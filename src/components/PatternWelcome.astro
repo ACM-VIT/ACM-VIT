@@ -157,8 +157,10 @@ import ProjectScreen from './ProjectScreen.astro';
 		}
 
 		// Initially hide project screen
-		projectScreen.style.opacity = '0';
-		projectScreen.style.transform = 'translateY(50px)';
+		if (projectScreen) {
+			projectScreen.style.opacity = '0';
+			projectScreen.style.transform = 'translateY(50px)';
+		}
 		
 		function handleScroll() {
 			const scrollPosition = window.scrollY;
@@ -169,14 +171,18 @@ import ProjectScreen from './ProjectScreen.astro';
 			
 			if (scrollPosition > windowHeight * 0.5) {
 				// Show project screen
-				firstScreen.classList.add('hidden');
-				projectScreen.style.opacity = '1';
-				projectScreen.style.transform = 'translateY(0)';
+				if (firstScreen) firstScreen.classList.add('hidden');
+				if (projectScreen) {
+					projectScreen.style.opacity = '1';
+					projectScreen.style.transform = 'translateY(0)';
+				}
 			} else {
 				// Show first screen
-				firstScreen.classList.remove('hidden');
-				projectScreen.style.opacity = '0';
-				projectScreen.style.transform = 'translateY(50px)';
+				if (firstScreen) firstScreen.classList.remove('hidden');
+				if (projectScreen) {
+					projectScreen.style.opacity = '0';
+					projectScreen.style.transform = 'translateY(50px)';
+				}
 			}
 		}
 

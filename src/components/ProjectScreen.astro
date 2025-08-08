@@ -1,45 +1,15 @@
 ---
+import projectData from '../data/projectsData.json';
 ---
 
 <section class="screen project-screen" id="project-screen">
+	<!-- Decorative dotted lines -->
+
 	<div class="grid-layout">
-		<!-- Left Side - Device Mockup -->
+		<!-- Left Side - Cassette SVG -->
 		<div class="device-section">
-			<div class="device-container">
-				<div class="device-frame">
-					<!-- Device Header -->
-					<div class="device-header">
-						<div class="header-controls">
-							<span class="control-dot"></span>
-							<span class="control-dot"></span>
-							<span class="control-dot"></span>
-						</div>
-					</div>
-					
-					<!-- Device Screen -->
-					<div class="device-screen">
-						<div class="logo-display">
-							<div class="logo-circle">
-								<div class="diagonal-pattern"></div>
-							</div>
-							<div class="logo-text">
-								<div class="acm-text">ACM</div>
-								<div class="one-text">ONE</div>
-							</div>
-						</div>
-					</div>
-					
-					<!-- Device Footer -->
-					<div class="device-footer">
-						<div class="footer-controls">
-							<div class="control-item circle-ctrl"></div>
-							<div class="control-item square-ctrl"></div>
-							<div class="control-item rect-ctrl"></div>
-							<div class="control-item square-ctrl"></div>
-							<div class="control-item circle-ctrl"></div>
-						</div>
-					</div>
-				</div>
+			<div class="cassette-container">
+				<img src={projectData.cassette.src} alt={projectData.cassette.alt} />
 			</div>
 		</div>
 
@@ -47,32 +17,26 @@
 		<div class="content-section">
 			<div class="content-block">
 				<p class="description">
-					Lorem quis mollit do ea et ex ut reprehenderit magna fugiat nostrud do tempor laboris laboris. 
-					Incididunt proident et incididunt minim duis officia esse ipsum aute consectetur cillum consectetur 
-					minim sint nostrud. Ea officia deserunt occaecat lorem amet dolore duis labore officia consectetur 
-					commodo veniam pariatur enim ullamco. Qui magna magna incididunt.
+					{projectData.textContent.firstBlock}
 				</p>
-				<div class="action-buttons">
-					<button class="btn primary">LEARN MORE</button>
-					<button class="btn primary">VISIT WEBSITE</button>
-					<button class="btn icon-btn">
-						<svg width="24" height="24" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-							<path d="M25.3794 10C21.7275 10.0001 18.1948 11.2998 15.4136 13.6662C12.6322 16.0327 10.7836 19.3117 10.1986 22.9165C9.61366 26.5211 10.3305 30.2164 12.2207 33.3411C14.1109 36.4655 17.0513 38.8156 20.5157 39.9706C21.2847 40.1052 21.5731 39.6438 21.5731 39.2401C21.5731 38.8748 21.5539 37.6637 21.5539 36.3757C17.6897 37.087 16.6901 35.4338 16.3825 34.5687C16.0412 33.7274 15.5001 32.9818 14.8061 32.3963C14.2678 32.108 13.4988 31.3967 14.7869 31.3774C15.2787 31.4308 15.7503 31.602 16.162 31.8763C16.5736 32.1507 16.9131 32.5204 17.1515 32.9538C17.3618 33.3317 17.6446 33.6644 17.9837 33.9327C18.3228 34.2011 18.7116 34.4 19.1278 34.5177C19.5439 34.6355 19.9792 34.6702 20.4086 34.6196C20.8381 34.5689 21.2535 34.4341 21.6306 34.2226C21.6972 33.4407 22.0457 32.7097 22.6112 32.1656C19.1893 31.7811 15.6135 30.4547 15.6135 24.572C15.5919 23.0436 16.1558 21.5647 17.1899 20.4389C16.7198 19.1104 16.7747 17.6525 17.3437 16.3633C17.3437 16.3633 18.6316 15.9596 21.5731 17.9397C24.0895 17.2476 26.7462 17.2476 29.2627 17.9397C32.2041 15.9403 33.4921 16.3633 33.4921 16.3633C34.0611 17.6525 34.1162 19.1104 33.6459 20.4389C34.6828 21.5628 35.2475 23.0431 35.2223 24.572C35.2223 30.4739 31.6273 31.7811 28.2054 32.1656C28.5723 32.5376 28.855 32.9843 29.0341 33.4751C29.2133 33.9662 29.2847 34.49 29.2435 35.0108C29.2435 37.068 29.2243 38.721 29.2243 39.2401C29.2243 39.6438 29.5126 40.1244 30.2816 39.9706C33.7399 38.8063 36.6718 36.4507 38.554 33.3246C40.4363 30.1983 41.1462 26.5049 40.5571 22.9036C39.9681 19.3025 38.1185 16.0278 35.3383 13.6643C32.5582 11.3006 29.0285 10.002 25.3794 10Z" fill="#FEFCD9"/>
-						</svg>
-					</button>
-				</div>
+			</div>
+			
+			<!-- Move buttons between the blocks -->
+			<div class="action-buttons">
+				<button class="btn primary">{projectData.buttons.learnMore.text}</button>
+				<button class="btn primary">{projectData.buttons.visitWebsite.text}</button>
+				<button class="btn icon-btn">
+					<svg width="24" height="24" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path d="M25.3794 10C21.7275 10.0001 18.1948 11.2998 15.4136 13.6662C12.6322 16.0327 10.7836 19.3117 10.1986 22.9165C9.61366 26.5211 10.3305 30.2164 12.2207 33.3411C14.1109 36.4655 17.0513 38.8156 20.5157 39.9706C21.2847 40.1052 21.5731 39.6438 21.5731 39.2401C21.5731 38.8748 21.5539 37.6637 21.5539 36.3757C17.6897 37.087 16.6901 35.4338 16.3825 34.5687C16.0412 33.7274 15.5001 32.9818 14.8061 32.3963C14.2678 32.108 13.4988 31.3967 14.7869 31.3774C15.2787 31.4308 15.7503 31.602 16.162 31.8763C16.5736 32.1507 16.9131 32.5204 17.1515 32.9538C17.3618 33.3317 17.6446 33.6644 17.9837 33.9327C18.3228 34.2011 18.7116 34.4 19.1278 34.5177C19.5439 34.6355 19.9792 34.6702 20.4086 34.6196C20.8381 34.5689 21.2535 34.4341 21.6306 34.2226C21.6972 33.4407 22.0457 32.7097 22.6112 32.1656C19.1893 31.7811 15.6135 30.4547 15.6135 24.572C15.5919 23.0436 16.1558 21.5647 17.1899 20.4389C16.7198 19.1104 16.7747 17.6525 17.3437 16.3633C17.3437 16.3633 18.6316 15.9596 21.5731 17.9397C24.0895 17.2476 26.7462 17.2476 29.2627 17.9397C32.2041 15.9403 33.4921 16.3633 33.4921 16.3633C34.0611 17.6525 34.1162 19.1104 33.6459 20.4389C34.6828 21.5628 35.2475 23.0431 35.2223 24.572C35.2223 30.4739 31.6273 31.7811 28.2054 32.1656C28.5723 32.5376 28.855 32.9843 29.0341 33.4751C29.2133 33.9662 29.2847 34.49 29.2435 35.0108C29.2435 37.068 29.2243 38.721 29.2243 39.2401C29.2243 39.6438 29.5126 40.1244 30.2816 39.9706C33.7399 38.8063 36.6718 36.4507 38.554 33.3246C40.4363 30.1983 41.1462 26.5049 40.5571 22.9036C39.9681 19.3025 38.1185 16.0278 35.3383 13.6643C32.5582 11.3006 29.0285 10.002 25.3794 10Z" fill="#FEFCD9"/>
+					</svg>
+				</button>
 			</div>
 			
 			<div class="content-block">
 				<p class="description">
-					Lorem quis mollit do ea et ex ut reprehenderit magna fugiat nostrud do tempor laboris laboris. 
-					Incididunt proident et incididunt minim duis officia esse ipsum aute consectetur cillum consectetur 
-					minim sint nostrud. Ea officia deserunt occaecat lorem amet dolore duis labore officia consectetur 
-					commodo veniam pariatur enim ullamco. Qui magna magna incididunt.
+					{projectData.textContent.secondBlock}
 				</p>
 			</div>
-			
-			
 		</div>
 	</div>
 </section>
@@ -119,7 +83,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		background: #0D0E0D;
+		background: transparent;
 		transition: opacity 0.8s ease, transform 0.8s ease;
 	}
 
@@ -128,199 +92,80 @@
 	}
 
 	.grid-layout {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 60px;
-		align-items: center;
-		max-width: 1400px;
-		width: 100%;
-		padding: 0 5%;
-		height: 100%;
-	}
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 190px; /* Reduced gap */
+    align-items: center;
+    max-width: 1200px;
+    width: 100%;
+    padding: 0 5%;
+    height: 100%;
+    position: relative;
+    z-index: 1;
+}
 
-	/* Device Section - Now on the LEFT */
-	.device-section {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
+.device-section {
+    display: flex;
+    justify-content: center; /* Center instead of flex-end */
+    align-items: center;
+    margin-left: 30px; /* Reduced from 60px to move cassette more left */
+}
 
-	/* Content Section - Now on the RIGHT */
-	.content-section {
-		color: white;
-		display: flex;
-		flex-direction: column;
-		gap: 30px;
-		justify-content: center;
-	}
+.cassette-container {
+    width: 100%;
+    max-width: 550px; /* Make container smaller */
+    height: auto;
+}
 
-	.device-container {
-		perspective: 1000px;
-	}
-
-	.device-frame {
-		width: 350px;
-		height: 280px;
-		background: #2A2A2A;
-		border-radius: 20px;
-		border: 3px solid #555;
-		display: flex;
-		flex-direction: column;
-		box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-		overflow: hidden;
-	}
-
-	.device-header {
-		height: 40px;
-		background: #1A1A1A;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border-bottom: 1px solid #555;
-	}
-
-	.header-controls {
-		display: flex;
-		gap: 8px;
-	}
-
-	.control-dot {
-		width: 12px;
-		height: 12px;
-		border-radius: 50%;
-		background: #666;
-	}
-
-	.device-screen {
-		flex: 1;
-		background: #0A0A0A;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		position: relative;
-	}
-
-	.logo-display {
-		display: flex;
-		align-items: center;
-		gap: 25px;
-	}
-
-	.logo-circle {
-		width: 75px;
-		height: 75px;
-		border-radius: 50%;
-		background: #F95F4A;
-		position: relative;
-		overflow: hidden;
-	}
-
-	.diagonal-pattern {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background: repeating-linear-gradient(
-			45deg,
-			transparent,
-			transparent 3px,
-			#0A0A0A 3px,
-			#0A0A0A 6px
-		);
-	}
-
-	.logo-text {
-		color: white;
-		font-family: 'PolySans Trial', Arial, sans-serif;
-		font-weight: bold;
-		line-height: 0.8;
-	}
-
-	.acm-text {
-		font-size: 44px;
-		margin-bottom: 5px;
-	}
-
-	.one-text {
-		font-size: 44px;
-	}
-
-	.device-footer {
-		height: 50px;
-		background: #1A1A1A;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border-top: 1px solid #555;
-	}
-
-	.footer-controls {
-		display: flex;
-		gap: 20px;
-		align-items: center;
-	}
-
-	.control-item {
-		background: #666;
-	}
-
-	.circle-ctrl {
-		width: 22px;
-		height: 22px;
-		border-radius: 50%;
-	}
-
-	.square-ctrl {
-		width: 18px;
-		height: 18px;
-		border-radius: 3px;
-	}
-
-	.rect-ctrl {
-		width: 35px;
-		height: 14px;
-		border-radius: 3px;
-	}
-
+.cassette-container img {
+    width: 110%;
+    height: auto;
+}
 	/* Content Section */
 	.content-section {
 		color: white;
 		display: flex;
 		flex-direction: column;
-		gap: 50px;
+		gap: 35px;
 		justify-content: center;
 	}
 
 	.content-block {
-		border: 1px dashed #666;
-		padding: 25px;
-		background: rgba(0, 0, 0, 0.2);
+		border: none;
+		padding: 30px;
+		
+		position: relative;
+		margin: 8px 0;
 	}
 
+	
+
+	
 	.description {
 		font-family: 'PolySans Trial', Arial, sans-serif;
 		font-size: 16px;
-		line-height: 1.5;
-		margin: 0 0 20px 0;
+		line-height: 1.4;
+		margin: 0;
 		text-transform: uppercase;
 		color: white;
 		font-weight: 300;
 		word-wrap: break-word;
 	}
 
-	.action-buttons {
-		display: flex;
-		gap: 18px;
-		align-items: center;
-	}
+.action-buttons {
+    display: flex;
+    gap: 40px;
+    align-items: left-center;
+    justify-content: center;
+    margin: 0; /* Remove margin since it's now between blocks */
+}
 
 	.btn {
-		padding: 12px 16px;
+		padding: 10px 18px;
 		border: 1px solid #FEFCD9;
-		border-radius: 41px;
+		border-radius: 25px;
 		font-family: 'PolySans Trial', Arial, sans-serif;
-		font-size: 14px;
+		font-size: 12px;
 		font-weight: 300;
 		text-transform: uppercase;
 		cursor: pointer;
@@ -336,7 +181,7 @@
 	.btn.icon-btn {
 		background: #F95F4A;
 		color: white;
-		width: 44px;
+		width: 40px;
 		height: 44px;
 		border-radius: 50%;
 		border: 1px solid #FEFCD9;
@@ -351,14 +196,6 @@
 		box-shadow: 0 8px 20px rgba(249, 95, 74, 0.4);
 	}
 
-	.hint-text {
-		font-family: 'PolySans Trial', Arial, sans-serif;
-		font-size: 13px;
-		color: #888;
-		text-align: center;
-		opacity: 0.7;
-	}
-
 	/* Responsive Design */
 	@media (max-width: 768px) {
 		.grid-layout {
@@ -367,22 +204,16 @@
 			padding: 20px;
 		}
 
-		.device-frame {
-			width: 320px;
-			height: 240px;
+		.cassette-container {
+			max-width: 220px;
 		}
 
-		.logo-circle {
-			width: 70px;
-			height: 70px;
-		}
-
-		.acm-text, .one-text {
-			font-size: 40px;
+		.cassette-container svg {
+			width: 120px !important;
 		}
 
 		.description {
-			font-size: 20px;
+			font-size: 14px;
 		}
 
 		.project-screen {
