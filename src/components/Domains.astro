@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cassette Scroll Animation</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+---
+// This is now a proper Astro component
+---
     <style>
         * {
             margin: 0;
@@ -18,7 +13,6 @@
             overflow-x: hidden;
         }
 
-        /* Some content before to enable scrolling */
         .spacer {
             height: 100vh;
             background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
@@ -30,28 +24,28 @@
         }
 
         .domains-section {
-            font-family: Inter, Roboto, 'Helvetica Neue', Arial, sans-serif;
-            min-height: 200vh; /* Make it taller for more scroll distance */
-            padding: 5rem 0;
+            height: 300vh;
             background: url('/background_domains.svg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            background-attachment: fixed; /* Keep background fixed */
-            display: flex;
-            align-items: flex-start;
+            background-attachment: fixed;
             position: relative;
-            overflow: hidden;
+            /* Optimize for performance */
+            contain: layout style paint;
         }
 
-        .container {
-            max-width: 1400px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 0 2rem;
-            position: relative;
-            z-index: 2;
-            padding-top: 10vh;
+        .pin-container {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            /* Optimize rendering */
+            will-change: transform;
+            transform: translateZ(0);
         }
 
         .section-subtitle {
@@ -60,40 +54,56 @@
             font-family: 'PolySans Trial', sans-serif;
             font-size: 20.667px;
             font-weight: 400;
-            margin-bottom: 4rem;
             max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            /* Performance optimization */
+            will-change: transform, opacity;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
         }
 
         .domains-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 4rem 0;
             position: relative;
-            min-height: 60vh;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform-origin: center center;
+            /* GPU acceleration */
+            will-change: transform;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
         }
 
         .domain-item {
-            will-change: transform;
-            transition: transform 0.1s ease-out;
             position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            /* Optimized GPU acceleration */
+            will-change: transform, opacity;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+            contain: layout style paint;
         }
 
         .cassette-img {
-            width: 308px;
-            height: 188.793px;
+            width: 220px;
+            height: auto;
             display: block;
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
-            transition: transform 0.3s ease;
-        }
-
-        .cassette-img:hover {
-            transform: scale(1.05) rotate(2deg);
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+            /* Optimized GPU acceleration */
+            transform: translateZ(0);
+            will-change: transform;
+            /* Better image rendering */
+            image-rendering: optimizeQuality;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
         }
 
         .spacer-after {
@@ -107,173 +117,222 @@
         }
 
         @media (max-width: 768px) {
-            .container {
-                padding: 0 1rem;
-                padding-top: 5vh;
-            }
             .cassette-img {
-                width: 200px;
-                height: auto;
+                width: 160px;
             }
-            .domains-grid {
-                min-height: 40vh;
+            .section-subtitle {
+                font-size: 16px;
+                padding: 0 1.5rem;
+                top: 12%;
+            }
+            .domains-section {
+                background-attachment: scroll; /* Better mobile performance */
+            }
+        }
+
+        /* Performance optimizations */
+        @media (prefers-reduced-motion: reduce) {
+            .domains-section {
+                height: 100vh;
+            }
+            .pin-container {
+                position: static;
             }
         }
     </style>
-</head>
-<body>
-    <section id="domains" class="domains-section">
-        <div class="container">
-            <p class="section-subtitle">
-                Each domain at ACM-VIT is more than a skillset — it's a mindset.<br />
-                We build, break, design, analyze, and communicate — not in silos, but in sync.<br />
-                Because true innovation happens where disciplines intersect.
-            </p>
 
-            <div class="domains-grid">
-                <div class="domain-item" data-speed="0.8">
-                    <img src="/Cassette_App.svg" alt="App Development" class="cassette-img" />
-                </div>
 
-                <div class="domain-item" data-speed="1.2">
-                    <img src="/Cassette_cc.svg" alt="Competitive Coding" class="cassette-img" />
-                </div>
+<section class="domains-section">
+    <div class="pin-container">
+        <p class="section-subtitle">
+            Each domain at ACM-VIT is more than a skillset — it's a mindset.<br />
+            We build, break, design, analyze, and communicate — not in silos, but in sync.<br />
+            Because true innovation happens where disciplines intersect.
+        </p>
 
-                <div class="domain-item" data-speed="0.5">
-                    <img src="/Cassette_Design.svg" alt="Design" class="cassette-img" />
-                </div>
-
-                <div class="domain-item" data-speed="1.5">
-                    <img src="/Cassette_Management.svg" alt="Management" class="cassette-img" />
-                </div>
-
-                <div class="domain-item" data-speed="0.3">
-                    <img src="/Cassette_Research.svg" alt="Research" class="cassette-img" />
-                </div>
-
-                <div class="domain-item" data-speed="1.8">
-                    <img src="/Cassette_Web.svg" alt="Web Development" class="cassette-img" />
-                </div>
+        <div class="domains-grid">
+            <div class="domain-item">
+                <img src="/Cassette_App.svg" alt="App Development" class="cassette-img" />
+            </div>
+            <div class="domain-item">
+                <img src="/Cassette_cc.svg" alt="Competitive Coding" class="cassette-img" />
+            </div>
+            <div class="domain-item">
+                <img src="/Cassette_Design.svg" alt="Design" class="cassette-img" />
+            </div>
+            <div class="domain-item">
+                <img src="/Cassette_Management.svg" alt="Management" class="cassette-img" />
+            </div>
+            <div class="domain-item">
+                <img src="/Cassette_Research.svg" alt="Research" class="cassette-img" />
+            </div>
+            <div class="domain-item">
+                <img src="/Cassette_Web.svg" alt="Web Development" class="cassette-img" />
             </div>
         </div>
-    </section>
-
-    <div class="spacer-after">
-        <div>Scroll up to see the reverse animation!</div>
     </div>
+</section>
 
-    <script>
-		import { gsap } from 'gsap';
-		import { ScrollTrigger } from 'gsap/ScrollTrigger';
-        // Register ScrollTrigger plugin
+
+<script>
+    // Wait for GSAP to load
+    import  {gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    if (typeof gsap !== 'undefined') {
         gsap.registerPlugin(ScrollTrigger);
 
-        // Wait for DOM to load
-        document.addEventListener('DOMContentLoaded', function() {
-            
-            // Define initial grid positions (starting positions)
-            const gridPositions = [
-                { x: -320, y: -100 }, // App (top-left)
-                { x: 0, y: -100 },    // CC (top-center)  
-                { x: 320, y: -100 },  // Design (top-right)
-                { x: -320, y: 100 },  // Management (bottom-left)
-                { x: 0, y: 100 },     // Research (bottom-center)
-                { x: 320, y: 100 }    // Web (bottom-right)
+        // Optimized GSAP config
+        gsap.config({
+            force3D: true,
+            nullTargetWarn: false
+        });
+
+        // Debounced initialization
+        let initialized = false;
+        
+        function initAnimation() {
+            if (initialized) return;
+            initialized = true;
+
+            // Grid positions (2x3 layout) - reduced spacing
+            const gridPos = [
+                { x: -180, y: -70 }, // App
+                { x: 0, y: -70 },    // CC
+                { x: 180, y: -70 },  // Design
+                { x: -180, y: 70 },  // Management  
+                { x: 0, y: 70 },     // Research
+                { x: 180, y: 70 }    // Web
             ];
 
-            // Define final horizontal line positions with proper spacing
-            const horizontalPositions = [
-                { x: -450, y: 0 }, // App
-                { x: 150, y: 0 }, // CC
-                { x: 450, y: 0 }, // Design
-                { x: -750, y: 0 },  // Management
-                { x: -150, y: 0 },  // Research
-                { x: 750, y: 0 }   // Web
+            // Horizontal line positions - reduced spread
+            const linePos = [
+                { x: -300, y: 0 },   // App
+                { x: -120, y: 0 },   // CC
+                { x: 120, y: 0 },    // Design
+                { x: 300, y: 0 },    // Management
+                { x: -450, y: 0 },   // Research
+                { x: 450, y: 0 }     // Web
             ];
 
-            // Get all domain items in the order they appear in HTML
-            const domainItems = document.querySelectorAll('.domain-item');
-            
-            // Set initial positions (2x3 grid)
-            domainItems.forEach((item, index) => {
-                const gridPos = gridPositions[index];
-                gsap.set(item, { 
-                    x: gridPos.x,
-                    y: gridPos.y,
-                    scale: 1,
-                    opacity: 1
-                });
+            const items = document.querySelectorAll('.domain-item');
+            const grid = document.querySelector('.domains-grid');
+            const subtitle = document.querySelector('.section-subtitle');
+
+            if (!items.length || !grid || !subtitle) return;
+
+            // Set initial state
+            gsap.set(items, {
+                x: 0,
+                y: 0,
+                scale: 0.6,
+                opacity: 0,
+                force3D: true
             });
 
-            // Create main timeline
+            // Simplified timeline with better performance
             const tl = gsap.timeline({
                 scrollTrigger: {
-                    trigger: ".domains-grid",
-                    start: "400px 80%",
-                    end: "bottom center",
-                    scrub: 1.5,
-					pin: true, // Pin the section during the animation
-                    invalidateOnRefresh: true,
-                    markers: true // Uncomment for debugging
+                    trigger: '.domains-section',
+                    start: 'top top',
+                    end: 'bottom bottom',
+                    scrub: 1.2, // Smoother scrub
+                    pin: 'true',
+                    anticipatePin: 1,
+                    invalidateOnRefresh: true
                 }
             });
 
-            // Animate each cassette to horizontal line position
-            domainItems.forEach((item, index) => {
-                const finalPos = horizontalPositions[index];
-                const speed = parseFloat(item.dataset.speed) || 1;
+            // Phase 1: Appear and form grid
+            tl.to(items, {
+                opacity: 1,
+                scale: 1,
+                duration: 2,
+                ease: "power2.out",
+                stagger: 0.1
+            })
+            .to(items, {
+                x: (i) => gridPos[i].x,
+                y: (i) => gridPos[i].y,
+                duration: 3,
+                ease: "power2.inOut"
+            }, "-=1");
+
+            // Phase 2: Form horizontal line
+            tl.to(items, {
+                x: (i) => linePos[i].x,
+                y: (i) => linePos[i].y,
+                scale: 0.9,
+                duration: 3,
+                ease: "power1.inOut"
+            })
+            .to(subtitle, {
+                opacity: 0.4,
+                y: -30,
+                duration: 2,
+                ease: "power2.out"
+            }, "<");
+
+            // Phase 3: Simplified zoom effect
+            tl.to(grid, {
+                scale: 3,
+                duration: 3,
+                ease: "power1.inOut"
+            })
+            .to(items, {
+                opacity: 0,
+                scale: 0.3,
+                duration: 2,
+                ease: "power2.in",
+                stagger: 0.05
+            }, "<+=0.5")
+            .to(subtitle, {
+                opacity: 0,
+                scale: 0.9,
+                duration: 2,
+                ease: "power2.inOut"
+            }, "<");
+
+            // Simplified hover effects
+            items.forEach((item) => {
+                const img = item.querySelector('.cassette-img');
+                if (!img) return;
                 
-                tl.to(item, {
-                    x: finalPos.x,
-                    y: finalPos.y,
-                    scale: 0.85,
-                    opacity: 0.9,
-                    ease: "power2.inOut",
-                    duration: speed
-                }, 0);
-            });
-
-            // Add text animation (fade out as we scroll)
-            tl.to('.section-subtitle', 
-                { 
-                    y: -30, 
-                    opacity: 0.3,
-                    duration: 1,
-                    ease: "power2.out"
-                }, 0
-            );
-
-            // Individual hover animations
-            domainItems.forEach(item => {
-                const cassette = item.querySelector('.cassette-img');
+                let hoverTween: gsap.core.Tween | null = null;
                 
                 item.addEventListener('mouseenter', () => {
-                    gsap.to(cassette, {
-                        scale: 1.1,
-                        rotation: 5,
-                        duration: 0.3,
+                    if (hoverTween) hoverTween.kill();
+                    hoverTween = gsap.to(img, {
+                        scale: 1.03,
+                        duration: 0.2,
                         ease: "power2.out"
                     });
                 });
                 
                 item.addEventListener('mouseleave', () => {
-                    gsap.to(cassette, {
+                    if (hoverTween) hoverTween.kill();
+                    hoverTween = gsap.to(img, {
                         scale: 1,
-                        rotation: 0,
-                        duration: 0.3,
+                        duration: 0.2,
                         ease: "power2.out"
                     });
                 });
             });
+        }
 
-            // Refresh ScrollTrigger
-            ScrollTrigger.refresh();
-        });
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initAnimation);
+        } else {
+            initAnimation();
+        }
 
-        // Handle window resize
+        // Throttled resize handler
+        let resizeTimeout: number | undefined;
         window.addEventListener('resize', () => {
-            ScrollTrigger.refresh();
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                ScrollTrigger.refresh();
+            }, 300);
         });
-    </script>
-</body>
-</html>
+    }
+</script>
