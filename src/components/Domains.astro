@@ -93,7 +93,7 @@
         }
 
         .cassette-img {
-            width: 220px;
+            width: 300px;
             height: auto;
             display: block;
             filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
@@ -196,22 +196,22 @@
 
             // Grid positions (2x3 layout) - reduced spacing
             const gridPos = [
-                { x: -180, y: -70 }, // App
+                { x: -500, y: -70 }, // App
                 { x: 0, y: -70 },    // CC
-                { x: 180, y: -70 },  // Design
-                { x: -180, y: 70 },  // Management  
-                { x: 0, y: 70 },     // Research
-                { x: 180, y: 70 }    // Web
+                { x: 500, y: -70 },  // Design
+                { x: -500, y: 200 },  // Management  
+                { x: 0, y: 200 },     // Research
+                { x: 500, y: 200 }    // Web
             ];
 
             // Horizontal line positions - reduced spread
             const linePos = [
-                { x: -300, y: 0 },   // App
-                { x: -120, y: 0 },   // CC
-                { x: 120, y: 0 },    // Design
-                { x: 300, y: 0 },    // Management
-                { x: -450, y: 0 },   // Research
-                { x: 450, y: 0 }     // Web
+                { x: -600, y: 0 },   // App
+                { x: 120, y: 0 },   // CC
+                { x: 360, y: 0 },    // Design
+                { x: -360, y: 0 },    // Management
+                { x: -120, y: 0 },   // Research
+                { x: 600, y: 0 }     // Web
             ];
 
             const items = document.querySelectorAll('.domain-item');
@@ -238,7 +238,8 @@
                     scrub: 1.2, // Smoother scrub
                     pin: 'true',
                     anticipatePin: 1,
-                    invalidateOnRefresh: true
+                    invalidateOnRefresh: true,
+                    markers: true,
                 }
             });
 
@@ -261,7 +262,7 @@
             tl.to(items, {
                 x: (i) => linePos[i].x,
                 y: (i) => linePos[i].y,
-                scale: 0.9,
+                scale: 0.7,
                 duration: 3,
                 ease: "power1.inOut"
             })
