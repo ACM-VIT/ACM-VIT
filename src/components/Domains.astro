@@ -175,7 +175,6 @@
 
 
 <script>
-    // Wait for GSAP to load
     import  {gsap } from "gsap";
     import { ScrollTrigger } from "gsap/ScrollTrigger";
     if (typeof gsap !== 'undefined') {
@@ -194,7 +193,7 @@
             if (initialized) return;
             initialized = true;
 
-            // Grid positions (2x3 layout) - reduced spacing
+            // Grid positions (2x3 layout)
             const gridPos = [
                 { x: -500, y: -70 }, // App
                 { x: 0, y: -70 },    // CC
@@ -204,7 +203,7 @@
                 { x: 500, y: 200 }    // Web
             ];
 
-            // Horizontal line positions - reduced spread
+            // Horizontal line positions
             const linePos = [
                 { x: -600, y: 0 },   // App
                 { x: 120, y: 0 },   // CC
@@ -212,6 +211,16 @@
                 { x: -360, y: 0 },    // Management
                 { x: -120, y: 0 },   // Research
                 { x: 600, y: 0 }     // Web
+            ];
+
+            // Zoom positions
+            const zoomPos = [
+                { x: -800, y: 0 },   // App : move left
+                { x: 240, y: 0 },   // CC : move right
+                { x: 480, y: 0 },    // Design : move right
+                { x: -480, y: 0 },    // Management : move left
+                { x: -240, y: 0 },   // Research : move left
+                { x: 480, y: 0 }     // Web : move right
             ];
 
             const items = document.querySelectorAll('.domain-item');
@@ -235,7 +244,7 @@
                     trigger: '.domains-section',
                     start: 'top top',
                     end: 'bottom bottom',
-                    scrub: 1.2, // Smoother scrub
+                    scrub: 1.2,
                     pin: 'true',
                     anticipatePin: 1,
                     invalidateOnRefresh: true,
@@ -267,7 +276,7 @@
                 ease: "power1.inOut"
             })
             .to(subtitle, {
-                opacity: 0.4,
+                opacity: 0,
                 y: -30,
                 duration: 2,
                 ease: "power2.out"
@@ -275,23 +284,19 @@
 
             // Phase 3: Simplified zoom effect
             tl.to(grid, {
-                scale: 3,
-                duration: 3,
+                scale: 10,
+                duration: 5,
                 ease: "power1.inOut"
             })
             .to(items, {
-                opacity: 0,
-                scale: 0.3,
+                x: (i) => zoomPos[i].x,  // Move to wider positions
+                y: (i) => zoomPos[i].y,
+                opacity: 100,
+                scale: 0.5,
                 duration: 2,
                 ease: "power2.in",
-                stagger: 0.05
+                stagger: 0.00
             }, "<+=0.5")
-            .to(subtitle, {
-                opacity: 0,
-                scale: 0.9,
-                duration: 2,
-                ease: "power2.inOut"
-            }, "<");
 
             // Simplified hover effects
             items.forEach((item) => {
@@ -327,13 +332,13 @@
             initAnimation();
         }
 
-        // Throttled resize handler
-        let resizeTimeout: number | undefined;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(() => {
-                ScrollTrigger.refresh();
-            }, 300);
-        });
+        // // Throttled resize handler
+        // let resizeTimeout: number | undefined;
+        // window.addEventListener('resize', () => {
+        //     clearTimeout(resizeTimeout);
+        //     resizeTimeout = setTimeout(() => {
+        //         ScrollTrigger.refresh();
+        //     }, 300);
+        // });
     }
 </script>
