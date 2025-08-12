@@ -74,7 +74,7 @@ import projectData from '../data/projectsData.json';
 	}
 
 	.screen {
-		position: fixed;
+		position: relative;
 		top: 0;
 		left: 0;
 		width: 100%;
@@ -83,7 +83,6 @@ import projectData from '../data/projectsData.json';
 		align-items: center;
 		justify-content: center;
 		background: transparent;
-		transition: opacity 0.8s ease, transform 0.8s ease;
 	}
 
 	.project-screen {
@@ -92,7 +91,7 @@ import projectData from '../data/projectsData.json';
 	}
 
 	.background-pattern {
-		position: fixed;
+		position: absolute;
 		top: 0;
 		left: 0;
 		width: 100%;
@@ -227,12 +226,6 @@ import projectData from '../data/projectsData.json';
 
 		.description {
 			font-size: 14px;
-		}
-
-		.project-screen {
-			position: relative;
-			transform: translateY(0);
-			opacity: 1;
 		}
 
 		.background-pattern {

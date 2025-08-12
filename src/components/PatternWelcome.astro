@@ -1,27 +1,20 @@
 ---
-import ProjectScreen from './ProjectScreen.astro';
 ---
 
 <div id="container">
 	<div class="background-pattern"></div>
-	<div class="scrollable-wrapper">
-		<!-- First Screen -->
-		<section class="screen first-screen" id="first-screen">
-			<div class="content-center">
-				<div class="text-box">
-					<span class="highlight-text">
-						Voluptate veniam aliquip nisi. Officia veniam cupidatat proident elit fugiat mollit velit eiusmod 
-					</span>
-					<span class="normal-text">
-						dolor proident sunt. Ipsum fugiat ea consequat consequat fugiat eu eu nulla commodo duis. Minim est ea ea ut aliqua.
-					</span>
-				</div>
+	<section class="screen" id="pattern-welcome">
+		<div class="content-center">
+			<div class="text-box">
+				<span class="highlight-text">
+					Voluptate veniam aliquip nisi. Officia veniam cupidatat proident elit fugiat mollit velit eiusmod 
+				</span>
+				<span class="normal-text">
+					dolor proident sunt. Ipsum fugiat ea consequat consequat fugiat eu eu nulla commodo duis. Minim est ea ea ut aliqua.
+				</span>
 			</div>
-		</section>
-
-		<!-- Second Screen -->
-		<ProjectScreen />
-	</div>
+		</div>
+	</section>
 </div>
 
 <style>
@@ -59,15 +52,15 @@ import ProjectScreen from './ProjectScreen.astro';
 
 	#container {
 		font-family: Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
-		height: 300vh;
+		height: 100vh;
 		width: 100%;
-		overflow-x: hidden;
+		overflow: hidden;
 		position: relative;
 		background: #0D0E0D;
 	}
 
 	.background-pattern {
-		position: fixed;
+		position: absolute;
 		top: 0;
 		left: 0;
 		width: 100%;
@@ -79,13 +72,8 @@ import ProjectScreen from './ProjectScreen.astro';
 		pointer-events: none;
 	}
 
-	.scrollable-wrapper {
-		height: 300vh;
-		position: relative;
-	}
-
 	.screen {
-		position: fixed;
+		position: absolute;
 		top: 0;
 		left: 0;
 		width: 100%;
@@ -93,20 +81,7 @@ import ProjectScreen from './ProjectScreen.astro';
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		transition: opacity 0.8s ease, transform 0.8s ease;
 		z-index: 1;
-	}
-
-	/* First Screen Styles */
-	.first-screen {
-		background: transparent;
-		z-index: 2;
-	}
-
-	.first-screen.hidden {
-		opacity: 0;
-		transform: translateY(-50px);
-		pointer-events: none;
 	}
 
 	.content-center {
@@ -168,53 +143,3 @@ import ProjectScreen from './ProjectScreen.astro';
 		}
 	}
 </style>
-
-<script>
-	document.addEventListener('DOMContentLoaded', () => {
-		const firstScreen = document.getElementById('first-screen');
-		const projectScreen = document.getElementById('project-screen');
-		
-		console.log('First screen:', firstScreen);
-		console.log('Project screen:', projectScreen);
-		
-		if (!firstScreen || !projectScreen) {
-			console.error('Could not find screen elements');
-			return;
-		}
-
-		// Initially hide project screen
-		if (projectScreen) {
-			projectScreen.style.opacity = '0';
-			projectScreen.style.transform = 'translateY(50px)';
-		}
-		
-		function handleScroll() {
-			const scrollPosition = window.scrollY;
-			const windowHeight = window.innerHeight;
-			
-			console.log('Scroll position:', scrollPosition);
-			console.log('Window height:', windowHeight);
-			
-			if (scrollPosition > windowHeight * 0.5) {
-				// Show project screen
-				if (firstScreen) firstScreen.classList.add('hidden');
-				if (projectScreen) {
-					projectScreen.style.opacity = '1';
-					projectScreen.style.transform = 'translateY(0)';
-				}
-			} else {
-				// Show first screen
-				if (firstScreen) firstScreen.classList.remove('hidden');
-				if (projectScreen) {
-					projectScreen.style.opacity = '0';
-					projectScreen.style.transform = 'translateY(50px)';
-				}
-			}
-		}
-
-		window.addEventListener('scroll', handleScroll);
-		
-		// Initial call
-		handleScroll();
-	});
-</script>
