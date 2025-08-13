@@ -16,6 +16,38 @@
 </html>
 
 <style>
+	@font-face {
+		font-family: 'PolySans Trial';
+		src: url('/src/assets/fonts/PolySans-trial/PolySans-trial/Standard/PolySansTrial-Slim.otf') format('opentype');
+		font-weight: 300;
+		font-style: normal;
+		font-display: swap;
+	}
+
+	@font-face {
+		font-family: 'PolySans Trial';
+		src: url('/src/assets/fonts/PolySans-trial/PolySans-trial/Standard/PolySansTrial-Neutral.otf') format('opentype');
+		font-weight: 400;
+		font-style: normal;
+		font-display: swap;
+	}
+
+	@font-face {
+		font-family: 'PolySans Trial';
+		src: url('/src/assets/fonts/PolySans-trial/PolySans-trial/Standard/PolySansTrial-Median.otf') format('opentype');
+		font-weight: 500;
+		font-style: normal;
+		font-display: swap;
+	}
+
+	@font-face {
+		font-family: 'PolySans Trial';
+		src: url('/src/assets/fonts/PolySans-trial/PolySans-trial/Standard/PolySansTrial-Bulky.otf') format('opentype');
+		font-weight: 700;
+		font-style: normal;
+		font-display: swap;
+	}
+
 	html,
 	body {
 		margin: 0;
@@ -24,6 +56,17 @@
 		overflow-x: hidden;
 		position: relative;
 		background: #0D0E0D;
+		font-family: 'PolySans Trial', Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
+		/* Hide scrollbar for Firefox */
+		scrollbar-width: none;
+		/* Hide scrollbar for Internet Explorer 10+ */
+		-ms-overflow-style: none;
+	}
+
+	/* Hide scrollbar for Chrome, Safari and Opera */
+	html::-webkit-scrollbar,
+	body::-webkit-scrollbar {
+		/* display: none; */
 	}
 
 	.diamond-grid {

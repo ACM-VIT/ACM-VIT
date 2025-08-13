@@ -1,0 +1,333 @@
+---
+---
+    <style>
+        .domains-section {
+            height: 300vh;
+            background: url('/background_domains.svg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            position: relative;
+            /* Optimize for performance */
+            contain: layout style paint;
+        }
+
+        .pin-container {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: visible;
+            /* Optimize rendering */
+            will-change: transform;
+            transform: translateZ(0);
+        }
+
+        .section-subtitle {
+            color: #fefcd9;
+            text-align: center;
+            font-family: 'PolySans Trial', sans-serif;
+            font-size: 20.667px;
+            font-weight: 400;
+            max-width: 800px;
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            /* Performance optimization */
+            will-change: transform, opacity;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+        }
+
+        .domains-grid {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform-origin: center center;
+            /* GPU acceleration */
+            will-change: transform;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+            overflow: visible;
+            padding: 20px; 
+        }
+
+        .domain-item {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            /* Optimized GPU acceleration */
+            will-change: transform, opacity;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+            contain: layout style paint;
+            padding: 10px;
+            margin: 10px;
+        }
+
+        .cassette-img {
+            width: 300px;
+            height: auto;
+            display: block;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+            /* Optimized GPU acceleration */
+            transform: translateZ(0);
+            will-change: transform;
+            /* Better image rendering */
+            image-rendering: optimizeQuality;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            transform-origin: center center;
+        }
+
+        @media (max-width: 768px) {
+            .cassette-img {
+                width: 160px;
+            }
+            .section-subtitle {
+                font-size: 16px;
+                padding: 0 1.5rem;
+                top: 12%;
+            }
+            .domains-section {
+                background-attachment: scroll; /* Better mobile performance */
+            }
+        }
+
+        /* Performance optimizations */
+        @media (prefers-reduced-motion: reduce) {
+            .domains-section {
+                height: 100vh;
+            }
+            .pin-container {
+                position: static;
+            }
+        }
+    </style>
+
+
+<section class="domains-section">
+    <div class="pin-container">
+        <p class="section-subtitle">
+            Each domain at ACM-VIT is more than a skillset — it's a mindset.<br />
+            We build, break, design, analyze, and communicate — not in silos, but in sync.<br />
+            Because true innovation happens where disciplines intersect.
+        </p>
+
+        <div class="domains-grid">
+            <div class="domain-item">
+                <img src="/Cassette_App.svg" alt="App Development" class="cassette-img" />
+            </div>
+            <div class="domain-item">
+                <img src="/Cassette_cc.svg" alt="Competitive Coding" class="cassette-img" />
+            </div>
+            <div class="domain-item">
+                <img src="/Cassette_Design.svg" alt="Design" class="cassette-img" />
+            </div>
+            <div class="domain-item">
+                <img src="/Cassette_Management.svg" alt="Management" class="cassette-img" />
+            </div>
+            <div class="domain-item">
+                <img src="/Cassette_Research.svg" alt="Research" class="cassette-img" />
+            </div>
+            <div class="domain-item">
+                <img src="/Cassette_Web.svg" alt="Web Development" class="cassette-img" />
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    import  {gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    if (typeof gsap !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Optimized GSAP config
+        gsap.config({
+            force3D: true,
+            nullTargetWarn: false
+        });
+
+        // Debounced initialization
+        let initialized = false;
+        
+        function initAnimation() {
+            if (initialized) return;
+            initialized = true;
+
+            // Grid positions (2x3 layout)
+            const gridPos = [
+                { x: -500, y: -70 }, // App
+                { x: 0, y: -70 },    // CC
+                { x: 500, y: -70 },  // Design
+                { x: -500, y: 200 },  // Management  
+                { x: 0, y: 200 },     // Research
+                { x: 500, y: 200 }    // Web
+            ];
+
+            // Horizontal line positions
+            const linePos = [
+                { x: -600, y: 0 },   // App
+                { x: 120, y: 0 },   // CC
+                { x: 360, y: 0 },    // Design
+                { x: -360, y: 0 },    // Management
+                { x: -120, y: 0 },   // Research
+                { x: 600, y: 0 }     // Web
+            ];
+
+            // Zoom positions
+            const zoomPos = [
+                { x: -800, y: 0 },   // App : move left
+                { x: 240, y: 0 },   // CC : move right
+                { x: 480, y: 0 },    // Design : move right
+                { x: -480, y: 0 },    // Management : move left
+                { x: -240, y: 0 },   // Research : move left
+                { x: 480, y: 0 }     // Web : move right
+            ];
+
+            const items = document.querySelectorAll('.domain-item');
+            const grid = document.querySelector('.domains-grid');
+            const subtitle = document.querySelector('.section-subtitle');
+
+            if (!items.length || !grid || !subtitle) return;
+
+            // Set initial state
+            gsap.set(items, {
+                x: 0,
+                y: 0,
+                scale: 0.6,
+                opacity: 0,
+                force3D: true
+            });
+
+            // initial state for subtitle (text)
+            gsap.set(subtitle, {
+                opacity: 0,
+                y: 20,
+                scale: 0.9,
+                force3D: true
+            });
+
+            // Simplified timeline with better performance
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: '.domains-section',
+                    start: '-580px top',
+                    end: 'bottom bottom',
+                    scrub: 1.2,
+                    pin: 'true',
+                    anticipatePin: 1,
+                    invalidateOnRefresh: true,
+                    markers: false,
+                }
+            });
+
+            // Phase 1: Appear and form grid
+            tl.to(subtitle, {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 2,
+                ease: "power2.out"
+            })
+            .to(items, {
+                opacity: 1,
+                scale: 1,
+                duration: 2,
+                ease: "power2.out",
+                stagger: 0.1
+            }, "<+=0.2")
+            .to(items, {
+                x: (i) => gridPos[i].x,
+                y: (i) => gridPos[i].y,
+                duration: 3,
+                ease: "power2.inOut"
+            }, "-=1");
+
+            // Phase 2: Form horizontal line
+            tl.to(items, {
+                x: (i) => linePos[i].x,
+                y: (i) => linePos[i].y,
+                scale: 0.7,
+                duration: 3,
+                ease: "power1.inOut"
+            })
+            .to(subtitle, {
+                opacity: 0,
+                y: -30,
+                duration: 2,
+                ease: "power2.out"
+            }, "<");
+
+            // Phase 3: Simplified zoom effect
+            tl.to(grid, {
+                scale: 10,
+                duration: 5,
+                ease: "power1.inOut"
+            })
+            .to(items, {
+                x: (i) => zoomPos[i].x,
+                y: (i) => zoomPos[i].y,
+                opacity: 100,
+                scale: 0.5,
+                duration: 2,
+                ease: "power2.in",
+                stagger: 0.00
+            }, "<+=0.5")
+
+            // Simplified hover effects
+            items.forEach((item) => {
+                const img = item.querySelector('.cassette-img');
+                if (!img) return;
+                
+                let hoverTween: gsap.core.Tween | null = null;
+                
+                item.addEventListener('mouseenter', () => {
+                    if (hoverTween) hoverTween.kill();
+                    hoverTween = gsap.to(img, {
+                        scale: 1.03,
+                        duration: 0.2,
+                        ease: "power2.out",
+                        transformOrigin: "center center"
+                    });
+                });
+                
+                item.addEventListener('mouseleave', () => {
+                    if (hoverTween) hoverTween.kill();
+                    hoverTween = gsap.to(img, {
+                        scale: 1,
+                        duration: 0.2,
+                        ease: "power2.out",
+                        transformOrigin: "center center"
+                    });
+                });
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initAnimation);
+        } else {
+            initAnimation();
+        }
+
+        // // Throttled resize handler
+        // let resizeTimeout: number | undefined;
+        // window.addEventListener('resize', () => {
+        //     clearTimeout(resizeTimeout);
+        //     resizeTimeout = setTimeout(() => {
+        //         ScrollTrigger.refresh();
+        //     }, 300);
+        // });
+    }
+</script>
