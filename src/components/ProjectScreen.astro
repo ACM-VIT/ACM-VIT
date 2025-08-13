@@ -1,0 +1,241 @@
+---
+import projectData from '../data/projectsData.json';
+---
+
+<section class="screen project-screen" id="project-screen">
+	<!-- Decorative dotted lines -->
+	<div class="background-pattern"></div>
+
+	<div class="grid-layout">
+		<!-- Left Side - Cassette SVG -->
+		<div class="device-section">
+			<div class="cassette-container">
+				<img src={projectData.cassette.src} alt={projectData.cassette.alt} />
+			</div>
+		</div>
+
+		<!-- Right Side - Content -->
+		<div class="content-section">
+			<div class="content-block">
+				<p class="description">
+					{projectData.textContent.firstBlock}
+				</p>
+			</div>
+			
+			<!-- Move buttons between the blocks -->
+			<div class="action-buttons">
+				<button class="btn primary">{projectData.buttons.learnMore.text}</button>
+				<button class="btn primary">{projectData.buttons.visitWebsite.text}</button>
+				<button class="btn icon-btn">
+					<img src="/github-icon.svg" alt="GitHub" width="24" height="24" />
+				</button>
+			</div>
+			
+			<div class="content-block">
+				<p class="description">
+					{projectData.textContent.secondBlock}
+				</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	@font-face {
+		font-family: 'PolySans Trial';
+		src: url('../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-SlimMono.otf') format('opentype');
+		font-weight: 300;
+		font-style: normal;
+		font-display: swap;
+	}
+
+	@font-face {
+		font-family: 'PolySans Trial';
+		src: url('../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-NeutralMono.otf') format('opentype');
+		font-weight: 400;
+		font-style: normal;
+		font-display: swap;
+	}
+
+	@font-face {
+		font-family: 'PolySans Trial';
+		src: url('../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-MedianMono.otf') format('opentype');
+		font-weight: 500;
+		font-style: normal;
+		font-display: swap;
+	}
+
+	@font-face {
+		font-family: 'PolySans Trial';
+		src: url('../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-BulkyMono.otf') format('opentype');
+		font-weight: 700;
+		font-style: normal;
+		font-display: swap;
+	}
+
+	.screen {
+		position: relative;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100vh;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: transparent;
+	}
+
+	.project-screen {
+		z-index: 1;
+		background: #0D0E0D;
+	}
+
+	.background-pattern {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-image: url('/background_pattern.svg');
+		background-repeat: repeat;
+		opacity: 0.8;
+		z-index: 0;
+		pointer-events: none;
+	}
+
+	.grid-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 190px; /* Reduced gap */
+    align-items: center;
+    max-width: 1200px;
+    width: 100%;
+    padding: 0 5%;
+    height: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+.device-section {
+    display: flex;
+    justify-content: center; /* Center instead of flex-end */
+    align-items: center;
+    margin-left: 30px; /* Reduced from 60px to move cassette more left */
+}
+
+.cassette-container {
+    width: 100%;
+    max-width: 550px; /* Make container smaller */
+    height: auto;
+}
+
+.cassette-container img {
+    width: 110%;
+    height: auto;
+}
+	/* Content Section */
+	.content-section {
+		color: white;
+		display: flex;
+		flex-direction: column;
+		gap: 35px;
+		justify-content: center;
+	}
+
+	.content-block {
+		border: none;
+		padding: 30px;
+		
+		position: relative;
+		margin: 8px 0;
+	}
+
+	
+
+	
+	.description {
+		font-family: 'PolySans Trial', Arial, sans-serif;
+		font-size: 16px;
+		line-height: 1.4;
+		margin: 0;
+		text-transform: uppercase;
+		color: white;
+		font-weight: 300;
+		word-wrap: break-word;
+	}
+
+.action-buttons {
+    display: flex;
+    gap: 40px;
+    align-items: left-center;
+    justify-content: center;
+    margin: 0; /* Remove margin since it's now between blocks */
+}
+
+	.btn {
+		padding: 10px 18px;
+		border: 1px solid #FEFCD9;
+		border-radius: 25px;
+		font-family: 'PolySans Trial', Arial, sans-serif;
+		font-size: 12px;
+		font-weight: 300;
+		text-transform: uppercase;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		word-wrap: break-word;
+	}
+
+	.btn.primary {
+		background: #F95F4A;
+		color: white;
+	}
+
+	.btn.icon-btn {
+		background: #F95F4A;
+		color: white;
+		width: 40px;
+		height: 44px;
+		border-radius: 50%;
+		border: 1px solid #FEFCD9;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0;
+	}
+
+	.btn:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 8px 20px rgba(249, 95, 74, 0.4);
+	}
+
+	/* Responsive Design */
+	@media (max-width: 768px) {
+		.grid-layout {
+			grid-template-columns: 1fr;
+			gap: 40px;
+			padding: 20px;
+		}
+
+		.cassette-container {
+			max-width: 220px;
+		}
+
+		.cassette-container svg {
+			width: 120px !important;
+		}
+
+		.description {
+			font-size: 14px;
+		}
+
+		.background-pattern {
+			background-size: 80px 80px;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.background-pattern {
+			background-size: 60px 60px;
+		}
+	}
+</style>
