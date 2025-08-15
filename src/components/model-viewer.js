@@ -216,6 +216,23 @@ export function initViewer(containerId, modelPath, opts = {}) {
   let lastActive = false;
   let lastUpdateTs = performance.now();
   let stuck = false;
+//   const tl = gsap.timeline({
+//   scrollTrigger: {
+//     trigger: container,
+//     start: "top top",
+//     end: `+=${endScroll}`,
+//     scrub: true,
+//     pin: pin,
+//     markers: debugMarkers,
+//   }
+//   });
+
+//   tl.to(root.position, { x: startX, duration: 0 }, 0);          // 0–startScroll: static
+//   tl.to(root.position, { x: midX, duration: 1 }, (phase1_px / endScroll)); // smooth change
+//   tl.to(root.position, { x: endX, duration: 1 }, (phase2_px / endScroll));   
+//   const midX = (startX + endX) / 2;
+// const phase1_px = endScroll * 0.33;
+// const phase2_px = endScroll * 0.66;
 
   const stVars = {
     id: 'glbST',
