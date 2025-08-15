@@ -15,8 +15,8 @@ export function initViewer(containerId, modelPath, opts = {}) {
 
     // camera/model fit
     desiredSize = 2.0,          // target longest side after scaling the GLB
-    padding = 1.25,             // extra framing around object
-    cameraDistanceMul = 1.8,    // push camera farther from model
+    padding = 1,             // extra framing around object
+    cameraDistanceMul = 0.3,    // push camera farther from model
 
     // scroll mapping
     startX = -2,
@@ -81,7 +81,7 @@ export function initViewer(containerId, modelPath, opts = {}) {
 
   // ---------- Three.js ----------
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(60, 1, 0.01, 5000);
+  const camera = new THREE.PerspectiveCamera(75, 1, 0.01, 1000);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -103,7 +103,7 @@ export function initViewer(containerId, modelPath, opts = {}) {
     const axes = new THREE.AxesHelper(3);
     axes.position.y = -1;
     scene.add(axes);
-    const grid = new THREE.GridHelper(20, 20);
+    const grid = new THREE.GridHelper(2, 20);
     grid.position.y = -1;
     scene.add(grid);
   }
@@ -131,7 +131,7 @@ export function initViewer(containerId, modelPath, opts = {}) {
     const fitWidthDist  = (size.x / 2) / Math.tan(fov / 2) / camera.aspect;
     const distance = cameraDistanceMul * padding * Math.max(fitHeightDist, fitWidthDist);
 
-    camera.position.set(center.x, center.y + size.y * 0.2+2, center.z + distance);
+    camera.position.set(0,0, 0.5);
     camera.near = Math.max(distance / 100, 0.01);
     camera.far  = distance * 100;
     camera.updateProjectionMatrix();
@@ -216,6 +216,23 @@ export function initViewer(containerId, modelPath, opts = {}) {
   let lastActive = false;
   let lastUpdateTs = performance.now();
   let stuck = false;
+//   const tl = gsap.timeline({
+//   scrollTrigger: {
+//     trigger: container,
+//     start: "top top",
+//     end: `+=${endScroll}`,
+//     scrub: true,
+//     pin: pin,
+//     markers: debugMarkers,
+//   }
+//   });
+
+//   tl.to(root.position, { x: startX, duration: 0 }, 0);          // 0–startScroll: static
+//   tl.to(root.position, { x: midX, duration: 1 }, (phase1_px / endScroll)); // smooth change
+//   tl.to(root.position, { x: endX, duration: 1 }, (phase2_px / endScroll));   
+//   const midX = (startX + endX) / 2;
+// const phase1_px = endScroll * 0.33;
+// const phase2_px = endScroll * 0.66;
 
   const stVars = {
     id: 'glbST',
