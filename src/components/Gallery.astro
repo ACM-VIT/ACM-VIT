@@ -1,0 +1,148 @@
+---
+// Gallery.astro
+export interface Props {}
+---
+
+<section class="relative min-h-screen overflow-hidden">
+    <!-- Background Text Pattern -->
+    <div class="absolute inset-0 opacity-30 grayscale-100 pointer-events-none z-0">
+        <img
+            src="/gallery-bg-text.svg"
+            alt="Background Pattern"
+            class="object-cover h-full"
+        />
+    </div>
+
+    <!-- Main Content Container -->
+    <div
+        class="absolute bottom-0 z-10 flex flex-col items-center justify-end min-h-screen"
+    >
+        <!-- Gallery Title -->
+        <div
+            class="text-center flex flex-col items-center justify-center gap-10"
+        >
+            <img
+                src="/gallery.svg"
+                alt="Gallery Title"
+                class="object-cover max-w-[60vw] h-full"
+            />
+
+            <!-- CTA Button -->
+            <button
+                class="bg-primary-orange text-white px-8 py-3 rounded-full text-md transition-all duration-300 transform hover:scale-103 hover:cursor-pointer z-10 border-1 border-[#FEFCD9]"
+            >
+                <span style="font-family: 'PolySans Trial';" class="z-10"
+                    >PROOF WE ACTUALLY DO STUFF - VIEW PHOTOS!</span
+                >
+            </button>
+        </div>
+
+        <!-- Photo Grid/Collage -->
+        <div class="w-full z-0 max-h-[55vh]">
+            <img
+                src="/full-core.svg"
+                alt="Description of photo 1"
+                class="w-full h-full object-cover rounded-lg shadow-lg"
+            />
+        </div>
+    </div>
+
+    <style>
+        @keyframes scroll-right {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        @keyframes scroll-left {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
+        }
+
+        @keyframes float-delayed {
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-15px) rotate(-8deg);
+            }
+        }
+
+        @keyframes float-slow {
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+        }
+
+        .animate-scroll-right {
+            animation: scroll-right 20s linear infinite;
+        }
+
+        .animate-scroll-left {
+            animation: scroll-left 25s linear infinite;
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .animate-float-delayed {
+            animation: float-delayed 8s ease-in-out infinite 2s;
+        }
+
+        .animate-float-slow {
+            animation: float-slow 10s ease-in-out infinite 4s;
+        }
+
+        /* Hover effects */
+        .group:hover .animate-float {
+            animation-duration: 2s;
+        }
+
+        /* Responsive text scaling */
+        @media (max-width: 768px) {
+            .animate-scroll-right,
+            .animate-scroll-left {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .animate-scroll-right,
+            .animate-scroll-left {
+                font-size: 2rem;
+            }
+        }
+
+        @font-face {
+            font-family: "PolySans Trial";
+            src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-NeutralMono.otf")
+                format("opentype");
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+    </style>
+</section>
