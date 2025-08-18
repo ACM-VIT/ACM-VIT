@@ -1,0 +1,466 @@
+---
+/* EventsThreeLayerGPU (native scroll) + Pill-fit Title + Fade-away + Horizontal Scroll with random data */
+const N = 24;
+const words = [
+  "Design",
+  "Hack",
+  "Summit",
+  "Neo",
+  "Pixel",
+  "Flux",
+  "Nova",
+  "Pulse",
+  "Forge",
+  "Orbit",
+  "Core",
+  "Atlas",
+  "Shift",
+  "Stack",
+  "Grid",
+  "Bloom",
+  "Spark",
+  "Delta",
+  "Alpha",
+  "Beta",
+  "Gamma",
+  "Kilo",
+  "Quark",
+  "Nimbus",
+];
+const cities = [
+  "San Francisco",
+  "New York",
+  "Berlin",
+  "Tokyo",
+  "Bengaluru",
+  "Sydney",
+  "Toronto",
+  "Paris",
+  "Seoul",
+  "London",
+  "Austin",
+  "Stockholm",
+];
+function rand<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+function rnd(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+const hItems = Array.from({ length: N }).map((_, i) => ({
+  id: i + 1,
+  title: `${rand(words)} ${rand(words)} ${rnd(2024, 2027)}`,
+  city: rand(cities),
+  date: `${rnd(1, 28).toString().padStart(2, "0")}-${rnd(1, 12).toString().padStart(2, "0")}-${rnd(2024, 2027)}`,
+  tag: ["conf", "workshop", "meetup", "summit", "bootcamp"][rnd(0, 4)],
+}));
+---
+
+<!-- spacer above -->
+<section
+  class="h-screen grid place-items-center bg-red-500 text-white text-3xl"
+>
+  Top section
+</section>
+
+<!-- EVENTS (three-layer) -->
+<section
+  id="events"
+  class="relative h-[250lvh] bg-neutral-950 text-neutral-50 overflow-clip"
+>
+  <div class="relative h-full [clip-path:inset(0_-0.75rem)]">
+    <!-- MIDDLE LAYER: fixed inner (title + scene + canvas) -->
+    <div
+      id="events-inner"
+      class="fixed inset-0 grid place-items-center bg-neutral-900 text-neutral-50 will-change-transform [transform-style:preserve-3d] [backface-visibility:hidden]"
+      style="transform: translate3d(0, calc(var(--scroll-progress,0)*-12%), 0);"
+    >
+      <!-- Title boxed to the pill’s inner size (prevents clipping) -->
+      <div
+        id="titleBox"
+        class="pointer-events-none absolute inset-0 grid place-items-center z-[1]"
+      >
+        <h2
+          id="eventsTitle"
+          class="uppercase font-extrabold tracking-widest leading-[0.85] opacity-10
+                 will-change-transform [transform-style:preserve-3d] [backface-visibility:hidden] text-center"
+          style="
+            width: var(--pill-inner-w, 260px);
+            height: var(--pill-inner-h, 80vh);
+            font-size: var(--events-font, 120px);
+            line-height: 0.85;
+            letter-spacing: -0.02em;
+            transform: translateZ(0);
+            display: grid;
+            place-items: center;
+          "
+        >
+          <span class="flex flex-col items-center gap-[.05em]">
+            <span class="event-letter">E</span>
+            <span class="event-letter">V</span>
+            <span class="event-letter">E</span>
+            <span class="event-letter">N</span>
+            <span class="event-letter">T</span>
+            <span class="event-letter">S</span>
+          </span>
+        </h2>
+      </div>
+
+      <!-- BACKDROP: canvas -->
+      <canvas
+        id="eventsCanvas"
+        class="absolute inset-0 w-full h-full will-change-transform [transform-style:preserve-3d] [backface-visibility:hidden]"
+        style="transform: translate3d(0, calc(var(--scroll-progress,0)*-5%), 0);"
+      ></canvas>
+    </div>
+
+    <!-- TOP LAYER: sticky SVG pill mask -->
+    <div class="sticky top-0 h-screen pointer-events-none z-20">
+      <div
+        id="mask-wrap"
+        class="absolute inset-0 will-change-transform [transform-style:preserve-3d] [backface-visibility:hidden]"
+        style="transform: scale(calc(1 + var(--scroll-progress,0)*0.15));"
+      >
+        <svg id="eventsSVG" class="absolute inset-0 w-full h-full">
+          <!-- even-odd fill: outer rect + inner rounded path = pill window -->
+          <path id="maskOuter" class="fill-neutral-900 stroke-white/10" d=""
+          ></path>
+          <path
+            id="maskInner"
+            class="fill-neutral-900 stroke-white/10"
+            d=""
+            style="transform: translate3d(0, calc(var(--scroll-progress,0)*48px), 0);"
+          ></path>
+          <path id="maskLines" class="fill-none stroke-white/10" d=""></path>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Ruler: defines pill position & size (centered tall capsule) -->
+    <div
+      id="ruler"
+      class="absolute top-[10lvh] left-1/2 -translate-x-1/2
+                w-[16.666%] max-w-[20rem] md:w-1/3 lg:w-[16.666%] h-[80lvh]"
+    >
+    </div>
+  </div>
+</section>
+
+<!-- HORIZONTAL SCROLL (pinned) -->
+<section id="hscroll" class="relative bg-neutral-975 text-neutral-50">
+  <div id="hwrap" class="sticky top-0 h-[100svh] overflow-hidden">
+    <div
+      id="htrack"
+      class="absolute left-0 top-0 h-full flex items-center gap-6 px-12 will-change-transform"
+    >
+      {
+        hItems.map((item) => (
+          <article class="shrink-0 w-[72vw] md:w-[46vw] max-w-[720px] h-[64vh] md:h-[70vh] rounded-2xl bg-neutral-900/70 backdrop-blur border border-white/10 p-6 flex flex-col justify-between shadow-xl">
+            <header class="space-y-2">
+              <div class="inline-flex items-center gap-2 text-xs uppercase tracking-wide text-white/60">
+                <span class="px-2 py-1 rounded bg-white/10">{item.tag}</span>
+                <span>{item.date}</span>
+              </div>
+              <h3 class="text-2xl md:text-3xl font-extrabold leading-tight">
+                {item.title}
+              </h3>
+              <p class="text-sm text-white/70">{item.city}</p>
+            </header>
+            <div class="grid grid-cols-3 gap-3 mt-6 text-sm">
+              <div class="rounded-lg bg-white/5 border border-white/10 p-3">
+                Seats: {rnd(50, 400)}
+              </div>
+              <div class="rounded-lg bg-white/5 border border-white/10 p-3">
+                Rating: {(Math.random() * 2 + 3).toFixed(1)}★
+              </div>
+              <div class="rounded-lg bg-white/5 border border-white/10 p-3">
+                Price: ${rnd(49, 299)}
+              </div>
+            </div>
+            <footer class="pt-4">
+              <button class="px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-500 transition font-semibold">
+                Details
+              </button>
+            </footer>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+  <!-- Spacer below to let the pin release gracefully -->
+  <div class="h-[40svh]"></div>
+</section>
+
+<!-- bottom -->
+<section
+  class="h-screen grid place-items-center bg-red-500 text-white text-3xl"
+>
+  Bottom section
+</section>
+
+<style>
+  #maskOuter,
+  #maskInner {
+    fill-rule: evenodd;
+    stroke-width: 1px;
+  }
+  #maskLines {
+    stroke: rgba(255, 255, 255, 0.1);
+    stroke-width: 1px;
+  } /* stronger grid like screenshot */
+
+  html,
+  body {
+    height: auto;
+    overscroll-behavior: none;
+  }
+  body {
+    position: relative;
+  }
+
+  .event-letter {
+    display: inline-block;
+    font-size: 125px;
+    will-change: transform, opacity, filter;
+    transform: translateZ(0);
+  }
+
+  /* Neutral 975 (custom) */
+  .bg-neutral-975 {
+    background-color: #0b0b0c;
+  }
+</style>
+
+<script type="module">
+  import { gsap } from "https://cdn.skypack.dev/gsap@3.12.5";
+  import { ScrollTrigger } from "https://cdn.skypack.dev/gsap@3.12.5/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* ====== DOM refs ====== */
+  const root = document.getElementById("events");
+  const inner = document.getElementById("events-inner");
+  const canvas = document.getElementById("eventsCanvas");
+  const ctx = canvas?.getContext?.("2d") ?? null;
+
+  const svg = document.getElementById("eventsSVG");
+  const pOuter = document.getElementById("maskOuter");
+  const pInner = document.getElementById("maskInner");
+  const pLines = document.getElementById("maskLines");
+  const ruler = document.getElementById("ruler");
+
+  const hwrap = document.getElementById("hwrap");
+  const htrack = document.getElementById("htrack");
+
+  /* ====== helpers ====== */
+  function setItemsProgress(progress) {
+    const p1 = 1 - progress,
+      p2 = 0 - progress,
+      p3 = -1 - progress;
+    document.documentElement.style.setProperty(
+      "--scroll-progress",
+      progress.toFixed(4)
+    );
+    document.documentElement.style.setProperty("--p1", p1.toFixed(4));
+    document.documentElement.style.setProperty("--p2", p2.toFixed(4));
+    document.documentElement.style.setProperty("--p3", p3.toFixed(4));
+  }
+
+  function setSize() {
+    const vw = innerWidth,
+      vh = innerHeight;
+    canvas.width = vw;
+    canvas.height = vh;
+    svg.setAttribute("viewBox", `0 0 ${vw} ${vh}`);
+
+    const r = ruler.getBoundingClientRect();
+    const rootRect = root.getBoundingClientRect();
+
+    const dOuter = `M -1 0 L ${vw + 2} 0 L ${vw + 2} ${vh} L -1 ${vh} Z`;
+
+    const tl = { x: r.left - rootRect.left, y: r.top - rootRect.top };
+    const tr = { x: tl.x + r.width, y: tl.y };
+    const br = { x: tr.x, y: tl.y + r.height };
+    const bl = { x: tl.x, y: br.y };
+    const rad = (tr.x - tl.x) / 2;
+
+    const inner1 = `M ${tl.x} ${tl.y + rad}
+      A ${rad} ${rad} 0 0 1 ${tr.x} ${tr.y + rad}
+      L ${br.x} ${br.y - rad}
+      A ${rad} ${rad} 0 0 1 ${bl.x} ${bl.y - rad} Z`;
+    pOuter.setAttribute("d", `${dOuter} ${inner1}`);
+
+    const thick = vw > 767 ? 16 : 8;
+    const tl2 = { x: tl.x + thick, y: tl.y + thick };
+    const tr2 = { x: tr.x - thick, y: tr.y + thick };
+    const br2 = { x: br.x - thick, y: br.y - thick };
+    const bl2 = { x: bl.x + thick, y: bl.y - thick };
+    const rad2 = (tr2.x - tl2.x) / 2;
+
+    const inner2 = `M ${tl2.x} ${tl2.y + rad2}
+      A ${rad2} ${rad2} 0 0 1 ${tr2.x} ${tr2.y + rad2}
+      L ${br2.x} ${br2.y - rad2}
+      A ${rad2} ${rad2} 0 0 1 ${bl2.x} ${bl2.y - rad2} Z`;
+    pInner.setAttribute("d", `${dOuter} ${inner2}`);
+
+    const cols = vw > 767 ? 12 : 8;
+    const gapX = (tr.x - tl.x) / cols;
+    const gapY = Math.max(8, (bl.y - tl.y) * 0.1);
+    const rows = Math.ceil((bl.y - tl.y) / gapY);
+    let dLines = "";
+    for (let i = 1; i < cols; i++) {
+      const x = tl.x + gapX * i;
+      dLines += `M ${x} ${tl.y} L ${x} ${bl.y} `;
+    }
+    for (let j = 0; j <= rows; j++) {
+      const y = tl.y + gapY * j;
+      dLines += `M ${tl.x} ${y} L ${tr.x} ${y} `;
+    }
+    pLines.setAttribute("d", dLines);
+
+    /* -------- Pill-fit title sizing (prevents clipping) -------- */
+    const pillInnerW = tr2.x - tl2.x;
+    const pillInnerH = bl2.y - tl2.y;
+    document.documentElement.style.setProperty(
+      "--pill-inner-w",
+      `${pillInnerW}px`
+    );
+    document.documentElement.style.setProperty(
+      "--pill-inner-h",
+      `${pillInnerH}px`
+    );
+
+    // Choose font size based on inner width so “E” fits comfortably.
+    // Adjust 0.80–0.86 per font; 0.82 is a good default for bold grotesks.
+    const fontPx = Math.floor(pillInnerW * 0.82);
+    document.documentElement.style.setProperty("--events-font", `${fontPx}px`);
+  }
+
+  // dots
+  function drawDots(t = 0) {
+    if (!ctx) return;
+    const vw = canvas.width,
+      vh = canvas.height;
+    ctx.clearRect(0, 0, vw, vh);
+    ctx.beginPath();
+    const gap = 24;
+    const drift = (t * -0.05) % gap;
+    for (let x = gap; x < vw - gap; x += gap) {
+      for (let y = gap; y < vh - gap; y += gap) {
+        ctx.rect(x + drift, y, 0.6, 0.6);
+      }
+    }
+    ctx.strokeStyle = "rgba(255,255,255,0.13)";
+    ctx.stroke();
+  }
+  let lastDots = 0;
+  function extraRAF(ts) {
+    if (ts - lastDots > 32) {
+      drawDots(ts);
+      lastDots = ts;
+    }
+    requestAnimationFrame(extraRAF);
+  }
+  requestAnimationFrame(extraRAF);
+
+  /* ====== ScrollTriggers ====== */
+  let stMain, stHideInner, stH;
+
+  function mountScrollTriggers() {
+    // main parallax
+    stMain?.kill();
+    stMain = ScrollTrigger.create({
+      trigger: root,
+      start: "bottom top",
+      end: "top top",
+      scrub: true,
+      fastScrollEnd: true,
+      invalidateOnRefresh: true,
+      onUpdate: (self) => setItemsProgress(self.progress),
+    });
+
+    // hide inner when we leave the section (so it “goes away”)
+    stHideInner?.kill();
+    stHideInner = ScrollTrigger.create({
+      trigger: root,
+      start: "top bottom",
+      end: "bottom top",
+      onEnter: () => gsap.set(inner, { autoAlpha: 1 }),
+      onEnterBack: () => gsap.to(inner, { autoAlpha: 1, duration: 0.25 }),
+      onLeave: () => gsap.to(inner, { autoAlpha: 0, duration: 0.25 }),
+      onLeaveBack: () => gsap.set(inner, { autoAlpha: 0 }),
+    });
+
+    // Horizontal scroller pin & translate
+    stH?.kill();
+    const totalWidth = htrack.scrollWidth;
+    const viewport = hwrap.clientWidth;
+    const distance = Math.max(0, totalWidth - viewport);
+
+    gsap.set(htrack, { x: 0 });
+
+    // Replace your current stH ScrollTrigger.create() with this:
+    stH = ScrollTrigger.create({
+      trigger: document.getElementById("hscroll"),
+      start: () => {
+        const titleBox = document.getElementById("titleBox");
+        const rect = titleBox.getBoundingClientRect();
+        const scrollTop =
+          window.pageYOffset || document.documentElement.scrollTop;
+        // Absolute position of bottom of titleBox
+        const titleBottom = rect.bottom + scrollTop;
+        // Start when bottom of titleBox hits top of viewport
+        return `${titleBottom - window.innerHeight} top`;
+      },
+      end: () => {
+        const totalWidth = htrack.scrollWidth;
+        const viewport = hwrap.clientWidth;
+        const distance = Math.max(0, totalWidth - viewport);
+        return `+=${distance}`;
+      },
+      scrub: true,
+      pin: true,
+      anticipatePin: 1,
+      invalidateOnRefresh: true,
+      onRefresh: (self) => {
+        const tw = htrack.scrollWidth;
+        const vp = hwrap.clientWidth;
+        const d = Math.max(0, tw - vp);
+        self.end = self.start + d;
+      },
+      onUpdate: (self) => {
+        const totalWidth = htrack.scrollWidth;
+        const viewport = hwrap.clientWidth;
+        const distance = Math.max(0, totalWidth - viewport);
+        const x = -distance * self.progress;
+        gsap.set(htrack, { x });
+      },
+    });
+  }
+
+  /* ====== Resize / Boot ====== */
+  let resizeRaf = 0;
+  const onResize = () => {
+    cancelAnimationFrame(resizeRaf);
+    resizeRaf = requestAnimationFrame(() => {
+      setSize();
+      ScrollTrigger.refresh();
+      mountScrollTriggers();
+    });
+  };
+  window.addEventListener("resize", onResize, { passive: true });
+
+  const boot = () => {
+    setSize();
+    mountScrollTriggers();
+    ScrollTrigger.refresh();
+  };
+  if (document.readyState === "complete") boot();
+  else window.addEventListener("load", boot, { once: true });
+
+  // Hot-reload guard
+  window.addEventListener("astro:after-swap", () => {
+    [stMain, stHideInner, stH].forEach((s) => s?.kill());
+    ScrollTrigger.getAll().forEach((s) => s.kill());
+  });
+</script>

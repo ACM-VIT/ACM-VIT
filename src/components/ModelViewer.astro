@@ -1,0 +1,16 @@
+---
+import modelViewerScript from './model-viewer.js?url';
+---
+
+<div id="viewer" style="width: 100%; height: 100%;"></div>
+
+
+<script type="module" src={modelViewerScript}></script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    import('./model-viewer.js').then(module => {
+      module.initViewer('viewer', '/SMVInside.glb');
+    });
+  });
+</script>

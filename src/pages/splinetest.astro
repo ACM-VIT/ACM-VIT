@@ -1,0 +1,26 @@
+---
+// This is an Astro file
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Spline Test Page</title>
+    <!-- Load the Spline loader script -->
+    <script type="module" src="/src/components/spline-loader.js"></script>
+
+    <!-- Remove the logo from spline-viewer shadow DOM -->
+    <script type="module">
+      document.addEventListener('DOMContentLoaded', () => {
+        const splineViewers = document.querySelectorAll('spline-viewer');
+        splineViewers.forEach(splineViewer => {
+          const logo = splineViewer.shadowRoot && splineViewer.shadowRoot.querySelector('#logo');
+          if (!logo) return;
+          logo.remove();
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <spline-viewer></spline-viewer>
+  </body>
+</html>

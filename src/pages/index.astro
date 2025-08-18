@@ -1,11 +1,31 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Welcome from "../components/Welcome.astro";
+import Layout from "../layouts/Layout.astro";
+import Events from "../components/events.astro";
 ---
 
 <Layout>
-	<Welcome />
+  <Events />
+  <!-- <Welcome /> -->
+  <!-- <style>
+    #viewer { width: 100%; height: 100vh; position: relative; }
+    .spacer { height: 100vh; }
+  </style>
+
+  <div class="spacer"></div>
+  <div id="viewer"></div>
+  <div class="spacer"></div>
+
+  <script type="module">
+    import { initViewer } from '/src/components/model-viewer.js';
+    // Ensure container has height (100vh is fine)
+    initViewer('viewer', '/SMVInside.glb', {
+    endScroll: 4000,
+    desiredSize: 2.5,
+    cameraDistanceMul: 2.0,
+    startX: -3,
+    endX: 3,
+    showHelpers: true,
+    debugMarkers: true
+    }); -->
 </Layout>

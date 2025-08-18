@@ -9,6 +9,15 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.12.8"
+    "@splinetool/loader": "^1.10.44",
+    "@tailwindcss/vite": "^4.1.11",
+    "astro": "^5.12.8",
+    "gsap": "^3.13.0",
+    "tailwindcss": "^4.1.11",
+    "three": "0.151.0"
+  },
+  "devDependencies": {
+    "@types/three": "^0.179.0",
+    "vite": "^7.0.6"
   }
 }

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<title>ACM-VIT</title>
+	</head>
+	<body>
+		<div class="background-pattern"></div>
+		<img src="/acm_topleft.svg" alt="ACM-VIT" class="acm-logo" />
+		<div class="content">
+			<slot />
+		</div>
+	</body>
+</html>
+
+<style>
+	html,
+	body {
+		margin: 0;
+		width: 100%;
+		height: 100%;
+		overflow-x: hidden;
+		position: relative;
+		background: #0D0E0D;
+	}
+
+	.background-pattern {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-image: url('/background_pattern.svg');
+		background-repeat: repeat;
+		opacity: 0.8;
+		z-index: 0;
+		pointer-events: none;
+	}
+
+	.acm-logo {
+		position: fixed;
+		top: 20px;
+		left: 20px;
+		width: auto;
+		height: 60px;
+		z-index: 1000;
+		pointer-events: none;
+	}
+
+	.content {
+		position: relative;
+		z-index: 1;
+		width: 100%;
+		height: 100%;
+	}
+
+	@media screen and (max-width: 768px) {
+		.acm-logo {
+			height: 45px;
+			top: 15px;
+			left: 15px;
+		}
+		
+		.background-pattern {
+			background-size: 80px 80px;
+		}
+	}
+
+	@media screen and (max-width: 480px) {
+		.acm-logo {
+			height: 35px;
+			top: 10px;
+			left: 10px;
+		}
+		
+		.background-pattern {
+			background-size: 60px 60px;
+		}
+	}
+</style>
