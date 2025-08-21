@@ -1,0 +1,651 @@
+---
+import AWork from './AWork.astro'
+import dummyVideo from '/src/assets/works/Dummy.mp4'
+
+const videos = await Astro.glob<{ default: any }>('/src/assets/works/*.mp4')
+
+// Project info
+const info: { [key: string]: { title: string; site: string } } = {
+  Pen: {
+    title: 'CodePen',
+    site: 'https://codepen.io/wodniack',
+  },
+  Dummy1: {
+    title: 'Dummy Project 1',
+    site: 'https://wodniack.dev',
+  },
+  Dummy2: {
+    title: 'Dummy Project 2',
+    site: 'https://wodniack.dev',
+  },
+  Dummy3: {
+    title: 'Dummy Project 3',
+    site: 'https://wodniack.dev',
+  },
+  Dummy4: {
+    title: 'Dummy Project 4',
+    site: 'https://wodniack.dev',
+  },
+  Dummy5: {
+    title: 'Dummy Project 5',
+    site: 'https://wodniack.dev',
+  },
+  Dummy6: {
+    title: 'Dummy Project 6',
+    site: 'https://wodniack.dev',
+  },
+  Dummy7: {
+    title: 'Dummy Project 7',
+    site: 'https://wodniack.dev',
+  },
+  Dummy8: {
+    title: 'Dummy Project 8',
+    site: 'https://wodniack.dev',
+  },
+  Dummy9: {
+    title: 'Dummy Project 9',
+    site: 'https://wodniack.dev',
+  },
+  Dummy10: {
+    title: 'Dummy Project 10',
+    site: 'https://wodniack.dev',
+  }
+}
+
+let projects = []
+let pens: any[] = []
+
+// Process videos
+videos.forEach((video, index) => {
+  const src = video.default
+  const key = src.split('-')[0].split('/').pop() as keyof typeof info
+  const project = info[key]
+  if (!project) return
+  const caption = project.title
+  const site = project.site
+
+  if (key === 'Pen') {
+    pens.push({
+      caption,
+      site,
+      src,
+    })
+  } else {
+    projects.push({
+      caption,
+      site,
+      src,
+    })
+  }
+})
+
+// Create dummy projects with 4 videos each
+for (let i = 1; i <= 14; i++) {
+  const key = `Dummy${i}`
+  const project = info[key]
+  if (!project) continue
+
+  for (let j = 0; j < 4; j++) {
+    projects.push({
+      caption: `${project.title} - Video ${j + 1}`,
+      site: project.site,
+      src: dummyVideo
+    })
+  }
+}
+
+function shuffle(array: any[]) {
+  let currentIndex = array.length
+  while (currentIndex != 0) {
+    let randomIndex = Math.floor(Math.random() * currentIndex)
+    currentIndex--
+    ;[array[currentIndex], array[randomIndex]] = [
+      array[randomIndex],
+      array[currentIndex],
+    ]
+  }
+}
+
+shuffle(projects)
+
+// Add pens in between projects regularly
+let works = []
+let chunkSize = Math.floor(projects.length / pens.length)
+let i = 0
+let j = 0
+while (i < projects.length) {
+  works.push(projects[i])
+  if (j < pens.length && (i + 1) % chunkSize === 0) {
+    works.push(pens[j])
+    j++
+  }
+  i++
+}
+---
+
+<section 
+  id="work" 
+  class="work-section relative z-[2] bg-white"
+  style={`height: ${works.length * 50}lvh`}
+  data-intersect
+>
+  <div class="work-outer relative clip-path-inset">
+    <div class="work-inner fixed top-0 left-0 w-full h-screen flex flex-col items-center justify-center bg-gray-900 text-white transform-gpu will-change-transform">
+      <h2 class="work-title opacity-0 w-[0.7em] break-all text-center uppercase leading-[0.85]" style="font-size: min(18.75rem, 25lvh); font-weight: 700;">
+        <span class="work-title-inner flex flex-col items-center justify-center my-[0.075em] -mb-[0.125em]">
+          <span class="work-letter">W</span>
+          <span class="work-letter">O</span>
+          <span class="work-letter">R</span>
+          <span class="work-letter">K</span>
+        </span>
+      </h2>
+
+      <div class="work-scene absolute top-0 left-0 z-[2] w-full h-full text-center uppercase leading-[0.85] transform-gpu will-change-transform" style="font-size: min(18.75rem, 25lvh); font-weight: 700; perspective: 40rem;">
+        {
+          works.map((work, index) => (
+            <AWork
+              cssClass="work-scene-item absolute top-1/2 left-1/2 z-[2] transform-gpu will-change-transform"
+              caption={work.caption}
+              site={work.site}
+              src={work.src}
+              index={index}
+              total={works.length}
+            />
+          ))
+        }
+      </div>
+
+      <canvas class="work-canvas absolute top-0 left-0 z-[1] w-full h-full transform-gpu"></canvas>
+    </div>
+
+    <div class="work-mask-outer sticky top-0 left-0 w-full h-screen overflow-hidden pointer-events-none">
+      <div class="work-mask absolute top-0 left-0 w-full h-full transform-gpu will-change-transform">
+        <svg class="work-mask-svg absolute top-0 left-0 w-full h-full">
+          <path class="work-mask-path-inner fill-white stroke-gray-900 stroke-1" d=""></path>
+          <path class="work-mask-path-outer fill-white stroke-gray-900 stroke-1" d="" style="fill-rule: evenodd;"></path>
+          <path class="work-mask-path-lines fill-none stroke-gray-900 stroke-1" d=""></path>
+        </svg>
+      </div>
+    </div>
+
+    <div class="work-ruler absolute pointer-events-none" style="top: 10lvh; left: calc(50% - min(16.6667%, 19.625rem) / 2); width: min(16.6667%, 19.625rem); height: 80lvh;"></div>
+  </div>
+
+  <!-- Before pseudo element replacement -->
+  <div class="absolute top-0 left-0 z-[2] w-full h-px bg-gray-900"></div>
+</section>
+
+<script>
+  interface Point {
+    x: number;
+    y: number;
+    dx: number;
+    dy: number;
+    m: number;
+    flowX: number;
+  }
+
+  interface Letter {
+    el: HTMLElement;
+    ghosts: Ghost[];
+    width?: number;
+    height?: number;
+    top?: number;
+    left?: number;
+    freq?: number;
+    total?: number;
+  }
+
+  interface Ghost {
+    el: HTMLElement;
+    x: number;
+    y: number;
+    z: number;
+    i: number;
+    p: number;
+    ap: number;
+    mx: number;
+    my: number;
+  }
+
+  interface Work {
+    el: HTMLElement;
+  }
+
+  interface Mask {
+    width: number;
+    height: number;
+    maxScale: number;
+    lines: Array<{p1: {x: number, y: number}, p2: {x: number, y: number}}>;
+    el: HTMLElement;
+    svg: HTMLElement;
+    pathOuter: HTMLElement;
+    pathInner: HTMLElement;
+    pathLines: HTMLElement;
+  }
+
+  class WorkSection {
+    el: HTMLElement;
+    container: HTMLElement;
+    ruler: HTMLElement;
+    scene: HTMLElement;
+    canvas: HTMLCanvasElement;
+    ctx: CanvasRenderingContext2D | null;
+    title: HTMLElement;
+    videos: NodeListOf<HTMLVideoElement>;
+
+    mask: Mask;
+    bounding!: { left: number; top: number; width: number; height: number };
+    letters: Letter[];
+    works: Work[];
+    points: Point[];
+
+    animationProgress: number = 0;
+    pointsProgress: number = 0;
+    last: { animationProgress: number; pointsProgress: number };
+    scrollProgress: number = 0;
+    smoothScrollProgress: number = 0;
+    state: number = 0;
+    speed: number = 0;
+    isPaused: boolean = true;
+    loadIsStarted: boolean = false;
+
+    constructor() {
+      this.el = document.querySelector('.work-section')!;
+      this.container = this.el.querySelector('.work-inner')!;
+      this.ruler = this.el.querySelector('.work-ruler')!;
+      this.scene = this.container.querySelector('.work-scene')!;
+      this.canvas = this.container.querySelector('.work-canvas')! as HTMLCanvasElement;
+      this.ctx = this.canvas.getContext('2d');
+      this.title = this.container.querySelector('.work-title')!;
+      this.videos = this.container.querySelectorAll('video');
+
+      this.mask = {
+        width: 0,
+        height: 0,
+        maxScale: 1,
+        lines: [],
+        el: this.el.querySelector('.work-mask')!,
+        svg: this.el.querySelector('.work-mask-svg')!,
+        pathOuter: this.el.querySelector('.work-mask-path-outer')!,
+        pathInner: this.el.querySelector('.work-mask-path-inner')!,
+        pathLines: this.el.querySelector('.work-mask-path-lines')!,
+      };
+
+      this.letters = [];
+      this.title.querySelectorAll('.work-letter').forEach((_letter) => {
+        const letter: Letter = {
+          el: _letter as HTMLElement,
+          ghosts: [],
+        };
+        this.letters.push(letter);
+      });
+
+      this.works = [];
+      this.container.querySelectorAll('.work-scene-item').forEach((_work) => {
+        const work: Work = {
+          el: _work as HTMLElement,
+        };
+        this.works.push(work);
+      });
+
+      this.points = [];
+      this.last = {
+        animationProgress: 0,
+        pointsProgress: 0,
+      };
+
+      this.init();
+    }
+
+    init() {
+      this.setCtxStyle();
+      this.setSize();
+      this.setMask();
+      this.setPoints();
+      this.setLetters();
+      this.setWorks();
+      this.bindEvents();
+    }
+
+    bindEvents() {
+      window.addEventListener('resize', () => this.onResize());
+      
+      // Intersection observer for performance
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          this.isPaused = !entry.isIntersecting;
+          
+          if (!this.isPaused) {
+            this.tick();
+          }
+          
+          if (!this.loadIsStarted && entry.isIntersecting) {
+            this.loadNextVideo();
+            this.loadIsStarted = true;
+          }
+        });
+      });
+      
+      observer.observe(this.el);
+    }
+
+    onResize() {
+      this.setSize();
+      this.setMask();
+      this.setPoints();
+      this.setLetters();
+      this.setWorks();
+    }
+
+    setCtxStyle() {
+      if (this.ctx) {
+        this.ctx.strokeStyle = '#ffffff';
+      }
+    }
+
+    setSize() {
+      const bounding = this.container.getBoundingClientRect();
+
+      this.bounding = {
+        left: bounding.left,
+        top: bounding.top,
+        width: window.innerWidth,
+        height: window.innerHeight,
+      };
+
+      this.canvas.width = this.bounding.width;
+      this.canvas.height = this.bounding.height;
+
+      this.speed = Math.hypot(this.bounding.width, this.bounding.height) * 4;
+    }
+
+    setMask() {
+      const { mask } = this;
+      
+      const width = mask.el.clientWidth;
+      const height = mask.el.clientHeight;
+
+      mask.width = width;
+      mask.height = height;
+
+      mask.svg.style.width = mask.width + 'px';
+      mask.svg.style.height = mask.height + 'px';
+
+      const elBounding = this.el.getBoundingClientRect();
+      const rulerBounding = this.ruler.getBoundingClientRect();
+      const rulerWidth = rulerBounding.width;
+      const rulerHeight = rulerBounding.height;
+      const offsetX = rulerBounding.left - elBounding.left;
+      const offsetY = rulerBounding.top - elBounding.top;
+
+      const dOuter = `M -1 0 L ${width + 2} 0 L ${width + 2} ${height} L -1 ${height} Z`;
+
+      const corners = {
+        tl: { x: offsetX, y: offsetY },
+        tr: { x: offsetX + rulerWidth, y: offsetY },
+        br: { x: offsetX + rulerWidth, y: offsetY + rulerHeight },
+        bl: { x: offsetX, y: offsetY + rulerHeight },
+      };
+
+      let size = (corners.tr.x - corners.tl.x) / 2;
+      mask.maxScale = window.innerWidth / size;
+
+      let dInner = `M ${corners.tl.x} ${corners.tl.y + size} A ${size} ${size} 0 0 1 ${corners.tr.x} ${corners.tr.y + size} L ${corners.br.x} ${corners.br.y - size} A ${size} ${size} 0 0 1 ${corners.bl.x} ${corners.bl.y - size} Z`;
+
+      mask.pathOuter.setAttribute('d', `${dOuter} ${dInner}`);
+
+      const thickness = window.innerWidth > 767 ? 16 : 8;
+      corners.tl.x += thickness;
+      corners.tl.y += thickness;
+      corners.tr.x -= thickness;
+      corners.tr.y += thickness;
+      corners.br.x -= thickness;
+      corners.br.y -= thickness;
+      corners.bl.x += thickness;
+      corners.bl.y -= thickness;
+
+      size = (corners.tr.x - corners.tl.x) / 2;
+      dInner = `M ${corners.tl.x} ${corners.tl.y + size} A ${size} ${size} 0 0 1 ${corners.tr.x} ${corners.tr.y + size} L ${corners.br.x} ${corners.br.y - size} A ${size} ${size} 0 0 1 ${corners.bl.x} ${corners.bl.y - size} Z`;
+
+      mask.pathInner.setAttribute('d', `${dOuter} ${dInner}`);
+
+      // Lines
+      mask.lines = [];
+      const vLines = window.innerWidth > 767 ? 12 : 8;
+      const gapX = width / vLines;
+      const gapY = height * 0.1;
+      const hLines = Math.ceil(height / gapY);
+
+      for (let i = 1; i < vLines; i++) {
+        const x = gapX * i;
+        mask.lines.push({
+          p1: { x, y: 0 },
+          p2: { x, y: height },
+        });
+      }
+
+      for (let i = 0; i < hLines; i++) {
+        const y = gapY * i;
+        mask.lines.push({
+          p1: { x: 0, y },
+          p2: { x: width, y },
+        });
+      }
+
+      let dLines = '';
+      mask.lines.forEach((line) => {
+        dLines += `M ${line.p1.x} ${line.p1.y} L ${line.p2.x} ${line.p2.y} `;
+      });
+
+      mask.pathLines.setAttribute('d', dLines);
+    }
+
+    setLetters() {
+      const { letters, scene } = this;
+
+      letters.forEach((letter, j) => {
+        letter.ghosts.forEach((ghost) => {
+          ghost.el.remove();
+        });
+        letter.ghosts = [];
+
+        const bounding = letter.el.getBoundingClientRect();
+
+        letter.width = bounding.width;
+        letter.height = bounding.height;
+        letter.top = bounding.top - this.bounding.top;
+        letter.left = bounding.left;
+        letter.freq = 1 + Math.random();
+
+        const multiplier = window.innerWidth > 767 ? 0.75 : 0.5;
+        letter.total = Math.round((this.bounding.width / letter.width) * multiplier) + 2;
+
+        for (let i = 0; i < letter.total; i++) {
+          const el = document.createElement('span');
+          el.classList.add('work-scene-letter', 'absolute', 'top-0', 'left-0', 'block', 'pointer-events-none', 'transform-gpu', 'will-change-transform');
+          el.style.lineHeight = '0.85';
+          el.style.fontSize = 'min(18.75rem, 25lvh)';
+          el.style.fontWeight = '700';
+
+          el.innerText = letter.el.innerText;
+          el.dataset.letter = letter.el.innerText;
+
+          scene.appendChild(el);
+
+          const ghost: Ghost = {
+            el,
+            x: letter.left,
+            y: letter.top,
+            z: Math.random() * 100,
+            i: i - letter.total * 0.5,
+            p: (i / letter.total - 0.5) * 2,
+            ap: Math.abs(i / letter.total - 0.5) * 2,
+            mx: 0,
+            my: 0,
+          };
+
+          el.style.top = ghost.y + 'px';
+          el.style.left = ghost.x + 'px';
+          el.style.zIndex = String(j !== 1 && j !== 2 && (j + letters.length + i) % 5 === 0 ? 3 : 1);
+
+          letter.ghosts.push(ghost);
+        }
+      });
+    }
+
+    setWorks() {
+      const { works } = this;
+
+      works.forEach((work, i) => {
+        const el = work.el;
+        el.style.setProperty('--size', String(0.5 + Math.random() * 0.5));
+        el.style.setProperty('--y', String((0.5 + Math.random() * 0.5) * (i % 2 ? -1 : 1)));
+      });
+    }
+
+    loadNextVideo() {
+      const video = Array.from(this.videos).find(
+        (video) => !video.classList.contains('is-loaded')
+      );
+
+      if (video) {
+        if (video.readyState >= 3) {
+          this.videoLoaded(video);
+        } else {
+          video.addEventListener('canplaythrough', () => {
+            this.videoLoaded(video);
+          }, { once: true });
+
+          video.setAttribute('src', video.getAttribute('data-src') || '');
+          video.load();
+        }
+      }
+    }
+
+    videoLoaded(video: HTMLVideoElement) {
+      video.classList.add('is-loaded');
+      this.loadNextVideo();
+    }
+
+    setPoints() {
+      const { bounding } = this;
+      this.points = [];
+
+      const gap = 24;
+      const cols = Math.ceil((bounding.width * 1.2) / gap);
+      const rows = Math.ceil((bounding.height * 1.2) / gap);
+
+      const offsetX = (bounding.width - cols * gap) * 0.5;
+      const offsetY = (bounding.height - rows * gap) * 0.5;
+
+      const hWidth = bounding.width * 0.5;
+      const hHeight = bounding.height * 0.5;
+
+      for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+          const x = i * gap + offsetX;
+          const y = j * gap + offsetY;
+
+          const dx = hWidth - x;
+          const dy = hHeight - y;
+
+          this.points.push({
+            x,
+            y,
+            dx,
+            dy,
+            m: Math.random(),
+            flowX: 0,
+          });
+        }
+      }
+    }
+
+    movePoints() {
+      const { points, animationProgress } = this;
+      points.forEach((p) => {
+        p.flowX = (animationProgress * -0.05) % 24;
+      });
+    }
+
+    moveLetters() {
+      const { speed, letters, animationProgress } = this;
+
+      letters.forEach((letter) => {
+        if (!letter.freq || !letter.total) return;
+        
+        const letterSpeed = speed * letter.freq;
+        letter.ghosts.forEach((ghost, index) => {
+          let progress = (((animationProgress % letterSpeed) / letterSpeed + index / letter.total!) % 1) / 0.7 - 0.15;
+          ghost.el.style.setProperty('--progress', String(progress));
+        });
+      });
+    }
+
+    drawPoints() {
+      const { bounding, ctx, points, animationProgress, pointsProgress, last } = this;
+
+      if (!ctx) return;
+
+      const rAnimationProgress = Math.round(animationProgress * 100) / 100;
+      const rPointsProgress = Math.round(pointsProgress * 100) / 100;
+
+      if (rPointsProgress === last.pointsProgress && rAnimationProgress === last.animationProgress) {
+        return;
+      }
+
+      ctx.clearRect(0, 0, bounding.width, bounding.height);
+      ctx.beginPath();
+
+      points.forEach((point) => {
+        const x = point.x + point.dx * (1 - pointsProgress) * 0.2 + point.flowX;
+        const y = point.y + point.dy * (1 - pointsProgress) * 0.2;
+        ctx.rect(x, y, 0.5, 0.5);
+      });
+
+      ctx.stroke();
+
+      last.pointsProgress = rPointsProgress;
+      last.animationProgress = rAnimationProgress;
+    }
+
+    tick() {
+      if (this.isPaused) return;
+
+      this.animationProgress += 1;
+      this.movePoints();
+      this.moveLetters();
+      this.drawPoints();
+
+      requestAnimationFrame(() => this.tick());
+    }
+  }
+
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      new WorkSection();
+    });
+  } else {
+    new WorkSection();
+  }
+</script>
+
+<style>
+  .clip-path-inset {
+    clip-path: inset(0 -1rem);
+  }
+  
+  @media (max-width: 768px) {
+    .work-ruler {
+      width: 33.3333% !important;
+    }
+  }
+  
+  @media (max-width: 640px) {
+    .work-ruler {
+      width: 50% !important;
+    }
+  }
+</style>

@@ -1,55 +1,133 @@
 ---
-import projectData from "../data/projectsData.json";
+export interface Props {
+	projectData: {
+		cassette: {
+			src: string;
+			alt: string;
+		};
+		textContent: {
+			blocks: string[];
+		};
+		buttons: {
+			primary: {
+				backgroundColor: string;
+				textColor: string;
+				borderColor: string;
+			};
+			learnMore: {
+				text: string;
+				backgroundColor: string;
+				textColor: string;
+				borderColor: string;
+			};
+			visitWebsite: {
+				text: string;
+				backgroundColor: string;
+				textColor: string;
+				borderColor: string;
+			};
+			icons: Array<{
+				type: string;
+				backgroundColor: string;
+				textColor: string;
+				borderColor: string;
+				iconColor: string;
+			}>;
+		};
+		colors: {
+			textColor: string;
+			contentBlockBackground: string;
+			hoverShadow: string;
+		};
+	};
+}
+
+const { projectData } = Astro.props;
 ---
 
 <section class="screen project-screen" id="project-screen">
 	<div class="grid-layout">
 		<!-- Left Side - Cassette SVG -->
 		<div class="device-section">
-			<div class="cassette-container">
+			<div
+				style={`background-image: url(${projectData.cassette.src});`}
+				class="cassette-container relative rounded-xl border border-white px-1 pt-1 bg-contain bg-center bg-no-repeat"
+			>
 				<img
-					src={projectData.cassette.src}
-					alt={projectData.cassette.alt}
+					src="/casette-layout-white.svg"
+					alt="Casette Boilerplate Layout"
 				/>
 			</div>
 		</div>
 
 		<!-- Right Side - Content -->
 		<div class="content-section">
-			<div class="content-block">
-				<p class="description">
-					{projectData.textContent.firstBlock}
-				</p>
-			</div>
+			<!-- Render text blocks dynamically -->
+			{
+				projectData.textContent.blocks.map((block, index) => (
+					<>
+						<div class="content-block">
+							<p class="description">{block}</p>
+						</div>
 
-			<!-- Move buttons between the blocks -->
-			<div class="action-buttons">
-				<button class="btn primary"
-					>{projectData.buttons.learnMore.text}</button
-				>
-				<button class="btn primary"
-					>{projectData.buttons.visitWebsite.text}</button
-				>
-				<button class="btn icon-btn">
-					<img
-						src="/github-icon.svg"
-						alt="GitHub"
-						width="24"
-						height="24"
-					/>
-				</button>
-			</div>
+						{/* Add buttons after first block */}
+						{index === 0 && (
+							<div class="action-buttons">
+								<button
+									class="btn primary"
+									style={`
+									background-color: ${projectData.buttons.learnMore.backgroundColor};
+									color: ${projectData.buttons.learnMore.textColor};
+									border-color: ${projectData.buttons.learnMore.borderColor};
+								`}
+								>
+									{projectData.buttons.learnMore.text}
+								</button>
+								<button
+									class="btn primary"
+									style={`
+									background-color: ${projectData.buttons.visitWebsite.backgroundColor};
+									color: ${projectData.buttons.visitWebsite.textColor};
+									border-color: ${projectData.buttons.visitWebsite.borderColor};
+								`}
+								>
+									{projectData.buttons.visitWebsite.text}
+								</button>
 
-			<div class="content-block">
-				<p class="description">
-					{projectData.textContent.secondBlock}
-				</p>
-			</div>
+								{/* Render icon buttons */}
+								{projectData.buttons.icons.map((icon) => (
+									<button
+										class="gh-btn icon-btn rounded-full"
+										style={`
+										background-color: ${icon.backgroundColor};
+										color: ${icon.textColor};
+										border-color: ${icon.borderColor};
+									`}
+									>
+										<img
+											src={`/${icon.type}-icon.svg`}
+											alt={icon.type}
+											width="24"
+											style={`filter: brightness(0) saturate(100%) invert(${icon.iconColor === "#FEFCD9" ? "96%" : "0%"});`}
+										/>
+									</button>
+								))}
+							</div>
+						)}
+					</>
+				))
+			}
 		</div>
 	</div>
 </section>
 
-<style>
+<style
+	define:vars={{
+		textColor: projectData.colors.textColor,
+		hoverShadow: projectData.colors.hoverShadow,
+		cassetteAccent: projectData.buttons.primary.backgroundColor,
+	}}
+>
 	@font-face {
 		font-family: "PolySans Trial";
 		src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-SlimMono.otf")
@@ -69,7 +147,7 @@ import projectData from "../data/projectsData.json";
 	}
 
 	@font-face {
-		font-family: "PolySans Trial";
+		family: "PolySans Trial";
 		src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-MedianMono.otf")
 			format("opentype");
 		font-weight: 500;
@@ -98,6 +176,19 @@ import projectData from "../data/projectsData.json";
 		background: transparent;
 	}
 
+	.cassette-container {
+		border: 2px solid;
+		border-image: linear-gradient(
+				150deg,
+				white 0%,
+				white 50%,
+				var(--cassetteAccent) 90%,
+				var(--cassetteAccent) 100%
+			)
+			1;
+		border-radius: 0; /* border-radius doesn't work with border-image */
+	}
+
 	.project-screen {
 		z-index: 1;
 		background: transparent;
@@ -119,7 +210,7 @@ import projectData from "../data/projectsData.json";
 	.grid-layout {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		gap: 190px; /* Reduced gap */
+		gap: 190px;
 		align-items: center;
 		max-width: 1200px;
 		width: 100%;
@@ -131,14 +222,14 @@ import projectData from "../data/projectsData.json";
 
 	.device-section {
 		display: flex;
-		justify-content: center; /* Center instead of flex-end */
+		justify-content: center;
 		align-items: center;
-		margin-left: 30px; /* Reduced from 60px to move cassette more left */
+		margin-left: 30px;
 	}
 
 	.cassette-container {
 		width: 100%;
-		max-width: 550px; /* Make container smaller */
+		max-width: 550px;
 		height: auto;
 	}
 
@@ -146,21 +237,24 @@ import projectData from "../data/projectsData.json";
 		width: 110%;
 		height: auto;
 	}
-	/* Content Section */
+
 	.content-section {
-		color: white;
+		color: var(--textColor);
 		display: flex;
 		flex-direction: column;
-		gap: 35px;
+		gap: 20px;
 		justify-content: center;
+		padding-left: 20px;
+		padding-right: 20px;
+		border-left: 2px dashed white;
+		border-right: 2px dashed white;
 	}
 
 	.content-block {
 		border: none;
-		padding: 30px;
-
+		padding: 10px;
 		position: relative;
-		margin: 8px 0;
+		margin: 4px 0;
 	}
 
 	.description {
@@ -169,7 +263,7 @@ import projectData from "../data/projectsData.json";
 		line-height: 1.4;
 		margin: 0;
 		text-transform: uppercase;
-		color: white;
+		color: var(--textColor);
 		font-weight: 300;
 		word-wrap: break-word;
 	}
@@ -177,14 +271,14 @@ import projectData from "../data/projectsData.json";
 	.action-buttons {
 		display: flex;
 		gap: 40px;
-		align-items: left-center;
+		align-items: center;
 		justify-content: center;
-		margin: 0; /* Remove margin since it's now between blocks */
+		margin: 0;
 	}
 
 	.btn {
 		padding: 10px 18px;
-		border: 1px solid #fefcd9;
+		border: 1px solid;
 		border-radius: 25px;
 		font-family: "PolySans Trial", Arial, sans-serif;
 		font-size: 12px;
@@ -195,27 +289,33 @@ import projectData from "../data/projectsData.json";
 		word-wrap: break-word;
 	}
 
-	.btn.primary {
-		background: #f95f4a;
-		color: white;
+	.gh-btn {
+		border: 1px solid;
+		border-radius: 25px;
+		font-family: "PolySans Trial", Arial, sans-serif;
+		font-size: 12px;
+		font-weight: 300;
+		text-transform: uppercase;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		word-wrap: break-word;
 	}
 
-	.btn.icon-btn {
-		background: #f95f4a;
-		color: white;
-		width: 40px;
+	.btn.icon-btn,
+	.gh-btn.icon-btn {
+		width: 44px;
 		height: 44px;
 		border-radius: 50%;
-		border: 1px solid #fefcd9;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		padding: 0;
 	}
 
-	.btn:hover {
+	.btn:hover,
+	.gh-btn:hover {
 		transform: translateY(-3px);
-		box-shadow: 0 8px 20px rgba(249, 95, 74, 0.4);
+		box-shadow: 0 8px 20px var(--hoverShadow);
 	}
 
 	/* Responsive Design */

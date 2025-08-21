@@ -11,6 +11,10 @@ import Board from "./Board.astro";
 import "../styles/globals.css";
 import PartnerCasetteSingular from "../components/PartnerCasetteSingular.astro";
 import Partners from "./Partners.astro";
+import AcmWMotto from "../components/AcmWMotto.astro";
+import AcmWContent from "../components/AcmWContent.astro";
+import { projectsData } from "../data/projectsData.ts";
+import Events from "../components/Events.astro";
 // import Hero from "./hero.astro";
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
@@ -20,9 +24,15 @@ import Partners from "./Partners.astro";
 <Layout>
 	<PatternWelcome />
 	<Welcome />
-	<ProjectScreen />
+	<ProjectScreen projectData={projectsData[0]} />
 	<Domains />
 	<Board />
 	<Gallery />
-	<Partners />
+	<Partners /> 
+	<AcmWMotto />
+	<AcmWContent />
+	<!-- <Events /> -->
+</Layout>
+
+
 </Layout>
