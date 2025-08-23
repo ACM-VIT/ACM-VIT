@@ -2,19 +2,19 @@
 // Gallery.astro
 ---
 
-<section class="relative min-h-screen overflow-hidden">
+<section class="relative min-h-screen w-full overflow-hidden pt-10">
     <!-- Background Text Pattern -->
     <div class="absolute inset-0 opacity-30 grayscale-100 pointer-events-none z-0">
         <img
             src="/gallery-bg-text.svg"
             alt="Background Pattern"
-            class="object-cover h-full"
+            class="object-cover w-full"
         />
     </div>
 
     <!-- Main Content Container -->
     <div
-        class="absolute bottom-0 z-10 flex flex-col items-center justify-end min-h-screen"
+        class="w-full z-10 flex flex-col min-h-screen items-center justify-end"
     >
         <!-- Gallery Title -->
         <div
@@ -28,7 +28,7 @@
 
             <!-- CTA Button -->
             <button
-                class="bg-primary-orange text-white px-8 py-3 rounded-full text-md transition-all duration-300 transform hover:scale-103 hover:cursor-pointer z-10 border-1 border-[#FEFCD9]"
+                class="bg-primary-orange max-w-[85vw] text-white px-4 py-2 md:px-8 md:py-3 rounded-full text-[0.6rem] md:text-xs transition-all duration-300 transform hover:scale-103 hover:cursor-pointer z-10 border-1 border-[#FEFCD9] mb-2"
             >
                 <span style="font-family: 'PolySans Trial';" class="z-10"
                     >PROOF WE ACTUALLY DO STUFF - VIEW PHOTOS!</span
@@ -37,11 +37,11 @@
         </div>
 
         <!-- Photo Grid/Collage -->
-        <div class="w-full z-0 max-h-[55vh]">
+        <div class="w-full z-0">
             <img
                 src="/full-core.svg"
                 alt="Description of photo 1"
-                class="w-full h-full object-cover rounded-lg shadow-lg"
+                class="w-full object-cover rounded-lg shadow-lg"
             />
         </div>
     </div>
