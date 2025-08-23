@@ -1,0 +1,185 @@
+---
+// Props interface for the component
+export interface Props {
+  title?: string;
+  description?: string;
+  techIcons?: Array<{
+    src: string;
+    alt: string;
+  }>;
+  projects?: Array<{
+    id: string;
+    title: string;
+    image: string;
+    alt: string;
+  }>;
+  themeColor?: string;
+  backUrl?: string;
+}
+
+const {
+  title = "APP",
+  description = "Cupidatat duis pariatur culpa aliquip irure magna nisl occaecat do laboris. Anim dolor ad aliquip. Reprehenderit aliqua incididunt ea magna sunt do proident sint aliqua pariatur. Culpa qui amet aliquip elit adipisicing mollit cupidatat. Occaecat at nisl reprehenderit dolor elit culpa anim aliquip fugiat et ipsum qui do.",
+  techIcons = [],
+  projects = [],
+  themeColor = "purple",
+  backUrl = "/"
+} = Astro.props;
+
+// Generate theme classes based on color
+const getThemeClasses = (color: string) => {
+  const colorMap: Record<string, string> = {
+    purple: "from-purple-600 to-purple-400",
+    blue: "from-blue-600 to-blue-400",
+    green: "from-green-600 to-green-400",
+    red: "from-red-600 to-red-400",
+    orange: "from-orange-600 to-orange-400",
+  };
+  return colorMap[color] || colorMap.purple;
+};
+
+const themeGradient = getThemeClasses(themeColor);
+---
+
+<div class="min-h-screen bg-black text-white">
+  <!-- Back Button -->
+  <!-- <div class="absolute top-6 right-6 z-10">
+    <a 
+      href={backUrl}
+      class="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors border border-gray-600"
+    >
+      <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+      </svg>
+    </a>
+  </div> -->
+
+  <!-- Hero Section with Theme Header -->
+  <div class="pt-20 pb-8 px-8">
+    <!-- Main Title Card -->
+    <div class="mx-auto max-w-6xl mb-8 relative">
+      <!-- SVG Background -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="178" viewBox="0 0 1389 178" fill="none" class="w-full">
+        <path d="M88 1.5H1301C1348.77 1.5 1387.5 40.2274 1387.5 88V90C1387.5 137.773 1348.77 176.5 1301 176.5H88C40.2274 176.5 1.5 137.773 1.5 90V88C1.5 40.2274 40.2274 1.5 88 1.5Z" fill="#9B51E0" stroke="#FEFCD9" stroke-width="3"/>
+      </svg>
+      
+      <!-- Content overlay -->
+      <div class="absolute inset-0 flex items-center justify-center p-8">
+        <!-- Decorative Elements -->
+        <div class="absolute left-8 top-1/2 -translate-y-1/2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="124" height="124" viewBox="0 0 124 124" fill="none" class="animate-spin-slow">
+            <circle cx="62" cy="62" r="57.5" stroke="#1E1E1E" stroke-width="3"/>
+            <path d="M61.6582 18C67.7102 18 73.4766 19.2231 78.7246 21.4336L73.4238 30.6182L82.9629 36.126L88.2588 26.9512C97.4504 33.9379 103.81 44.4557 105.314 56.4844H94.7051V67.5H105.316C103.815 79.5413 97.4473 90.0689 88.2441 97.0586L82.9473 87.8828L73.4082 93.3906L78.709 102.572C73.4651 104.779 67.7043 106 61.6582 106C55.6035 106 49.8348 104.776 44.585 102.563L49.8945 93.3672L40.3555 87.8594L35.0527 97.0439C25.8603 90.0541 19.5005 79.5326 18 67.5H28.6123V56.4844H18.002C19.5071 44.4491 25.8735 33.9262 35.0732 26.9395L40.3721 36.1172L49.9121 30.6104L44.6094 21.4258C49.8527 19.2199 55.6129 18.0001 61.6582 18Z" fill="#1E1E1E"/>
+          </svg>
+        </div>
+        
+        <div class="absolute right-8 top-1/2 -translate-y-1/2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="124" height="124" viewBox="0 0 124 124" fill="none" class="animate-spin-slow">
+            <circle cx="62" cy="62" r="57.5" stroke="#1E1E1E" stroke-width="3"/>
+            <path d="M61.6582 18C67.7102 18 73.4766 19.2231 78.7246 21.4336L73.4238 30.6182L82.9629 36.126L88.2588 26.9512C97.4504 33.9379 103.81 44.4557 105.314 56.4844H94.7051V67.5H105.316C103.815 79.5413 97.4473 90.0689 88.2441 97.0586L82.9473 87.8828L73.4082 93.3906L78.709 102.572C73.4651 104.779 67.7043 106 61.6582 106C55.6035 106 49.8348 104.776 44.585 102.563L49.8945 93.3672L40.3555 87.8594L35.0527 97.0439C25.8603 90.0541 19.5005 79.5326 18 67.5H28.6123V56.4844H18.002C19.5071 44.4491 25.8735 33.9262 35.0732 26.9395L40.3721 36.1172L49.9121 30.6104L44.6094 21.4258C49.8527 19.2199 55.6129 18.0001 61.6582 18Z" fill="#1E1E1E"/>
+          </svg>
+        </div>
+
+        <!-- Domain Title -->
+        <div class="text-center">
+          <h1 class="text-6xl md:text-8xl font-bold text-black tracking-wider">
+            {title}
+          </h1>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tech Stack Icons -->
+    {techIcons.length > 0 && (
+      <div class="flex justify-center gap-4 mb-8 flex-wrap">
+        {techIcons.map((icon) => (
+          <div class="w-12 h-12 rounded-lg bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition-colors">
+            <img src={icon.src} alt={icon.alt} class="w-8 h-8" />
+          </div>
+        ))}
+      </div>
+    )}
+
+    <!-- Description -->
+    <div class="max-w-4xl mx-auto text-center mb-12">
+      <p class="text-gray-300 text-lg leading-relaxed">
+        {description}
+      </p>
+    </div>
+
+    <!-- Projects Button -->
+    <div class="text-center mb-12">
+      <button class={`px-8 py-3 bg-gradient-to-r ${themeGradient} rounded-full text-white font-medium hover:shadow-lg transition-shadow`}>
+        PROJECTS
+      </button>
+    </div>
+
+    <!-- Project Cards Grid -->
+    {projects.length > 0 && (
+      <div class="max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {projects.map((project) => (
+            <div class="group cursor-pointer">
+              <!-- Cassette Card -->
+              <div class="bg-gradient-to-br from-gray-200 to-gray-400 rounded-2xl p-6 transform group-hover:scale-105 transition-transform duration-300 relative overflow-hidden cassette-shadow">
+                <!-- Cassette Design Elements -->
+                <div class="absolute top-4 left-4 w-3 h-3 rounded-full bg-gray-600"></div>
+                <div class="absolute top-4 right-4 w-3 h-3 rounded-full bg-gray-600"></div>
+                <div class="absolute bottom-4 left-4 w-3 h-3 rounded-full bg-gray-600"></div>
+                <div class="absolute bottom-4 right-4 w-3 h-3 rounded-full bg-gray-600"></div>
+                
+                <!-- Project Content Area -->
+                <div class="text-center py-8">
+                  <img src={project.image} alt={project.alt} class="w-16 h-16 mx-auto mb-4" />
+                  <h3 class="text-xl font-bold text-gray-900">{project.title}</h3>
+                </div>
+                
+                <!-- Cassette Holes/Details -->
+                <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
+                  <div class="w-2 h-2 rounded-full bg-gray-600"></div>
+                  <div class="w-2 h-2 rounded-full bg-gray-600"></div>
+                  <div class="w-2 h-2 rounded-full bg-gray-600"></div>
+                  <div class="w-2 h-2 rounded-full bg-gray-600"></div>
+                  <div class="w-2 h-2 rounded-full bg-gray-600"></div>
+                </div>
+                
+                <!-- Side holes -->
+                <div class="absolute left-8 top-1/2 -translate-y-1/2 flex flex-col gap-1">
+                  <div class="w-1.5 h-1.5 rounded-full bg-gray-600"></div>
+                  <div class="w-1.5 h-1.5 rounded-full bg-gray-600"></div>
+                </div>
+                <div class="absolute right-8 top-1/2 -translate-y-1/2 flex flex-col gap-1">
+                  <div class="w-1.5 h-1.5 rounded-full bg-gray-600"></div>
+                  <div class="w-1.5 h-1.5 rounded-full bg-gray-600"></div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+</div>
+
+<style>
+  /* Define slow spin animation for Tailwind */
+  @keyframes spin-slow {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .animate-spin-slow {
+    animation: spin-slow 8s linear infinite;
+  }
+
+  /* Additional custom styles if needed */
+  .cassette-shadow {
+    box-shadow: 
+      inset 0 2px 4px rgba(0, 0, 0, 0.1),
+      0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+</style>
