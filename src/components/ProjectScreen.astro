@@ -13,18 +13,21 @@ export interface Props {
 				backgroundColor: string;
 				textColor: string;
 				borderColor: string;
+				borderRadius?: string;
 			};
 			learnMore: {
 				text: string;
 				backgroundColor: string;
 				textColor: string;
 				borderColor: string;
+				borderRadius?: string;
 			};
 			visitWebsite: {
 				text: string;
 				backgroundColor: string;
 				textColor: string;
 				borderColor: string;
+				borderRadius?: string;
 			};
 			icons: Array<{
 				type: string;
@@ -32,6 +35,7 @@ export interface Props {
 				textColor: string;
 				borderColor: string;
 				iconColor: string;
+				borderRadius?: string;
 			}>;
 		};
 		colors: {
@@ -51,7 +55,7 @@ const { projectData } = Astro.props;
 		<div class="device-section">
 			<div
 				style={`background-image: url(${projectData.cassette.src});`}
-				class="cassette-container relative rounded-xl border border-white px-1 pt-1 bg-contain bg-center bg-no-repeat"
+				class="cassette-container relative rounded-xl border border-white px-1 pt-1 bg-contain bg-center bg-no-repeat z-[100px]"
 			>
 				<img
 					src="/casette-layout-white.svg"
@@ -76,9 +80,10 @@ const { projectData } = Astro.props;
 								<button
 									class="btn primary"
 									style={`
-									background-color: ${projectData.buttons.learnMore.backgroundColor};
+									background: ${projectData.buttons.learnMore.backgroundColor};
 									color: ${projectData.buttons.learnMore.textColor};
 									border-color: ${projectData.buttons.learnMore.borderColor};
+									${projectData.buttons.learnMore.borderRadius ? `border-radius: ${projectData.buttons.learnMore.borderRadius};` : ''}
 								`}
 								>
 									{projectData.buttons.learnMore.text}
@@ -86,9 +91,10 @@ const { projectData } = Astro.props;
 								<button
 									class="btn primary"
 									style={`
-									background-color: ${projectData.buttons.visitWebsite.backgroundColor};
+									background: ${projectData.buttons.visitWebsite.backgroundColor};
 									color: ${projectData.buttons.visitWebsite.textColor};
 									border-color: ${projectData.buttons.visitWebsite.borderColor};
+									${projectData.buttons.visitWebsite.borderRadius ? `border-radius: ${projectData.buttons.visitWebsite.borderRadius};` : ''}
 								`}
 								>
 									{projectData.buttons.visitWebsite.text}
@@ -97,13 +103,15 @@ const { projectData } = Astro.props;
 								{/* Render icon buttons */}
 								{projectData.buttons.icons.map((icon) => (
 									<button
-										class="gh-btn icon-btn rounded-full"
+										class="gh-btn icon-btn"
 										style={`
-										background-color: ${icon.backgroundColor};
+										background: ${icon.backgroundColor};
 										color: ${icon.textColor};
 										border-color: ${icon.borderColor};
+										${icon.borderRadius ? `border-radius: ${icon.borderRadius};` : 'border-radius: 50%;'}
 									`}
 									>
+									
 										<img
 											src={`/${icon.type}-icon.svg`}
 											alt={icon.type}
@@ -186,7 +194,8 @@ const { projectData } = Astro.props;
 				var(--cassetteAccent) 100%
 			)
 			1;
-		border-radius: 0; /* border-radius doesn't work with border-image */
+		/* Use clip-path for rounded corners since border-radius doesn't work with border-image */
+		clip-path: inset(0 round 12px);
 	}
 
 	.project-screen {
@@ -246,8 +255,7 @@ const { projectData } = Astro.props;
 		justify-content: center;
 		padding-left: 20px;
 		padding-right: 20px;
-		border-left: 2px dashed white;
-		border-right: 2px dashed white;
+		
 	}
 
 	.content-block {
