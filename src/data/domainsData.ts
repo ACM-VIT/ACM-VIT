@@ -5,6 +5,7 @@ export const domainConfigs = {
         description: "We build tools that people actually use in a world driven by digital experiences. From frontend finesse to backend logic, we focus on developing full-stack applications that solve real problems. We collaborate on real-world projects, explore the latest technologies, and grow as developers through hands-on experience. It's where curiosity turns into code and ideas turn into seamless digital experiences.",
         themeColor: "app",
         cassetteSvg: "/Cassette_App.svg",
+        buttonText: "PROJECTS",
         techIcons: [
             { src: "/domains/app/android.svg", alt: "Android" },
             { src: "/domains/app/dart.svg", alt: "Dart" },
@@ -21,6 +22,7 @@ export const domainConfigs = {
         description: "We see competitive programming as a game of logic, strategy, and precision, far beyond just writing code. We host contests, craft cryptic challenges, and build problem sets that push us to think algorithmically. Whether we're solving our first problem or chasing the next rating jump, we do it together - discussing, debating, and decoding as a team. In this space, sharpening skills becomes second nature and way more fun. Every problem we solve makes us a little sharper and a lot more confident.",
         themeColor: "competitive",
         cassetteSvg: "/Cassette_cc.svg",
+        buttonText: "PROJECTS",
         techIcons: [
             { src: "/domains/cc/codeforces_icon 1.svg", alt: "Codeforces" },
             { src: "/domains/cc/c++.svg", alt: "C++" },
@@ -33,6 +35,7 @@ export const domainConfigs = {
         description: "We craft visual experiences that bring our ideas and events to life - from UI/UX design and motion graphics to social media posts and video edits. With a focus on aesthetics, usability, and storytelling, we shape how the world sees ACM. Whether it's building brand identity or designing user-first interfaces, we blend art with purpose to create meaningful designs. Every pixel, frame, and layout is intentional, because great design isn't just seen, it's felt.",
         themeColor: "design",
         cassetteSvg: "/Cassette_Design.svg",
+        buttonText: "PROJECTS",
         techIcons: [
             { src: "/domains/design/ae.svg", alt: "AE" },
             { src: "/domains/design/ai.svg", alt: "AI" },
@@ -47,6 +50,7 @@ export const domainConfigs = {
         description: "We create digital experiences that combine purpose with performance, ensuring every interaction feels seamless and intentional. From dynamic frontends to robust backend systems, everything we build is smooth, efficient, and reliable. We prioritize accessibility, performance, and scalability, working together to turn ideas into impactful solutions. It's not just about building websites, it's about creating systems that deliver consistent and meaningful user experiences.",
         themeColor: "web",
         cassetteSvg: "/Cassette_Web.svg",
+        buttonText: "PROJECTS",
         techIcons: [
             { src: "/domains/web/cloudflare.svg", alt: "Cloudflare" },
             { src: "/domains/web/cockroachdb 1.svg", alt: "CockroachDB" },
@@ -69,6 +73,7 @@ export const domainConfigs = {
         description: "Curiosity, collaboration, and a passion for exploration drive everything we do. We explore cutting-edge technologies, work across disciplines, and drive innovation through hands-on mentorship and real-world problem solving. From crafting thought-provoking challenges for our flagship events to publishing insightful blogs, we turn questions into breakthroughs. We also host the System's Reading Group (SRG), a peer-led initiative to deep-dive into foundational research. With interests spanning AI, cybersecurity, quantum computing, and more, we're always pushing boundaries through learning and discovery.",
         themeColor: "research",
         cassetteSvg: "/Cassette_Research.svg",
+        buttonText: "AREAS OF INTEREST",
         techIcons: [
             { src: "/domains/research/icons8-google-colab 1.svg", alt: "Collab" },
             { src: "/domains/research/icons8-burp-suite 1.svg", alt: "BurpSuite" },
@@ -86,6 +91,7 @@ export const domainConfigs = {
         description: "Nothing comes together on its own, and we're the ones ensuring every part is in place. We handle sponsorships, logistics, outreach, and content with precision and intent. Some days it's drafting timelines and emails, other days it's finding the perfect hook or navigating last-minute surprises. We work across teams, juggle priorities, and keep the chaos in check. It's this quiet consistency that ensures every event runs smoothly, start to finish.",
         themeColor: "management",
         cassetteSvg: "/Cassette_Management.svg",
+        buttonText: "PARTNERS AND PROJECTS",
         techIcons: [
             { src: "/domains/management/slack.svg", alt: "Slack" },
             { src: "/domains/management/icons8-discord 1.svg", alt: "Discord" },
