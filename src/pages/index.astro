@@ -3,6 +3,7 @@ import Welcome from "../components/Welcome.astro";
 import PatternWelcome from "../components/PatternWelcome.astro";
 import ProjectScreen from "../components/ProjectScreen.astro";
 import Domains from "../components/Domains.astro";
+import DomainsPhone from "../phoneComponents/Domains_Phone.astro";
 import Layout from "../layouts/Layout.astro";
 import Pattern from "./pattern.astro";
 import Gallery from "../components/Gallery.astro";
@@ -14,6 +15,7 @@ import Partners from "./Partners.astro";
 import AcmWMotto from "../components/AcmWMotto.astro";
 import AcmWContent from "../components/AcmWContent.astro";
 import { projectsData } from "../data/projectsData.ts";
+import ContactUs from "../components/ContactUs.astro";
 import Events from "../components/Events.astro";
 // import Hero from "./hero.astro";
 
@@ -25,14 +27,43 @@ import Events from "../components/Events.astro";
 	<PatternWelcome />
 	<Welcome />
 	<ProjectScreen projectData={projectsData[0]} />
-	<Domains />
+	<div class="domains-desktop-container">
+		<Domains />
+	</div>
+	<div class="domains-mobile-container">
+		<DomainsPhone />
+	</div>
+	
 	<Board />
 	<Gallery />
 	<Partners /> 
 	<AcmWMotto />
 	<AcmWContent />
+	<ContactUs />
 	<!-- <Events /> -->
 </Layout>
+
+<style>
+	/* Show desktop version by default, hide mobile */
+	.domains-desktop-container {
+		display: block;
+	}
+	
+	.domains-mobile-container {
+		display: none;
+	}
+	
+	/* On mobile screens, hide desktop and show mobile */
+	@media (max-width: 768px) {
+		.domains-desktop-container {
+			display: none;
+		}
+		
+		.domains-mobile-container {
+			display: block;
+		}
+	}
+</style>
 
 
 </Layout>
