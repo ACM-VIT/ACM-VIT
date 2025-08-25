@@ -1,0 +1,126 @@
+---
+import MacBookScreen from '../../public/MacBookScreen.svg';
+// ContactScreen.astro
+// Place your MacBook SVG in the public folder as:
+// public/MacBook Pro 15.svg
+---
+
+<section class="min-h-[120vh] flex flex-col items-center justify-center p-4">
+  <div class="w-full max-w-7xl relative flex flex-col items-center">
+    <!-- Contact Us Heading Above Laptop -->
+      <div class="text-center mb-8 mt-4">
+      <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">
+        CONTACT US!
+      </h1>
+      <!-- CTA Button -->
+    </div>
+
+<div class="relative flex justify-center w-full">
+  <!-- The MacBook SVG -->
+  <img 
+    src="/MacBook Pro 15.svg" 
+    alt="MacBook Structure" 
+    class="w-full max-w-5xl h-auto object-contain drop-shadow-[0_30px_60px_rgba(0,0,0,0.4)] hover:perspective-1000 hover:rotate-x-1 hover:-rotate-y-1 transition-transform duration-[600ms] ease-out animate-[float_6s_ease-in-out_infinite]"
+  />
+
+  <!-- Custom Screen Content -->
+  <div 
+    class="absolute top-[20%] left-[17%] w-[66%] h-[58%] flex justify-center items-center -z-10 scale-94"
+  >
+    <MacBookScreen />
+  </div>
+</div>
+
+
+  </div>
+</section>
+
+<script>
+  // Add interactivity
+  document.addEventListener('DOMContentLoaded', function () {
+    // Form submission
+    const form = document.querySelector('.absolute');
+    if (form) {
+      const submitBtn = form.querySelector('button[type="submit"], button:last-child');
+      const inputs = form.querySelectorAll('input, textarea');
+
+      // Add form validation and submission logic here
+      if (submitBtn instanceof HTMLElement) {
+        submitBtn.addEventListener('click', function (e) {
+          e.preventDefault();
+
+          // Simple validation
+          var isValid = true;
+          inputs.forEach(function (input) {
+            if (input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement) {
+              if (input.hasAttribute('required') && !input.value.trim()) {
+                isValid = false;
+                input.classList.add('border-red-500');
+              } else {
+                input.classList.remove('border-red-500');
+              }
+            }
+          });
+
+          if (isValid) {
+            // Show success message or submit form
+            submitBtn.innerHTML = '<span>Sent!</span>';
+            setTimeout(function () {
+              submitBtn.innerHTML = '<span>Submit</span><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>';
+            }, 2000);
+          }
+        });
+      }
+    }
+
+    // Toggle buttons for one-on-one session
+    var toggleButtons = document.querySelectorAll('.absolute button');
+    toggleButtons.forEach(function (btn) {
+      if (btn.textContent === 'Yes' || btn.textContent === 'No') {
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+
+          // Remove active state from siblings (guard parentElement)
+          var parent = btn.parentElement;
+          if (parent) {
+            var siblings = Array.from(parent.children);
+            siblings.forEach(function (sibling) {
+              if (sibling !== btn && sibling instanceof HTMLElement) {
+                sibling.classList.remove('ring-2', 'ring-gray-600');
+                sibling.classList.add('opacity-60');
+              }
+            });
+          }
+
+          // Add active state to clicked button
+          if (btn instanceof HTMLElement) {
+            btn.classList.add('ring-2', 'ring-gray-600');
+            btn.classList.remove('opacity-60');
+          }
+        });
+      }
+    });
+
+    // Add focus and hover effects for inputs and buttons
+    const inputs = document.querySelectorAll('.absolute input, .absolute textarea');
+    inputs.forEach(function(input) {
+      input.addEventListener('focus', function() {
+        this.classList.add('scale-[1.02]', 'transition-all', 'duration-300', 'ease-in-out');
+      });
+      input.addEventListener('blur', function() {
+        this.classList.remove('scale-[1.02]');
+      });
+    });
+
+    const buttons = document.querySelectorAll('.absolute button');
+    buttons.forEach(function(button) {
+      button.addEventListener('mouseenter', function() {
+        this.classList.add('-translate-y-0.5', 'transition-all', 'duration-300', 'ease-in-out');
+      });
+      button.addEventListener('mouseleave', function() {
+        this.classList.remove('-translate-y-0.5');
+      });
+    });
+  });
+</script>
+
