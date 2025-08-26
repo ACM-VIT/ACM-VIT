@@ -1,0 +1,43 @@
+---
+---
+
+  <header class="fixed top-5 left-0 right-0 z-50 w-full px-4 py-2">
+  <div class="relative max-w-4xl mx-auto flex justify-center">
+
+    <nav>
+  <div class="header-pill flex items-center justify-center" style="width:465px;height:50px;padding:17px 20px;border-radius:41px;border:1px solid #FEFCD9;background:rgba(0,0,0,0.35);backdrop-filter:blur(4px);">
+  <ul class="nav-list flex items-center gap-2 md:gap-4 text-[13.5px] md:text-[14.8px] font-mono uppercase text-white" style="white-space:nowrap;align-items:center;letter-spacing:0.04em;">
+          <li>
+            <a href="#" class="inline-block px-0 py-0 hover:text-gray-300 transition-colors">ABOUT</a>
+          </li>
+          <li>
+            <a href="#" class="inline-block px-0 py-0 hover:text-gray-300 transition-colors">DOMAINS</a>
+          </li>
+          <li>
+            <a href="#" class="inline-block px-0 py-0 hover:text-gray-300 transition-colors">PROJECTS</a>
+          </li>
+          <li>
+            <a href="#" class="inline-block px-0 py-0 hover:text-gray-300 transition-colors">EVENTS</a>
+          </li>
+          <li>
+            <a href="#" class="inline-block px-0 py-0 hover:text-gray-300 transition-colors">ACM-W</a>
+          </li>
+          <li>
+            <a href="#" class="inline-block px-0 py-0 more-link hover:opacity-80 transition-opacity">MORE</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .header-pill { display: flex; align-items: center; justify-content: center; }
+  .nav-list a { display: inline-block; padding: 0 4px; color: #FEFCD9; }
+  .nav-list a.more-link { color: #F95F4A !important; }
+  .nav-list li { white-space: nowrap; }
+  @media (max-width: 520px) {
+    .header-pill { width: calc(100% - 32px); padding: 10px 14px; }
+    .nav-list { gap: 20px; font-size: 12px; font-weight: 300; }
+  }
+</style>

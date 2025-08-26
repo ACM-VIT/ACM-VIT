@@ -1,3 +1,6 @@
+---
+import Header from '../components/Header.astro'
+---
 <!doctype html>
 <html lang="en">
 	<head>
@@ -9,8 +12,11 @@
 	<body>
 		<div class="diamond-grid"></div>
 		<img src="/acm_topleft.svg" alt="ACM-VIT" class="acm-logo" />
-		<div class="content">
-			<slot />
+		<div class="app-root min-h-screen flex flex-col">
+			<Header />
+			<main class="content flex-1 relative z-1 pt-28">
+				<slot />
+			</main>
 		</div>
 	</body>
 </html>
@@ -99,6 +105,16 @@
 		z-index: 1;
 		width: 100%;
 		height: 100%;
+	}
+
+	.acm-logo {
+		position: fixed;
+		top: 20px;
+		left: 20px;
+		width: auto;
+		height: 60px;
+		z-index: 1000;
+		pointer-events: none;
 	}
 
 	@media screen and (max-width: 768px) {
