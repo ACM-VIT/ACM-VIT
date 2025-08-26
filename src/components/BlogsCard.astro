@@ -1,0 +1,65 @@
+---
+interface Props {
+  bgurl: string;
+}
+
+const { bgurl } = Astro.props;
+---
+
+<div
+  class="relative w-[80vw] h-[50vw] max-h-[50vw] sm:w-[40vw] sm:h-[25vw] sm:max-h-[25vw] lg:w-[25vw] lg:h-[15.625vw] lg:max-h-[15.625vw] rounded-lg bg-white overflow-hidden flex items-end justify-center"
+>
+  <!-- Background Pattern -->
+  <div
+    class="absolute inset-0 pointer-events-none z-0"
+    style={`background-image: url('${bgurl}'); background-size: cover;`}
+  >
+  </div>
+  <div
+    class="w-[97%] h-[96.5%] flex justify-center items-center absolute z-20 pointer-events-none"
+  >
+    <img
+      src="/bloglayout.svg"
+      alt="Background Pattern"
+      class="absolute w-full h-full object-cover"
+    />
+  </div>
+</div>
+
+<style>
+  @font-face {
+    font-family: "PolySans Slim";
+    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-SlimMono.otf")
+      format("opentype");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "PolySans Trial";
+    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-NeutralMono.otf")
+      format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "PolySans Medium";
+    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-MedianMono.otf")
+      format("opentype");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "PolySans Bold";
+    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-BulkyMono.otf")
+      format("opentype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+</style>
