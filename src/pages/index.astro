@@ -3,6 +3,7 @@ import Welcome from "../components/Welcome.astro";
 import PatternWelcome from "../components/PatternWelcome.astro";
 import ProjectScreen from "../components/ProjectScreen.astro";
 import Domains from "../components/Domains.astro";
+import DomainsPhone from "../phoneComponents/Domains_Phone.astro";
 import Layout from "../layouts/Layout.astro";
 import Pattern from "./pattern.astro";
 import Gallery from "../components/Gallery.astro";
@@ -15,6 +16,7 @@ import AcmWMotto from "../components/AcmWMotto.astro";
 import AcmWContent from "../components/AcmWContent.astro";
 import { projectsData } from "../data/projectsData.ts";
 import Events from "../components/Events.astro";
+import ContactUS from "../components/ContactUs.astro";
 // import Hero from "./hero.astro";
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
@@ -22,8 +24,40 @@ import Events from "../components/Events.astro";
 ---
 
 <Layout>
-	<ProjectScreen projectData={projectsData[3]} />
+	<PatternWelcome />
+	<Welcome />
+	<ProjectScreen projectData={projectsData[0]} />
+	<Domains />
+	<Board />
+	<Gallery />
+	<Partners /> 
+	<AcmWMotto />
+	<AcmWContent />
+	<ContactUS />
+	<!-- <Events /> -->
 </Layout>
+
+<style>
+	/* Show desktop version by default, hide mobile */
+	.domains-desktop-container {
+		display: block;
+	}
+	
+	.domains-mobile-container {
+		display: none;
+	}
+	
+	/* On mobile screens, hide desktop and show mobile */
+	@media (max-width: 768px) {
+		.domains-desktop-container {
+			display: none;
+		}
+		
+		.domains-mobile-container {
+			display: block;
+		}
+	}
+</style>
 
 
 </Layout>

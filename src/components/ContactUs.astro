@@ -1,0 +1,159 @@
+---
+import MacBookScreen from '../../public/MacBookScreen.svg';
+import ArrowButton from '../../public/button_arrow.svg';
+// ContactScreen.astro
+// Place your MacBook SVG in the public folder as:
+// public/MacBook Pro 15.svg
+---
+
+<section class="min-h-[120vh] flex flex-col items-center justify-center p-4">
+  <div class="w-full max-w-7xl relative flex flex-col items-center">
+    <!-- Contact Us Heading Above Laptop -->
+    <div class="text-center mb-8 mt-4">
+      <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">CONTACT US!</h1>
+    </div>
+
+    <div class="relative flex justify-center w-full">
+      <!-- The MacBook SVG -->
+      <img
+        src="/MacBook Pro 15.svg"
+        alt="MacBook Structure"
+        class="w-full max-w-5xl h-auto object-contain drop-shadow-[0_30px_60px_rgba(0,0,0,0.4)] transition-transform duration-[600ms] ease-out animate-[float_6s_ease-in-out_infinite] pointer-events-none -z-20"
+      />
+
+      <!-- Custom Screen Content -->
+      <div
+        class="absolute top-[20%] left-[17%] w-[66%] h-[58%] flex justify-center items-center -z-10 scale-[0.94] pointer-events-auto"
+      >
+        <!-- Say Hello! at the top of the MacBook screen -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full pointer-events-auto z-50 m-0 p-0">
+          <h2 class="text-center text-3xl font-thin font-['Nunito_Sans'] text-black drop-shadow-sm -mt-16 p-0">Say Hello!</h2>
+        </div>
+
+        <!-- Dotted border text boxes layout -->
+        <form class="absolute top-14 left-1/2 -translate-x-1/2 w-[90%] max-w-[700px] pointer-events-auto z-50 -my-10" autocomplete="off">
+          <div class="flex flex-row gap-6 mb-4">
+            <input type="text" name="firstName" placeholder="First Name" class="flex-1 h-10 px-4 border-2 border-dashed border-black rounded-lg bg-transparent outline-none text-black placeholder:text-black placeholder:opacity-50" required />
+            <input type="text" name="lastName" placeholder="Last Name" class="flex-1 h-10 px-4 border-2 border-dashed border-black rounded-lg bg-transparent outline-none text-black placeholder:text-black placeholder:opacity-50" required />
+          </div>
+          <div class="flex flex-row gap-6 mb-4">
+            <input type="email" name="email" placeholder="Email" class="flex-1 h-10 px-4 border-2 border-dashed border-black rounded-lg bg-transparent outline-none text-black placeholder:text-black placeholder:opacity-50" required />
+            <input type="text" name="phone" placeholder="Phone" class="flex-1 h-10 px-4 border-2 border-dashed border-black rounded-lg bg-transparent outline-none text-black placeholder:text-black placeholder:opacity-50" />
+          </div>
+          <div class="mt-2">
+            <textarea name="message" rows="4" placeholder="Your Message" class="w-full h-28 px-4 py-2 border-2 border-dashed border-black rounded-lg bg-transparent outline-none text-black placeholder:text-black placeholder:opacity-50 resize-none" required></textarea>
+          </div>
+        </form>
+
+        <!-- Book a One-on-One session row above Submit Button -->
+        <div class="absolute left-1/2 -translate-x-1/2 bottom-[45px] pointer-events-auto z-50">
+          <div class="flex flex-row items-center gap-2 whitespace-nowrap">
+            <div class="text-black text-2xl font-normal font-['Nunito_Sans']">Book a One-on-One session?</div>
+            <button type="button" id="yesBtn" class="w-24 h-7 bg-yellow-50 rounded-[10px] flex items-center justify-center focus:outline-none">
+              <span class="text-black text-xl font-normal font-['Trap']">Yes</span>
+            </button>
+            <button type="button" id="noBtn" class="w-24 h-7 bg-stone-900 rounded-[10px] flex items-center justify-center focus:outline-none">
+              <span class="text-white text-xl font-normal font-['Trap']">No</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Bottom Centered Submit Button -->
+        <div class="absolute left-1/2 -translate-x-1/2 bottom-1 pointer-events-auto z-50">
+          <button type="submit" id="submitBtn" class="w-72 h-2 relative group focus:outline-none bg-transparent border-none p-0">
+            <div class="w-72 h-12 left-0 top-0 absolute bg-stone-900 rounded-[200px] group-hover:scale-[1.03] transition-transform duration-200"></div>
+            <div class="submit-text left-[88px] top-[2px] absolute text-center justify-start text-yellow-50 text-4xl font-light font-['PolySans_Trial']">Submit</div>
+            <ArrowButton class="w-10 h-10 left-[206px] top-[6px] absolute" />
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Yes/No toggle logic
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn = document.getElementById('noBtn');
+    let oneOnOne = null;
+    if (yesBtn && noBtn) {
+      yesBtn.addEventListener('click', function () {
+        yesBtn.classList.add('ring-2', 'ring-gray-600');
+        yesBtn.classList.remove('opacity-60');
+        noBtn.classList.remove('ring-2', 'ring-gray-600');
+        noBtn.classList.add('opacity-60');
+        oneOnOne = true;
+      });
+      noBtn.addEventListener('click', function () {
+        noBtn.classList.add('ring-2', 'ring-gray-600');
+        noBtn.classList.remove('opacity-60');
+        yesBtn.classList.remove('ring-2', 'ring-gray-600');
+        yesBtn.classList.add('opacity-60');
+        oneOnOne = false;
+      });
+    }
+
+    // Form submission
+    const form = document.querySelector('form');
+    const submitBtn = document.getElementById('submitBtn');
+    if (form && submitBtn) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const inputs = form.querySelectorAll('input, textarea');
+        let isValid = true;
+        inputs.forEach(function (input) {
+          if (input.hasAttribute('required') && !input.value.trim()) {
+            isValid = false;
+            input.classList.add('border-red-500');
+          } else {
+            input.classList.remove('border-red-500');
+          }
+        });
+        if (oneOnOne === null) {
+          isValid = false;
+          yesBtn.classList.add('border-red-500');
+          noBtn.classList.add('border-red-500');
+        } else {
+          yesBtn.classList.remove('border-red-500');
+          noBtn.classList.remove('border-red-500');
+        }
+        if (isValid) {
+          const submitText = submitBtn.querySelector('.submit-text');
+          submitText.textContent = 'Sent!';
+          setTimeout(function () {
+            submitText.textContent = 'Submit';
+          }, 2000);
+          form.reset();
+          oneOnOne = null;
+          yesBtn.classList.remove('ring-2', 'ring-gray-600', 'opacity-60');
+          noBtn.classList.remove('ring-2', 'ring-gray-600', 'opacity-60');
+        }
+      });
+    }
+
+    // Focus/hover effects for inputs and buttons
+    const inputs = document.querySelectorAll('input, textarea');
+    inputs.forEach(function(input) {
+      input.addEventListener('focus', function() {
+        this.classList.add('scale-[1.02]', 'transition-all', 'duration-300', 'ease-in-out');
+      });
+      input.addEventListener('blur', function() {
+        this.classList.remove('scale-[1.02]');
+      });
+    });
+    [yesBtn, noBtn, submitBtn].forEach(function(button) {
+      if (button) {
+        button.addEventListener('mouseenter', function() {
+          this.classList.add('-translate-y-0.5', 'transition-all', 'duration-300', 'ease-in-out');
+        });
+        button.addEventListener('mouseleave', function() {
+          this.classList.remove('-translate-y-0.5');
+        });
+      }
+    });
+  });
+</script>
+-->
