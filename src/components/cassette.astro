@@ -1,0 +1,66 @@
+---
+/*
+  Props (defaults):
+    - id: DOM id for the wrapper
+    - trigger: CSS selector of the element whose scroll drives the rotation (default "#main-screen")
+    - offset: how far out-of-screen the left-bottom point should be. Accepts "20%" (interpreted as 20vw) or "200px".
+    - startDeg, endDeg: rotation start and end angles in degrees
+    - svgWidth: displayed width of the SVG (e.g. "300" => 300px)
+*/
+const {
+  id = 'svg-rotator',
+  trigger = '#main-screen',
+  offset = '20%',
+  startDeg = 120,
+  endDeg = -21,
+  svgWidth = 300
+} = Astro.props;
+---
+<div
+  id={id}
+  class="svg-rotator"
+  data-trigger={trigger}
+  data-offset={offset}
+  data-start-deg={startDeg}
+  data-end-deg={endDeg}
+  style={`--svg-width:${svgWidth}px;`}
+>
+  <div class="svg-inner" aria-hidden="true">
+    <img 
+      id={`${id}-svg`} 
+      src="startingpage/Cassette.svg" 
+      alt="Rotating cassette" 
+      width="100%" 
+      height="100%" 
+      style="display:block; transform-box: fill-box; transform-origin: 0% 100%; will-change: transform;"
+    />
+  </div>
+</div>
+
+<style>
+.svg-rotator {
+  position: relative;
+  /* Made container large enough to accommodate full rotation */
+  width: calc(var(--svg-width) * 1.5);
+  height: calc(var(--svg-width) * 1.5);
+  overflow: visible;
+}
+.svg-rotator .svg-inner {
+  position: absolute;
+  bottom: 1%;
+  /* Removed left positioning to let JS handle it properly */
+  left: 0;
+  width: var(--svg-width);
+  height: var(--svg-width);
+  pointer-events: none;
+}
+.svg-rotator img {
+  width: 100%;
+  height: auto;
+  transform-box: fill-box;
+  transform-origin: 0% 100%;
+  will-change: transform;
+}
+</style>
+
+<!-- Script removed to prevent ScrollTrigger conflicts that freeze scrolling -->

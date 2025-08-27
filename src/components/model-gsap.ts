@@ -46,8 +46,8 @@ export function initViewer(
   opts: ModelViewerOptions = {}
 ): () => void {
     const {
-        pin = true,
-        debugMarkers = true,
+        pin = true,  // Changed back to true for scroll animation
+        debugMarkers = false,
         endScroll = 3000,
         showHelpers = true,
         desiredSize = 2.0,
@@ -83,21 +83,51 @@ export function initViewer(
 
     initHUD(container, logs);
 
+    // Clear all ScrollTriggers completely
+    ScrollTrigger.killAll();
+    log('Cleared all ScrollTriggers completely');
+
     const scene = new THREE.Scene();
-    // const camera = new THREE.PerspectiveCamera(3, container.clientWidth / container.clientHeight, 0.01, 5000);
-
+    
     const aspect = container.clientWidth / container.clientHeight;
-const frustumSize = 250; // Adjust for your scene scale
-const camera = new THREE.OrthographicCamera(
-  -frustumSize * aspect / 2, // left
-  frustumSize * aspect / 2,  // right
-  frustumSize / 2,           // top
-  -frustumSize / 2,          // bottom
-  0.01,                      // near
-  5000                       // far
-);
+    
+    // CAMERA ANIMATION SETTINGS - EASILY CHANGEABLE VALUES
+    const INITIAL_CAMERA_POSITION = new THREE.Vector3(-500, 500, 500);  // Starting position
+    const FINAL_CAMERA_POSITION = new THREE.Vector3(-100, 45, 30);        // End position (CHANGE THIS - closer to origin)
+    const INITIAL_CAMERA_TARGET = new THREE.Vector3(-10, 70, 10);       // What camera looks at initially
+    const FINAL_CAMERA_TARGET = new THREE.Vector3(0, 20, 25);            // What camera looks at finally (CHANGE THIS)
+    const INITIAL_FRUSTUM_SIZE = 250;                                   // Starting zoom level (wide view)
+    const FINAL_FRUSTUM_SIZE = 20;                                      // Final zoom level (CHANGE THIS - smaller = more zoom)
+    
+    // Create orthographic camera with initial frustum size
+    const camera = new THREE.OrthographicCamera(
+      -INITIAL_FRUSTUM_SIZE * aspect / 2, // left
+      INITIAL_FRUSTUM_SIZE * aspect / 2,  // right
+      INITIAL_FRUSTUM_SIZE / 2,           // top
+      -INITIAL_FRUSTUM_SIZE / 2,          // bottom
+      0.001,                              // near - very close
+      100000                              // far
+    );
 
-    camera.position.set(-500,500,500);
+    // Set initial positions
+    camera.position.copy(INITIAL_CAMERA_POSITION);
+    camera.up.set(0, 1, 0); // Ensure proper up vector to prevent inversion
+    
+    // Create target object for what camera looks at
+    const camTarget = new THREE.Vector3().copy(INITIAL_CAMERA_TARGET);
+    
+    // Create an object to hold the current frustum size for animation
+    const cameraZoom = { frustumSize: INITIAL_FRUSTUM_SIZE };
+    
+    // Function to update camera frustum based on current zoom
+    const updateCameraFrustum = () => {
+        const size = cameraZoom.frustumSize;
+        camera.left = -size * aspect / 2;
+        camera.right = size * aspect / 2;
+        camera.top = size / 2;
+        camera.bottom = -size / 2;
+        camera.updateProjectionMatrix();
+    };
   
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -127,10 +157,6 @@ const camera = new THREE.OrthographicCamera(
     dir.castShadow = true;
     scene.add(dir);
     
-    
-
-    const camTarget = new THREE.Vector3(-10, 70, 10);
-
     function render() {
         camera.lookAt(camTarget);
         renderer.render(scene, camera);
@@ -197,6 +223,59 @@ const camera = new THREE.OrthographicCamera(
             render();
 
             log('GLB loaded', { children: (model as THREE.Group).children?.length || 0 });
+            
+            // Camera animation with proper scroll binding
+            const cameraTimeline = gsap.timeline({
+                scrollTrigger: {
+                    trigger: container,
+                    start: "top top",
+                    end: `+=${endScroll}`,
+                    scrub: 1,
+                    pin: true,
+                    pinSpacing: false,
+                    anticipatePin: 1,
+                    markers: debugMarkers,
+                    onUpdate: (self: any) => {
+                        updateCameraFrustum();
+                        render();
+                        log(`Animation progress: ${(self.progress * 100).toFixed(1)}%`);
+                    }
+                }
+            });
+            
+            // Animate camera position, target, and zoom simultaneously
+            cameraTimeline
+                .to(camera.position, {
+                    x: FINAL_CAMERA_POSITION.x,
+                    y: FINAL_CAMERA_POSITION.y,
+                    z: FINAL_CAMERA_POSITION.z,
+                    duration: 1,
+                    ease: "power2.inOut"
+                }, 0)
+                .to(camTarget, {
+                    x: FINAL_CAMERA_TARGET.x,
+                    y: FINAL_CAMERA_TARGET.y,
+                    z: FINAL_CAMERA_TARGET.z,
+                    duration: 1,
+                    ease: "power2.inOut"
+                }, 0)
+                .to(cameraZoom, {
+                    frustumSize: FINAL_FRUSTUM_SIZE,
+                    duration: 1,
+                    ease: "power2.inOut",
+                    onUpdate: () => {
+                        updateCameraFrustum();
+                    }
+                }, 0);
+
+            log('Camera animation with zoom created', { 
+                from: INITIAL_CAMERA_POSITION, 
+                to: FINAL_CAMERA_POSITION,
+                targetFrom: INITIAL_CAMERA_TARGET,
+                targetTo: FINAL_CAMERA_TARGET,
+                zoomFrom: INITIAL_FRUSTUM_SIZE,
+                zoomTo: FINAL_FRUSTUM_SIZE
+            });
         },
         (xhr: ProgressEvent<EventTarget>) => {
             const loaded = (xhr as any).loaded;
@@ -209,142 +288,26 @@ const camera = new THREE.OrthographicCamera(
             log('GLB error', { message: String(err) });
         }
     );
-      const mapX = gsap.utils.mapRange(0, 1, startX, endX);
-  const toX = gsap.quickSetter(camera.position, 'x');
-  let lastProg = 0;
-  let lastActive = false;
-  let lastUpdateTs = performance.now();
-  let stuck = false;
 
-  const stVars: Record<string, any> = {
-    id: 'glbST',
-    trigger: container,
-    start: 'top top',
-    end: `+=${endScroll}`,
-    scrub: true,
-    pin,
-    pinSpacing: true,
-    pinReparent: true,
-    markers: debugMarkers,
-    anticipatePin: 1,
-    invalidateOnRefresh: false,
-    onUpdate: (self: any) => {
-      const x = mapX(self.progress);
-      toX(x);
-      render();
-      lastActive = self.isActive;
-      lastProg = self.progress;
-      lastUpdateTs = performance.now();
-    //   setHUD({ prog: self.progress, scrollY: getScrollY(), active: self.isActive, dir: self.direction, stuck, x });
-      log('ST onUpdate', { prog: self.progress, x, dir: self.direction, active: self.isActive });
-    },
-    onLeave: (self: any) => {
-      toX(endX);
-      render();
-      log('ST onLeave -> lock end', { prog: self.progress });
-    },
-    onEnterBack: (self: any) => {
-      toX(startX);
-      render();
-      log('ST onEnterBack -> lock start', { prog: self.progress });
-    },
-    onToggle: (self: any) => { log('ST onToggle', { active: self.isActive }); },
-    onRefreshInit: () => log('ST refreshInit'),
-    onRefresh: () => log('ST refresh'),
-    onKill: () => log('ST kill'),
-    onScrubComplete: () => log('ST scrubComplete')
-  };
-  if (forcePinType) stVars.pinType = forcePinType;
+    // Render loop
+    function animate() {
+        requestAnimationFrame(animate);
+        render();
+    }
+    animate();
 
-//   const st = ScrollTrigger.create(stVars);
-
-//   ScrollTrigger.addEventListener('scrollEnd', () => {
-//     const prog = st.progress;
-//     if (prog >= 1) {
-//       toX(endX);
-//       render();
-//       log('scrollEnd -> enforce end', { prog });
-//     } else if (prog <= 0) {
-//       toX(startX);
-//       render();
-//       log('scrollEnd -> enforce start', { prog });
-//     } else {
-//       log('scrollEnd mid', { prog });
-//     }
-//   });
-
-//   const getScrollY = (): number =>
-//     window.pageYOffset ||
-//     document.documentElement.scrollTop ||
-//     document.body.scrollTop || 0;
-
-//   // Watchdog
-//   let lastScrollY = getScrollY();
-//   function watchdog() {
-//     const y = getScrollY();
-//     const now = performance.now();
-
-//     if (y !== lastScrollY) {
-//       if (now - lastUpdateTs > watchdogMs) {
-//         stuck = true;
-//         log('WATCHDOG kick: ST stale, forcing update', { y, prog: st.progress });
-//         ScrollTrigger.update();
-
-//         requestAnimationFrame(() => {
-//           if (performance.now() - lastUpdateTs > watchdogMs) {
-//             log('WATCHDOG hard refresh');
-//             ScrollTrigger.refresh();
-//             const p = st.progress;
-//             const x = mapX(p);
-//             toX(x);
-//             render();
-//             log('WATCHDOG enforced', { p, x });
-//           } else {
-//             stuck = false;
-//           }
-//         });
-//       } else {
-//         stuck = false;
-//       }
-//     }
-
-//     lastScrollY = y;
-//     setHUD({ prog: st.progress, scrollY: y, active: lastActive, dir: 0, stuck, x: root.position.x });
-//     requestAnimationFrame(watchdog);
-//   }
-//   requestAnimationFrame(watchdog);
-
-//   // Wake ST on any user intent
-//   const wake = () => { log('wake'); ScrollTrigger.update(); };
-//   window.addEventListener('scroll', wake, { passive: true });
-//   window.addEventListener('wheel', wake, { passive: true });
-//   window.addEventListener('touchmove', wake, { passive: true });
-//   window.addEventListener('keydown', wake, { passive: true });
-
-//   // RAF
-//   function animate() {
-//     requestAnimationFrame(animate);
-//     render();
-//   }
-//   animate();
-
-  return () => {
-    //   window.removeEventListener('scroll', wake);
-    //   window.removeEventListener('wheel', wake);
-    //   window.removeEventListener('touchmove', wake);
-    //   window.removeEventListener('keydown', wake);
-      ScrollTrigger.getAll().forEach((t: any) => t.kill());
+    return () => {
+      // Kill all ScrollTriggers
+      ScrollTrigger.killAll();
+      log('Killed all ScrollTriggers');
   
       root.traverse((o: THREE.Object3D) => {
-        // dispose Mesh geometry/materials
         if ((o as THREE.Mesh).isMesh) {
           (o as THREE.Mesh).geometry?.dispose?.();
           const m = (o as THREE.Mesh).material;
           if (Array.isArray(m)) m.forEach((mm) => mm.dispose?.());
           else m?.dispose?.();
         }
-
-        // dispose LineSegments (edge overlays)
         if ((o as THREE.LineSegments).isLineSegments) {
           (o as THREE.LineSegments).geometry?.dispose?.();
         }

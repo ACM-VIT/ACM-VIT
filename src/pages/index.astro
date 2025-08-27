@@ -1,6 +1,7 @@
 ---
 import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+// src/pages/index.astro
 ---
 
 <Layout>
@@ -10,9 +11,10 @@ import Layout from '../layouts/Layout.astro';
     .spacer { height: 100vh; }
   </style>
 
-  <div class="spacer"></div>
+ 
   <div id="viewer"></div>
-  <div class="spacer"></div>
+    <div style="height: 200vh;"></div>
+   
 
   <script type="module">
     import { initViewer } from '/src/components/model-gsap.js';

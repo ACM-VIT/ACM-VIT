@@ -6,7 +6,7 @@ gsap.registerPlugin(ScrollTrigger);
 export function initViewer(containerId, opts = {}) {
   const {
     pin = true,
-    debugMarkers = true,
+    debugMarkers = false,
     endScroll = 3000,
     showHelpers = true,
     cubeSize = 2,

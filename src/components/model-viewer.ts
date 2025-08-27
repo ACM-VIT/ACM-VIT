@@ -112,7 +112,7 @@ export function initViewer(
 ): () => void {
   const {
     pin = true,
-    debugMarkers = true,
+    debugMarkers = false,
     endScroll = 3000,
     showHelpers = true,
     desiredSize = 2.0,

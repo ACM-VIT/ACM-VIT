@@ -9,7 +9,7 @@ export function initViewer(containerId, modelPath, opts = {}) {
   const {
     // behavior / layout
     pin = true,
-    debugMarkers = true,
+    debugMarkers = false,
     endScroll = 3000,
     showHelpers = true,
 
