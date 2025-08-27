@@ -3,6 +3,12 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
+// TEMPORARILY DISABLED TO PREVENT SCROLLING CONFLICTS
+// This script is causing ScrollTrigger conflicts with model-gsap.ts
+console.log("[svg-rotator] Script disabled to prevent scrolling conflicts");
+
+// Commenting out the entire script to prevent ScrollTrigger conflicts
+/*
 document.addEventListener("DOMContentLoaded", () => {
   const rotators = document.querySelectorAll(".svg-rotator");
 
@@ -62,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
         scrub: true,
         pin: pinTarget,
         pinSpacing: true,          // leave placeholder so page doesn't jump; set to false if you want overlap
-        markers: false,
+        markers: true,
         // optional callbacks for debugging:
         // onRefresh: () => console.log('refresh'),
         // onEnter: () => console.log('enter'),
@@ -77,3 +83,4 @@ document.addEventListener("DOMContentLoaded", () => {
     // ScrollTrigger.refresh(); // optional: ensure sizes are correct right away
   });
 });
+*/

@@ -2,8 +2,6 @@
 import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
 // src/pages/index.astro
- 
-import SvgRotator from "../components/cassette.astro";
 ---
 
 <Layout>
@@ -15,6 +13,7 @@ import SvgRotator from "../components/cassette.astro";
 
  
   <div id="viewer"></div>
+    <div style="height: 200vh;"></div>
    
 
   <script type="module">
@@ -31,21 +30,4 @@ import SvgRotator from "../components/cassette.astro";
     }); 
 
   </script>
-  <section id="main-screen" class="min-h-[200vh] flex items-center justify-center bg-white">
-     
-  </section>
-  
-  <!-- Fixed pinning section with proper ScrollTrigger pin setup -->
-  <section id="pinned-section" class="h-[200vh] bg-gray-100 relative">
-    <div class="w-full h-screen flex items-center justify-start">
-      <SvgRotator
-        id="hero-rot"
-        trigger="#main-screen"
-        offset="20%"
-        startDeg={120}
-        endDeg={-21}
-        svgWidth={600}
-      />
-    </div>
-  </section>
 </Layout>
