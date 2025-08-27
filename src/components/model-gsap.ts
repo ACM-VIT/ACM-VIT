@@ -239,165 +239,10 @@ export function initViewer(
                         updateCameraFrustum();
                         render();
                         log(`Animation progress: ${(self.progress * 100).toFixed(1)}%`);
-                    },
-                    onLeave: () => {
-                        log('3D animation complete - creating static cassette section');
-                        setTimeout(() => {
-                            // Create the static cassette section
-                            const cassetteSection = document.createElement('section');
-                            cassetteSection.id = 'cassette-static-section';
-                            cassetteSection.style.cssText = `
-                                width: 100vw;
-                                height: 100vh;
-                                background: #111;
-                                display: flex;
-                                align-items: center;
-                                justify-content: space-between;
-                                position: relative;
-                                z-index: 2;
-                            `;
-                            // Cassette SVG (left, offset, rotated to endDeg)
-                            const svgContainer = document.createElement('div');
-                            svgContainer.style.cssText = `
-                                position: relative;
-                                width: 400px;
-                                height: 400px;
-                                margin-left: -12vw;
-                                display: flex;
-                                align-items: flex-end;
-                            `;
-                            const svgImg = document.createElement('img');
-                            svgImg.src = '/startingpage/Cassette.svg';
-                            svgImg.alt = 'Static cassette';
-                            svgImg.style.cssText = `
-                                width: 100%;
-                                height: auto;
-                                transform: rotate(-21deg);
-                                transform-origin: 0% 100%;
-                                display: block;
-                            `;
-                            svgContainer.appendChild(svgImg);
-                            // Text (right)
-                            const textContainer = document.createElement('div');
-                            textContainer.style.cssText = `
-                                color: white;
-                                max-width: 500px;
-                                margin-right: 10vw;
-                                text-align: left;
-                            `;
-                            textContainer.innerHTML = `
-                                <h2 style="font-size: 3rem; margin-bottom: 2rem; font-weight: bold;">INNOVATION</h2>
-                                <p style="font-size: 1.2rem; line-height: 1.6; opacity: 0.8;">
-                                    We push the boundaries of technology and creativity, fostering innovation through collaboration and cutting-edge research.
-                                </p>
-                            `;
-                            cassetteSection.appendChild(svgContainer);
-                            cassetteSection.appendChild(textContainer);
-                            // Insert after viewer
-                            if (container && container.parentNode) {
-                                container.parentNode.insertBefore(cassetteSection, container.nextSibling);
-                            }
-                            // Pin the section with ScrollTrigger, only visible after animation ends
-                            gsap.timeline({
-                                scrollTrigger: {
-                                    trigger: cassetteSection,
-                                    start: 'top top',
-                                    end: '+=1200',
-                                    pin: true,
-                                    pinSpacing: false,
-                                    markers: debugMarkers,
-                                    onLeave: () => {
-                                        // Remove section when leaving
-                                        cassetteSection.remove();
-                                        log('Cassette section removed after scroll');
-                                    },
-                                    onEnterBack: () => {
-                                        // Remove section when scrolling back up
-                                        cassetteSection.remove();
-                                        log('Cassette section removed on scroll up');
-                                    }
-                                }
-                            });
-                            log('Cassette static section created and pinned');
-                        }, 100);
                     }
                 }
             });
             
-            // Simple content creation function
-            function createSimpleContent() {
-                // Create a simple section after the 3D viewer
-                const contentSection = document.createElement('section');
-                contentSection.style.cssText = `
-                    height: 100vh;
-                    background-color: #111;
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    padding: 0 5%;
-                    box-sizing: border-box;
-                `;
-                
-                // SVG on left with offset
-                const svgContainer = document.createElement('div');
-                svgContainer.style.cssText = `
-                    position: relative;
-                    width: 600px;
-                    height: 600px;
-                    margin-left: -20vw;
-                `;
-                
-                const svgImg = document.createElement('img');
-                svgImg.src = '/startingpage/Cassette.svg';
-                svgImg.style.cssText = `
-                    width: 100%;
-                    height: auto;
-                    transform: rotate(-21deg);
-                    transform-origin: 0% 100%;
-                `;
-                
-                // Text on right
-                const textContainer = document.createElement('div');
-                textContainer.style.cssText = `
-                    color: white;
-                    max-width: 500px;
-                `;
-                textContainer.innerHTML = `
-                    <h2 style="font-size: 3rem; margin-bottom: 2rem;">INNOVATION</h2>
-                    <p style="font-size: 1.2rem; line-height: 1.6; opacity: 0.8;">
-                        We push the boundaries of technology and creativity.
-                    </p>
-                `;
-                
-                svgContainer.appendChild(svgImg);
-                contentSection.appendChild(svgContainer);
-                contentSection.appendChild(textContainer);
-                
-                // Insert after container
-                if (container && container.parentNode) {
-                    container.parentNode.insertBefore(contentSection, container.nextSibling);
-                }
-                
-                // Add spacer for continued scrolling
-                const spacer = document.createElement('div');
-                spacer.style.cssText = `
-                    height: 200vh;
-                    background: linear-gradient(to bottom, #111, #333);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: white;
-                    font-size: 2rem;
-                `;
-                spacer.innerHTML = '<div>Continue Scrolling...</div>';
-                
-                if (container && container.parentNode) {
-                    container.parentNode.insertBefore(spacer, container.nextSibling);
-                }
-                
-                log('Simple content created');
-            }
-
             // Animate camera position, target, and zoom simultaneously
             cameraTimeline
                 .to(camera.position, {
@@ -417,7 +262,10 @@ export function initViewer(
                 .to(cameraZoom, {
                     frustumSize: FINAL_FRUSTUM_SIZE,
                     duration: 1,
-                    ease: "power2.inOut"
+                    ease: "power2.inOut",
+                    onUpdate: () => {
+                        updateCameraFrustum();
+                    }
                 }, 0);
 
             log('Camera animation with zoom created', { 
