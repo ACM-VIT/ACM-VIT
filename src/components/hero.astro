@@ -1,0 +1,292 @@
+---
+---
+
+<div class="hero-container">
+  <!-- Hero Section 1 -->
+  <section class="hero-section section-1">
+    <div class="text-content">
+      <h1>Welcome to ACM-VIT</h1>
+      <p>Advancing Computing Excellence</p>
+    </div>
+  </section>
+
+  <!-- Hero Section 2 -->
+  <section class="hero-section section-2">
+    <div class="text-content">
+      <h1>Innovation & Technology</h1>
+      <p>Building the Future Together</p>
+    </div>
+  </section>
+
+  <!-- About Section 1: SVG left, text right -->
+  <section class="about-section section-1">
+    <div class="svg-container svg-left">
+      <img src="/about/Cassette.svg" alt="Cassette 1" class="cassette-svg" />
+    </div>
+    <div class="text-container text-right">
+      <p>ACM-VIT is a student chapter of the Association for Computing Machinery at Vellore Institute of Technology. Since our inception, we've been at the forefront of technological innovation and education on campus.  Our chapter focuses on fostering a passion for computing through workshops, hackathons, and industry collaborations. We provide students with opportunities to expand their technical skills, work on real-world projects, and connect with industry professionals, creating a vibrant community of future tech leaders.</p>
+    </div>
+  </section>
+
+  <!-- About Section 2: SVG right, text left -->
+  <section class="about-section section-2">
+    <div class="text-container text-left">
+      <p>ACM-VIT is a student chapter of the Association for Computing Machinery at Vellore Institute of Technology. Since our inception, we've been at the forefront of technological innovation and education on campus.  Our chapter focuses on fostering a passion for computing through workshops, hackathons, and industry collaborations. We provide students with opportunities to expand their technical skills, work on real-world projects, and connect with industry professionals, creating a vibrant community of future tech leaders.</p>
+    </div>
+    <div class="svg-container svg-right">
+      <img src="/about/3.svg" alt="Cassette 2" class="cassette-svg" />
+    </div>
+  </section>
+
+  <!-- About Section 3: SVG left, text right -->
+  <section class="about-section section-3">
+    <div class="svg-container svg-left-two">
+      <img src="/about/2.svg" alt="Cassette 3" class="cassette-svg" />
+    </div>
+    <div class="text-container text-right">
+      <h2>Excellence</h2>
+      <p>Striving for excellence in everything we do, from technical projects to community events and educational initiatives.</p>
+    </div>
+  </section>
+</div>
+
+<style>
+  .hero-container {
+    position: relative;
+    margin-top: -7rem; /* Offset the pt-28 from Layout */
+  }
+
+  /* Base styles for all sections (hero and about) */
+  .hero-section,
+  .about-section {
+    width: 100vw;
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  /* Hero sections 1 & 2 - Fixed background, scrolling text */
+  .hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 15vw;
+    position: relative;
+  }
+
+  /* Fixed background for first 2 hero sections */
+  .hero-section.section-1,
+  .hero-section.section-2 {
+    background: url('/about/rishit.jpeg') center/cover no-repeat;
+    background-attachment: fixed; /* Fixed background */
+  }
+
+  /* About sections styling - Continue sticky effect */
+  .about-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    position: sticky;
+    top: 0;
+  }
+
+  .text-content {
+    max-width: 600px;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  }
+
+  .text-content h1 {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 900;
+    margin-bottom: 1rem;
+    line-height: 1.1;
+  }
+
+  .text-content p {
+    font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+    font-weight: 300;
+    opacity: 0.9;
+    margin: 0;
+  }
+
+  /* From 3rd section onward - Start sticky section transitions */
+  .about-section.section-1 {
+    background: url('/about/rishit1.jpeg') center/cover no-repeat;
+    z-index: 1;
+  }
+  
+  .about-section.section-2 {
+    background: url('/about/rishit2.jpeg') center/cover no-repeat;
+    z-index: 2;
+  }
+  
+  .about-section.section-3 {
+    background: url('/about/rishit3.jpeg') center/cover no-repeat;
+    z-index: 3;
+  }
+
+  /* Text Container Positioning */
+  .text-container {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 300vw;
+    max-width: 9000px;
+    color: white;
+    padding: 2rem;
+  }
+
+  .text-right {
+    width: 220vw;
+    max-width: 1100px;
+    left: 50vw;
+    text-align: left;
+    padding-left: 2vw;
+  }
+
+  .text-left {
+    left: 0;
+    right: auto;
+    width: 50vw;
+    max-width: 600px;
+    text-align: left;
+    padding-right: 2vw;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  /* SVG Container Positioning */
+  .svg-container {
+    position: relative;
+    width: 500px;
+    height: 500px;
+    flex-shrink: 0;
+    z-index: 1;
+    grid-column: 1;
+  }
+
+  .section-2 .svg-right {
+    grid-column: 2;
+    justify-self: end;
+  }
+
+  .section-2 .text-left {
+    grid-column: 1;
+    left: 15vw;
+    right: auto;
+    width: 35vw;
+    max-width: 500px;
+  }
+
+  .section-2 .svg-right {
+    left: auto;
+    right: 0;
+  }
+
+  .svg-left {
+    /* Position SVG with bottom-left point outside screen */
+    margin-left: -150px; /* Hardcoded pixel value - adjust this as needed */
+    margin-bottom: -600px;
+  }
+  .svg-left-two {
+    
+    margin-left: -150px;  
+    margin-bottom: 200px;
+  }
+
+  .svg-right {
+    margin-right: -200px;
+    margin-bottom: -700px;
+  }
+
+  .cassette-svg {
+    width: 100%;
+    height: auto;
+    transform-origin: 0% 100%; /* Bottom-left origin for rotation */
+  }
+
+  /* Rotate SVG in left sections by 21 degrees */
+  .svg-left .cassette-svg {
+    transform: rotate(21deg);
+  }
+  .svg-left-two .cassette-svg {
+    transform: rotate(11deg);
+  }
+
+  /* Rotate SVG in right sections by -21 degrees for variety */
+  .svg-right .cassette-svg {
+    transform: rotate(-15deg);
+    transform-origin: 100% 100%; /* Bottom-right origin for right-side SVGs */
+  }
+
+  .text-container h2 {
+    font-size: 4rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    line-height: 1.1;
+    text-shadow: 0px 2px 4px rgba(0,0,0,0.3);
+  }
+
+  .text-container p {
+    font-size: 1.4rem;
+    line-height: 1.6;
+    opacity: 0.9;
+    max-width: 500px;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .hero-section {
+      padding-left: 8vw;
+      text-align: center;
+      justify-content: center;
+    }
+
+    .text-content h1 {
+      font-size: clamp(2.5rem, 12vw, 4rem);
+    }
+
+    .text-content p {
+      font-size: clamp(1rem, 4vw, 1.4rem);
+    }
+
+    .about-section {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 2rem;
+    }
+    
+    .text-container {
+      position: static;
+      width: 100%;
+      max-width: 100%;
+      text-align: center;
+      padding: 1rem;
+      transform: none;
+      top: auto;
+      left: auto;
+      right: auto;
+    }
+    
+    .svg-container {
+      width: 300px;
+      height: 300px;
+    }
+    
+    .svg-left, .svg-right {
+      margin: 1rem 0;
+    }
+    
+    .text-container h2 {
+      font-size: 2.5rem;
+    }
+    
+    .text-container p {
+      font-size: 1.1rem;
+    }
+  }
+</style>

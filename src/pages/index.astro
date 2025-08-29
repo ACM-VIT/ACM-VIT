@@ -17,6 +17,7 @@ import AcmWContent from "../components/AcmWContent.astro";
 import { projectsData } from "../data/projectsData.ts";
 import Events from "../components/Events.astro";
 import ContactUS from "../components/ContactUs.astro";
+import Hero from "../components/hero.astro";
 // import Hero from "./hero.astro";
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
@@ -24,6 +25,7 @@ import ContactUS from "../components/ContactUs.astro";
 ---
 
 <Layout>
+  <Hero />
 	<PatternWelcome />
 	<Welcome />
 	<ProjectScreen projectData={projectsData[0]} />
