@@ -16,7 +16,9 @@ import AcmWMotto from "../components/AcmWMotto.astro";
 import AcmWContent from "../components/AcmWContent.astro";
 import { projectsData } from "../data/projectsData.ts";
 import Events from "../components/Events.astro";
-import ContactUS from "../components/ContactUs.astro";
+import ContactUS from "../components/ContactUS.astro";
+import Hero from "../components/hero.astro";
+import Footer from "../components/Footer.astro";
 // import Hero from "./hero.astro";
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
@@ -24,16 +26,23 @@ import ContactUS from "../components/ContactUs.astro";
 ---
 
 <Layout>
+	<Hero />
 	<PatternWelcome />
 	<Welcome />
 	<ProjectScreen projectData={projectsData[0]} />
-	<Domains />
+	<div class="domains-desktop-container">
+  		<Domains />
+	</div>
+	<div class="domains-mobile-container">
+		<DomainsPhone />
+	</div>
 	<Board />
 	<Gallery />
 	<Partners /> 
 	<AcmWMotto />
 	<AcmWContent />
 	<ContactUS />
+	<Footer />
 	<!-- <Events /> -->
 </Layout>
 
