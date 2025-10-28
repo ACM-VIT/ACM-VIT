@@ -16,9 +16,10 @@ import AcmWMotto from "../components/AcmWMotto.astro";
 import AcmWContent from "../components/AcmWContent.astro";
 import { projectsData } from "../data/projectsData.ts";
 import Events from "../components/Events.astro";
-import ContactUS from "../components/ContactUS.astro";
+import ContactUS from "../components/ContactUs.astro";
 import Hero from "../components/hero.astro";
 import Footer from "../components/Footer.astro";
+import Blogs from "../components/Blogs.astro";
 // import Hero from "./hero.astro";
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
@@ -27,23 +28,32 @@ import Footer from "../components/Footer.astro";
 
 <Layout>
 	<Hero />
-	<PatternWelcome />
+	<!-- <PatternWelcome /> -->
 	<Welcome />
-	<ProjectScreen projectData={projectsData[0]} />
 	<div class="domains-desktop-container">
   		<Domains />
 	</div>
 	<div class="domains-mobile-container">
 		<DomainsPhone />
 	</div>
-	<Board />
-	<Gallery />
-	<Partners /> 
+	<!-- <Events />  -->
+	<div class="projects-stack" style={`--project-count: ${projectsData.length};`}>
+		{projectsData.map((project, index) => (
+			<ProjectScreen projectData={project} order={index} />
+		))}
+	</div>
 	<AcmWMotto />
 	<AcmWContent />
+	
+	
+	<Board />
+	<Blogs />
+	<Gallery />
+	<Partners /> 
+	
 	<ContactUS />
 	<Footer />
-	<!-- <Events /> -->
+	
 </Layout>
 
 <style>
@@ -65,6 +75,11 @@ import Footer from "../components/Footer.astro";
 		.domains-mobile-container {
 			display: block;
 		}
+	}
+
+	.projects-stack {
+		position: relative;
+		height: calc(var(--project-count) * 100vh);
 	}
 </style>
 

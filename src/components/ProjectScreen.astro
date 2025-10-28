@@ -7,7 +7,7 @@ export interface Props {
             alt: string;
         };
         textContent: {
-            blocks: string[2];
+            blocks: string[];
         };
         buttons: {
             primary: {
@@ -45,9 +45,11 @@ export interface Props {
             hoverShadow: string;
         };
     };
+    order?: number;
 }
 
-const {projectData} = Astro.props;
+const { projectData, order = 0 } = Astro.props;
+const zIndex = 10 + order;
 ---
 
 <!--<section class="screen project-screen" id="project-screen">-->
@@ -367,7 +369,7 @@ const {projectData} = Astro.props;
 <!--</style>-->
 
 
-<section class="hero">
+<section class="project-slide" style={`z-index: ${zIndex};`}>
     <div class="parent">
         <div class="div1">
             <Cassette overlaySrc={projectData.cassette.src} alt={projectData.cassette.alt}
@@ -448,10 +450,18 @@ const {projectData} = Astro.props;
     cassetteAccent: projectData.buttons.primary.backgroundColor,
 }}
 >
-    .hero {
+    .project-slide {
+        position: sticky;
+        top: 0;
+        height: 100vh;
         padding: clamp(24px, 4vw, 48px);
         color: #fff;
-        height: calc(100vh - 112px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        background: rgba(5, 5, 5, 0.92);
+        isolation: isolate;
     }
 
     .parent {

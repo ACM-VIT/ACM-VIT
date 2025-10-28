@@ -20,11 +20,12 @@
 <style>
     .marquee-container {
         position: absolute;
-        top: 50%;
+        top: 45%;
         left: 0;
         transform: translateY(-50%);
         width: 100%;
         overflow: hidden;
+        height: clamp(18rem, 50vh, 32rem);
         white-space: nowrap;
     }
 
@@ -36,8 +37,8 @@
     }
 
     .marquee-content img {
-        height: auto;
-        width: 100%;
+        height: 100%;
+        width: auto;
         margin-right: 50px;
     }
 
