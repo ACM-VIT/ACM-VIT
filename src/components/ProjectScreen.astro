@@ -1,13 +1,13 @@
 ---
 import Cassette from "./Cassette.astro";
 export interface Props {
-    projectData: {
+    projects: Array<{
         cassette: {
             src: string;
             alt: string;
         };
         textContent: {
-            blocks: string[2];
+            blocks: string[];
         };
         buttons: {
             primary: {
@@ -43,329 +43,25 @@ export interface Props {
             textColor: string;
             contentBlockBackground: string;
             hoverShadow: string;
+            // optional: borderAlpha?: number;
         };
-    };
+    }>;
 }
 
-const {projectData} = Astro.props;
+const { projects = [] } = Astro.props;
+// pick the first project for this screen; change selection logic as needed
+const projectData = projects[0] ?? {
+    cassette: { src: '', alt: '' },
+    textContent: { blocks: ['', ''] },
+    buttons: {
+        primary: { backgroundColor: '#000', textColor: '#fff', borderColor: '#000' },
+        learnMore: { text: '', backgroundColor: '#000', textColor: '#fff', borderColor: '#000' },
+        visitWebsite: { text: '', backgroundColor: '#000', textColor: '#fff', borderColor: '#000' },
+        icons: []
+    },
+    colors: { textColor: '#fff', contentBlockBackground: '#000', hoverShadow: 'rgba(0,0,0,0.4)' }
+};
 ---
-
-<!--<section class="screen project-screen" id="project-screen">-->
-<!--    <div class="grid-layout">-->
-<!--        &lt;!&ndash; Left Side - Cassette SVG &ndash;&gt;-->
-<!--        <div class="device-section">-->
-<!--            <Cassette overlaySrc={projectData.cassette.src} alt={projectData.cassette.alt}-->
-<!--                      color={projectData.buttons.primary.backgroundColor}/>-->
-<!--        </div>-->
-
-<!--        &lt;!&ndash; Right Side - Content &ndash;&gt;-->
-<!--        <div class="content-section">-->
-<!--            &lt;!&ndash; Render text blocks dynamically &ndash;&gt;-->
-<!--            {-->
-<!--                projectData.textContent.blocks.map((block, index) => (-->
-<!--                        <>-->
-<!--                            <div class="content-block">-->
-<!--                                <p class="description">{block}</p>-->
-<!--                            </div>-->
-<!--                            <div class="w-full flex justify-end flex-row">-->
-<!--                                <svg xmlns="http://www.w3.org/2000/svg" width="1418" height="1" viewBox="0 0 1418 1" fill="none">-->
-<!--                                    <path opacity="0.5" d="M0.995605 0.5L1417 0.5" stroke="url(#paint0_linear_285_182552)" stroke-linecap="round" stroke-dasharray="6 6"/>-->
-<!--                                    <defs>-->
-<!--                                        <linearGradient id="paint0_linear_285_182552" x1="0.995605" y1="1" x2="1417" y2="1" gradientUnits="userSpaceOnUse">-->
-<!--                                            <stop offset="0.318011" stop-color="#999999"/>-->
-<!--                                            <stop offset="0.932784" stop-color="white"/>-->
-<!--                                        </linearGradient>-->
-<!--                                    </defs>-->
-<!--                                </svg>-->
-<!--                            </div>-->
-<!--                            {/* Add buttons after first block */}-->
-<!--                            {index === 0 && (-->
-<!--                                    <div class="action-buttons">-->
-<!--                                        <button-->
-<!--                                                class="btn primary"-->
-<!--                                                style={`-->
-<!--									background: ${projectData.buttons.learnMore.backgroundColor};-->
-<!--									color: ${projectData.buttons.learnMore.textColor};-->
-<!--									border-color: ${projectData.buttons.learnMore.borderColor};-->
-<!--									${projectData.buttons.learnMore.borderRadius ? `border-radius: ${projectData.buttons.learnMore.borderRadius};` : ''}-->
-<!--								`}-->
-<!--                                        >-->
-<!--                                            {projectData.buttons.learnMore.text}-->
-<!--                                        </button>-->
-<!--                                        <button-->
-<!--                                                class="btn primary"-->
-<!--                                                style={`-->
-<!--									background: ${projectData.buttons.visitWebsite.backgroundColor};-->
-<!--									color: ${projectData.buttons.visitWebsite.textColor};-->
-<!--									border-color: ${projectData.buttons.visitWebsite.borderColor};-->
-<!--									${projectData.buttons.visitWebsite.borderRadius ? `border-radius: ${projectData.buttons.visitWebsite.borderRadius};` : ''}-->
-<!--								`}-->
-<!--                                        >-->
-<!--                                            {projectData.buttons.visitWebsite.text}-->
-<!--                                        </button>-->
-
-<!--                                        {/* Render icon buttons */}-->
-<!--                                        {projectData.buttons.icons.map((icon) => (-->
-<!--                                                <button-->
-<!--                                                        class="gh-btn icon-btn"-->
-<!--                                                        style={`-->
-<!--										background: ${icon.backgroundColor};-->
-<!--										color: ${icon.textColor};-->
-<!--										border-color: ${icon.borderColor};-->
-<!--										${icon.borderRadius ? `border-radius: ${icon.borderRadius};` : 'border-radius: 50%;'}-->
-<!--									`}-->
-<!--                                                >-->
-
-<!--                                                    <img-->
-<!--                                                            src={`/${icon.type}-icon.svg`}-->
-<!--                                                            alt={icon.type}-->
-<!--                                                            width="24"-->
-<!--                                                            style={`filter: brightness(0) saturate(100%) invert(${icon.iconColor === "#FEFCD9" ? "96%" : "0%"});`}-->
-<!--                                                    />-->
-<!--                                                </button>-->
-<!--                                        ))}-->
-<!--                                    </div>-->
-<!--                            )}-->
-<!--                        </>-->
-<!--                ))-->
-
-<!--            }-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</section>-->
-
-<!--<style-->
-<!--        define:vars={{-->
-<!--            textColor: projectData.colors.textColor,-->
-<!--            hoverShadow: projectData.colors.hoverShadow,-->
-<!--            cassetteAccent: projectData.buttons.primary.backgroundColor,-->
-<!--        }}-->
-<!--&gt;-->
-<!--    @font-face {-->
-<!--        font-family: "PolySans Trial";-->
-<!--        src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-SlimMono.otf") format("opentype");-->
-<!--        font-weight: 300;-->
-<!--        font-style: normal;-->
-<!--        font-display: swap;-->
-<!--    }-->
-
-<!--    @font-face {-->
-<!--        font-family: "PolySans Trial";-->
-<!--        src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-NeutralMono.otf") format("opentype");-->
-<!--        font-weight: 400;-->
-<!--        font-style: normal;-->
-<!--        font-display: swap;-->
-<!--    }-->
-
-<!--    @font-face {-->
-<!--        family: "PolySans Trial";-->
-<!--        src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-MedianMono.otf") format("opentype");-->
-<!--        font-weight: 500;-->
-<!--        font-style: normal;-->
-<!--        font-display: swap;-->
-<!--    }-->
-
-<!--    @font-face {-->
-<!--        font-family: "PolySans Trial";-->
-<!--        src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-BulkyMono.otf") format("opentype");-->
-<!--        font-weight: 700;-->
-<!--        font-style: normal;-->
-<!--        font-display: swap;-->
-<!--    }-->
-
-<!--    .screen {-->
-<!--        position: relative;-->
-<!--        top: 0;-->
-<!--        left: 0;-->
-<!--        width: 100%;-->
-<!--        height: 100vh;-->
-<!--        display: flex;-->
-<!--        align-items: center;-->
-<!--        justify-content: center;-->
-<!--        background: transparent;-->
-<!--    }-->
-
-<!--    .cassette-container {-->
-<!--        border: 2px solid;-->
-<!--        border-image: linear-gradient(-->
-<!--                150deg,-->
-<!--                white 0%,-->
-<!--                white 50%,-->
-<!--                var(&#45;&#45;cassetteAccent) 90%,-->
-<!--                var(&#45;&#45;cassetteAccent) 100%-->
-<!--        ) 1;-->
-<!--        /* Use clip-path for rounded corners since border-radius doesn't work with border-image */-->
-<!--        clip-path: inset(0 round 12px);-->
-<!--    }-->
-
-<!--    .project-screen {-->
-<!--        z-index: 1;-->
-<!--        background: transparent;-->
-<!--    }-->
-
-<!--    .background-pattern {-->
-<!--        position: absolute;-->
-<!--        top: 0;-->
-<!--        left: 0;-->
-<!--        width: 100%;-->
-<!--        height: 100%;-->
-<!--        background-image: url("/background_pattern.svg");-->
-<!--        background-repeat: repeat;-->
-<!--        opacity: 0.8;-->
-<!--        z-index: 0;-->
-<!--        pointer-events: none;-->
-<!--    }-->
-
-<!--    .grid-layout {-->
-<!--        display: grid;-->
-<!--        grid-template-columns: 1fr 1fr;-->
-<!--        gap: 190px;-->
-<!--        align-items: center;-->
-<!--        max-width: 1200px;-->
-<!--        width: 100%;-->
-<!--        padding: 0 5%;-->
-<!--        height: 100%;-->
-<!--        position: relative;-->
-<!--        z-index: 1;-->
-<!--    }-->
-
-<!--    .device-section {-->
-<!--        display: flex;-->
-<!--        justify-content: center;-->
-<!--        align-items: center;-->
-<!--        margin-left: 30px;-->
-<!--    }-->
-
-<!--    .cassette-container {-->
-<!--        width: 100%;-->
-<!--        max-width: 550px;-->
-<!--        height: auto;-->
-<!--    }-->
-
-<!--    .cassette-container img {-->
-<!--        width: 110%;-->
-<!--        height: auto;-->
-<!--    }-->
-
-<!--    .content-section {-->
-<!--        color: var(&#45;&#45;textColor);-->
-<!--        display: flex;-->
-<!--        flex-direction: column;-->
-<!--        gap: 20px;-->
-<!--        justify-content: center;-->
-<!--        padding-left: 20px;-->
-<!--        padding-right: 20px;-->
-
-<!--    }-->
-
-<!--    .content-block {-->
-<!--        border: none;-->
-<!--        padding: 10px;-->
-<!--        position: relative;-->
-<!--        margin: 4px 0;-->
-<!--    }-->
-
-<!--    .description {-->
-<!--        font-family: "PolySans Trial", Arial, sans-serif;-->
-<!--        font-size: 16px;-->
-<!--        line-height: 1.4;-->
-<!--        margin: 0;-->
-<!--        text-transform: uppercase;-->
-<!--        color: var(&#45;&#45;textColor);-->
-<!--        font-weight: 300;-->
-<!--        word-wrap: break-word;-->
-<!--    }-->
-
-<!--    .action-buttons {-->
-<!--        display: flex;-->
-<!--        gap: 40px;-->
-<!--        align-items: center;-->
-<!--        justify-content: center;-->
-<!--        margin: 0;-->
-<!--    }-->
-
-<!--    .btn {-->
-<!--        padding: 10px 18px;-->
-<!--        border: 1px solid;-->
-<!--        border-radius: 25px;-->
-<!--        font-family: "PolySans Trial", Arial, sans-serif;-->
-<!--        font-size: 12px;-->
-<!--        font-weight: 300;-->
-<!--        text-transform: uppercase;-->
-<!--        cursor: pointer;-->
-<!--        transition: all 0.3s ease;-->
-<!--        word-wrap: break-word;-->
-<!--    }-->
-
-<!--    .gh-btn {-->
-<!--        border: 1px solid;-->
-<!--        border-radius: 25px;-->
-<!--        font-family: "PolySans Trial", Arial, sans-serif;-->
-<!--        font-size: 12px;-->
-<!--        font-weight: 300;-->
-<!--        text-transform: uppercase;-->
-<!--        cursor: pointer;-->
-<!--        transition: all 0.3s ease;-->
-<!--        word-wrap: break-word;-->
-<!--    }-->
-
-<!--    .btn.icon-btn,-->
-<!--    .gh-btn.icon-btn {-->
-<!--        width: 44px;-->
-<!--        height: 44px;-->
-<!--        border-radius: 50%;-->
-<!--        display: flex;-->
-<!--        align-items: center;-->
-<!--        justify-content: center;-->
-<!--        padding: 0;-->
-<!--    }-->
-
-<!--    .btn:hover,-->
-<!--    .gh-btn:hover {-->
-<!--        transform: translateY(-3px);-->
-<!--        box-shadow: 0 8px 20px var(&#45;&#45;hoverShadow);-->
-<!--    }-->
-
-<!--    .dotted-line {-->
-<!--        border: none; /* Remove default border */-->
-<!--        border-top: 2px dotted #ccc; /* Set dotted top border */-->
-<!--        color: #ccc; /* Fallback color for older browsers */-->
-<!--        background-color: transparent; /* Ensure no background color interferes */-->
-<!--        height: 1px; /* Adjust height if needed, often not required with border-top */-->
-<!--    }-->
-
-<!--    /* Responsive Design */-->
-<!--    @media (max-width: 768px) {-->
-<!--        .grid-layout {-->
-<!--            grid-template-columns: 1fr;-->
-<!--            gap: 40px;-->
-<!--            padding: 20px;-->
-<!--        }-->
-
-<!--        .cassette-container {-->
-<!--            max-width: 220px;-->
-<!--        }-->
-
-<!--        .cassette-container svg {-->
-<!--            width: 120px !important;-->
-<!--        }-->
-
-<!--        .description {-->
-<!--            font-size: 14px;-->
-<!--        }-->
-
-<!--        .background-pattern {-->
-<!--            background-size: 80px 80px;-->
-<!--        }-->
-<!--    }-->
-
-<!--    @media (max-width: 480px) {-->
-<!--        .background-pattern {-->
-<!--            background-size: 60px 60px;-->
-<!--        }-->
-<!--    }-->
-<!--</style>-->
-
 
 <section class="hero">
     <div class="parent">
@@ -441,6 +137,22 @@ const {projectData} = Astro.props;
     </div>
 </section>
 
+<!-- GSAP + ScrollTrigger client script: animates border alpha only -->
+<script>
+    import gsap from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.to(".div1", {
+        scrollTrigger: {
+            trigger:".parent",
+            pin:".div4",
+            start: "top top",
+            endTrigger: ".div1",
+            markers: true
+        }
+    })
+</script>
 
 <style define:vars={{
     textColor: projectData.colors.textColor,
@@ -489,17 +201,14 @@ const {projectData} = Astro.props;
     }
 
     .div3 {
-        border-top: 2px dashed rgba(153, 153, 153, 0.5); /* Set dotted top border */
-        //height: 100px;
-        border-bottom: 2px dashed rgba(153, 153, 153, 0.5); /* Set dotted top border */
-
+        /* use the animated CSS custom property for alpha */
+        border-top: 2px dashed rgba(153, 153, 153, var(--border-alpha)); /* Set dashed top border */
+        border-bottom: 2px dashed rgba(153, 153, 153, var(--border-alpha)); /* Set dashed bottom border */
     }
 
     .div2 {
-        border-left: 2px dashed rgba(153, 153, 153, 0.5); /* Set dotted top border */
-        //height: 100px;
-        border-right: 2px dashed rgba(153, 153, 153, 0.5); /* Set dotted top border */
-
+        border-left: 2px dashed rgba(153, 153, 153, var(--border-alpha)); /* Set dashed left border */
+        border-right: 2px dashed rgba(153, 153, 153, var(--border-alpha)); /* Set dashed right border */
     }
 
     .div1 {
@@ -561,6 +270,8 @@ const {projectData} = Astro.props;
         cursor: pointer;
         transition: all 0.3s ease;
         word-wrap: break-word;
+        /* keep buttons out of layout paint churn */
+        will-change: transform;
     }
 
     .gh-btn {

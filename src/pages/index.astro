@@ -16,7 +16,7 @@ import AcmWMotto from "../components/AcmWMotto.astro";
 import AcmWContent from "../components/AcmWContent.astro";
 import { projectsData } from "../data/projectsData.ts";
 import Events from "../components/Events.astro";
-import ContactUS from "../components/ContactUS.astro";
+import ContactUS from "../components/ContactUs.astro";
 import Hero from "../components/hero.astro";
 import Footer from "../components/Footer.astro";
 // import Hero from "./hero.astro";
@@ -29,7 +29,7 @@ import Footer from "../components/Footer.astro";
 	<Hero />
 	<PatternWelcome />
 	<Welcome />
-	<ProjectScreen projectData={projectsData[0]} />
+	<ProjectScreen projects={projectsData} />
 	<div class="domains-desktop-container">
   		<Domains />
 	</div>
