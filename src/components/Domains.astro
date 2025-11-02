@@ -131,7 +131,7 @@
 
         <div class="domains-grid">
             <div class="domain-item" data-domain="app">
-                <img src="/Cassette_App.svg" alt="App Development" class="cassette-img" />
+                <img src="/Cassette_App.svg" alt="Tech Development" class="cassette-img" /> <!--tech development doenst sound right -->
             </div>
             <div class="domain-item" data-domain="cc">
                 <img src="/Cassette_cc.svg" alt="Competitive Coding" class="cassette-img" />
@@ -144,9 +144,6 @@
             </div>
             <div class="domain-item" data-domain="research">
                 <img src="/Cassette_Research.svg" alt="Research" class="cassette-img" />
-            </div>
-            <div class="domain-item" data-domain="web">
-                <img src="/Cassette_Web.svg" alt="Web Development" class="cassette-img" />
             </div>
         </div>
     </div>
@@ -176,32 +173,29 @@
 
             // Grid positions (2x3 layout)
             const gridPos = [
-                { x: -500, y: -70 }, // App
+                { x: -500, y: -70 }, // Tech
                 { x: 0, y: -70 },    // CC
                 { x: 500, y: -70 },  // Design
-                { x: -500, y: 200 },  // Management  
-                { x: 0, y: 200 },     // Research
-                { x: 500, y: 200 }    // Web
+                { x: -300, y: 200 },  // Management  
+                { x: 300, y: 200 },     // Research
             ];
 
             // Horizontal line positions
             const linePos = [
-                { x: -600, y: 0 },   // App
-                { x: 120, y: 0 },   // CC
-                { x: 360, y: 0 },    // Design
-                { x: -360, y: 0 },    // Management
-                { x: -120, y: 0 },   // Research
-                { x: 600, y: 0 }     // Web
+                { x: -480, y: 0 },   // Tech
+                { x: -240, y: 0 },   // CC
+                { x: 0, y: 0 },    // Design
+                { x: 240, y: 0 },    // Management
+                { x: 480, y: 0 },   // Research
             ];
 
             // Zoom positions
             const zoomPos = [
-                { x: -800, y: 0 },   // App : move left
-                { x: 240, y: 0 },   // CC : move right
-                { x: 480, y: 0 },    // Design : move right
-                { x: -480, y: 0 },    // Management : move left
-                { x: -240, y: 0 },   // Research : move left
-                { x: 480, y: 0 }     // Web : move right
+                { x: -800, y: 0 },   // Tech : move left
+                { x: -480, y: 0 },   // CC : move left
+                { x: -240, y: 0 },    // Design : move left
+                { x: 240, y: 0 },    // Management : move right
+                { x: 480, y: 0 },   // Research : move right
             ];
 
             const items = document.querySelectorAll('.domain-item');
