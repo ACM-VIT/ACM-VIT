@@ -2,14 +2,10 @@
 // Footer.astro
 ---
 
-<footer class="relative w-full w-full overflow-hidden">
-  <div class="w-[1438.01px] h-0 outline outline-1 outline-offset-[-0.50px] outline-white mx-auto"></div>
+<footer class="relative w-full w-full overflow-hidden pb-8 md:pb-16">
+  <div class="hidden md:block w-[1438.01px] h-0 outline outline-1 outline-offset-[-0.50px] outline-white mx-auto"></div>
 
-
-
-  
-  <!-- Footer Content -->
-  <div class="relative z-10 flex flex-col min-h-[60vh] pb-0    ">
+  <div class="relative z-10 hidden md:flex flex-col min-h-[60vh] pb-8    ">
     <div class="flex-grow flex items-start justify-between px-16 pt-6">
       <div class="flex-shrink-0">
         <div class="text-yellow-50 text-xl font-bold font-['PolySans_Trial'] leading-tight">
@@ -187,7 +183,7 @@
     </div>
 </div>
 
-    <div class="w-full flex flex-col items-center justify-center relative">
+  <div class="hidden md:flex w-full flex-col items-center justify-center relative">
         <div class="flex flex-col items-center justify-center mb-4 z-30 relative">
           <p class="text-neutral-400 text-xl text-white mb-12">© 2025&nbsp;ACM-VIT. All rights reserved.</p>
           <!-- Social Icons -->
@@ -209,8 +205,137 @@
         </div>
     </div>
     <!-- Footer Background -->
-    <div class="w-full flex justify-center items-end mt-0">
+    <div class="hidden md:flex w-full justify-center items-end mt-0 pb-4">
       <img src="/footer/footer-background.svg" alt="Footer Background" class="w-full max-w-none h-auto object-contain" style="min-width:100vw;" />
+    </div>
+  </div>
+  
+  <!-- Phone Screen Version -->
+  <div class="block md:hidden relative w-full h-auto overflow-hidden min-h-[1100px] pb-24">
+
+    <!-- Divider line -->
+    <div class="w-full h-0 outline outline-1 outline-offset-[-0.5px] outline-white mx-auto"></div>
+
+    <!-- Content -->
+    <div class="relative z-10 flex flex-col px-4 pt-4 gap-6">
+      <!-- Title -->
+      <div class="text-yellow-50 text-base sm:text-lg font-bold leading-tight text-center font-['PolySans_Trial']">
+        association for computing machinery
+      </div>
+
+      <!-- Map under title for mobile -->
+      <div class="relative w-44 h-32 mt-2 self-start">
+        <a href="https://w3w.co/static.grips.limelight" target="_blank" rel="noopener noreferrer">
+          <img src="/footer/VIT-Map.png" alt="VIT Map" class="w-full h-full object-cover rounded-lg shadow-lg border border-zinc-700" loading="lazy" />
+          <div class="absolute inset-0 opacity-40 bg-gradient-to-b from-white to-red-500 rounded-lg pointer-events-none"></div>
+        </a>
+      </div>
+
+      <!-- Navigation Sections (mobile grid) -->
+      <div class="grid grid-cols-2 gap-4">
+        <!-- About Section -->
+        <div class="w-full inline-flex flex-col justify-start items-start gap-2">
+          <div class="text-yellow-50 text-xs font-light font-['PolySans_Trial'] uppercase">About</div>
+          <div class="flex flex-col justify-start items-start gap-1">
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">ACM-VIT</a>
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">VIT</a>
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">ACM</a>
+          </div>
+        </div>
+
+        <!-- Domains Section -->
+        <div class="w-full inline-flex flex-col justify-start items-start gap-2">
+          <div class="text-yellow-50 text-xs font-light font-['PolySans_Trial'] uppercase">Domains</div>
+          <div class="flex flex-col justify-start items-start gap-1">
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">App</a>
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">competitive coding</a>
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">design</a>
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">management</a>
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">research</a>
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">web</a>
+          </div>
+        </div>
+
+        <!-- Events Section -->
+        <div class="w-full inline-flex flex-col justify-start items-start gap-2">
+          <div class="text-yellow-50 text-xs font-light font-['PolySans_Trial'] uppercase">Events</div>
+          <div class="flex flex-col justify-start items-start gap-1">
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">Code2CREATE</a>
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">CRYPTIC HUNT</a>
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">REVERSE CODING</a>
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">CODEX CRYPTUM</a>
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">FORKTOBER</a>
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">THE TINY HACK</a>
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">APPTITUDE</a>
+            <a href="#" class="text-red-500 text-xs font-light font-['PolySans_Trial'] uppercase hover:text-red-400 transition-colors">MORE</a>
+          </div>
+        </div>
+
+        <!-- Projects Section -->
+        <div class="w-full inline-flex flex-col justify-start items-start gap-2">
+          <div class="text-yellow-50 text-xs font-light font-['PolySans_Trial'] uppercase">Projects</div>
+          <div class="flex flex-col justify-start items-start gap-1">
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">ACMONE</a>
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">CLI-RPG</a>
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">EXAMCOOKER</a>
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">CLITOP</a>
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">LOCALHOST</a>
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">OS</a>
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">UNIPOOL</a>
+          </div>
+        </div>
+
+        <!-- ACM-W Section -->
+        <div class="w-full inline-flex flex-col justify-start items-start gap-2">
+          <div class="text-yellow-50 text-xs font-light font-['PolySans_Trial'] uppercase">ACM-W</div>
+          <div class="flex flex-col justify-start items-start gap-1">
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">about w</a>
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">events</a>
+          </div>
+        </div>
+
+        <!-- More Section -->
+        <div class="w-full inline-flex flex-col justify-start items-start gap-2">
+          <div class="text-red-500 text-xs font-light font-['PolySans_Trial'] uppercase">More</div>
+          <div class="flex flex-col justify-start items-start gap-1">
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">team</a>
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">blogs</a>
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">partners</a>
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">gallery</a>
+            <a href="#" class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors">contact us</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Section (mobile) -->
+    <div class="w-full flex flex-col items-center justify-center relative px-4 pt-4">
+      <div class="flex flex-col items-center justify-center mb-4 z-30 relative">
+        <p class="text-white text-xs mb-4 text-center">© 2025&nbsp;ACM-VIT. All rights reserved.</p>
+        <!-- Social Icons -->
+        <div class="flex flex-row items-center gap-4 mb-6 flex-wrap justify-center">
+          <a href="https://www.facebook.com/acmvitvellore" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><img src="/footer/Facebook.svg" alt="Facebook" class="w-8 h-8 hover:scale-110 transition-transform" /></a>
+          <a href="https://x.com/acm_vit" aria-label="Twitter" target="_blank" rel="noopener noreferrer"><img src="/footer/Twitter.svg" alt="Twitter" class="w-6 h-6 hover:scale-110 transition-transform" /></a>
+          <a href="https://www.instagram.com/acmvit" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><img src="/footer/Instagram.svg" alt="Instagram" class="w-8 h-8 hover:scale-110 transition-transform" /></a>
+          <a href="https://medium.com/acmvit" aria-label="Medium" target="_blank" rel="noopener noreferrer"><img src="/footer/Medium.svg" alt="Medium" class="w-8 h-8 hover:scale-110 transition-transform" /></a>
+          <a href="https://www.linkedin.com/company/acmvit" aria-label="Linkedin" target="_blank" rel="noopener noreferrer"><img src="/footer/Linkedin.svg" alt="Linkedin" class="w-8 h-8 hover:scale-110 transition-transform" /></a>
+          <a href="https://www.youtube.com/@acm_vit" aria-label="YouTube" target="_blank" rel="noopener noreferrer"><img src="/footer/youtube icon.png" alt="YouTube" class="w-6 h-6 rounded hover:scale-110 transition-transform" /></a>
+        </div>
+        <div class="flex items-center gap-2">
+          <img src="/footer/pixel-heart.svg" alt="pixel heart" class="w-5 h-5" />
+          <span class="text-white text-xs font-['PolySans_Trial']">crafted with love by ACM-VIT</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Background (mobile) -->
+    <div class="w-full flex justify-center items-end mt-4">
+      <img
+        src="/footer/footer-background.svg"
+        alt="Footer Background"
+        class="w-[560px] max-w-[100vw] h-auto object-contain opacity-90"
+        loading="lazy"
+      />
     </div>
   </div>
 </footer>
