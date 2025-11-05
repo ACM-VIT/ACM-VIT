@@ -19,6 +19,7 @@ import Events from "../components/Events.astro";
 import ContactUS from "../components/ContactUs.astro";
 import Hero from "../components/hero.astro";
 import Footer from "../components/Footer.astro";
+import Blogs from "../components/Blogs.astro";
 // import Hero from "./hero.astro";
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
@@ -26,22 +27,53 @@ import Footer from "../components/Footer.astro";
 ---
 
 <Layout>
-	<Hero />
+	<section id="home" class="page-section">
+		<Hero />
+	</section>
+
 	<PatternWelcome />
-	<Welcome />
-	<ProjectScreen projects={projectsData} />
-	<div class="domains-desktop-container">
-  		<Domains />
-	</div>
-	<div class="domains-mobile-container">
-		<DomainsPhone />
-	</div>
+
+	<section id="about" class="page-section">
+		<Welcome />
+	</section>
+
+	<section id="projects" class="page-section">
+		<ProjectScreen projects={projectsData} />
+	</section>
+
+	<section id="domains" class="page-section">
+		<div class="domains-desktop-container">
+  			<Domains />
+		</div>
+		<div class="domains-mobile-container">
+			<DomainsPhone />
+		</div>
+	</section>
+
 	<Board />
+
+	<section id="blogs" class="page-section">
+		<Blogs />
+	</section>
+
 	<Gallery />
-	<Partners /> 
-	<AcmWMotto />
-	<AcmWContent />
-	<ContactUS />
+
+	<section id="partners" class="page-section">
+		<Partners /> 
+	</section>
+
+	<section id="acm-w" class="page-section">
+		<AcmWMotto />
+		<AcmWContent />
+	</section>
+
+	<section id="contact" class="page-section">
+		<ContactUS />
+	</section>
+
+	<!-- Anchor placeholder for events if content is not displayed -->
+	<section id="events" class="page-section"></section>
+
 	<Footer />
 	<!-- <Events /> -->
 </Layout>
