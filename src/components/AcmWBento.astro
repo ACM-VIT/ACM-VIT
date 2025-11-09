@@ -1,0 +1,73 @@
+---
+// ACM-W Bento
+---
+
+<section class="w-full flex flex-col justify-center items-center px-8 md:px-16 py-10 min-h-[55vh] md:min-h-[60vh]">
+		<a href="https://blog.acmvit.in" target="_blank" rel="noopener noreferrer" class="relative w-full max-w-[300px] sm:max-w-[380px] md:max-w-[640px] lg:max-w-[720px] block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-pink/60 rounded-md">
+			<!-- Mobile SVG -->
+			<img
+				src="/acmw-bento-phone.svg"
+				alt="ACM-W bento (mobile)"
+				class="block md:hidden w-full h-auto select-none"
+				loading="lazy"
+				decoding="async"
+			/>
+
+			<!--Laptop SVG -->
+			<img
+				src="/acmw-bento.svg"
+				alt="ACM-W bento"
+				class="hidden md:block w-full h-auto select-none"
+				loading="lazy"
+				decoding="async"
+			/>
+		</a>
+
+	<!-- Tubelight under the bento -->
+	<div class="relative flex items-center justify-center mt-8">
+		<img
+			id="bento-tubelight"
+			src="/white_tubelight.png"
+			alt="Decorative tubelight"
+			loading="lazy"
+			decoding="async"
+			class="w-[78vw] max-w-[1440px] opacity-0 select-none z-[-100] rotate-180
+						 [mask-image:radial-gradient(circle,black_20%,transparent_75%)]
+						 [mask-repeat:no-repeat] [mask-position:center] [mask-size:contain]
+						 max-[480px]:w-[95vw] max-[480px]:max-w-none"
+		/>
+	</div>
+</section>
+
+<script>
+	import { gsap } from "gsap";
+	import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+	gsap.registerPlugin(ScrollTrigger);
+
+	document.addEventListener("DOMContentLoaded", () => {
+		const light = document.getElementById("bento-tubelight");
+		if (!light) return;
+			const tl = gsap.timeline({
+			scrollTrigger: {
+				trigger: light,
+					start: "top 80%",
+					end: "top 55%",
+				scrub: false,
+				once: true,
+			}
+		});
+			
+			tl.to(light, { opacity: 0, duration: 0.3 })
+				.to(light, { opacity: 0.35, duration: 0.09 })
+				.to(light, { opacity: 0, duration: 0.08 })
+				.to(light, { opacity: 0.55, duration: 0.12 })
+				.to(light, { opacity: 0.12, duration: 0.08 })
+				.to(light, { opacity: 0.65, duration: 0.14 })
+				.to(light, { opacity: 0.2, duration: 0.1 })
+				.to(light, { opacity: 0.75, duration: 0.16 })
+				.to(light, { opacity: 0.3, duration: 0.09 })
+				.to(light, { opacity: 1, duration: 0.5, ease: "power2.out" });
+	});
+</script>
+
