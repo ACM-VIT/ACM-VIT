@@ -1,0 +1,78 @@
+---
+// Shared bottom legends for home page
+---
+<div class="legend-pins-wrapper" aria-hidden="false">
+  <!-- Left Legend -->
+  <div class="legend-pin left-legend">
+    <div class="legend-left-inner">
+      <div class="legend-line">Established in&nbsp;<span class="accent">2009</span>.</div>
+      <div class="legend-line">Evolving ever since.</div>
+    </div>
+  </div>
+  <!-- Right Legend (hidden on small screens) -->
+  <div class="legend-pin right-legend">
+    <div class="legend-right-inner">
+      <div class="legend-line nowrap">We're not just another <span class="accent">tech chapter</span><span class="punct">.</span></div>
+      <div class="legend-line nowrap">We're the <span class="accent">conspiracy</span><span class="punct"> that actually works.</span></div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .legend-pins-wrapper { pointer-events: none; opacity:0; transition:opacity .35s ease; }
+  .legend-pins-wrapper.visible { opacity:1; }
+  .legend-pin {
+    position: fixed;
+    bottom: 2rem;
+    z-index: 60;
+    font-family: 'PolySans Trial', sans-serif;
+    color: #FEFCD9;
+    max-width: 42vw;
+  }
+  .left-legend { left: 2rem; }
+  .right-legend { right: 2rem; text-align: right; display: flex; justify-content: flex-end; }
+  .legend-left-inner, .legend-right-inner { display: inline-flex; flex-direction: column; gap: 0.25rem; }
+  .legend-line { font-size: 1.25rem; line-height: 1.15; font-weight: 400; text-shadow: 1px 1px 2px rgba(0,0,0,0.45); }
+  .legend-line .accent { color: #F95F4A; }
+  .legend-line .punct { color: #FEFCD9; }
+  .nowrap { white-space: nowrap; }
+  @media (max-width: 1280px) {
+    .legend-line { font-size: 1.05rem; }
+  }
+  @media (max-width: 1024px) {
+    .legend-pin { bottom: 1.75rem; }
+    .legend-line { font-size: 0.95rem; }
+  }
+  @media (max-width: 860px) {
+    .legend-line { font-size: 0.9rem; }
+  }
+  @media (max-width: 768px) {
+    .right-legend { display: none; }
+    .legend-pin { max-width: 80vw; left: 1rem; bottom: 1.5rem; }
+    .legend-line { font-size: 0.85rem; }
+  }
+  @media (max-width: 480px) {
+    .legend-line { font-size: 0.8rem; }
+  }
+</style>
+
+<script>
+  // Show legends only while #home section is in viewport
+  const homeSection = document.getElementById('home');
+  const wrapper = document.querySelector('.legend-pins-wrapper');
+  if (homeSection && wrapper && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          wrapper.classList.add('visible');
+        } else {
+          wrapper.classList.remove('visible');
+        }
+      });
+    }, { threshold: 0.05 });
+    io.observe(homeSection);
+  } else if (wrapper) {
+    // Fallback: show legends if observer unsupported
+    wrapper.classList.add('visible');
+  }
+</script>

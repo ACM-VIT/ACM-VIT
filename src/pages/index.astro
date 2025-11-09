@@ -1,6 +1,5 @@
 ---
-import Welcome from "../components/Welcome.astro";
-import PatternWelcome from "../components/PatternWelcome.astro";
+import Welcome from "../components/Welcome.astro";	
 import ProjectScreen from "../components/ProjectScreen.astro";
 import Domains from "../components/Domains.astro";
 import DomainsPhone from "../phoneComponents/Domains_Phone.astro";
@@ -17,7 +16,10 @@ import AcmWContent from "../components/AcmWContent.astro";
 import { projectsData } from "../data/projectsData.ts";
 import Events from "../components/Events.astro";
 import ContactUS from "../components/ContactUs.astro";
+import AcmWBento from "../components/AcmWBento.astro";
 import Hero from "../components/hero.astro";
+import LegendPins from "../components/LegendPins.astro";
+import About from "../components/About.astro";
 import Footer from "../components/Footer.astro";
 import Blogs from "../components/Blogs.astro";
 // import Hero from "./hero.astro";
@@ -27,14 +29,18 @@ import Blogs from "../components/Blogs.astro";
 ---
 
 <Layout>
+
+	
 	<section id="home" class="page-section">
 		<Hero />
+		<!-- {/* Legends pinned ONLY for the home section */}
+		<LegendPins /> -->
 	</section>
 
-	<PatternWelcome />
 
 	<section id="about" class="page-section">
 		<Welcome />
+		<About />
 	</section>
 
 	<section id="projects" class="page-section">
@@ -50,6 +56,12 @@ import Blogs from "../components/Blogs.astro";
 		</div>
 	</section>
 
+	<section id="acm-w" class="page-section">
+		<AcmWMotto />
+		<AcmWContent />
+		<AcmWBento />
+	</section>
+	
 	<Board />
 
 	<section id="blogs" class="page-section">
@@ -62,10 +74,7 @@ import Blogs from "../components/Blogs.astro";
 		<Partners /> 
 	</section>
 
-	<section id="acm-w" class="page-section">
-		<AcmWMotto />
-		<AcmWContent />
-	</section>
+	
 
 	<section id="contact" class="page-section">
 		<ContactUS />
