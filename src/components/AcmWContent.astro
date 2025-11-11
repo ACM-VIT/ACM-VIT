@@ -1,28 +1,36 @@
 ---
-// Your frontmatter here
+// AMMW Content
 ---
 
 <section
-    class="h-screen w-full relative flex flex-col justify-center items-center text-white"
->
-    <!-- Spotlight Background Effect -->
+    class="min-h-screen w-full relative flex flex-col justify-center items-center text-white py-16 px-6 md:py-24 md:px-12 uppercase">
+    <div class="h-dvh flex flex-col items-center justify-center relative z-20 gap-10">
+        <div class="flex items-center justify-center relative px-16">
+            <img 
+                id="tubelight"
+                src="/pink_tubelight.png" 
+                alt="pink light"
+                class="w-[60vw] max-w-[1100px] opacity-0 select-none absolute z-[-1000]
+                    [mask-image:radial-gradient(circle,black_30%,transparent_100%)]
+                    [mask-repeat:no-repeat]
+                    [mask-position:center]
+                    [mask-size:contain]
+                    max-[480px]:w-[95vw] max-[480px]:max-w-none max-[480px]:left-1/2 max-[480px]:-translate-x-1/2"
+            />
+        </div>
 
-    <!-- Main Content -->
-    <div
-        class="h-dvh flex flex-col items-center justify-center relative z-20 gap-10"
-    >
-        <!-- Center Logo and Text -->
         <div class="flex items-center gap-10">
             <img
                 src="/acmw-logo.svg"
                 alt="ACM-W Logo"
-                class="w-[30vw] h-auto"
+                class="w-[30vw] h-auto max-[480px]:!w-[45vw] max-[480px]:max-w-none"
             />
         </div>
 
         <div
-            style="font-family: 'PolySans Trial';"
-            class="text-left text-white text-base leading-relaxed max-w-2xl"
+            class="text-left text-white text-base leading-relaxed max-w-2xl font-polysans
+                max-[640px]:text-[0.88rem] max-[640px]:leading-[1.4] max-[640px]:max-w-[28rem]
+                max-[480px]:text-[0.78rem] max-[480px]:leading-[1.35]"
         >
             <span class="text-primary-pink"
                 >ACM-W was created with a simple yet profound mission: to create
@@ -43,12 +51,17 @@
         </div>
 
         <!-- Learn More Button -->
-        <button
-            style="font-family: 'PolySans Trial';"
-            class="border border-primary-pink text-white px-8 py-3 rounded-full text-sm hover:cursor-pointer hover:scale-105 transition-transform duration-300 ease-in-out"
+        <a 
+            href="https://women.acm.org" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="border border-primary-pink text-white px-8 py-3 rounded-full text-sm hover:cursor-pointer hover:scale-105 transition-transform duration-300 ease-in-out font-polysans
+                max-[640px]:text-[0.72rem]
+                max-[480px]:py-[0.55rem] max-[480px]:px-4 max-[480px]:text-[0.72rem]
+                inline-block text-center"
         >
             LEARN MORE
-        </button>
+        </a>    
     </div>
 </section>
 
@@ -88,4 +101,86 @@
         font-style: normal;
         font-display: swap;
     }
+
+    .font-polysans {
+        font-family: "PolySans Trial";
+    }
 </style>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const tubelight = document.getElementById("tubelight");
+
+        if (tubelight) {
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: tubelight,
+                    start: "top 80%",
+                    end: "top 50%",
+                    scrub: false,
+                    once: true,
+                }
+            });
+
+            // Flickering effect
+            tl.to(tubelight, {
+                opacity: 0.3,
+                duration: 0.05,
+                ease: "none"
+            })
+            .to(tubelight, {
+                opacity: 0,
+                duration: 0.05,
+                ease: "none"
+            })
+            .to(tubelight, {
+                opacity: 0.5,
+                duration: 0.08,
+                ease: "none"
+            })
+            .to(tubelight, {
+                opacity: 0.1,
+                duration: 0.05,
+                ease: "none"
+            })
+            .to(tubelight, {
+                opacity: 0.6,
+                duration: 0.1,
+                ease: "none"
+            })
+            .to(tubelight, {
+                opacity: 0.2,
+                duration: 0.06,
+                ease: "none"
+            })
+            .to(tubelight, {
+                opacity: 0.7,
+                duration: 0.12,
+                ease: "none"
+            })
+            .to(tubelight, {
+                opacity: 0.3,
+                duration: 0.05,
+                ease: "none"
+            })
+            //final glow
+            .to(tubelight, {
+                opacity: 0.8,
+                duration: 0.3,
+                ease: "power2.out"
+            })
+            .to(tubelight, {
+                opacity: 0.75,
+                duration: 0.15,
+                ease: "sine.inOut",
+                yoyo: true,
+                repeat: 1
+            });
+        }
+    });
+</script>

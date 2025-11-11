@@ -1,292 +1,178 @@
 ---
+// Introduction Section
 ---
 
-<div class="hero-container">
+<div class="relative -mt-28">
   <!-- Hero Section 1 -->
-  <section class="hero-section section-1">
-    <div class="text-content">
-      <h1>Welcome to ACM-VIT</h1>
-      <p>Advancing Computing Excellence</p>
+  <section class="hero-section w-screen h-screen relative flex items-center justify-start pl-[15vw] bg-[#060606] radial-bg max-md:pl-[8vw] max-md:text-left max-md:justify-start">
+    <div class="max-w-[600px] text-white" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);">
+      <div class="w-[1145px] inline-flex flex-col justify-start items-start max-md:w-full max-md:max-w-[96vw]">
+        <div 
+          class="hero-line-1 self-stretch justify-start text-7xl font-bold max-md:text-[clamp(2.2rem,10vw,3rem)] max-md:leading-[1.05]" 
+          style="color:#F95F4A; font-family: 'PolySans Trial'"
+        >
+          we are the
+        </div>
+        <div 
+          class="hero-line-2 self-stretch justify-end text-yellow-50 text-8xl font-bold max-md:text-[clamp(2.2rem,11.2vw,3.4rem)] max-md:leading-[1.05] max-md:inline-block" 
+          style="font-family: 'PolySans Trial'"
+        >
+          association for<br/>computing machinery
+        </div>
+      </div>
     </div>
-  </section>
 
-  <!-- Hero Section 2 -->
-  <section class="hero-section section-2">
-    <div class="text-content">
-      <h1>Innovation & Technology</h1>
-      <p>Building the Future Together</p>
-    </div>
-  </section>
-
-  <!-- About Section 1: SVG left, text right -->
-  <section class="about-section section-1">
-    <div class="svg-container svg-left">
-      <img src="/about/Cassette.svg" alt="Cassette 1" class="cassette-svg" />
-    </div>
-    <div class="text-container text-right">
-      <p>ACM-VIT is a student chapter of the Association for Computing Machinery at Vellore Institute of Technology. Since our inception, we've been at the forefront of technological innovation and education on campus.  Our chapter focuses on fostering a passion for computing through workshops, hackathons, and industry collaborations. We provide students with opportunities to expand their technical skills, work on real-world projects, and connect with industry professionals, creating a vibrant community of future tech leaders.</p>
-    </div>
-  </section>
-
-  <!-- About Section 2: SVG right, text left -->
-  <section class="about-section section-2">
-    <div class="text-container text-left">
-      <p>ACM-VIT is a student chapter of the Association for Computing Machinery at Vellore Institute of Technology. Since our inception, we've been at the forefront of technological innovation and education on campus.  Our chapter focuses on fostering a passion for computing through workshops, hackathons, and industry collaborations. We provide students with opportunities to expand their technical skills, work on real-world projects, and connect with industry professionals, creating a vibrant community of future tech leaders.</p>
-    </div>
-    <div class="svg-container svg-right">
-      <img src="/about/3.svg" alt="Cassette 2" class="cassette-svg" />
-    </div>
-  </section>
-
-  <!-- About Section 3: SVG left, text right -->
-  <section class="about-section section-3">
-    <div class="svg-container svg-left-two">
-      <img src="/about/2.svg" alt="Cassette 3" class="cassette-svg" />
-    </div>
-    <div class="text-container text-right">
-      <h2>Excellence</h2>
-      <p>Striving for excellence in everything we do, from technical projects to community events and educational initiatives.</p>
-    </div>
-  </section>
-</div>
+  
 
 <style>
-  .hero-container {
-    position: relative;
-    margin-top: -7rem; /* Offset the pt-28 from Layout */
+  @import url('https://fonts.cdnfonts.com/css/polysans');
+  
+  .hero-line-1, .hero-line-2 { 
+    opacity: 0; 
+  }
+  
+  .radial-bg {
+    /* Use rishit.jpeg as the hero background, with a dark radial overlay for contrast */
+    background-image: radial-gradient(circle at 30% 50%, rgba(26,26,26,0.6) 0%, rgba(6,6,6,0.85) 70%), url('/about/rishit.jpeg');
+    background-repeat: no-repeat, no-repeat;
+    background-position: center center, center 30%;
+    background-size: cover, cover;
+    /* Keep the background image pinned to the viewport while the section scrolls */
+    background-attachment: fixed, fixed;
+    /* Fallback solid color while image loads */
+    background-color: #060606;
   }
 
-  /* Base styles for all sections (hero and about) */
-  .hero-section,
-  .about-section {
-    width: 100vw;
-    height: 100vh;
-    padding: 0;
-    margin: 0;
-    overflow: hidden;
-  }
-
-  /* Hero sections 1 & 2 - Fixed background, scrolling text */
+  /* Make the hero section taller for scroll space */
   .hero-section {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding-left: 15vw;
+    height: 100vh; /* reduced section height so hero pins for a shorter duration */
     position: relative;
   }
 
-  /* Fixed background for first 2 hero sections */
-  .hero-section.section-1,
-  .hero-section.section-2 {
-    background: url('/about/rishit.jpeg') center/cover no-repeat;
-    background-attachment: fixed; /* Fixed background */
+  /* Legends default to absolute inside the hero section. When the section has
+     the `in-view` class we switch them to fixed so they pin to viewport only
+     while the hero is active (component-scoped). */
+  .legend-pin { position: absolute; }
+
+  .hero-section.in-view .legend-pin {
+    position: fixed !important;
+    bottom: 2rem !important;
+    z-index: 60 !important;
   }
 
-  /* About sections styling - Continue sticky effect */
-  .about-section {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    position: sticky;
-    top: 0;
-  }
-
-  .text-content {
-    max-width: 600px;
-    color: white;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-  }
-
-  .text-content h1 {
-    font-size: clamp(3rem, 8vw, 6rem);
-    font-weight: 900;
-    margin-bottom: 1rem;
-    line-height: 1.1;
-  }
-
-  .text-content p {
-    font-size: clamp(1.2rem, 2.5vw, 1.8rem);
-    font-weight: 300;
-    opacity: 0.9;
-    margin: 0;
-  }
-
-  /* From 3rd section onward - Start sticky section transitions */
-  .about-section.section-1 {
-    background: url('/about/rishit1.jpeg') center/cover no-repeat;
-    z-index: 1;
-  }
+  .hero-section.in-view .left-legend { left: 2rem !important; }
+  .hero-section.in-view .right-legend { right: 2rem !important; }
   
-  .about-section.section-2 {
-    background: url('/about/rishit2.jpeg') center/cover no-repeat;
-    z-index: 2;
-  }
-  
-  .about-section.section-3 {
-    background: url('/about/rishit3.jpeg') center/cover no-repeat;
-    z-index: 3;
-  }
-
-  /* Text Container Positioning */
-  .text-container {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 300vw;
-    max-width: 9000px;
-    color: white;
-    padding: 2rem;
-  }
-
-  .text-right {
-    width: 220vw;
-    max-width: 1100px;
-    left: 50vw;
-    text-align: left;
-    padding-left: 2vw;
-  }
-
-  .text-left {
-    left: 0;
-    right: auto;
-    width: 50vw;
-    max-width: 600px;
-    text-align: left;
-    padding-right: 2vw;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  /* SVG Container Positioning */
-  .svg-container {
-    position: relative;
-    width: 500px;
-    height: 500px;
-    flex-shrink: 0;
-    z-index: 1;
-    grid-column: 1;
-  }
-
-  .section-2 .svg-right {
-    grid-column: 2;
-    justify-self: end;
-  }
-
-  .section-2 .text-left {
-    grid-column: 1;
-    left: 15vw;
-    right: auto;
-    width: 35vw;
-    max-width: 500px;
-  }
-
-  .section-2 .svg-right {
-    left: auto;
-    right: 0;
-  }
-
-  .svg-left {
-    /* Position SVG with bottom-left point outside screen */
-    margin-left: -150px; /* Hardcoded pixel value - adjust this as needed */
-    margin-bottom: -600px;
-  }
-  .svg-left-two {
-    
-    margin-left: -150px;  
-    margin-bottom: 200px;
-  }
-
-  .svg-right {
-    margin-right: -200px;
-    margin-bottom: -700px;
-  }
-
-  .cassette-svg {
-    width: 100%;
-    height: auto;
-    transform-origin: 0% 100%; /* Bottom-left origin for rotation */
-  }
-
-  /* Rotate SVG in left sections by 21 degrees */
-  .svg-left .cassette-svg {
-    transform: rotate(21deg);
-  }
-  .svg-left-two .cassette-svg {
-    transform: rotate(11deg);
-  }
-
-  /* Rotate SVG in right sections by -21 degrees for variety */
-  .svg-right .cassette-svg {
-    transform: rotate(-15deg);
-    transform-origin: 100% 100%; /* Bottom-right origin for right-side SVGs */
-  }
-
-  .text-container h2 {
-    font-size: 4rem;
-    font-weight: bold;
-    margin-bottom: 2rem;
-    line-height: 1.1;
-    text-shadow: 0px 2px 4px rgba(0,0,0,0.3);
-  }
-
-  .text-container p {
-    font-size: 1.4rem;
-    line-height: 1.6;
-    opacity: 0.9;
-    max-width: 500px;
-  }
-
-  /* Responsive adjustments */
   @media (max-width: 768px) {
-    .hero-section {
-      padding-left: 8vw;
-      text-align: center;
-      justify-content: center;
+    .hero-line-2 br { 
+      display: none; 
     }
-
-    .text-content h1 {
-      font-size: clamp(2.5rem, 12vw, 4rem);
-    }
-
-    .text-content p {
-      font-size: clamp(1rem, 4vw, 1.4rem);
-    }
-
-    .about-section {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 2rem;
-    }
-    
-    .text-container {
-      position: static;
-      width: 100%;
-      max-width: 100%;
-      text-align: center;
-      padding: 1rem;
-      transform: none;
-      top: auto;
-      left: auto;
-      right: auto;
-    }
-    
-    .svg-container {
-      width: 300px;
-      height: 300px;
-    }
-    
-    .svg-left, .svg-right {
-      margin: 1rem 0;
-    }
-    
-    .text-container h2 {
-      font-size: 2.5rem;
-    }
-    
-    .text-container p {
-      font-size: 1.1rem;
-    }
+    /* mobile: avoid fixed backgrounds for performance and visual issues */
+    .radial-bg { background-attachment: scroll, scroll; }
   }
 </style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  
+  gsap.registerPlugin(ScrambleTextPlugin, ScrollTrigger);
+
+  const initScramble = () => {
+    const line1 = document.querySelector('.hero-line-1');
+    const line2 = document.querySelector('.hero-line-2');
+    const section1 = document.querySelector('.hero-section');
+    
+    if (!line1 || !line2 || !section1) return;
+
+    const html1 = line1.innerHTML;
+    const html2 = line2.innerHTML;
+    const text1 = (line1.textContent || '').replace(/\s+/g,' ').trim();
+    const text2 = (line2.textContent || '').replace(/\s+/g,' ').trim();
+
+    // Initial scramble animation
+    const tl = gsap.timeline();
+    tl.set(line1, { opacity: 1 })
+      .to(line1, {
+        duration: 1.50,
+        ease: 'none',
+        scrambleText: {
+          text: text1,
+          chars: 'upperAndLowerCase',
+          revealDelay: 0.12
+        },
+        onComplete: () => { line1.innerHTML = html1; }
+      })
+      .set(line2, { opacity: 1 })
+      .to(line2, {
+        duration: 1.50,
+        ease: 'none',
+        scrambleText: {
+          text: text2,
+          chars: 'upperAndLowerCase',
+          revealDelay: 0.12
+        },
+        onComplete: () => { line2.innerHTML = html2; }
+      });
+
+  // ScrollTrigger animation - transforms text when scrolling starts from top
+    let hasTransformed = false;
+    
+    ScrollTrigger.create({
+      trigger: section1,
+      start: 'top top',
+      end: 'bottom bottom',
+      markers: true,
+      onEnter: () => {
+        if (!hasTransformed) {
+          hasTransformed = true;
+          gsap.timeline()
+            .to(line1, {
+              duration: 1.2,
+              ease: 'none',
+              scrambleText: {
+                text: 'because',
+                chars: 'upperAndLowerCase',
+                revealDelay: 0.12
+              }
+            })
+            .to(line2, {
+              duration: 1.2,
+              ease: 'none',
+              scrambleText: {
+                text: 'technology matters',
+                chars: 'upperAndLowerCase',
+                revealDelay: 0.12
+              }
+            }, '-=0.4');
+        }
+      }
+    });
+
+    // IntersectionObserver to toggle an "in-view" class on the hero section
+    // so legend pinning is scoped to this component only.
+    try {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            section1.classList.add('in-view');
+          } else {
+            section1.classList.remove('in-view');
+          }
+        });
+      }, { root: null, threshold: 0.05 });
+
+      io.observe(section1);
+    } catch (e) {
+      // Fallback: if IntersectionObserver isn't available, keep legends absolute inside the section
+      console.warn('IntersectionObserver not available — legend pinning will remain scoped via absolute positioning.');
+    }
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScramble);
+  } else {
+    initScramble();
+  }
+</script>

@@ -1,0 +1,68 @@
+---
+---
+<!-- About Sections extracted from hero.astro -->
+<div class="about-container">
+  <!-- About Section 1: SVG left, text right -->
+  <section class="about-section section-1">
+    <div class="svg-container svg-left">
+      <img src="/about/Cassette.svg" alt="Cassette 1" class="cassette-svg" />
+    </div>
+    <div class="text-container text-right">
+      <p>ACM-VIT is a student chapter of the Association for Computing Machinery at Vellore Institute of Technology. Since our inception, we've been at the forefront of technological innovation and education on campus.  Our chapter focuses on fostering a passion for computing through workshops, hackathons, and industry collaborations. We provide students with opportunities to expand their technical skills, work on real-world projects, and connect with industry professionals, creating a vibrant community of future tech leaders.</p>
+    </div>
+  </section>
+
+  <!-- About Section 2: SVG right, text left -->
+  <section class="about-section section-2">
+    <div class="text-container text-left">
+      <p>ACM-VIT is a student chapter of the Association for Computing Machinery at Vellore Institute of Technology. Since our inception, we've been at the forefront of technological innovation and education on campus.  Our chapter focuses on fostering a passion for computing through workshops, hackathons, and industry collaborations. We provide students with opportunities to expand their technical skills, work on real-world projects, and connect with industry professionals, creating a vibrant community of future tech leaders.</p>
+    </div>
+    <div class="svg-container svg-right">
+      <img src="/about/3.svg" alt="Cassette 2" class="cassette-svg" />
+    </div>
+  </section>
+
+  <!-- About Section 3: SVG left, text right -->
+  <section class="about-section section-3">
+    <div class="svg-container svg-left-two">
+      <img src="/about/2.svg" alt="Cassette 3" class="cassette-svg" />
+    </div>
+    <div class="text-container text-right">
+      <h2>Excellence</h2>
+      <p>Striving for excellence in everything we do, from technical projects to community events and educational initiatives.</p>
+    </div>
+  </section>
+</div>
+
+<style>
+  .about-container { width:100vw; overflow:hidden; }
+  .about-section { width:100vw; height:100vh; position:relative; }
+  .about-section.section-1 { background:url('/about/rishit1.jpeg') center/cover no-repeat; }
+  .about-section.section-2 { background:url('/about/rishit2.jpeg') center/cover no-repeat; }
+  .about-section.section-3 { background:url('/about/rishit3.jpeg') center/cover no-repeat; }
+
+  .text-container { position:absolute; top:50%; transform:translateY(-50%); color:#fff; padding:2rem; }
+  .text-right { left:50vw; width:35vw; max-width:650px; }
+  .text-left { left:15vw; width:35vw; max-width:520px; }
+  .text-container h2 { font-size:4rem; margin-bottom:2rem; }
+  .text-container p { font-size:1.4rem; line-height:1.55; max-width:520px; }
+
+  .svg-container { position:relative; width:500px; height:500px; }
+  .svg-left { margin-left:-150px; margin-bottom:-600px; }
+  .svg-left-two { margin-left:-150px; margin-bottom:200px; }
+  .svg-right { margin-right:-200px; margin-bottom:-700px; position:absolute; right:0; }
+  .cassette-svg { width:100%; height:auto; transform-origin:0% 100%; }
+  .svg-left .cassette-svg { transform:rotate(21deg); }
+  .svg-left-two .cassette-svg { transform:rotate(11deg); }
+  .svg-right .cassette-svg { transform:rotate(-15deg); transform-origin:100% 100%; }
+
+  @media (max-width:768px){
+    .about-section { display:flex; flex-direction:column; justify-content:center; padding:2rem; height:auto; min-height:100vh; }
+    .text-container { position:static; transform:none; width:100%; max-width:100%; text-align:center; padding:1rem; }
+    .text-right, .text-left { left:auto; width:100%; }
+    .svg-container { width:300px; height:300px; margin:1rem auto; }
+    .svg-left, .svg-right, .svg-left-two { margin:1rem auto; }
+    .text-container h2 { font-size:2.5rem; }
+    .text-container p { font-size:1.1rem; }
+  }
+</style>
