@@ -37,9 +37,9 @@
 <style>
   .about-container { width:100vw; overflow:hidden; }
   .about-section { width:100vw; height:100vh; position:relative; }
-  .about-section.section-1 { background:url('/about/rishit1.jpeg') center/cover no-repeat; }
-  .about-section.section-2 { background:url('/about/rishit2.jpeg') center/cover no-repeat; }
-  .about-section.section-3 { background:url('/about/rishit3.jpeg') center/cover no-repeat; }
+  .about-section.section-1 { background:url('/about/about-acmvit.jpeg') center/cover no-repeat; }
+  .about-section.section-2 { background:url('/about/about-vit.jpeg') center/cover no-repeat; }
+  .about-section.section-3 { background:url('/about/about-acm.jpeg') center/cover no-repeat; }
 
   .text-container { position:absolute; top:50%; transform:translateY(-50%); color:#fff; padding:2rem; }
   .text-right { left:50vw; width:35vw; max-width:650px; }
@@ -48,9 +48,9 @@
   .text-container p { font-size:1.4rem; line-height:1.55; max-width:520px; }
 
   .svg-container { position:relative; width:500px; height:500px; }
-  .svg-left { margin-left:-150px; margin-bottom:-600px; }
-  .svg-left-two { margin-left:-150px; margin-bottom:200px; }
-  .svg-right { margin-right:-200px; margin-bottom:-700px; position:absolute; right:0; }
+  .svg-left { margin-left:-50px; margin-bottom:-600px; } 
+  .svg-left-two { margin-left:-50px; margin-bottom:200px; } 
+  .svg-right { margin-right:-100px; margin-bottom:-700px; position:absolute; right:0; }
   .cassette-svg { width:100%; height:auto; transform-origin:0% 100%; }
   .svg-left .cassette-svg { transform:rotate(21deg); }
   .svg-left-two .cassette-svg { transform:rotate(11deg); }
@@ -66,3 +66,45 @@
     .text-container p { font-size:1.1rem; }
   }
 </style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function initAnimations() {
+    const sections = document.querySelectorAll('.about-section');
+
+    sections.forEach((section) => {
+      const cassette = section.querySelector('.cassette-svg');
+      const isLeft = section.querySelector('.svg-left') || section.querySelector('.svg-left-two');
+      const isRight = section.querySelector('.svg-right');
+
+      if (cassette && (isLeft || isRight)) {
+        const xStart = isLeft ? -300 : 300;
+
+        //tilt animation
+        gsap.from(cassette, {
+          x: xStart,
+          rotation: 45, //45 degrees
+          duration: 1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: section,
+            start: "top 80%",
+            end: "center center",
+            scrub: 1,
+            toggleActions: "play none none reverse"
+          }
+        });
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAnimations);
+  } else {
+    initAnimations();
+  }
+</script>
