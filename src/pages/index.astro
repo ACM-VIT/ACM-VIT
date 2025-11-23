@@ -1,5 +1,4 @@
 ---
-import Welcome from "../components/Welcome.astro";	
 import ProjectScreen from "../components/ProjectScreen.astro";
 import Domains from "../components/Domains.astro";
 import DomainsPhone from "../phoneComponents/Domains_Phone.astro";
@@ -16,10 +15,13 @@ import AcmWContent from "../components/AcmWContent.astro";
 import { projectsData } from "../data/projectsData.ts";
 import Events from "../components/Events.astro";
 import ContactUS from "../components/ContactUs.astro";
+import ContactUSPhone from "../phoneComponents/ContactUs_Phone.astro";
 import AcmWBento from "../components/AcmWBento.astro";
 import Hero from "../components/hero.astro";
 import LegendPins from "../components/LegendPins.astro";
+import BecauseTechMatters from "../components/BecauseTechMatters.astro";
 import About from "../components/About.astro";
+import About_Phone from "../phoneComponents/About_Phone.astro";
 import Footer from "../components/Footer.astro";
 import Blogs from "../components/Blogs.astro";
 // import Hero from "./hero.astro";
@@ -29,85 +31,88 @@ import Blogs from "../components/Blogs.astro";
 ---
 
 <Layout>
-
-	
-	<section id="home" class="page-section">
-		<Hero />
-		<!-- {/* Legends pinned ONLY for the home section */}
+  <section id="home" class="page-section">
+    <Hero />
+    <!-- {/* Legends pinned ONLY for the home section */}
 		<LegendPins /> -->
-	</section>
+    <BecauseTechMatters />
+  </section>
 
 
 	<section id="about" class="page-section">
-		<Welcome />
-		<About />
+		<div class="hidden md:block">
+			<About />
+		</div>
+		<div class="md:hidden">
+			<About_Phone />
+		</div>
 	</section>
 
 	<section id="projects" class="page-section">
 		<ProjectScreen projects={projectsData} />
 	</section>
 
-	<section id="domains" class="page-section">
-		<div class="domains-desktop-container">
-  			<Domains />
-		</div>
-		<div class="domains-mobile-container">
-			<DomainsPhone />
-		</div>
-	</section>
+  <section id="domains" class="page-section">
+    <div class="domains-desktop-container">
+      <Domains />
+    </div>
+    <div class="domains-mobile-container">
+      <DomainsPhone />
+    </div>
+  </section>
 
-	<section id="acm-w" class="page-section">
-		<AcmWMotto />
-		<AcmWContent />
-		<AcmWBento />
-	</section>
-	
-	<Board />
+  <section id="acm-w" class="page-section">
+    <AcmWMotto />
+    <AcmWContent />
+    <AcmWBento />
+  </section>
 
-	<section id="blogs" class="page-section">
-		<Blogs />
-	</section>
+  <Board />
 
-	<Gallery />
+  <section id="blogs" class="page-section">
+    <Blogs />
+  </section>
 
-	<section id="partners" class="page-section">
-		<Partners /> 
-	</section>
+  <Gallery />
 
-	
+  <section id="partners" class="page-section">
+    <Partners />
+  </section>
 
-	<section id="contact" class="page-section">
-		<ContactUS />
-	</section>
+  <section id="contact" class="page-section">
+    <div class="hidden md:block">
+      <ContactUS />
+    </div>
+    <div class="md:hidden">
+      <ContactUSPhone />
+    </div>
+  </section>
 
-	<!-- Anchor placeholder for events if content is not displayed -->
-	<section id="events" class="page-section"></section>
+  <!-- Anchor placeholder for events if content is not displayed -->
+  <section id="events" class="page-section"></section>
 
-	<Footer />
-	<!-- <Events /> -->
+  <Footer />
+  <!-- <Events /> -->
 </Layout>
 
 <style>
-	/* Show desktop version by default, hide mobile */
-	.domains-desktop-container {
-		display: block;
-	}
-	
-	.domains-mobile-container {
-		display: none;
-	}
-	
-	/* On mobile screens, hide desktop and show mobile */
-	@media (max-width: 768px) {
-		.domains-desktop-container {
-			display: none;
-		}
-		
-		.domains-mobile-container {
-			display: block;
-		}
-	}
+  /* Show desktop version by default, hide mobile */
+  .domains-desktop-container {
+    display: block;
+  }
+
+  .domains-mobile-container {
+    display: none;
+  }
+
+  /* On mobile screens, hide desktop and show mobile */
+  @media (max-width: 768px) {
+    .domains-desktop-container {
+      display: none;
+    }
+
+    .domains-mobile-container {
+      display: block;
+    }
+  }
 </style>
-
-
-</Layout>
