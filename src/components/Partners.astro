@@ -1,0 +1,150 @@
+---
+import PartnerCasetteSingular from "../components/PartnerCasetteSingular.astro";
+
+interface Partner {
+  title: string;
+  imageUrl: string;
+  link: string;
+}
+
+const partners: Partner[] = [
+  {
+    title: "Partner 1",
+    imageUrl: "/github-icon.svg",
+    link: "/partners/1",
+  },
+  {
+    title: "Partner 2",
+    imageUrl: "/github-icon.svg",
+    link: "/partners/2",
+  },
+  {
+    title: "Partner 3",
+    imageUrl: "/github-icon.svg",
+    link: "/partners/3",
+  },
+  {
+    title: "Partner 4",
+    imageUrl: "/github-icon.svg",
+    link: "/partners/4",
+  },
+  {
+    title: "Partner 5",
+    imageUrl: "/github-icon.svg",
+    link: "/partners/5",
+  },
+  {
+    title: "Partner 6",
+    imageUrl: "/github-icon.svg",
+    link: "/partners/6",
+  },
+  {
+    title: "Partner 1",
+    imageUrl: "/github-icon.svg",
+    link: "/partners/1",
+  },
+  {
+    title: "Partner 2",
+    imageUrl: "/github-icon.svg",
+    link: "/partners/2",
+  },
+  {
+    title: "Partner 3",
+    imageUrl: "/github-icon.svg",
+    link: "/partners/3",
+  },
+  {
+    title: "Partner 3",
+    imageUrl: "/github-icon.svg",
+    link: "/partners/3",
+  },
+  {
+    title: "Partner 3",
+    imageUrl: "/github-icon.svg",
+    link: "/partners/3",
+  },
+  {
+    title: "Partner 3",
+    imageUrl: "/github-icon.svg",
+    link: "/partners/3",
+  },
+  {
+    title: "Partner 3",
+    imageUrl: "/github-icon.svg",
+    link: "/partners/3",
+  },
+  {
+    title: "Partner 3",
+    imageUrl: "/github-icon.svg",
+    link: "/partners/3",
+  },
+  {
+    title: "Partner 3",
+    imageUrl: "/github-icon.svg",
+    link: "/partners/3",
+  },
+  {
+    title: "Partner 3",
+    imageUrl: "/github-icon.svg",
+    link: "/partners/3",
+  },
+];
+---
+
+<div
+  id="partners-container"
+  class="relative flex flex-wrap gap-6 justify-center items-center w-full pt-18 pb-64"
+>
+  <div
+    id="Cassette-pos-1"
+    class="w-full flex justify-center mt-0 z-50 relative -mb-48"
+  >
+    <img
+      id="partners-svg"
+      src="/partners1.svg"
+      alt="Partners Image"
+      class="max-w-[500px] w-auto object-contain"
+    />
+  </div>
+
+  <div
+    class="w-[80vw] pb-24 flex flex-wrap gap-6 justify-center items-center relative z-10"
+  >
+    {
+      partners.map((partner) => (
+        <PartnerCasetteSingular
+          title={partner.title}
+          imageUrl={partner.imageUrl}
+          link={partner.link}
+        />
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Wait for DOM to be ready
+  document.addEventListener("DOMContentLoaded", () => {
+    const svg = document.getElementById("partners-svg");
+    const pos1 = document.getElementById("Cassette-pos-1");
+    const container = document.getElementById("partners-container");
+
+    if (!svg || !pos1 || !container) return;
+
+    // Pin when cassette is half visible from bottom, unpin before bottom of container
+    ScrollTrigger.create({
+      trigger: pos1,
+      start: "center bottom",
+      endTrigger: container,
+      end: "bottom-=150 bottom",
+      pin: pos1,
+      pinSpacing: false,
+      markers: true, // Set to false when done debugging
+    });
+  });
+</script>

@@ -9,7 +9,7 @@ import BoardMemberCardSingular from "../components/BoardMemberCardSingular.astro
 import Board from "./Board.astro";
 import "../styles/globals.css";
 import PartnerCasetteSingular from "../components/PartnerCasetteSingular.astro";
-import Partners from "./Partners.astro";
+import Partners from "../components/Partners.astro";
 import AcmWMotto from "../components/AcmWMotto.astro";
 import AcmWContent from "../components/AcmWContent.astro";
 import { projectsData } from "../data/projectsData.ts";
@@ -70,7 +70,7 @@ import ProjectScreenPhone from "../phoneComponents/ProjectScreen-Phone.astro";
   <section id="acm-w" class="page-section">
     <AcmWMotto />
     <AcmWContent />
-    <AcmWBento />
+    <!-- <AcmWBento /> -->
   </section>
 
   <Board />
@@ -79,11 +79,12 @@ import ProjectScreenPhone from "../phoneComponents/ProjectScreen-Phone.astro";
     <Blogs />
   </section>
 
-  <Gallery />
+  <!-- <Gallery /> -->
 
-  <section id="partners" class="page-section">
+   <section id="partners" class="page-section">
     <Partners />
   </section>
+  
 
   <section id="contact" class="page-section">
     <div class="hidden md:block">
