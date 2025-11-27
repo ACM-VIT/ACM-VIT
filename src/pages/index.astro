@@ -17,6 +17,8 @@ import Events from "../components/Events.astro";
 import ContactUS from "../components/ContactUs.astro";
 import ContactUSPhone from "../phoneComponents/ContactUs_Phone.astro";
 import AcmWBento from "../components/AcmWBento.astro";
+import ProjectScreenPhone from "../phoneComponents/ProjectScreen-Phone.astro";
+import Gallery_Phone from "../phoneComponents/Gallery_Phone.astro";
 import Hero from "../components/hero.astro";
 import LegendPins from "../components/LegendPins.astro";
 import BecauseTechMatters from "../components/BecauseTechMatters.astro";
@@ -24,11 +26,6 @@ import About from "../components/About.astro";
 import About_Phone from "../phoneComponents/About_Phone.astro";
 import Footer from "../components/Footer.astro";
 import Blogs from "../components/Blogs.astro";
-import ProjectScreenPhone from "../phoneComponents/ProjectScreen-Phone.astro";	
-// import Hero from "./hero.astro";
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
 <Layout>
@@ -50,12 +47,12 @@ import ProjectScreenPhone from "../phoneComponents/ProjectScreen-Phone.astro";
   </section>
 
   <section id="projects" class="page-section">
-	<div class="hidden md:block">
-    <ProjectScreen projects={projectsData} />
-	</div>
-	<div class="md:hidden">
-		<ProjectScreenPhone projects={projectsData} />
-	</div>
+    <div class="hidden md:block">
+      <ProjectScreen projects={projectsData} />
+    </div>
+    <div class="md:hidden">
+      <ProjectScreenPhone projects={projectsData} />
+    </div>
   </section>
 
   <section id="domains" class="page-section">
@@ -80,13 +77,17 @@ import ProjectScreenPhone from "../phoneComponents/ProjectScreen-Phone.astro";
   </section>
 
   <section id="gallery" class="page-section">
-    <Gallery />
+    <div class="hidden md:block">
+      <Gallery />
+    </div>
+    <div class="md:hidden">
+      <Gallery_Phone />
+    </div>
   </section>
 
-   <section id="partners" class="page-section">
+  <section id="partners" class="page-section">
     <Partners />
   </section>
-  
 
   <section id="contact" class="page-section">
     <div class="hidden md:block">
