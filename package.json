@@ -13,5 +13,8 @@
     "astro": "^5.12.8",
     "gsap": "^3.13.0",
     "tailwindcss": "^4.1.11"
+  },
+  "devDependencies": {
+    "sass-embedded": "^1.93.3"
   }
 }
