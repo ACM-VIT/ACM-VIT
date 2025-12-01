@@ -328,6 +328,16 @@
 
       setTimeout(() => {
         createDomainScreen(domain);
+        // Hide header
+        const header = document.querySelector("header");
+        if (header) {
+          gsap.to(header, {
+            y: -100,
+            opacity: 0,
+            duration: 0.3,
+            ease: "power2.inOut",
+          });
+        }
       }, 200);
     }
 
@@ -572,6 +582,18 @@
           scale: 0.98,
           duration: 0.3,
           ease: "power2.inOut",
+          onStart: () => {
+            // Restore header
+            const header = document.querySelector("header");
+            if (header) {
+              gsap.to(header, {
+                y: 0,
+                opacity: 1,
+                duration: 0.3,
+                ease: "power2.out",
+              });
+            }
+          },
         });
       }
     };

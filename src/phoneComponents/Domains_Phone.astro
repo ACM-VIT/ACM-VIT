@@ -18,85 +18,117 @@
 </style>
 
 <section
-  class="domains-mobile-section min-h-screen bg-[url('/glow_ball_red.svg')] bg-cover bg-center bg-no-repeat bg-scroll relative py-8 px-4 flex flex-col items-center justify-center"
+  class="domains-mobile-section min-h-screen relative py-8 px-4 flex flex-col items-center justify-center overflow-hidden"
 >
-  <p
-    class="mobile-section-subtitle text-[#fefcd9] text-center font-['PolySans_Trial',sans-serif] text-[10px] font-normal pt-4 max-w-[90%] mb-12 leading-relaxed opacity-0 animate-[fadeIn_0.8s_ease_forwards] delay-300"
-  >
-    <span style="display:block; margin-bottom: 0.5rem;">
-      Each domain at ACM-VIT is more than a skillset — it's a mindset.
-    </span>
-    <span style="display:block; margin-bottom: 0.5rem;">
-      We build, break, design, analyze, and communicate — not in silos, but in
-      sync.
-    </span>
-    <span style="display:block;">
-      Because true innovation happens where disciplines intersect.
-    </span>
-  </p>
-
+  <!-- Fixed Background Layer -->
   <div
-    class="domains-mobile-grid flex flex-col gap-8 w-full max-w-[400px] items-center"
+    class="absolute inset-0 z-0 pointer-events-none opacity-0 domain-mobile-bg-layer"
   >
-    <div
-      class="mobile-domain-item w-full max-w-[300px] cursor-pointer transition-all duration-300 ease-out hover:scale-105 opacity-0 translate-y-[30px] animate-[slideInUp_0.6s_ease_forwards] delay-100"
-      data-domain="app"
+    <img
+      src="/glow_ball_red.svg"
+      alt=""
+      class="w-full h-full object-cover scale-125"
+    />
+  </div>
+
+  <div class="relative z-10 w-full flex flex-col items-center">
+    <p
+      class="mobile-section-subtitle text-[#fefcd9] text-center font-['PolySans_Trial',sans-serif] text-[10px] font-normal pt-4 max-w-[90%] mb-12 leading-relaxed opacity-0 animate-[fadeIn_0.8s_ease_forwards] delay-300"
     >
-      <img
-        src="/Cassette_App.svg"
-        alt="App Development"
-        class="mobile-cassette-img w-full h-auto block drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] rounded-[20px]"
-      />
-    </div>
+      <span style="display:block; margin-bottom: 0.5rem;">
+        Each domain at ACM-VIT is more than a skillset — it's a mindset.
+      </span>
+      <span style="display:block; margin-bottom: 0.5rem;">
+        We build, break, design, analyze, and communicate — not in silos, but in
+        sync.
+      </span>
+      <span style="display:block;">
+        Because true innovation happens where disciplines intersect.
+      </span>
+    </p>
+
     <div
-      class="mobile-domain-item w-full max-w-[300px] cursor-pointer transition-all duration-300 ease-out hover:scale-105 opacity-0 translate-y-[30px] animate-[slideInUp_0.6s_ease_forwards] delay-200"
-      data-domain="cc"
+      class="domains-mobile-grid flex flex-col gap-8 w-full max-w-[400px] items-center"
     >
-      <img
-        src="/Cassette_cc.svg"
-        alt="Competitive Coding"
-        class="mobile-cassette-img w-full h-auto block drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] rounded-[20px]"
-      />
-    </div>
-    <div
-      class="mobile-domain-item w-full max-w-[300px] cursor-pointer transition-all duration-300 ease-out hover:scale-105 opacity-0 translate-y-[30px] animate-[slideInUp_0.6s_ease_forwards] delay-300"
-      data-domain="design"
-    >
-      <img
-        src="/Cassette_Design.svg"
-        alt="Design"
-        class="mobile-cassette-img w-full h-auto block drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] rounded-[20px]"
-      />
-    </div>
-    <div
-      class="mobile-domain-item w-full max-w-[300px] cursor-pointer transition-all duration-300 ease-out hover:scale-105 opacity-0 translate-y-[30px] animate-[slideInUp_0.6s_ease_forwards] delay-400"
-      data-domain="management"
-    >
-      <img
-        src="/Cassette_Management.svg"
-        alt="Management"
-        class="mobile-cassette-img w-full h-auto block drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] rounded-[20px]"
-      />
-    </div>
-    <div
-      class="mobile-domain-item w-full max-w-[300px] cursor-pointer transition-all duration-300 ease-out hover:scale-105 opacity-0 translate-y-[30px] animate-[slideInUp_0.6s_ease_forwards] delay-500"
-      data-domain="research"
-    >
-      <img
-        src="/Cassette_Research.svg"
-        alt="Research"
-        class="mobile-cassette-img w-full h-auto block drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] rounded-[20px]"
-      />
+      <div
+        class="mobile-domain-item w-full max-w-[250px] cursor-pointer transition-all duration-300 ease-out hover:scale-105 opacity-0 translate-y-[30px] animate-[slideInUp_0.6s_ease_forwards] delay-100"
+        data-domain="app"
+      >
+        <img
+          src="/Cassette_App.svg"
+          alt="App Development"
+          class="mobile-cassette-img w-full h-auto block drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] rounded-[20px]"
+        />
+      </div>
+      <div
+        class="mobile-domain-item w-full max-w-[250px] cursor-pointer transition-all duration-300 ease-out hover:scale-105 opacity-0 translate-y-[30px] animate-[slideInUp_0.6s_ease_forwards] delay-200"
+        data-domain="cc"
+      >
+        <img
+          src="/Cassette_cc.svg"
+          alt="Competitive Coding"
+          class="mobile-cassette-img w-full h-auto block drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] rounded-[20px]"
+        />
+      </div>
+      <div
+        class="mobile-domain-item w-full max-w-[250px] cursor-pointer transition-all duration-300 ease-out hover:scale-105 opacity-0 translate-y-[30px] animate-[slideInUp_0.6s_ease_forwards] delay-300"
+        data-domain="design"
+      >
+        <img
+          src="/Cassette_Design.svg"
+          alt="Design"
+          class="mobile-cassette-img w-full h-auto block drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] rounded-[20px]"
+        />
+      </div>
+      <div
+        class="mobile-domain-item w-full max-w-[250px] cursor-pointer transition-all duration-300 ease-out hover:scale-105 opacity-0 translate-y-[30px] animate-[slideInUp_0.6s_ease_forwards] delay-400"
+        data-domain="management"
+      >
+        <img
+          src="/Cassette_Management.svg"
+          alt="Management"
+          class="mobile-cassette-img w-full h-auto block drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] rounded-[20px]"
+        />
+      </div>
+      <div
+        class="mobile-domain-item w-full max-w-[250px] cursor-pointer transition-all duration-300 ease-out hover:scale-105 opacity-0 translate-y-[30px] animate-[slideInUp_0.6s_ease_forwards] delay-500"
+        data-domain="research"
+      >
+        <img
+          src="/Cassette_Research.svg"
+          alt="Research"
+          class="mobile-cassette-img w-full h-auto block drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] rounded-[20px]"
+        />
+      </div>
     </div>
   </div>
 </section>
 
 <script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
   import { domainConfigs } from "../data/domainsData";
+
+  gsap.registerPlugin(ScrollTrigger);
 
   // Mobile-optimized domain screen functionality
   function initMobileAnimation() {
     const items = document.querySelectorAll(".mobile-domain-item");
+    const bgLayer = document.querySelector(".domain-mobile-bg-layer");
+
+    // Animate background layer
+    if (bgLayer) {
+      gsap.to(bgLayer, {
+        opacity: 1,
+        duration: 1,
+        scrollTrigger: {
+          trigger: ".domains-mobile-section",
+          start: "top 60%",
+          end: "bottom 40%",
+          toggleActions: "play reverse play reverse",
+        },
+      });
+    }
 
     items.forEach((item) => {
       // Add click event handler for domain screen
