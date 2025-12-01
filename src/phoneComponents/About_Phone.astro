@@ -29,7 +29,7 @@
         <img
           src="/about/Cassette.svg"
           alt="Cassette 1"
-          class="cassette-svg-phone w-full h-auto origin-center drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]"
+          class="cassette-svg-phone w-full h-auto origin-center drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] will-change-transform"
         />
       </div>
     </div>
@@ -60,7 +60,7 @@
         <img
           src="/about/3.svg"
           alt="Cassette 2"
-          class="cassette-svg-phone w-full h-auto origin-center drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]"
+          class="cassette-svg-phone w-full h-auto origin-center drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] will-change-transform"
         />
       </div>
     </div>
@@ -86,7 +86,7 @@
         <img
           src="/about/2.svg"
           alt="Cassette 3"
-          class="cassette-svg-phone w-full h-auto origin-center drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]"
+          class="cassette-svg-phone w-full h-auto origin-center drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] will-change-transform"
         />
       </div>
     </div>
@@ -100,6 +100,7 @@
   gsap.registerPlugin(ScrollTrigger);
 
   function initPhoneAnimations() {
+    console.log("Initializing Phone Animations");
     const sections = document.querySelectorAll(".about-section-phone");
 
     sections.forEach((section, index) => {
@@ -151,11 +152,15 @@
         );
       }
     });
+
+    // Refresh ScrollTrigger to ensure positions are correct after layout
+    ScrollTrigger.refresh();
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initPhoneAnimations);
-  } else {
+  // Ensure animations init after everything (including images) is loaded
+  if (document.readyState === "complete") {
     initPhoneAnimations();
+  } else {
+    window.addEventListener("load", initPhoneAnimations);
   }
 </script>
