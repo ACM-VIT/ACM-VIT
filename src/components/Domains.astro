@@ -2,14 +2,21 @@
 
 ---
 
-<section
-  class="domains-section relative h-[300vh] bg-[url('/glow_ball_red.svg')] bg-cover bg-center bg-no-repeat bg-scroll md:bg-fixed [contain:layout_style_paint] motion-reduce:h-screen"
->
+<section class="domains-section relative h-[300vh] motion-reduce:h-screen">
+  <!-- Fixed Background Layer -->
+  <div class="fixed inset-0 z-0 pointer-events-none opacity-0 domain-bg-layer">
+    <img
+      src="/glow_ball_red.svg"
+      alt=""
+      class="w-full h-full object-cover scale-125"
+    />
+  </div>
+
   <div
-    class="pin-container sticky top-0 flex h-screen items-center justify-center overflow-visible will-change-transform transform-gpu motion-reduce:static"
+    class="pin-container sticky top-0 flex h-screen items-center justify-center overflow-visible will-change-transform transform-gpu motion-reduce:static z-10"
   >
     <p
-      class="section-subtitle absolute top-[8%] pt-2 md:pt-4 md:top-[10%] left-1/2 z-10 max-w-[95%] md:max-w-[900px]  -translate-x-1/2 px-6 md:px-8 text-center font-['PolySans_Trial',sans-serif] text-[4px] md:text-[18px] font-normal leading-[1.6] md:leading-[1.4] text-[#fefcd9] will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden"
+      class="section-subtitle absolute top-[8%] pt-2 md:pt-4 md:top-[10%] left-1/2 z-10 max-w-[95%] md:max-w-[900px] -translate-x-1/2 px-6 md:px-8 text-center font-['PolySans_Trial',sans-serif] text-[4px] md:text-[18px] font-normal leading-[1.6] md:leading-[1.4] text-[#fefcd9] will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden"
     >
       <span class="whitespace-nowrap">
         Each domain at ACM-VIT is more than a skillset, it's a mindset.
@@ -132,8 +139,9 @@
       const items = document.querySelectorAll(".domain-item");
       const grid = document.querySelector(".domains-grid");
       const subtitle = document.querySelector(".section-subtitle");
+      const bgLayer = document.querySelector(".domain-bg-layer");
 
-      if (!items.length || !grid || !subtitle) return;
+      if (!items.length || !grid || !subtitle || !bgLayer) return;
 
       // Set initial state
       gsap.set(items, {
@@ -152,17 +160,21 @@
         force3D: true,
       });
 
-      // Simplified timeline with better performance
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: ".domains-section",
-          start: "-580px top",
+          start: "-300px top",
           end: "bottom bottom",
           scrub: 1.2,
           pin: "true",
           anticipatePin: 1,
           invalidateOnRefresh: true,
           markers: false,
+          onEnter: () => gsap.to(bgLayer, { opacity: 1, duration: 0.5 }),
+          onLeave: () =>
+            gsap.to(bgLayer, { opacity: 0, duration: 0.5, delay: 0.5 }), // Fade out with delay
+          onEnterBack: () => gsap.to(bgLayer, { opacity: 1, duration: 0.5 }),
+          onLeaveBack: () => gsap.to(bgLayer, { opacity: 0, duration: 0.5 }),
         },
       });
 
@@ -275,45 +287,45 @@
       // Hide all cassettes and subtitle with animation
       const items = document.querySelectorAll(".domain-item");
       const subtitle = document.querySelector(".section-subtitle");
-      const domainsSection = document.querySelector(".domains-section");
+      const bgLayer = document.querySelector(".domain-bg-layer");
 
       // Create a smooth transition timeline
       const tl = gsap.timeline();
 
       // Fade out background and elements simultaneously
-      tl.to(
-        domainsSection,
-        {
-          backgroundSize: "0% 0%",
-          opacity: 0,
-          duration: 0.4,
-          ease: "power2.inOut",
-        },
-        0
-      )
-        .to(
-          items,
+      if (bgLayer) {
+        tl.to(
+          bgLayer,
           {
             opacity: 0,
-            scale: 0.8,
             duration: 0.4,
             ease: "power2.inOut",
-            stagger: 0.02,
           },
           0
-        )
-        .to(
-          subtitle,
-          {
-            opacity: 0,
-            y: -30,
-            duration: 0.3,
-            ease: "power2.inOut",
-          },
-          0.05
         );
+      }
 
-      // Create and show domain screen after animation with overlap
+      tl.to(
+        items,
+        {
+          opacity: 0,
+          scale: 0.8,
+          duration: 0.4,
+          ease: "power2.inOut",
+          stagger: 0.02,
+        },
+        0
+      ).to(
+        subtitle,
+        {
+          opacity: 0,
+          y: -30,
+          duration: 0.3,
+          ease: "power2.inOut",
+        },
+        0.05
+      );
+
       setTimeout(() => {
         createDomainScreen(domain);
       }, 200);
@@ -503,7 +515,7 @@
       const domainScreen = document.getElementById("domain-screen");
       const items = document.querySelectorAll(".domain-item");
       const subtitle = document.querySelector(".section-subtitle");
-      const domainsSection = document.querySelector(".domains-section");
+      const bgLayer = document.querySelector(".domain-bg-layer");
 
       if (domainScreen) {
         // Create smooth exit timeline
@@ -515,11 +527,10 @@
             const entranceTl = gsap.timeline();
 
             // Restore the glow ball background first
-            if (domainsSection) {
+            if (bgLayer) {
               entranceTl.to(
-                domainsSection,
+                bgLayer,
                 {
-                  backgroundSize: "cover",
                   opacity: 1,
                   duration: 0.3,
                   ease: "power2.out",

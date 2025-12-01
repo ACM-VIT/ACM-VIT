@@ -12,15 +12,16 @@ const facultyCoordinator = boardMembers.find(
 );
 ---
 
-<section class="w-full min-h-screen py-12 px-4 relative">
-  <div class="">
+<section class="board-section w-full min-h-screen py-12 px-4 relative">
+  <div class="fixed inset-0 z-0 pointer-events-none opacity-0 board-bg-layer">
     <img
       src="/glow_ball_red.svg"
       alt="Board Background"
-      class="w-full min-h-screen object-cover absolute top-0 left-0 z-0 pointer-events-none"
+      class="w-full h-full object-cover scale-125"
     />
   </div>
-  <div class="max-w-7xl mx-auto flex flex-col pt-52">
+
+  <div class="max-w-7xl mx-auto flex flex-col relative z-10">
     <!-- Faculty Coordinator - Featured Card -->
     {
       facultyCoordinator && (
@@ -95,8 +96,41 @@ const facultyCoordinator = boardMembers.find(
   </div>
 </section>
 
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  if (typeof gsap !== "undefined") {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const initBoardAnimation = () => {
+      const bgLayer = document.querySelector(".board-bg-layer");
+      const section = document.querySelector(".board-section");
+
+      if (!bgLayer || !section) return;
+
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top 30%", 
+        end: "bottom 60%", 
+        onEnter: () => gsap.to(bgLayer, { opacity: 1, duration: 0.5 }),
+        onLeave: () => gsap.to(bgLayer, { opacity: 0, duration: 0.5 }),
+        onEnterBack: () => gsap.to(bgLayer, { opacity: 1, duration: 0.5 }),
+        onLeaveBack: () => gsap.to(bgLayer, { opacity: 0, duration: 0.5 }),
+      });
+    };
+
+    // Initialize on load
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initBoardAnimation);
+    } else {
+      initBoardAnimation();
+    }
+  }
+</script>
+
 <style>
-  /* Custom animations for enhanced user experience */
+  /* Custom animations */
   @keyframes fadeInUp {
     from {
       opacity: 0;
