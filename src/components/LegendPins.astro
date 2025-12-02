@@ -1,78 +1,98 @@
 ---
 // Shared bottom legends for home page
+import { ButtonData } from "../data/legendData";
 ---
-<div class="legend-pins-wrapper" aria-hidden="false">
+
+<div
+  class="legend-pins-wrapper absolute top-0 left-0 w-full h-screen pointer-events-none z-[60]"
+  aria-hidden="false"
+>
   <!-- Left Legend -->
-  <div class="legend-pin left-legend">
-    <div class="legend-left-inner">
-      <div class="legend-line">Established in&nbsp;<span class="accent">2009</span>.</div>
-      <div class="legend-line">Evolving ever since.</div>
+  <div
+    class="legend-pin left-legend absolute bottom-8 z-[60] font-['PolySans_Trial',sans-serif] text-[#FEFCD9] max-w-[42vw] left-8 max-lg:bottom-7 max-md:max-w-[80vw] max-md:left-4 max-md:bottom-24"
+  >
+    <div class="legend-left-inner inline-flex flex-col gap-1">
+      <div
+        class="legend-line text-lg leading-[1.15] font-normal [text-shadow:1px_1px_2px_rgba(0,0,0,0.45)] max-xl:text-[0.95rem] max-lg:text-[0.85rem] max-[860px]:text-[0.8rem] max-md:text-[0.75rem] max-[480px]:text-[0.7rem]"
+      >
+        Established in&nbsp;<span class="accent text-[#F95F4A]">2009</span>.
+      </div>
+      <div
+        class="legend-line text-lg leading-[1.15] font-normal [text-shadow:1px_1px_2px_rgba(0,0,0,0.45)] max-xl:text-[0.95rem] max-lg:text-[0.85rem] max-[860px]:text-[0.8rem] max-md:text-[0.75rem] max-[480px]:text-[0.7rem]"
+      >
+        Evolving ever since.
+      </div>
     </div>
   </div>
-  <!-- Right Legend (hidden on small screens) -->
-  <div class="legend-pin right-legend">
-    <div class="legend-right-inner">
-      <div class="legend-line nowrap">We're not just another <span class="accent">tech chapter</span><span class="punct">.</span></div>
-      <div class="legend-line nowrap">We're the <span class="accent">conspiracy</span><span class="punct"> that actually works.</span></div>
+  <!-- Right Legend -->
+  <div
+    class="legend-pin right-legend absolute bottom-8 z-[60] font-['PolySans_Trial',sans-serif] text-[#FEFCD9] max-w-[42vw] right-8 text-right flex justify-end max-lg:bottom-7 max-md:left-4 max-md:right-auto max-md:text-left max-md:justify-start max-md:bottom-6 max-md:max-w-[80vw]"
+  >
+    <div class="legend-right-inner inline-flex flex-col gap-1">
+      <div
+        class="legend-line text-lg leading-[1.15] font-normal [text-shadow:1px_1px_2px_rgba(0,0,0,0.45)] max-xl:text-[0.95rem] max-lg:text-[0.85rem] max-[860px]:text-[0.8rem] max-md:text-[0.75rem] max-[480px]:text-[0.7rem] whitespace-nowrap"
+      >
+        We're not just another <span class="accent text-[#F95F4A]"
+          >tech chapter</span
+        ><span class="punct text-[#FEFCD9]">.</span>
+      </div>
+      <div
+        class="legend-line text-lg leading-[1.15] font-normal [text-shadow:1px_1px_2px_rgba(0,0,0,0.45)] max-xl:text-[0.95rem] max-lg:text-[0.85rem] max-[860px]:text-[0.8rem] max-md:text-[0.75rem] max-[480px]:text-[0.7rem] whitespace-nowrap"
+      >
+        We're the <span class="accent text-[#F95F4A]">conspiracy</span><span
+          class="punct text-[#FEFCD9]"
+        >
+          that actually works.</span
+        >
+      </div>
     </div>
   </div>
+
+  <a
+    href={ButtonData.link}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="c2c-btn absolute top-7 right-10 z-[600] pointer-events-auto w-auto h-12 bg-[#F95F4A] rounded-[41px] flex items-center pl-[34px] pr-8 gap-3 max-md:right-4 max-md:top-3 max-md:scale-[0.5] max-md:origin-top-right transition-transform hover:scale-105 no-underline"
+  >
+    <div
+      class="text-[#FEFCD9] text-base font-light font-['PolySans_Trial'] uppercase"
+    >
+      {ButtonData.text}
+    </div>
+    <div class="w-6 h-6 relative overflow-hidden">
+      <img src="/top-arrow.svg" alt="arrow" class="w-full h-full" />
+    </div>
+  </a>
 </div>
 
-<style>
-  .legend-pins-wrapper { pointer-events: none; opacity:0; transition:opacity .35s ease; }
-  .legend-pins-wrapper.visible { opacity:1; }
-  .legend-pin {
-    position: fixed;
-    bottom: 2rem;
-    z-index: 60;
-    font-family: 'PolySans Trial', sans-serif;
-    color: #FEFCD9;
-    max-width: 42vw;
-  }
-  .left-legend { left: 2rem; }
-  .right-legend { right: 2rem; text-align: right; display: flex; justify-content: flex-end; }
-  .legend-left-inner, .legend-right-inner { display: inline-flex; flex-direction: column; gap: 0.25rem; }
-  .legend-line { font-size: 1.25rem; line-height: 1.15; font-weight: 400; text-shadow: 1px 1px 2px rgba(0,0,0,0.45); }
-  .legend-line .accent { color: #F95F4A; }
-  .legend-line .punct { color: #FEFCD9; }
-  .nowrap { white-space: nowrap; }
-  @media (max-width: 1280px) {
-    .legend-line { font-size: 1.05rem; }
-  }
-  @media (max-width: 1024px) {
-    .legend-pin { bottom: 1.75rem; }
-    .legend-line { font-size: 0.95rem; }
-  }
-  @media (max-width: 860px) {
-    .legend-line { font-size: 0.9rem; }
-  }
-  @media (max-width: 768px) {
-    .right-legend { display: none; }
-    .legend-pin { max-width: 80vw; left: 1rem; bottom: 1.5rem; }
-    .legend-line { font-size: 0.85rem; }
-  }
-  @media (max-width: 480px) {
-    .legend-line { font-size: 0.8rem; }
-  }
-</style>
-
 <script>
-  // Show legends only while #home section is in viewport
-  const homeSection = document.getElementById('home');
-  const wrapper = document.querySelector('.legend-pins-wrapper');
-  if (homeSection && wrapper && 'IntersectionObserver' in window) {
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          wrapper.classList.add('visible');
-        } else {
-          wrapper.classList.remove('visible');
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const wrapper = document.querySelector(".legend-pins-wrapper");
+  const triggerSection = document.getElementById("home");
+
+  if (triggerSection && wrapper) {
+    document.body.appendChild(wrapper);
+
+    ScrollTrigger.create({
+      trigger: triggerSection,
+      start: "top top",
+      end: "bottom bottom",
+      pin: wrapper,
+      pinSpacing: false,
+      onRefresh: (self) => {
+        if (
+          self.pin &&
+          self.pin.parentNode &&
+          self.pin.parentNode instanceof Element &&
+          self.pin.parentNode.classList.contains("pin-spacer")
+        ) {
+          (self.pin.parentNode as HTMLElement).style.pointerEvents = "none";
         }
-      });
-    }, { threshold: 0.05 });
-    io.observe(homeSection);
-  } else if (wrapper) {
-    // Fallback: show legends if observer unsupported
-    wrapper.classList.add('visible');
+      },
+    });
   }
 </script>

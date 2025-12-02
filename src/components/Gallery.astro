@@ -2,57 +2,229 @@
 // Gallery.astro
 ---
 
-<section class="relative min-h-screen w-full overflow-hidden pt-10">
-    <!-- Background Text Pattern -->
-    <div class="absolute inset-0 opacity-30 grayscale-100 pointer-events-none z-0">
-        <img
-            src="/gallery-bg-text.svg"
-            alt="Background Pattern"
-            class="object-cover w-full"
-        />
-    </div>
-
-    <div
-        class="w-full z-10 flex flex-col min-h-screen items-center justify-end"
+<section
+  class="gallery-section relative w-full pt-16 pb-0 sm:pt-24 sm:pb-0 overflow-hidden"
+>
+  <!-- Floating Words Background -->
+  <div class="floating-words-container" aria-hidden="true">
+    <span
+      class="floating-word"
+      style="--delay: 0s; --duration: 45s; --x: 5%; --y: 10%;"
+      >CODEX CRYPTUM</span
     >
-        <!-- Gallery Title -->
-        <div
-            class="text-center flex flex-col items-center justify-center gap-10"
-        >
-            <img
-                src="/gallery.svg"
-                alt="Gallery Title"
-                class="object-cover max-w-[60vw] h-full"
-            />
+    <span
+      class="floating-word"
+      style="--delay: 3s; --duration: 55s; --x: 80%; --y: 15%;"
+      >THE NEURAL HACK</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 6s; --duration: 50s; --x: 10%; --y: 35%;"
+      >CRYPTIC HUNT</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 0s; --duration: 60s; --x: 70%; --y: 40%;">APPTITUDE</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 3s; --duration: 48s; --x: 25%; --y: 20%;">CODART</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 6s; --duration: 52s; --x: 85%; --y: 30%;"
+      >REVERSE CODING</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 0s; --duration: 58s; --x: 2%; --y: 45%;"
+      >HOUR OF CODE</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 3s; --duration: 47s; --x: 60%; --y: 10%;"
+      >CODE2CREATE</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 6s; --duration: 54s; --x: 40%; --y: 5%;"
+      >THE TINY HACK</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 0s; --duration: 51s; --x: 90%; --y: 25%;">CODE++</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 3s; --duration: 56s; --x: 15%; --y: 25%;">INSPIHER</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 6s; --duration: 49s; --x: 75%; --y: 5%;">FORKTOBER</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 0s; --duration: 53s; --x: 35%; --y: 40%;"
+      >SUMMER BOOTCAMP</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 3s; --duration: 57s; --x: 50%; --y: 30%;"
+      >LEARN2AUGMENT</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 6s; --duration: 46s; --x: 65%; --y: 20%;">UNIPOOL</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 0s; --duration: 59s; --x: 8%; --y: 15%;">CLI-TOP</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 3s; --duration: 50s; --x: 82%; --y: 45%;">CLI-RPG</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 6s; --duration: 55s; --x: 45%; --y: 15%;">EXAMCOOKER</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 0s; --duration: 48s; --x: 20%; --y: 40%;">LOCALHOST</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 3s; --duration: 52s; --x: 55%; --y: 45%;">ACM</span
+    >
+  </div>
 
-            <!-- CTA Button -->
-            <button
-                class="bg-primary-orange max-w-[85vw] text-white px-4 py-2 md:px-8 md:py-3 rounded-full text-[0.6rem] md:text-xs transition-all duration-300 transform hover:scale-103 hover:cursor-pointer z-10 border-1 border-[#FEFCD9] mb-2"
-            >
-                <span style="font-family: 'PolySans Trial';" class="z-10"
-                    >PROOF WE ACTUALLY DO STUFF - VIEW PHOTOS!</span
-                >
-            </button>
-        </div>
-
-        <!-- Photo Grid/Collage -->
-        <div class="w-full z-0">
-            <img
-                src="/full-core.svg"
-                alt="Description of photo 1"
-                class="w-full object-cover rounded-lg shadow-lg"
-            />
-        </div>
+  <div class="flex w-full flex-col items-center gap-3 relative z-10">
+    <div class="relative flex w-full max-w-4xl flex-col items-center px-4">
+      <img
+        src="/gallery.svg"
+        alt="Gallery Title"
+        class="gallery-title relative z-10 w-[90vw] max-w-3xl mb-2"
+      />
     </div>
 
-    <style>
-        @font-face {
-            font-family: "PolySans Trial";
-            src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-NeutralMono.otf")
-                format("opentype");
-            font-weight: 400;
-            font-style: normal;
-            font-display: swap;
-        }
-    </style>
+    <div class="px-4">
+      <a
+        href="https://photos.google.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="w-[484px] h-12 bg-[#F95F4A] rounded-[41px] outline outline-1 outline-offset-[-1px] outline-yellow-50
+           flex items-center justify-center hover:scale-105 transition-transform duration-200"
+      >
+        <span
+          class="text-white text-base font-light font-['PolySans_Trial'] uppercase"
+        >
+          Proof We Actually Do Stuff - View Photos!
+        </span>
+      </a>
+    </div>
+
+    <div class="gallery-frame relative w-full overflow-hidden">
+      <img
+        src="/full-core.svg"
+        alt="ACM-VIT gallery collage"
+        class="gallery-image w-full object-cover"
+        loading="lazy"
+      />
+    </div>
+  </div>
 </section>
+
+<style>
+  .gallery-section {
+    font-family: "PolySans Trial", "PolySans", system-ui, sans-serif;
+  }
+
+  .gallery-frame::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(3, 3, 3, 0) 40%,
+      rgba(3, 3, 3, 0.55) 100%
+    );
+    pointer-events: none;
+  }
+
+  .gallery-image {
+    filter: grayscale(1);
+    transition: filter 0.3s ease;
+  }
+
+  .gallery-frame:hover .gallery-image {
+    filter: grayscale(0.2);
+  }
+
+  /* Floating Words Background */
+  .floating-words-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .floating-word {
+    position: absolute;
+    font-family: "Inter", sans-serif;
+    font-size: 60.703px;
+    font-weight: 900;
+    font-style: normal;
+    line-height: normal;
+    text-transform: uppercase;
+    opacity: 0.15;
+    white-space: nowrap;
+    letter-spacing: 0.1em;
+    color: #ffffff;
+    will-change: transform;
+    animation: float var(--duration, 50s) ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+    left: var(--x, 50%);
+    top: var(--y, 50%);
+  }
+
+  .floating-word:nth-child(even) {
+    -webkit-text-stroke-width: 2.28px;
+    -webkit-text-stroke-color: #ffffff;
+    color: transparent;
+    opacity: 0.1;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translate(0, 0) rotate(0deg);
+    }
+    25% {
+      transform: translate(15vw, -20vh) rotate(2deg);
+    }
+    50% {
+      transform: translate(-10vw, 15vh) rotate(-1deg);
+    }
+    75% {
+      transform: translate(20vw, 10vh) rotate(1deg);
+    }
+  }
+
+  /* Ensure gallery content is above the floating words */
+  /* The z-index on gallery-section is not strictly needed here as floating-words-container is now a child with z-index 0 and main content has z-10 */
+  /* .gallery-section {
+    position: relative;
+    z-index: 1;
+  } */
+
+  @media (max-width: 640px) {
+    .floating-word {
+      font-size: clamp(1rem, 4vw, 2rem);
+      opacity: 0.02;
+    }
+  }
+</style>

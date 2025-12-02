@@ -1,0 +1,141 @@
+export interface BoardMember {
+  title: string;
+  fullName: string;
+  position: string;
+  imageUrl: string;
+  linkedinUrl?: string;
+  googleScholarUrl?: string;
+  githubUrl?: string;
+  isW: boolean;
+}
+
+export const boardMembers: BoardMember[] = [
+  {
+    title: "Dr.",
+    fullName: "Aswani Kumar Cherukuri",
+    position: "Faculty Coordinator",
+    imageUrl: "/board/aswani.svg",
+    linkedinUrl: "https://linkedin.com/in/ramanuj-kumar",
+    googleScholarUrl: "https://scholar.google.com/citations?user=...",
+    githubUrl: "https://github.com/ramanuj-kumar",
+    isW: false,
+  },
+  {
+    title: "",
+    fullName: "Manan Shah",
+    position: "Chairperson",
+    imageUrl: "/board/mananshah.svg",
+    linkedinUrl: "https://linkedin.com/in/manan-shah",
+    githubUrl: "https://github.com/manan-shah",
+    isW: false,
+  },
+  {
+    title: "",
+    fullName: "Kairav Sheth",
+    position: "Vice Chair",
+    imageUrl: "/board/kairavsheth.svg",
+    linkedinUrl: "https://linkedin.com/in/kairav-sheth",
+    githubUrl: "https://github.com/kairav-sheth",
+    isW: false,
+  },
+  {
+    title: "",
+    fullName: "Sunny Gogoi",
+    position: "Secretary",
+    imageUrl: "/board/sunnygogoi.svg",
+    linkedinUrl: "https://linkedin.com/in/sunny-gogoi",
+    githubUrl: "https://github.com/sunny-gogoi",
+    isW: false,
+  },
+  {
+    title: "",
+    fullName: "Eshita Chokhani",
+    position: "Co - Secretary",
+    imageUrl: "/board/eshitachokhani.svg",
+    linkedinUrl: "https://linkedin.com/in/eshita-chokhani",
+    githubUrl: "https://github.com/eshita-chokhani",
+    isW: false,
+  },
+  {
+    title: "",
+    fullName: "Tanush Golwala",
+    position: "Technical Director",
+    imageUrl: "/board/tanushgolwala.svg",
+    linkedinUrl: "https://linkedin.com/in/tanush-golwala",
+    githubUrl: "https://github.com/tanush-golwala",
+    isW: false,
+  },
+  {
+    title: "",
+    fullName: "Yasha Pacholee",
+    position: "Research Lead",
+    imageUrl: "/board/yashapacholee.svg",
+    linkedinUrl: "https://linkedin.com/in/yasha-pacholee",
+    githubUrl: "https://github.com/yasha-pacholee",
+    isW: false,
+  },
+  {
+    title: "",
+    fullName: "Supratim Ghose",
+    position: "Projects Lead",
+    imageUrl: "/board/supratimghose.svg",
+    linkedinUrl: "https://linkedin.com/in/supratim-ghose",
+    githubUrl: "https://github.com/supratim-ghose",
+    isW: false,
+  },
+  {
+    title: "",
+    fullName: "Garv Jain",
+    position: "Developer Relations Lead",
+    imageUrl: "/board/garvjain.svg",
+    linkedinUrl: "https://linkedin.com/in/garv-jain",
+    githubUrl: "https://github.com/garv-jain",
+    isW: false,
+  },
+  {
+    title: "",
+    fullName: "Yash Raj Singh",
+    position: "Design Lead",
+    imageUrl: "/board/yashrajsingh.svg",
+    linkedinUrl: "https://linkedin.com/in/yash-raj-singh",
+    githubUrl: "https://github.com/yash-raj-singh",
+    isW: false,
+  },
+  {
+    title: "",
+    fullName: "Srija Puvvada",
+    position: "Creative Lead",
+    imageUrl: "/board/srijapuvvada.svg",
+    linkedinUrl: "https://linkedin.com/in/srija-puvvada",
+    googleScholarUrl: "https://scholar.google.com/citations?user=...",
+    githubUrl: "https://github.com/srija-puvvada",
+    isW: false,
+  },
+  {
+    title: "",
+    fullName: "Harshitaa Kashyap",
+    position: "ACM-W Chairperson",
+    imageUrl: "/board/harshitaakashyap.svg",
+    linkedinUrl: "https://linkedin.com/in/harshitaa-kashyap",
+    githubUrl: "https://github.com/harshitaa-kashyap",
+    isW: true,
+  },
+  {
+    title: "",
+    fullName: "Aastik Narang",
+    position: "ACM-W Vice Chair",
+    imageUrl: "/board/aastiknarang.svg",
+    linkedinUrl: "https://linkedin.com/in/aastik-narang",
+    githubUrl: "https://github.com/aastik-narang",
+    isW: true,
+  },
+  {
+    title: "",
+    fullName: "Shambhavi Paygude",
+    position: "ACM-W Secretary",
+    imageUrl: "/board/shambhavipaygude.svg",
+    linkedinUrl: "https://linkedin.com/in/shambhavi-paygude",
+    githubUrl: "https://github.com/shambhavi-paygude",
+    isW: true,
+  },
+];

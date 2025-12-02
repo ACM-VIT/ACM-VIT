@@ -1,0 +1,1195 @@
+---
+const cassetteImages = [
+  "/events/apptitude-cassette.svg",
+  "/events/c2c-cassette.svg",
+  "/events/codart-cassette.svg",
+  "/events/code-plusplus-cassette.svg",
+  "/events/codex-cryptum-cassette.svg",
+  "/events/cryptic-hunt-cassette.svg",
+  "/events/forktober-cassette.svg",
+  "/events/inspiher-cassette.svg",
+  "/events/neural-hack-cassette.svg",
+  "/events/reverse-coding-cassette.svg",
+  "/events/the-tiny-hack-cassette.svg",
+];
+
+// Data
+const info = {
+  Pen: { title: "CodePen", site: "https://codepen.io/wodniack" },
+  Dummy1: { title: "Dummy Project 1", site: "https://wodniack.dev" },
+  Dummy2: { title: "Dummy Project 2", site: "https://wodniack.dev" },
+  Dummy3: { title: "Dummy Project 3", site: "https://wodniack.dev" },
+  Dummy4: { title: "Dummy Project 4", site: "https://wodniack.dev" },
+  Dummy5: { title: "Dummy Project 5", site: "https://wodniack.dev" },
+  Dummy6: { title: "Dummy Project 6", site: "https://wodniack.dev" },
+  Dummy7: { title: "Dummy Project 7", site: "https://wodniack.dev" },
+  Dummy8: { title: "Dummy Project 8", site: "https://wodniack.dev" },
+  Dummy9: { title: "Dummy Project 9", site: "https://wodniack.dev" },
+  Dummy10: { title: "Dummy Project 10", site: "https://wodniack.dev" },
+};
+
+interface Project {
+  caption: string;
+  site: string;
+  src: string;
+}
+
+let projects: Project[] = [];
+let pens: Project[] = [];
+
+// Create dummy projects
+cassetteImages.forEach((src, i) => {
+  const index = i + 1;
+  const key = `Dummy${index % 10 === 0 ? 10 : index % 10}` as keyof typeof info;
+  const project = info[key];
+
+  if (project) {
+    projects.push({
+      caption: `${project.title}`,
+      site: project.site,
+      src: src,
+    });
+  }
+});
+
+function shuffle(array: Project[]) {
+  let currentIndex = array.length;
+  while (currentIndex != 0) {
+    let randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex],
+      array[currentIndex],
+    ];
+  }
+}
+
+shuffle(projects);
+
+// Add pens in between projects regularly
+let works: Project[] = [];
+let chunkSize = Math.floor(projects.length / (pens.length || 1));
+let i = 0;
+let j = 0;
+while (i < projects.length) {
+  works.push(projects[i]);
+  if (pens.length > 0 && j < pens.length && (i + 1) % chunkSize === 0) {
+    works.push(pens[j]);
+    j++;
+  }
+  i++;
+}
+---
+
+<section id="work" class="s-work" data-intersect>
+  <div class="s__outer">
+    <div class="s__inner js-container">
+      <h2 class="s__title">
+        <span class="s__title__inner js-title">
+          <span class="s__title__letter js-letter">E</span>
+          <span class="s__title__letter js-letter">V</span>
+          <span class="s__title__letter js-letter">E</span>
+          <span class="s__title__letter js-letter">N</span>
+          <span class="s__title__letter js-letter">T</span>
+          <span class="s__title__letter js-letter">S</span>
+        </span>
+      </h2>
+
+      <div class="s__scene js-scene">
+        {
+          works.map((work, index) => {
+            const key =
+              Math.random().toString(36).slice(2, 6) +
+              "-" +
+              String(index).padStart(4, "0") +
+              "/" +
+              String(works.length).padStart(2, "0");
+            return (
+              <a-work class="s__scene__work s__scene__work--video js-work">
+                <div class="a__inner">
+                  <a href={work.site} target="_blank">
+                    <img
+                      src={work.src}
+                      class="a__video js-video"
+                      width="1082"
+                      height="636"
+                      alt={work.caption}
+                    />
+
+                    <div class="a__caption">
+                      <div class="a__caption__text">{work.caption}</div>
+                      <div class="a__caption__key">#{key}</div>
+                    </div>
+                  </a>
+                </div>
+              </a-work>
+            );
+          })
+        }
+      </div><!-- .s__scene -->
+
+      <canvas class="s__canvas js-canvas"></canvas>
+    </div><!-- .s__inner -->
+
+    <div class="s__mask-outer">
+      <div class="s__mask js-mask">
+        <svg class="s__mask__svg js-mask-svg">
+          <path class="s__mask__path-inner js-mask-path-inner" d=""></path>
+          <path class="s__mask__path-outer js-mask-path-outer" d=""></path>
+          <path class="s__mask__path-lines js-mask-path-lines" d=""></path>
+        </svg>
+      </div><!-- .s__mask -->
+    </div><!-- .s__mask-outer -->
+
+    <div class="s__ruler js-ruler"></div>
+  </div><!-- .s__outer -->
+</section>
+
+<script>
+  import { gsap } from "gsap";
+  import { SlowMo } from "gsap/EasePack";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger, SlowMo);
+
+  // Extend Window interface for custom safe area properties
+  declare global {
+    interface Window {
+      safeWidth?: number;
+      safeHeight?: number;
+    }
+  }
+
+  // --- Utils ---
+  class Emitter {
+    events: { [key: string]: any[] };
+    constructor() {
+      this.events = {};
+    }
+    on(name: string, callback: any, context: any, once = false) {
+      if (!this.events[name]) {
+        this.events[name] = [];
+      }
+      let exists = false;
+      this.events[name].forEach((object) => {
+        if (object.cb === callback && object.context === context) {
+          exists = true;
+          return;
+        }
+      });
+      if (exists) {
+        return;
+      }
+      this.events[name].push({ cb: callback, context: context, once: once });
+    }
+    once(name: string, callback: any, context: any) {
+      this.on(name, callback, context, true);
+    }
+    emit(name: string, ...args: any[]) {
+      const self = this;
+      if (this.events[name]) {
+        this.events[name].forEach((object, index) => {
+          object.cb.apply(object.context, args);
+          if (object.once) {
+            delete self.events[name][index];
+          }
+        });
+      }
+    }
+    off(name: string, callback: any, context: any) {
+      const self = this;
+      if (this.events[name]) {
+        this.events[name].forEach((object, index) => {
+          if (object.cb === callback && object.context === context) {
+            delete self.events[name][index];
+          }
+        });
+      }
+    }
+  }
+  const emitter = new Emitter();
+
+  class Ticker {
+    callbacks: any[];
+    delta: number;
+    constructor() {
+      this.callbacks = [];
+      this.delta = 0;
+    }
+    init() {
+      gsap.ticker.add(this.tick.bind(this));
+    }
+    tick(time: number, delta: number) {
+      const self = this;
+      this.delta = delta;
+      this.callbacks.forEach((object, index) => {
+        object.callback.apply(object.context);
+        delete self.callbacks[index];
+      });
+      emitter.emit("tick", time * 1000);
+    }
+    nextTick(callback: Function, context: any) {
+      this.callbacks.push({ callback, context });
+    }
+  }
+  const ticker = new Ticker();
+  ticker.init();
+
+  // --- AWork Component ---
+  class AWork extends HTMLElement {
+    static observedAttributes = ["progress"];
+    link!: HTMLAnchorElement;
+    video!: HTMLImageElement;
+    isPlaying!: boolean;
+
+    connectedCallback() {
+      this.video = this.querySelector(".js-video")!;
+      this.link = this.querySelector("a")!;
+      this.isPlaying = false;
+      this.link.addEventListener("click", this.onClick.bind(this));
+    }
+
+    attributeChangedCallback(
+      name: string,
+      oldValue: string | null,
+      newValue: string | null
+    ) {
+      if (name === "progress") {
+        this.style.setProperty("--progress", newValue);
+        if (newValue === "1" || newValue === "-1") {
+          if (this.isPlaying) {
+            this.outView();
+          }
+        } else {
+          if (!this.isPlaying) {
+            this.inView();
+          }
+        }
+      }
+    }
+
+    inView() {
+      this.isPlaying = true;
+      this.classList.add("is-inview");
+    }
+
+    outView() {
+      this.isPlaying = false;
+      this.classList.remove("is-inview");
+    }
+
+    onClick(event: MouseEvent) {
+      if (this.link.href.includes("#")) {
+        event.preventDefault();
+        return false;
+      }
+    }
+  }
+  if (!customElements.get("a-work")) {
+    customElements.define("a-work", AWork);
+  }
+
+  // --- Section Logic ---
+  interface Ghost {
+    el: HTMLElement;
+    x: number;
+    y: number;
+    z: number;
+    i: number;
+    p: number;
+    ap: number;
+    mx: number;
+    my: number;
+  }
+
+  interface Letter {
+    el: HTMLElement;
+    ghosts: Ghost[];
+    width?: number;
+    height?: number;
+    top?: number;
+    left?: number;
+    freq: number;
+    total: number;
+  }
+
+  class Section {
+    el: HTMLElement;
+    container: HTMLElement;
+    ruler: HTMLElement;
+    scene: HTMLElement;
+    canvas: HTMLCanvasElement;
+    ctx: CanvasRenderingContext2D;
+    title: HTMLElement;
+    videos: NodeListOf<HTMLImageElement>;
+
+    mask: {
+      width: number;
+      height: number;
+      maxScale: number;
+      lines: any[];
+      el: HTMLElement;
+      svg: HTMLElement;
+      pathOuter: HTMLElement;
+      pathInner: HTMLElement;
+      pathLines: HTMLElement;
+    };
+
+    bounding!: {
+      left: number;
+      top: number;
+      width: number;
+      height: number;
+    };
+    letters: Letter[];
+    works: any[];
+    points: any[];
+
+    tl!: gsap.core.Timeline;
+    animationProgress!: number;
+    pointsProgress!: number;
+    last: {
+      animationProgress: number;
+      pointsProgress: number;
+    };
+    scrollProgress: number;
+    smoothScrollProgress: number;
+    state = 0;
+    speed!: number;
+    isPaused: boolean;
+    loadIsStarted: boolean;
+
+    constructor() {
+      this.el = document.querySelector(".s-work")!;
+      this.container = this.el.querySelector(".js-container")!;
+      this.ruler = this.el.querySelector(".js-ruler")!;
+      this.scene = this.container.querySelector(".js-scene")!;
+      this.canvas = this.container.querySelector(".js-canvas")!;
+      this.ctx = this.canvas.getContext("2d")!;
+      this.title = this.container.querySelector(".js-title")!;
+      this.videos = this.container.querySelectorAll("img");
+
+      this.mask = {
+        width: 0,
+        height: 0,
+        maxScale: 1,
+        lines: [],
+        el: this.el.querySelector(".js-mask")!,
+        svg: this.el.querySelector(".js-mask-svg")!,
+        pathOuter: this.el.querySelector(".js-mask-path-outer")!,
+        pathInner: this.el.querySelector(".js-mask-path-inner")!,
+        pathLines: this.el.querySelector(".js-mask-path-lines")!,
+      };
+
+      this.letters = [];
+      this.title.querySelectorAll(".js-letter").forEach((_letter) => {
+        const letter: Letter = {
+          el: _letter as HTMLElement,
+          ghosts: [],
+          freq: 1,
+          total: 0,
+        };
+        this.letters.push(letter);
+      });
+
+      this.works = [];
+      this.container.querySelectorAll(".js-work").forEach((_work) => {
+        const work = {
+          el: _work,
+        };
+        this.works.push(work);
+      });
+
+      this.points = [];
+      this.scrollProgress = 0;
+      this.smoothScrollProgress = 0;
+      this.last = {
+        animationProgress: 0,
+        pointsProgress: 0,
+      };
+
+      this.isPaused = true;
+      this.loadIsStarted = false;
+
+      if (document.readyState === "complete") {
+        ticker.nextTick(this.init, this);
+      } else {
+        emitter.once("siteLoaded", this.init, this);
+        // Fallback if siteLoaded is never emitted in standalone
+        setTimeout(() => this.init(), 100);
+      }
+    }
+
+    init() {
+      this.setCtxStyle();
+      this.setSize();
+      this.setMask();
+      this.setPoints();
+      this.setLetters();
+      this.setWorks();
+      this.setTimeline();
+
+      this.bindEvents();
+    }
+
+    bindEvents() {
+      emitter.on("contrastchange", this.setCtxStyle, this);
+      emitter.on("resize", this.onResize, this);
+      window.addEventListener("resize", () => this.onResize(true)); // Fallback
+
+      this.el.addEventListener(
+        "intersect",
+        this.onIntersect.bind(this) as EventListener,
+        {
+          passive: true,
+        }
+      );
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          this.el.dispatchEvent(
+            new CustomEvent("intersect", {
+              detail: { isIntersecting: entry.isIntersecting },
+            })
+          );
+        });
+      });
+      observer.observe(this.el);
+    }
+
+    lastWidth: number = 0;
+
+    onResize(widthChanged: boolean) {
+      if (widthChanged) {
+        const width = window.innerWidth;
+        if (width === this.lastWidth) return;
+        this.lastWidth = width;
+
+        this.setCtxStyle();
+        this.setSize();
+        this.setMask();
+        this.setPoints();
+        this.setLetters();
+        this.setWorks();
+        this.setTimeline();
+      }
+    }
+
+    onIntersect(e: CustomEvent<{ isIntersecting: boolean }>) {
+      this.isPaused = !e.detail.isIntersecting;
+
+      if (this.isPaused) {
+        emitter.off("tick", this.tick, this);
+      } else {
+        emitter.on("tick", this.tick, this);
+      }
+    }
+
+    setCtxStyle() {
+      const color = getComputedStyle(this.el).getPropertyValue(
+        "--color-primary"
+      );
+      ticker.nextTick(() => {
+        this.ctx.strokeStyle = color;
+      }, this);
+    }
+
+    setSize() {
+      this.el.style.setProperty("--height", this.works.length * 50 + "lvh");
+      const bounding = this.container.getBoundingClientRect();
+      // Fallback for window.safeWidth/Height
+      const safeWidth = window.safeWidth || window.innerWidth;
+      const safeHeight = window.safeHeight || window.innerHeight;
+
+      this.bounding = {
+        left: bounding.left,
+        top: bounding.top,
+        width: safeWidth,
+        height: safeHeight,
+      };
+
+      this.canvas.width = this.bounding.width;
+      this.canvas.height = this.bounding.height;
+      this.speed = Math.hypot(this.bounding.width, this.bounding.height) * 4;
+    }
+
+    setMask() {
+      const { mask } = this;
+      const width = mask.el.clientWidth;
+      const height = mask.el.clientHeight;
+
+      mask.width = width;
+      mask.height = height;
+      mask.svg.style.width = mask.width + "px";
+      mask.svg.style.height = mask.height + "px";
+
+      const elBounding = this.el.getBoundingClientRect();
+      const rulerBounding = this.ruler.getBoundingClientRect();
+      const rulerWidth = rulerBounding.width;
+      const rulerHeight = rulerBounding.height;
+      const offsetX = rulerBounding.left - elBounding.left;
+      const offsetY = rulerBounding.top - elBounding.top;
+
+      const dOuter = `M -1 0 L ${width + 2} 0 L ${width + 2} ${height} L -1 ${height} Z`;
+
+      const corners = {
+        tl: { x: offsetX, y: offsetY },
+        tr: { x: offsetX + rulerWidth, y: offsetY },
+        br: { x: offsetX + rulerWidth, y: offsetY + rulerHeight },
+        bl: { x: offsetX, y: offsetY + rulerHeight },
+      };
+
+      let size = (corners.tr.x - corners.tl.x) / 2;
+      const safeWidth = window.safeWidth || window.innerWidth;
+      mask.maxScale = safeWidth / size;
+
+      let dInner = `M ${corners.tl.x} ${corners.tl.y + size} A ${size} ${size} 0 0 1 ${corners.tr.x} ${corners.tr.y + size} L ${corners.br.x} ${corners.br.y - size} A ${size} ${size} 0 0 1 ${corners.bl.x} ${corners.bl.y - size} Z`;
+      const linesClip = `${dOuter} ${dInner}`;
+
+      mask.pathOuter.setAttribute("d", `${dOuter} ${dInner}`);
+
+      const thickness = safeWidth > 767 ? 16 : 8;
+      corners.tl.x += thickness;
+      corners.tl.y += thickness;
+      corners.tr.x -= thickness;
+      corners.tr.y += thickness;
+      corners.br.x -= thickness;
+      corners.br.y -= thickness;
+      corners.bl.x += thickness;
+      corners.bl.y -= thickness;
+
+      size = (corners.tr.x - corners.tl.x) / 2;
+      dInner = `M ${corners.tl.x} ${corners.tl.y + size} A ${size} ${size} 0 0 1 ${corners.tr.x} ${corners.tr.y + size} L ${corners.br.x} ${corners.br.y - size} A ${size} ${size} 0 0 1 ${corners.bl.x} ${corners.bl.y - size} Z`;
+
+      mask.pathInner.setAttribute("d", `${dOuter} ${dInner}`);
+
+      mask.lines = [];
+      const vLines = safeWidth > 767 ? 12 : 8;
+      const gapX = width / vLines;
+      const gapY = height * 0.1;
+      const hLines = Math.ceil(height / gapY);
+
+      for (let i = 1; i < vLines; i++) {
+        const x = gapX * i;
+        mask.lines.push({ p1: { x, y: 0 }, p2: { x, y: height } });
+      }
+
+      for (let i = 0; i < hLines; i++) {
+        const y = gapY * i;
+        mask.lines.push({ p1: { x: 0, y }, p2: { x: width, y } });
+      }
+
+      let dLines = "";
+      mask.lines.forEach((line) => {
+        dLines += `M ${line.p1.x} ${line.p1.y} L ${line.p2.x} ${line.p2.y} `;
+      });
+
+      mask.pathLines.setAttribute("d", dLines);
+      mask.pathLines.style.clipPath = `path(evenodd, '${linesClip}')`;
+    }
+
+    setLetters() {
+      const { letters, scene } = this;
+      const safeWidth = window.safeWidth || window.innerWidth;
+
+      letters.forEach((letter, j) => {
+        letter.ghosts.forEach((ghost: Ghost) => {
+          ghost.el.remove();
+        });
+        letter.ghosts = [];
+
+        const bounding = letter.el.getBoundingClientRect();
+        letter.width = bounding.width;
+        letter.height = bounding.height;
+        letter.top = bounding.top - this.bounding.top;
+        letter.left = bounding.left;
+        letter.freq = 1 + Math.random();
+
+        const multiplier = safeWidth > 767 ? 1.6 : 0.75;
+        letter.total =
+          Math.round((this.bounding.width / letter.width) * multiplier) + 2;
+
+        for (let i = 0; i < letter.total; i++) {
+          const el = document.createElement("span");
+          el.classList.add("s__scene__letter");
+          el.classList.add("js-letter");
+          el.innerText = letter.el.innerText;
+          el.dataset.letter = letter.el.innerText;
+          scene.appendChild(el);
+
+          const ghost = {
+            el,
+            x: letter.left,
+            y: letter.top,
+            z: Math.random() * 100,
+            i: i - letter.total * 0.5,
+            p: (i / letter.total - 0.5) * 2,
+            ap: Math.abs(i / letter.total - 0.5) * 2,
+            mx: 0,
+            my: 0,
+          };
+
+          el.style.top = ghost.y + "px";
+          el.style.left = ghost.x + "px";
+          el.style.zIndex = String(
+            j !== 1 && j !== 2 && (j + letters.length + i) % 5 === 0 ? 3 : 1
+          );
+          el.style.setProperty("--ix", String(ghost.i));
+          el.style.setProperty(
+            "--iy",
+            String(((j + 1) / (letters.length + 1) - 0.5) * 2)
+          );
+          el.style.setProperty("--ap", String(ghost.ap));
+          el.style.setProperty("--p", String(ghost.p));
+
+          letter.ghosts.push(ghost);
+        }
+      });
+    }
+
+    setWorks() {
+      const { works } = this;
+      works.forEach((work, i) => {
+        const el = work.el;
+        el.style.setProperty("--size", String(0.5 + Math.random() * 0.5));
+        el.style.setProperty(
+          "--y",
+          String((0.5 + Math.random() * 0.5) * (i % 2 ? -1 : 1))
+        );
+      });
+    }
+
+    setTimeline() {
+      const { el, container, works, scene, mask } = this;
+      const worksEl = works.map((work) => work.el);
+      let { tl } = this;
+      if (tl) {
+        tl.kill();
+      }
+
+      tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: el,
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 1,
+        },
+        onUpdate: () => {
+          scene.style.setProperty("--state", String(this.state));
+        },
+      });
+
+      tl.fromTo(
+        mask.el,
+        { scale: 1 },
+        { scale: mask.maxScale, duration: 0.75, ease: "power4.in" },
+        0
+      );
+      tl.fromTo(
+        scene,
+        { scale: 0.75 },
+        { scale: 1, duration: 0.75, ease: "power3.in" },
+        0
+      );
+      tl.fromTo(
+        container,
+        { clipPath: "inset(0 1rem)" },
+        { clipPath: "inset(0 0rem)", duration: 0.75, ease: "power3.in" },
+        0
+      );
+      tl.fromTo(
+        this,
+        { pointsProgress: 0 },
+        { pointsProgress: 1, duration: 1, ease: "power4.inOut" },
+        0
+      );
+      tl.fromTo(
+        this,
+        { state: 0 },
+        { state: 1, duration: 0.75, ease: "power4.in" },
+        0
+      );
+      tl.fromTo(
+        worksEl,
+        { attr: { progress: 1 } },
+        { attr: { progress: -1 }, ease: "slow(0.15, 0.6)", stagger: 0.25 },
+        0.75
+      );
+      tl.fromTo(
+        this,
+        { animationProgress: 0 },
+        {
+          animationProgress: 10000,
+          duration: tl.totalDuration(),
+          ease: "power1.out",
+        },
+        0.75
+      );
+      tl.fromTo(
+        this,
+        { state: 1 },
+        {
+          state: 0,
+          duration: 0.75,
+          ease: "power4.inOut",
+          immediateRender: false,
+        },
+        "-=1"
+      );
+      tl.fromTo(
+        mask.el,
+        { scale: mask.maxScale },
+        {
+          scale: 1,
+          duration: 0.75,
+          ease: "power4.inOut",
+          immediateRender: false,
+        },
+        "-=1"
+      );
+      tl.fromTo(
+        scene,
+        { scale: 1 },
+        {
+          scale: 0.75,
+          duration: 0.75,
+          ease: "power3.inOut",
+          immediateRender: false,
+        },
+        "-=1"
+      );
+      tl.fromTo(
+        container,
+        { clipPath: "inset(0 0rem)" },
+        {
+          clipPath: "inset(0 1rem)",
+          duration: 0.75,
+          ease: "power3.inOut",
+          immediateRender: false,
+        },
+        "-=1"
+      );
+      tl.fromTo(
+        this,
+        { pointsProgress: 1 },
+        { pointsProgress: 0, duration: 1, ease: "power4.inOut" },
+        "-=1"
+      );
+    }
+
+    moveLetters() {
+      const { speed, letters, animationProgress } = this;
+      letters.forEach((letter, i) => {
+        const letterSpeed = speed * letter.freq;
+        letter.ghosts.forEach((ghost: Ghost, index: number) => {
+          let progress =
+            (((animationProgress % letterSpeed) / letterSpeed +
+              index / letter.total) %
+              1) /
+              0.7 -
+            0.15;
+          ghost.el.style.setProperty("--progress", String(progress));
+        });
+      });
+    }
+
+    setPoints() {
+      const { bounding } = this;
+      this.points = [];
+      const gap = 24;
+      const cols = Math.ceil((bounding.width * 1.2) / gap);
+      const rows = Math.ceil((bounding.height * 1.2) / gap);
+      const offsetX = (bounding.width - cols * gap) * 0.5;
+      const offsetY = (bounding.height - rows * gap) * 0.5;
+      const hWidth = bounding.width * 0.5;
+      const hHeight = bounding.height * 0.5;
+
+      for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+          const x = i * gap + offsetX;
+          const y = j * gap + offsetY;
+          const dx = hWidth - x;
+          const dy = hHeight - y;
+          this.points.push({ x, y, dx, dy, m: Math.random(), flowX: 0 });
+        }
+      }
+    }
+
+    movePoints() {
+      const { points, animationProgress } = this;
+      points.forEach((p) => {
+        p.flowX = (animationProgress * -0.05) % 24;
+      });
+    }
+
+    drawPoints() {
+      const { bounding, ctx, points, animationProgress, pointsProgress, last } =
+        this;
+      const rAnimationProgress = Math.round(animationProgress * 100) / 100;
+      const rPointsProgress = Math.round(pointsProgress * 100) / 100;
+
+      if (
+        rPointsProgress === last.pointsProgress &&
+        rAnimationProgress === last.animationProgress
+      )
+        return;
+
+      ctx.clearRect(0, 0, bounding.width, bounding.height);
+      ctx.beginPath();
+      points.forEach((point) => {
+        const x = point.x + point.dx * (1 - pointsProgress) * 0.2 + point.flowX;
+        const y = point.y + point.dy * (1 - pointsProgress) * 0.2;
+        ctx.rect(x, y, 0.5, 0.5);
+      });
+      ctx.stroke();
+      last.pointsProgress = rPointsProgress;
+      last.animationProgress = rAnimationProgress;
+    }
+
+    tick() {
+      this.scrollProgress =
+        Math.max(
+          Math.min(1, ScrollTrigger.positionInViewport(this.el, "top")),
+          0
+        ) *
+          -1 +
+        (1 -
+          Math.max(
+            Math.min(1, ScrollTrigger.positionInViewport(this.el, "bottom")),
+            0
+          ));
+      this.smoothScrollProgress +=
+        (this.scrollProgress - this.smoothScrollProgress) * 0.1;
+      this.el.style.setProperty(
+        "--scroll-progress",
+        String(this.scrollProgress)
+      );
+
+      // Movement
+      // this.movePoints()
+      this.moveLetters();
+
+      // Draw
+      // this.drawPoints()
+    }
+  }
+
+  new Section();
+</script>
+
+<style lang="scss">
+  /* --- Variables & Mixins Inlined --- */
+  :root {
+    --color-primary: #f40c3f;
+    --color-secondary: #160000;
+    --color-shadow: #540000;
+    --color-white: #fff0eb;
+
+    --font-family-fraktion: "Fraktion Mono", monospace;
+    --font-family-bigger: "Bigger Display", sans-serif;
+  }
+
+  /* --- SWork Styles --- */
+  .s-work {
+    --height: 100lvh;
+    position: relative;
+    z-index: 2;
+    height: var(--height);
+    background: #f95f4a;
+
+    &:before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 2;
+      width: 100%;
+      height: 1px;
+      background: var(--color-secondary);
+      content: "";
+    }
+
+    .s__mask-outer {
+      position: sticky;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100lvh;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .s__mask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      will-change: scale, transform;
+
+      &__svg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      &__path-outer {
+        fill: #f95f4a;
+        fill-rule: evenodd;
+        stroke: var(--color-secondary);
+        stroke-width: 1px;
+      }
+
+      &__path-inner {
+        fill: #f95f4a;
+        fill-rule: evenodd;
+        stroke: var(--color-secondary);
+        stroke-width: 1px;
+        transform: translate3d(0, calc(var(--scroll-progress) * 48px), 0);
+        will-change: transform;
+      }
+
+      &__path-lines {
+        fill: none;
+        stroke: var(--color-secondary);
+        stroke-width: 1px;
+      }
+    }
+
+    .s__outer {
+      position: relative;
+      height: var(--height);
+      clip-path: inset(0 -1rem);
+    }
+
+    .s__inner {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      position: sticky;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100lvh;
+      background: var(--color-secondary);
+      transform: translate3d(0, calc(var(--scroll-progress) * -15%), 0);
+      color: white;
+      will-change: clip-path, transform;
+
+      @media only screen and (max-width: 767px) and (orientation: landscape),
+        only screen and (max-width: 576px) {
+        transform: none;
+      }
+    }
+
+    .s__ruler {
+      --width: min(16.6667%, 19.625rem);
+      position: absolute;
+      top: 10lvh;
+      left: calc(50% - var(--width) / 2);
+      width: var(--width);
+      height: 80lvh;
+      pointer-events: none;
+
+      @media only screen and (max-width: 987px) {
+        --width: 33.3333%;
+      }
+
+      @media only screen and (max-width: 767px) and (orientation: landscape),
+        only screen and (max-width: 576px) {
+        --width: 50%;
+      }
+    }
+
+    .s__title,
+    .s__scene {
+      font: 700 min(12.5rem, 16lvh) / 1 var(--font-family-bigger);
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .s__title__inner,
+    :global(.s__scene__letter) {
+      line-height: 0.85;
+    }
+
+    .s__title {
+      width: 0.7em;
+      opacity: 0;
+      word-break: break-all;
+      &__inner {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 0.075em 0 -0.125em;
+      }
+    }
+
+    .s__scene {
+      --shadow: var(--color-shadow);
+      --progress: 0.5;
+      --state: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      perspective: 40rem;
+      will-change: transform;
+
+      :global(.s__scene__letter) {
+        --head: calc((var(--progress) - 0.5) * -2);
+        --ahead: calc(var(--head) * var(--head));
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: block;
+        transform: rotateY(calc(var(--head) * -10deg * var(--state)))
+          translate3d(
+            calc(var(--head) * 50vw * var(--state)),
+            calc(var(--iy) * 50% * var(--ahead) * var(--state)),
+            0
+          );
+        pointer-events: none;
+        will-change: transform;
+
+        &:before {
+          position: absolute;
+          top: 0;
+          left: 0;
+          z-index: -1;
+          color: var(--color-shadow);
+          opacity: min(calc(var(--state) * 2), 1);
+          transform: scale(1.05, 1.02)
+            translate3d(
+              calc(var(--head) * 0.1rem * var(--state) * var(--state)),
+              0,
+              0
+            );
+          transform-origin: calc(50% - var(--head) * 50%) -50%;
+          will-change: opacity, transform;
+          content: attr(data-letter);
+        }
+      }
+
+      :global(.s__scene__work) {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 2;
+        transform: rotateY(calc(var(--progress) * -20deg))
+          translate3d(
+            calc(var(--progress) * (50vw + 100%) - 50%),
+            calc(var(--y) * 50% - 50%),
+            calc(var(--progress) * var(--progress) * -5rem)
+          )
+          scale(var(--size));
+        will-change: transform;
+
+        @media only screen and (max-width: 987px) {
+          transform: rotateY(calc(var(--progress) * -20deg))
+            translate3d(
+              calc(var(--progress) * (50vw + 100%) - 50%),
+              calc(var(--y) * 50% - 50%),
+              calc(var(--progress) * var(--progress) * -5rem)
+            );
+        }
+
+        @media only screen and (max-width: 767px) and (orientation: landscape),
+          only screen and (max-width: 576px) {
+          transform: rotateY(calc(var(--progress) * -20deg))
+            translate3d(
+              calc(var(--progress) * (50vw + 100%) - 50%),
+              calc(var(--y) * 100% - 50%),
+              calc(var(--progress) * var(--progress) * -5rem)
+            );
+        }
+      }
+    }
+
+    .s__canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      transform: translate3d(0, calc(var(--scroll-progress) * -5%), 0);
+
+      @media only screen and (max-width: 767px) and (orientation: landscape),
+        only screen and (max-width: 576px) {
+        transform: none;
+      }
+    }
+  }
+
+  /* --- AWork Styles Inlined --- */
+  a-work {
+    position: relative;
+    top: 0;
+    left: 0;
+    display: block;
+    margin: 0;
+    padding: 0.5rem 0.5rem 0;
+    background: var(--color-secondary);
+    content-visibility: hidden;
+    transform-style: preserve-3d;
+    will-change: transform;
+
+    @media only screen and (max-width: 767px) and (orientation: landscape),
+      only screen and (max-width: 576px) {
+      padding: 0.25rem;
+    }
+
+    a {
+      display: block;
+      text-decoration: none;
+    }
+
+    .a__inner {
+      display: block;
+      margin: 0;
+      padding: 0;
+    }
+
+    .a__video {
+      display: block;
+      width: auto;
+      max-width: 50vw;
+      height: auto;
+      max-height: 50vh;
+
+      @media only screen and (max-width: 767px) and (orientation: landscape),
+        only screen and (max-width: 576px) {
+        max-width: 80vw;
+        max-height: 80vh;
+      }
+    }
+
+    .a__caption {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 0.5rem;
+      color: var(--color-primary);
+      font: 700 11px / 1 var(--font-family-fraktion);
+      letter-spacing: 0.15em;
+      text-align: right;
+      text-transform: uppercase;
+
+      @media only screen and (max-width: 767px) and (orientation: landscape),
+        only screen and (max-width: 576px) {
+        display: none;
+      }
+    }
+
+    &.is-inview {
+      content-visibility: visible;
+    }
+  }
+</style>

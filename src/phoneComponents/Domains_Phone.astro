@@ -1,229 +1,235 @@
 ---
+
 ---
-    <style>
-        .domains-mobile-section {
-            min-height: 100vh;
-            background: url('/glow_ball_red.svg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: scroll;
-            position: relative;
-            padding: 2rem 1rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
 
-        .mobile-section-subtitle {
-            color: #fefcd9;
-            text-align: center;
-            font-family: 'PolySans Trial', sans-serif;
-            font-size: 16px;
-            font-weight: 400;
-            max-width: 90%;
-            margin-bottom: 3rem;
-            line-height: 1.5;
-        }
+<style>
+  @keyframes slideInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
-        .domains-mobile-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-            width: 100%;
-            max-width: 400px;
-            align-items: center;
-        }
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+    }
+  }
+</style>
 
-        .mobile-domain-item {
-            width: 100%;
-            max-width: 300px;
-            cursor: pointer;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-        }
+<section
+  class="domains-mobile-section min-h-screen relative py-8 px-4 flex flex-col items-center justify-center overflow-hidden"
+>
+  <!-- Fixed Background Layer -->
+  <div
+    class="absolute inset-0 z-0 pointer-events-none opacity-0 domain-mobile-bg-layer"
+  >
+    <img
+      src="/glow_ball_red.svg"
+      alt=""
+      class="w-full h-full object-cover scale-125"
+    />
+  </div>
 
-        .mobile-domain-item:hover {
-            transform: scale(1.05);
-        }
-
-        .mobile-cassette-img {
-            width: 100%;
-            height: auto;
-            display: block;
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
-            border-radius: 20px;
-        }
-
-        /* Staggered animation entrance */
-        .mobile-domain-item {
-            opacity: 0;
-            transform: translateY(30px);
-            animation: slideInUp 0.6s ease forwards;
-        }
-
-        .mobile-domain-item:nth-child(1) { animation-delay: 0.1s; }
-        .mobile-domain-item:nth-child(2) { animation-delay: 0.2s; }
-        .mobile-domain-item:nth-child(3) { animation-delay: 0.3s; }
-        .mobile-domain-item:nth-child(4) { animation-delay: 0.4s; }
-        .mobile-domain-item:nth-child(5) { animation-delay: 0.5s; }
-        .mobile-domain-item:nth-child(6) { animation-delay: 0.6s; }
-
-        @keyframes slideInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .mobile-section-subtitle {
-            opacity: 0;
-            animation: fadeIn 0.8s ease forwards;
-            animation-delay: 0.3s;
-        }
-
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
-        }
-    </style>
-
-<section class="domains-mobile-section">
-    <p class="mobile-section-subtitle">
-        <span style="display:block; margin-bottom: 0.5rem;">
-            Each domain at ACM-VIT is more than a skillset — it's a mindset.
-        </span>
-        <span style="display:block; margin-bottom: 0.5rem;">
-            We build, break, design, analyze, and communicate — not in silos, but in sync.
-        </span>
-        <span style="display:block;">
-            Because true innovation happens where disciplines intersect.
-        </span>
+  <div class="relative z-10 w-full flex flex-col items-center">
+    <p
+      class="mobile-section-subtitle text-[#fefcd9] text-center font-['PolySans_Trial',sans-serif] text-[10px] font-normal pt-4 max-w-[90%] mb-12 leading-relaxed opacity-0 animate-[fadeIn_0.8s_ease_forwards] delay-300"
+    >
+      <span style="display:block; margin-bottom: 0.5rem;">
+        Each domain at ACM-VIT is more than a skillset — it's a mindset.
+      </span>
+      <span style="display:block; margin-bottom: 0.5rem;">
+        We build, break, design, analyze, and communicate — not in silos, but in
+        sync.
+      </span>
+      <span style="display:block;">
+        Because true innovation happens where disciplines intersect.
+      </span>
     </p>
 
-    <div class="domains-mobile-grid">
-        <div class="mobile-domain-item" data-domain="app">
-            <img src="/Cassette_App.svg" alt="App Development" class="mobile-cassette-img" />
-        </div>
-        <div class="mobile-domain-item" data-domain="cc">
-            <img src="/Cassette_cc.svg" alt="Competitive Coding" class="mobile-cassette-img" />
-        </div>
-        <div class="mobile-domain-item" data-domain="design">
-            <img src="/Cassette_Design.svg" alt="Design" class="mobile-cassette-img" />
-        </div>
-        <div class="mobile-domain-item" data-domain="management">
-            <img src="/Cassette_Management.svg" alt="Management" class="mobile-cassette-img" />
-        </div>
-        <div class="mobile-domain-item" data-domain="research">
-            <img src="/Cassette_Research.svg" alt="Research" class="mobile-cassette-img" />
-        </div>
+    <div
+      class="domains-mobile-grid flex flex-col gap-8 w-full max-w-[400px] items-center"
+    >
+      <div
+        class="mobile-domain-item w-full max-w-[250px] cursor-pointer transition-all duration-300 ease-out hover:scale-105 opacity-0 translate-y-[30px] animate-[slideInUp_0.6s_ease_forwards] delay-100"
+        data-domain="app"
+      >
+        <img
+          src="/Cassette_App.svg"
+          alt="App Development"
+          class="mobile-cassette-img w-full h-auto block drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] rounded-[20px]"
+        />
+      </div>
+      <div
+        class="mobile-domain-item w-full max-w-[250px] cursor-pointer transition-all duration-300 ease-out hover:scale-105 opacity-0 translate-y-[30px] animate-[slideInUp_0.6s_ease_forwards] delay-200"
+        data-domain="cc"
+      >
+        <img
+          src="/Cassette_cc.svg"
+          alt="Competitive Coding"
+          class="mobile-cassette-img w-full h-auto block drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] rounded-[20px]"
+        />
+      </div>
+      <div
+        class="mobile-domain-item w-full max-w-[250px] cursor-pointer transition-all duration-300 ease-out hover:scale-105 opacity-0 translate-y-[30px] animate-[slideInUp_0.6s_ease_forwards] delay-300"
+        data-domain="design"
+      >
+        <img
+          src="/Cassette_Design.svg"
+          alt="Design"
+          class="mobile-cassette-img w-full h-auto block drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] rounded-[20px]"
+        />
+      </div>
+      <div
+        class="mobile-domain-item w-full max-w-[250px] cursor-pointer transition-all duration-300 ease-out hover:scale-105 opacity-0 translate-y-[30px] animate-[slideInUp_0.6s_ease_forwards] delay-400"
+        data-domain="management"
+      >
+        <img
+          src="/Cassette_Management.svg"
+          alt="Management"
+          class="mobile-cassette-img w-full h-auto block drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] rounded-[20px]"
+        />
+      </div>
+      <div
+        class="mobile-domain-item w-full max-w-[250px] cursor-pointer transition-all duration-300 ease-out hover:scale-105 opacity-0 translate-y-[30px] animate-[slideInUp_0.6s_ease_forwards] delay-500"
+        data-domain="research"
+      >
+        <img
+          src="/Cassette_Research.svg"
+          alt="Research"
+          class="mobile-cassette-img w-full h-auto block drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] rounded-[20px]"
+        />
+      </div>
     </div>
+  </div>
 </section>
 
 <script>
-    import { domainConfigs } from '../data/domainsData';
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  import { domainConfigs } from "../data/domainsData";
 
-    // Mobile-optimized domain screen functionality
-    function initMobileAnimation() {
-        const items = document.querySelectorAll('.mobile-domain-item');
-        
-        items.forEach((item) => {
-            // Add click event handler for domain screen
-            item.addEventListener('click', () => {
-                const domain = item.getAttribute('data-domain');
-                if (domain) {
-                    showMobileDomainScreen(domain);
-                }
-            });
+  gsap.registerPlugin(ScrollTrigger);
 
-            // Add touch feedback
-            item.addEventListener('touchstart', () => {
-                (item as HTMLElement).style.transform = 'scale(0.95)';
-            });
+  // Mobile-optimized domain screen functionality
+  function initMobileAnimation() {
+    const items = document.querySelectorAll(".mobile-domain-item");
+    const bgLayer = document.querySelector(".domain-mobile-bg-layer");
 
-            item.addEventListener('touchend', () => {
-                (item as HTMLElement).style.transform = 'scale(1)';
-            });
-        });
+    // Animate background layer
+    if (bgLayer) {
+      gsap.to(bgLayer, {
+        opacity: 1,
+        duration: 1,
+        scrollTrigger: {
+          trigger: ".domains-mobile-section",
+          start: "top 60%",
+          end: "bottom 40%",
+          toggleActions: "play reverse play reverse",
+        },
+      });
     }
 
-    // Function to show mobile domain screen
-    function showMobileDomainScreen(domain: string) {
-        const config = domainConfigs[domain as keyof typeof domainConfigs];
-        if (!config) return;
-
-        // Hide all cassettes with animation
-        const items = document.querySelectorAll('.mobile-domain-item');
-        const subtitle = document.querySelector('.mobile-section-subtitle');
-        const domainsSection = document.querySelector('.domains-mobile-section');
-        
-        // Create smooth exit animation for cassettes
-        items.forEach((item, index) => {
-            setTimeout(() => {
-                (item as HTMLElement).style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-                (item as HTMLElement).style.opacity = '0';
-                (item as HTMLElement).style.transform = 'translateY(-20px) scale(0.9)';
-            }, index * 50);
-        });
-
-        // Hide subtitle
-        if (subtitle) {
-            setTimeout(() => {
-                (subtitle as HTMLElement).style.transition = 'opacity 0.3s ease';
-                (subtitle as HTMLElement).style.opacity = '0';
-            }, 100);
+    items.forEach((item) => {
+      // Add click event handler for domain screen
+      item.addEventListener("click", () => {
+        const domain = item.getAttribute("data-domain");
+        if (domain) {
+          showMobileDomainScreen(domain);
         }
+      });
 
-        // Create mobile domain screen HTML after cassettes fade
-        setTimeout(() => {
-            const mobileDomainScreenHTML = createMobileDomainScreenContent(config);
+      // Add touch feedback
+      item.addEventListener("touchstart", () => {
+        (item as HTMLElement).style.transform = "scale(0.95)";
+      });
 
-            // Insert the domain screen
-            const domainScreenDiv = document.createElement('div');
-            domainScreenDiv.id = 'mobile-domain-screen';
-            domainScreenDiv.className = 'fixed inset-0 z-50 overflow-y-auto';
-            domainScreenDiv.style.scrollbarWidth = 'none';
-            (domainScreenDiv.style as any).msOverflowStyle = 'none';
-            domainScreenDiv.innerHTML = mobileDomainScreenHTML;
-            
-            // Add webkit scrollbar hiding
-            const style = document.createElement('style');
-            style.textContent = `
+      item.addEventListener("touchend", () => {
+        (item as HTMLElement).style.transform = "scale(1)";
+      });
+    });
+  }
+
+  // Function to show mobile domain screen
+  function showMobileDomainScreen(domain: string) {
+    const config = domainConfigs[domain as keyof typeof domainConfigs];
+    if (!config) return;
+
+    // Hide all cassettes with animation
+    const items = document.querySelectorAll(".mobile-domain-item");
+    const subtitle = document.querySelector(".mobile-section-subtitle");
+    const domainsSection = document.querySelector(".domains-mobile-section");
+
+    // Create smooth exit animation for cassettes
+    items.forEach((item, index) => {
+      setTimeout(() => {
+        (item as HTMLElement).style.transition =
+          "opacity 0.3s ease, transform 0.3s ease";
+        (item as HTMLElement).style.opacity = "0";
+        (item as HTMLElement).style.transform = "translateY(-20px) scale(0.9)";
+      }, index * 50);
+    });
+
+    // Hide subtitle
+    if (subtitle) {
+      setTimeout(() => {
+        (subtitle as HTMLElement).style.transition = "opacity 0.3s ease";
+        (subtitle as HTMLElement).style.opacity = "0";
+      }, 100);
+    }
+
+    // Create mobile domain screen HTML after cassettes fade
+    setTimeout(() => {
+      const mobileDomainScreenHTML = createMobileDomainScreenContent(config);
+
+      // Insert the domain screen
+      const domainScreenDiv = document.createElement("div");
+      domainScreenDiv.id = "mobile-domain-screen";
+      domainScreenDiv.className = "fixed inset-0 z-50 overflow-y-auto";
+      domainScreenDiv.style.scrollbarWidth = "none";
+      (domainScreenDiv.style as any).msOverflowStyle = "none";
+      domainScreenDiv.innerHTML = mobileDomainScreenHTML;
+
+      // Add webkit scrollbar hiding
+      const style = document.createElement("style");
+      style.textContent = `
                 #mobile-domain-screen::-webkit-scrollbar {
                     display: none;
                 }
             `;
-            document.head.appendChild(style);
-            
-            document.body.appendChild(domainScreenDiv);
+      document.head.appendChild(style);
 
-            // Mobile entrance animation
-            (domainScreenDiv as HTMLElement).style.opacity = '0';
-            (domainScreenDiv as HTMLElement).style.transform = 'translateY(20px)';
-            
-            setTimeout(() => {
-                (domainScreenDiv as HTMLElement).style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-                (domainScreenDiv as HTMLElement).style.opacity = '1';
-                (domainScreenDiv as HTMLElement).style.transform = 'translateY(0)';
-            }, 10);
-        }, 400);
-    }
+      document.body.appendChild(domainScreenDiv);
 
-    // Function to create mobile domain screen content
-    function createMobileDomainScreenContent(config: any) {
-        const themeColors = {
-            app: "#9B51E0",
-            web: "#B4E35B", 
-            design: "#FF7777",
-            research: "#9AF3FF",
-            management: "#008080",
-            competitive: "#42CD9D"
-        };
+      // Mobile entrance animation
+      (domainScreenDiv as HTMLElement).style.opacity = "0";
+      (domainScreenDiv as HTMLElement).style.transform = "translateY(20px)";
 
-        const themeHex = themeColors[config.themeColor as keyof typeof themeColors] || themeColors.app;
+      setTimeout(() => {
+        (domainScreenDiv as HTMLElement).style.transition =
+          "opacity 0.3s ease, transform 0.3s ease";
+        (domainScreenDiv as HTMLElement).style.opacity = "1";
+        (domainScreenDiv as HTMLElement).style.transform = "translateY(0)";
+      }, 10);
+    }, 400);
+  }
 
-        return `
+  // Function to create mobile domain screen content
+  function createMobileDomainScreenContent(config: any) {
+    const themeColors = {
+      app: "#9B51E0",
+      web: "#B4E35B",
+      design: "#FF7777",
+      research: "#9AF3FF",
+      management: "#008080",
+      competitive: "#42CD9D",
+    };
+
+    const themeHex =
+      themeColors[config.themeColor as keyof typeof themeColors] ||
+      themeColors.app;
+
+    return `
             <div class="min-h-screen text-white" style="background-color: #000000; background-image: url('/background_pattern.svg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
                 <!-- Mobile Back Button -->
                 <div class="fixed top-4 right-4 z-50">
@@ -278,9 +284,13 @@
                     </div>
 
                     <!-- Mobile Tech Stack Icons -->
-                    ${config.techIcons.length > 0 ? `
+                    ${
+                      config.techIcons.length > 0
+                        ? `
                         <div class="flex justify-center items-center gap-4 mb-8 flex-wrap px-4">
-                            ${config.techIcons.map((icon: any) => `
+                            ${config.techIcons
+                              .map(
+                                (icon: any) => `
                                 <div class="flex items-center justify-center hover:scale-110 transition-transform duration-300">
                                     <img 
                                         src="${icon.src}" 
@@ -288,9 +298,13 @@
                                         class="w-8 h-8 grayscale hover:grayscale-0 transition-all duration-300 opacity-70 hover:opacity-100" 
                                     />
                                 </div>
-                            `).join('')}
+                            `
+                              )
+                              .join("")}
                         </div>
-                    ` : ''}
+                    `
+                        : ""
+                    }
 
                     <!-- Mobile Description -->
                     <div class="max-w-sm mx-auto text-center mb-8">
@@ -302,7 +316,7 @@
                     <!-- Mobile Projects Button -->
                     <div class="flex justify-center mb-8">
                         <button 
-                            class="flex justify-center items-center px-6 py-3 h-[40px] rounded-[25px] border border-[#FEFCD9] font-medium hover:shadow-lg transition-shadow whitespace-nowrap ${config.themeColor === 'competitive' || config.themeColor === 'research' || config.themeColor === 'web' ? 'text-black' : 'text-white'}"
+                            class="flex justify-center items-center px-6 py-3 h-[40px] rounded-[25px] border border-[#FEFCD9] font-medium hover:shadow-lg transition-shadow whitespace-nowrap ${config.themeColor === "competitive" || config.themeColor === "research" || config.themeColor === "web" ? "text-black" : "text-white"}"
                             style="background-color: ${themeHex}"
                         >
                             ${config.buttonText}
@@ -329,46 +343,51 @@
                 </div>
             </div>
         `;
-    }
+  }
 
-    // Global function to hide mobile domain screen
-    (window as any).hideMobileDomainScreen = function() {
-        const domainScreen = document.getElementById('mobile-domain-screen');
-        
-        if (domainScreen) {
-            (domainScreen as HTMLElement).style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-            (domainScreen as HTMLElement).style.opacity = '0';
-            (domainScreen as HTMLElement).style.transform = 'translateY(20px)';
-            
-            setTimeout(() => {
-                domainScreen.remove();
-                
-                // Restore cassettes and subtitle with staggered animation
-                const items = document.querySelectorAll('.mobile-domain-item');
-                const subtitle = document.querySelector('.mobile-section-subtitle');
-                
-                // Show subtitle first
-                if (subtitle) {
-                    (subtitle as HTMLElement).style.transition = 'opacity 0.4s ease';
-                    (subtitle as HTMLElement).style.opacity = '1';
-                }
-                
-                // Then show cassettes with stagger
-                items.forEach((item, index) => {
-                    setTimeout(() => {
-                        (item as HTMLElement).style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-                        (item as HTMLElement).style.opacity = '1';
-                        (item as HTMLElement).style.transform = 'translateY(0) scale(1)';
-                    }, index * 100 + 200);
-                });
-            }, 300);
+  // Global function to hide mobile domain screen
+  (window as any).hideMobileDomainScreen = function () {
+    const domainScreen = document.getElementById("mobile-domain-screen");
+
+    if (domainScreen) {
+      (domainScreen as HTMLElement).style.transition =
+        "opacity 0.3s ease, transform 0.3s ease";
+      (domainScreen as HTMLElement).style.opacity = "0";
+      (domainScreen as HTMLElement).style.transform = "translateY(20px)";
+
+      setTimeout(() => {
+        domainScreen.remove();
+
+        // Restore cassettes and subtitle with staggered animation
+        const items = document.querySelectorAll(".mobile-domain-item");
+        const subtitle = document.querySelector(".mobile-section-subtitle");
+
+        // Show subtitle first
+        if (subtitle) {
+          (subtitle as HTMLElement).style.transition = "opacity 0.4s ease";
+          (subtitle as HTMLElement).style.opacity = "1";
         }
-    }
 
-    // Initialize mobile animations
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initMobileAnimation);
-    } else {
-        initMobileAnimation();
+        // Then show cassettes with stagger
+        items.forEach((item, index) => {
+          setTimeout(
+            () => {
+              (item as HTMLElement).style.transition =
+                "opacity 0.4s ease, transform 0.4s ease";
+              (item as HTMLElement).style.opacity = "1";
+              (item as HTMLElement).style.transform = "translateY(0) scale(1)";
+            },
+            index * 100 + 200
+          );
+        });
+      }, 300);
     }
+  };
+
+  // Initialize mobile animations
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initMobileAnimation);
+  } else {
+    initMobileAnimation();
+  }
 </script>

@@ -1,0 +1,61 @@
+---
+import PartnerCasetteSingular from "../components/PartnerCasetteSingular.astro";
+import { partners } from "../data/partnersData";
+---
+
+<div
+  id="partners-container"
+  class="relative flex flex-wrap gap-6 justify-center items-center w-full pt-18 pb-64 overflow-hidden"
+>
+  <div
+    id="Cassette-pos-1"
+    class="w-full flex justify-center mt-0 z-50 relative -mb-48"
+  >
+    <img
+      id="partners-svg"
+      src="/partners-cassette.svg"
+      alt="Partners Image"
+      class="max-w-[300px] md:max-w-[500px] w-auto object-contain"
+    />
+  </div>
+
+  <div
+    class="w-[80vw] pb-24 flex flex-wrap gap-6 justify-center items-center relative z-10"
+  >
+    {
+      partners.map((partner) => (
+        <PartnerCasetteSingular
+          title={partner.title}
+          imageUrl={partner.imageUrl}
+          link={partner.link}
+        />
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const svg = document.getElementById("partners-svg");
+    const pos1 = document.getElementById("Cassette-pos-1");
+    const container = document.getElementById("partners-container");
+
+    if (!svg || !pos1 || !container) return;
+
+    // Pin when cassette is half visible from bottom and unpin later
+    ScrollTrigger.create({
+      trigger: pos1,
+      start: "center bottom",
+      endTrigger: container,
+      end: "bottom-=150 bottom",
+      pin: pos1,
+      pinSpacing: false,
+      markers: false,
+    });
+  });
+</script>

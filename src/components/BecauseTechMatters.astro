@@ -1,0 +1,208 @@
+---
+// Technology Animation Section
+---
+
+<div class="relative -mt-28">
+  <section
+    class="tech-hero-section w-screen h-[130vh] relative flex items-center justify-center bg-[#060606] radial-bg overflow-hidden"
+    id="tech-hero"
+  >
+    <div
+      class="text-container relative flex flex-col items-center"
+      id="textContainer"
+    >
+      <div
+        class="line absolute flex items-center justify-center gap-[clamp(0.5rem,2vw,1.5rem)] whitespace-nowrap"
+        id="line1"
+      >
+        <span class="tech-word text-[#FEFCD9] font-bold tracking-tight"
+          >technology</span
+        >
+      </div>
+      <div
+        class="line absolute flex items-center justify-center gap-[clamp(0.5rem,2vw,1.5rem)] whitespace-nowrap"
+        id="line2"
+      >
+        <span class="tech-word text-[#FEFCD9] font-bold tracking-tight"
+          >technology</span
+        >
+      </div>
+      <div
+        class="line absolute flex items-center justify-center gap-[clamp(0.5rem,2vw,1.5rem)] whitespace-nowrap"
+        id="line3"
+      >
+        <span class="side-text text-[#FEFCD9] font-semibold">because</span>
+        <span class="tech-word outlined font-bold tracking-tight"
+          >technology</span
+        >
+        <span class="side-text text-[#FEFCD9] font-semibold">matters</span>
+      </div>
+      <div
+        class="line absolute flex items-center justify-center gap-[clamp(0.5rem,2vw,1.5rem)] whitespace-nowrap"
+        id="line4"
+      >
+        <span class="tech-word text-[#FEFCD9] font-bold tracking-tight"
+          >technology</span
+        >
+      </div>
+      <div
+        class="line absolute flex items-center justify-center gap-[clamp(0.5rem,2vw,1.5rem)] whitespace-nowrap"
+        id="line5"
+      >
+        <span class="tech-word text-[#FEFCD9] font-bold tracking-tight"
+          >technology</span
+        >
+      </div>
+    </div>
+  </section>
+</div>
+
+<style>
+  @import url("https://fonts.cdnfonts.com/css/polysans");
+
+  .tech-word {
+    font-family: "PolySans Trial", sans-serif;
+    font-size: clamp(1.5rem, 6vw, 5rem);
+  }
+
+  .tech-word.outlined {
+    color: transparent;
+    -webkit-text-stroke: 2px #f95f4a;
+  }
+
+  .side-text {
+    font-family: "PolySans Trial", sans-serif;
+    font-size: clamp(1rem, 4.5vw, 3.8rem);
+  }
+
+  .radial-bg {
+    background-image: radial-gradient(
+        circle at 30% 50%,
+        rgba(26, 26, 26, 0.6) 0%,
+        rgba(6, 6, 6, 0.85) 70%
+      ),
+      url("/about/rishit.jpeg");
+    background-repeat: no-repeat, no-repeat;
+    background-position:
+      center center,
+      center 30%;
+    background-size: cover, cover;
+    background-attachment: fixed, fixed;
+    background-color: #060606;
+  }
+
+  @media (max-width: 768px) {
+    .radial-bg {
+      background-attachment: scroll, scroll;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const initAnimation = () => {
+    const lineHeight = window.innerWidth < 768 ? 50 : 75;
+
+    // All lines start stacked at center (y: 0)
+    gsap.set("#line1", { y: 0, opacity: 1 });
+    gsap.set("#line2", { y: 0, opacity: 0 });
+    gsap.set("#line3", { y: 0, opacity: 0 });
+    gsap.set("#line4", { y: 0, opacity: 0 });
+    gsap.set("#line5", { y: 0, opacity: 0 });
+    gsap.set(".side-text", { opacity: 1, x: 0 });
+
+    // Initial state for the outlined word in line 3 (starts as normal text)
+    gsap.set("#line3 .outlined", {
+      color: "#FEFCD9",
+      webkitTextStroke: "0px #F95F4A",
+    });
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#tech-hero",
+        start: "top 30%",
+        end: "bottom 80%",
+        scrub: 0.8,
+        pin: false,
+        markers: false,
+        anticipatePin: 1,
+      },
+    });
+
+    // Spread lines outward from center
+    tl.to(
+      "#line1",
+      {
+        y: -lineHeight * 2,
+        duration: 1,
+        ease: "power2.inOut",
+      },
+      0
+    )
+      .to(
+        "#line2",
+        {
+          y: -lineHeight,
+          opacity: 1,
+          duration: 1,
+          ease: "power2.inOut",
+        },
+        0
+      )
+      .to(
+        "#line3",
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          ease: "power2.inOut",
+        },
+        0
+      )
+      .to(
+        "#line4",
+        {
+          y: lineHeight,
+          opacity: 1,
+          duration: 1,
+          ease: "power2.inOut",
+        },
+        0
+      )
+      .to(
+        "#line5",
+        {
+          y: lineHeight * 2,
+          opacity: 1,
+          duration: 1,
+          ease: "power2.inOut",
+        },
+        0
+      )
+
+      // Transition middle word to outlined style
+      .to(
+        "#line3 .outlined",
+        {
+          color: "transparent",
+          webkitTextStroke: "2px #F95F4A",
+          duration: 0.5,
+          ease: "power1.inOut",
+        },
+        0.3
+      )
+
+      // Hold
+      .to({}, { duration: 0.3 });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initAnimation);
+  } else {
+    initAnimation();
+  }
+</script>

@@ -4,175 +4,212 @@
 
 <div class="relative -mt-28">
   <!-- Hero Section 1 -->
-  <section class="hero-section w-screen h-screen relative flex items-center justify-start pl-[15vw] bg-[#060606] radial-bg max-md:pl-[8vw] max-md:text-left max-md:justify-start">
-    <div class="max-w-[600px] text-white" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);">
-      <div class="w-[1145px] inline-flex flex-col justify-start items-start max-md:w-full max-md:max-w-[96vw]">
-        <div 
-          class="hero-line-1 self-stretch justify-start text-7xl font-bold max-md:text-[clamp(2.2rem,10vw,3rem)] max-md:leading-[1.05]" 
+  <section
+    class="hero-section w-screen h-screen relative flex items-center justify-start pl-[15vw] bg-[#060606] radial-bg max-md:pl-[8vw] max-md:text-left max-md:justify-start"
+  >
+    <div
+      class="max-w-[600px] text-white"
+      style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);"
+    >
+      <div
+        class="w-[1145px] inline-flex flex-col justify-start items-start max-md:w-full max-md:max-w-[96vw]"
+      >
+        <div
+          class="hero-line-1 self-stretch justify-start text-7xl font-bold max-md:text-[clamp(2.2rem,10vw,3rem)] max-md:leading-[1.05]"
           style="color:#F95F4A; font-family: 'PolySans Trial'"
         >
           we are the
         </div>
-        <div 
-          class="hero-line-2 self-stretch justify-end text-yellow-50 text-8xl font-bold max-md:text-[clamp(2.2rem,11.2vw,3.4rem)] max-md:leading-[1.05] max-md:inline-block" 
+        <div
+          class="hero-line-2 self-stretch justify-end text-yellow-50 text-8xl font-bold max-md:text-[clamp(2.2rem,11.2vw,3.4rem)] max-md:leading-[1.05] max-md:inline-block"
           style="font-family: 'PolySans Trial'"
         >
-          association for<br/>computing machinery
+          association for<br />computing machinery
         </div>
       </div>
     </div>
 
-  
+    <style>
+      @import url("https://fonts.cdnfonts.com/css/polysans");
 
-<style>
-  @import url('https://fonts.cdnfonts.com/css/polysans');
-  
-  .hero-line-1, .hero-line-2 { 
-    opacity: 0; 
-  }
-  
-  .radial-bg {
-    /* Use rishit.jpeg as the hero background, with a dark radial overlay for contrast */
-    background-image: radial-gradient(circle at 30% 50%, rgba(26,26,26,0.6) 0%, rgba(6,6,6,0.85) 70%), url('/about/rishit.jpeg');
-    background-repeat: no-repeat, no-repeat;
-    background-position: center center, center 30%;
-    background-size: cover, cover;
-    /* Keep the background image pinned to the viewport while the section scrolls */
-    background-attachment: fixed, fixed;
-    /* Fallback solid color while image loads */
-    background-color: #060606;
-  }
+      .hero-line-1,
+      .hero-line-2 {
+        opacity: 0;
+      }
 
-  /* Make the hero section taller for scroll space */
-  .hero-section {
-    height: 100vh; /* reduced section height so hero pins for a shorter duration */
-    position: relative;
-  }
+      .radial-bg {
+        /* Use rishit.jpeg as the hero background, with a dark radial overlay for contrast */
+        background-image: radial-gradient(
+            circle at 30% 50%,
+            rgba(26, 26, 26, 0.6) 0%,
+            rgba(6, 6, 6, 0.85) 70%
+          ),
+          url("/about/rishit.jpeg");
+        background-repeat: no-repeat, no-repeat;
+        background-position:
+          center center,
+          center 30%;
+        background-size: cover, cover;
+        /* Keep the background image pinned to the viewport while the section scrolls */
+        background-attachment: fixed, fixed;
+        /* Fallback solid color while image loads */
+        background-color: #060606;
+      }
 
-  /* Legends default to absolute inside the hero section. When the section has
+      /* Make the hero section taller for scroll space */
+      .hero-section {
+        height: 100vh; /* reduced section height so hero pins for a shorter duration */
+        position: relative;
+      }
+
+      /* Legends default to absolute inside the hero section. When the section has
      the `in-view` class we switch them to fixed so they pin to viewport only
      while the hero is active (component-scoped). */
-  .legend-pin { position: absolute; }
+      .legend-pin {
+        position: absolute;
+      }
 
-  .hero-section.in-view .legend-pin {
-    position: fixed !important;
-    bottom: 2rem !important;
-    z-index: 60 !important;
-  }
+      .hero-section.in-view .legend-pin {
+        position: fixed !important;
+        bottom: 2rem !important;
+        z-index: 60 !important;
+      }
 
-  .hero-section.in-view .left-legend { left: 2rem !important; }
-  .hero-section.in-view .right-legend { right: 2rem !important; }
-  
-  @media (max-width: 768px) {
-    .hero-line-2 br { 
-      display: none; 
-    }
-    /* mobile: avoid fixed backgrounds for performance and visual issues */
-    .radial-bg { background-attachment: scroll, scroll; }
-  }
-</style>
+      .hero-section.in-view .left-legend {
+        left: 2rem !important;
+      }
+      .hero-section.in-view .right-legend {
+        right: 2rem !important;
+      }
 
-<script>
-  import { gsap } from "gsap";
-  import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
-  import { ScrollTrigger } from "gsap/ScrollTrigger";
-  
-  gsap.registerPlugin(ScrambleTextPlugin, ScrollTrigger);
-
-  const initScramble = () => {
-    const line1 = document.querySelector('.hero-line-1');
-    const line2 = document.querySelector('.hero-line-2');
-    const section1 = document.querySelector('.hero-section');
-    
-    if (!line1 || !line2 || !section1) return;
-
-    const html1 = line1.innerHTML;
-    const html2 = line2.innerHTML;
-    const text1 = (line1.textContent || '').replace(/\s+/g,' ').trim();
-    const text2 = (line2.textContent || '').replace(/\s+/g,' ').trim();
-
-    // Initial scramble animation
-    const tl = gsap.timeline();
-    tl.set(line1, { opacity: 1 })
-      .to(line1, {
-        duration: 1.50,
-        ease: 'none',
-        scrambleText: {
-          text: text1,
-          chars: 'upperAndLowerCase',
-          revealDelay: 0.12
-        },
-        onComplete: () => { line1.innerHTML = html1; }
-      })
-      .set(line2, { opacity: 1 })
-      .to(line2, {
-        duration: 1.50,
-        ease: 'none',
-        scrambleText: {
-          text: text2,
-          chars: 'upperAndLowerCase',
-          revealDelay: 0.12
-        },
-        onComplete: () => { line2.innerHTML = html2; }
-      });
-
-  // ScrollTrigger animation - transforms text when scrolling starts from top
-    let hasTransformed = false;
-    
-    ScrollTrigger.create({
-      trigger: section1,
-      start: 'top top',
-      end: 'bottom bottom',
-      markers: true,
-      onEnter: () => {
-        if (!hasTransformed) {
-          hasTransformed = true;
-          gsap.timeline()
-            .to(line1, {
-              duration: 1.2,
-              ease: 'none',
-              scrambleText: {
-                text: 'because',
-                chars: 'upperAndLowerCase',
-                revealDelay: 0.12
-              }
-            })
-            .to(line2, {
-              duration: 1.2,
-              ease: 'none',
-              scrambleText: {
-                text: 'technology matters',
-                chars: 'upperAndLowerCase',
-                revealDelay: 0.12
-              }
-            }, '-=0.4');
+      @media (max-width: 768px) {
+        .hero-line-2 br {
+          display: none;
+        }
+        /* mobile: avoid fixed backgrounds for performance and visual issues */
+        .radial-bg {
+          background-attachment: scroll, scroll;
         }
       }
-    });
+    </style>
 
-    // IntersectionObserver to toggle an "in-view" class on the hero section
-    // so legend pinning is scoped to this component only.
-    try {
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            section1.classList.add('in-view');
-          } else {
-            section1.classList.remove('in-view');
-          }
+    <script>
+      import { gsap } from "gsap";
+      import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
+      import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+      gsap.registerPlugin(ScrambleTextPlugin, ScrollTrigger);
+
+      const initScramble = () => {
+        const line1 = document.querySelector(".hero-line-1");
+        const line2 = document.querySelector(".hero-line-2");
+        const section1 = document.querySelector(".hero-section");
+
+        if (!line1 || !line2 || !section1) return;
+
+        const html1 = line1.innerHTML;
+        const html2 = line2.innerHTML;
+        const text1 = (line1.textContent || "").replace(/\s+/g, " ").trim();
+        const text2 = (line2.textContent || "").replace(/\s+/g, " ").trim();
+
+        // Initial scramble animation
+        const tl = gsap.timeline();
+        tl.set(line1, { opacity: 1 })
+          .to(line1, {
+            duration: 1.5,
+            ease: "none",
+            scrambleText: {
+              text: text1,
+              chars: "upperAndLowerCase",
+              revealDelay: 0.12,
+            },
+            onComplete: () => {
+              line1.innerHTML = html1;
+            },
+          })
+          .set(line2, { opacity: 1 })
+          .to(line2, {
+            duration: 1.5,
+            ease: "none",
+            scrambleText: {
+              text: text2,
+              chars: "upperAndLowerCase",
+              revealDelay: 0.12,
+            },
+            onComplete: () => {
+              line2.innerHTML = html2;
+            },
+          });
+
+        // ScrollTrigger animation - transforms text when scrolling starts from top
+        let hasTransformed = false;
+
+        ScrollTrigger.create({
+          trigger: section1,
+          start: "top top",
+          end: "bottom bottom",
+          markers: false,
+          onEnter: () => {
+            if (!hasTransformed) {
+              hasTransformed = true;
+              gsap
+                .timeline()
+                .to(line1, {
+                  duration: 1.2,
+                  ease: "none",
+                  scrambleText: {
+                    text: "because",
+                    chars: "upperAndLowerCase",
+                    revealDelay: 0.12,
+                  },
+                })
+                .to(
+                  line2,
+                  {
+                    duration: 1.2,
+                    ease: "none",
+                    scrambleText: {
+                      text: "technology matters",
+                      chars: "upperAndLowerCase",
+                      revealDelay: 0.12,
+                    },
+                  },
+                  "-=0.4"
+                );
+            }
+          },
         });
-      }, { root: null, threshold: 0.05 });
 
-      io.observe(section1);
-    } catch (e) {
-      // Fallback: if IntersectionObserver isn't available, keep legends absolute inside the section
-      console.warn('IntersectionObserver not available — legend pinning will remain scoped via absolute positioning.');
-    }
-  };
+        // IntersectionObserver to toggle an "in-view" class on the hero section
+        // so legend pinning is scoped to this component only.
+        try {
+          const io = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  section1.classList.add("in-view");
+                } else {
+                  section1.classList.remove("in-view");
+                }
+              });
+            },
+            { root: null, threshold: 0.05 }
+          );
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initScramble);
-  } else {
-    initScramble();
-  }
-</script>
+          io.observe(section1);
+        } catch (e) {
+          // Fallback: if IntersectionObserver isn't available, keep legends absolute inside the section
+          console.warn(
+            "IntersectionObserver not available — legend pinning will remain scoped via absolute positioning."
+          );
+        }
+      };
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initScramble);
+      } else {
+        initScramble();
+      }
+    </script>
+  </section>
+</div>

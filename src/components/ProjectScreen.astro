@@ -1,305 +1,189 @@
 ---
 import Cassette from "./Cassette.astro";
+
 export interface Props {
-    projects: Array<{
-        cassette: {
-            src: string;
-            alt: string;
-        };
-        textContent: {
-            blocks: string[];
-        };
-        buttons: {
-            primary: {
-                backgroundColor: string;
-                textColor: string;
-                borderColor: string;
-                borderRadius?: string;
-            };
-            learnMore: {
-                text: string;
-                backgroundColor: string;
-                textColor: string;
-                borderColor: string;
-                borderRadius?: string;
-            };
-            visitWebsite: {
-                text: string;
-                backgroundColor: string;
-                textColor: string;
-                borderColor: string;
-                borderRadius?: string;
-            };
-            icons: Array<{
-                type: string;
-                backgroundColor: string;
-                textColor: string;
-                borderColor: string;
-                iconColor: string;
-                borderRadius?: string;
-            }>;
-        };
-        colors: {
-            textColor: string;
-            contentBlockBackground: string;
-            hoverShadow: string;
-            // optional: borderAlpha?: number;
-        };
-    }>;
+  projects: Array<{
+    cassette: {
+      src: string;
+      alt: string;
+    };
+    textContent: {
+      blocks: string[];
+    };
+    buttons: {
+      primary: {
+        backgroundColor: string;
+        textColor: string;
+        borderColor: string;
+        borderRadius?: string;
+      };
+      learnMore: {
+        text: string;
+        backgroundColor: string;
+        textColor: string;
+        borderColor: string;
+        borderRadius?: string;
+      };
+      visitWebsite: {
+        text: string;
+        backgroundColor: string;
+        textColor: string;
+        borderColor: string;
+        borderRadius?: string;
+      };
+      icons: Array<{
+        type: string;
+        backgroundColor: string;
+        textColor: string;
+        borderColor: string;
+        iconColor: string;
+        borderRadius?: string;
+      }>;
+    };
+    colors: {
+      textColor: string;
+      contentBlockBackground: string;
+      hoverShadow: string;
+    };
+  }>;
 }
 
 const { projects = [] } = Astro.props;
-// pick the first project for this screen; change selection logic as needed
-const projectData = projects[0] ?? {
-    cassette: { src: '', alt: '' },
-    textContent: { blocks: ['', ''] },
-    buttons: {
-        primary: { backgroundColor: '#000', textColor: '#fff', borderColor: '#000' },
-        learnMore: { text: '', backgroundColor: '#000', textColor: '#fff', borderColor: '#000' },
-        visitWebsite: { text: '', backgroundColor: '#000', textColor: '#fff', borderColor: '#000' },
-        icons: []
-    },
-    colors: { textColor: '#fff', contentBlockBackground: '#000', hoverShadow: 'rgba(0,0,0,0.4)' }
-};
 ---
 
-<section class="hero">
-    <div class="parent">
-        <div class="div1">
-            <Cassette overlaySrc={projectData.cassette.src} alt={projectData.cassette.alt}
-                      color={projectData.buttons.primary.backgroundColor}/>
-        </div>
-        <div class="div2">
-            <!--    empty for borders -->
-        </div>
-        <div class="div3">
-            <!--    empty for borders -->
-        </div>
-        <div class="div4">
-            <div class="content-section">
-                <div class="content-block">
-                    <p class="description">{projectData.textContent.blocks[0]}</p>
-                </div>
+<div class="projects-container flex flex-col">
+  {
+    projects.map((projectData) => (
+      <section
+        class="hero p-[clamp(24px,4vw,48px)] text-white h-[calc(100vh-112px)] w-full"
+        style={{
+          "--textColor": projectData.colors.textColor,
+          "--hoverShadow": projectData.colors.hoverShadow,
+        }}
+      >
+        <div class="parent grid grid-cols-9 grid-rows-5 gap-0 h-full w-full">
+          <div class="div1 col-start-1 col-end-6 row-start-1 row-end-6 flex items-center justify-center">
+            <Cassette
+              overlaySrc={projectData.cassette.src}
+              alt={projectData.cassette.alt}
+              color={projectData.buttons.primary.backgroundColor}
+            />
+          </div>
+
+          <div class="div2 col-start-6 col-end-10 row-start-1 row-end-6 border-l-2 border-r-2 border-dashed border-[#999999]/50">
+            <!-- borders only -->
+          </div>
+          <div class="div3 col-start-1 col-end-10 row-start-3 row-end-4 border-t-2 border-b-2 border-dashed border-[#999999]/50">
+            <!-- borders only -->
+          </div>
+
+          <div class="div4 col-start-6 col-end-10 row-start-1 row-end-3">
+            <div class="content-section text-[var(--textColor)] flex flex-col gap-5 justify-center px-5 h-full">
+              <div class="content-block border-none p-2.5 relative my-1">
+                <p class="description font-['PolySans_Trial'] text-base leading-[1.4] m-0 uppercase text-[var(--textColor)] font-light break-words">
+                  {projectData.textContent.blocks[0]}
+                </p>
+              </div>
             </div>
-        </div>
-        <div class="div5">
-            <div class="action-buttons">
+          </div>
+
+          <div class="div5 col-start-6 col-end-10 row-start-3 row-end-4 flex items-center justify-center">
+            <div class="action-buttons flex gap-10 items-center justify-center m-0">
+              <button
+                class="btn primary px-[18px] py-[10px] border rounded-[25px] font-['PolySans_Trial'] text-xs font-light uppercase cursor-pointer transition-all duration-300 break-words hover:-translate-y-[3px] hover:shadow-[0_8px_20px_var(--hoverShadow)]"
+                style={`
+            background: ${projectData.buttons.learnMore.backgroundColor};
+            color: ${projectData.buttons.learnMore.textColor};
+            border-color: ${projectData.buttons.learnMore.borderColor};
+            ${projectData.buttons.learnMore.borderRadius ? `border-radius: ${projectData.buttons.learnMore.borderRadius};` : ""}
+          `}
+              >
+                {projectData.buttons.learnMore.text}
+              </button>
+
+              <button
+                class="btn primary px-[18px] py-[10px] border rounded-[25px] font-['PolySans_Trial'] text-xs font-light uppercase cursor-pointer transition-all duration-300 break-words hover:-translate-y-[3px] hover:shadow-[0_8px_20px_var(--hoverShadow)]"
+                style={`
+            background: ${projectData.buttons.visitWebsite.backgroundColor};
+            color: ${projectData.buttons.visitWebsite.textColor};
+            border-color: ${projectData.buttons.visitWebsite.borderColor};
+            ${projectData.buttons.visitWebsite.borderRadius ? `border-radius: ${projectData.buttons.visitWebsite.borderRadius};` : ""}
+          `}
+              >
+                {projectData.buttons.visitWebsite.text}
+              </button>
+
+              {projectData.buttons.icons.map((icon) => (
                 <button
-                        class="btn primary"
-                        style={`
-                        background: ${projectData.buttons.learnMore.backgroundColor};
-                        color: ${projectData.buttons.learnMore.textColor};
-                        border-color: ${projectData.buttons.learnMore.borderColor};
-                        ${projectData.buttons.learnMore.borderRadius ? `border-radius: ${projectData.buttons.learnMore.borderRadius};` : ''}
-                    `}
+                  class="gh-btn icon-btn w-11 h-11 rounded-full flex items-center justify-center p-0 border font-['PolySans_Trial'] text-xs font-light uppercase cursor-pointer transition-all duration-300 break-words hover:-translate-y-[3px] hover:shadow-[0_8px_20px_var(--hoverShadow)]"
+                  style={`
+              background: ${icon.backgroundColor};
+              color: ${icon.textColor};
+              border-color: ${icon.borderColor};
+              ${icon.borderRadius ? `border-radius: ${icon.borderRadius};` : "border-radius: 50%;"}
+            `}
+                  aria-label={icon.type}
                 >
-                    {projectData.buttons.learnMore.text}
+                  <img
+                    src={`/${icon.type}-icon.svg`}
+                    alt={icon.type}
+                    width="24"
+                    style={`filter: brightness(0) saturate(100%) invert(${icon.iconColor === "#FEFCD9" ? "96%" : "0%"});`}
+                  />
                 </button>
-                <button
-                        class="btn primary"
-                        style={`
-                        background: ${projectData.buttons.visitWebsite.backgroundColor};
-                        color: ${projectData.buttons.visitWebsite.textColor};
-                        border-color: ${projectData.buttons.visitWebsite.borderColor};
-                        ${projectData.buttons.visitWebsite.borderRadius ? `border-radius: ${projectData.buttons.visitWebsite.borderRadius};` : ''}
-                    `}
-                >
-                    {projectData.buttons.visitWebsite.text}
-                </button>
-
-                {projectData.buttons.icons.map((icon) => (
-                        <button
-                                class="gh-btn icon-btn"
-                                style={`
-                            background: ${icon.backgroundColor};
-                            color: ${icon.textColor};
-                            border-color: ${icon.borderColor};
-                            ${icon.borderRadius ? `border-radius: ${icon.borderRadius};` : 'border-radius: 50%;'}
-                        `}
-                        >
-                            <img
-                                    src={`/${icon.type}-icon.svg`}
-                                    alt={icon.type}
-                                    width="24"
-                                    style={`filter: brightness(0) saturate(100%) invert(${icon.iconColor === "#FEFCD9" ? "96%" : "0%"});`}
-                            />
-                        </button>
-                ))}
+              ))}
             </div>
-        </div>
-        <div class="div6">
-            <div class="content-section">
-                <div class="content-block">
-                    <p class="description">{projectData.textContent.blocks[1]}</p>
-                </div>
+          </div>
+
+          <div class="div6 col-start-6 col-end-10 row-start-4 row-end-6">
+            <div class="content-section text-[var(--textColor)] flex flex-col gap-5 justify-center px-5 h-full">
+              <div class="content-block border-none p-2.5 relative my-1">
+                <p class="description font-['PolySans_Trial'] text-base leading-[1.4] m-0 uppercase text-[var(--textColor)] font-light break-words">
+                  {projectData.textContent.blocks[1]}
+                </p>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
-</section>
+      </section>
+    ))
+  }
+</div>
 
-<!-- GSAP + ScrollTrigger client script: animates border alpha only -->
-<script>
-    import gsap from "gsap";
-    import { ScrollTrigger } from "gsap/ScrollTrigger";
-    gsap.registerPlugin(ScrollTrigger);
+<style>
+  @font-face {
+    font-family: "PolySans Trial";
+    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-SlimMono.otf")
+      format("opentype");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+  }
 
-    gsap.to(".div1", {
-        scrollTrigger: {
-            trigger:".parent",
-            pin:".div4",
-            start: "top top",
-            endTrigger: ".div1",
-            markers: false
-        }
-    })
-</script>
+  @font-face {
+    font-family: "PolySans Trial";
+    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-NeutralMono.otf")
+      format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
 
-<style define:vars={{
-    textColor: projectData.colors.textColor,
-    hoverShadow: projectData.colors.hoverShadow,
-    cassetteAccent: projectData.buttons.primary.backgroundColor,
-}}
->
-    .hero {
-        padding: clamp(24px, 4vw, 48px);
-        color: #fff;
-        height: calc(100vh - 112px);
-    }
+  @font-face {
+    font-family: "PolySans Trial";
+    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-MedianMono.otf")
+      format("opentype");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
 
-    .parent {
-        display: grid;
-        grid-template-columns: repeat(9, 1fr);
-        grid-template-rows: repeat(5, 1fr);
-        grid-column-gap: 0;
-        grid-row-gap: 0;
-        height: 100%;
-        width: 100%;
-    }
-
-    .div1 {
-        grid-area: 1 / 1 / 6 / 6;
-    }
-
-    .div2 {
-        grid-area: 1 / 6 / 6 / 10;
-    }
-
-    .div3 {
-        grid-area: 3 / 1 / 4 / 10;
-    }
-
-    .div4 {
-        grid-area: 1 / 6 / 3 / 10;
-    }
-
-    .div5 {
-        grid-area: 3 / 6 / 4 / 10;
-    }
-
-    .div6 {
-        grid-area: 4 / 6 / 6 / 10;
-    }
-
-    .div3 {
-        /* use the animated CSS custom property for alpha */
-        border-top: 2px dashed rgba(153, 153, 153, var(--border-alpha)); /* Set dashed top border */
-        border-bottom: 2px dashed rgba(153, 153, 153, var(--border-alpha)); /* Set dashed bottom border */
-    }
-
-    .div2 {
-        border-left: 2px dashed rgba(153, 153, 153, var(--border-alpha)); /* Set dashed left border */
-        border-right: 2px dashed rgba(153, 153, 153, var(--border-alpha)); /* Set dashed right border */
-    }
-
-    .div1 {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .div5 {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .content-section {
-        color: var(--textColor);
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        justify-content: center;
-        padding-left: 20px;
-        padding-right: 20px;
-
-    }
-
-    .content-block {
-        border: none;
-        padding: 10px;
-        position: relative;
-        margin: 4px 0;
-    }
-
-    .description {
-        font-family: "PolySans Trial", Arial, sans-serif;
-        font-size: 16px;
-        line-height: 1.4;
-        margin: 0;
-        text-transform: uppercase;
-        color: var(--textColor);
-        font-weight: 300;
-        word-wrap: break-word;
-    }
-
-    .action-buttons {
-        display: flex;
-        gap: 40px;
-        align-items: center;
-        justify-content: center;
-        margin: 0;
-    }
-
-    .btn {
-        padding: 10px 18px;
-        border: 1px solid;
-        border-radius: 25px;
-        font-family: "PolySans Trial", Arial, sans-serif;
-        font-size: 12px;
-        font-weight: 300;
-        text-transform: uppercase;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        word-wrap: break-word;
-        /* keep buttons out of layout paint churn */
-        will-change: transform;
-    }
-
-    .gh-btn {
-        border: 1px solid;
-        border-radius: 25px;
-        font-family: "PolySans Trial", Arial, sans-serif;
-        font-size: 12px;
-        font-weight: 300;
-        text-transform: uppercase;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        word-wrap: break-word;
-    }
-
-    .btn.icon-btn,
-    .gh-btn.icon-btn {
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0;
-    }
-
-    .btn:hover,
-    .gh-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px var(--hoverShadow);
-    }
+  @font-face {
+    font-family: "PolySans Trial";
+    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-BulkyMono.otf")
+      format("opentype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
 </style>

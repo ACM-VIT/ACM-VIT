@@ -2,62 +2,156 @@
 // Header.astro
 ---
 
-<header class="fixed top-5 left-0 right-0 z-50 w-full px-4 py-2">
-  <div class="relative max-w-4xl mx-auto flex justify-center">
+<header
+  class="fixed top-5 left-0 right-0 z-50 w-full px-4 py-2 pointer-events-none"
+>
+  <div
+    class="relative max-w-4xl mx-auto flex justify-center pointer-events-auto"
+  >
     <nav>
       <!-- Desktop nav -->
       <div class="nav-desktop">
-        <div class="header-pill flex items-center justify-center" style="width:465px;height:50px;padding:17px 20px;border-radius:41px;border:1px solid #FEFCD9;background:rgba(0,0,0,0.35);backdrop-filter:blur(4px);">
-          <ul class="nav-list flex items-center gap-2 md:gap-4 text-[13.5px] md:text-[14.8px] font-mono uppercase text-white" style="white-space:nowrap;align-items:center;letter-spacing:0.04em;">
+        <div
+          class="header-pill flex items-center justify-center"
+          style="width:465px;height:50px;padding:17px 20px;border-radius:41px;border:1px solid #FEFCD9;background:rgba(0,0,0,0.35);backdrop-filter:blur(4px);"
+        >
+          <ul
+            class="nav-list flex items-center gap-2 md:gap-4 text-[13.5px] md:text-[14.8px] font-mono uppercase text-white"
+            style="white-space:nowrap;align-items:center;letter-spacing:0.04em;"
+          >
             <li>
-              <a href="#about" class="inline-block px-0 py-0 hover:text-gray-300 transition-colors">ABOUT</a>
+              <a
+                href="#about"
+                class="inline-block px-0 py-0 hover:text-gray-300 transition-colors"
+                >ABOUT</a
+              >
             </li>
             <li>
-              <a href="#domains" class="inline-block px-0 py-0 hover:text-gray-300 transition-colors">DOMAINS</a>
+              <a
+                href="#domains"
+                class="inline-block px-0 py-0 hover:text-gray-300 transition-colors"
+                >DOMAINS</a
+              >
             </li>
             <li>
-              <a href="#projects" class="inline-block px-0 py-0 hover:text-gray-300 transition-colors">PROJECTS</a>
+              <a
+                href="#projects"
+                class="inline-block px-0 py-0 hover:text-gray-300 transition-colors"
+                >PROJECTS</a
+              >
             </li>
             <li>
-              <a href="#events" class="inline-block px-0 py-0 hover:text-gray-300 transition-colors">EVENTS</a>
+              <a
+                href="#events"
+                class="inline-block px-0 py-0 hover:text-gray-300 transition-colors"
+                >EVENTS</a
+              >
             </li>
             <li>
-              <a href="#acm-w" class="inline-block px-0 py-0 hover:text-gray-300 transition-colors">ACM-W</a>
+              <a
+                href="#acm-w"
+                class="inline-block px-0 py-0 hover:text-gray-300 transition-colors"
+                >ACM-W</a
+              >
             </li>
             <li>
-              <a href="#" role="button" class="more-toggle inline-block px-0 py-0 more-link hover:opacity-80 transition-opacity" aria-controls="desktopMoreMenu" aria-expanded="false">MORE</a>
+              <a
+                href="#"
+                role="button"
+                class="more-toggle inline-block px-0 py-0 more-link hover:opacity-80 transition-opacity"
+                aria-controls="desktopMoreMenu"
+                aria-expanded="false">MORE</a
+              >
             </li>
           </ul>
         </div>
       </div>
 
-  <!-- Desktop More dropdown -->
-  <div id="desktopMoreMenu" class="more-menu w-[220px]">
+      <!-- Desktop More dropdown -->
+      <div id="desktopMoreMenu" class="more-menu w-[220px]">
         <ul class="mobile-more-list">
-          <li><a href="#blogs" class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[11px]">Blogs</a></li>
-          <li><a href="#partners" class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[11px]">Partners</a></li>
-          <li><a href="#contact" class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[11px]">Contact Us</a></li>
+          <li>
+            <a
+              href="#blogs"
+              class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[11px]"
+              >Blogs</a>
+          </li>
+          <li>
+            <a
+              href="#partners"
+              class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[11px]"
+              >Partners</a>
+          </li>
+          <li>
+            <a
+              href="#contact"
+              class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[11px]"
+              >Contact Us</a>
+          </li>
         </ul>
       </div>
 
-  <!-- Mobile nav -->
+      <!-- Mobile nav -->
       <div class="nav-mobile pt-6">
-        <div class="w-64 min-h-7 h-auto px-3 pt-2 pb-2 rounded-3xl outline outline-[0.56px] outline-offset-[-0.56px] outline-yellow-50 inline-flex items-center justify-center" style="background:rgba(0,0,0,0.35);backdrop-filter:blur(4px);">
+        <div
+          class="w-64 min-h-7 h-auto px-3 pt-2 pb-2 rounded-3xl outline outline-[0.56px] outline-offset-[-0.56px] outline-yellow-50 inline-flex items-center justify-center"
+          style="background:rgba(0,0,0,0.35);backdrop-filter:blur(4px);"
+        >
           <div class="w-full inline-flex justify-center items-center gap-2">
-            <a href="#about" class="justify-start text-yellow-50 text-[8px] font-light font-['PolySans_Trial'] uppercase">About</a>
-            <a href="#domains" class="justify-start text-yellow-50 text-[8px] font-light font-['PolySans_Trial'] uppercase">Domains</a>
-            <a href="#projects" class="justify-start text-yellow-50 text-[8px] font-light font-['PolySans_Trial'] uppercase">Projects</a>
-            <a href="#events" class="justify-start text-yellow-50 text-[8px] font-light font-['PolySans_Trial'] uppercase">Events</a>
-            <a href="#acm-w" class="justify-start text-yellow-50 text-[8px] font-light font-['PolySans_Trial'] uppercase">ACM-W</a>
-            <button type="button" class="more-toggle justify-start text-[#F95F4A] text-[8px] font-light font-['PolySans_Trial'] uppercase" aria-controls="mobileMoreMenu" aria-expanded="false">More</button>
+            <a
+              href="#about"
+              class="justify-start text-yellow-50 text-[8px] font-light font-['PolySans_Trial'] uppercase"
+              >About</a
+            >
+            <a
+              href="#domains"
+              class="justify-start text-yellow-50 text-[8px] font-light font-['PolySans_Trial'] uppercase"
+              >Domains</a
+            >
+            <a
+              href="#projects"
+              class="justify-start text-yellow-50 text-[8px] font-light font-['PolySans_Trial'] uppercase"
+              >Projects</a
+            >
+            <a
+              href="#events"
+              class="justify-start text-yellow-50 text-[8px] font-light font-['PolySans_Trial'] uppercase"
+              >Events</a
+            >
+            <a
+              href="#acm-w"
+              class="justify-start text-yellow-50 text-[8px] font-light font-['PolySans_Trial'] uppercase"
+              >ACM-W</a
+            >
+            <button
+              type="button"
+              class="more-toggle justify-start text-[#F95F4A] text-[8px] font-light font-['PolySans_Trial'] uppercase"
+              aria-controls="mobileMoreMenu"
+              aria-expanded="false">More</button
+            >
           </div>
         </div>
-  <!-- Expandable 'More' dropdown -->
-  <div id="mobileMoreMenu" class="more-menu w-56">
+        <!-- Expandable 'More' dropdown -->
+        <div id="mobileMoreMenu" class="more-menu w-56">
           <ul class="mobile-more-list">
-            <li><a href="#blogs" class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[10px]">Blogs</a></li>
-            <li><a href="#partners" class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[10px]">Partners</a></li>
-            <li><a href="#contact" class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[10px]">Contact Us</a></li>
+            <li>
+              <a
+                href="#blogs"
+                class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[10px]"
+                >Blogs</a>
+            </li>
+            <li>
+              <a
+                href="#partners"
+                class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[10px]"
+                >Partners</a>
+            </li>
+            <li>
+              <a
+                href="#contact"
+                class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[10px]"
+                >Contact Us</a>
+            </li>
           </ul>
         </div>
       </div>
@@ -66,12 +160,30 @@
 </header>
 
 <style>
-  .header-pill { display: flex; align-items: center; justify-content: center; }
-  .nav-list a { display: inline-block; padding: 0 4px; color: #FEFCD9; }
-  .nav-list a.more-link { color: #F95F4A !important; }
-  .nav-list li { white-space: nowrap; }
-  .nav-desktop { display: block; position: relative; }
-  .nav-mobile { display: none; position: relative; }
+  .header-pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-list a {
+    display: inline-block;
+    padding: 0 4px;
+    color: #fefcd9;
+  }
+  .nav-list a.more-link {
+    color: #f95f4a !important;
+  }
+  .nav-list li {
+    white-space: nowrap;
+  }
+  .nav-desktop {
+    display: block;
+    position: relative;
+  }
+  .nav-mobile {
+    display: none;
+    position: relative;
+  }
 
   /* 'More' dropdown */
   .more-menu {
@@ -79,18 +191,20 @@
     top: calc(100% + 8px);
     right: 0; /* stick to right */
     left: auto;
-    border: 1px solid #FEFCD9;
+    border: 1px solid #fefcd9;
     border-radius: 16px;
-    background: rgba(0,0,0,0.35);
+    background: rgba(0, 0, 0, 0.35);
     backdrop-filter: blur(4px);
     padding: 10px 12px;
-    box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
     z-index: 60;
     /* animation base state */
     opacity: 0;
     transform: translateY(8px) scale(0.96);
     transform-origin: top right;
-    transition: opacity .18s ease, transform .24s cubic-bezier(.22,.61,.36,1);
+    transition:
+      opacity 0.18s ease,
+      transform 0.24s cubic-bezier(0.22, 0.61, 0.36, 1);
     pointer-events: none;
   }
   .more-menu.open,
@@ -99,64 +213,93 @@
     transform: translateY(0) scale(1);
     pointer-events: auto;
   }
-  .mobile-more-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; text-align: left; }
-  .mobile-more-list a { text-decoration: none; letter-spacing: 0.04em; }
-  .more-menu .mobile-more-list li { opacity: 0; transform: translateY(6px); transition: opacity .2s ease, transform .25s ease; }
-  .more-menu.open .mobile-more-list li { opacity: 1; transform: translateY(0); }
-  .more-menu.open .mobile-more-list li:nth-child(1) { transition-delay: .02s; }
-  .more-menu.open .mobile-more-list li:nth-child(2) { transition-delay: .06s; }
-  .more-menu.open .mobile-more-list li:nth-child(3) { transition-delay: .1s; }
-
-  @media (max-width: 520px) {
-    .nav-desktop { display: none; }
-    .nav-mobile { display: block; }
+  .mobile-more-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+    text-align: left;
+  }
+  .mobile-more-list a {
+    text-decoration: none;
+    letter-spacing: 0.04em;
+  }
+  .more-menu .mobile-more-list li {
+    opacity: 0;
+    transform: translateY(6px);
+    transition:
+      opacity 0.2s ease,
+      transform 0.25s ease;
+  }
+  .more-menu.open .mobile-more-list li {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .more-menu.open .mobile-more-list li:nth-child(1) {
+    transition-delay: 0.02s;
+  }
+  .more-menu.open .mobile-more-list li:nth-child(2) {
+    transition-delay: 0.06s;
+  }
+  .more-menu.open .mobile-more-list li:nth-child(3) {
+    transition-delay: 0.1s;
   }
 
+  @media (max-width: 520px) {
+    .nav-desktop {
+      display: none;
+    }
+    .nav-mobile {
+      display: block;
+    }
+  }
 </style>
 
 <script>
   // @ts-nocheck
   // Toggle 'More' dropdowns (desktop and mobile) with smooth animation; close on outside click
-  document.addEventListener('DOMContentLoaded', () => {
-    const toggles = Array.from(document.querySelectorAll('.more-toggle'));
+  document.addEventListener("DOMContentLoaded", () => {
+    const toggles = Array.from(document.querySelectorAll(".more-toggle"));
 
     const getMenuFor = (tg) => {
-      const id = tg.getAttribute('aria-controls');
+      const id = tg.getAttribute("aria-controls");
       return id ? document.getElementById(id) : null;
     };
 
     const openMenu = (tg, menu) => {
-      tg.setAttribute('aria-expanded', 'true');
+      tg.setAttribute("aria-expanded", "true");
       // add open class for animation/visibility
-      menu.classList.add('open');
+      menu.classList.add("open");
     };
 
     const closeMenu = (tg, menu) => {
-      tg.setAttribute('aria-expanded', 'false');
-      menu.classList.remove('open');
+      tg.setAttribute("aria-expanded", "false");
+      menu.classList.remove("open");
     };
 
-    const allMenus = () => toggles
-      .map(getMenuFor)
-      .filter(Boolean);
+    const allMenus = () => toggles.map(getMenuFor).filter(Boolean);
 
-    const closeAll = () => toggles.forEach((tg) => {
-      const m = getMenuFor(tg);
-      if (m) closeMenu(tg, m);
-    });
+    const closeAll = () =>
+      toggles.forEach((tg) => {
+        const m = getMenuFor(tg);
+        if (m) closeMenu(tg, m);
+      });
 
     let suppressNextDocClick = false;
 
     toggles.forEach((tg) => {
       const menu = getMenuFor(tg);
       if (!menu) return;
-      tg.addEventListener('click', (e) => {
+      tg.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
         // Prevent the immediate document click from closing right after opening
         suppressNextDocClick = true;
-        setTimeout(() => { suppressNextDocClick = false; }, 0);
-        const expanded = tg.getAttribute('aria-expanded') === 'true';
+        setTimeout(() => {
+          suppressNextDocClick = false;
+        }, 0);
+        const expanded = tg.getAttribute("aria-expanded") === "true";
         // close others first
         toggles.forEach((ot) => {
           if (ot !== tg) {
@@ -178,24 +321,27 @@
         }, 220);
       };
       const clearCloseTimer = () => {
-        if (hoverTimer) { clearTimeout(hoverTimer); hoverTimer = null; }
+        if (hoverTimer) {
+          clearTimeout(hoverTimer);
+          hoverTimer = null;
+        }
       };
 
-      tg.addEventListener('mouseenter', () => {
+      tg.addEventListener("mouseenter", () => {
         openMenu(tg, menu);
       });
-      tg.addEventListener('mouseleave', () => {
+      tg.addEventListener("mouseleave", () => {
         startCloseTimer();
       });
-      menu.addEventListener('mouseenter', () => {
+      menu.addEventListener("mouseenter", () => {
         clearCloseTimer();
       });
-      menu.addEventListener('mouseleave', () => {
+      menu.addEventListener("mouseleave", () => {
         startCloseTimer();
       });
     });
 
-    document.addEventListener('click', (e) => {
+    document.addEventListener("click", (e) => {
       if (suppressNextDocClick) return;
       const t = e.target;
       if (!(t instanceof Node)) return;
@@ -206,18 +352,19 @@
     });
 
     // Smooth-scroll
-    document.addEventListener('click', (e) => {
-      const el = e.target instanceof Element ? e.target.closest('a[href^="#"]') : null;
+    document.addEventListener("click", (e) => {
+      const el =
+        e.target instanceof Element ? e.target.closest('a[href^="#"]') : null;
       if (!el) return;
-      const href = el.getAttribute('href');
+      const href = el.getAttribute("href");
       if (!href || href.length < 2) return;
       const id = href.slice(1);
       const target = document.getElementById(id);
       if (!target) return; // let browser handle if not found
       e.preventDefault();
       closeAll();
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      history.replaceState(null, '', `#${id}`);
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      history.replaceState(null, "", `#${id}`);
     });
   });
 </script>

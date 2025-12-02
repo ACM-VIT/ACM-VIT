@@ -1,0 +1,191 @@
+---
+import BoardMemberCardSingular from "../components/BoardMemberCardSingular.astro";
+
+import { boardMembers } from "../data/boardData";
+
+const mainBoardMembers = boardMembers.filter(
+  (member) => !member.isW && member.position !== "Faculty Coordinator"
+);
+const acmwBoardMembers = boardMembers.filter((member) => member.isW);
+const facultyCoordinator = boardMembers.find(
+  (member) => member.position === "Faculty Coordinator"
+);
+---
+
+<section class="board-section w-full min-h-screen py-12 px-4 relative">
+  <div class="fixed inset-0 z-0 pointer-events-none opacity-0 board-bg-layer">
+    <img
+      src="/glow_ball_red.svg"
+      alt="Board Background"
+      class="w-full h-full object-cover scale-125"
+    />
+  </div>
+
+  <div class="max-w-7xl mx-auto flex flex-col relative z-10">
+    <!-- Faculty Coordinator - Featured Card -->
+    {
+      facultyCoordinator && (
+        <div class="flex justify-center mb-12">
+          <div class="transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+            <BoardMemberCardSingular
+              title={facultyCoordinator.title}
+              fullName={facultyCoordinator.fullName}
+              position={facultyCoordinator.position}
+              imageUrl={facultyCoordinator.imageUrl}
+              linkedinUrl={facultyCoordinator.linkedinUrl}
+              googleScholarUrl={facultyCoordinator.googleScholarUrl}
+              githubUrl={facultyCoordinator.githubUrl}
+              isW={facultyCoordinator.isW}
+            />
+          </div>
+        </div>
+      )
+    }
+
+    <!-- Main Board Members Grid -->
+    <div
+      class="w-full lg:w-[80vw] self-center flex flex-wrap justify-center gap-4 mb-12"
+    >
+      {
+        mainBoardMembers.map((member) => (
+          <div class="w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)] transition-all duration-300 hover:scale-105 hover:shadow-2xl self-center justify-center items-center flex">
+            <BoardMemberCardSingular
+              title={member.title}
+              fullName={member.fullName}
+              position={member.position}
+              imageUrl={member.imageUrl}
+              linkedinUrl={member.linkedinUrl}
+              googleScholarUrl={member.googleScholarUrl}
+              githubUrl={member.githubUrl}
+              isW={member.isW}
+            />
+          </div>
+        ))
+      }
+    </div>
+
+    {
+      acmwBoardMembers.length > 0 && (
+        <div class="w-full lg:w-[80vw] self-center flex flex-wrap justify-center gap-4 mb-12">
+          {acmwBoardMembers.map((member) => (
+            <div class="w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)] transition-all duration-300 hover:scale-105 hover:shadow-2xl self-center justify-center items-center flex">
+              <BoardMemberCardSingular
+                title={member.title}
+                fullName={member.fullName}
+                position={member.position}
+                imageUrl={member.imageUrl}
+                linkedinUrl={member.linkedinUrl}
+                googleScholarUrl={member.googleScholarUrl}
+                githubUrl={member.githubUrl}
+                isW={member.isW}
+              />
+            </div>
+          ))}
+        </div>
+      )
+    }
+
+    <!-- Call to Action Button -->
+    <div class="text-center mt-16">
+      <button
+        class="text-white border-2 border-primary-orange hover:cursor-pointer py-4 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+      >
+        See the Entire Crew Making Magic!
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  if (typeof gsap !== "undefined") {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const initBoardAnimation = () => {
+      const bgLayer = document.querySelector(".board-bg-layer");
+      const section = document.querySelector(".board-section");
+
+      if (!bgLayer || !section) return;
+
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top 30%", 
+        end: "bottom 60%", 
+        onEnter: () => gsap.to(bgLayer, { opacity: 1, duration: 0.5 }),
+        onLeave: () => gsap.to(bgLayer, { opacity: 0, duration: 0.5 }),
+        onEnterBack: () => gsap.to(bgLayer, { opacity: 1, duration: 0.5 }),
+        onLeaveBack: () => gsap.to(bgLayer, { opacity: 0, duration: 0.5 }),
+      });
+    };
+
+    // Initialize on load
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initBoardAnimation);
+    } else {
+      initBoardAnimation();
+    }
+  }
+</script>
+
+<style>
+  /* Custom animations */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .grid > div {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+
+  .grid > div:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  .grid > div:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .grid > div:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  .grid > div:nth-child(4) {
+    animation-delay: 0.4s;
+  }
+  .grid > div:nth-child(5) {
+    animation-delay: 0.5s;
+  }
+  .grid > div:nth-child(6) {
+    animation-delay: 0.6s;
+  }
+  .grid > div:nth-child(7) {
+    animation-delay: 0.7s;
+  }
+  .grid > div:nth-child(8) {
+    animation-delay: 0.8s;
+  }
+  .grid > div:nth-child(9) {
+    animation-delay: 0.9s;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+  }
+</style>

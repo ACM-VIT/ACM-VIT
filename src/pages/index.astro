@@ -1,31 +1,28 @@
 ---
-import Welcome from "../components/Welcome.astro";	
 import ProjectScreen from "../components/ProjectScreen.astro";
 import Domains from "../components/Domains.astro";
 import DomainsPhone from "../phoneComponents/Domains_Phone.astro";
 import Layout from "../layouts/Layout.astro";
-import Pattern from "./pattern.astro";
 import Gallery from "../components/Gallery.astro";
-import BoardMemberCardSingular from "../components/BoardMemberCardSingular.astro";
-import Board from "./Board.astro";
+import Board from "../components/Board.astro";
 import "../styles/globals.css";
-import PartnerCasetteSingular from "../components/PartnerCasetteSingular.astro";
-import Partners from "./Partners.astro";
+import Partners from "../components/Partners.astro";
 import AcmWMotto from "../components/AcmWMotto.astro";
 import AcmWContent from "../components/AcmWContent.astro";
 import { projectsData } from "../data/projectsData.ts";
-import Events from "../components/Events.astro";
+import Events from "../components/SWork.astro";
 import ContactUS from "../components/ContactUs.astro";
+import ContactUSPhone from "../phoneComponents/ContactUs_Phone.astro";
 import AcmWBento from "../components/AcmWBento.astro";
+import ProjectScreenPhone from "../phoneComponents/ProjectScreen-Phone.astro";
+import Gallery_Phone from "../phoneComponents/Gallery_Phone.astro";
 import Hero from "../components/hero.astro";
 import LegendPins from "../components/LegendPins.astro";
+import BecauseTechMatters from "../components/BecauseTechMatters.astro";
 import About from "../components/About.astro";
+import About_Phone from "../phoneComponents/About_Phone.astro";
 import Footer from "../components/Footer.astro";
 import Blogs from "../components/Blogs.astro";
-// import Hero from "./hero.astro";
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
 <Layout>
@@ -88,26 +85,23 @@ import Blogs from "../components/Blogs.astro";
 </Layout>
 
 <style>
-	/* Show desktop version by default, hide mobile */
-	.domains-desktop-container {
-		display: block;
-	}
-	
-	.domains-mobile-container {
-		display: none;
-	}
-	
-	/* On mobile screens, hide desktop and show mobile */
-	@media (max-width: 768px) {
-		.domains-desktop-container {
-			display: none;
-		}
-		
-		.domains-mobile-container {
-			display: block;
-		}
-	}
+  /* Show desktop version by default, hide mobile */
+  .domains-desktop-container {
+    display: block;
+  }
+
+  .domains-mobile-container {
+    display: none;
+  }
+
+  /* On mobile screens, hide desktop and show mobile */
+  @media (max-width: 768px) {
+    .domains-desktop-container {
+      display: none;
+    }
+
+    .domains-mobile-container {
+      display: block;
+    }
+  }
 </style>
-
-
-</Layout>

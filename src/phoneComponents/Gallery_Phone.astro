@@ -1,0 +1,213 @@
+---
+// Gallery_Phone.astro
+---
+
+<section class="gallery-section relative w-full pt-12 pb-0 overflow-hidden">
+  <!-- Floating Words Background -->
+  <div class="floating-words-container" aria-hidden="true">
+    <span
+      class="floating-word"
+      style="--delay: 0s; --duration: 45s; --x: 5%; --y: 5%;"
+      >CODEX CRYPTUM</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 3s; --duration: 55s; --x: 80%; --y: 8%;"
+      >THE NEURAL HACK</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 6s; --duration: 50s; --x: 10%; --y: 25%;"
+      >CRYPTIC HUNT</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 0s; --duration: 60s; --x: 70%; --y: 30%;">APPTITUDE</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 3s; --duration: 48s; --x: 25%; --y: 15%;">CODART</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 6s; --duration: 52s; --x: 85%; --y: 20%;"
+      >REVERSE CODING</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 0s; --duration: 58s; --x: 2%; --y: 35%;"
+      >HOUR OF CODE</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 3s; --duration: 47s; --x: 60%; --y: 5%;">CODE2CREATE</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 6s; --duration: 54s; --x: 40%; --y: 2%;"
+      >THE TINY HACK</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 0s; --duration: 51s; --x: 90%; --y: 15%;">CODE++</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 3s; --duration: 56s; --x: 15%; --y: 18%;">INSPIHER</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 6s; --duration: 49s; --x: 75%; --y: 2%;">FORKTOBER</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 0s; --duration: 53s; --x: 35%; --y: 30%;"
+      >SUMMER BOOTCAMP</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 3s; --duration: 57s; --x: 50%; --y: 22%;"
+      >LEARN2AUGMENT</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 6s; --duration: 46s; --x: 65%; --y: 12%;">UNIPOOL</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 0s; --duration: 59s; --x: 8%; --y: 10%;">CLI-TOP</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 3s; --duration: 50s; --x: 82%; --y: 35%;">CLI-RPG</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 6s; --duration: 55s; --x: 45%; --y: 10%;">EXAMCOOKER</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 0s; --duration: 48s; --x: 20%; --y: 30%;">LOCALHOST</span
+    >
+    <span
+      class="floating-word"
+      style="--delay: 3s; --duration: 52s; --x: 55%; --y: 35%;">ACM</span
+    >
+  </div>
+
+  <div class="flex w-full flex-col items-center gap-4 relative z-10">
+    <div class="relative flex w-full max-w-4xl flex-col items-center px-4">
+      <img
+        src="/gallery.svg"
+        alt="Gallery Title"
+        class="gallery-title relative z-10 w-[95vw] max-w-md mb-4"
+      />
+    </div>
+
+    <div class="px-4 w-full flex justify-center">
+      <a
+        href="https://photos.google.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="w-[90%] max-w-[280px] h-8 bg-[#F95F4A] rounded-[41px] outline outline-1 outline-offset-[-1px] outline-yellow-50
+           flex items-center justify-center hover:scale-105 transition-transform duration-200"
+      >
+        <span
+          class="text-white text-[8px] font-light font-['PolySans_Trial'] uppercase tracking-wider"
+        >
+          Proof We Actually Do Stuff - View Photos!
+        </span>
+      </a>
+    </div>
+
+    <div class="gallery-frame relative w-full overflow-hidden mt-2">
+      <img
+        src="/full-core.svg"
+        alt="ACM-VIT gallery collage"
+        class="gallery-image w-full object-cover"
+        loading="lazy"
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  .gallery-section {
+    font-family: "PolySans Trial", "PolySans", system-ui, sans-serif;
+  }
+
+  .gallery-frame::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(3, 3, 3, 0) 40%,
+      rgba(3, 3, 3, 0.55) 100%
+    );
+    pointer-events: none;
+  }
+
+  .gallery-image {
+    filter: grayscale(1);
+    transition: filter 0.3s ease;
+  }
+
+  .gallery-frame:hover .gallery-image {
+    filter: grayscale(0.2);
+  }
+
+  /* Floating Words Background */
+  .floating-words-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .floating-word {
+    position: absolute;
+    font-family: "Inter", sans-serif;
+    font-size: clamp(1rem, 4vw, 1.5rem);
+    font-weight: 900;
+    font-style: normal;
+    line-height: normal;
+    text-transform: uppercase;
+    opacity: 0.15;
+    white-space: nowrap;
+    letter-spacing: 0.1em;
+    color: #ffffff;
+    will-change: transform;
+    animation: float var(--duration, 50s) ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+    left: var(--x, 50%);
+    top: var(--y, 50%);
+  }
+
+  .floating-word:nth-child(even) {
+    -webkit-text-stroke-width: 1.5px;
+    -webkit-text-stroke-color: #ffffff;
+    color: transparent;
+    opacity: 0.1;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translate(0, 0) rotate(0deg);
+    }
+    25% {
+      transform: translate(10vw, -10vh) rotate(2deg);
+    }
+    50% {
+      transform: translate(-5vw, 10vh) rotate(-1deg);
+    }
+    75% {
+      transform: translate(15vw, 5vh) rotate(1deg);
+    }
+  }
+</style>

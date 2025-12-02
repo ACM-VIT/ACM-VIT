@@ -1,0 +1,243 @@
+---
+import Cassette from "../components/Cassette.astro";
+
+export interface Props {
+  projects: Array<{
+    cassette: {
+      src: string;
+      alt: string;
+    };
+    textContent: {
+      blocks: string[];
+    };
+    buttons: {
+      primary: {
+        backgroundColor: string;
+        textColor: string;
+        borderColor: string;
+        borderRadius?: string;
+      };
+      learnMore: {
+        text: string;
+        backgroundColor: string;
+        textColor: string;
+        borderColor: string;
+        borderRadius?: string;
+      };
+      visitWebsite: {
+        text: string;
+        backgroundColor: string;
+        textColor: string;
+        borderColor: string;
+        borderRadius?: string;
+      };
+      icons: Array<{
+        type: string;
+        backgroundColor: string;
+        textColor: string;
+        borderColor: string;
+        iconColor: string;
+        borderRadius?: string;
+      }>;
+    };
+    colors: {
+      textColor: string;
+      contentBlockBackground: string;
+      hoverShadow: string;
+    };
+  }>;
+}
+
+const { projects = [] } = Astro.props;
+---
+
+<div class="projects-container flex flex-col">
+  {
+    projects.map((projectData) => (
+      <section
+        class="hero px-4 text-white w-full"
+        style={{
+          "--textColor": projectData.colors.textColor,
+          "--hoverShadow": projectData.colors.hoverShadow,
+        }}
+      >
+        <div class="mobile-layout flex flex-col w-full">
+          {/* Top Text Block with border */}
+          <div class="moving-border-box-b p-6">
+            <div class="content-section text-[var(--textColor)]">
+              <p class="description font-['PolySans_Trial'] text-[8px] leading-[1.5] m-0 uppercase text-[var(--textColor)] font-light break-words">
+                {projectData.textContent.blocks[0]}
+              </p>
+            </div>
+          </div>
+
+          {/* Cassette in middle with border */}
+          <div class="moving-border-box-b py-8 flex items-center justify-center">
+            <div class="w-[60%]">
+              <Cassette
+                overlaySrc={projectData.cassette.src}
+                alt={projectData.cassette.alt}
+                color={projectData.buttons.primary.backgroundColor}
+                overlaySizePercent={10}
+              />
+            </div>
+          </div>
+
+          {/* Bottom Text Block with border */}
+          <div class="moving-border-box-b p-6">
+            <div class="content-section text-[var(--textColor)]">
+              <p class="description font-['PolySans_Trial'] text-[8px] leading-[1.5] m-0 uppercase text-[var(--textColor)] font-light break-words">
+                {projectData.textContent.blocks[1]}
+              </p>
+            </div>
+          </div>
+
+          {/* Action Buttons at bottom with border */}
+          <div class="moving-border-box pt-6 px-6 pb-20 flex flex-row gap-3 items-center justify-center">
+            <button
+              class="gh-btn icon-btn w-10 h-10 rounded-full flex items-center justify-center p-0 border font-['PolySans_Trial'] text-xs font-light uppercase cursor-pointer transition-all duration-300 shrink-0"
+              style={`
+                background: ${projectData.buttons.icons[0].backgroundColor};
+                color: ${projectData.buttons.icons[0].textColor};
+                border-color: ${projectData.buttons.icons[0].borderColor};
+              `}
+              aria-label={projectData.buttons.icons[0].type}
+            >
+              <img
+                src={`/${projectData.buttons.icons[0].type}-icon.svg`}
+                alt={projectData.buttons.icons[0].type}
+                width="20"
+                style={`filter: brightness(0) saturate(100%) invert(${projectData.buttons.icons[0].iconColor === "#FEFCD9" ? "96%" : "0%"});`}
+              />
+            </button>
+
+            <button
+              class="btn primary flex-1 px-3 py-2 border rounded-[25px] font-['PolySans_Trial'] text-[8px] font-light uppercase cursor-pointer transition-all duration-300 whitespace-nowrap"
+              style={`
+                background: ${projectData.buttons.learnMore.backgroundColor};
+                color: ${projectData.buttons.learnMore.textColor};
+                border-color: ${projectData.buttons.learnMore.borderColor};
+              `}
+            >
+              {projectData.buttons.learnMore.text}
+            </button>
+
+            <button
+              class="btn primary flex-1 px-3 py-2 border rounded-[25px] font-['PolySans_Trial'] text-[8px] font-light uppercase cursor-pointer transition-all duration-300 whitespace-nowrap"
+              style={`
+                background: ${projectData.buttons.visitWebsite.backgroundColor};
+                color: ${projectData.buttons.visitWebsite.textColor};
+                border-color: ${projectData.buttons.visitWebsite.borderColor};
+              `}
+            >
+              {projectData.buttons.visitWebsite.text}
+            </button>
+          </div>
+        </div>
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  .moving-border-box-b {
+    background-image: linear-gradient(
+        to bottom,
+        rgba(153, 153, 153, 0.5) 50%,
+        transparent 50%
+      ),
+      linear-gradient(to bottom, rgba(153, 153, 153, 0.5) 50%, transparent 50%),
+      linear-gradient(to right, rgba(153, 153, 153, 0.5) 50%, transparent 50%);
+    background-size:
+      2px 12px,
+      2px 12px,
+      12px 2px;
+    background-position:
+      0 0,
+      100% 0,
+      0 100%;
+    background-repeat: repeat-y, repeat-y, repeat-x;
+    animation: move-borders-b 1s linear infinite;
+  }
+
+  .moving-border-box {
+    background-image: linear-gradient(
+        to bottom,
+        rgba(153, 153, 153, 0.5) 50%,
+        transparent 50%
+      ),
+      linear-gradient(to bottom, rgba(153, 153, 153, 0.5) 50%, transparent 50%);
+    background-size:
+      2px 12px,
+      2px 12px;
+    background-position:
+      0 0,
+      100% 0;
+    background-repeat: repeat-y, repeat-y;
+    animation: move-borders 1s linear infinite;
+  }
+
+  @keyframes move-borders-b {
+    0% {
+      background-position:
+        0 0,
+        100% 0,
+        0 100%;
+    }
+    100% {
+      background-position:
+        0 12px,
+        100% 12px,
+        12px 100%;
+    }
+  }
+
+  @keyframes move-borders {
+    0% {
+      background-position:
+        0 0,
+        100% 0;
+    }
+    100% {
+      background-position:
+        0 12px,
+        100% 12px;
+    }
+  }
+
+  @font-face {
+    font-family: "PolySans Trial";
+    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-SlimMono.otf")
+      format("opentype");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "PolySans Trial";
+    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-NeutralMono.otf")
+      format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "PolySans Trial";
+    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-MedianMono.otf")
+      format("opentype");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "PolySans Trial";
+    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-BulkyMono.otf")
+      format("opentype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+</style>
