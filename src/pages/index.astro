@@ -26,62 +26,80 @@ import Blogs from "../components/Blogs.astro";
 ---
 
 <Layout>
+  <section id="home" class="page-section relative">
+    <div class="relative h-screen w-screen">
+      <Hero />
+    </div>
+    <LegendPins />
+    <BecauseTechMatters />
+  </section>
 
-	
-	<section id="home" class="page-section">
-		<Hero />
-		<!-- {/* Legends pinned ONLY for the home section */}
-		<LegendPins /> -->
-	</section>
+  <section id="about" class="page-section">
+    <div class="hidden md:block">
+      <About />
+    </div>
+    <div class="md:hidden">
+      <About_Phone />
+    </div>
+  </section>
 
+  <section id="projects" class="page-section">
+    <div class="hidden md:block">
+      <ProjectScreen projects={projectsData} />
+    </div>
+    <div class="md:hidden">
+      <ProjectScreenPhone projects={projectsData} />
+    </div>
+  </section>
 
-	<section id="about" class="page-section">
-		<Welcome />
-		<About />
-	</section>
+  <section id="domains" class="page-section">
+    <div class="domains-desktop-container">
+      <Domains />
+    </div>
+    <div class="domains-mobile-container">
+      <DomainsPhone />
+    </div>
+  </section>
 
-	<section id="projects" class="page-section">
-		<ProjectScreen projects={projectsData} />
-	</section>
+  <section id="events" class="page-section">
+    <Events />
+  </section>
 
-	<section id="domains" class="page-section">
-		<div class="domains-desktop-container">
-  			<Domains />
-		</div>
-		<div class="domains-mobile-container">
-			<DomainsPhone />
-		</div>
-	</section>
+  <section id="acm-w" class="page-section">
+    <AcmWMotto />
+    <AcmWContent />
+    <AcmWBento />
+  </section>
 
-	<section id="acm-w" class="page-section">
-		<AcmWMotto />
-		<AcmWContent />
-		<AcmWBento />
-	</section>
-	
-	<Board />
+  <Board />
 
-	<section id="blogs" class="page-section">
-		<Blogs />
-	</section>
+  <section id="blogs" class="page-section">
+    <Blogs />
+  </section>
 
-	<Gallery />
+  <section id="gallery" class="page-section">
+    <div class="hidden md:block">
+      <Gallery />
+    </div>
+    <div class="md:hidden">
+      <Gallery_Phone />
+    </div>
+  </section>
 
-	<section id="partners" class="page-section">
-		<Partners /> 
-	</section>
+  <section id="partners" class="page-section">
+    <Partners />
+  </section>
 
-	
+  <section id="contact" class="page-section">
+    <div class="hidden md:block">
+      <ContactUS />
+    </div>
+    <div class="md:hidden">
+      <ContactUSPhone />
+    </div>
+  </section>
 
-	<section id="contact" class="page-section">
-		<ContactUS />
-	</section>
-
-	<!-- Anchor placeholder for events if content is not displayed -->
-	<section id="events" class="page-section"></section>
-
-	<Footer />
-	<!-- <Events /> -->
+  <Footer />
 </Layout>
 
 <style>
