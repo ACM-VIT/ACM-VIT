@@ -43,15 +43,6 @@ import Blogs from "../components/Blogs.astro";
     </div>
   </section>
 
-  <section id="projects" class="page-section">
-    <div class="hidden md:block">
-      <ProjectScreen projects={projectsData} />
-    </div>
-    <div class="md:hidden">
-      <ProjectScreenPhone projects={projectsData} />
-    </div>
-  </section>
-
   <section id="domains" class="page-section">
     <div class="domains-desktop-container">
       <Domains />
@@ -63,6 +54,15 @@ import Blogs from "../components/Blogs.astro";
 
   <section id="events" class="page-section">
     <Events />
+  </section>
+
+  <section id="projects" class="page-section">
+    <div class="hidden md:block">
+      <ProjectScreen projects={projectsData} />
+    </div>
+    <div class="md:hidden">
+      <ProjectScreenPhone projects={projectsData} />
+    </div>
   </section>
 
   <section id="acm-w" class="page-section">
@@ -77,6 +77,10 @@ import Blogs from "../components/Blogs.astro";
     <Blogs />
   </section>
 
+  <section id="partners" class="page-section">
+    <Partners />
+  </section>
+
   <section id="gallery" class="page-section">
     <div class="hidden md:block">
       <Gallery />
@@ -84,10 +88,6 @@ import Blogs from "../components/Blogs.astro";
     <div class="md:hidden">
       <Gallery_Phone />
     </div>
-  </section>
-
-  <section id="partners" class="page-section">
-    <Partners />
   </section>
 
   <section id="contact" class="page-section">

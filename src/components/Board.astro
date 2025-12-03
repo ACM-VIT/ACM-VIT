@@ -44,7 +44,7 @@ const facultyCoordinator = boardMembers.find(
 
     <!-- Main Board Members Grid -->
     <div
-      class="w-full lg:w-[80vw] self-center flex flex-wrap justify-center gap-4 mb-12"
+      class="w-full lg:w-[70vw] self-center flex flex-wrap justify-center gap-4 mb-12"
     >
       {
         mainBoardMembers.map((member) => (
@@ -66,7 +66,7 @@ const facultyCoordinator = boardMembers.find(
 
     {
       acmwBoardMembers.length > 0 && (
-        <div class="w-full lg:w-[80vw] self-center flex flex-wrap justify-center gap-4 mb-12">
+        <div class="w-full lg:w-[70vw] self-center flex flex-wrap justify-center gap-4 mb-12">
           {acmwBoardMembers.map((member) => (
             <div class="w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)] transition-all duration-300 hover:scale-105 hover:shadow-2xl self-center justify-center items-center flex">
               <BoardMemberCardSingular
@@ -111,8 +111,8 @@ const facultyCoordinator = boardMembers.find(
 
       ScrollTrigger.create({
         trigger: section,
-        start: "top 30%", 
-        end: "bottom 60%", 
+        start: "top 30%",
+        end: "bottom 60%",
         onEnter: () => gsap.to(bgLayer, { opacity: 1, duration: 0.5 }),
         onLeave: () => gsap.to(bgLayer, { opacity: 0, duration: 0.5 }),
         onEnterBack: () => gsap.to(bgLayer, { opacity: 1, duration: 0.5 }),
