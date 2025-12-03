@@ -182,5 +182,95 @@ export const projectsData = [
       "contentBlockBackground": "rgba(0, 0, 0, 0.15)",
       "hoverShadow": "rgba(135, 16, 219, 0.4)"
     }
+  },
+  {
+    "cassette": {
+      "src": "/projects/localhost.svg",
+      "alt": "Localhost Image"
+    },
+    "textContent": {
+      "blocks": [
+        "Lorem quis mollit do ea et ex ut reprehenderit magna fugiat nostrud do tempor laboris laboris. Incididunt proident et incididunt minim duis officia esse ipsum aute consectetur cillum consectetur minim sint nostrud. Ea officia deserunt occaecat lorem amet dolore duis labore officia consectetur commodo veniam pariatur enim ullamco. Qui magna magna incididunt.",
+        "Lorem quis mollit do ea et ex ut reprehenderit magna fugiat nostrud do tempor laboris laboris. Incididunt proident et incididunt minim duis officia esse ipsum aute consectetur cillum consectetur minim sint nostrud. Ea officia deserunt occaecat lorem amet dolore duis labore officia consectetur commodo veniam pariatur enim ullamco. Qui magna magna incididunt."
+      ]
+    },
+    "buttons": {
+      "primary": {
+        "backgroundColor": "#eb5757",
+        "textColor": "white",
+        "borderColor": "#FEFCD9"
+      },
+      "learnMore": {
+        "text": "LEARN MORE",
+        "backgroundColor": "#eb5757",
+        "textColor": "white",
+        "borderColor": "#FEFCD9"
+      },
+      "visitWebsite": {
+        "text": "VISIT WEBSITE",
+        "backgroundColor": "#eb5757",
+        "textColor": "white",
+        "borderColor": "#FEFCD9"
+      },
+      "icons": [
+        {
+          "type": "github",
+          "backgroundColor": "#eb5757",
+          "textColor": "white",
+          "borderColor": "#FEFCD9",
+          "iconColor": "#FEFCD9"
+        }
+      ]
+    },
+    "colors": {
+      "textColor": "white",
+      "contentBlockBackground": "rgba(0, 0, 0, 0.15)",
+      "hoverShadow": "rgba(235, 87, 87, 0.4)"
+    }
+  },
+  {
+    "cassette": {
+      "src": "/projects/examcooker.svg",
+      "alt": "ExamCooker Image"
+    },
+    "textContent": {
+      "blocks": [
+        "Lorem quis mollit do ea et ex ut reprehenderit magna fugiat nostrud do tempor laboris laboris. Incididunt proident et incididunt minim duis officia esse ipsum aute consectetur cillum consectetur minim sint nostrud. Ea officia deserunt occaecat lorem amet dolore duis labore officia consectetur commodo veniam pariatur enim ullamco. Qui magna magna incididunt.",
+        "Lorem quis mollit do ea et ex ut reprehenderit magna fugiat nostrud do tempor laboris laboris. Incididunt proident et incididunt minim duis officia esse ipsum aute consectetur cillum consectetur minim sint nostrud. Ea officia deserunt occaecat lorem amet dolore duis labore officia consectetur commodo veniam pariatur enim ullamco. Qui magna magna incididunt."
+      ]
+    },
+    "buttons": {
+      "primary": {
+        "backgroundColor": "#2664e4",
+        "textColor": "white",
+        "borderColor": "#FEFCD9"
+      },
+      "learnMore": {
+        "text": "LEARN MORE",
+        "backgroundColor": "#2664e4",
+        "textColor": "white",
+        "borderColor": "#FEFCD9"
+      },
+      "visitWebsite": {
+        "text": "VISIT WEBSITE",
+        "backgroundColor": "#2664e4",
+        "textColor": "white",
+        "borderColor": "#FEFCD9"
+      },
+      "icons": [
+        {
+          "type": "github",
+          "backgroundColor": "#2664e4",
+          "textColor": "white",
+          "borderColor": "#FEFCD9",
+          "iconColor": "#FEFCD9"
+        }
+      ]
+    },
+    "colors": {
+      "textColor": "white",
+      "contentBlockBackground": "rgba(0, 0, 0, 0.15)",
+      "hoverShadow": "rgba(38, 100, 228, 0.4)"
+    }
   }
 ]
