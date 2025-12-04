@@ -6,8 +6,8 @@ export const projectsData = [
     },
     "textContent": {
       "blocks": [
-        "Lorem quis mollit do ea et ex ut reprehenderit magna fugiat nostrud do tempor laboris laboris. Incididunt proident et incididunt minim duis officia esse ipsum aute consectetur cillum consectetur minim sint nostrud. Ea officia deserunt occaecat lorem amet dolore duis labore officia consectetur commodo veniam pariatur enim ullamco. Qui magna magna incididunt.",
-        "Lorem quis mollit do ea et ex ut reprehenderit magna fugiat nostrud do tempor laboris laboris. Incididunt proident et incididunt minim duis officia esse ipsum aute consectetur cillum consectetur minim sint nostrud. Ea officia deserunt occaecat lorem amet dolore duis labore officia consectetur commodo veniam pariatur enim ullamco. Qui magna magna incididunt."
+        "ACMOne streamlines operations for ACM VIT's 100+ organizing committee members by centralizing event planning, deadline tracking, ID scanning, and team communication in one unified platform.",
+        "Built specifically for student chapter management, the system features real-time updates, an intuitive calendar interface, and integrated collaboration tools that keep all teams synchronized. This eliminates coordination bottlenecks and reduces administrative overhead, allowing the chapter to focus on delivering impactful events and initiatives. With its clean interface and robust backend architecture, ACMOne demonstrates how thoughtful system design can solve real organizational challenges at scale."
       ]
     },
     "buttons": {
@@ -46,37 +46,37 @@ export const projectsData = [
   },
   {
     "cassette": {
-      "src": "/projects/UniPool.svg",
-      "alt": "UniPool Image"
+      "src": "/projects/examcooker.svg",
+      "alt": "ExamCooker Image"
     },
     "textContent": {
       "blocks": [
-        "Lorem quis mollit do ea et ex ut reprehenderit magna fugiat nostrud do tempor laboris laboris. Incididunt proident et incididunt minim duis officia esse ipsum aute consectetur cillum consectetur minim sint nostrud. Ea officia deserunt occaecat lorem amet dolore duis labore officia consectetur commodo veniam pariatur enim ullamco. Qui magna magna incididunt.",
-        "Lorem quis mollit do ea et ex ut reprehenderit magna fugiat nostrud do tempor laboris laboris. Incididunt proident et incididunt minim duis officia esse ipsum aute consectetur cillum consectetur minim sint nostrud. Ea officia deserunt occaecat lorem amet dolore duis labore officia consectetur commodo veniam pariatur enim ullamco. Qui magna magna incididunt."
+        "ExamCooker simplifies exam preparation for VIT students by centralizing notes, past papers, and community discussions in one comprehensive platform. Built to perform when the pressure's on, it features an intuitive interface, fast search, and seamless resource sharing that helps students find what they need quickly.",
+        "The platform's active forum enables peer-to-peer learning, while its extensive repository grows through community contributions. With over 11,000 active users, ExamCooker has become an essential tool during exam seasons across the VIT community. Developed using Next.js, CockroachDB, and Prisma, the platform maintains reliable performance even during peak traffic periods when thousands of students access resources simultaneously."
       ]
     },
     "buttons": {
       "primary": {
-        "backgroundColor": "#7100FF",
+        "backgroundColor": "#2664e4",
         "textColor": "white",
         "borderColor": "#FEFCD9"
       },
       "learnMore": {
         "text": "LEARN MORE",
-        "backgroundColor": "#7100FF",
+        "backgroundColor": "#2664e4",
         "textColor": "white",
         "borderColor": "#FEFCD9"
       },
       "visitWebsite": {
         "text": "VISIT WEBSITE",
-        "backgroundColor": "#7100FF",
+        "backgroundColor": "#2664e4",
         "textColor": "white",
         "borderColor": "#FEFCD9"
       },
       "icons": [
         {
           "type": "github",
-          "backgroundColor": "#7100FF",
+          "backgroundColor": "#2664e4",
           "textColor": "white",
           "borderColor": "#FEFCD9",
           "iconColor": "#FEFCD9"
@@ -86,7 +86,7 @@ export const projectsData = [
     "colors": {
       "textColor": "white",
       "contentBlockBackground": "rgba(0, 0, 0, 0.15)",
-      "hoverShadow": "rgba(124, 58, 237, 0.4)"
+      "hoverShadow": "rgba(38, 100, 228, 0.4)"
     }
   },
   {
@@ -96,8 +96,8 @@ export const projectsData = [
     },
     "textContent": {
       "blocks": [
-        "Lorem quis mollit do ea et ex ut reprehenderit magna fugiat nostrud do tempor laboris laboris. Incididunt proident et incididunt minim duis officia esse ipsum aute consectetur cillum consectetur minim sint nostrud. Ea officia deserunt occaecat lorem amet dolore duis labore officia consectetur commodo veniam pariatur enim ullamco. Qui magna magna incididunt.",
-        "Lorem quis mollit do ea et ex ut reprehenderit magna fugiat nostrud do tempor laboris laboris. Incididunt proident et incididunt minim duis officia esse ipsum aute consectetur cillum consectetur minim sint nostrud. Ea officia deserunt occaecat lorem amet dolore duis labore officia consectetur commodo veniam pariatur enim ullamco. Qui magna magna incididunt."
+        "CLI-RPG brings interactive storytelling to the command line through an immersive text-based adventure. Players navigate a mysterious world filled with challenging puzzles, compelling characters, and detailed ASCII art, all enhanced by dynamic music and an integrated audio visualizer.",
+        "The game features a branching narrative with multiple endings, inventory management, and diverse locations to explore. Each playthrough offers unique discoveries as players uncover the deeper mysteries driving the storyline forward. Built with Rust, Ratatui, and Supabase, CLI-RPG demonstrates the creative potential of terminal-based applications. It's a unique fusion of classic adventure gaming with modern command-line interfaces, showcasing how technical innovation can create engaging experiences in unexpected formats."
       ]
     },
     "buttons": {
@@ -136,13 +136,103 @@ export const projectsData = [
   },
   {
     "cassette": {
-      "src": "/projects/Cover.svg",
-      "alt": "Hello Image"
+      "src": "/projects/UniPool.svg",
+      "alt": "UniPool Image"
     },
     "textContent": {
       "blocks": [
-        "Lorem quis mollit do ea et ex ut reprehenderit magna fugiat nostrud do tempor laboris laboris. Incididunt proident et incididunt minim duis officia esse ipsum aute consectetur cillum consectetur minim sint nostrud. Ea officia deserunt occaecat lorem amet dolore duis labore officia consectetur commodo veniam pariatur enim ullamco. Qui magna magna incididunt.",
-        "Lorem quis mollit do ea et ex ut reprehenderit magna fugiat nostrud do tempor laboris laboris. Incididunt proident et incididunt minim duis officia esse ipsum aute consectetur cillum consectetur minim sint nostrud. Ea officia deserunt occaecat lorem amet dolore duis labore officia consectetur commodo veniam pariatur enim ullamco. Qui magna magna incididunt."
+        "UniPool is a comprehensive carpooling platform that connects you across India with seamless ride-sharing solutions. Whether hosting or joining rides, the platform's dynamic search capabilities work nationwide, from campus trips to intercity travel, breaking free from predefined route limitations.",
+        "Real-time notifications keep users updated on ride status, bookings, and acceptances, while built-in group messaging connects all the riders for easy coordination. Direct messaging enables one-on-one communication between riders and hosts. Powered by a proprietary search algorithm with advanced filtering, UniPool intelligently matches riders with optimal routes and schedules. The platform transforms carpooling into a connected travel community, making intercity and local travel more accessible, affordable, and social especially for VIT students."
+      ]
+    },
+    "buttons": {
+      "primary": {
+        "backgroundColor": "#7100FF",
+        "textColor": "white",
+        "borderColor": "#FEFCD9"
+      },
+      "learnMore": {
+        "text": "LEARN MORE",
+        "backgroundColor": "#7100FF",
+        "textColor": "white",
+        "borderColor": "#FEFCD9"
+      },
+      "visitWebsite": {
+        "text": "VISIT WEBSITE",
+        "backgroundColor": "#7100FF",
+        "textColor": "white",
+        "borderColor": "#FEFCD9"
+      },
+      "icons": [
+        {
+          "type": "github",
+          "backgroundColor": "#7100FF",
+          "textColor": "white",
+          "borderColor": "#FEFCD9",
+          "iconColor": "#FEFCD9"
+        }
+      ]
+    },
+    "colors": {
+      "textColor": "white",
+      "contentBlockBackground": "rgba(0, 0, 0, 0.15)",
+      "hoverShadow": "rgba(124, 58, 237, 0.4)"
+    }
+  },
+  {
+    "cassette": {
+      "src": "/projects/localhost.svg",
+      "alt": "Localhost Image"
+    },
+    "textContent": {
+      "blocks": [
+        "Localhost is a VS Code-inspired platform built for ACM VIT's 2024 organizing committee selections. With its familiar code-editor interface, the platform streamlines the entire recruitment process from application submission to candidate evaluation.",
+        "The system provides organizing teams with efficient tools to assess prospective members while creating an engaging, developer-friendly experience for applicants. By reimagining familiar development environments for organizational processes, Localhost demonstrates innovative thinking in recruitment technology tailored specifically for the tech-savvy ACM community."
+      ]
+    },
+    "buttons": {
+      "primary": {
+        "backgroundColor": "#eb5757",
+        "textColor": "white",
+        "borderColor": "#FEFCD9"
+      },
+      "learnMore": {
+        "text": "LEARN MORE",
+        "backgroundColor": "#eb5757",
+        "textColor": "white",
+        "borderColor": "#FEFCD9"
+      },
+      "visitWebsite": {
+        "text": "VISIT WEBSITE",
+        "backgroundColor": "#eb5757",
+        "textColor": "white",
+        "borderColor": "#FEFCD9"
+      },
+      "icons": [
+        {
+          "type": "github",
+          "backgroundColor": "#eb5757",
+          "textColor": "white",
+          "borderColor": "#FEFCD9",
+          "iconColor": "#FEFCD9"
+        }
+      ]
+    },
+    "colors": {
+      "textColor": "white",
+      "contentBlockBackground": "rgba(0, 0, 0, 0.15)",
+      "hoverShadow": "rgba(235, 87, 87, 0.4)"
+    }
+  },
+  {
+    "cassette": {
+      "src": "/projects/Cover.svg",
+      "alt": "OCS Website Image"
+    },
+    "textContent": {
+      "blocks": [
+        "OCS is ACM VIT's 2025 organizing committee selection portal featuring a sleek macOS-inspired interface that transforms recruitment into an interactive desktop experience. The platform showcases the chapter's projects, events, and memories while allowing you to enjoy mini-games like ACM Draw, Doom, and 2048.",
+        "The platform serves as both a recruitment tool and digital showcase, combining nostalgic design with innovative functionality to create a memorable selection experience that reflects the chapter's commitment to creative technical solutions."
       ]
     },
     "buttons": {
@@ -182,95 +272,5 @@ export const projectsData = [
       "contentBlockBackground": "rgba(0, 0, 0, 0.15)",
       "hoverShadow": "rgba(135, 16, 219, 0.4)"
     }
-  },
-  {
-    "cassette": {
-      "src": "/projects/localhost.svg",
-      "alt": "Localhost Image"
-    },
-    "textContent": {
-      "blocks": [
-        "Lorem quis mollit do ea et ex ut reprehenderit magna fugiat nostrud do tempor laboris laboris. Incididunt proident et incididunt minim duis officia esse ipsum aute consectetur cillum consectetur minim sint nostrud. Ea officia deserunt occaecat lorem amet dolore duis labore officia consectetur commodo veniam pariatur enim ullamco. Qui magna magna incididunt.",
-        "Lorem quis mollit do ea et ex ut reprehenderit magna fugiat nostrud do tempor laboris laboris. Incididunt proident et incididunt minim duis officia esse ipsum aute consectetur cillum consectetur minim sint nostrud. Ea officia deserunt occaecat lorem amet dolore duis labore officia consectetur commodo veniam pariatur enim ullamco. Qui magna magna incididunt."
-      ]
-    },
-    "buttons": {
-      "primary": {
-        "backgroundColor": "#eb5757",
-        "textColor": "white",
-        "borderColor": "#FEFCD9"
-      },
-      "learnMore": {
-        "text": "LEARN MORE",
-        "backgroundColor": "#eb5757",
-        "textColor": "white",
-        "borderColor": "#FEFCD9"
-      },
-      "visitWebsite": {
-        "text": "VISIT WEBSITE",
-        "backgroundColor": "#eb5757",
-        "textColor": "white",
-        "borderColor": "#FEFCD9"
-      },
-      "icons": [
-        {
-          "type": "github",
-          "backgroundColor": "#eb5757",
-          "textColor": "white",
-          "borderColor": "#FEFCD9",
-          "iconColor": "#FEFCD9"
-        }
-      ]
-    },
-    "colors": {
-      "textColor": "white",
-      "contentBlockBackground": "rgba(0, 0, 0, 0.15)",
-      "hoverShadow": "rgba(235, 87, 87, 0.4)"
-    }
-  },
-  {
-    "cassette": {
-      "src": "/projects/examcooker.svg",
-      "alt": "ExamCooker Image"
-    },
-    "textContent": {
-      "blocks": [
-        "Lorem quis mollit do ea et ex ut reprehenderit magna fugiat nostrud do tempor laboris laboris. Incididunt proident et incididunt minim duis officia esse ipsum aute consectetur cillum consectetur minim sint nostrud. Ea officia deserunt occaecat lorem amet dolore duis labore officia consectetur commodo veniam pariatur enim ullamco. Qui magna magna incididunt.",
-        "Lorem quis mollit do ea et ex ut reprehenderit magna fugiat nostrud do tempor laboris laboris. Incididunt proident et incididunt minim duis officia esse ipsum aute consectetur cillum consectetur minim sint nostrud. Ea officia deserunt occaecat lorem amet dolore duis labore officia consectetur commodo veniam pariatur enim ullamco. Qui magna magna incididunt."
-      ]
-    },
-    "buttons": {
-      "primary": {
-        "backgroundColor": "#2664e4",
-        "textColor": "white",
-        "borderColor": "#FEFCD9"
-      },
-      "learnMore": {
-        "text": "LEARN MORE",
-        "backgroundColor": "#2664e4",
-        "textColor": "white",
-        "borderColor": "#FEFCD9"
-      },
-      "visitWebsite": {
-        "text": "VISIT WEBSITE",
-        "backgroundColor": "#2664e4",
-        "textColor": "white",
-        "borderColor": "#FEFCD9"
-      },
-      "icons": [
-        {
-          "type": "github",
-          "backgroundColor": "#2664e4",
-          "textColor": "white",
-          "borderColor": "#FEFCD9",
-          "iconColor": "#FEFCD9"
-        }
-      ]
-    },
-    "colors": {
-      "textColor": "white",
-      "contentBlockBackground": "rgba(0, 0, 0, 0.15)",
-      "hoverShadow": "rgba(38, 100, 228, 0.4)"
-    }
   }
-]
+];

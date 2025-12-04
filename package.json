@@ -12,9 +12,11 @@
     "@tailwindcss/vite": "^4.1.11",
     "astro": "^5.12.8",
     "gsap": "^3.13.0",
+    "imagesloaded": "^5.0.0",
     "tailwindcss": "^4.1.11"
   },
   "devDependencies": {
+    "@types/imagesloaded": "^4.1.7",
     "sass-embedded": "^1.93.3"
   }
 }

@@ -253,9 +253,9 @@
                 <div class="pt-16 pb-8 px-4">
                     <!-- Mobile Main Title Card -->
                     <div class="mx-auto max-w-xs mb-8 relative">
-                        <!-- Mobile SVG Background -->
-                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="65" viewBox="0 0 300 60" fill="none" class="w-full">
-                            <path d="M50 1.5H250C275.41 1.5 296 13.09 296 30V35C296 51.91 275.41 63.5 250 63.5H50C24.59 63.5 4 51.91 4 35V30C4 13.09 24.59 1.5 50 1.5Z" fill="${themeHex}" stroke="#FEFCD9" stroke-width="3"/>
+                        <!-- Mobile SVG Background (using desktop path scaled) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="80" viewBox="0 0 1389 178" fill="none" class="w-full">
+                            <path d="M88 1.5H1301C1348.77 1.5 1387.5 40.2274 1387.5 88V90C1387.5 137.773 1348.77 176.5 1301 176.5H88C40.2274 176.5 1.5 137.773 1.5 90V88C1.5 40.2274 40.2274 1.5 88 1.5Z" fill="${themeHex}" stroke="#FEFCD9" stroke-width="20"/>
                         </svg>
                         
                         <!-- Mobile Content overlay -->
@@ -277,7 +277,7 @@
 
                             <!-- Mobile Domain Title -->
                             <div class="text-center">
-                                <h1 class="${config.title === "COMPETITIVE CODING" ? "text-sm font-normal" : "text-base font-normal"} text-[#1E1E1E] tracking-wider">
+                                <h1 class="${config.title === "COMPETITIVE CODING" ? "text-lg" : "text-xl"} font-normal text-[#1E1E1E] tracking-wider">
                                     ${config.title}
                                 </h1>
                             </div>

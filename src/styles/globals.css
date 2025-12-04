@@ -10,7 +10,18 @@ html {
     scroll-behavior: smooth;
 }
 
-/* Offset anchors for fixed header (approx 80px) */
 .page-section {
-    scroll-margin-top: 84px;
+  scroll-margin-top: 84px;
+}
+
+/* Global Selection Style */
+::selection {
+  background: #f95f4a;
+  color: white;
+}
+
+/* ACM-W Section Selection Style */
+#acm-w ::selection {
+  background: #ff007a;
+  color: white;
 }

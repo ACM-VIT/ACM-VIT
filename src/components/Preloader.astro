@@ -1,0 +1,136 @@
+---
+import { Image } from "astro:assets";
+---
+
+<div id="preloader" class="preloader">
+  <div class="loader-content">
+    <img src="/acm_topleft.svg" alt="ACM-VIT" class="loader-logo" />
+    <div class="progress-bar">
+      <div class="progress-fill"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import gsap from "gsap";
+  import imagesLoaded from "imagesloaded";
+
+  const preloader = document.getElementById("preloader");
+  const progressFill = document.querySelector(".progress-fill") as HTMLElement;
+
+  if (preloader && progressFill) {
+    const preloaderShown = sessionStorage.getItem("preloaderShown");
+
+    if (preloaderShown) {
+      preloader.style.display = "none";
+    } else {
+      gsap.set(preloader, { autoAlpha: 1 });
+      gsap.set(progressFill, { width: "0%" });
+      const imgLoad = imagesLoaded(document.body, { background: true });
+      const totalImages = imgLoad.images.length;
+      let loadedImages = 0;
+      if (totalImages === 0) {
+        finishLoading();
+      }
+
+      imgLoad.on("progress", (instance, image) => {
+        loadedImages++;
+        const percentage = (loadedImages / totalImages) * 100;
+        gsap.to(progressFill, {
+          width: `${percentage}%`,
+          duration: 0.2,
+          ease: "power1.out",
+        });
+      });
+
+      imgLoad.on("always", () => {
+        finishLoading();
+      });
+      setTimeout(() => {
+        if (preloader.style.display !== "none") {
+          finishLoading();
+        }
+      }, 5000); // 5 seconds max wait
+    }
+  }
+
+  function finishLoading() {
+    const preloader = document.getElementById("preloader");
+    if (!preloader) return;
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        sessionStorage.setItem("preloaderShown", "true");
+      },
+    });
+
+    tl.to(".progress-bar", {
+      opacity: 0,
+      duration: 0.3,
+    })
+      .to(preloader, {
+        yPercent: -100,
+        duration: 0.8,
+        ease: "power4.inOut",
+      })
+      .set(preloader, { display: "none" });
+  }
+</script>
+
+<style>
+  .preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #0d0e0d; /* Match body background */
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .loader-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .loader-logo {
+    width: 150px;
+    height: auto;
+    animation: pulse 2s infinite ease-in-out;
+  }
+
+  .progress-bar {
+    width: 200px;
+    height: 2px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background-color: #ffffff;
+    width: 0%;
+  }
+
+  @keyframes pulse {
+    0% {
+      opacity: 0.5;
+      transform: scale(0.95);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+    100% {
+      opacity: 0.5;
+      transform: scale(0.95);
+    }
+  }
+</style>

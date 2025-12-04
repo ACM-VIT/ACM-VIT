@@ -38,7 +38,6 @@
       }
 
       .radial-bg {
-        /* Use rishit.jpeg as the hero background, with a dark radial overlay for contrast */
         background-image: radial-gradient(
             circle at 30% 50%,
             rgba(26, 26, 26, 0.6) 0%,
@@ -50,21 +49,13 @@
           center center,
           center 30%;
         background-size: cover, cover;
-        /* Keep the background image pinned to the viewport while the section scrolls */
         background-attachment: fixed, fixed;
-        /* Fallback solid color while image loads */
         background-color: #060606;
       }
-
-      /* Make the hero section taller for scroll space */
       .hero-section {
-        height: 100vh; /* reduced section height so hero pins for a shorter duration */
+        height: 100vh;
         position: relative;
       }
-
-      /* Legends default to absolute inside the hero section. When the section has
-     the `in-view` class we switch them to fixed so they pin to viewport only
-     while the hero is active (component-scoped). */
       .legend-pin {
         position: absolute;
       }
@@ -86,7 +77,6 @@
         .hero-line-2 br {
           display: none;
         }
-        /* mobile: avoid fixed backgrounds for performance and visual issues */
         .radial-bg {
           background-attachment: scroll, scroll;
         }
@@ -107,81 +97,56 @@
 
         if (!line1 || !line2 || !section1) return;
 
-        const html1 = line1.innerHTML;
-        const html2 = line2.innerHTML;
-        const text1 = (line1.textContent || "").replace(/\s+/g, " ").trim();
-        const text2 = (line2.textContent || "").replace(/\s+/g, " ").trim();
+        // Helper to wrap words in spans
+        const wrapWords = (element: Element) => {
+          const childNodes = Array.from(element.childNodes);
+          element.innerHTML = "";
 
-        // Initial scramble animation
-        const tl = gsap.timeline();
-        tl.set(line1, { opacity: 1 })
-          .to(line1, {
-            duration: 1.5,
-            ease: "none",
-            scrambleText: {
-              text: text1,
-              chars: "upperAndLowerCase",
-              revealDelay: 0.12,
-            },
-            onComplete: () => {
-              line1.innerHTML = html1;
-            },
-          })
-          .set(line2, { opacity: 1 })
-          .to(line2, {
-            duration: 1.5,
-            ease: "none",
-            scrambleText: {
-              text: text2,
-              chars: "upperAndLowerCase",
-              revealDelay: 0.12,
-            },
-            onComplete: () => {
-              line2.innerHTML = html2;
-            },
-          });
-
-        // ScrollTrigger animation - transforms text when scrolling starts from top
-        let hasTransformed = false;
-
-        ScrollTrigger.create({
-          trigger: section1,
-          start: "top top",
-          end: "bottom bottom",
-          markers: false,
-          onEnter: () => {
-            if (!hasTransformed) {
-              hasTransformed = true;
-              gsap
-                .timeline()
-                .to(line1, {
-                  duration: 1.2,
-                  ease: "none",
-                  scrambleText: {
-                    text: "because",
-                    chars: "upperAndLowerCase",
-                    revealDelay: 0.12,
-                  },
-                })
-                .to(
-                  line2,
-                  {
-                    duration: 1.2,
-                    ease: "none",
-                    scrambleText: {
-                      text: "technology matters",
-                      chars: "upperAndLowerCase",
-                      revealDelay: 0.12,
-                    },
-                  },
-                  "-=0.4"
-                );
+          childNodes.forEach((node) => {
+            if (node.nodeType === Node.TEXT_NODE) {
+              const textContent = node.textContent;
+              if (textContent) {
+                const words = textContent.trim().split(/\s+/);
+                words.forEach((word) => {
+                  if (word) {
+                    const span = document.createElement("span");
+                    span.textContent = word;
+                    span.className = "hover-scramble inline-block mr-2"; // mr-2 for spacing
+                    span.dataset.original = word;
+                    element.appendChild(span);
+                    element.appendChild(document.createTextNode(" ")); // Space between words
+                  }
+                });
+              }
+            } else {
+              element.appendChild(node); 
             }
-          },
+          });
+        };
+
+        wrapWords(line1);
+        wrapWords(line2);
+
+        
+        gsap.set([line1, line2], { opacity: 1 });
+
+        const words = document.querySelectorAll(".hover-scramble");
+        words.forEach((word) => {
+          if (word instanceof HTMLElement) {
+            word.addEventListener("mouseenter", () => {
+              gsap.to(word, {
+                duration: 0.8,
+                scrambleText: {
+                  text: word.dataset.original || "",
+                  chars: "upperAndLowerCase",
+                  revealDelay: 0.1,
+                  speed: 0.3,
+                },
+              });
+            });
+          }
         });
 
-        // IntersectionObserver to toggle an "in-view" class on the hero section
-        // so legend pinning is scoped to this component only.
         try {
           const io = new IntersectionObserver(
             (entries) => {
@@ -198,7 +163,6 @@
 
           io.observe(section1);
         } catch (e) {
-          // Fallback: if IntersectionObserver isn't available, keep legends absolute inside the section
           console.warn(
             "IntersectionObserver not available — legend pinning will remain scoped via absolute positioning."
           );
