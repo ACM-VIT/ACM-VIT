@@ -1,32 +1,5 @@
 ---
-const cassetteImages = [
-  "/events/apptitude-cassette.svg",
-  "/events/c2c-cassette.svg",
-  "/events/codart-cassette.svg",
-  "/events/code-plusplus-cassette.svg",
-  "/events/codex-cryptum-cassette.svg",
-  "/events/cryptic-hunt-cassette.svg",
-  "/events/forktober-cassette.svg",
-  "/events/inspiher-cassette.svg",
-  "/events/neural-hack-cassette.svg",
-  "/events/reverse-coding-cassette.svg",
-  "/events/the-tiny-hack-cassette.svg",
-];
-
-// Data
-const info = {
-  Pen: { title: "CodePen", site: "https://codepen.io/wodniack" },
-  Dummy1: { title: "Dummy Project 1", site: "https://wodniack.dev" },
-  Dummy2: { title: "Dummy Project 2", site: "https://wodniack.dev" },
-  Dummy3: { title: "Dummy Project 3", site: "https://wodniack.dev" },
-  Dummy4: { title: "Dummy Project 4", site: "https://wodniack.dev" },
-  Dummy5: { title: "Dummy Project 5", site: "https://wodniack.dev" },
-  Dummy6: { title: "Dummy Project 6", site: "https://wodniack.dev" },
-  Dummy7: { title: "Dummy Project 7", site: "https://wodniack.dev" },
-  Dummy8: { title: "Dummy Project 8", site: "https://wodniack.dev" },
-  Dummy9: { title: "Dummy Project 9", site: "https://wodniack.dev" },
-  Dummy10: { title: "Dummy Project 10", site: "https://wodniack.dev" },
-};
+import { cassetteImages, info } from "../data/eventsData";
 
 interface Project {
   caption: string;
@@ -40,7 +13,7 @@ let pens: Project[] = [];
 // Create dummy projects
 cassetteImages.forEach((src, i) => {
   const index = i + 1;
-  const key = `Dummy${index % 10 === 0 ? 10 : index % 10}` as keyof typeof info;
+  const key = `Event${index}` as keyof typeof info;
   const project = info[key];
 
   if (project) {
