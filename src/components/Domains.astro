@@ -426,6 +426,20 @@
                 #domain-screen::-webkit-scrollbar {
                     display: none;
                 }
+                @keyframes logo-loop {
+                    0% { transform: translateX(var(--loop-offset, -50%)); }
+                    100% { transform: translateX(0); }
+                }
+                .animate-logo-loop {
+                    animation: logo-loop 20s linear infinite;
+                }
+                .hover-pause:hover {
+                    animation-play-state: paused;
+                }
+                .fade-mask {
+                    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+                    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+                }
             `;
           document.head.appendChild(style);
 
@@ -523,23 +537,42 @@
                         <!-- Tech Stack Icons -->
                         ${
                           config.techIcons.length > 0
-                            ? `
-                            <div class="flex justify-center items-center gap-8 mb-12 flex-wrap px-8">
-                                ${config.techIcons
-                                  .map(
-                                    (icon: any) => `
-                                    <div class="flex items-center justify-center hover:scale-110 transition-transform duration-300">
-                                        <img 
-                                            src="${icon.src}" 
-                                            alt="${icon.alt}" 
-                                            class="w-12 h-12 md:w-12 md:h-12 grayscale hover:grayscale-0 transition-all duration-300 opacity-70 hover:opacity-100" 
-                                        />
+                            ? (() => {
+                                // Dynamic duplication to ensure continuous loop filling at least ~3000px
+                                const minItems = 30;
+                                const count = config.techIcons.length;
+                                const sets = Math.max(
+                                  3,
+                                  Math.ceil(minItems / count)
+                                );
+                                const loopOffset = -100 / sets;
+
+                                const oneSetHTML = `
+                                    <div class="flex gap-16 pr-16 items-center">
+                                        ${config.techIcons
+                                          .map(
+                                            (icon: any) => `
+                                            <div class="flex items-center justify-center hover:scale-110 transition-transform duration-300 min-w-[3rem]">
+                                                <img 
+                                                    src="${icon.src}" 
+                                                    alt="${icon.alt}" 
+                                                    class="w-12 h-12 md:w-16 md:h-16 grayscale hover:grayscale-0 transition-all duration-300 opacity-70 hover:opacity-100" 
+                                                />
+                                            </div>
+                                        `
+                                          )
+                                          .join("")}
                                     </div>
-                                `
-                                  )
-                                  .join("")}
-                            </div>
-                        `
+                                `;
+
+                                return `
+                                    <div class="w-full overflow-hidden mb-12 relative fade-mask">
+                                        <div class="flex w-max animate-logo-loop hover-pause" style="--loop-offset: ${loopOffset}%;">
+                                            ${new Array(sets).fill(oneSetHTML).join("")}
+                                        </div>
+                                    </div>
+                                `;
+                              })()
                             : ""
                         }
 
@@ -551,14 +584,26 @@
                         </div>
 
                         <!-- Projects Button -->
+                        ${
+                          config.buttonText
+                            ? `
                         <div class="flex justify-center mb-12">
                             <button 
-                                class="flex justify-center items-center px-6 py-3 h-[50px] rounded-[41px] border border-[#FEFCD9] font-medium hover:shadow-lg transition-shadow whitespace-nowrap ${config.themeColor === "competitive" || config.themeColor === "research" || config.themeColor === "tech" ? "text-black" : "text-white"}"
+                                class="flex justify-center items-center px-6 py-3 h-[50px] rounded-[41px] border border-[#FEFCD9] font-medium hover:shadow-lg transition-shadow whitespace-nowrap ${
+                                  config.themeColor === "competitive" ||
+                                  config.themeColor === "research" ||
+                                  config.themeColor === "tech"
+                                    ? "text-black"
+                                    : "text-white"
+                                }"
                                 style="background-color: ${themeHex}"
                             >
                                 ${config.buttonText}
                             </button>
                         </div>
+                        `
+                            : ""
+                        }
 
                         <!-- AOIs or Cassettes -->
                         ${

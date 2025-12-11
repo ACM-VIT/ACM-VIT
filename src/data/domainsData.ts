@@ -27,8 +27,7 @@ export const domainConfigs = {
             { src: "/domains/web/postman.svg", alt: "Postman" },
             { src: "/domains/web/prisma.svg", alt: "Prisma" },
             { src: "/domains/web/redis.svg", alt: "Redis" },    
-            { src: "/domains/web/tailwindcss.svg", alt: "TailwindCSS" },
-            { src: "/domains/web/typescript.svg", alt: "TypeScript" }
+            { src: "/domains/web/tailwindcss.svg", alt: "TailwindCSS" }
         ],
         aois: [
             { src: "/AOIs/tech/app.svg", alt: "App Development" },
@@ -43,7 +42,7 @@ export const domainConfigs = {
         description: "We see competitive programming as a game of logic, strategy, and precision, far beyond just writing code. We host contests, craft cryptic challenges, and build problem sets that push us to think algorithmically. Whether we're solving our first problem or chasing the next rating jump, we do it together - discussing, debating, and decoding as a team. In this space, sharpening skills becomes second nature and way more fun. Every problem we solve makes us a little sharper and a lot more confident.",
         themeColor: "competitive",
         cassetteSvg: "/Cassette_cc.svg",
-        buttonText: "PROJECTS",
+        buttonText: "",
         techIcons: [
             { src: "/domains/cc/codeforces_icon 1.svg", alt: "Codeforces" },
             { src: "/domains/cc/c++.svg", alt: "C++" },
@@ -95,7 +94,8 @@ export const domainConfigs = {
             { src: "/AOIs/research/bioinfo.svg", alt: "Bioinformatics" },
             { src: "/AOIs/research/blockchain.svg", alt: "Blockchain" },
             { src: "/AOIs/research/cybersec.svg", alt: "Cybersecurity" },
-            { src: "/AOIs/research/iot.svg", alt: "IoT" }
+            { src: "/AOIs/research/iot.svg", alt: "IoT" },
+            { src: "/AOIs/research/quantum.svg", alt: "Quantum Computing" }
         ]
     },
     management: {
@@ -103,7 +103,7 @@ export const domainConfigs = {
         description: "Nothing comes together on its own, and we're the ones ensuring every part is in place. We handle sponsorships, logistics, outreach, and content with precision and intent. Some days it's drafting timelines and emails, other days it's finding the perfect hook or navigating last-minute surprises. We work across teams, juggle priorities, and keep the chaos in check. It's this quiet consistency that ensures every event runs smoothly, start to finish.",
         themeColor: "management",
         cassetteSvg: "/Cassette_Management.svg",
-        buttonText: "PARTNERS AND PROJECTS",
+        buttonText: "",
         techIcons: [
             { src: "/domains/management/slack.svg", alt: "Slack" },
             { src: "/domains/management/icons8-discord 1.svg", alt: "Discord" },
