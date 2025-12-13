@@ -1,0 +1,84 @@
+<section class="w-full min-h-screen flex items-center justify-center">
+  <div class="w-[930px] flex justify-start reveal-text-container">
+    <p class="leading-[1.5]">
+      <span
+        class="text-[#F95F4A] text-4xl font-light font-['PolySans_Trial'] uppercase split-text"
+        >Voluptate veniam aliquip nisi. Officia veniam cupidatat proident elit
+        fugiat mollit velit eiusmod
+      </span><span
+        class="text-white text-4xl font-light font-['PolySans_Trial'] uppercase split-text"
+        >dolor proident sunt. Ipsum fugiat ea consequat consequat fugiat eu eu
+        nulla commodo duis. Minim est ea ea ut aliqua.</span
+      >
+    </p>
+  </div>
+</section>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const container = document.querySelector(".reveal-text-container");
+
+  if (container) {
+    const splitTextElements = container.querySelectorAll(".split-text");
+
+    // Split text into words for each span
+    splitTextElements.forEach((element) => {
+      const text = element.textContent || "";
+      element.innerHTML = text
+        .split(/(\s+)/)
+        .map((word) => {
+          if (word.match(/^\s+$/)) return word;
+          return `<span class="inline-block word">${word}</span>`;
+        })
+        .join("");
+    });
+
+    // Container Animation (Rotation)
+    gsap.fromTo(
+      container,
+      { 
+        transformOrigin: "0% 50%", 
+        rotate: 3, 
+        force3D: true // Force GPU acceleration
+      },
+      {
+        ease: "none",
+        rotate: 0,
+        force3D: true, // Force GPU acceleration
+        willChange: "transform", // Hint browser
+        scrollTrigger: {
+          trigger: container,
+          start: "top center", // Adjusted start point for full screen
+          end: "bottom center",
+          scrub: 1,
+        },
+      }
+    );
+
+    // Collect all words from all spans for unified stagger
+    const allWords = container.querySelectorAll(".word");
+
+    gsap.fromTo(
+      allWords,
+      {
+        opacity: 0.1,
+        willChange: "opacity", // Optimized will-change
+      },
+      {
+        ease: "none",
+        opacity: 1,
+        stagger: 0.05,
+        scrollTrigger: {
+          trigger: container,
+          start: "top center", // Adjusted match
+          end: "bottom center",
+          scrub: 1,
+        },
+      }
+    );
+  }
+</script>

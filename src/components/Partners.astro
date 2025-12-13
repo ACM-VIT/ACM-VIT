@@ -1,6 +1,7 @@
 ---
 import PartnerCasetteSingular from "../components/PartnerCasetteSingular.astro";
 import { partners } from "../data/partnersData";
+import { getAssetUrl } from "../utils/cdn";
 ---
 
 <div
@@ -13,7 +14,7 @@ import { partners } from "../data/partnersData";
   >
     <img
       id="partners-svg"
-      src="/partners-cassette.svg"
+      src={getAssetUrl("/partners-cassette.svg")}
       alt="Partners Image"
       class="max-w-[300px] md:max-w-[500px] w-auto object-contain"
     />
@@ -26,7 +27,7 @@ import { partners } from "../data/partnersData";
       partners.map((partner) => (
         <PartnerCasetteSingular
           title={partner.title}
-          imageUrl={partner.imageUrl}
+          imageUrl={getAssetUrl(partner.imageUrl)}
           link={partner.link}
         />
       ))

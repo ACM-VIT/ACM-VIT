@@ -12,45 +12,64 @@
       <!-- Desktop nav -->
       <div class="nav-desktop">
         <div
-          class="header-pill flex items-center justify-center w-fit px-8"
+          class="header-pill relative flex items-center justify-center w-fit px-8 overflow-hidden"
           style="height:50px;border-radius:41px;border:1px solid #FEFCD9;background:rgba(0,0,0,0.35);backdrop-filter:blur(4px);"
         >
+          <!-- The Blob -->
+          <div
+            id="nav-blob"
+            class="absolute top-0 bottom-0 bg-[#F95F4A] rounded-[41px] transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] opacity-0 -z-10"
+            style="left: 0; width: 0;"
+          >
+          </div>
+
+          <!-- Dynamic Title for MORE sections -->
+          <div
+            id="dynamic-title"
+            class="absolute inset-0 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300"
+          >
+            <div
+              class="justify-start text-white text-base font-light font-['PolySans_Trial'] uppercase"
+            >
+            </div>
+          </div>
+
           <ul
-            class="nav-list flex items-center gap-2 md:gap-4 text-[13.5px] md:text-[14.8px] font-mono uppercase text-white"
+            class="nav-list relative z-10 flex items-center gap-2 md:gap-4 text-[13.5px] md:text-[14.8px] font-mono uppercase text-white"
             style="white-space:nowrap;align-items:center;letter-spacing:0.04em;"
           >
             <li>
               <a
                 href="#about"
-                class="inline-block px-0 py-0 hover:text-gray-300 transition-colors"
+                class="nav-link inline-block px-3 py-1 hover:text-white transition-colors"
                 >ABOUT</a
               >
             </li>
             <li>
               <a
                 href="#domains"
-                class="inline-block px-0 py-0 hover:text-gray-300 transition-colors"
+                class="nav-link inline-block px-3 py-1 hover:text-white transition-colors"
                 >DOMAINS</a
               >
             </li>
             <li>
               <a
                 href="#projects"
-                class="inline-block px-0 py-0 hover:text-gray-300 transition-colors"
+                class="nav-link inline-block px-3 py-1 hover:text-white transition-colors"
                 >PROJECTS</a
               >
             </li>
             <li>
               <a
                 href="#events"
-                class="inline-block px-0 py-0 hover:text-gray-300 transition-colors"
+                class="nav-link inline-block px-3 py-1 hover:text-white transition-colors"
                 >EVENTS</a
               >
             </li>
             <li>
               <a
                 href="#acm-w"
-                class="inline-block px-0 py-0 hover:text-gray-300 transition-colors"
+                class="nav-link inline-block px-3 py-1 hover:text-white transition-colors"
                 >ACM-W</a
               >
             </li>
@@ -58,7 +77,7 @@
               <a
                 href="#"
                 role="button"
-                class="more-toggle inline-block px-0 py-0 more-link hover:opacity-80 transition-opacity"
+                class="more-toggle inline-block px-3 py-1 more-link hover:opacity-80 transition-opacity"
                 aria-controls="desktopMoreMenu"
                 aria-expanded="false">MORE</a
               >
@@ -89,6 +108,20 @@
               href="#contact"
               class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[11px]"
               >Contact Us</a
+            >
+          </li>
+          <li>
+            <a
+              href="#community"
+              class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[11px]"
+              >Community</a
+            >
+          </li>
+          <li>
+            <a
+              href="#team"
+              class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[11px]"
+              >Team</a
             >
           </li>
         </ul>
@@ -158,6 +191,20 @@
                 >Contact Us</a
               >
             </li>
+            <li>
+              <a
+                href="#community"
+                class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[10px]"
+                >Community</a
+              >
+            </li>
+            <li>
+              <a
+                href="#team"
+                class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[10px]"
+                >Team</a
+              >
+            </li>
           </ul>
         </div>
       </div>
@@ -170,11 +217,48 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    transition:
+      width 0.3s cubic-bezier(0.25, 0.1, 0.25, 1),
+      background-color 0.3s ease;
+  }
+
+  /* Dynamic Mode Styles */
+  .header-pill.dynamic-mode {
+    width: 112px !important; /* w-28 */
+    background-color: #f95f4a !important;
+    border-color: #fefcd9;
+  }
+
+  .header-pill.dynamic-mode .nav-list {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .header-pill.dynamic-mode #dynamic-title {
+    opacity: 1;
+  }
+
+  /* Hover state for dynamic mode - revert to full menu */
+  .header-pill.dynamic-mode:hover {
+    width: var(--full-width, auto) !important;
+    background-color: rgba(0, 0, 0, 0.35) !important;
+  }
+
+  .header-pill.dynamic-mode:hover .nav-list {
+    opacity: 1;
+    pointer-events: auto;
+    transition-delay: 0.1s;
+  }
+
+  .header-pill.dynamic-mode:hover #dynamic-title {
+    opacity: 0;
+    transition-delay: 0s;
   }
   .nav-list a {
-    display: inline-block;
-    padding: 0 4px;
+    position: relative;
+    z-index: 10;
     color: #fefcd9;
+    transition: color 0.3s ease;
   }
   .nav-list a.more-link {
     color: #f95f4a !important;
@@ -264,8 +348,120 @@
 
 <script>
   // @ts-nocheck
-  // Toggle 'More' dropdowns (desktop and mobile) with smooth animation; close on outside click
   document.addEventListener("DOMContentLoaded", () => {
+    // BLOB NAVIGATION LOGIC
+    const blob = document.getElementById("nav-blob");
+    const navLinks = document.querySelectorAll(".nav-desktop .nav-link");
+    const sections = document.querySelectorAll("section[id], footer[id]"); // Include footer
+    const moreToggle = document.querySelector(".nav-desktop .more-toggle");
+    const pill = document.querySelector(".header-pill");
+    const dynamicTitle = document.querySelector("#dynamic-title div"); // Changed to div
+
+    // Capture initial full width for restoration
+    let fullWidth = pill ? pill.offsetWidth : 0;
+    if (pill) {
+      pill.style.setProperty("--full-width", `${fullWidth}px`);
+      // Update full width on resize
+      window.addEventListener("resize", () => {
+        // Temporarily remove dynamic class to measure
+        const wasDynamic = pill.classList.contains("dynamic-mode");
+        if (wasDynamic) pill.classList.remove("dynamic-mode");
+
+        const navList = document.querySelector(".nav-list");
+        if (navList) {
+          // 32px padding-left + 32px padding-right (px-8 = 2rem = 32px)
+          const w = navList.offsetWidth + 64;
+          pill.style.setProperty("--full-width", `${w}px`);
+        }
+
+        if (wasDynamic) pill.classList.add("dynamic-mode");
+      });
+    }
+
+    // IDs that live under the "MORE" dropdown
+    const moreSectionIds = [
+      "blogs",
+      "partners",
+      "contact",
+      "community",
+      "team",
+    ];
+
+    // Function to update blob position
+    function updateBlob(targetLink) {
+      if (!targetLink || !blob) return;
+
+      const pill = document.querySelector(".header-pill");
+      if (!pill) return;
+
+      const pillRect = pill.getBoundingClientRect();
+      const linkRect = targetLink.getBoundingClientRect();
+
+      const relativeLeft = linkRect.left - pillRect.left;
+      const width = linkRect.width;
+
+      blob.style.left = `${relativeLeft}px`;
+      blob.style.width = `${width}px`;
+      blob.style.opacity = "1";
+    }
+
+    // Function to hide blob
+    function hideBlob() {
+      if (blob) blob.style.opacity = "0";
+    }
+
+    function setDynamicMode(isDynamic, sectionId) {
+      if (!pill) return;
+
+      if (isDynamic) {
+        pill.classList.add("dynamic-mode");
+        if (dynamicTitle) dynamicTitle.textContent = sectionId;
+        hideBlob();
+      } else {
+        pill.classList.remove("dynamic-mode");
+      }
+    }
+
+    // Intersection Observer to track sections
+    const observerOptions = {
+      root: null,
+      rootMargin: "-20% 0px -60% 0px", // Trigger when section is near top/center
+      threshold: 0,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute("id");
+
+          if (id === "footer") {
+            // Explicitly disable dynamic mode for footer
+            setDynamicMode(false);
+            hideBlob();
+          } else if (moreSectionIds.includes(id)) {
+            // Enter Dynamic Mode
+            setDynamicMode(true, id);
+          } else {
+            // Exit Dynamic Mode
+            setDynamicMode(false);
+
+            // Update blob for normal sections
+            const activeLink = document.querySelector(
+              `.nav-desktop .nav-link[href="#${id}"]`
+            );
+            if (activeLink) {
+              updateBlob(activeLink);
+            }
+          }
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach((section) => observer.observe(section));
+
+    // Removed manual hover listener as requested
+
+    // EXISTING DROPDOWN LOGIC
     const toggles = Array.from(document.querySelectorAll(".more-toggle"));
 
     const getMenuFor = (tg) => {
@@ -275,7 +471,6 @@
 
     const openMenu = (tg, menu) => {
       tg.setAttribute("aria-expanded", "true");
-      // add open class for animation/visibility
       menu.classList.add("open");
     };
 
@@ -300,13 +495,11 @@
       tg.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
-        // Prevent the immediate document click from closing right after opening
         suppressNextDocClick = true;
         setTimeout(() => {
           suppressNextDocClick = false;
         }, 0);
         const expanded = tg.getAttribute("aria-expanded") === "true";
-        // close others first
         toggles.forEach((ot) => {
           if (ot !== tg) {
             const otherMenu = getMenuFor(ot);
@@ -351,7 +544,6 @@
       if (suppressNextDocClick) return;
       const t = e.target;
       if (!(t instanceof Node)) return;
-      // if click not on a toggle or inside any menu, close all
       const withinToggle = toggles.some((tg) => tg.contains(t));
       const withinMenu = allMenus().some((m) => m.contains(t));
       if (!withinToggle && !withinMenu) closeAll();
@@ -366,11 +558,22 @@
       if (!href || href.length < 2) return;
       const id = href.slice(1);
       const target = document.getElementById(id);
-      if (!target) return; // let browser handle if not found
+      if (!target) return;
       e.preventDefault();
       closeAll();
       target.scrollIntoView({ behavior: "smooth", block: "start" });
       history.replaceState(null, "", `#${id}`);
+
+      // Manually update blob on click
+      if (moreSectionIds.includes(id)) {
+        setDynamicMode(true, id);
+      } else {
+        setDynamicMode(false);
+        const link = document.querySelector(
+          `.nav-desktop .nav-link[href="#${id}"]`
+        );
+        if (link) updateBlob(link);
+      }
     });
   });
 </script>

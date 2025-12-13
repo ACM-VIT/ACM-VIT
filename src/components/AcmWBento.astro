@@ -1,5 +1,6 @@
 ---
 // ACM-W Bento
+import { getAssetUrl } from "../utils/cdn";
 ---
 
 <section
@@ -13,7 +14,7 @@
   >
     <!-- Mobile SVG -->
     <img
-      src="/acmw-bento-phone.svg"
+      src={getAssetUrl("/acmw-bento-phone.svg")}
       alt="ACM-W bento (mobile)"
       class="block md:hidden w-full h-auto select-none"
       loading="lazy"
@@ -22,7 +23,7 @@
 
     <!--Laptop SVG -->
     <img
-      src="/acmw-bento.svg"
+      src={getAssetUrl("/acmw-bento.svg")}
       alt="ACM-W bento"
       class="hidden md:block w-full h-auto select-none"
       loading="lazy"
@@ -36,7 +37,7 @@
   >
     <img
       id="bento-tubelight"
-      src="/white_tubelight.png"
+      src={getAssetUrl("/white_tubelight.png")}
       alt="Decorative tubelight"
       loading="lazy"
       decoding="async"

@@ -1,10 +1,15 @@
 ---
 import { Image } from "astro:assets";
+import { getAssetUrl } from "../utils/cdn";
 ---
 
 <div id="preloader" class="preloader">
   <div class="loader-content">
-    <img src="/acm_topleft.svg" alt="ACM-VIT" class="loader-logo" />
+    <img
+      src={getAssetUrl("/acm_topleft.svg")}
+      alt="ACM-VIT"
+      class="loader-logo"
+    />
     <div class="progress-bar">
       <div class="progress-fill"></div>
     </div>

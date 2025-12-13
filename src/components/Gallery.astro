@@ -1,5 +1,7 @@
 ---
 // Gallery.astro
+import { getAssetUrl } from "../utils/cdn";
+import ProofGallery from "./ProofGallery.astro";
 ---
 
 <section
@@ -101,38 +103,44 @@
   <div class="flex w-full flex-col items-center gap-3 relative z-10">
     <div class="relative flex w-full max-w-4xl flex-col items-center px-4">
       <img
-        src="/gallery.svg"
+        src={getAssetUrl("/gallery.svg")}
         alt="Gallery Title"
         class="gallery-title relative z-10 w-[90vw] max-w-3xl mb-2"
       />
     </div>
 
     <div class="px-4">
-      <a
-        href="https://photos.google.com"
-        target="_blank"
-        rel="noopener noreferrer"
+      <div
+        onclick="window.openProofGallery()"
         class="w-[484px] h-12 bg-[#F95F4A] rounded-[41px] outline outline-1 outline-offset-[-1px] outline-yellow-50
-           flex items-center justify-center hover:scale-105 transition-transform duration-200"
+           flex items-center justify-center hover:scale-105 transition-transform duration-200 cursor-pointer"
+        role="button"
+        tabindex="0"
       >
         <span
           class="text-white text-base font-light font-['PolySans_Trial'] uppercase"
         >
           Proof We Actually Do Stuff - View Photos!
         </span>
-      </a>
+      </div>
     </div>
 
     <div class="gallery-frame relative w-full overflow-hidden">
       <img
-        src="/full-core.svg"
+        src={getAssetUrl("/full-core.svg")}
         alt="ACM-VIT gallery collage"
         class="gallery-image w-full object-cover"
         loading="lazy"
       />
     </div>
   </div>
+  <ProofGallery />
 </section>
+
+<script>
+  // Ensure the function is available (if ProofGallery script hasn't run yet, though it should have)
+  // Actually, Astro scripts module hoist, so it might be fine, but let's be safe.
+</script>
 
 <style>
   .gallery-section {

@@ -151,10 +151,28 @@
     });
   }
 
+  // Handle browser back button
+  window.addEventListener("popstate", (event) => {
+    // If we have a domain screen open and the user pressed back (state is now null or not domainScreenOpen)
+    const domainScreen = document.getElementById("mobile-domain-screen");
+    if (domainScreen) {
+      // The user pressed back, so we just animate it closing
+      // We pass 'true' to skip history.back() because the browser already did it
+      closeMobileDomainScreenInternal();
+    }
+  });
+
   // Function to show mobile domain screen
   function showMobileDomainScreen(domain: string) {
     const config = domainConfigs[domain as keyof typeof domainConfigs];
     if (!config) return;
+
+    // Push history state so back button works
+    history.pushState(
+      { domainScreenOpen: true },
+      "",
+      window.location.pathname + "#domain-" + domain
+    );
 
     // Hide all cassettes with animation
     const items = document.querySelectorAll(".mobile-domain-item");
@@ -346,8 +364,14 @@
         `;
   }
 
-  // Global function to hide mobile domain screen
+  // Called when the X / back button in the UI is clicked
   (window as any).hideMobileDomainScreen = function () {
+    // Manually trigger history back, which will trigger the popstate listener, which calls internal close
+    history.back();
+  };
+
+  // Internal close function (doesn't touch history)
+  function closeMobileDomainScreenInternal() {
     const domainScreen = document.getElementById("mobile-domain-screen");
 
     if (domainScreen) {
@@ -383,7 +407,7 @@
         });
       }, 300);
     }
-  };
+  }
 
   // Initialize mobile animations
   if (document.readyState === "loading") {

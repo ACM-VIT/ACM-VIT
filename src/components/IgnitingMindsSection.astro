@@ -1,0 +1,192 @@
+---
+import "../styles/globals.css";
+import { getAssetUrl } from "../utils/cdn";
+---
+
+<div class="min-h-screen overflow-x-hidden">
+  <!-- Part A: Outreach Event -->
+  <section
+    id="community"
+    class="relative z-20 py-12 md:py-20 border-t border-white/10 overflow-hidden"
+  >
+    <!-- Horizontal Dotted Lines Overlay - Hidden on mobile -->
+    <div class="absolute inset-0 pointer-events-none z-0 hidden md:block">
+      <div
+        class="absolute top-[43%] w-full border-t-2 border-dashed border-[#999999]/50"
+      >
+      </div>
+      <div
+        class="absolute top-[57%] w-full border-t-2 border-dashed border-[#999999]/50"
+      >
+      </div>
+    </div>
+
+    <div
+      class="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-0 relative z-10 md:min-h-[600px]"
+    >
+      <!-- Left: Text Content -->
+      <div
+        class="flex flex-col h-full md:border-r-2 md:border-dashed md:border-[#999999]/50"
+      >
+        <!-- Top Section - Title -->
+        <div class="p-6 md:p-10 flex items-start md:h-[43%]">
+          <h1
+            class="text-5xl sm:text-6xl md:text-7xl lg:text-[8rem] leading-[0.85] font-bold text-[#FFFDD0] uppercase tracking-tighter break-words"
+          >
+            OUTREACH<br />
+            <span class="text-[#FF5F4A]">EVENT</span>
+          </h1>
+        </div>
+
+        <!-- Middle Section - Beyond the Norm -->
+        <div class="px-6 md:px-10 py-4 md:py-0 flex items-center md:h-[14%]">
+          <div class="relative">
+            <div
+              class="text-[#FF5F4A] text-3xl sm:text-4xl md:text-5xl font-bold font-['Inter'] leading-tight md:leading-none"
+            >
+              BEYOND <img
+                src={getAssetUrl("/outreacch/beyond-norm-logo.svg")}
+                alt="Logo"
+                class="inline h-8 sm:h-10 md:h-12 ml-2 align-baseline"
+              /><br />THE NORM
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Section - Empty on desktop, description on mobile -->
+        <div class="p-6 md:p-10 md:h-[43%] block md:hidden">
+          <div
+            class="text-left text-gray-300 text-xs sm:text-sm font-mono leading-relaxed"
+          >
+            OUR OUTREACH INITIATIVE BROUGHT THE WORLD OF COMPUTING TO STUDENTS
+            OF CLASSES 7 TO 9, USING THE THEME "FLOWCHARTS AND DIGITAL LOGIC."
+            THROUGH INTERACTIVE DEMONSTRATIONS, SIMPLIFIED EXPLANATIONS OF
+            BINARY THINKING, AND REAL-LIFE EXAMPLES OF LOGIC GATES, STUDENTS
+            DISCOVERED HOW COMPUTERS "THINK" AND SOLVE PROBLEMS. THE SESSION NOT
+            ONLY INTRODUCED THEM TO STRUCTURED PROBLEM-SOLVING THROUGH
+            FLOWCHARTS BUT ALSO CONNECTED EVERYDAY TECHNOLOGY TO THE
+            FUNDAMENTALS OF DIGITAL DESIGN, SPARKING CURIOSITY AND ENCOURAGING
+            YOUNG LEARNERS TO EXPLORE THE WORLD OF COMPUTING.
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Image and Description -->
+      <div class="relative h-[50vh] md:h-full group">
+        <!-- Image -->
+        <div class="absolute inset-0">
+          <img
+            src={getAssetUrl("/outreacch/outreach-event.svg")}
+            alt="Outreach Event"
+            class="w-full h-full object-cover"
+          />
+        </div>
+
+        <!-- Overlay Text - Only on desktop -->
+        <div
+          class="hidden md:block absolute bottom-8 right-10 left-10 text-right text-gray-300 text-sm font-mono leading-relaxed max-w-lg ml-auto z-10"
+        >
+          OUR OUTREACH INITIATIVE BROUGHT THE WORLD OF COMPUTING TO STUDENTS OF
+          CLASSES 7 TO 9, USING THE THEME "FLOWCHARTS AND DIGITAL LOGIC."
+          THROUGH INTERACTIVE DEMONSTRATIONS, SIMPLIFIED EXPLANATIONS OF BINARY
+          THINKING, AND REAL-LIFE EXAMPLES OF LOGIC GATES, STUDENTS DISCOVERED
+          HOW COMPUTERS "THINK" AND SOLVE PROBLEMS. THE SESSION NOT ONLY
+          INTRODUCED THEM TO STRUCTURED PROBLEM-SOLVING THROUGH FLOWCHARTS BUT
+          ALSO CONNECTED EVERYDAY TECHNOLOGY TO THE FUNDAMENTALS OF DIGITAL
+          DESIGN, SPARKING CURIOSITY AND ENCOURAGING YOUNG LEARNERS TO EXPLORE
+          THE WORLD OF COMPUTING.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Part B: SDG Section -->
+  <section
+    class="relative z-20 py-12 md:py-20 border-t border-white/10 overflow-hidden"
+  >
+    <!-- Horizontal Dotted Lines Overlay - Hidden on mobile -->
+    <div class="absolute inset-0 pointer-events-none z-0 hidden md:block">
+      <div
+        class="absolute top-[43%] w-full border-t-2 border-dashed border-[#999999]/50"
+      >
+      </div>
+      <div
+        class="absolute top-[57%] w-full border-t-2 border-dashed border-[#999999]/50"
+      >
+      </div>
+    </div>
+
+    <div
+      class="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-0 relative z-10 md:min-h-[600px]"
+    >
+      <!-- Left Side -->
+      <div
+        class="flex flex-col h-full md:border-r-2 md:border-dashed md:border-[#999999]/50 order-2 md:order-1"
+      >
+        <!-- Top Section - Empty on desktop -->
+        <div class="hidden md:block md:h-[43%] p-10"></div>
+
+        <!-- Middle Section - Beyond the Norm -->
+        <div class="px-6 md:px-6 py-4 md:py-0 flex items-center md:h-[14%]">
+          <div class="relative">
+            <div
+              class="text-[#FF5F4A] text-3xl sm:text-4xl md:text-5xl font-bold font-['Inter'] leading-tight md:leading-none"
+            >
+              BEYOND <img
+                src={getAssetUrl("/outreacch/beyond-norm-logo.svg")}
+                alt="Logo"
+                class="inline h-8 sm:h-10 md:h-12 ml-2 align-baseline"
+              /><br />THE NORM
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Section - Description -->
+        <div class="p-6 md:p-2 md:h-[43%] flex items-start md:items-end">
+          <div
+            class="text-left text-gray-300 text-xs sm:text-sm font-mono leading-relaxed max-w-lg"
+          >
+            ALIGNED WITH UN SUSTAINABLE DEVELOPMENT GOAL 4: QUALITY EDUCATION.
+            THIS WORKSHOP FOCUSED ON REDUCING THE DIGITAL LEARNING GAP IN RURAL
+            COMMUNITIES. PARTICIPANTS EXPLORED MODERN WEB TECHNOLOGIES AND
+            LEARNED HOW SIMPLE DIGITAL TOOLS CAN STRENGTHEN CLASSROOMS WITH
+            LIMITED RESOURCES. BY COMBINING TECHNICAL LEARNING WITH REAL SOCIAL
+            IMPACT, THE SESSION EMPHASIZED ACM-VIT'S COMMITMENT TO INCLUSIVE,
+            TECHNOLOGY-DRIVEN GROWTH, EMPOWERING PARTICIPANTS TO SUPPORT BETTER
+            EDUCATIONAL ACCESS IN RURAL AREAS.
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Side: SDG Title -->
+      <div
+        class="p-6 md:p-10 flex flex-col justify-start h-full order-1 md:order-2"
+      >
+        <div
+          class="md:h-[43%] flex flex-col items-start justify-start gap-4 md:gap-6 pt-0 md:pt-8"
+        >
+          <h1
+            class="text-6xl sm:text-7xl md:text-[8rem] leading-none font-bold text-[#FFFDD0] uppercase tracking-tighter"
+          >
+            SDG
+          </h1>
+          <h2
+            class="text-2xl sm:text-3xl md:text-4xl text-[#FF5F4A] font-normal leading-tight"
+          >
+            Simplifying Digital<br />
+            Learning for Rural Schools
+          </h2>
+        </div>
+        <div class="hidden md:flex md:h-[14%] items-center"></div>
+        <div class="hidden md:flex md:h-[43%] items-end justify-end"></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<style>
+  .bg-dots-pattern {
+    background-image: radial-gradient(#333 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+</style>

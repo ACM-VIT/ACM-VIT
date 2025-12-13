@@ -2,6 +2,7 @@
 import BoardMemberCardSingular from "../components/BoardMemberCardSingular.astro";
 
 import { boardMembers } from "../data/boardData";
+import { getAssetUrl } from "../utils/cdn";
 
 const mainBoardMembers = boardMembers.filter(
   (member) => !member.isW && member.position !== "Faculty Coordinator"
@@ -12,10 +13,13 @@ const facultyCoordinator = boardMembers.find(
 );
 ---
 
-<section class="board-section w-full min-h-screen py-12 px-4 relative">
+<section
+  id="team"
+  class="board-section w-full min-h-screen py-12 px-4 relative"
+>
   <div class="fixed inset-0 z-0 pointer-events-none opacity-0 board-bg-layer">
     <img
-      src="/glow_ball_red.svg"
+      src={getAssetUrl("/glow_ball_red.svg")}
       alt="Board Background"
       class="w-full h-full object-cover scale-125"
     />
@@ -24,7 +28,7 @@ const facultyCoordinator = boardMembers.find(
   <div class="max-w-7xl mx-auto flex flex-col relative z-10">
     <div class="flex justify-center mb-12">
       <img
-        src="/the_team.svg"
+        src={getAssetUrl("/the_team.svg")}
         alt="The Team"
         class="w-80 md:w-[30rem] lg:w-[50rem] h-auto"
       />
@@ -39,7 +43,7 @@ const facultyCoordinator = boardMembers.find(
               title={facultyCoordinator.title}
               fullName={facultyCoordinator.fullName}
               position={facultyCoordinator.position}
-              imageUrl={facultyCoordinator.imageUrl}
+              imageUrl={getAssetUrl(facultyCoordinator.imageUrl)}
               linkedinUrl={facultyCoordinator.linkedinUrl}
               googleScholarUrl={facultyCoordinator.googleScholarUrl}
               githubUrl={facultyCoordinator.githubUrl}
@@ -61,7 +65,7 @@ const facultyCoordinator = boardMembers.find(
               title={member.title}
               fullName={member.fullName}
               position={member.position}
-              imageUrl={member.imageUrl}
+              imageUrl={getAssetUrl(member.imageUrl)}
               linkedinUrl={member.linkedinUrl}
               googleScholarUrl={member.googleScholarUrl}
               githubUrl={member.githubUrl}
@@ -81,7 +85,7 @@ const facultyCoordinator = boardMembers.find(
                 title={member.title}
                 fullName={member.fullName}
                 position={member.position}
-                imageUrl={member.imageUrl}
+                imageUrl={getAssetUrl(member.imageUrl)}
                 linkedinUrl={member.linkedinUrl}
                 googleScholarUrl={member.googleScholarUrl}
                 githubUrl={member.githubUrl}

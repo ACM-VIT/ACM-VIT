@@ -1,5 +1,6 @@
 ---
 // AMMW Content
+import { getAssetUrl } from "../utils/cdn";
 ---
 
 <section
@@ -11,7 +12,7 @@
     <div class="flex items-center justify-center relative px-16">
       <img
         id="tubelight"
-        src="/pink_tubelight.png"
+        src={getAssetUrl("/pink_tubelight.png")}
         alt="pink light"
         class="w-[80vw] max-w-[1400px] opacity-0 select-none absolute z-[-1]
                     [mask-image:radial-gradient(circle,black_30%,transparent_100%)]
@@ -24,7 +25,7 @@
 
     <div class="flex items-center gap-10">
       <img
-        src="/acmw-logo.svg"
+        src={getAssetUrl("/acmw-logo.svg")}
         alt="ACM-W Logo"
         class="w-[30vw] h-auto max-[480px]:!w-[45vw] max-[480px]:max-w-none"
       />

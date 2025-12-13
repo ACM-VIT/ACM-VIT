@@ -34,7 +34,7 @@
       <form
         class="contact-form pointer-events-auto mt-4 flex w-full max-w-[50%] flex-col gap-4 text-xs text-black px-4"
         method="POST"
-        action="mailto:hello@acmvit.in"
+        id="contact-form-desktop"
       >
         <div class="contact-grid grid gap-4 sm:grid-cols-2">
           <label
@@ -132,6 +132,7 @@
 <script>
   import { gsap } from "gsap";
   import { ScrollTrigger } from "gsap/ScrollTrigger";
+  import { getAssetUrl } from "../utils/cdn";
 
   gsap.registerPlugin(ScrollTrigger);
 
@@ -145,7 +146,9 @@
 
   const frameCount = 125;
   const currentFrame = (index: number) =>
-    `/outputFolder/frame_${(index + 1).toString().padStart(4, "0")}.png`;
+    getAssetUrl(
+      `/outputFolder/frame_${(index + 1).toString().padStart(4, "0")}.png`
+    );
 
   const images: HTMLImageElement[] = [];
   const laptop = {
@@ -221,4 +224,52 @@
   }
 
   // Handle resize if needed, though CSS object-contain handles display size
+
+  // Form handling
+  const form = document.getElementById(
+    "contact-form-desktop"
+  ) as HTMLFormElement;
+  if (form) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn ? submitBtn.innerHTML : "Submit";
+
+      if (submitBtn) {
+        submitBtn.innerHTML = "Sending...";
+        (submitBtn as HTMLButtonElement).disabled = true;
+      }
+
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        const response = await fetch("/api/contact", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+
+        if (response.ok) {
+          alert("Message sent successfully!");
+          form.reset();
+        } else {
+          const resData = await response.json();
+          alert(
+            `Failed to send message: ${resData.message || "Unknown error"}`
+          );
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("An error occurred. Please try again later.");
+      } finally {
+        if (submitBtn) {
+          submitBtn.innerHTML = originalBtnText;
+          (submitBtn as HTMLButtonElement).disabled = false;
+        }
+      }
+    });
+  }
 </script>

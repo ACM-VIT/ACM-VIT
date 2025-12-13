@@ -1,8 +1,9 @@
 ---
 // Footer.astro
+import { getAssetUrl } from "../utils/cdn";
 ---
 
-<footer class="relative w-full w-full overflow-hidden m-0 p-0">
+<footer id="footer" class="relative w-full w-full overflow-hidden m-0 p-0">
   <div
     class="hidden md:block w-[1438.01px] h-0 outline outline-1 outline-offset-[-0.50px] outline-white mx-auto"
   >
@@ -41,7 +42,7 @@
             rel="noopener noreferrer"
           >
             <img
-              src="/footer/VIT-Map.png"
+              src={getAssetUrl("/footer/VIT-Map.png")}
               alt="VIT Map"
               class="w-52 h-36 object-cover rounded-lg shadow-lg border border-zinc-700"
             />
@@ -337,7 +338,7 @@
           target="_blank"
           rel="noopener noreferrer"
           ><img
-            src="/footer/Facebook.svg"
+            src={getAssetUrl("/footer/Facebook.svg")}
             alt="Facebook"
             class="w-14 h-12 hover:scale-110 transition-transform"
           /></a
@@ -348,7 +349,7 @@
           target="_blank"
           rel="noopener noreferrer"
           ><img
-            src="/footer/Twitter.svg"
+            src={getAssetUrl("/footer/Twitter.svg")}
             alt="Twitter"
             class="w-10 h-8 hover:scale-110 transition-transform"
           /></a
@@ -359,7 +360,7 @@
           target="_blank"
           rel="noopener noreferrer"
           ><img
-            src="/footer/Instagram.svg"
+            src={getAssetUrl("/footer/Instagram.svg")}
             alt="Instagram"
             class="w-14 h-12 hover:scale-110 transition-transform"
           /></a
@@ -370,7 +371,7 @@
           target="_blank"
           rel="noopener noreferrer"
           ><img
-            src="/footer/Medium.svg"
+            src={getAssetUrl("/footer/Medium.svg")}
             alt="Medium"
             class="w-14 h-12 hover:scale-110 transition-transform"
           /></a
@@ -381,7 +382,7 @@
           target="_blank"
           rel="noopener noreferrer"
           ><img
-            src="/footer/Linkedin.svg"
+            src={getAssetUrl("/footer/Linkedin.svg")}
             alt="Linkedin"
             class="w-14 h-12 hover:scale-110 transition-transform"
           /></a
@@ -392,14 +393,18 @@
           target="_blank"
           rel="noopener noreferrer"
           ><img
-            src="/footer/youtube icon.png"
+            src={getAssetUrl("/footer/youtube icon.png")}
             alt="YouTube"
             class="w-7 h-7 rounded hover:scale-110 transition-transform"
           /></a
         >
       </div>
       <div class="flex items-center gap-2">
-        <img src="/footer/pixel-heart.svg" alt="pixel heart" class="w-6 h-6" />
+        <img
+          src={getAssetUrl("/footer/pixel-heart.svg")}
+          alt="pixel heart"
+          class="w-6 h-6"
+        />
         <span
           class="text-neutral-400 text-base text-white font-['PolySans_Trial']"
           >crafted with love by ACM-VIT</span
@@ -416,7 +421,7 @@
   <!-- Footer Background -->
   <div class="hidden md:flex w-full justify-center items-end mt-0">
     <img
-      src="/footer/footer-background.svg"
+      src={getAssetUrl("/footer/footer-background.svg")}
       alt="Footer Background"
       class="w-full max-w-none h-auto object-contain"
       style="min-width:100vw;"
@@ -451,7 +456,7 @@
         rel="noopener noreferrer"
       >
         <img
-          src="/footer/VIT-Map.png"
+          src={getAssetUrl("/footer/VIT-Map.png")}
           alt="VIT Map"
           class="w-full h-full object-cover rounded-lg shadow-lg border border-zinc-700"
           loading="lazy"
@@ -706,7 +711,7 @@
           target="_blank"
           rel="noopener noreferrer"
           ><img
-            src="/footer/Facebook.svg"
+            src={getAssetUrl("/footer/Facebook.svg")}
             alt="Facebook"
             class="w-8 h-8 hover:scale-110 transition-transform"
           /></a
@@ -717,7 +722,7 @@
           target="_blank"
           rel="noopener noreferrer"
           ><img
-            src="/footer/Twitter.svg"
+            src={getAssetUrl("/footer/Twitter.svg")}
             alt="Twitter"
             class="w-6 h-6 hover:scale-110 transition-transform"
           /></a
@@ -728,7 +733,7 @@
           target="_blank"
           rel="noopener noreferrer"
           ><img
-            src="/footer/Instagram.svg"
+            src={getAssetUrl("/footer/Instagram.svg")}
             alt="Instagram"
             class="w-8 h-8 hover:scale-110 transition-transform"
           /></a
@@ -739,7 +744,7 @@
           target="_blank"
           rel="noopener noreferrer"
           ><img
-            src="/footer/Medium.svg"
+            src={getAssetUrl("/footer/Medium.svg")}
             alt="Medium"
             class="w-8 h-8 hover:scale-110 transition-transform"
           /></a
@@ -750,7 +755,7 @@
           target="_blank"
           rel="noopener noreferrer"
           ><img
-            src="/footer/Linkedin.svg"
+            src={getAssetUrl("/footer/Linkedin.svg")}
             alt="Linkedin"
             class="w-8 h-8 hover:scale-110 transition-transform"
           /></a
@@ -761,14 +766,18 @@
           target="_blank"
           rel="noopener noreferrer"
           ><img
-            src="/footer/youtube icon.png"
+            src={getAssetUrl("/footer/youtube icon.png")}
             alt="YouTube"
             class="w-6 h-6 rounded hover:scale-110 transition-transform"
           /></a
         >
       </div>
       <div class="flex items-center gap-2">
-        <img src="/footer/pixel-heart.svg" alt="pixel heart" class="w-5 h-5" />
+        <img
+          src={getAssetUrl("/footer/pixel-heart.svg")}
+          alt="pixel heart"
+          class="w-5 h-5"
+        />
         <span class="text-white text-xs font-['PolySans_Trial']"
           >crafted with love by ACM-VIT</span
         >
@@ -787,7 +796,7 @@
   <!-- Footer Background (mobile) -->
   <div class="w-full flex justify-center items-end mt-4">
     <img
-      src="/footer/footer-background.svg"
+      src={getAssetUrl("/footer/footer-background.svg")}
       alt="Footer Background"
       class="w-[560px] max-w-[100vw] h-auto object-contain opacity-90"
       loading="lazy"

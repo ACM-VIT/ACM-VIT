@@ -1,24 +1,25 @@
 ---
 interface Props {
-    title: string;
-    imageUrl: string;
-    link: string;
+  title: string;
+  imageUrl: string;
+  link: string;
 }
 
+import { getAssetUrl } from "../utils/cdn";
 const { title, imageUrl, link } = Astro.props;
 ---
 
 <div
-    class="w-[80vw] h-[50vw] sm:w-[30vw] sm:h-[18.75vw] lg:w-[20vw] lg:h-[12.5vw] rounded-lg shadow-lg flex flex-col items-center justify-center relative"
+  class="w-[80vw] h-[50vw] sm:w-[30vw] sm:h-[18.75vw] lg:w-[20vw] lg:h-[12.5vw] rounded-lg shadow-lg flex flex-col items-center justify-center relative"
 >
-    <div class="w-full h-[80%] z-0 absolute">
-        <img
-            src="/partner-casette.svg"
-            alt="Partner Casette Boilerplate"
-            class="w-full h-auto object-cover absolute pointer-events-none rounded-lg mb-4"
-        />
-    </div>
-    <div class="z-10 h-full w-full flex justify-center items-center">
-        <img src={imageUrl} alt={title} class="object-contain h-[60%] w-[60%]" />
-    </div>
+  <div class="w-full h-[80%] z-0 absolute">
+    <img
+      src={getAssetUrl("/partner-casette.svg")}
+      alt="Partner Casette Boilerplate"
+      class="w-full h-auto object-cover absolute pointer-events-none rounded-lg mb-4"
+    />
+  </div>
+  <div class="z-10 h-full w-full flex justify-center items-center">
+    <img src={imageUrl} alt={title} class="object-contain h-[60%] w-[60%]" />
+  </div>
 </div>

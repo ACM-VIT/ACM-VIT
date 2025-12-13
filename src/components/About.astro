@@ -1,18 +1,19 @@
 ---
-
+import { getAssetUrl } from "../utils/cdn";
 ---
 
 <!-- About Sections-->
 <div class="about-container w-screen overflow-hidden">
   <!-- About Section 1: -->
   <section
-    class="about-section section-1 w-screen h-screen relative bg-[url('/about/about-acmvit.jpeg')] bg-center bg-cover bg-no-repeat"
+    class="about-section section-1 w-screen h-screen relative bg-center bg-cover bg-no-repeat"
+    style={`background-image: url(${getAssetUrl("/about/about-acmvit.jpeg")})`}
   >
     <div
       class="svg-container svg-left relative w-[500px] h-[500px] ml-[-50px] mb-[-600px]"
     >
       <img
-        src="/about/Cassette.svg"
+        src={getAssetUrl("/about/Cassette.svg")}
         alt="Cassette 1"
         class="cassette-svg w-full h-auto origin-bottom-left rotate-[21deg]"
       />
@@ -42,7 +43,8 @@
 
   <!-- About Section 2:-->
   <section
-    class="about-section section-2 w-screen h-screen relative bg-[url('/about/about-vit.jpeg')] bg-center bg-cover bg-no-repeat"
+    class="about-section section-2 w-screen h-screen relative bg-center bg-cover bg-no-repeat"
+    style={`background-image: url(${getAssetUrl("/about/about-vit.jpeg")})`}
   >
     <div
       class="text-container text-left absolute top-1/2 -translate-y-1/2 text-white p-8 left-[10vw] w-[55vw] max-w-[800px]"
@@ -70,7 +72,7 @@
       class="svg-container svg-right w-[500px] h-[500px] absolute right-0 top-1/2 -translate-y-1/2 mr-[-100px]"
     >
       <img
-        src="/about/3.svg"
+        src={getAssetUrl("/about/3.svg")}
         alt="Cassette 2"
         class="cassette-svg w-full h-auto origin-bottom-right rotate-[-15deg]"
       />
@@ -79,13 +81,14 @@
 
   <!-- About Section 3:-->
   <section
-    class="about-section section-3 w-screen h-screen relative bg-[url('/about/about-acm.jpeg')] bg-center bg-cover bg-no-repeat"
+    class="about-section section-3 w-screen h-screen relative bg-center bg-cover bg-no-repeat"
+    style={`background-image: url(${getAssetUrl("/about/about-acm.jpeg")})`}
   >
     <div
       class="svg-container svg-left-two relative w-[500px] h-[500px] ml-[-50px] mb-[200px]"
     >
       <img
-        src="/about/2.svg"
+        src={getAssetUrl("/about/2.svg")}
         alt="Cassette 3"
         class="cassette-svg w-full h-auto origin-bottom-left rotate-[11deg]"
       />

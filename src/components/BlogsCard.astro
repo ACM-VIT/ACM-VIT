@@ -4,6 +4,7 @@ interface Props {
   link: string;
 }
 
+import { getAssetUrl } from "../utils/cdn";
 const { bgurl, link } = Astro.props;
 ---
 
@@ -16,14 +17,14 @@ const { bgurl, link } = Astro.props;
   <!-- Background Pattern -->
   <div
     class="absolute inset-0 pointer-events-none z-0"
-    style={`background-image: url('${bgurl}'); background-size: cover; background-position: center; background-repeat: no-repeat;`}
+    style={`background-image: url('${getAssetUrl(bgurl)}'); background-size: cover; background-position: center; background-repeat: no-repeat;`}
   >
   </div>
   <div
     class="w-[97%] h-[96.5%] flex justify-center items-center absolute z-20 pointer-events-none"
   >
     <img
-      src="/bloglayout.svg"
+      src={getAssetUrl("/bloglayout.svg")}
       alt="Background Pattern"
       class="absolute w-full h-full object-cover"
     />

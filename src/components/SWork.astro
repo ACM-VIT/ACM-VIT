@@ -1,5 +1,6 @@
 ---
 import { cassetteImages, info } from "../data/eventsData";
+import { getAssetUrl } from "../utils/cdn";
 
 interface Project {
   caption: string;
@@ -20,7 +21,7 @@ cassetteImages.forEach((src, i) => {
     projects.push({
       caption: `${project.title}`,
       site: project.site,
-      src: src,
+      src: getAssetUrl(src),
     });
   }
 });

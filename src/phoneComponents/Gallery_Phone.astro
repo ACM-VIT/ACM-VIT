@@ -1,5 +1,6 @@
 ---
 // Gallery_Phone.astro
+import ProofGallery from "../components/ProofGallery.astro";
 ---
 
 <section class="gallery-section relative w-full pt-12 pb-0 overflow-hidden">
@@ -105,19 +106,19 @@
     </div>
 
     <div class="px-4 w-full flex justify-center">
-      <a
-        href="https://photos.google.com"
-        target="_blank"
-        rel="noopener noreferrer"
+      <div
+        onclick="window.openProofGallery()"
         class="w-[90%] max-w-[280px] h-8 bg-[#F95F4A] rounded-[41px] outline outline-1 outline-offset-[-1px] outline-yellow-50
-           flex items-center justify-center hover:scale-105 transition-transform duration-200"
+           flex items-center justify-center hover:scale-105 transition-transform duration-200 cursor-pointer"
+        role="button"
+        tabindex="0"
       >
         <span
           class="text-white text-[8px] font-light font-['PolySans_Trial'] uppercase tracking-wider"
         >
           Proof We Actually Do Stuff - View Photos!
         </span>
-      </a>
+      </div>
     </div>
 
     <div class="gallery-frame relative w-full overflow-hidden mt-2">
@@ -129,6 +130,7 @@
       />
     </div>
   </div>
+  <ProofGallery />
 </section>
 
 <style>

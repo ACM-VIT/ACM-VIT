@@ -1,66 +1,69 @@
 ---
 // Your frontmatter here
+import { getAssetUrl } from "../utils/cdn";
 ---
 
-<section class="h-dvh w-full flex justify-center items-center relative overflow-hidden">
-    <!-- Marquee Container -->
-    <div class="marquee-container">
-        <div class="marquee-content z-20">
-            <img src="/acmwmotto.svg" alt="AcmW Motto" />
-            <img src="/acmwmotto.svg" alt="AcmW Motto" />
-            <img src="/acmwmotto.svg" alt="AcmW Motto" />
-        </div>
+<section
+  class="h-dvh w-full flex justify-center items-center relative overflow-hidden"
+>
+  <!-- Marquee Container -->
+  <div class="marquee-container">
+    <div class="marquee-content z-20">
+      <img src={getAssetUrl("/acmwmotto.svg")} alt="AcmW Motto" />
+      <img src={getAssetUrl("/acmwmotto.svg")} alt="AcmW Motto" />
+      <img src={getAssetUrl("/acmwmotto.svg")} alt="AcmW Motto" />
     </div>
-    
-    <div class="absolute bottom-0 right-0">
-        <img src="/acmwtable.svg" alt="AcmW Table" />
-    </div>
+  </div>
+
+  <div class="absolute bottom-0 right-0">
+    <img src={getAssetUrl("/acmwtable.svg")} alt="AcmW Table" />
+  </div>
 </section>
 
 <style>
-    .marquee-container {
-        position: absolute;
-        top: 50%;
-        left: 0;
-        transform: translateY(-50%);
-        width: 100%;
-        overflow: hidden;
-        white-space: nowrap;
-    }
+  .marquee-container {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+  }
 
-    .marquee-content {
-        display: inline-flex;
-        animation: marquee 15s linear infinite;
-        height: 100%;
-        align-items: center;
-    }
+  .marquee-content {
+    display: inline-flex;
+    animation: marquee 15s linear infinite;
+    height: 100%;
+    align-items: center;
+  }
 
-    .marquee-content img {
-        height: auto;
-        width: 100%;
-        margin-right: 50px;
-    }
+  .marquee-content img {
+    height: auto;
+    width: 100%;
+    margin-right: 50px;
+  }
 
-    @keyframes marquee {
-        0% {
-            transform: translateX(0);
-        }
-        100% {
-            transform: translateX(calc(-100% - 50px));
-        }
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
     }
+    100% {
+      transform: translateX(calc(-100% - 50px));
+    }
+  }
 
-    /* Pause on hover */
-    .marquee-container:hover .marquee-content {
-        animation-play-state: paused;
-    }
+  /* Pause on hover */
+  .marquee-container:hover .marquee-content {
+    animation-play-state: paused;
+  }
 
-    /* Optional: Different speeds */
-    .fast {
-        animation-duration: 8s;
-    }
-    
-    .slow {
-        animation-duration: 25s;
-    }
+  /* Optional: Different speeds */
+  .fast {
+    animation-duration: 8s;
+  }
+
+  .slow {
+    animation-duration: 25s;
+  }
 </style>

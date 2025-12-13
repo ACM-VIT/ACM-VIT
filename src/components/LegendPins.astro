@@ -1,6 +1,7 @@
 ---
 // Shared bottom legends for home page
 import { ButtonData } from "../data/legendData";
+import { getAssetUrl } from "../utils/cdn";
 ---
 
 <div
@@ -60,7 +61,11 @@ import { ButtonData } from "../data/legendData";
       {ButtonData.text}
     </div>
     <div class="w-6 h-6 relative overflow-hidden">
-      <img src="/top-arrow.svg" alt="arrow" class="w-full h-full" />
+      <img
+        src={getAssetUrl("/top-arrow.svg")}
+        alt="arrow"
+        class="w-full h-full"
+      />
     </div>
   </a>
 </div>

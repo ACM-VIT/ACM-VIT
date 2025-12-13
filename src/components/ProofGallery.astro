@@ -1,0 +1,299 @@
+---
+import { getAssetUrl } from "../utils/cdn";
+---
+
+<div
+  id="proof-gallery-modal"
+  class="fixed inset-0 z-[100] hidden items-center justify-center opacity-0 transition-opacity duration-300 pointer-events-none"
+  aria-hidden="true"
+  role="dialog"
+>
+  <!-- Backdrop with warm tint -->
+  <div
+    class="absolute inset-0 bg-[#050505]/95 backdrop-blur-md"
+    id="proof-gallery-backdrop"
+  >
+    <!-- Ambient Glow -->
+    <div class="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-[#F95F4A]/20 blur-[120px] rounded-full pointer-events-none"></div>
+    <div class="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-[#F95F4A]/10 blur-[120px] rounded-full pointer-events-none"></div>
+  </div>
+
+  <!-- Content Container -->
+  <div
+    class="relative w-full h-full max-w-7xl mx-auto p-4 md:p-8 pt-24 md:pt-32 flex flex-col z-10"
+  >
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6 md:mb-10 px-2">
+      <div class="flex flex-col">
+        <h2
+          class="text-2xl md:text-5xl text-[#FEFCD9] font-['PolySans_Trial'] uppercase tracking-wider drop-shadow-lg"
+        >
+          Proof We Actually <span class="text-[#F95F4A]">Do Stuff</span>
+        </h2>
+        <div class="h-1 w-24 bg-[#F95F4A] mt-2 rounded-full"></div>
+      </div>
+      
+      <button
+        id="proof-gallery-close"
+        class="group relative w-12 h-12 flex items-center justify-center rounded-full border border-[#FEFCD9]/30 hover:border-[#F95F4A] hover:bg-[#F95F4A]/10 transition-all duration-300"
+        aria-label="Close Gallery"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="text-[#FEFCD9] transition-transform duration-300 group-hover:rotate-90 group-hover:text-[#F95F4A]"
+        >
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Gallery Grid -->
+    <div
+      class="flex-1 overflow-y-auto overflow-x-hidden px-2 custom-scrollbar"
+      id="proof-gallery-grid-container"
+    >
+      <!-- Grid Layout for Cassettes -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20">
+        {
+          [
+            // ACM_25 Board pics
+            { src: "/gallery/ACM_25 Board pics/IMG-20250302-WA0001.jpg", category: "ACM 25 Board", title: "Board Moment" },
+            { src: "/gallery/ACM_25 Board pics/IMG-20250302-WA0002.jpg", category: "ACM 25 Board", title: "Board Moment" },
+            { src: "/gallery/ACM_25 Board pics/IMG_20250228_222031430.jpg", category: "ACM 25 Board", title: "Board Moment" },
+            { src: "/gallery/ACM_25 Board pics/_DSC0054.JPG", category: "ACM 25 Board", title: "Board Moment" },
+            { src: "/gallery/ACM_25 Board pics/WhatsApp Image 2025-12-11 at 12.24.44 AM.jpeg", category: "ACM 25 Board", title: "Board Moment" },
+            
+            // Reverse Coding
+            { src: "/gallery/Reverse Coding/20250207_111113.jpg", category: "Reverse Coding", title: "Event Highlight" },
+            { src: "/gallery/Reverse Coding/20250207_114342.jpg", category: "Reverse Coding", title: "Event Highlight" },
+            { src: "/gallery/Reverse Coding/DSC00924.JPG", category: "Reverse Coding", title: "Event Highlight" },
+            { src: "/gallery/Reverse Coding/DSC_0254.JPG", category: "Reverse Coding", title: "Event Highlight" },
+            
+            // Turf
+            { src: "/gallery/Turf/IMG_8061.JPG", category: "Turf", title: "Turf Action" },
+            { src: "/gallery/Turf/IMG-20250414-WA0021.jpg", category: "Turf", title: "Turf Action" },
+            { src: "/gallery/Turf/WhatsApp Image 2025-12-11 at 12.23.47 AM.jpeg", category: "Turf", title: "Turf Action" },
+
+            // Nightslip
+            { src: "/gallery/Nightslip/DSC00719.JPG", category: "Nightslip", title: "Nightslip Vibes" },
+            { src: "/gallery/Nightslip/DSC00754.JPG", category: "Nightslip", title: "Nightslip Vibes" },
+            { src: "/gallery/Nightslip/DSC00816.JPG", category: "Nightslip", title: "Nightslip Vibes" },
+            
+            // Women's Day
+            { src: "/gallery/Women_s day/DSC00852.JPG", category: "Women's Day", title: "Celebration" },
+            { src: "/gallery/Women_s day/DSC02199.JPG", category: "Women's Day", title: "Celebration" },
+            { src: "/gallery/Women_s day/DSC02591.JPG", category: "Women's Day", title: "Celebration" },
+
+            // ACM_26 Board
+            { src: "/gallery/ACM_26 Board/WhatsApp Image 2025-12-11 at 12.27.04 AM.jpeg", category: "ACM 26 Board", title: "New Board" },
+            { src: "/gallery/ACM_26 Board/WhatsApp Image 2025-12-11 at 12.27.05 AM.jpeg", category: "ACM 26 Board", title: "New Board" },
+          ].map((item, i) => {
+            const isPink = i % 2 === 0;
+            return (
+            <div class="gallery-item group relative w-full aspect-[1.6] rounded-lg bg-white overflow-hidden flex items-center justify-center transition-transform duration-300 hover:scale-[1.02]">
+              
+              <!-- Background Pattern -->
+              <div
+                class="absolute inset-0 pointer-events-none opacity-50 z-0"
+                style={`background-image: url('${getAssetUrl("/noise.svg")}'); background-size: cover;`}
+              >
+              </div>
+
+              <!-- Full Frame Image -->
+              <div class="absolute inset-0 z-10 p-[2%]">
+                 <img 
+                    src={getAssetUrl(item.src)} 
+                    alt={item.title} 
+                    class="w-full h-full object-cover rounded-sm transition-transform duration-700 group-hover:scale-110" 
+                    loading="lazy"
+                  />
+              </div>
+
+              <!-- Cassette Overlay -->
+              <div
+                class="w-[97%] h-[96.5%] flex justify-center items-center absolute z-20 pointer-events-none"
+              >
+                <img
+                  src={isPink
+                    ? getAssetUrl("/casette-layout-pink.svg")
+                    : getAssetUrl("/casette-layout-orange.svg")}
+                  alt="Cassette Frame"
+                  class="absolute w-full h-full object-cover"
+                />
+              </div>
+
+              <!-- ACM Logo at Bottom -->
+              <div
+                class="w-full flex justify-center items-center z-30 h-[20%] pb-1 absolute bottom-0 pointer-events-none"
+              >
+                <img
+                  src={getAssetUrl("/acm-logo-black.svg")}
+                  alt="ACM-VIT Logo"
+                  class="h-full object-cover"
+                />
+              </div>
+
+              <!-- Hover Overlay Content -->
+              <div class="absolute inset-0 z-40 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center text-center p-6 backdrop-blur-sm">
+                  <h3
+                    style="font-family: 'PolySans Bold';"
+                    class="text-xl md:text-2xl text-[#FEFCD9] m-0 leading-tight uppercase translate-y-4 group-hover:translate-y-0 transition-transform duration-300"
+                  >
+                    {item.title}
+                  </h3>
+                  <p
+                    style="font-family: 'PolySans Slim';"
+                    class={!isPink
+                      ? "text-sm md:text-base text-primary-orange m-0 uppercase mt-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75"
+                      : "text-sm md:text-base text-[#FF007A] m-0 uppercase mt-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75"}
+                  >
+                    {item.category}
+                  </p>
+                  <div class="mt-4 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100">
+                     <span class="text-xs text-white/80 font-['PolySans_Trial'] uppercase border-b border-white/50 pb-0.5">View Details</span>
+                  </div>
+              </div>
+            </div>
+          )})
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(5, 5, 5, 0.5);
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(254, 252, 217, 0.2);
+    border-radius: 10px;
+    border: 1px solid transparent;
+    background-clip: content-box;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #F95F4A;
+    border: none;
+  }
+
+  /* Animation classes controlled by JS */
+  .modal-open {
+    display: flex !important;
+    pointer-events: auto !important;
+    opacity: 1 !important;
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+
+  const modal = document.getElementById("proof-gallery-modal");
+  const closeBtn = document.getElementById("proof-gallery-close");
+  const gridContainer = document.getElementById("proof-gallery-grid-container");
+  const galleryItems = document.querySelectorAll(".gallery-item");
+
+  let isOpen = false;
+
+  function openGallery() {
+    if (isOpen) return;
+    isOpen = true;
+
+    // Push history state to handle back button
+    history.pushState({ galleryOpen: true }, "", "#gallery-view");
+
+    // Make visible
+    if (modal) {
+      modal.classList.add("modal-open");
+
+      // Animate entrance
+      const tl = gsap.timeline();
+
+      tl.fromTo(
+        modal,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.3, ease: "power2.out" }
+      ).fromTo(
+        galleryItems,
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger: 0.05,
+          duration: 0.5,
+          ease: "back.out(1.2)",
+        },
+        "-=0.1"
+      );
+    }
+
+    // Disable body scroll
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeGallery() {
+    if (!isOpen) return;
+    isOpen = false;
+
+    if (modal) {
+      // Animate exit
+      gsap.to(modal, {
+        opacity: 0,
+        duration: 0.3,
+        ease: "power2.in",
+        onComplete: () => {
+          modal.classList.remove("modal-open");
+          // Reset items for next open
+          gsap.set(galleryItems, { clearProps: "all" });
+        },
+      });
+    }
+
+    // Enable body scroll
+    document.body.style.overflow = "";
+  }
+
+  // Global expose for triggers
+  (window as any).openProofGallery = openGallery;
+
+  // Event Listeners
+  if (closeBtn) {
+    closeBtn.addEventListener("click", () => {
+      // Use history.back() to trigger popstate and keep history clean
+      history.back();
+    });
+  }
+
+  // Handle escape key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && isOpen) {
+      history.back();
+    }
+  });
+
+  // Handle back button
+  window.addEventListener("popstate", (event) => {
+    // If we pop state and we think we are open, we should likely close.
+    // However, if we just opened, we pushed state.
+    // So popping state usually means going back.
+    if (isOpen) {
+      closeGallery();
+    }
+  });
+
+  // Re-attach listeners on view transitions (optional safety)
+  document.addEventListener('astro:page-load', () => {
+      // Logic if needed for view transitions, but for now this is static
+  });
+</script>

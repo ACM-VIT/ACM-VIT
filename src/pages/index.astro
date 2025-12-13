@@ -23,6 +23,8 @@ import About from "../components/About.astro";
 import About_Phone from "../phoneComponents/About_Phone.astro";
 import Footer from "../components/Footer.astro";
 import Blogs from "../components/Blogs.astro";
+import IgnitingMinds from "../components/IgnitingMindsSection.astro";
+import ProjectsIntro from "../components/ProjectsIntro.astro";
 ---
 
 <Layout>
@@ -43,6 +45,8 @@ import Blogs from "../components/Blogs.astro";
     </div>
   </section>
 
+  <IgnitingMinds />
+
   <section id="domains" class="page-section">
     <div class="domains-desktop-container">
       <Domains />
@@ -55,6 +59,8 @@ import Blogs from "../components/Blogs.astro";
   <section id="events" class="page-section">
     <Events />
   </section>
+
+  <ProjectsIntro />
 
   <section id="projects" class="page-section">
     <div class="hidden md:block">

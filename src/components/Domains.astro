@@ -1,12 +1,12 @@
 ---
-
+import { getAssetUrl } from "../utils/cdn";
 ---
 
 <section class="domains-section relative h-[300vh] motion-reduce:h-screen">
   <!-- Fixed Background Layer -->
   <div class="fixed inset-0 z-0 pointer-events-none opacity-0 domain-bg-layer">
     <img
-      src="/glow_ball_red.svg"
+      src={getAssetUrl("/glow_ball_red.svg")}
       alt=""
       class="w-full h-full object-cover scale-125"
     />
@@ -39,7 +39,7 @@
       >
         <div class="cassette-wrapper">
           <img
-            src="/Cassette_Tech.svg"
+            src={getAssetUrl("/Cassette_Tech.svg")}
             alt="Tech Development"
             class="cassette-img block h-auto w-[160px] md:w-[300px] origin-center transform-gpu drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] will-change-transform [image-rendering:optimizeQuality] backface-hidden"
           />
@@ -51,7 +51,7 @@
       >
         <div class="cassette-wrapper">
           <img
-            src="/Cassette_cc.svg"
+            src={getAssetUrl("/Cassette_cc.svg")}
             alt="Competitive Coding"
             class="cassette-img block h-auto w-[160px] md:w-[300px] origin-center transform-gpu drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] will-change-transform [image-rendering:optimizeQuality] backface-hidden"
           />
@@ -63,7 +63,7 @@
       >
         <div class="cassette-wrapper">
           <img
-            src="/Cassette_Design.svg"
+            src={getAssetUrl("/Cassette_Design.svg")}
             alt="Design"
             class="cassette-img block h-auto w-[160px] md:w-[300px] origin-center transform-gpu drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] will-change-transform [image-rendering:optimizeQuality] backface-hidden"
           />
@@ -75,7 +75,7 @@
       >
         <div class="cassette-wrapper">
           <img
-            src="/Cassette_Management.svg"
+            src={getAssetUrl("/Cassette_Management.svg")}
             alt="Management"
             class="cassette-img block h-auto w-[160px] md:w-[300px] origin-center transform-gpu drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] will-change-transform [image-rendering:optimizeQuality] backface-hidden"
           />
@@ -87,7 +87,7 @@
       >
         <div class="cassette-wrapper">
           <img
-            src="/Cassette_Research.svg"
+            src={getAssetUrl("/Cassette_Research.svg")}
             alt="Research"
             class="cassette-img block h-auto w-[160px] md:w-[300px] origin-center transform-gpu drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] will-change-transform [image-rendering:optimizeQuality] backface-hidden"
           />
@@ -151,6 +151,7 @@
       import { gsap } from "gsap";
       import { ScrollTrigger } from "gsap/ScrollTrigger";
       import { domainConfigs } from "../data/domainsData";
+      import { getAssetUrl } from "../utils/cdn";
 
       if (typeof gsap !== "undefined") {
         gsap.registerPlugin(ScrollTrigger);
@@ -277,6 +278,7 @@
             scale: 0.7,
             duration: 3,
             ease: "power1.inOut",
+            stagger: 0,
           }).to(
             subtitle,
             {
@@ -482,55 +484,34 @@
 
           return `
                 <div class="min-h-screen text-white">
-                    <!-- Back Button -->
-                    <div class="fixed top-6 right-6 z-50">
-                        <button 
-                            onclick="hideDomainScreen()"
-                            class="relative w-12 h-12 flex items-center justify-center hover:opacity-80 transition-opacity"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" fill="none" class="absolute">
-                                <circle cx="25" cy="25" r="24.5" stroke="#FEFCD9"/>
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="relative z-10">
-                                <path d="M3 19V5" stroke="#FEFCD9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M13 6L7 12L13 18" stroke="#FEFCD9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M7 12H21" stroke="#FEFCD9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </button>
-                    </div>
-
                     <!-- Hero Section with Theme Header -->
                     <div class="pt-20 pb-8 px-8">
                         <!-- Main Title Card -->
-                        <div class="mx-auto max-w-6xl mb-8 relative">
-                            <!-- SVG Background -->
-                            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="178" viewBox="0 0 1389 178" fill="none" class="w-full">
-                                <path d="M88 1.5H1301C1348.77 1.5 1387.5 40.2274 1387.5 88V90C1387.5 137.773 1348.77 176.5 1301 176.5H88C40.2274 176.5 1.5 137.773 1.5 90V88C1.5 40.2274 40.2274 1.5 88 1.5Z" fill="${themeHex}" stroke="#FEFCD9" stroke-width="3"/>
-                            </svg>
-                            
-                            <!-- Content overlay -->
-                            <div class="absolute inset-0 flex items-center justify-center p-8">
-                                <!-- Decorative Elements -->
-                                <div class="absolute left-8 top-1/2 -translate-y-1/2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 124 124" fill="none" class="animate-spin" style="animation-duration: 8s;">
-                                        <circle cx="62" cy="62" r="57.5" stroke="#1E1E1E" stroke-width="3"/>
-                                        <path d="M61.6582 18C67.7102 18 73.4766 19.2231 78.7246 21.4336L73.4238 30.6182L82.9629 36.126L88.2588 26.9512C97.4504 33.9379 103.81 44.4557 105.314 56.4844H94.7051V67.5H105.316C103.815 79.5413 97.4473 90.0689 88.2441 97.0586L82.9473 87.8828L73.4082 93.3906L78.709 102.572C73.4651 104.779 67.7043 106 61.6582 106C55.6035 106 49.8348 104.776 44.585 102.563L49.8945 93.3672L40.3555 87.8594L35.0527 97.0439C25.8603 90.0541 19.5005 79.5326 18 67.5H28.6123V56.4844H18.002C19.5071 44.4491 25.8735 33.9262 35.0732 26.9395L40.3721 36.1172L49.9121 30.6104L44.6094 21.4258C49.8527 19.2199 55.6129 18.0001 61.6582 18Z" fill="#1E1E1E"/>
-                                    </svg>
+                        <div class="mx-auto max-w-6xl mb-8 relative flex justify-center">
+                            <div class="inline-flex justify-start items-center gap-2">
+                                <div 
+                                    class="w-auto min-w-[12rem] h-12 px-5 flex items-center rounded-[41px] outline outline-1 outline-offset-[-1px] outline-[#FEFCD9]"
+                                    style="background-color: ${themeHex}"
+                                >
+                                    <div class="text-white text-base font-light font-['PolySans_Trial'] uppercase tracking-wider whitespace-nowrap">
+                                        DOMAINS : ${config.title}
+                                    </div>
                                 </div>
                                 
-                                <div class="absolute right-8 top-1/2 -translate-y-1/2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 124 124" fill="none" class="animate-spin" style="animation-duration: 8s;">
-                                        <circle cx="62" cy="62" r="57.5" stroke="#1E1E1E" stroke-width="3"/>
-                                        <path d="M61.6582 18C67.7102 18 73.4766 19.2231 78.7246 21.4336L73.4238 30.6182L82.9629 36.126L88.2588 26.9512C97.4504 33.9379 103.81 44.4557 105.314 56.4844H94.7051V67.5H105.316C103.815 79.5413 97.4473 90.0689 88.2441 97.0586L82.9473 87.8828L73.4082 93.3906L78.709 102.572C73.4651 104.779 67.7043 106 61.6582 106C55.6035 106 49.8348 104.776 44.585 102.563L49.8945 93.3672L40.3555 87.8594L35.0527 97.0439C25.8603 90.0541 19.5005 79.5326 18 67.5H28.6123V56.4844H18.002C19.5071 44.4491 25.8735 33.9262 35.0732 26.9395L40.3721 36.1172L49.9121 30.6104L44.6094 21.4258C49.8527 19.2199 55.6129 18.0001 61.6582 18Z" fill="#1E1E1E"/>
+                                <!-- Original Back Button (Inline) -->
+                                <button 
+                                    onclick="hideDomainScreen()"
+                                    class="relative w-12 h-12 flex items-center justify-center hover:opacity-80 transition-opacity rounded-full"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" fill="none" class="absolute">
+                                        <circle cx="25" cy="25" r="24.5" stroke="#FEFCD9"/>
                                     </svg>
-                                </div>
-
-                                <!-- Domain Title -->
-                                <div class="text-center">
-                                    <h1 class="${config.title === "COMPETITIVE CODING" ? "text-4xl md:text-6xl" : "text-6xl md:text-8xl"} font-normal text-[#1E1E1E] tracking-wider">
-                                        ${config.title}
-                                    </h1>
-                                </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="relative z-10">
+                                        <path d="M3 19V5" stroke="#FEFCD9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M13 6L7 12L13 18" stroke="#FEFCD9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M7 12H21" stroke="#FEFCD9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
                             </div>
                         </div>
 
@@ -554,7 +535,7 @@
                                             (icon: any) => `
                                             <div class="flex items-center justify-center hover:scale-110 transition-transform duration-300 min-w-[3rem]">
                                                 <img 
-                                                    src="${icon.src}" 
+                                                    src="${getAssetUrl(icon.src)}" 
                                                     alt="${icon.alt}" 
                                                     class="w-12 h-12 md:w-16 md:h-16 grayscale hover:grayscale-0 transition-all duration-300 opacity-70 hover:opacity-100" 
                                                 />
@@ -615,7 +596,7 @@
                                     (aoi: any) => `
                                     <div class="flex flex-col items-center justify-center gap-2 hover:scale-105 transition-transform duration-300">
                                         <img 
-                                            src="${aoi.src}" 
+                                            src="${getAssetUrl(aoi.src)}" 
                                             alt="${aoi.alt}" 
                                             class="w-32 h-32 md:w-48 md:h-48 object-contain" 
                                         />

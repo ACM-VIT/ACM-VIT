@@ -1,6 +1,7 @@
 ---
 import BlogsCard from "./BlogsCard.astro";
 import { blogData } from "../data/blogData";
+import { getAssetUrl } from "../utils/cdn";
 ---
 
 <div
@@ -14,7 +15,10 @@ import { blogData } from "../data/blogData";
       data-type="Filled"
       class="w-12 h-12 md:w-20 md:h-20 lg:w-24 lg:h-24 relative"
     >
-      <img src="/rotate.svg" class="rotate-svg w-full h-full block" />
+      <img
+        src={getAssetUrl("/rotate.svg")}
+        class="rotate-svg w-full h-full block"
+      />
     </div>
 
     <div class="flex-1 flex justify-center mb-4 py-4">
@@ -29,7 +33,10 @@ import { blogData } from "../data/blogData";
       data-type="Filled"
       class="w-12 h-12 md:w-20 md:h-20 lg:w-24 lg:h-24 relative"
     >
-      <img src="/rotate.svg" class="rotate-svg w-full h-full block" />
+      <img
+        src={getAssetUrl("/rotate.svg")}
+        class="rotate-svg w-full h-full block"
+      />
     </div>
   </div>
 

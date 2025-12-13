@@ -1,186 +1,190 @@
 ---
 interface Props {
-    title: string;
-    fullName: string;
-    position: string;
-    imageUrl: string;
-    linkedinUrl?: string;
-    googleScholarUrl?: string;
-    githubUrl?: string;
-    isW?: boolean;
+  title: string;
+  fullName: string;
+  position: string;
+  imageUrl: string;
+  linkedinUrl?: string;
+  googleScholarUrl?: string;
+  githubUrl?: string;
+  isW?: boolean;
 }
 
 const {
-    title,
-    fullName,
-    position,
-    imageUrl,
-    linkedinUrl,
-    googleScholarUrl,
-    githubUrl,
-    isW,
+  title,
+  fullName,
+  position,
+  imageUrl,
+  linkedinUrl,
+  googleScholarUrl,
+  githubUrl,
+  isW,
 } = Astro.props;
+
+import { getAssetUrl } from "../utils/cdn";
 ---
 
 <div
-    class="relative w-[80vw] h-[50vw] max-h-[50vw] sm:w-[40vw] sm:h-[25vw] sm:max-h-[25vw] lg:w-[25vw] lg:h-[15.625vw] lg:max-h-[15.625vw] rounded-lg bg-white overflow-hidden flex items-end justify-center"
+  class="relative w-[80vw] h-[50vw] max-h-[50vw] sm:w-[40vw] sm:h-[25vw] sm:max-h-[25vw] lg:w-[25vw] lg:h-[15.625vw] lg:max-h-[15.625vw] rounded-lg bg-white overflow-hidden flex items-end justify-center"
 >
-    <!-- Background Pattern -->
+  <!-- Background Pattern -->
+  <div
+    class="absolute inset-0 pointer-events-none opacity-50 z-0"
+    style={`background-image: url('${getAssetUrl("/noise.svg")}'); background-size: cover;`}
+  >
+  </div>
+  <div
+    class="w-[97%] h-[96.5%] flex justify-center items-center absolute z-20 pointer-events-none"
+  >
+    <img
+      src={isW
+        ? getAssetUrl("/casette-layout-pink.svg")
+        : getAssetUrl("/casette-layout-orange.svg")}
+      alt="Background Pattern"
+      class="absolute w-full h-full object-cover"
+    />
+  </div>
+
+  <div
+    class="w-full flex justify-center items-center z-20 h-[20%] pb-1 absolute bottom-0"
+  >
+    <img
+      src={getAssetUrl("/acm-logo-black.svg")}
+      alt="ACM-VIT Logo"
+      class="h-full object-cover"
+    />
+  </div>
+
+  <!-- Member Info -->
+  <div class="flex items-center w-full h-full text-center z-10">
+    <div class="h-[85%] w-2/5 flex self-end items-start">
+      <img src={imageUrl} alt={fullName} class="w-full object-cover" />
+    </div>
+
     <div
-        class="absolute inset-0 pointer-events-none opacity-50 z-0"
-        style="background-image: url('/noise.svg'); background-size: cover;"
+      class="w-3/5 z-20 text-left flex flex-col justify-center mb-10 gap-1.5"
     >
-    </div>
-    <div
-        class="w-[97%] h-[96.5%] flex justify-center items-center absolute z-20 pointer-events-none"
-    >
-        <img
-            src={isW
-                ? "/casette-layout-pink.svg"
-                : "/casette-layout-orange.svg"}
-            alt="Background Pattern"
-            class="absolute w-full h-full object-cover"
-        />
-    </div>
+      <div class="">
+        <h3
+          style="font-family: 'PolySans Bold';"
+          class="text-[100%] text-gray-900 m-0"
+        >
+          {title}
+          {fullName}
+        </h3>
+        <p
+          style="font-family: PolySans Slim;"
+          class={!isW
+            ? "text-[80%] text-primary-orange m-0"
+            : "text-[80%] text-[#FF007A] m-0"}
+        >
+          {position}
+        </p>
+      </div>
 
-    <div
-        class="w-full flex justify-center items-center z-20 h-[20%] pb-1 absolute bottom-0"
-    >
-        <img
-            src="/acm-logo-black.svg"
-            alt="ACM-VIT Logo"
-            class="h-full object-cover"
-        />
-    </div>
-
-    <!-- Member Info -->
-    <div class="flex items-center w-full h-full text-center z-10">
-        <div class="h-[85%] w-2/5 flex self-end items-start">
-            <img src={imageUrl} alt={fullName} class="w-full object-cover" />
-        </div>
-
-        <div class="w-3/5 z-20 text-left flex flex-col justify-center mb-10 gap-1.5">
-            <div class="">
-                <h3
-                    style="font-family: 'PolySans Bold';"
-                    class="text-[100%] text-gray-900 m-0"
-                >
-                    {title}
-                    {fullName}
-                </h3>
-                <p
-                    style="font-family: PolySans Slim;"
-                    class={!isW
-                        ? "text-[80%] text-primary-orange m-0"
-                        : "text-[80%] text-[#FF007A] m-0"}
-                >
-                    {position}
-                </p>
-            </div>
-
-            <!-- Social Links -->
-            <div class="flex justify-center gap-3 mt-2">
-                {
-                    linkedinUrl && (
-                        <a
-                            href={linkedinUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="hover:cursor-pointer"
-                        >
-                            <img
-                                src={
-                                    isW
-                                        ? "/linkedin-pink.svg"
-                                        : "/linkedin-orange.svg"
-                                }
-                                alt="LinkedIn"
-                                class="w-[5vw] h-[5vw] sm:w-[2vw] sm:h-[2vw] lg:w-[1.7vw] lg:h-[1.7vw]"
-                            />
-                        </a>
-                    )
+      <!-- Social Links -->
+      <div class="flex justify-center gap-3 mt-2">
+        {
+          linkedinUrl && (
+            <a
+              href={linkedinUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="hover:cursor-pointer"
+            >
+              <img
+                src={
+                  isW
+                    ? getAssetUrl("/linkedin-pink.svg")
+                    : getAssetUrl("/linkedin-orange.svg")
                 }
+                alt="LinkedIn"
+                class="w-[5vw] h-[5vw] sm:w-[2vw] sm:h-[2vw] lg:w-[1.7vw] lg:h-[1.7vw]"
+              />
+            </a>
+          )
+        }
 
-                {
-                    googleScholarUrl && (
-                        <a
-                            href={googleScholarUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="hover:cursor-pointer"
-                        >
-                            <img
-                                src={
-                                    isW
-                                        ? "/google-scholar-pink.svg"
-                                        : "/google-scholar-orange.svg"
-                                }
-                                alt="Google Scholar"
-                                class="w-[5vw] h-[5vw] sm:w-[2vw] sm:h-[2vw] lg:w-[1.7vw] lg:h-[1.7vw]"
-                            />
-                        </a>
-                    )
+        {
+          googleScholarUrl && (
+            <a
+              href={googleScholarUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="hover:cursor-pointer"
+            >
+              <img
+                src={
+                  isW
+                    ? getAssetUrl("/google-scholar-pink.svg")
+                    : getAssetUrl("/google-scholar-orange.svg")
                 }
+                alt="Google Scholar"
+                class="w-[5vw] h-[5vw] sm:w-[2vw] sm:h-[2vw] lg:w-[1.7vw] lg:h-[1.7vw]"
+              />
+            </a>
+          )
+        }
 
-                {
-                    githubUrl && (
-                        <a
-                            href={githubUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="hover:cursor-pointer"
-                        >
-                            <img
-                                src={
-                                    isW
-                                        ? "/github-pink.svg"
-                                        : "/github-orange.svg"
-                                }
-                                alt="GitHub"
-                                class="w-[5vw] h-[5vw] sm:w-[2vw] sm:h-[2vw] lg:w-[1.7vw] lg:h-[1.7vw]"
-                            />
-                        </a>
-                    )
+        {
+          githubUrl && (
+            <a
+              href={githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="hover:cursor-pointer"
+            >
+              <img
+                src={
+                  isW
+                    ? getAssetUrl("/github-pink.svg")
+                    : getAssetUrl("/github-orange.svg")
                 }
-            </div>
-        </div>
+                alt="GitHub"
+                class="w-[5vw] h-[5vw] sm:w-[2vw] sm:h-[2vw] lg:w-[1.7vw] lg:h-[1.7vw]"
+              />
+            </a>
+          )
+        }
+      </div>
     </div>
+  </div>
 </div>
 
 <style>
-    @font-face {
-        font-family: "PolySans Slim";
-        src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-SlimMono.otf")
-            format("opentype");
-        font-weight: 300;
-        font-style: normal;
-        font-display: swap;
-    }
+  @font-face {
+    font-family: "PolySans Slim";
+    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-SlimMono.otf")
+      format("opentype");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+  }
 
-    @font-face {
-        font-family: "PolySans Trial";
-        src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-NeutralMono.otf")
-            format("opentype");
-        font-weight: 400;
-        font-style: normal;
-        font-display: swap;
-    }
+  @font-face {
+    font-family: "PolySans Trial";
+    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-NeutralMono.otf")
+      format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
 
-    @font-face {
-        font-family: "PolySans Medium";
-        src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-MedianMono.otf")
-            format("opentype");
-        font-weight: 500;
-        font-style: normal;
-        font-display: swap;
-    }
+  @font-face {
+    font-family: "PolySans Medium";
+    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-MedianMono.otf")
+      format("opentype");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
 
-    @font-face {
-        font-family: "PolySans Bold";
-        src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-BulkyMono.otf")
-            format("opentype");
-        font-weight: 700;
-        font-style: normal;
-        font-display: swap;
-    }
+  @font-face {
+    font-family: "PolySans Bold";
+    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-BulkyMono.otf")
+      format("opentype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
 </style>
