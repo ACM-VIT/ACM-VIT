@@ -6,17 +6,24 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "deploy:cdn": "node scripts/upload-r2.mjs"
   },
   "dependencies": {
+    "@astrojs/node": "^9.5.1",
     "@tailwindcss/vite": "^4.1.11",
+    "@types/nodemailer": "^7.0.4",
     "astro": "^5.12.8",
     "gsap": "^3.13.0",
     "imagesloaded": "^5.0.0",
+    "nodemailer": "^7.0.11",
     "tailwindcss": "^4.1.11"
   },
   "devDependencies": {
+    "@aws-sdk/client-s3": "^3.948.0",
     "@types/imagesloaded": "^4.1.7",
+    "dotenv": "^17.2.3",
+    "mime-types": "^3.0.2",
     "sass-embedded": "^1.93.3"
   }
 }
