@@ -8,7 +8,7 @@ export default defineConfig({
     output: 'static',
     adapter: vercel(),
     build: {
-        assetsPrefix: process.env.PUBLIC_CDN_URL,
+        // assetsPrefix: process.env.PUBLIC_CDN_URL,
     },
     vite: {
         plugins: [tailwindcss()],
