@@ -25,4 +25,6 @@ pnpm-debug.log*
 
 AGENTS.md
 
+.vercel
+
 .gitignore

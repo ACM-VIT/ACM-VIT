@@ -10,7 +10,7 @@
     "deploy:cdn": "node scripts/upload-r2.mjs"
   },
   "dependencies": {
-    "@astrojs/node": "^9.5.1",
+    "@astrojs/vercel": "^9.0.2",
     "@tailwindcss/vite": "^4.1.11",
     "@types/nodemailer": "^7.0.4",
     "astro": "^5.12.8",
