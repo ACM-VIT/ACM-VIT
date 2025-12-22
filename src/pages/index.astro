@@ -24,6 +24,8 @@ import About_Phone from "../phoneComponents/About_Phone.astro";
 import Footer from "../components/Footer.astro";
 import Blogs from "../components/Blogs.astro";
 import IgnitingMinds from "../components/IgnitingMindsSection.astro";
+import CodeOfConduct from "../components/CodeOfConduct.astro";
+import DistinguishedSpeaker from "../components/DistinguishedSpeaker.astro";
 import ProjectsIntro from "../components/ProjectsIntro.astro";
 ---
 
@@ -46,6 +48,8 @@ import ProjectsIntro from "../components/ProjectsIntro.astro";
   </section>
 
   <IgnitingMinds />
+  <CodeOfConduct />
+  <DistinguishedSpeaker />
 
   <section id="domains" class="page-section">
     <div class="domains-desktop-container">
@@ -68,6 +72,16 @@ import ProjectsIntro from "../components/ProjectsIntro.astro";
     </div>
     <div class="md:hidden">
       <ProjectScreenPhone projects={projectsData} />
+    </div>
+    <div class="w-full flex justify-center py-10">
+      <a
+        href="https://github.com/ACM-VIT"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-block text-white text-lg border-2 border-[#F95F4A] hover:bg-[#F95F4A]/10 hover:cursor-pointer py-4 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-['PolySans_Trial'] uppercase"
+      >
+        Checkout all cool projects
+      </a>
     </div>
   </section>
 

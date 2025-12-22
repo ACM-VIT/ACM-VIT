@@ -1,18 +1,38 @@
-<section class="w-full min-h-screen flex items-center justify-center">
-  <div class="w-[930px] flex justify-start reveal-text-container">
-    <p class="leading-[1.5]">
+<section
+  id="projects-intro"
+  class="w-full min-h-screen flex items-center justify-center px-6"
+>
+  <div
+    class="w-full max-w-4xl flex justify-start reveal-text-container font-polysans"
+  >
+    <p
+      class="leading-[1.5] max-[640px]:leading-[1.4] max-[480px]:leading-[1.35]"
+    >
       <span
-        class="text-[#F95F4A] text-4xl font-light font-['PolySans_Trial'] uppercase split-text"
-        >Voluptate veniam aliquip nisi. Officia veniam cupidatat proident elit
-        fugiat mollit velit eiusmod
+        class="text-[#F95F4A] text-2xl font-light uppercase split-text
+               max-[640px]:text-xl
+               max-[480px]:text-lg"
+        >At ACM VIT, we conduct structured project cycles throughout the year to
+        foster innovation, hands-on learning, and creative problem-solving.
       </span><span
-        class="text-white text-4xl font-light font-['PolySans_Trial'] uppercase split-text"
-        >dolor proident sunt. Ipsum fugiat ea consequat consequat fugiat eu eu
-        nulla commodo duis. Minim est ea ea ut aliqua.</span
+        class="text-white text-2xl font-light uppercase split-text
+               max-[640px]:text-xl
+               max-[480px]:text-lg"
+        >These project cycles reflect the diversity of technologies explored
+        within the chapter and encourage members to push boundaries, experiment
+        boldly, and grow through real-world application. Through these projects,
+        we also aim to create meaningful community impact by building solutions
+        that address real-world challenges and contribute beyond the campus.</span
       >
     </p>
   </div>
 </section>
+
+<style>
+  .font-polysans {
+    font-family: "PolySans Trial", sans-serif;
+  }
+</style>
 
 <script>
   import { gsap } from "gsap";
@@ -40,10 +60,10 @@
     // Container Animation (Rotation)
     gsap.fromTo(
       container,
-      { 
-        transformOrigin: "0% 50%", 
-        rotate: 3, 
-        force3D: true // Force GPU acceleration
+      {
+        transformOrigin: "0% 50%",
+        rotate: 3,
+        force3D: true, // Force GPU acceleration
       },
       {
         ease: "none",
@@ -52,7 +72,7 @@
         willChange: "transform", // Hint browser
         scrollTrigger: {
           trigger: container,
-          start: "top center", // Adjusted start point for full screen
+          start: "top 80%", // Adjusted to start earlier
           end: "bottom center",
           scrub: 1,
         },
@@ -74,7 +94,7 @@
         stagger: 0.05,
         scrollTrigger: {
           trigger: container,
-          start: "top center", // Adjusted match
+          start: "top 80%", // Adjusted to start earlier
           end: "bottom center",
           scrub: 1,
         },

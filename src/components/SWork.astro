@@ -1,11 +1,13 @@
 ---
 import { cassetteImages, info } from "../data/eventsData";
 import { getAssetUrl } from "../utils/cdn";
+import EventDetails from "./EventDetails.astro";
 
 interface Project {
   caption: string;
   site: string;
   src: string;
+  description?: string;
 }
 
 let projects: Project[] = [];
@@ -22,6 +24,7 @@ cassetteImages.forEach((src, i) => {
       caption: `${project.title}`,
       site: project.site,
       src: getAssetUrl(src),
+      description: project.description,
     });
   }
 });
@@ -79,9 +82,19 @@ while (i < projects.length) {
               "/" +
               String(works.length).padStart(2, "0");
             return (
-              <a-work class="s__scene__work s__scene__work--video js-work">
+              <a-work
+                class="s__scene__work s__scene__work--video js-work"
+                style="pointer-events: auto !important; cursor: pointer !important; z-index: 9999 !important;"
+              >
                 <div class="a__inner">
-                  <a href={work.site} target="_blank">
+                  <a
+                    href={work.site}
+                    target="_blank"
+                    data-title={work.caption}
+                    data-description={work.description}
+                    data-site={work.site}
+                    data-src={work.src}
+                  >
                     <img
                       src={work.src}
                       class="a__video js-video"
@@ -105,9 +118,15 @@ while (i < projects.length) {
       <canvas class="s__canvas js-canvas"></canvas>
     </div><!-- .s__inner -->
 
-    <div class="s__mask-outer">
-      <div class="s__mask js-mask">
-        <svg class="s__mask__svg js-mask-svg">
+    <div
+      class="s__mask-outer"
+      style="pointer-events: none !important; z-index: 10;"
+    >
+      <div class="s__mask js-mask" style="pointer-events: none !important;">
+        <svg
+          class="s__mask__svg js-mask-svg"
+          style="pointer-events: none !important;"
+        >
           <path class="s__mask__path-inner js-mask-path-inner" d=""></path>
           <path class="s__mask__path-outer js-mask-path-outer" d=""></path>
           <path class="s__mask__path-lines js-mask-path-lines" d=""></path>
@@ -116,6 +135,7 @@ while (i < projects.length) {
     </div><!-- .s__mask-outer -->
 
     <div class="s__ruler js-ruler"></div>
+    <EventDetails />
   </div><!-- .s__outer -->
 </section>
 
@@ -216,10 +236,14 @@ while (i < projects.length) {
     isPlaying!: boolean;
 
     connectedCallback() {
+      // console.log("AWork connected");
       this.video = this.querySelector(".js-video")!;
       this.link = this.querySelector("a")!;
       this.isPlaying = false;
-      this.link.addEventListener("click", this.onClick.bind(this));
+      this.addEventListener("click", this.onClick.bind(this)); // Attach to self
+      this.link.addEventListener("click", (e) => e.stopPropagation()); // Let parent handle? Or just let it bubble?
+      // Actually, if we attach to 'this', we don't need to attach to link if link bubbles.
+      // But link has href. We want href to work.
     }
 
     attributeChangedCallback(
@@ -252,10 +276,31 @@ while (i < projects.length) {
     }
 
     onClick(event: MouseEvent) {
-      if (this.link.href.includes("#")) {
-        event.preventDefault();
-        return false;
-      }
+      // Don't prevent default! We want the link to open.
+
+      // Manually trigger the link if the user clicked the custom element (outside the a tag? shouldn't happen if a fills it)
+      // If event.target is the link or inside it, normal behavior proceeds (new tab).
+      // We just need to dispatch the modal event.
+
+      const title = this.link.dataset.title;
+      const description = this.link.dataset.description;
+      const site = this.link.dataset.site;
+      const src = this.link.dataset.src;
+
+      const detail = {
+        title,
+        description,
+        site,
+        src,
+      };
+
+      document.dispatchEvent(
+        new CustomEvent("open-event-modal", {
+          detail,
+        })
+      );
+
+      // return false; // Removed to allow link redirect
     }
   }
   if (!customElements.get("a-work")) {
@@ -579,8 +624,14 @@ while (i < projects.length) {
         letter.freq = 1 + Math.random();
 
         const multiplier = safeWidth > 767 ? 1.6 : 0.75;
-        letter.total =
-          Math.round((this.bounding.width / letter.width) * multiplier) + 2;
+
+        // Mobile Optimization: Reduce or disable ghost letters
+        if (safeWidth < 768) {
+          letter.total = 0;
+        } else {
+          letter.total =
+            Math.round((this.bounding.width / letter.width) * multiplier) + 2;
+        }
 
         for (let i = 0; i < letter.total; i++) {
           const el = document.createElement("span");
@@ -624,7 +675,8 @@ while (i < projects.length) {
       const { works } = this;
       works.forEach((work, i) => {
         const el = work.el;
-        el.style.setProperty("--size", String(0.5 + Math.random() * 0.5));
+        // Increase minimum size and range (0.8 to 1.2 instead of 0.5 to 1.0)
+        el.style.setProperty("--size", String(0.8 + Math.random() * 0.4));
         el.style.setProperty(
           "--y",
           String((0.5 + Math.random() * 0.5) * (i % 2 ? -1 : 1))
@@ -652,6 +704,8 @@ while (i < projects.length) {
         },
       });
 
+      const isMobile = window.innerWidth < 768;
+
       tl.fromTo(
         mask.el,
         { scale: 1 },
@@ -664,12 +718,16 @@ while (i < projects.length) {
         { scale: 1, duration: 0.75, ease: "power3.in" },
         0
       );
-      tl.fromTo(
-        container,
-        { clipPath: "inset(0 1rem)" },
-        { clipPath: "inset(0 0rem)", duration: 0.75, ease: "power3.in" },
-        0
-      );
+
+      if (!isMobile) {
+        tl.fromTo(
+          container,
+          { clipPath: "inset(0 1rem)" },
+          { clipPath: "inset(0 0rem)", duration: 0.75, ease: "power3.in" },
+          0
+        );
+      }
+
       tl.fromTo(
         this,
         { pointsProgress: 0 },
@@ -731,17 +789,21 @@ while (i < projects.length) {
         },
         "-=1"
       );
-      tl.fromTo(
-        container,
-        { clipPath: "inset(0 0rem)" },
-        {
-          clipPath: "inset(0 1rem)",
-          duration: 0.75,
-          ease: "power3.inOut",
-          immediateRender: false,
-        },
-        "-=1"
-      );
+
+      if (!isMobile) {
+        tl.fromTo(
+          container,
+          { clipPath: "inset(0 0rem)" },
+          {
+            clipPath: "inset(0 1rem)",
+            duration: 0.75,
+            ease: "power3.inOut",
+            immediateRender: false,
+          },
+          "-=1"
+        );
+      }
+
       tl.fromTo(
         this,
         { pointsProgress: 1 },
@@ -769,6 +831,11 @@ while (i < projects.length) {
     setPoints() {
       const { bounding } = this;
       this.points = [];
+
+      // Mobile Optimization: Disable canvas points
+      const safeWidth = window.safeWidth || window.innerWidth;
+      if (safeWidth < 768) return;
+
       const gap = 24;
       const cols = Math.ceil((bounding.width * 1.2) / gap);
       const rows = Math.ceil((bounding.height * 1.2) / gap);
@@ -839,11 +906,15 @@ while (i < projects.length) {
       );
 
       // Movement
-      // this.movePoints()
-      this.moveLetters();
+      if (window.innerWidth >= 768) {
+        // this.movePoints()
+        this.moveLetters();
+      }
 
       // Draw
-      // this.drawPoints()
+      if (window.innerWidth >= 768) {
+        // this.drawPoints()
+      }
     }
   }
 
@@ -868,7 +939,11 @@ while (i < projects.length) {
     position: relative;
     z-index: 2;
     height: var(--height);
+    height: var(--height);
     background: #f95f4a;
+    height: var(--height);
+    background: #f95f4a;
+    /* pointer-events: none; REMOVED - this might break scrolling/child interactions unpredictably */
 
     &:before {
       position: absolute;
@@ -888,7 +963,11 @@ while (i < projects.length) {
       width: 100%;
       height: 100lvh;
       overflow: hidden;
-      pointer-events: none;
+      pointer-events: none !important;
+      z-index: 10; /* Ensure it's above but click-through */
+      * {
+        pointer-events: none !important;
+      }
     }
 
     .s__mask {
@@ -898,6 +977,7 @@ while (i < projects.length) {
       width: 100%;
       height: 100%;
       will-change: scale, transform;
+      pointer-events: none !important;
 
       &__svg {
         position: absolute;
@@ -905,6 +985,13 @@ while (i < projects.length) {
         left: 0;
         width: 100%;
         height: 100%;
+        pointer-events: none !important;
+      }
+
+      &__path-outer,
+      &__path-inner,
+      &__path-lines {
+        pointer-events: none !important;
       }
 
       &__path-outer {
@@ -949,8 +1036,10 @@ while (i < projects.length) {
       height: 100lvh;
       background: var(--color-secondary);
       transform: translate3d(0, calc(var(--scroll-progress) * -15%), 0);
+      transform: translate3d(0, calc(var(--scroll-progress) * -15%), 0);
       color: white;
       will-change: clip-path, transform;
+      /* z-index: 20; REMOVED - This hid the mask */
 
       @media only screen and (max-width: 767px) and (orientation: landscape),
         only screen and (max-width: 576px) {
@@ -998,6 +1087,7 @@ while (i < projects.length) {
     .s__title {
       width: 0.7em;
       opacity: 0;
+      pointer-events: none; /* Prevent title from blocking */
       word-break: break-all;
       &__inner {
         display: flex;
@@ -1069,6 +1159,7 @@ while (i < projects.length) {
           )
           scale(var(--size));
         will-change: transform;
+        pointer-events: auto; /* Ensure clickable */
 
         @media only screen and (max-width: 987px) {
           transform: rotateY(calc(var(--progress) * -20deg))
@@ -1081,12 +1172,13 @@ while (i < projects.length) {
 
         @media only screen and (max-width: 767px) and (orientation: landscape),
           only screen and (max-width: 576px) {
-          transform: rotateY(calc(var(--progress) * -20deg))
-            translate3d(
+          /* Simplified mobile transform: Remove 3D rotation, simpler translation */
+          transform: translate3d(
               calc(var(--progress) * (50vw + 100%) - 50%),
               calc(var(--y) * 100% - 50%),
-              calc(var(--progress) * var(--progress) * -5rem)
-            );
+              0
+            )
+            scale(var(--size));
         }
       }
     }
@@ -1115,10 +1207,13 @@ while (i < projects.length) {
     display: block;
     margin: 0;
     padding: 0.5rem 0.5rem 0;
+    margin: 0;
+    padding: 0.5rem 0.5rem 0;
     background: var(--color-secondary);
-    content-visibility: hidden;
+    /* content-visibility: hidden; -- REMOVED to prevent interactivity issues */
     transform-style: preserve-3d;
     will-change: transform;
+    pointer-events: auto; /* Double ensure clickable */
 
     @media only screen and (max-width: 767px) and (orientation: landscape),
       only screen and (max-width: 576px) {
@@ -1128,6 +1223,10 @@ while (i < projects.length) {
     a {
       display: block;
       text-decoration: none;
+      cursor: pointer;
+      pointer-events: auto;
+      position: relative;
+      z-index: 9999; /* Boosted z-index */
     }
 
     .a__inner {
@@ -1139,9 +1238,9 @@ while (i < projects.length) {
     .a__video {
       display: block;
       width: auto;
-      max-width: 50vw;
+      max-width: 80vw;
       height: auto;
-      max-height: 50vh;
+      max-height: 80vh;
 
       @media only screen and (max-width: 767px) and (orientation: landscape),
         only screen and (max-width: 576px) {
@@ -1168,8 +1267,8 @@ while (i < projects.length) {
       }
     }
 
-    &.is-inview {
+    /* &.is-inview {
       content-visibility: visible;
-    }
+    } */
   }
 </style>

@@ -117,6 +117,13 @@ import { getAssetUrl } from "../utils/cdn";
   </section>
 </div>
 
+<!-- Preload Background Images -->
+<div class="hidden" aria-hidden="true" style="display: none;">
+  <img src={getAssetUrl("/about/about-acmvit.jpeg")} alt="" loading="eager" />
+  <img src={getAssetUrl("/about/about-vit.jpeg")} alt="" loading="eager" />
+  <img src={getAssetUrl("/about/about-acm.jpeg")} alt="" loading="eager" />
+</div>
+
 <script>
   import { gsap } from "gsap";
   import { ScrollTrigger } from "gsap/ScrollTrigger";

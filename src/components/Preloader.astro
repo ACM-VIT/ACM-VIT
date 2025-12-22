@@ -31,16 +31,17 @@ import { getAssetUrl } from "../utils/cdn";
     } else {
       gsap.set(preloader, { autoAlpha: 1 });
       gsap.set(progressFill, { width: "0%" });
+      // Tracking loading state
       const imgLoad = imagesLoaded(document.body, { background: true });
       const totalImages = imgLoad.images.length;
       let loadedImages = 0;
-      if (totalImages === 0) {
-        finishLoading();
-      }
+      let windowLoaded = false;
 
+      // Progress bar driven by images (gives visual feedback during load)
       imgLoad.on("progress", (instance, image) => {
         loadedImages++;
-        const percentage = (loadedImages / totalImages) * 100;
+        // Cap progress at 90% until window.load fires
+        const percentage = Math.min((loadedImages / totalImages) * 100, 95);
         gsap.to(progressFill, {
           width: `${percentage}%`,
           duration: 0.2,
@@ -48,14 +49,32 @@ import { getAssetUrl } from "../utils/cdn";
         });
       });
 
-      imgLoad.on("always", () => {
-        finishLoading();
-      });
+      // Ensure we finish only when EVERYTHING is loaded
+      const onWindowLoad = () => {
+        if (windowLoaded) return;
+        windowLoaded = true;
+
+        // Force progress to 100% then finish
+        gsap.to(progressFill, {
+          width: "100%",
+          duration: 0.5,
+          onComplete: finishLoading,
+        });
+      };
+
+      if (document.readyState === "complete") {
+        onWindowLoad();
+      } else {
+        window.addEventListener("load", onWindowLoad);
+      }
+
+      // Fallback safety timeout (increased to 15s)
       setTimeout(() => {
-        if (preloader.style.display !== "none") {
-          finishLoading();
+        if (!windowLoaded) {
+          console.warn("Preloader timeout reached - forcing dismissal");
+          onWindowLoad();
         }
-      }, 5000); // 5 seconds max wait
+      }, 15000);
     }
   }
 

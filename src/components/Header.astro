@@ -54,16 +54,16 @@
             </li>
             <li>
               <a
-                href="#projects"
+                href="#events"
                 class="nav-link inline-block px-3 py-1 hover:text-white transition-colors"
-                >PROJECTS</a
+                >EVENTS</a
               >
             </li>
             <li>
               <a
-                href="#events"
+                href="#projects"
                 class="nav-link inline-block px-3 py-1 hover:text-white transition-colors"
-                >EVENTS</a
+                >PROJECTS</a
               >
             </li>
             <li>
@@ -128,83 +128,74 @@
       </div>
 
       <!-- Mobile nav -->
-      <div class="nav-mobile pt-6">
-        <div
-          class="w-64 min-h-7 h-auto px-3 pt-2 pb-2 rounded-3xl outline outline-[0.56px] outline-offset-[-0.56px] outline-yellow-50 inline-flex items-center justify-center"
-          style="background:rgba(0,0,0,0.35);backdrop-filter:blur(4px);"
+      <div class="nav-mobile">
+        <button
+          id="mobile-menu-btn"
+          class="pointer-events-auto w-12 h-12 flex items-center justify-center rounded-full bg-[rgba(0,0,0,0.35)] border border-[#FEFCD9] backdrop-blur transition-transform active:scale-95"
+          aria-label="Toggle menu"
         >
-          <div class="w-full inline-flex justify-center items-center gap-2">
-            <a
-              href="#about"
-              class="justify-start text-yellow-50 text-[8px] font-light font-['PolySans_Trial'] uppercase"
-              >About</a
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#FEFCD9"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+
+        <div
+          id="mobile-menu-overlay"
+          class="fixed inset-0 bg-black/95 z-[100] translate-x-full transition-transform duration-300 flex flex-col items-center justify-center"
+        >
+          <button
+            id="mobile-menu-close"
+            class="absolute top-6 right-6 w-12 h-12 flex items-center justify-center text-[#FEFCD9]"
+          >
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
             >
-            <a
-              href="#domains"
-              class="justify-start text-yellow-50 text-[8px] font-light font-['PolySans_Trial'] uppercase"
-              >Domains</a
-            >
-            <a
-              href="#projects"
-              class="justify-start text-yellow-50 text-[8px] font-light font-['PolySans_Trial'] uppercase"
-              >Projects</a
-            >
-            <a
-              href="#events"
-              class="justify-start text-yellow-50 text-[8px] font-light font-['PolySans_Trial'] uppercase"
-              >Events</a
-            >
-            <a
-              href="#acm-w"
-              class="justify-start text-yellow-50 text-[8px] font-light font-['PolySans_Trial'] uppercase"
-              >ACM-W</a
-            >
-            <button
-              type="button"
-              class="more-toggle justify-start text-[#F95F4A] text-[8px] font-light font-['PolySans_Trial'] uppercase"
-              aria-controls="mobileMoreMenu"
-              aria-expanded="false">More</button
-            >
-          </div>
-        </div>
-        <!-- Expandable 'More' dropdown -->
-        <div id="mobileMoreMenu" class="more-menu w-56">
-          <ul class="mobile-more-list">
-            <li>
-              <a
-                href="#blogs"
-                class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[10px]"
-                >Blogs</a
-              >
-            </li>
-            <li>
-              <a
-                href="#partners"
-                class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[10px]"
-                >Partners</a
-              >
-            </li>
-            <li>
-              <a
-                href="#contact"
-                class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[10px]"
-                >Contact Us</a
-              >
-            </li>
-            <li>
-              <a
-                href="#community"
-                class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[10px]"
-                >Community</a
-              >
-            </li>
-            <li>
-              <a
-                href="#team"
-                class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[10px]"
-                >Team</a
-              >
-            </li>
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+          <ul class="flex flex-col gap-6 text-center">
+            {
+              [
+                "about",
+                "domains",
+                "events",
+                "projects",
+                "acm-w",
+                "blogs",
+                "partners",
+                "contact",
+                "community",
+                "team",
+              ].map((item) => (
+                <li>
+                  <a
+                    href={`#${item}`}
+                    class="mobile-nav-link text-3xl font-light font-['PolySans_Trial'] uppercase text-[#FEFCD9] hover:text-[#F95F4A] transition-colors"
+                  >
+                    {item.replace("-", " ")}
+                  </a>
+                </li>
+              ))
+            }
           </ul>
         </div>
       </div>
@@ -219,14 +210,19 @@
     justify-content: center;
     transition:
       width 0.3s cubic-bezier(0.25, 0.1, 0.25, 1),
-      background-color 0.3s ease;
+      background-color 0.3s ease,
+      border-color 0.3s ease;
   }
 
   /* Dynamic Mode Styles */
   .header-pill.dynamic-mode {
-    width: 112px !important; /* w-28 */
+    width: 112px; /* w-28 */
     background-color: #f95f4a !important;
     border-color: #fefcd9;
+  }
+
+  .header-pill.dynamic-mode.pink-mode {
+    background-color: #ff007a !important;
   }
 
   .header-pill.dynamic-mode .nav-list {
@@ -242,6 +238,7 @@
   .header-pill.dynamic-mode:hover {
     width: var(--full-width, auto) !important;
     background-color: rgba(0, 0, 0, 0.35) !important;
+    border-color: #fefcd9;
   }
 
   .header-pill.dynamic-mode:hover .nav-list {
@@ -273,6 +270,7 @@
   .nav-mobile {
     display: none;
     position: relative;
+    pointer-events: auto; /* Ensure button is clickable */
   }
 
   /* 'More' dropdown */
@@ -357,6 +355,30 @@
     const pill = document.querySelector(".header-pill");
     const dynamicTitle = document.querySelector("#dynamic-title div"); // Changed to div
 
+    // Mobile Menu Logic
+    const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+    const mobileMenuOverlay = document.getElementById("mobile-menu-overlay");
+    const mobileMenuClose = document.getElementById("mobile-menu-close");
+    const mobileNavLinks = document.querySelectorAll(".mobile-nav-link");
+
+    function toggleMobileMenu(show) {
+      if (show) {
+        mobileMenuOverlay.classList.remove("translate-x-full");
+      } else {
+        mobileMenuOverlay.classList.add("translate-x-full");
+      }
+    }
+
+    if (mobileMenuBtn) {
+      mobileMenuBtn.addEventListener("click", () => toggleMobileMenu(true));
+    }
+    if (mobileMenuClose) {
+      mobileMenuClose.addEventListener("click", () => toggleMobileMenu(false));
+    }
+    mobileNavLinks.forEach((link) => {
+      link.addEventListener("click", () => toggleMobileMenu(false));
+    });
+
     // Capture initial full width for restoration
     let fullWidth = pill ? pill.offsetWidth : 0;
     if (pill) {
@@ -403,6 +425,14 @@
       blob.style.left = `${relativeLeft}px`;
       blob.style.width = `${width}px`;
       blob.style.opacity = "1";
+
+      // Color logic
+      const href = targetLink.getAttribute("href");
+      if (href === "#acm-w") {
+        blob.style.backgroundColor = "#FF007A";
+      } else {
+        blob.style.backgroundColor = "#F95F4A";
+      }
     }
 
     // Function to hide blob
@@ -415,10 +445,64 @@
 
       if (isDynamic) {
         pill.classList.add("dynamic-mode");
-        if (dynamicTitle) dynamicTitle.textContent = sectionId;
+        if (sectionId === "acm-w") {
+          pill.classList.add("pink-mode");
+        } else {
+          pill.classList.remove("pink-mode");
+        }
+
+        if (dynamicTitle) {
+          let text = sectionId;
+          let isLongText = false;
+
+          if (sectionId.startsWith("community-")) {
+            // Format: Community: Outreach
+            const sub = sectionId.replace("community-", "");
+            let displaySub = sub;
+            if (sub === "outreach") displaySub = "Outreach";
+            else if (sub === "sdg") displaySub = "SDG";
+            else if (sub === "conduct") displaySub = "Code of Conduct";
+            else if (sub === "speaker") displaySub = "Speakers";
+
+            text = `Community: ${displaySub}`;
+            isLongText = true;
+          }
+
+          dynamicTitle.textContent = text;
+          dynamicTitle.style.whiteSpace = "nowrap";
+
+          if (isLongText) {
+            // Measure text width
+            const font = "16px PolySans_Trial";
+            const tempSpan = document.createElement("span");
+            tempSpan.style.fontFamily = "'PolySans_Trial', sans-serif";
+            tempSpan.style.fontSize = "16px";
+            tempSpan.style.fontWeight = "300";
+            tempSpan.style.textTransform = "uppercase";
+            tempSpan.style.visibility = "hidden";
+            tempSpan.style.position = "absolute";
+            tempSpan.style.whiteSpace = "nowrap";
+            tempSpan.textContent = text;
+            document.body.appendChild(tempSpan);
+            const width = tempSpan.offsetWidth;
+            document.body.removeChild(tempSpan);
+
+            const totalWidth = width + 55;
+
+            pill.style.setProperty("width", `${totalWidth}px`);
+            pill.style.setProperty("padding-left", "0px"); // Reset to avoid double padding if width includes it? Actually my logic sets width including padding.
+            // Wait, transition: width 0.3s. If I set width explicit, it should animate.
+          } else {
+            pill.style.setProperty("width", "112px");
+          }
+        }
         hideBlob();
       } else {
         pill.classList.remove("dynamic-mode");
+        pill.classList.remove("pink-mode");
+        // Clear inline styles so it returns to original CSS/auto width
+        pill.style.removeProperty("width");
+        pill.style.removeProperty("padding-left");
       }
     }
 
@@ -442,15 +526,34 @@
             // Enter Dynamic Mode
             setDynamicMode(true, id);
           } else {
-            // Exit Dynamic Mode
-            setDynamicMode(false);
+            // ID Mapping for internal sections
+            const idMapping = {
+              work: "events",
+              "igniting-minds-section": "about",
+              "projects-intro": "projects",
+              "community-outreach": "community",
+              "community-sdg": "community",
+              "community-conduct": "community",
+              "community-speaker": "community",
+            };
+            const mappedId = idMapping[id] || id;
 
-            // Update blob for normal sections
-            const activeLink = document.querySelector(
-              `.nav-desktop .nav-link[href="#${id}"]`
-            );
-            if (activeLink) {
-              updateBlob(activeLink);
+            // Check if it's a specific community subsection
+            if (id.startsWith("community-")) {
+              setDynamicMode(true, id);
+            } else {
+              // Exit Dynamic Mode
+              setDynamicMode(false);
+
+              // Update blob for normal sections
+              const activeLink = document.querySelector(
+                `.nav-desktop .nav-link[href="#${mappedId}"]`
+              );
+              if (activeLink) {
+                updateBlob(activeLink);
+              } else {
+                hideBlob();
+              }
             }
           }
         }

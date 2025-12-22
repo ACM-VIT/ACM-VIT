@@ -1,4 +1,5 @@
 ---
+import { getAssetUrl } from "../utils/cdn";
 const fallbackEmail = "hello@acmvit.in";
 const rawEndpoint = (import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? "").trim();
 const formAction = rawEndpoint ? undefined : `mailto:${fallbackEmail}`;

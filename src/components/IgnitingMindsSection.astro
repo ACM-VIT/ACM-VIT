@@ -5,31 +5,27 @@ import { getAssetUrl } from "../utils/cdn";
 
 <div class="min-h-screen overflow-x-hidden">
   <!-- Part A: Outreach Event -->
+  <div id="community" class="absolute -top-24 pointer-events-none"></div>
   <section
-    id="community"
+    id="community-outreach"
     class="relative z-20 py-12 md:py-20 border-t border-white/10 overflow-hidden"
   >
-    <!-- Horizontal Dotted Lines Overlay - Hidden on mobile -->
-    <div class="absolute inset-0 pointer-events-none z-0 hidden md:block">
-      <div
-        class="absolute top-[43%] w-full border-t-2 border-dashed border-[#999999]/50"
-      >
-      </div>
-      <div
-        class="absolute top-[57%] w-full border-t-2 border-dashed border-[#999999]/50"
-      >
-      </div>
-    </div>
-
     <div
-      class="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-0 relative z-10 md:min-h-[600px]"
+      class="max-w-[1400px] mx-auto md:grid md:grid-cols-10 md:grid-rows-5 gap-0 relative z-10 md:min-h-[600px]"
     >
-      <!-- Left: Text Content -->
+      <!-- Horizontal Lines (Grid Row 3) - Visible on Left -->
       <div
-        class="flex flex-col h-full md:border-r-2 md:border-dashed md:border-[#999999]/50"
+        class="hidden md:block col-start-1 col-end-11 row-start-3 row-end-4 border-t-2 border-b-2 border-dashed border-[#999999]/50 pointer-events-none z-20"
+        style="mask-image: linear-gradient(to right, black 50%, transparent 50%); -webkit-mask-image: linear-gradient(to right, black 50%, transparent 50%);"
       >
-        <!-- Top Section - Title -->
-        <div class="p-6 md:p-10 flex items-start md:h-[43%]">
+      </div>
+
+      <!-- Left: Text Content -->
+      <!-- Top Section - Title (Rows 1-2) -->
+      <div
+        class="flex flex-col h-full md:col-start-1 md:col-end-6 md:row-start-1 md:row-end-3 md:border-r-2 md:border-dashed md:border-[#999999]/50"
+      >
+        <div class="p-6 md:p-10 flex items-start h-full">
           <h1
             class="text-5xl sm:text-6xl md:text-7xl lg:text-[8rem] leading-[0.85] font-bold text-[#FFFDD0] uppercase tracking-tighter break-words"
           >
@@ -37,9 +33,13 @@ import { getAssetUrl } from "../utils/cdn";
             <span class="text-[#FF5F4A]">EVENT</span>
           </h1>
         </div>
+      </div>
 
-        <!-- Middle Section - Beyond the Norm -->
-        <div class="px-6 md:px-10 py-4 md:py-0 flex items-center md:h-[14%]">
+      <!-- Middle Section - Beyond the Norm (Row 3) -->
+      <div
+        class="flex flex-col h-full md:col-start-1 md:col-end-6 md:row-start-3 md:row-end-4 md:border-r-2 md:border-dashed md:border-[#999999]/50"
+      >
+        <div class="px-6 md:px-10 py-4 md:py-0 flex items-center h-full">
           <div class="relative">
             <div
               class="text-[#FF5F4A] text-3xl sm:text-4xl md:text-5xl font-bold font-['Inter'] leading-tight md:leading-none"
@@ -52,9 +52,13 @@ import { getAssetUrl } from "../utils/cdn";
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Bottom Section - Empty on desktop, description on mobile -->
-        <div class="p-6 md:p-10 md:h-[43%] block md:hidden">
+      <!-- Bottom Section - Empty/Mobile Desc (Rows 4-5) -->
+      <div
+        class="flex flex-col h-full md:col-start-1 md:col-end-6 md:row-start-4 md:row-end-6 md:border-r-2 md:border-dashed md:border-[#999999]/50"
+      >
+        <div class="p-6 md:p-10 h-full block md:hidden">
           <div
             class="text-left text-gray-300 text-xs sm:text-sm font-mono leading-relaxed"
           >
@@ -71,8 +75,10 @@ import { getAssetUrl } from "../utils/cdn";
         </div>
       </div>
 
-      <!-- Right: Image and Description -->
-      <div class="relative h-[50vh] md:h-full group">
+      <!-- Right: Image and Description (Rows 1-5) -->
+      <div
+        class="relative h-[50vh] md:h-full group md:col-start-6 md:col-end-11 md:row-start-1 md:row-end-6"
+      >
         <!-- Image -->
         <div class="absolute inset-0">
           <img
@@ -102,32 +108,32 @@ import { getAssetUrl } from "../utils/cdn";
 
   <!-- Part B: SDG Section -->
   <section
+    id="community-sdg"
     class="relative z-20 py-12 md:py-20 border-t border-white/10 overflow-hidden"
   >
-    <!-- Horizontal Dotted Lines Overlay - Hidden on mobile -->
-    <div class="absolute inset-0 pointer-events-none z-0 hidden md:block">
-      <div
-        class="absolute top-[43%] w-full border-t-2 border-dashed border-[#999999]/50"
-      >
-      </div>
-      <div
-        class="absolute top-[57%] w-full border-t-2 border-dashed border-[#999999]/50"
-      >
-      </div>
-    </div>
-
     <div
-      class="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-0 relative z-10 md:min-h-[600px]"
+      class="max-w-[1400px] mx-auto md:grid md:grid-cols-10 md:grid-rows-5 gap-0 relative z-10 md:min-h-[600px]"
     >
-      <!-- Left Side -->
+      <!-- Horizontal Lines (Grid Row 3) - Visible on Left -->
       <div
-        class="flex flex-col h-full md:border-r-2 md:border-dashed md:border-[#999999]/50 order-2 md:order-1"
+        class="hidden md:block col-start-1 col-end-11 row-start-3 row-end-4 border-t-2 border-b-2 border-dashed border-[#999999]/50 pointer-events-none z-20"
+        style="mask-image: linear-gradient(to right, black 50%, transparent 50%); -webkit-mask-image: linear-gradient(to right, black 50%, transparent 50%);"
       >
-        <!-- Top Section - Empty on desktop -->
-        <div class="hidden md:block md:h-[43%] p-10"></div>
+      </div>
 
-        <!-- Middle Section - Beyond the Norm -->
-        <div class="px-6 md:px-6 py-4 md:py-0 flex items-center md:h-[14%]">
+      <!-- Left Side -->
+      <!-- Top Section - Empty (Rows 1-2) -->
+      <div
+        class="flex flex-col h-full order-2 md:order-1 md:col-start-1 md:col-end-6 md:row-start-1 md:row-end-3 md:border-r-2 md:border-dashed md:border-[#999999]/50"
+      >
+        <div class="hidden md:block h-full p-10"></div>
+      </div>
+
+      <!-- Middle Section - Beyond the Norm (Row 3) -->
+      <div
+        class="flex flex-col h-full order-2 md:order-1 md:col-start-1 md:col-end-6 md:row-start-3 md:row-end-4 md:border-r-2 md:border-dashed md:border-[#999999]/50"
+      >
+        <div class="px-6 md:px-6 py-4 md:py-0 flex items-center h-full">
           <div class="relative">
             <div
               class="text-[#FF5F4A] text-3xl sm:text-4xl md:text-5xl font-bold font-['Inter'] leading-tight md:leading-none"
@@ -140,9 +146,13 @@ import { getAssetUrl } from "../utils/cdn";
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Bottom Section - Description -->
-        <div class="p-6 md:p-2 md:h-[43%] flex items-start md:items-end">
+      <!-- Bottom Section - Description (Rows 4-5) -->
+      <div
+        class="flex flex-col h-full order-2 md:order-1 md:col-start-1 md:col-end-6 md:row-start-4 md:row-end-6 md:border-r-2 md:border-dashed md:border-[#999999]/50"
+      >
+        <div class="p-6 md:p-2 h-full flex items-start md:items-end">
           <div
             class="text-left text-gray-300 text-xs sm:text-sm font-mono leading-relaxed max-w-lg"
           >
@@ -158,9 +168,9 @@ import { getAssetUrl } from "../utils/cdn";
         </div>
       </div>
 
-      <!-- Right Side: SDG Title -->
+      <!-- Right Side: SDG Title (Rows 1-5) -->
       <div
-        class="p-6 md:p-10 flex flex-col justify-start h-full order-1 md:order-2"
+        class="p-6 md:p-10 flex flex-col justify-start h-full order-1 md:order-2 md:col-start-6 md:col-end-11 md:row-start-1 md:row-end-6"
       >
         <div
           class="md:h-[43%] flex flex-col items-start justify-start gap-4 md:gap-6 pt-0 md:pt-8"
@@ -177,6 +187,7 @@ import { getAssetUrl } from "../utils/cdn";
             Learning for Rural Schools
           </h2>
         </div>
+        <!-- Empty spacers maintained for spacing emulation if needed, or removed if handled by simple flow -->
         <div class="hidden md:flex md:h-[14%] items-center"></div>
         <div class="hidden md:flex md:h-[43%] items-end justify-end"></div>
       </div>

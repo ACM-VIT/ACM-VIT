@@ -1,0 +1,185 @@
+---
+import "../styles/globals.css";
+import { getAssetUrl } from "../utils/cdn";
+import { speakerData } from "../data/speakerData";
+---
+
+
+<div class="h-full overflow-x-hidden">
+  <section
+    id="community-speaker"
+    class="relative z-20 py-12 md:py-20 border-t border-white/10 overflow-hidden"
+  >
+    <!-- Background Pattern -->
+    <div
+      class="absolute inset-0 pointer-events-none z-0 opacity-20"
+      style={`background-image: url(${getAssetUrl("/background_pattern.svg")}); background-size: cover;`}
+    >
+    </div>
+
+<div class="h-full overflow-x-hidden">
+  <section
+    id="community-speaker"
+    class="relative z-20 py-12 md:py-20 border-t border-white/10 overflow-hidden"
+  >
+    <!-- Background Pattern -->
+    <div
+      class="absolute inset-0 pointer-events-none z-0 opacity-20"
+      style={`background-image: url(${getAssetUrl("/background_pattern.svg")}); background-size: cover;`}
+    >
+    </div>
+
+    <!-- Carousel Container -->
+    <div class="relative max-w-[1400px] mx-auto md:min-h-[600px]">
+      <!-- Slides Container (Grid Stacking) -->
+      <div class="grid grid-cols-1 grid-rows-1">
+        {
+          speakerData.map((speaker, index) => (
+            <div
+              class={`speaker-slide col-start-1 row-start-1 w-full transition-opacity duration-500 ease-in-out ${index === 0 ? "opacity-100 z-10 relative" : "opacity-0 z-0 absolute top-0 left-0 pointer-events-none"}`}
+              data-index={index}
+            >
+              <div class="md:grid md:grid-cols-10 md:grid-rows-5 gap-0 h-full">
+                <!-- Horizontal Lines (Hidden but kept for structure if needed) -->
+                <div class="hidden md:block col-start-1 col-end-11 row-start-3 row-end-4 border-t-2 border-b-2 border-dashed border-[#999999]/50 pointer-events-none opacity-0"></div>
+
+                <!-- Left: Speaker Info & Photo -->
+                <div class="flex flex-col h-full md:col-start-1 md:col-end-6 md:row-start-1 md:row-end-6 md:border-r-2 md:border-dashed md:border-[#999999]/50 p-6 md:p-10 justify-center items-center md:items-start">
+                  <div class="relative w-48 h-48 md:w-64 md:h-64 mb-6 rounded-full overflow-hidden border-4 border-[#FF5F4A]">
+                    <img
+                      src={speaker.image}
+                      alt={speaker.name}
+                      class="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  <h2 class="text-3xl md:text-5xl font-bold text-[#FFFDD0] uppercase tracking-tighter text-center md:text-left mb-2">
+                    {speaker.name}
+                  </h2>
+                  <p class="text-[#FF5F4A] font-['PolySans_Trial'] text-lg md:text-xl uppercase tracking-widest text-center md:text-left mb-4">
+                    {speaker.subtitle}
+                  </p>
+                  <p class="text-gray-400 font-mono text-xs md:text-sm text-center md:text-left max-w-sm">
+                    {speaker.role}
+                  </p>
+                </div>
+
+                <!-- Right: Session Details -->
+                <div class="flex flex-col h-full p-6 md:p-10 justify-center md:col-start-6 md:col-end-11 md:row-start-1 md:row-end-6">
+                  <div class="flex flex-col gap-6">
+                    <div>
+                      <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-[#FFFDD0] uppercase tracking-tight leading-none mb-4">
+                        {speaker.sessionTitle}<br />
+                        <span class="text-[#FF5F4A]">
+                          {speaker.sessionTitleHighlight}
+                        </span>
+                      </h1>
+                      <div class="w-20 h-1 bg-[#FF5F4A] mb-6" />
+                    </div>
+
+                    <div class="text-gray-300 font-mono text-sm md:text-base leading-relaxed space-y-4">
+                      {speaker.description.map((desc) => (
+                        <p>{desc}</p>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- Navigation Controls -->
+      <div class="absolute bottom-4 right-4 md:bottom-10 md:right-10 z-30 flex gap-4">
+        <button
+          id="prev-speaker"
+          class="w-12 h-12 rounded-full border border-[#FF5F4A] text-[#FF5F4A] flex items-center justify-center hover:bg-[#FF5F4A] hover:text-white transition-colors duration-300 focus:outline-none"
+          aria-label="Previous Speaker"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M15.75 19.5L8.25 12l7.5-7.5"></path>
+          </svg>
+        </button>
+        <button
+          id="next-speaker"
+          class="w-12 h-12 rounded-full border border-[#FF5F4A] text-[#FF5F4A] flex items-center justify-center hover:bg-[#FF5F4A] hover:text-white transition-colors duration-300 focus:outline-none"
+          aria-label="Next Speaker"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M8.25 4.5l7.5 7.5-7.5 7.5"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const slides = document.querySelectorAll(
+      ".speaker-slide"
+    ) as NodeListOf<HTMLElement>;
+    const prevBtn = document.getElementById("prev-speaker");
+    const nextBtn = document.getElementById("next-speaker");
+    let currentIndex = 0;
+    const totalSlides = slides.length;
+
+    if (slides.length === 0) return;
+
+    const showSlide = (index: number) => {
+      slides.forEach((slide, i) => {
+        if (i === index) {
+          slide.classList.remove(
+            "opacity-0",
+            "z-0",
+            "absolute",
+            "pointer-events-none"
+          );
+          slide.classList.add("opacity-100", "z-10", "relative");
+        } else {
+          slide.classList.remove("opacity-100", "z-10", "relative");
+          slide.classList.add(
+            "opacity-0",
+            "z-0",
+            "absolute",
+            "pointer-events-none"
+          );
+        }
+      });
+    };
+
+    nextBtn?.addEventListener("click", () => {
+      currentIndex = (currentIndex + 1) % totalSlides;
+      showSlide(currentIndex);
+    });
+
+    prevBtn?.addEventListener("click", () => {
+      currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+      showSlide(currentIndex);
+    });
+  });
+</script>
+  </section>
+</div>

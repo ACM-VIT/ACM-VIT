@@ -1,0 +1,174 @@
+---
+import "../styles/globals.css";
+---
+
+<div class="h-full overflow-x-hidden">
+  <section
+    id="community-conduct"
+    class="relative z-20 py-12 md:py-20 border-t border-white/10 overflow-hidden"
+  >
+    <div
+      class="max-w-[1400px] mx-auto md:grid md:grid-cols-10 md:grid-rows-5 gap-0 relative z-10 md:min-h-[600px]"
+    >
+      <!-- Horizontal Lines (Grid Row 3) - Visible on Left, Hidden on Right -->
+      <div
+        class="hidden md:block col-start-1 col-end-11 row-start-3 row-end-4 border-t-2 border-b-2 border-dashed border-[#999999]/50 pointer-events-none z-20"
+        style="mask-image: linear-gradient(to right, black 50%, transparent 50%); -webkit-mask-image: linear-gradient(to right, black 50%, transparent 50%);"
+      >
+      </div>
+
+      <!-- Left: Title and Intro -->
+      <!-- Title: Rows 1-2 -->
+      <div
+        class="flex flex-col h-full md:col-start-1 md:col-end-6 md:row-start-1 md:row-end-3 md:border-r-2 md:border-dashed md:border-[#999999]/50"
+      >
+        <div class="p-6 md:p-10 flex items-start h-full">
+          <h1
+            class="text-4xl sm:text-5xl md:text-6xl lg:text-[5rem] leading-[0.9] font-bold text-[#FFFDD0] uppercase tracking-tighter break-words"
+          >
+            ACM-VIT<br />
+            <span class="text-[#FF5F4A]">CODE OF CONDUCT</span>
+          </h1>
+        </div>
+      </div>
+
+      <!-- Subtitle: Row 3 -->
+      <div
+        class="flex flex-col h-full md:col-start-1 md:col-end-6 md:row-start-3 md:row-end-4 md:border-r-2 md:border-dashed md:border-[#999999]/50"
+      >
+        <div class="px-6 md:px-10 py-4 md:py-0 flex items-center h-full">
+          <div
+            class="text-[#FF5F4A] text-xl sm:text-2xl md:text-3xl font-bold font-['Inter'] leading-tight"
+          >
+            Core Values & Expectations
+          </div>
+        </div>
+      </div>
+
+      <!-- Intro Text: Rows 4-5 -->
+      <div
+        class="flex flex-col h-full md:col-start-1 md:col-end-6 md:row-start-4 md:row-end-6 md:border-r-2 md:border-dashed md:border-[#999999]/50"
+      >
+        <div class="p-6 md:p-10 h-full flex items-end">
+          <div
+            class="text-left text-gray-300 text-xs sm:text-sm font-mono leading-relaxed max-w-lg"
+          >
+            AS THE VIT UNIVERSITY ACM STUDENT CHAPTER, OUR VALUES AND
+            EXPECTATIONS ARE GROUNDED IN THE ACM CODE OF ETHICS AND PROFESSIONAL
+            CONDUCT. COMPUTING PROFESSIONALS HAVE A PROFOUND IMPACT ON SOCIETY
+            AND MUST PRIORITISE THE PUBLIC GOOD.
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Detailed Points (Spans Full Height on Desktop) -->
+      <div
+        class="flex flex-col h-full md:col-start-6 md:col-end-11 md:row-start-1 md:row-end-6"
+      >
+        <!-- Scrollable content area for detailed points -->
+        <div class="p-6 md:p-10 h-full overflow-y-auto custom-scrollbar">
+          <div
+            class="grid grid-cols-1 gap-8 text-gray-300 font-mono text-xs sm:text-sm leading-relaxed"
+          >
+            <!-- 1. General Ethical Principles -->
+            <div>
+              <h3
+                class="text-[#FF5F4A] font-bold uppercase tracking-wider mb-2 text-base"
+              >
+                1. General Ethical Principles
+              </h3>
+              <p class="mb-2">Computing professionals should:</p>
+              <ul class="list-disc list-inside space-y-1 ml-2 text-gray-400">
+                <li>Contribute to the well-being of society and avoid harm.</li>
+                <li>
+                  Be honest, trustworthy, fair, and respectful toward all
+                  individuals.
+                </li>
+                <li>
+                  Uphold inclusivity, accessibility, and non-discrimination.
+                </li>
+                <li>
+                  Respect intellectual property, protect users’ privacy, and
+                  honour confidentiality.
+                </li>
+                <li>
+                  Consider the broader implications of their work on society and
+                  environment.
+                </li>
+              </ul>
+            </div>
+
+            <!-- 2. Professional Responsibilities -->
+            <div>
+              <h3
+                class="text-[#FF5F4A] font-bold uppercase tracking-wider mb-2 text-base"
+              >
+                2. Professional Responsibilities
+              </h3>
+              <p class="mb-2">Professionals are expected to:</p>
+              <ul class="list-disc list-inside space-y-1 ml-2 text-gray-400">
+                <li>Deliver high-quality work and valid expertise.</li>
+                <li>Follow laws, policies, and professional standards.</li>
+                <li>
+                  Evaluate systems for risks and design secure, reliable
+                  solutions.
+                </li>
+                <li>Access systems only with proper authorisation.</li>
+                <li>Promote public understanding and engage in peer review.</li>
+              </ul>
+            </div>
+
+            <!-- 3. Leadership Responsibilities -->
+            <div>
+              <h3
+                class="text-[#FF5F4A] font-bold uppercase tracking-wider mb-2 text-base"
+              >
+                3. Leadership Responsibilities
+              </h3>
+              <p class="mb-2">Leaders must:</p>
+              <ul class="list-disc list-inside space-y-1 ml-2 text-gray-400">
+                <li>Ensure goals prioritise the public good.</li>
+                <li>Foster ethical behaviour, transparency, and respect.</li>
+                <li>Support team well-being and growth.</li>
+                <li>Enforce sound governance and policies.</li>
+              </ul>
+            </div>
+
+            <!-- 4. Compliance -->
+            <div>
+              <h3
+                class="text-[#FF5F4A] font-bold uppercase tracking-wider mb-2 text-base"
+              >
+                4. Compliance With Code
+              </h3>
+              <ul class="list-disc list-inside space-y-1 ml-2 text-gray-400">
+                <li>Uphold and promote the ACM Code.</li>
+                <li>Address ethical concerns responsibly.</li>
+                <li>
+                  Unethical behaviour is incompatible with ACM membership.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<style>
+  /* Custom Scrollbar for the text area */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #ff5f4a;
+    border-radius: 3px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #ff3f2a;
+  }
+</style>

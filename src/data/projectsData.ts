@@ -16,27 +16,14 @@ export const projectsData = [
         "textColor": "white",
         "borderColor": "#FEFCD9"
       },
-      "learnMore": {
-        "text": "LEARN MORE",
-        "backgroundColor": "#F95F4A",
-        "textColor": "white",
-        "borderColor": "#FEFCD9"
-      },
       "visitWebsite": {
         "text": "VISIT WEBSITE",
         "backgroundColor": "#F95F4A",
         "textColor": "white",
-        "borderColor": "#FEFCD9"
+        "borderColor": "#FEFCD9",
+        "url": "https://acmone.acmvit.in"
       },
-      "icons": [
-        {
-          "type": "github",
-          "backgroundColor": "#F95F4A",
-          "textColor": "white",
-          "borderColor": "#FEFCD9",
-          "iconColor": "#FEFCD9"
-        }
-      ]
+      "icons": []
     },
     "colors": {
       "textColor": "white",
@@ -61,17 +48,12 @@ export const projectsData = [
         "textColor": "white",
         "borderColor": "#FEFCD9"
       },
-      "learnMore": {
-        "text": "LEARN MORE",
-        "backgroundColor": "#2664e4",
-        "textColor": "white",
-        "borderColor": "#FEFCD9"
-      },
       "visitWebsite": {
         "text": "VISIT WEBSITE",
         "backgroundColor": "#2664e4",
         "textColor": "white",
-        "borderColor": "#FEFCD9"
+        "borderColor": "#FEFCD9",
+        "url": "https://examcooker.acmvit.in"
       },
       "icons": [
         {
@@ -79,7 +61,8 @@ export const projectsData = [
           "backgroundColor": "#2664e4",
           "textColor": "white",
           "borderColor": "#FEFCD9",
-          "iconColor": "#FEFCD9"
+          "iconColor": "#FEFCD9",
+          "url": "https://github.com/ACM-VIT/ExamCooker-2024"
         }
       ]
     },
@@ -106,27 +89,14 @@ export const projectsData = [
         "textColor": "white",
         "borderColor": "#FEFCD9"
       },
-      "learnMore": {
-        "text": "LEARN MORE",
-        "backgroundColor": "#16A34A",
-        "textColor": "white",
-        "borderColor": "#FEFCD9"
-      },
       "visitWebsite": {
         "text": "VISIT WEBSITE",
         "backgroundColor": "#16A34A",
         "textColor": "white",
-        "borderColor": "#FEFCD9"
+        "borderColor": "#FEFCD9",
+        "url": "https://cli-rpg.acmvit.in"
       },
-      "icons": [
-        {
-          "type": "github",
-          "backgroundColor": "#16A34A",
-          "textColor": "white",
-          "borderColor": "#FEFCD9",
-          "iconColor": "#FEFCD9"
-        }
-      ]
+      "icons": []
     },
     "colors": {
       "textColor": "white",
@@ -151,27 +121,14 @@ export const projectsData = [
         "textColor": "white",
         "borderColor": "#FEFCD9"
       },
-      "learnMore": {
-        "text": "LEARN MORE",
-        "backgroundColor": "#7100FF",
-        "textColor": "white",
-        "borderColor": "#FEFCD9"
-      },
       "visitWebsite": {
         "text": "VISIT WEBSITE",
         "backgroundColor": "#7100FF",
         "textColor": "white",
-        "borderColor": "#FEFCD9"
+        "borderColor": "#FEFCD9",
+        "url": "https://unipool.acmvit.in"
       },
-      "icons": [
-        {
-          "type": "github",
-          "backgroundColor": "#7100FF",
-          "textColor": "white",
-          "borderColor": "#FEFCD9",
-          "iconColor": "#FEFCD9"
-        }
-      ]
+      "icons": []
     },
     "colors": {
       "textColor": "white",
@@ -196,17 +153,13 @@ export const projectsData = [
         "textColor": "white",
         "borderColor": "#FEFCD9"
       },
-      "learnMore": {
-        "text": "LEARN MORE",
-        "backgroundColor": "#eb5757",
-        "textColor": "white",
-        "borderColor": "#FEFCD9"
-      },
       "visitWebsite": {
         "text": "VISIT WEBSITE",
+        "iconColor": "white",
         "backgroundColor": "#eb5757",
         "textColor": "white",
-        "borderColor": "#FEFCD9"
+        "borderColor": "#FEFCD9",
+        "url": "https://localhost.acmvit.in"
       },
       "icons": [
         {
@@ -214,7 +167,9 @@ export const projectsData = [
           "backgroundColor": "#eb5757",
           "textColor": "white",
           "borderColor": "#FEFCD9",
-          "iconColor": "#FEFCD9"
+          "iconColor": "#FEFCD9",
+          "borderRadius": "41px",
+          "url": "https://github.com/ACM-VIT/enrollment-website-2024"
         }
       ]
     },
@@ -242,30 +197,15 @@ export const projectsData = [
         "borderColor": "#FEFCD9",
         "borderRadius": "41px"
       },
-      "learnMore": {
-        "text": "LEARN MORE",
-        "backgroundColor": "linear-gradient(91deg, #8710DB -8.19%, #EB5757 100.39%)",
-        "textColor": "white",
-        "borderColor": "#FEFCD9",
-        "borderRadius": "41px"
-      },
       "visitWebsite": {
         "text": "VISIT WEBSITE",
         "backgroundColor": "linear-gradient(91deg, #8710DB -8.19%, #EB5757 100.39%)",
         "textColor": "white",
         "borderColor": "#FEFCD9",
-        "borderRadius": "41px"
+        "borderRadius": "41px",
+        "url": "https://os.acmvit.in"
       },
-      "icons": [
-        {
-          "type": "github",
-          "backgroundColor": "linear-gradient(91deg, #8710DB -8.19%, #EB5757 100.39%)",
-          "textColor": "white",
-          "borderColor": "#FEFCD9",
-          "iconColor": "#FEFCD9",
-          "borderRadius": "41px"
-        }
-      ]
+      "icons": []
     },
     "colors": {
       "textColor": "white",

@@ -1,6 +1,7 @@
 ---
 // Gallery_Phone.astro
 import ProofGallery from "../components/ProofGallery.astro";
+import { getAssetUrl } from "../utils/cdn";
 ---
 
 <section class="gallery-section relative w-full pt-12 pb-0 overflow-hidden">
@@ -99,7 +100,7 @@ import ProofGallery from "../components/ProofGallery.astro";
   <div class="flex w-full flex-col items-center gap-4 relative z-10">
     <div class="relative flex w-full max-w-4xl flex-col items-center px-4">
       <img
-        src="/gallery.svg"
+        src={getAssetUrl("/gallery.svg")}
         alt="Gallery Title"
         class="gallery-title relative z-10 w-[95vw] max-w-md mb-4"
       />
@@ -123,7 +124,7 @@ import ProofGallery from "../components/ProofGallery.astro";
 
     <div class="gallery-frame relative w-full overflow-hidden mt-2">
       <img
-        src="/full-core.svg"
+        src={getAssetUrl("/full-core.svg")}
         alt="ACM-VIT gallery collage"
         class="gallery-image w-full object-cover"
         loading="lazy"

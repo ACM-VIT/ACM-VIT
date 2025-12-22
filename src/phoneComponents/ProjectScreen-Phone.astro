@@ -1,5 +1,6 @@
 ---
 import Cassette from "../components/Cassette.astro";
+import { getAssetUrl } from "../utils/cdn";
 
 export interface Props {
   projects: Array<{
@@ -17,19 +18,13 @@ export interface Props {
         borderColor: string;
         borderRadius?: string;
       };
-      learnMore: {
-        text: string;
-        backgroundColor: string;
-        textColor: string;
-        borderColor: string;
-        borderRadius?: string;
-      };
       visitWebsite: {
         text: string;
         backgroundColor: string;
         textColor: string;
         borderColor: string;
         borderRadius?: string;
+        url?: string;
       };
       icons: Array<{
         type: string;
@@ -38,6 +33,7 @@ export interface Props {
         borderColor: string;
         iconColor: string;
         borderRadius?: string;
+        url?: string;
       }>;
     };
     colors: {
@@ -93,37 +89,36 @@ const { projects = [] } = Astro.props;
           </div>
 
           {/* Action Buttons at bottom with border */}
-          <div class="moving-border-box pt-6 px-6 pb-20 flex flex-row gap-3 items-center justify-center">
-            <button
-              class="gh-btn icon-btn w-10 h-10 rounded-full flex items-center justify-center p-0 border font-['PolySans_Trial'] text-xs font-light uppercase cursor-pointer transition-all duration-300 shrink-0"
-              style={`
-                background: ${projectData.buttons.icons[0].backgroundColor};
-                color: ${projectData.buttons.icons[0].textColor};
-                border-color: ${projectData.buttons.icons[0].borderColor};
-              `}
-              aria-label={projectData.buttons.icons[0].type}
-            >
-              <img
-                src={`/${projectData.buttons.icons[0].type}-icon.svg`}
-                alt={projectData.buttons.icons[0].type}
-                width="20"
-                style={`filter: brightness(0) saturate(100%) invert(${projectData.buttons.icons[0].iconColor === "#FEFCD9" ? "96%" : "0%"});`}
-              />
-            </button>
+          <div class="moving-border-box pt-6 px-6 pb-20 flex flex-row gap-3 items-center justify-center relative z-20">
+            {projectData.buttons.icons.length > 0 && (
+              <a
+                href={projectData.buttons.icons[0].url || "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="gh-btn icon-btn w-10 h-10 rounded-full flex items-center justify-center p-0 border font-['PolySans_Trial'] text-xs font-light uppercase cursor-pointer transition-all duration-300 shrink-0"
+                style={`
+                  background: ${projectData.buttons.icons[0].backgroundColor};
+                  color: ${projectData.buttons.icons[0].textColor};
+                  border-color: ${projectData.buttons.icons[0].borderColor};
+                `}
+                aria-label={projectData.buttons.icons[0].type}
+              >
+                <img
+                  src={getAssetUrl(
+                    `/${projectData.buttons.icons[0].type}-icon.svg`
+                  )}
+                  alt={projectData.buttons.icons[0].type}
+                  width="20"
+                  style={`filter: brightness(0) saturate(100%) invert(${projectData.buttons.icons[0].iconColor === "#FEFCD9" ? "96%" : "0%"});`}
+                />
+              </a>
+            )}
 
-            <button
-              class="btn primary flex-1 px-3 py-2 border rounded-[25px] font-['PolySans_Trial'] text-[8px] font-light uppercase cursor-pointer transition-all duration-300 whitespace-nowrap"
-              style={`
-                background: ${projectData.buttons.learnMore.backgroundColor};
-                color: ${projectData.buttons.learnMore.textColor};
-                border-color: ${projectData.buttons.learnMore.borderColor};
-              `}
-            >
-              {projectData.buttons.learnMore.text}
-            </button>
-
-            <button
-              class="btn primary flex-1 px-3 py-2 border rounded-[25px] font-['PolySans_Trial'] text-[8px] font-light uppercase cursor-pointer transition-all duration-300 whitespace-nowrap"
+            <a
+              href={projectData.buttons.visitWebsite.url || "#"}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn primary flex-1 px-3 py-2 border rounded-[25px] font-['PolySans_Trial'] text-[8px] font-light uppercase cursor-pointer transition-all duration-300 whitespace-nowrap flex items-center justify-center no-underline"
               style={`
                 background: ${projectData.buttons.visitWebsite.backgroundColor};
                 color: ${projectData.buttons.visitWebsite.textColor};
@@ -131,7 +126,7 @@ const { projects = [] } = Astro.props;
               `}
             >
               {projectData.buttons.visitWebsite.text}
-            </button>
+            </a>
           </div>
         </div>
       </section>
@@ -141,11 +136,8 @@ const { projects = [] } = Astro.props;
 
 <style>
   .moving-border-box-b {
-    background-image: linear-gradient(
-        to bottom,
-        rgba(153, 153, 153, 0.5) 50%,
-        transparent 50%
-      ),
+    background-image:
+      linear-gradient(to bottom, rgba(153, 153, 153, 0.5) 50%, transparent 50%),
       linear-gradient(to bottom, rgba(153, 153, 153, 0.5) 50%, transparent 50%),
       linear-gradient(to right, rgba(153, 153, 153, 0.5) 50%, transparent 50%);
     background-size:
@@ -161,11 +153,8 @@ const { projects = [] } = Astro.props;
   }
 
   .moving-border-box {
-    background-image: linear-gradient(
-        to bottom,
-        rgba(153, 153, 153, 0.5) 50%,
-        transparent 50%
-      ),
+    background-image:
+      linear-gradient(to bottom, rgba(153, 153, 153, 0.5) 50%, transparent 50%),
       linear-gradient(to bottom, rgba(153, 153, 153, 0.5) 50%, transparent 50%);
     background-size:
       2px 12px,

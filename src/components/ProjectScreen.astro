@@ -1,5 +1,6 @@
 ---
 import Cassette from "./Cassette.astro";
+import { getAssetUrl } from "../utils/cdn";
 
 export interface Props {
   projects: Array<{
@@ -17,19 +18,13 @@ export interface Props {
         borderColor: string;
         borderRadius?: string;
       };
-      learnMore: {
-        text: string;
-        backgroundColor: string;
-        textColor: string;
-        borderColor: string;
-        borderRadius?: string;
-      };
       visitWebsite: {
         text: string;
         backgroundColor: string;
         textColor: string;
         borderColor: string;
         borderRadius?: string;
+        url?: string;
       };
       icons: Array<{
         type: string;
@@ -38,6 +33,7 @@ export interface Props {
         borderColor: string;
         iconColor: string;
         borderRadius?: string;
+        url?: string;
       }>;
     };
     colors: {
@@ -64,7 +60,7 @@ const { projects = [] } = Astro.props;
         <div class="parent grid grid-cols-9 grid-rows-5 gap-0 h-full w-full">
           <div class="div1 col-start-1 col-end-6 row-start-1 row-end-6 flex items-center justify-center">
             <Cassette
-              overlaySrc={projectData.cassette.src}
+              overlaySrc={getAssetUrl(projectData.cassette.src)}
               alt={projectData.cassette.alt}
               color={projectData.buttons.primary.backgroundColor}
             />
@@ -87,22 +83,14 @@ const { projects = [] } = Astro.props;
             </div>
           </div>
 
-          <div class="div5 col-start-6 col-end-10 row-start-3 row-end-4 flex items-center justify-center">
+          <div class="div5 col-start-6 col-end-10 row-start-3 row-end-4 flex items-center justify-center relative z-20">
             <div class="action-buttons flex gap-10 items-center justify-center m-0">
-              <button
-                class="btn primary px-[18px] py-[10px] border rounded-[25px] font-['PolySans_Trial'] text-xs font-light uppercase cursor-pointer transition-all duration-300 break-words hover:-translate-y-[3px] hover:shadow-[0_8px_20px_var(--hoverShadow)]"
-                style={`
-            background: ${projectData.buttons.learnMore.backgroundColor};
-            color: ${projectData.buttons.learnMore.textColor};
-            border-color: ${projectData.buttons.learnMore.borderColor};
-            ${projectData.buttons.learnMore.borderRadius ? `border-radius: ${projectData.buttons.learnMore.borderRadius};` : ""}
-          `}
-              >
-                {projectData.buttons.learnMore.text}
-              </button>
 
-              <button
-                class="btn primary px-[18px] py-[10px] border rounded-[25px] font-['PolySans_Trial'] text-xs font-light uppercase cursor-pointer transition-all duration-300 break-words hover:-translate-y-[3px] hover:shadow-[0_8px_20px_var(--hoverShadow)]"
+              <a
+                href={projectData.buttons.visitWebsite.url || "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn primary px-[18px] py-[10px] border rounded-[25px] font-['PolySans_Trial'] text-xs font-light uppercase cursor-pointer transition-all duration-300 break-words hover:-translate-y-[3px] hover:shadow-[0_8px_20px_var(--hoverShadow)] no-underline flex items-center justify-center"
                 style={`
             background: ${projectData.buttons.visitWebsite.backgroundColor};
             color: ${projectData.buttons.visitWebsite.textColor};
@@ -111,10 +99,13 @@ const { projects = [] } = Astro.props;
           `}
               >
                 {projectData.buttons.visitWebsite.text}
-              </button>
+              </a>
 
               {projectData.buttons.icons.map((icon) => (
-                <button
+                <a
+                  href={icon.url || "#"}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   class="gh-btn icon-btn w-11 h-11 rounded-full flex items-center justify-center p-0 border font-['PolySans_Trial'] text-xs font-light uppercase cursor-pointer transition-all duration-300 break-words hover:-translate-y-[3px] hover:shadow-[0_8px_20px_var(--hoverShadow)]"
                   style={`
               background: ${icon.backgroundColor};
@@ -125,12 +116,12 @@ const { projects = [] } = Astro.props;
                   aria-label={icon.type}
                 >
                   <img
-                    src={`/${icon.type}-icon.svg`}
+                    src={getAssetUrl(`/${icon.type}-icon.svg`)}
                     alt={icon.type}
                     width="24"
                     style={`filter: brightness(0) saturate(100%) invert(${icon.iconColor === "#FEFCD9" ? "96%" : "0%"});`}
                   />
-                </button>
+                </a>
               ))}
             </div>
           </div>
@@ -151,39 +142,6 @@ const { projects = [] } = Astro.props;
 </div>
 
 <style>
-  @font-face {
-    font-family: "PolySans Trial";
-    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-SlimMono.otf")
-      format("opentype");
-    font-weight: 300;
-    font-style: normal;
-    font-display: swap;
-  }
-
-  @font-face {
-    font-family: "PolySans Trial";
-    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-NeutralMono.otf")
-      format("opentype");
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-  }
-
-  @font-face {
-    font-family: "PolySans Trial";
-    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-MedianMono.otf")
-      format("opentype");
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
-  }
-
-  @font-face {
-    font-family: "PolySans Trial";
-    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-BulkyMono.otf")
-      format("opentype");
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
-  }
+  /* Local fonts removed */
 </style>
+```

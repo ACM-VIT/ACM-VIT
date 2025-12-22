@@ -1,12 +1,15 @@
 ---
-
+import { getAssetUrl } from "../utils/cdn";
 ---
 
 <!-- About Sections for Phone -->
 <div class="w-full overflow-hidden">
   <!-- About Section 1 -->
   <section
-    class="about-section-phone section-1 w-full h-screen relative flex flex-col justify-center px-4 py-8 overflow-hidden bg-[url('/about/about-acmvit.jpeg')] bg-center bg-cover bg-no-repeat radial-overlay"
+    class="about-section-phone section-1 w-full h-screen relative flex flex-col justify-center px-4 py-8 overflow-hidden bg-center bg-cover bg-no-repeat radial-overlay"
+    style={{
+      backgroundImage: `url(${getAssetUrl("/about/about-acmvit.jpeg")})`,
+    }}
   >
     <div
       class="content-wrapper flex flex-col items-center justify-center h-full gap-4"
@@ -27,9 +30,9 @@
         class="svg-container-phone w-full max-w-[250px] flex justify-center items-end"
       >
         <img
-          src="/about/Cassette.svg"
+          src={getAssetUrl("/about/Cassette.svg")}
           alt="Cassette 1"
-          class="cassette-svg-phone w-full h-auto origin-center drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] will-change-transform"
+          class="cassette-svg-phone w-full h-auto origin-center drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] will-change-[transform]"
         />
       </div>
     </div>
@@ -37,7 +40,8 @@
 
   <!-- About Section 2 -->
   <section
-    class="about-section-phone section-2 w-full h-screen relative flex flex-col justify-center px-4 py-8 overflow-hidden bg-[url('/about/about-vit.jpeg')] bg-center bg-cover bg-no-repeat radial-overlay"
+    class="about-section-phone section-2 w-full h-screen relative flex flex-col justify-center px-4 py-8 overflow-hidden bg-center bg-cover bg-no-repeat radial-overlay"
+    style={{ backgroundImage: `url(${getAssetUrl("/about/about-vit.jpeg")})` }}
   >
     <div
       class="content-wrapper flex flex-col items-center justify-center h-full gap-4"
@@ -58,9 +62,9 @@
         class="svg-container-phone w-full max-w-[250px] flex justify-center items-end"
       >
         <img
-          src="/about/3.svg"
+          src={getAssetUrl("/about/3.svg")}
           alt="Cassette 2"
-          class="cassette-svg-phone w-full h-auto origin-center drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] will-change-transform"
+          class="cassette-svg-phone w-full h-auto origin-center drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] will-change-[transform]"
         />
       </div>
     </div>
@@ -68,7 +72,8 @@
 
   <!-- About Section 3 -->
   <section
-    class="about-section-phone section-3 w-full h-screen relative flex flex-col justify-center px-4 py-8 overflow-hidden bg-[url('/about/about-acm.jpeg')] bg-center bg-cover bg-no-repeat radial-overlay"
+    class="about-section-phone section-3 w-full h-screen relative flex flex-col justify-center px-4 py-8 overflow-hidden bg-center bg-cover bg-no-repeat radial-overlay"
+    style={{ backgroundImage: `url(${getAssetUrl("/about/about-acm.jpeg")})` }}
   >
     <div
       class="content-wrapper flex flex-col items-center justify-center h-full gap-4"
@@ -84,9 +89,9 @@
         class="svg-container-phone w-full max-w-[250px] flex justify-center items-end"
       >
         <img
-          src="/about/2.svg"
+          src={getAssetUrl("/about/2.svg")}
           alt="Cassette 3"
-          class="cassette-svg-phone w-full h-auto origin-center drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] will-change-transform"
+          class="cassette-svg-phone w-full h-auto origin-center drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] will-change-[transform]"
         />
       </div>
     </div>
@@ -133,19 +138,19 @@
 
         if (index === 0) {
           // Section 1
-          xStart = -200;
-          xEnd = -40;
-          rotationEnd = 20;
+          xStart = -100; // Reduced from -200
+          xEnd = -20; // Reduced from -40
+          rotationEnd = 10; // Reduced rotation
         } else if (index === 1) {
           // Section 2
-          xStart = 200;
-          xEnd = 50;
-          rotationEnd = -20;
+          xStart = 100; // Reduced from 200
+          xEnd = 25; // Reduced from 50
+          rotationEnd = -10;
         } else {
           // Section 3
-          xStart = -200;
-          xEnd = -40;
-          rotationEnd = 20;
+          xStart = -100;
+          xEnd = -20;
+          rotationEnd = 10;
         }
 
         const rotationStart = -45;
