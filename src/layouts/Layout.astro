@@ -42,6 +42,43 @@ import { getAssetUrl } from "../utils/cdn";
         <slot />
       </main>
     </div>
+    <script>
+      import { gsap } from "gsap";
+      import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      let refreshTimer: number | null = null;
+      const scheduleRefresh = () => {
+        if (refreshTimer) return;
+        refreshTimer = window.setTimeout(() => {
+          refreshTimer = null;
+          ScrollTrigger.refresh();
+        }, 200);
+      };
+
+      const kickRefresh = () => {
+        scheduleRefresh();
+        window.setTimeout(scheduleRefresh, 700);
+      };
+
+      if (document.readyState === "complete") {
+        kickRefresh();
+      } else {
+        window.addEventListener("load", kickRefresh);
+      }
+
+      window.addEventListener("resize", scheduleRefresh);
+      window.addEventListener("orientationchange", scheduleRefresh);
+
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(scheduleRefresh);
+      }
+
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener("resize", scheduleRefresh);
+      }
+    </script>
   </body>
 </html>
 
