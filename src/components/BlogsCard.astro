@@ -15,11 +15,13 @@ const { bgurl, link } = Astro.props;
   class="relative w-[80vw] h-[50vw] max-h-[50vw] sm:w-[40vw] sm:h-[25vw] sm:max-h-[25vw] lg:w-[22vw] lg:h-[15.625vw] lg:max-h-[15.625vw] rounded-lg bg-white overflow-hidden flex items-end justify-center cursor-pointer transition-transform duration-300 hover:scale-105"
 >
   <!-- Background Pattern -->
-  <div
-    class="absolute inset-0 pointer-events-none z-0"
-    style={`background-image: url('${getAssetUrl(bgurl)}'); background-size: cover; background-position: center; background-repeat: no-repeat;`}
-  >
-  </div>
+  <img
+    src={getAssetUrl(bgurl)}
+    alt=""
+    class="absolute inset-0 w-full h-full object-cover"
+    loading="lazy"
+    decoding="async"
+  />
   <div
     class="w-[97%] h-[96.5%] flex justify-center items-center absolute z-20 pointer-events-none"
   >

@@ -113,8 +113,9 @@ import { getAssetUrl } from "../utils/cdn";
                  <img 
                     src={getAssetUrl(item.src)} 
                     alt={item.title} 
-                    class="w-full h-full object-cover rounded-sm transition-transform duration-700 group-hover:scale-110" 
+                    class="w-full h-full object-cover rounded-sm transition-transform duration-700 group-hover:scale-110"
                     loading="lazy"
+                    decoding="async"
                   />
               </div>
 

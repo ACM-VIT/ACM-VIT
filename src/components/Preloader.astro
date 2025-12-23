@@ -10,8 +10,8 @@
 
 <script>
   import gsap from "gsap";
-  import imagesLoaded from "imagesloaded";
-  import lottie, { type AnimationItem } from "lottie-web";
+  import lottie from "lottie-web/build/player/lottie_light";
+  import type { AnimationItem } from "lottie-web";
 
   const preloader = document.getElementById("preloader");
   const progressFill = document.querySelector(".progress-fill") as HTMLElement;
@@ -19,7 +19,7 @@
 
   let loadingAnimation: AnimationItem | null = null;
   let loadedAnimation: AnimationItem | null = null;
-  let loadedAnimationData: any = null; // Store preloaded data
+  let progressTween: gsap.core.Tween | null = null;
 
   if (preloader && progressFill && lottieContainer) {
     const preloaderShown = sessionStorage.getItem("preloaderShown");
@@ -30,58 +30,64 @@
       gsap.set(preloader, { autoAlpha: 1 });
       gsap.set(progressFill, { width: "0%" });
 
-      // Preload both animations for instant loading
-      const preloadAnimations = async () => {
+      const startProgress = () => {
+        progressTween = gsap.to(progressFill, {
+          width: "90%",
+          duration: 1.6,
+          ease: "power1.out",
+        });
+      };
+
+      const loadLoadingAnimation = async () => {
         try {
-          // Preload loading animation
-          const loadingResponse = await fetch('/loader/loading_state.json');
+          const loadingResponse = await fetch("/loader/loading_state.json");
           const loadingData = await loadingResponse.json();
-          
-          // Preload loaded animation
-          const loadedResponse = await fetch('/loader/laoded_state.json');
-          loadedAnimationData = await loadedResponse.json();
-          
-          // Initialize loading animation with preloaded data
           loadingAnimation = lottie.loadAnimation({
             container: lottieContainer,
-            renderer: 'svg',
-            loop: true, // Keep looping until we switch to loaded animation
-            autoplay: true,
-            animationData: loadingData // Use preloaded data instead of path
-          });
-        } catch (error) {
-          console.error('Failed to preload animations:', error);
-          // Fallback to path-based loading
-          loadingAnimation = lottie.loadAnimation({
-            container: lottieContainer,
-            renderer: 'svg',
+            renderer: "svg",
             loop: true,
             autoplay: true,
-            path: '/loader/loading_state.json'
+            animationData: loadingData,
+          });
+        } catch (error) {
+          console.error("Failed to load loading animation:", error);
+          loadingAnimation = lottie.loadAnimation({
+            container: lottieContainer,
+            renderer: "svg",
+            loop: true,
+            autoplay: true,
+            path: "/loader/loading_state.json",
           });
         }
       };
 
-      // Start preloading immediately
-      preloadAnimations();
+      const loadLoadedAnimation = async () => {
+        try {
+          const loadedResponse = await fetch("/loader/loaded_state.json");
+          const loadedData = await loadedResponse.json();
+          return lottie.loadAnimation({
+            container: lottieContainer,
+            renderer: "svg",
+            loop: false,
+            autoplay: true,
+            animationData: loadedData,
+          });
+        } catch (error) {
+          console.error("Failed to load completion animation:", error);
+          return lottie.loadAnimation({
+            container: lottieContainer,
+            renderer: "svg",
+            loop: false,
+            autoplay: true,
+            path: "/loader/loaded_state.json",
+          });
+        }
+      };
 
-      // Tracking loading state
-      const imgLoad = imagesLoaded(document.body, { background: true });
-      const totalImages = imgLoad.images.length;
-      let loadedImages = 0;
+      startProgress();
+      loadLoadingAnimation();
+
       let windowLoaded = false;
-
-      // Progress bar driven by images (gives visual feedback during load)
-      imgLoad.on("progress", () => {
-        loadedImages++;
-        // Progress should go from 0% to 90%, leaving 10% for final loading
-        const percentage = Math.min((loadedImages / totalImages) * 90, 90);
-        gsap.to(progressFill, {
-          width: `${percentage}%`,
-          duration: 0.2,
-          ease: "power1.out",
-        });
-      });
 
       // Ensure we finish only when EVERYTHING is loaded
       const onWindowLoad = () => {
@@ -93,33 +99,18 @@
           width: "100%",
           duration: 0.5,
           onComplete: () => {
-            // Website is now fully loaded - switch to completion animation
             if (loadingAnimation) {
               loadingAnimation.destroy();
             }
-            
-            // Play the loaded/completion animation once (using preloaded data)
-            if (loadedAnimationData) {
-              loadedAnimation = lottie.loadAnimation({
-                container: lottieContainer,
-                renderer: 'svg',
-                loop: false, // Play only once
-                autoplay: true,
-                animationData: loadedAnimationData // Use preloaded data for instant loading
-              });
-            } else {
-              // Fallback to path-based loading
-              loadedAnimation = lottie.loadAnimation({
-                container: lottieContainer,
-                renderer: 'svg',
-                loop: false, // Play only once
-                autoplay: true,
-                path: '/loader/loaded_state.json'
-              });
-            }
 
-            // After completion animation finishes, dismiss preloader
-            loadedAnimation.addEventListener('complete', finishLoading);
+            loadLoadedAnimation()
+              .then((animation) => {
+                loadedAnimation = animation;
+                loadedAnimation.addEventListener("complete", finishLoading);
+              })
+              .catch(() => {
+                finishLoading();
+              });
           },
         });
       };
@@ -130,13 +121,13 @@
         window.addEventListener("load", onWindowLoad);
       }
 
-      // Fallback safety timeout (increased to 15s)
+      // Fallback safety timeout
       setTimeout(() => {
         if (!windowLoaded) {
           console.warn("Preloader timeout reached - forcing dismissal");
           onWindowLoad();
         }
-      }, 15000);
+      }, 10000);
     }
   }
 
@@ -148,6 +139,7 @@
       onComplete: () => {
         sessionStorage.setItem("preloaderShown", "true");
         // Clean up animations
+        if (progressTween) progressTween.kill();
         if (loadingAnimation) loadingAnimation.destroy();
         if (loadedAnimation) loadedAnimation.destroy();
       },

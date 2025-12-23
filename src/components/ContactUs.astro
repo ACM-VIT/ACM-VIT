@@ -137,93 +137,222 @@
   gsap.registerPlugin(ScrollTrigger);
 
   const canvas = document.querySelector("#laptop-canvas") as HTMLCanvasElement;
-  const context = canvas.getContext("2d");
-
-  // Set canvas dimensions to match the image aspect ratio or window
-  // For now, let's set a base resolution and scale it with CSS
-  canvas.width = 1920;
-  canvas.height = 1080;
+  const context = canvas?.getContext("2d", { alpha: true });
+  const section = document.querySelector(".laptop-section");
 
   const frameCount = 125;
+  const maxCacheSize = 14;
+  const preloadRadius = 6;
+  const pendingFrames = new Set<number>();
+  const frameCache = new Map<number, HTMLImageElement>();
+  const prefersReducedMotion =
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const laptop = {
+    frame: 0,
+  };
+
   const currentFrame = (index: number) =>
     getAssetUrl(
       `/outputFolder/frame_${(index + 1).toString().padStart(4, "0")}.png`
     );
 
-  const images: HTMLImageElement[] = [];
-  const laptop = {
-    frame: 0,
+  const clampFrame = (index: number) =>
+    Math.max(0, Math.min(frameCount - 1, index));
+
+  const resizeCanvas = () => {
+    if (!canvas || !context) return;
+    const rect = canvas.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    const width = Math.round(rect.width * dpr);
+    const height = Math.round(rect.height * dpr);
+    if (canvas.width !== width || canvas.height !== height) {
+      canvas.width = width;
+      canvas.height = height;
+    }
   };
 
-  // Preload images
-  for (let i = 0; i < frameCount; i++) {
+  const trimCache = (center: number) => {
+    if (frameCache.size <= maxCacheSize) return;
+    const keys = Array.from(frameCache.keys()).sort(
+      (a, b) => Math.abs(a - center) - Math.abs(b - center)
+    );
+    const keep = new Set(keys.slice(0, maxCacheSize));
+    for (const key of frameCache.keys()) {
+      if (!keep.has(key)) frameCache.delete(key);
+    }
+  };
+
+  const loadFrame = async (index: number) => {
+    const clampedIndex = clampFrame(index);
+    const cached = frameCache.get(clampedIndex);
+    if (cached) return cached;
+    if (pendingFrames.has(clampedIndex)) return null;
+    pendingFrames.add(clampedIndex);
+
     const img = new Image();
-    img.src = currentFrame(i);
-    images.push(img);
-  }
+    img.decoding = "async";
+    img.src = currentFrame(clampedIndex);
+    const awaitLoad = () =>
+      new Promise((resolve) => {
+        if (img.complete) {
+          resolve(null);
+          return;
+        }
+        img.onload = () => resolve(null);
+        img.onerror = () => resolve(null);
+      });
 
-  // Ensure the first image is loaded before rendering
-  images[0].onload = render;
+    if (typeof img.decode === "function") {
+      try {
+        await img.decode();
+      } catch {
+        await awaitLoad();
+      }
+    } else {
+      await awaitLoad();
+    }
 
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: ".laptop-section",
-      start: "top top",
-      end: "bottom bottom",
-      scrub: 0.5,
-    },
-  });
+    pendingFrames.delete(clampedIndex);
+    frameCache.set(clampedIndex, img);
+    trimCache(clampedIndex);
+    return img;
+  };
 
-  // Add a delay at the start (hold frame 0 for a portion of the scroll)
-  tl.to(laptop, {
-    frame: 0,
-    duration: 0.5, // Adjust this value to control the delay length relative to total scroll
-    onUpdate: render,
-  })
-    .to(laptop, {
-      frame: frameCount - 1,
-      snap: "frame",
-      ease: "none",
-      duration: 2, // The animation takes up the rest of the scroll
+  const queueFrames = (center: number) => {
+    const start = Math.max(0, center - preloadRadius);
+    const end = Math.min(frameCount - 1, center + preloadRadius);
+    for (let i = start; i <= end; i++) {
+      void loadFrame(i);
+    }
+  };
+
+  let lastRenderedFrame = -1;
+  let lastCanvasWidth = 0;
+  let lastCanvasHeight = 0;
+
+  const render = () => {
+    if (!context || !canvas) return;
+    const frame = clampFrame(laptop.frame);
+    const img = frameCache.get(frame);
+    if (!img) {
+      void loadFrame(frame).then((loaded) => {
+        if (loaded && frame === laptop.frame) render();
+      });
+      return;
+    }
+
+    if (
+      frame === lastRenderedFrame &&
+      canvas.width === lastCanvasWidth &&
+      canvas.height === lastCanvasHeight
+    ) {
+      return;
+    }
+
+    lastRenderedFrame = frame;
+    lastCanvasWidth = canvas.width;
+    lastCanvasHeight = canvas.height;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(img, 0, 0, canvas.width, canvas.height);
+    queueFrames(frame);
+  };
+
+  const initSequence = async () => {
+    if (!canvas || !context) return;
+    resizeCanvas();
+    await loadFrame(0);
+    render();
+
+    if (prefersReducedMotion) {
+      const formOverlay = document.querySelector(
+        ".contact-form-overlay"
+      ) as HTMLElement | null;
+      if (formOverlay) {
+        formOverlay.style.opacity = "1";
+        formOverlay.style.pointerEvents = "auto";
+      }
+      const heading = document.querySelector(
+        ".contact-heading"
+      ) as HTMLElement | null;
+      if (heading) {
+        heading.style.opacity = "0";
+        heading.style.transform = "translateY(-50px)";
+      }
+      return;
+    }
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".laptop-section",
+        start: "top top",
+        end: "bottom bottom",
+        scrub: 0.5,
+      },
+    });
+
+    tl.to(laptop, {
+      frame: 0,
+      duration: 0.5,
       onUpdate: render,
     })
-    .to(
-      ".contact-heading",
-      {
-        opacity: 0,
-        y: -50, // Fade up
-        duration: (20 / frameCount) * 2, // Fade out over 20 frames (40 to 60)
+      .to(laptop, {
+        frame: frameCount - 1,
+        snap: "frame",
         ease: "none",
-      },
-      `<+${(40 / frameCount) * 2}`
-    ) // Start at frame 40
-    .to(
-      ".contact-form-overlay",
-      {
-        opacity: 1,
-        pointerEvents: "auto",
-        duration: 0.5,
-        ease: "power2.inOut",
-      },
-      `<+${(40 / frameCount) * 2}`
-    ); // Start at frame 80 (40 + 40)
-
-  function render() {
-    if (context && images[laptop.frame]) {
-      context.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Draw image to cover/contain within canvas
-      context.drawImage(
-        images[laptop.frame],
-        0,
-        0,
-        canvas.width,
-        canvas.height
+        duration: 2,
+        onUpdate: render,
+      })
+      .to(
+        ".contact-heading",
+        {
+          opacity: 0,
+          y: -50,
+          duration: (20 / frameCount) * 2,
+          ease: "none",
+        },
+        `<+${(40 / frameCount) * 2}`
+      )
+      .to(
+        ".contact-form-overlay",
+        {
+          opacity: 1,
+          pointerEvents: "auto",
+          duration: 0.5,
+          ease: "power2.inOut",
+        },
+        `<+${(40 / frameCount) * 2}`
       );
-    }
+  };
+
+  let started = false;
+  const startWhenVisible = () => {
+    if (started) return;
+    started = true;
+    initSequence();
+  };
+
+  if (section && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          startWhenVisible();
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    observer.observe(section);
+  } else {
+    startWhenVisible();
   }
 
-  // Handle resize if needed, though CSS object-contain handles display size
+  window.addEventListener("resize", () => {
+    resizeCanvas();
+    lastRenderedFrame = -1;
+    render();
+  });
 
   // Form handling
   const form = document.getElementById(
