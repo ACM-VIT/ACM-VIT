@@ -201,25 +201,20 @@ import { getAssetUrl } from "../utils/cdn";
     opacity: 0.1;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .floating-word {
-      animation: none;
-    }
-  }
 
   @keyframes float {
     0%,
     100% {
-      transform: translate(0, 0) rotate(0deg);
+      transform: translate3d(0, 0, 0) rotate(0deg);
     }
     25% {
-      transform: translate(10vw, -10vh) rotate(2deg);
+      transform: translate3d(10vw, -10vh, 0) rotate(2deg);
     }
     50% {
-      transform: translate(-5vw, 10vh) rotate(-1deg);
+      transform: translate3d(-5vw, 10vh, 0) rotate(-1deg);
     }
     75% {
-      transform: translate(15vw, 5vh) rotate(1deg);
+      transform: translate3d(15vw, 5vh, 0) rotate(1deg);
     }
   }
 </style>

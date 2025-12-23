@@ -2,6 +2,14 @@
 import Preloader from "../components/Preloader.astro";
 import Header from "../components/Header.astro";
 import { getAssetUrl } from "../utils/cdn";
+
+const site = Astro.site ?? new URL("https://www.acmvit.in");
+const canonicalUrl = new URL(Astro.url.pathname, site);
+const ogImageUrl = new URL("/opengraph.svg", site);
+
+const title = "ACM-VIT";
+const description =
+  "ACM-VIT is a student chapter founded in 2009 focused on building, learning, and community through technology.";
 ---
 
 <!doctype html>
@@ -10,10 +18,26 @@ import { getAssetUrl } from "../utils/cdn";
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href={getAssetUrl("/favicon.svg")} />
-    <meta property="og:image" content={getAssetUrl("/opengraph.svg")} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl.toString()} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ACM-VIT" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl.toString()} />
+    <meta property="og:image" content={ogImageUrl.toString()} />
+    <meta property="og:image:secure_url" content={ogImageUrl.toString()} />
+    <meta property="og:image:type" content="image/svg+xml" />
+    <meta property="og:image:alt" content="ACM-VIT" />
+
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content={getAssetUrl("/opengraph.svg")} />
-    <title>ACM-VIT</title>
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl.toString()} />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -42,6 +66,48 @@ import { getAssetUrl } from "../utils/cdn";
         <slot />
       </main>
     </div>
+    <script>
+      import { gsap } from "gsap";
+      import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      ScrollTrigger.config({
+        limitCallbacks: true,
+        ignoreMobileResize: true,
+      });
+
+      let refreshTimer: number | null = null;
+      const scheduleRefresh = () => {
+        if (refreshTimer) return;
+        refreshTimer = window.setTimeout(() => {
+          refreshTimer = null;
+          ScrollTrigger.refresh();
+        }, 200);
+      };
+
+      const kickRefresh = () => {
+        scheduleRefresh();
+        window.setTimeout(scheduleRefresh, 700);
+      };
+
+      if (document.readyState === "complete") {
+        kickRefresh();
+      } else {
+        window.addEventListener("load", kickRefresh);
+      }
+
+      window.addEventListener("resize", scheduleRefresh);
+      window.addEventListener("orientationchange", scheduleRefresh);
+
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(scheduleRefresh);
+      }
+
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener("resize", scheduleRefresh);
+      }
+    </script>
   </body>
 </html>
 

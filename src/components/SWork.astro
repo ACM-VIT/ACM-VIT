@@ -441,7 +441,6 @@ const worksHeight = works.length * 50;
       this.loadIsStarted = false;
       this.reducedMotion = false;
       this.reducedData = false;
-      this.updateMotionPrefs();
 
       if (document.readyState === "complete") {
         ticker.nextTick(this.init, this);
@@ -452,14 +451,6 @@ const worksHeight = works.length * 50;
       }
     }
 
-    updateMotionPrefs() {
-      this.reducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
-      this.reducedData = window.matchMedia(
-        "(prefers-reduced-data: reduce)"
-      ).matches;
-    }
 
     init() {
       this.setCtxStyle();
@@ -506,7 +497,6 @@ const worksHeight = works.length * 50;
         if (width === this.lastWidth) return;
         this.lastWidth = width;
 
-        this.updateMotionPrefs();
         this.setCtxStyle();
         this.setSize();
         this.setMask();
