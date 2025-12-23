@@ -145,8 +145,7 @@
   let preloadRadius = 6;
   const pendingFrames = new Set<number>();
   const frameCache = new Map<number, HTMLImageElement>();
-  const prefersReducedMotion =
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const prefersReducedMotion = false;
 
   const laptop = {
     frame: 0,
