@@ -5,6 +5,7 @@ import vercel from "@astrojs/vercel";
 const cdnUrl = process.env.PUBLIC_CDN_URL?.replace(/\/$/, "");
 
 export default defineConfig({
+    site: 'https://www.acmvit.in',
     output: 'static',
     adapter: vercel(),
     build: {
