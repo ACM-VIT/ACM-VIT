@@ -217,10 +217,20 @@ import { getAssetUrl } from "../utils/cdn";
     ScrollTrigger.refresh();
   }
 
-  // Ensure animations init after everything (including images) is loaded
-  if (document.readyState === "complete") {
+  let phoneInit = false;
+  const safeInit = () => {
+    if (phoneInit) return;
+    phoneInit = true;
     initPhoneAnimations();
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", safeInit);
   } else {
-    window.addEventListener("load", initPhoneAnimations);
+    safeInit();
   }
+
+  window.addEventListener("load", () => {
+    ScrollTrigger.refresh();
+  });
 </script>

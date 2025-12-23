@@ -141,8 +141,8 @@
   const section = document.querySelector(".laptop-section");
 
   const frameCount = 125;
-  const maxCacheSize = 14;
-  const preloadRadius = 6;
+  let maxCacheSize = 14;
+  let preloadRadius = 6;
   const pendingFrames = new Set<number>();
   const frameCache = new Map<number, HTMLImageElement>();
   const prefersReducedMotion =
@@ -150,6 +150,12 @@
 
   const laptop = {
     frame: 0,
+  };
+
+  const updatePerfSettings = () => {
+    const isNarrow = window.innerWidth < 768;
+    maxCacheSize = isNarrow ? 8 : 14;
+    preloadRadius = isNarrow ? 3 : 6;
   };
 
   const currentFrame = (index: number) =>
@@ -162,9 +168,11 @@
 
   const resizeCanvas = () => {
     if (!canvas || !context) return;
+    updatePerfSettings();
     const rect = canvas.getBoundingClientRect();
     if (!rect.width || !rect.height) return;
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    const maxDpr = window.innerWidth < 768 ? 1.25 : 1.5;
+    const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
     const width = Math.round(rect.width * dpr);
     const height = Math.round(rect.height * dpr);
     if (canvas.width !== width || canvas.height !== height) {
