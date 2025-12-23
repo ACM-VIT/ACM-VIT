@@ -92,3 +92,12 @@ html {
   font-style: normal;
   font-display: swap;
 }
+
+@font-face {
+  font-family: "PolySans Bulky Wide";
+  src: url("src/assets/fonts/PolySans-trial/PolySans-trial/Wide/PolySansTrial-BulkyWide.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+

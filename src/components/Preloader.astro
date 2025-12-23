@@ -1,15 +1,7 @@
----
-import { Image } from "astro:assets";
-import { getAssetUrl } from "../utils/cdn";
----
 
 <div id="preloader" class="preloader">
   <div class="loader-content">
-    <img
-      src={getAssetUrl("/acm_topleft.svg")}
-      alt="ACM-VIT"
-      class="loader-logo"
-    />
+    <div id="lottie-container" class="lottie-container"></div>
     <div class="progress-bar">
       <div class="progress-fill"></div>
     </div>
@@ -19,11 +11,17 @@ import { getAssetUrl } from "../utils/cdn";
 <script>
   import gsap from "gsap";
   import imagesLoaded from "imagesloaded";
+  import lottie, { type AnimationItem } from "lottie-web";
 
   const preloader = document.getElementById("preloader");
   const progressFill = document.querySelector(".progress-fill") as HTMLElement;
+  const lottieContainer = document.getElementById("lottie-container");
 
-  if (preloader && progressFill) {
+  let loadingAnimation: AnimationItem | null = null;
+  let loadedAnimation: AnimationItem | null = null;
+  let loadedAnimationData: any = null; // Store preloaded data
+
+  if (preloader && progressFill && lottieContainer) {
     const preloaderShown = sessionStorage.getItem("preloaderShown");
 
     if (preloaderShown) {
@@ -31,6 +29,42 @@ import { getAssetUrl } from "../utils/cdn";
     } else {
       gsap.set(preloader, { autoAlpha: 1 });
       gsap.set(progressFill, { width: "0%" });
+
+      // Preload both animations for instant loading
+      const preloadAnimations = async () => {
+        try {
+          // Preload loading animation
+          const loadingResponse = await fetch('/loader/loading_state.json');
+          const loadingData = await loadingResponse.json();
+          
+          // Preload loaded animation
+          const loadedResponse = await fetch('/loader/laoded_state.json');
+          loadedAnimationData = await loadedResponse.json();
+          
+          // Initialize loading animation with preloaded data
+          loadingAnimation = lottie.loadAnimation({
+            container: lottieContainer,
+            renderer: 'svg',
+            loop: true, // Keep looping until we switch to loaded animation
+            autoplay: true,
+            animationData: loadingData // Use preloaded data instead of path
+          });
+        } catch (error) {
+          console.error('Failed to preload animations:', error);
+          // Fallback to path-based loading
+          loadingAnimation = lottie.loadAnimation({
+            container: lottieContainer,
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            path: '/loader/loading_state.json'
+          });
+        }
+      };
+
+      // Start preloading immediately
+      preloadAnimations();
+
       // Tracking loading state
       const imgLoad = imagesLoaded(document.body, { background: true });
       const totalImages = imgLoad.images.length;
@@ -38,10 +72,10 @@ import { getAssetUrl } from "../utils/cdn";
       let windowLoaded = false;
 
       // Progress bar driven by images (gives visual feedback during load)
-      imgLoad.on("progress", (instance, image) => {
+      imgLoad.on("progress", () => {
         loadedImages++;
-        // Cap progress at 90% until window.load fires
-        const percentage = Math.min((loadedImages / totalImages) * 100, 95);
+        // Progress should go from 0% to 90%, leaving 10% for final loading
+        const percentage = Math.min((loadedImages / totalImages) * 90, 90);
         gsap.to(progressFill, {
           width: `${percentage}%`,
           duration: 0.2,
@@ -54,11 +88,39 @@ import { getAssetUrl } from "../utils/cdn";
         if (windowLoaded) return;
         windowLoaded = true;
 
-        // Force progress to 100% then finish
+        // Force progress to 100% first
         gsap.to(progressFill, {
           width: "100%",
           duration: 0.5,
-          onComplete: finishLoading,
+          onComplete: () => {
+            // Website is now fully loaded - switch to completion animation
+            if (loadingAnimation) {
+              loadingAnimation.destroy();
+            }
+            
+            // Play the loaded/completion animation once (using preloaded data)
+            if (loadedAnimationData) {
+              loadedAnimation = lottie.loadAnimation({
+                container: lottieContainer,
+                renderer: 'svg',
+                loop: false, // Play only once
+                autoplay: true,
+                animationData: loadedAnimationData // Use preloaded data for instant loading
+              });
+            } else {
+              // Fallback to path-based loading
+              loadedAnimation = lottie.loadAnimation({
+                container: lottieContainer,
+                renderer: 'svg',
+                loop: false, // Play only once
+                autoplay: true,
+                path: '/loader/loaded_state.json'
+              });
+            }
+
+            // After completion animation finishes, dismiss preloader
+            loadedAnimation.addEventListener('complete', finishLoading);
+          },
         });
       };
 
@@ -85,6 +147,9 @@ import { getAssetUrl } from "../utils/cdn";
     const tl = gsap.timeline({
       onComplete: () => {
         sessionStorage.setItem("preloaderShown", "true");
+        // Clean up animations
+        if (loadingAnimation) loadingAnimation.destroy();
+        if (loadedAnimation) loadedAnimation.destroy();
       },
     });
 
@@ -123,38 +188,77 @@ import { getAssetUrl } from "../utils/cdn";
     gap: 2rem;
   }
 
-  .loader-logo {
-    width: 150px;
-    height: auto;
-    animation: pulse 2s infinite ease-in-out;
+  .lottie-container {
+    width: 300px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .lottie-container svg {
+    max-width: 100%;
+    max-height: 100%;
   }
 
   .progress-bar {
-    width: 200px;
-    height: 2px;
+    width: 300px; /* Same width as lottie container */
+    height: 3px;
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 2px;
     overflow: hidden;
+    position: relative;
   }
 
   .progress-fill {
     height: 100%;
-    background-color: #ffffff;
+    background: #ffffff;
+    position: relative;
     width: 0%;
+    border-radius: 2px;
+    overflow: hidden;
   }
 
-  @keyframes pulse {
+  .progress-fill::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes shimmer {
     0% {
-      opacity: 0.5;
-      transform: scale(0.95);
-    }
-    50% {
-      opacity: 1;
-      transform: scale(1.05);
+      left: -100%;
     }
     100% {
-      opacity: 0.5;
-      transform: scale(0.95);
+      left: 100%;
+    }
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .lottie-container {
+      width: 250px;
+      height: 250px;
+    }
+    
+    .progress-bar {
+      width: 250px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .lottie-container {
+      width: 200px;
+      height: 200px;
+    }
+    
+    .progress-bar {
+      width: 200px;
     }
   }
 </style>
