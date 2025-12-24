@@ -61,7 +61,7 @@ const { projects = [] } = Astro.props;
           {/* Top Text Block with border */}
           <div class="moving-border-box-b p-6">
             <div class="content-section text-[var(--textColor)]">
-              <p class="description font-['PolySans_Trial'] text-[8px] leading-[1.5] m-0 uppercase text-[var(--textColor)] font-light break-words">
+              <p class="description font-['PolySans_Trial'] text-[11px] sm:text-xs leading-[1.55] m-0 uppercase text-[var(--textColor)] font-light break-words">
                 {projectData.textContent.blocks[0]}
               </p>
             </div>
@@ -82,7 +82,7 @@ const { projects = [] } = Astro.props;
           {/* Bottom Text Block with border */}
           <div class="moving-border-box-b p-6">
             <div class="content-section text-[var(--textColor)]">
-              <p class="description font-['PolySans_Trial'] text-[8px] leading-[1.5] m-0 uppercase text-[var(--textColor)] font-light break-words">
+              <p class="description font-['PolySans_Trial'] text-[11px] sm:text-xs leading-[1.55] m-0 uppercase text-[var(--textColor)] font-light break-words">
                 {projectData.textContent.blocks[1]}
               </p>
             </div>
@@ -120,7 +120,7 @@ const { projects = [] } = Astro.props;
               href={projectData.buttons.visitWebsite.url || "#"}
               target="_blank"
               rel="noopener noreferrer"
-              class="btn primary flex-1 px-3 py-2 border rounded-[25px] font-['PolySans_Trial'] text-[8px] font-light uppercase cursor-pointer transition-all duration-300 whitespace-nowrap flex items-center justify-center no-underline"
+              class="btn primary flex-1 px-3 py-2 border rounded-[25px] font-['PolySans_Trial'] text-[10px] sm:text-xs font-light uppercase cursor-pointer transition-all duration-300 whitespace-nowrap flex items-center justify-center no-underline"
               style={`
                 background: ${projectData.buttons.visitWebsite.backgroundColor};
                 color: ${projectData.buttons.visitWebsite.textColor};
