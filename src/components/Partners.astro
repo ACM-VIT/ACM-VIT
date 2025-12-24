@@ -23,17 +23,22 @@ import { getAssetUrl } from "../utils/cdn";
   </div>
 
   <div
-    class="w-[80vw] pb-24 flex flex-wrap gap-6 justify-center items-center relative z-10"
+    class="partners-carousel w-[80vw] pb-24 flex flex-wrap gap-6 justify-center items-center relative z-10"
+    data-partners-carousel
   >
-    {
-      partners.map((partner) => (
-        <PartnerCasetteSingular
-          title={partner.title}
-          imageUrl={getAssetUrl(partner.imageUrl)}
-          link={partner.link}
-        />
-      ))
-    }
+    <div class="partners-track flex flex-wrap gap-6 justify-center items-center">
+      {
+        partners.map((partner) => (
+          <div class="partners-card">
+            <PartnerCasetteSingular
+              title={partner.title}
+              imageUrl={getAssetUrl(partner.imageUrl)}
+              link={partner.link}
+            />
+          </div>
+        ))
+      }
+    </div>
   </div>
 </div>
 
@@ -58,6 +63,30 @@ import { getAssetUrl } from "../utils/cdn";
   @media (max-width: 768px), (pointer: coarse) {
     .partners-floating {
       bottom: -110px;
+    }
+    .partners-carousel {
+      width: 100vw;
+      padding: 0 6vw 5rem;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .partners-carousel::-webkit-scrollbar {
+      display: none;
+    }
+
+    .partners-track {
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      gap: 1.25rem;
+      padding: 0.5rem 1vw;
+    }
+
+    .partners-card {
+      flex: 0 0 auto;
+      scroll-snap-align: center;
     }
   }
 </style>
@@ -106,6 +135,56 @@ import { getAssetUrl } from "../utils/cdn";
       );
 
       galleryObserver.observe(gallery);
+    }
+
+    const carousel = document.querySelector(
+      "[data-partners-carousel]"
+    ) as HTMLElement | null;
+    const isCoarsePointer = window.matchMedia(
+      "(max-width: 768px), (pointer: coarse)"
+    ).matches;
+
+    if (carousel && isCoarsePointer) {
+      let isUserInteracting = false;
+      let scrollRaf = 0;
+
+      const setInteracting = (state: boolean) => {
+        isUserInteracting = state;
+      };
+
+      const syncHorizontalScroll = () => {
+        scrollRaf = 0;
+        if (isUserInteracting) return;
+        if (!section) return;
+        const rect = section.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+        const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+        if (maxScroll <= 0) return;
+
+        const progress = Math.min(
+          Math.max((viewportHeight - rect.top) / (rect.height + viewportHeight), 0),
+          1
+        );
+        carousel.scrollLeft = maxScroll * progress;
+      };
+
+      const scheduleSync = () => {
+        if (scrollRaf) return;
+        scrollRaf = requestAnimationFrame(syncHorizontalScroll);
+      };
+
+      window.addEventListener("scroll", scheduleSync, { passive: true });
+      window.addEventListener("resize", scheduleSync, { passive: true });
+
+      carousel.addEventListener("pointerdown", () => setInteracting(true));
+      carousel.addEventListener("pointerup", () => setInteracting(false));
+      carousel.addEventListener("pointercancel", () => setInteracting(false));
+      carousel.addEventListener("touchstart", () => setInteracting(true), {
+        passive: true,
+      });
+      carousel.addEventListener("touchend", () => setInteracting(false));
+
+      scheduleSync();
     }
   });
 </script>

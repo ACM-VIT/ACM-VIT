@@ -110,15 +110,108 @@
     loadLoadingAnimation();
 
     let windowLoaded = false;
+    let assetsLoaded = false;
 
-    // Ensure we finish only when EVERYTHING is loaded
-    const onWindowLoad = () => {
-      if (windowLoaded) return;
-      windowLoaded = true;
+    const collectAssetUrls = (): string[] => {
+      const urls = new Set<string>();
 
+      Array.from(document.images).forEach((img) => {
+        if (img.src) urls.add(img.src);
+      });
+
+      Array.from(document.querySelectorAll('source[src], source[srcset]')).forEach((s) => {
+        const src = s.getAttribute('src') || s.getAttribute('srcset');
+        if (src) urls.add(src);
+      });
+
+      Array.from(document.querySelectorAll('*')).forEach((el) => {
+        try {
+          const style = window.getComputedStyle(el);
+          const bg = style && style.backgroundImage;
+          if (bg && bg !== 'none') {
+            const matches = [...bg.matchAll(/url\(["']?(.*?)["']?\)/g)];
+            matches.forEach((m) => {
+              if (m[1]) urls.add(m[1]);
+            });
+          }
+        } catch (e) {
+        }
+      });
+
+      Array.from(document.querySelectorAll('link[rel="preload"], link[rel="prefetch"]')).forEach((l) => {
+        const href = l.getAttribute('href');
+        if (href) urls.add(href);
+      });
+
+      Array.from(document.querySelectorAll('video[poster]')).forEach((v) => {
+        const p = v.getAttribute('poster');
+        if (p) urls.add(p);
+      });
+
+      return Array.from(urls).filter(Boolean).map((u: string) => {
+        try {
+          return new URL(u, location.href).href;
+        } catch (e) {
+          return u;
+        }
+      });
+    };
+
+    const preloadImages = (urls: string[]): Promise<boolean> => {
+      return new Promise((resolve) => {
+        if (!urls || urls.length === 0) return resolve(true);
+        let loaded = 0;
+        const total = urls.length;
+
+        const onProgress = () => {
+          loaded++;
+          const pct = Math.min(90, Math.round((loaded / total) * 90));
+          if (progressTween) progressTween.progress(pct / 90);
+          if (loaded >= total) resolve(true);
+        };
+
+        urls.forEach((u: string) => {
+          const isImage = /\.(png|jpe?g|gif|webp|avif|svg)(\?|$)/i.test(u);
+          if (isImage) {
+            const img = new Image();
+            img.onload = onProgress;
+            img.onerror = onProgress;
+            img.src = u;
+          } else {
+            // fetch resource to warm cache
+            fetch(u, { method: 'GET', mode: 'cors' })
+              .then(() => onProgress())
+              .catch(() => onProgress());
+          }
+        });
+      });
+    };
+
+    const waitForFonts = () => {
+      if (document.fonts && document.fonts.ready) {
+        return document.fonts.ready.catch(() => {});
+      }
+      return Promise.resolve();
+    };
+
+    const preloadAllAssets = async () => {
+      try {
+        const urls = collectAssetUrls();
+        await Promise.all([preloadImages(urls), waitForFonts()]);
+      } catch (e) {
+        console.warn('Asset preloading failed', e);
+      }
+      assetsLoaded = true;
+      // If window already loaded, proceed
+      if (windowLoaded) {
+        proceedAfterAssets();
+      }
+    };
+
+    const proceedAfterAssets = () => {
       // Force progress to 100% first
       gsap.to(progressFill, {
-        width: "100%",
+        width: '100%',
         duration: 0.5,
         onComplete: () => {
           if (loadingAnimation) {
@@ -128,7 +221,7 @@
           loadLoadedAnimation()
             .then((animation) => {
               loadedAnimation = animation;
-              loadedAnimation.addEventListener("complete", finishLoading);
+              loadedAnimation.addEventListener('complete', finishLoading);
             })
             .catch(() => {
               finishLoading();
@@ -137,19 +230,29 @@
       });
     };
 
-    if (document.readyState === "complete") {
+    preloadAllAssets();
+
+    const onWindowLoad = () => {
+      if (windowLoaded) return;
+      windowLoaded = true;
+      if (assetsLoaded) {
+        proceedAfterAssets();
+      }
+    };
+
+    if (document.readyState === 'complete') {
       onWindowLoad();
     } else {
-      window.addEventListener("load", onWindowLoad);
+      window.addEventListener('load', onWindowLoad);
     }
 
     // Fallback safety timeout
     setTimeout(() => {
-      if (!windowLoaded) {
-        console.warn("Preloader timeout reached - forcing dismissal");
-        onWindowLoad();
+      if (!windowLoaded || !assetsLoaded) {
+        console.warn('Preloader timeout reached - forcing dismissal');
+        proceedAfterAssets();
       }
-    }, 10000);
+    }, 7000);
   };
 
   function finishLoading() {
