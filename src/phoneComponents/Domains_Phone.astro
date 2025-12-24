@@ -15,10 +15,36 @@ import { getAssetUrl } from "../utils/cdn";
       opacity: 1;
     }
   }
+
+  .domains-mobile-section {
+    background-color: #0d0e0d;
+  }
+
+  .domains-mobile-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 140px;
+    background: linear-gradient(
+      180deg,
+      rgba(13, 14, 13, 1) 0%,
+      rgba(13, 14, 13, 0) 100%
+    );
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .domain-mobile-bg-layer {
+    transform: translateY(18%) scale(1.05);
+    will-change: opacity, transform;
+  }
 </style>
 
 <section
-  class="domains-mobile-section min-h-screen relative py-8 px-4 flex flex-col items-center justify-center overflow-hidden"
+  class="domains-mobile-section min-h-screen relative pt-8 pb-16 px-4 flex flex-col items-center justify-center overflow-hidden"
+  style={`background-image: url('${getAssetUrl("/background_pattern.svg")}'); background-size: cover; background-position: center; background-repeat: no-repeat;`}
 >
   <!-- Fixed Background Layer -->
   <div
@@ -36,13 +62,13 @@ import { getAssetUrl } from "../utils/cdn";
 
   <div class="relative z-10 w-full flex flex-col items-center">
     <p
-      class="mobile-section-subtitle text-[#fefcd9] text-center font-['PolySans_Trial',sans-serif] text-[10px] font-normal pt-4 max-w-[90%] mb-12 leading-relaxed opacity-0 animate-[fadeIn_0.8s_ease_forwards] delay-300"
+      class="mobile-section-subtitle text-[#fefcd9] text-center font-['PolySans_Trial',sans-serif] text-[12px] sm:text-sm font-normal pt-4 max-w-[340px] mb-12 leading-[1.6] opacity-0 animate-[fadeIn_0.8s_ease_forwards] delay-300"
     >
       <span style="display:block; margin-bottom: 0.5rem;">
-        Each domain at ACM-VIT is more than a skillset — it's a mindset.
+        Each domain at ACM-VIT is more than a skillset, it's a mindset.
       </span>
       <span style="display:block; margin-bottom: 0.5rem;">
-        We build, break, design, analyze, and communicate — not in silos, but in
+        We build, break, design, analyze, and communicate, not in silos, but in
         sync.
       </span>
       <span style="display:block;">
@@ -55,11 +81,11 @@ import { getAssetUrl } from "../utils/cdn";
     >
       <div
         class="mobile-domain-item w-full max-w-[250px] cursor-pointer transition-all duration-300 ease-out hover:scale-105 opacity-0 translate-y-[30px] animate-[slideInUp_0.6s_ease_forwards] delay-100"
-        data-domain="app"
+        data-domain="tech"
       >
         <img
-          src={getAssetUrl("/Cassette_App.svg")}
-          alt="App Development"
+          src={getAssetUrl("/Cassette_Tech.svg")}
+          alt="Tech Development"
           class="mobile-cassette-img w-full h-auto block drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] rounded-[20px]"
           loading="lazy"
           decoding="async"
@@ -133,11 +159,11 @@ import { getAssetUrl } from "../utils/cdn";
     // Animate background layer
     if (bgLayer) {
       gsap.to(bgLayer, {
-        opacity: 1,
-        duration: 1,
+        opacity: 0.35,
+        duration: 0.8,
         scrollTrigger: {
           trigger: ".domains-mobile-section",
-          start: "top 60%",
+          start: "top 75%",
           end: "bottom 40%",
           toggleActions: "play reverse play reverse",
         },
@@ -249,8 +275,8 @@ import { getAssetUrl } from "../utils/cdn";
   // Function to create mobile domain screen content
   function createMobileDomainScreenContent(config: any) {
     const themeColors = {
-      app: "#9B51E0",
-      web: "#B4E35B",
+      tech: "#9B51E0",
+      cc: "#B4E35B",
       design: "#FF7777",
       research: "#9AF3FF",
       management: "#008080",
@@ -259,10 +285,10 @@ import { getAssetUrl } from "../utils/cdn";
 
     const themeHex =
       themeColors[config.themeColor as keyof typeof themeColors] ||
-      themeColors.app;
+      themeColors.tech;
 
     return `
-            <div class="min-h-screen text-white" style="background-color: #000000; background-image: url('/background_pattern.svg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+            <div class="min-h-screen text-white" style="background-color: #000000; background-image: url('${getAssetUrl("/background_pattern.svg")}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
                 <!-- Mobile Back Button -->
                 <div class="fixed top-4 right-4 z-50">
                     <button 
@@ -348,36 +374,52 @@ import { getAssetUrl } from "../utils/cdn";
                     </div>
 
                     <!-- Mobile Projects Button -->
+                    ${
+                      config.buttonText
+                        ? `
                     <div class="flex justify-center mb-8">
                         <button 
-                            class="flex justify-center items-center px-6 py-3 h-[40px] rounded-[25px] border border-[#FEFCD9] font-medium hover:shadow-lg transition-shadow whitespace-nowrap ${config.themeColor === "competitive" || config.themeColor === "research" || config.themeColor === "web" ? "text-black" : "text-white"}"
+                            class="flex justify-center items-center px-6 py-3 h-[40px] rounded-[25px] border border-[#FEFCD9] font-medium hover:shadow-lg transition-shadow whitespace-nowrap ${
+                              config.themeColor === "competitive" ||
+                              config.themeColor === "research" ||
+                              config.themeColor === "tech"
+                                ? "text-black"
+                                : "text-white"
+                            }"
                             style="background-color: ${themeHex}"
                         >
                             ${config.buttonText}
                         </button>
                     </div>
+                    `
+                        : ""
+                    }
 
-                    <!-- Mobile Cassette SVGs -->
-                    <div class="flex justify-center items-center gap-4 mb-8">
-                        <div class="flex items-center justify-center">
-                            <img 
-                                src="${getAssetUrl(config.cassetteSvg)}" 
-                                alt="${config.title} Cassette" 
-                                class="w-32 h-auto hover:scale-105 transition-transform duration-300" 
-                                loading="lazy"
-                                decoding="async"
-                            />
+                    <!-- Mobile AOIs -->
+                    ${
+                      config.aois && config.aois.length > 0
+                        ? `
+                        <div class="flex justify-center items-center gap-4 mb-8 flex-wrap px-6">
+                            ${config.aois
+                              .map(
+                                (aoi: any) => `
+                                <div class="flex flex-col items-center justify-center gap-2 hover:scale-105 transition-transform duration-300">
+                                    <img 
+                                        src="${getAssetUrl(aoi.src)}" 
+                                        alt="${aoi.alt}" 
+                                        class="w-24 h-24 object-contain" 
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
+                                    <span class="text-[#FEFCD9] text-[11px] font-medium tracking-wide text-center">${aoi.alt}</span>
+                                </div>
+                            `
+                              )
+                              .join("")}
                         </div>
-                        <div class="flex items-center justify-center">
-                            <img 
-                                src="${getAssetUrl("/Cassette_Design.svg")}" 
-                                alt="Design Cassette" 
-                                class="w-32 h-auto hover:scale-105 transition-transform duration-300 opacity-60" 
-                                loading="lazy"
-                                decoding="async"
-                            />
-                        </div>
-                    </div>
+                    `
+                        : ""
+                    }
                 </div>
             </div>
         `;
