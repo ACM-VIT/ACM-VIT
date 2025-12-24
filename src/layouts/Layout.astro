@@ -68,92 +68,68 @@ const description =
         <slot />
       </main>
     </div>
-<!-- <script>
-  import { gsap } from "gsap";
-  import { ScrollTrigger } from "gsap/ScrollTrigger";
+    <script>
+      import { gsap } from "gsap";
+      import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-  gsap.registerPlugin(ScrollTrigger);
+      gsap.registerPlugin(ScrollTrigger);
 
-  ScrollTrigger.config({
-    limitCallbacks: true,
-    ignoreMobileResize: true,
-  });
+      const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
 
-  const getVP = () => {
-    const vv = window.visualViewport;
-    return {
-      w: Math.round(vv?.width ?? window.innerWidth),
-      h: Math.round(vv?.height ?? window.innerHeight),
-    };
-  };
+      ScrollTrigger.config({
+        limitCallbacks: true,
+        ignoreMobileResize: true,
+        autoRefreshEvents: "visibilitychange,DOMContentLoaded,load",
+      });
 
-  let last = getVP();
+      const refreshHard = () => {
+        // Always measure triggers NOW
+        ScrollTrigger.refresh(true);
+      };
 
-  let rafId = 0;
-  let pending = false;
+      const kickRefresh = () => {
+        refreshHard();
+        setTimeout(refreshHard, 250);
+        setTimeout(refreshHard, 900);
+      };
 
-  const refreshHard = () => {
-    // Always measure triggers NOW
-    ScrollTrigger.refresh(true);
-  };
+      if (document.readyState === "complete") {
+        kickRefresh();
+      } else {
+        window.addEventListener("load", kickRefresh, { once: true });
+      }
 
-  const refreshIfRealChange = () => {
-    pending = false;
-    const now = getVP();
+      if (document.fonts?.ready) {
+        document.fonts.ready.then(() => {
+          refreshHard();
+          setTimeout(refreshHard, 250);
+        });
+      }
 
-    const widthChanged = now.w !== last.w;
-    const bigHeightChange = Math.abs(now.h - last.h) >= 120;
+      let refreshTimeout = 0;
+      const scheduleRefresh = () => {
+        clearTimeout(refreshTimeout);
+        refreshTimeout = window.setTimeout(refreshHard, 150);
+      };
 
-    if (widthChanged || bigHeightChange) {
-      last = now;
-      refreshHard();
-    }
-  };
+      window.addEventListener("resize", scheduleRefresh, { passive: true });
+      window.addEventListener("orientationchange", scheduleRefresh, {
+        passive: true,
+      });
 
-  const scheduleRefreshIfRealChange = () => {
-    if (pending) return;
-    pending = true;
-    cancelAnimationFrame(rafId);
-    rafId = requestAnimationFrame(refreshIfRealChange);
-  };
-
-  const kickRefresh = () => {
-    refreshHard();
-    setTimeout(refreshHard, 250);
-    setTimeout(refreshHard, 900);
-  };
-
-  if (document.readyState === "complete") {
-    kickRefresh();
-  } else {
-    window.addEventListener("load", kickRefresh, { once: true });
-  }
-
-  if (document.fonts?.ready) {
-    document.fonts.ready.then(() => {
-      refreshHard();
-      setTimeout(refreshHard, 250);
-    });
-  }
-
-  window.addEventListener("resize", scheduleRefreshIfRealChange, { passive: true });
-
-  window.addEventListener(
-    "orientationchange",
-    () => {
-      last = { w: 0, h: 0 };
-      scheduleRefreshIfRealChange();
-      setTimeout(refreshHard, 300);
-    },
-    { passive: true }
-  );
-
-  if (window.visualViewport) {
-    window.visualViewport.addEventListener("resize", scheduleRefreshIfRealChange, {
-      passive: true,
-    });
-  }
-</script> -->
+      if (isCoarsePointer) {
+        let touchRafId = 0;
+        const updateOnTouch = () => {
+          cancelAnimationFrame(touchRafId);
+          touchRafId = requestAnimationFrame(() => ScrollTrigger.update());
+        };
+        document.addEventListener("touchstart", updateOnTouch, {
+          passive: true,
+        });
+        document.addEventListener("touchmove", updateOnTouch, { passive: true });
+        document.addEventListener("touchend", updateOnTouch, { passive: true });
+      }
+    </script>
 
   <script>
     (() => {
@@ -163,6 +139,8 @@ const description =
 
         const isMobile = window.matchMedia("(max-width: 768px)").matches;
         const variant = isMobile ? "mobile" : "desktop";
+
+        let mountedAny = false;
 
         hosts.forEach((host) => {
           const element = host as HTMLElement;
@@ -181,7 +159,14 @@ const description =
 
           element.appendChild(template.content.cloneNode(true));
           element.dataset.variantReady = variant;
+          mountedAny = true;
         });
+
+        if (mountedAny) {
+          requestAnimationFrame(() => {
+            window.dispatchEvent(new Event("resize"));
+          });
+        }
       };
 
       if (document.readyState === "loading") {
