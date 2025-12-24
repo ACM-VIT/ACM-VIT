@@ -73,7 +73,9 @@ import { getAssetUrl } from "../utils/cdn";
     let inPartners = false;
     let inGallery = false;
     const updateVisibility = () => {
-      pos1.classList.toggle("is-fixed", inPartners && !inGallery);
+      const isActive = inPartners && !inGallery;
+      pos1.classList.toggle("is-fixed", isActive);
+      document.body.classList.toggle("partners-active", isActive);
     };
 
     const partnersObserver = new IntersectionObserver(
