@@ -68,7 +68,7 @@ const description =
         <slot />
       </main>
     </div>
-  <script>
+<!-- <script>
   import { gsap } from "gsap";
   import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -81,48 +81,46 @@ const description =
 
   const getVP = () => {
     const vv = window.visualViewport;
-    const w = Math.round(vv?.width ?? window.innerWidth);
-    const h = Math.round(vv?.height ?? window.innerHeight);
-    return { w, h };
+    return {
+      w: Math.round(vv?.width ?? window.innerWidth),
+      h: Math.round(vv?.height ?? window.innerHeight),
+    };
   };
 
   let last = getVP();
+
   let rafId = 0;
   let pending = false;
 
-  const shouldRefresh = () => {
+  const refreshHard = () => {
+    // Always measure triggers NOW
+    ScrollTrigger.refresh(true);
+  };
+
+  const refreshIfRealChange = () => {
+    pending = false;
     const now = getVP();
 
     const widthChanged = now.w !== last.w;
-
     const bigHeightChange = Math.abs(now.h - last.h) >= 120;
 
     if (widthChanged || bigHeightChange) {
       last = now;
-      return true;
+      refreshHard();
     }
-    return false;
   };
 
-  const doRefresh = () => {
-    pending = false;
-    if (!shouldRefresh()) return;
-
-    ScrollTrigger.refresh(true);
-  };
-
-  const scheduleRefresh = () => {
+  const scheduleRefreshIfRealChange = () => {
     if (pending) return;
     pending = true;
-
     cancelAnimationFrame(rafId);
-    rafId = requestAnimationFrame(doRefresh);
+    rafId = requestAnimationFrame(refreshIfRealChange);
   };
 
   const kickRefresh = () => {
-    scheduleRefresh();
-    setTimeout(scheduleRefresh, 250);
-    setTimeout(scheduleRefresh, 900);
+    refreshHard();
+    setTimeout(refreshHard, 250);
+    setTimeout(refreshHard, 900);
   };
 
   if (document.readyState === "complete") {
@@ -131,25 +129,32 @@ const description =
     window.addEventListener("load", kickRefresh, { once: true });
   }
 
-  window.addEventListener("resize", scheduleRefresh, { passive: true });
+  if (document.fonts?.ready) {
+    document.fonts.ready.then(() => {
+      refreshHard();
+      setTimeout(refreshHard, 250);
+    });
+  }
+
+  window.addEventListener("resize", scheduleRefreshIfRealChange, { passive: true });
 
   window.addEventListener(
     "orientationchange",
     () => {
-      last = { w: 0, h: 0 } as any;
-      scheduleRefresh();
+      last = { w: 0, h: 0 };
+      scheduleRefreshIfRealChange();
+      setTimeout(refreshHard, 300);
     },
     { passive: true }
   );
 
-  if (document.fonts?.ready) {
-    document.fonts.ready.then(scheduleRefresh);
-  }
-
   if (window.visualViewport) {
-    window.visualViewport.addEventListener("resize", scheduleRefresh, { passive: true });
+    window.visualViewport.addEventListener("resize", scheduleRefreshIfRealChange, {
+      passive: true,
+    });
   }
-    </script>
+</script> -->
+
   <script>
     (() => {
       const mountVariants = () => {
