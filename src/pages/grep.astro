@@ -1,0 +1,526 @@
+---
+import { getAssetUrl } from "../utils/cdn";
+import viewerScript from "../scripts/grep-viewer.ts?url";
+
+const pdfUrl = getAssetUrl("/grep-v0.pdf");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GREP - ACM-VIT</title>
+  </head>
+  <body>
+    <main class="grep-viewer" data-grep-viewer data-pdf-url={pdfUrl}>
+      <div class="grep-stage" data-grep-stage>
+        <div class="book-page book-left">
+          <canvas data-grep-left></canvas>
+        </div>
+        <div class="book-page book-right">
+          <canvas data-grep-right></canvas>
+        </div>
+        <div class="book-page book-single">
+          <canvas data-grep-single></canvas>
+        </div>
+        <div class="book-flip" data-grep-flip aria-hidden="true">
+          <div class="page-face page-front">
+            <canvas data-grep-flip-front></canvas>
+          </div>
+          <div class="page-face page-back">
+            <canvas data-grep-flip-back></canvas>
+          </div>
+        </div>
+      </div>
+
+      <button class="grep-hit grep-prev" data-grep-prev aria-label="Previous pages">
+        <span class="sr-only">Previous pages</span>
+        <span class="grep-control" aria-hidden="true">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </span>
+      </button>
+      <button class="grep-hit grep-next" data-grep-next aria-label="Next pages">
+        <span class="sr-only">Next pages</span>
+        <span class="grep-control" aria-hidden="true">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M9 6l6 6-6 6" />
+          </svg>
+        </span>
+      </button>
+
+      <div class="grep-hud">
+        <span data-grep-page>1</span>
+        <span class="grep-hud-sep">/</span>
+        <span data-grep-total>--</span>
+      </div>
+
+      <div class="grep-end" data-grep-end>
+        <div class="grep-end-card">
+          <p class="grep-end-title">End of GREP</p>
+          <a class="grep-end-link" href="/">Back to Main Site</a>
+        </div>
+      </div>
+
+      <div class="grep-start" data-grep-start>
+        <div class="grep-start-card">
+          <p class="grep-start-title">Welcome to GREP</p>
+          <p class="grep-start-subtitle">Origins Edition</p>
+          <button class="grep-start-btn" type="button" data-grep-start-btn>
+            Start Reading
+          </button>
+        </div>
+      </div>
+    </main>
+    <script type="module" src={viewerScript}></script>
+  </body>
+</html>
+
+<style>
+  :global(html),
+  :global(body) {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: #0d0e0d;
+    overflow: hidden;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .grep-viewer {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at center, #111 0%, #0a0a0a 55%, #050505 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 2200px;
+    user-select: none;
+  }
+
+  .grep-stage {
+    position: relative;
+    display: flex;
+    gap: 0;
+    width: 100%;
+    height: 100%;
+    padding: clamp(8px, 1.2vw, 18px);
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .grep-stage::before {
+    content: "";
+    position: absolute;
+    top: 6%;
+    bottom: 6%;
+    left: 50%;
+    width: 10px;
+    transform: translateX(-50%);
+    background: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.6),
+      rgba(0, 0, 0, 0.15),
+      rgba(0, 0, 0, 0.6)
+    );
+    opacity: 0.3;
+    border-radius: 999px;
+    pointer-events: none;
+  }
+
+  .book-page {
+    background: #0d0e0d;
+    border-radius: 0;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    flex: 0 0 auto;
+  }
+
+  .book-page canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 100%;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
+    border-radius: 0;
+    transition: filter 0.35s ease;
+  }
+
+  .book-page::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .book-left::after {
+    background: linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.45),
+      rgba(0, 0, 0, 0.08) 28%,
+      rgba(0, 0, 0, 0) 100%
+    );
+  }
+
+  .book-right::after {
+    background: linear-gradient(
+      270deg,
+      rgba(0, 0, 0, 0.45),
+      rgba(0, 0, 0, 0.08) 28%,
+      rgba(0, 0, 0, 0) 100%
+    );
+  }
+
+  .book-left,
+  .book-right {
+    margin: 0;
+  }
+
+  .book-single {
+    display: none;
+  }
+
+  .book-flip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    transform-style: preserve-3d;
+    z-index: 10;
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+
+  .book-flip .page-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    overflow: hidden;
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.35);
+    border-radius: 2px;
+  }
+
+  .book-flip .page-face::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.35),
+      rgba(0, 0, 0, 0) 50%,
+      rgba(0, 0, 0, 0.15)
+    );
+  }
+
+  .book-flip .page-back {
+    transform: rotateY(180deg);
+  }
+
+  .book-flip canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .book-flip.is-flipping {
+    opacity: 1;
+  }
+
+  .grep-hit {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    display: flex;
+    align-items: center;
+  }
+
+  .grep-hit:hover {
+    background: rgba(249, 95, 74, 0.03);
+  }
+
+  .grep-prev {
+    left: 0;
+    cursor: w-resize;
+    justify-content: flex-start;
+  }
+
+  .grep-next {
+    right: 0;
+    cursor: e-resize;
+    justify-content: flex-end;
+  }
+
+  .grep-hit:focus-visible {
+    outline: 2px solid #f95f4a;
+    outline-offset: -4px;
+  }
+
+  .grep-control {
+    width: 48px;
+    height: 48px;
+    margin: 0 20px;
+    border-radius: 999px;
+    background: rgba(10, 10, 10, 0.65);
+    border: 1px solid rgba(249, 95, 74, 0.4);
+    color: rgba(254, 252, 217, 0.75);
+    display: grid;
+    place-items: center;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .grep-control svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .grep-viewer:hover .grep-control,
+  .grep-hit:focus-visible .grep-control {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .grep-hud {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(254, 252, 217, 0.7);
+    pointer-events: none;
+  }
+
+  .grep-hud-sep {
+    margin: 0 4px;
+    color: rgba(254, 252, 217, 0.4);
+  }
+
+  .grep-end {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(
+      circle at center,
+      rgba(12, 12, 12, 0.6),
+      rgba(5, 5, 5, 0.9)
+    );
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+
+  .grep-end.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .grep-end-card {
+    text-align: center;
+    padding: 24px 28px;
+    border-radius: 18px;
+    border: 1px solid rgba(249, 95, 74, 0.4);
+    background: rgba(10, 10, 10, 0.7);
+    color: #fefcd9;
+    font-family: "PolySans Trial", sans-serif;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+  }
+
+  .grep-end-title {
+    margin: 0 0 12px;
+    font-size: 0.9rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(254, 252, 217, 0.7);
+  }
+
+  .grep-end-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 999px;
+    border: 1px solid #f95f4a;
+    color: #fefcd9;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+
+  .grep-end-link:hover {
+    background: #f95f4a;
+    color: #1a1a1a;
+  }
+
+  .grep-start {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(
+      circle at center,
+      rgba(12, 12, 12, 0.7),
+      rgba(5, 5, 5, 0.92)
+    );
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+
+  .grep-start.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .grep-start-card {
+    text-align: center;
+    padding: 26px 30px;
+    border-radius: 18px;
+    border: 1px solid rgba(249, 95, 74, 0.4);
+    background: rgba(10, 10, 10, 0.7);
+    color: #fefcd9;
+    font-family: "PolySans Trial", sans-serif;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+  }
+
+  .grep-start-title {
+    margin: 0 0 8px;
+    font-size: 0.95rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(254, 252, 217, 0.8);
+  }
+
+  .grep-start-subtitle {
+    margin: 0;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(254, 252, 217, 0.6);
+  }
+
+  .grep-start-btn {
+    margin-top: 16px;
+    padding: 10px 22px;
+    border-radius: 999px;
+    border: 1px solid #f95f4a;
+    background: transparent;
+    color: #fefcd9;
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
+  }
+
+  .grep-start-btn:hover {
+    background: #f95f4a;
+    color: #1a1a1a;
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 768px) {
+    .grep-stage {
+      flex-direction: column;
+      gap: 0;
+      padding: 8px;
+    }
+
+    .book-left,
+    .book-right {
+      display: none;
+    }
+
+    .book-single {
+      display: flex;
+    }
+
+    .grep-control {
+      opacity: 0.7;
+      transform: none;
+    }
+
+    .grep-hit {
+      top: auto;
+      bottom: 20px;
+      width: 52px;
+      height: 52px;
+      background: rgba(10, 10, 10, 0.6);
+      border: 1px solid rgba(249, 95, 74, 0.35);
+      border-radius: 999px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .grep-prev {
+      left: 16px;
+    }
+
+    .grep-next {
+      right: 16px;
+    }
+
+    .grep-control {
+      margin: 0;
+      width: 36px;
+      height: 36px;
+      opacity: 1;
+    }
+
+    .grep-hud {
+      bottom: 84px;
+    }
+  }
+</style>

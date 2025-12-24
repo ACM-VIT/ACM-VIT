@@ -2,6 +2,8 @@
 // Shared bottom legends for home page
 import { ButtonData } from "../data/legendData";
 import { getAssetUrl } from "../utils/cdn";
+
+const isExternalLink = ButtonData.link.startsWith("http");
 ---
 
 <div
@@ -51,8 +53,8 @@ import { getAssetUrl } from "../utils/cdn";
 
   <a
     href={ButtonData.link}
-    target="_blank"
-    rel="noopener noreferrer"
+    target={isExternalLink ? "_blank" : undefined}
+    rel={isExternalLink ? "noopener noreferrer" : undefined}
     class="c2c-btn absolute top-7 right-10 z-[600] pointer-events-auto w-auto h-12 bg-[#F95F4A] rounded-[41px] flex items-center pl-[34px] pr-8 gap-3 max-md:right-4 max-md:top-3 max-md:scale-[0.5] max-md:origin-top-right transition-transform hover:scale-105 no-underline"
   >
     <div
