@@ -295,8 +295,7 @@
       transform 0.24s cubic-bezier(0.22, 0.61, 0.36, 1);
     pointer-events: none;
   }
-  .more-menu.open,
-  #desktopMoreMenu:hover {
+  .more-menu.open {
     opacity: 1;
     transform: translateY(0) scale(1);
     pointer-events: auto;
@@ -641,6 +640,7 @@
 
     // EXISTING DROPDOWN LOGIC
     const toggles = Array.from(document.querySelectorAll(".more-toggle"));
+    const moreMenuLinks = document.querySelectorAll("#desktopMoreMenu a");
 
     const getMenuFor = (tg) => {
       const id = tg.getAttribute("aria-controls");
@@ -715,6 +715,12 @@
       });
       menu.addEventListener("mouseleave", () => {
         startCloseTimer();
+      });
+    });
+
+    moreMenuLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        closeAll();
       });
     });
 

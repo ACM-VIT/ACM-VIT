@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
 export const prerender = false;
 
@@ -17,11 +17,11 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   // Check for credentials
-  const emailUser = import.meta.env.EMAIL_USER || "outreach.acmvit@gmail.com";
-  const emailPass = import.meta.env.EMAIL_PASS;
+  const resendApiKey = import.meta.env.RESEND_API_KEY;
+  const resendFrom = import.meta.env.RESEND_FROM;
 
-  if (!emailPass) {
-    console.error("Missing EMAIL_PASS environment variable");
+  if (!resendApiKey || !resendFrom) {
+    console.error("Missing RESEND_API_KEY or RESEND_FROM environment variable");
     return new Response(
       JSON.stringify({
         message: "Server configuration error: Missing email credentials",
@@ -30,19 +30,12 @@ export const POST: APIRoute = async ({ request }) => {
     );
   }
 
-  // Create transporter
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: emailUser,
-      pass: emailPass,
-    },
-  });
+  const resend = new Resend(resendApiKey);
 
   const mailOptions = {
-    from: emailUser,
-    to: "outreach.acmvit@gmail.com",
-    replyTo: email,
+    from: resendFrom,
+    to: "outreach@acmvit.in",
+    reply_to: email,
     subject: `New Contact Form Submission from ${firstName} ${lastName || ""}`,
     text: `
       Name: ${firstName} ${lastName || ""}
@@ -67,7 +60,18 @@ export const POST: APIRoute = async ({ request }) => {
   };
 
   try {
-    await transporter.sendMail(mailOptions);
+    const { error } = await resend.emails.send(mailOptions);
+    if (error) {
+      console.error("Error sending email:", error);
+      return new Response(
+        JSON.stringify({
+          message: "Failed to send email",
+          error: error.message ?? error,
+        }),
+        { status: 500 }
+      );
+    }
+
     return new Response(
       JSON.stringify({
         message: "Email sent successfully",
