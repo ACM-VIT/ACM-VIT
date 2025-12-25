@@ -56,49 +56,95 @@
         })
         .join("");
     });
+    if (typeof window !== "undefined") {
+      if (window.innerWidth < 768) {
+        gsap.fromTo(
+          container,
+          {
+            transformOrigin: "0% 50%",
+            rotate: 3,
+            force3D: true, // Force GPU acceleration
+          },
+          {
+            ease: "none",
+            rotate: 0,
+            force3D: true, // Force GPU acceleration
+            willChange: "transform", // Hint browser
+            scrollTrigger: {
+              trigger: container,
+              start: "top 120%", // Adjusted to start earlier
+              end: "bottom center",
+              scrub: 1,
+            },
+          }
+        );
 
-    // Container Animation (Rotation)
-    gsap.fromTo(
-      container,
-      {
-        transformOrigin: "0% 50%",
-        rotate: 3,
-        force3D: true, // Force GPU acceleration
-      },
-      {
-        ease: "none",
-        rotate: 0,
-        force3D: true, // Force GPU acceleration
-        willChange: "transform", // Hint browser
-        scrollTrigger: {
-          trigger: container,
-          start: "top 80%", // Adjusted to start earlier
-          end: "bottom center",
-          scrub: 1,
-        },
+        // Collect all words from all spans for unified stagger
+        const allWords = container.querySelectorAll(".word");
+
+        gsap.fromTo(
+          allWords,
+          {
+            opacity: 0.1,
+            willChange: "opacity", // Optimized will-change
+          },
+          {
+            ease: "none",
+            opacity: 1,
+            stagger: 0.05,
+            scrollTrigger: {
+              trigger: container,
+              start: "top 120%", // Adjusted to start earlier
+              end: "bottom center",
+              scrub: 1,
+            },
+          }
+        );
+      } else {
+        gsap.fromTo(
+          container,
+          {
+            transformOrigin: "0% 50%",
+            rotate: 3,
+            force3D: true, // Force GPU acceleration
+          },
+          {
+            ease: "none",
+            rotate: 0,
+            force3D: true, // Force GPU acceleration
+            willChange: "transform", // Hint browser
+            scrollTrigger: {
+              trigger: container,
+              start: "top 80%", // Adjusted to start earlier
+              end: "bottom center",
+              scrub: 1,
+            },
+          }
+        );
+
+        // Collect all words from all spans for unified stagger
+        const allWords = container.querySelectorAll(".word");
+
+        gsap.fromTo(
+          allWords,
+          {
+            opacity: 0.1,
+            willChange: "opacity", // Optimized will-change
+          },
+          {
+            ease: "none",
+            opacity: 1,
+            stagger: 0.05,
+            scrollTrigger: {
+              trigger: container,
+              start: "top 80%", // Adjusted to start earlier
+              end: "bottom center",
+              scrub: 1,
+            },
+          }
+        );
       }
-    );
-
-    // Collect all words from all spans for unified stagger
-    const allWords = container.querySelectorAll(".word");
-
-    gsap.fromTo(
-      allWords,
-      {
-        opacity: 0.1,
-        willChange: "opacity", // Optimized will-change
-      },
-      {
-        ease: "none",
-        opacity: 1,
-        stagger: 0.05,
-        scrollTrigger: {
-          trigger: container,
-          start: "top 80%", // Adjusted to start earlier
-          end: "bottom center",
-          scrub: 1,
-        },
-      }
-    );
+    }
   }
+  // Container Animation (Rotation)
 </script>

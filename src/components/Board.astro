@@ -104,7 +104,9 @@ const facultyCoordinator = boardMembers.find(
     <!-- Call to Action Button -->
     <div class="text-center mt-16">
       <button
-        class="text-white border-2 border-primary-orange hover:cursor-pointer py-4 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+        id="crew-btn"
+        class="text-white border-2 border-primary-orange hover:cursor-pointer py-2 px-4 text-sm rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl
+            sm:py-4 sm:px-8 sm:text-base"
       >
         SEE THE ENTIRE CREW MAKING MAGIC!
       </button>
@@ -142,6 +144,21 @@ const facultyCoordinator = boardMembers.find(
     } else {
       initBoardAnimation();
     }
+  }
+
+  if (typeof window !== "undefined") {
+    const updateCrewBtnText = () => {
+      const btn = document.getElementById("crew-btn");
+      if (!btn) return;
+      if (window.innerWidth < 738) {
+        btn.textContent = "SEE THE ENTIRE CREW!";
+      } else {
+        btn.textContent = "SEE THE ENTIRE CREW MAKING MAGIC!";
+      }
+    };
+    window.addEventListener("resize", updateCrewBtnText);
+    // Set on load
+    updateCrewBtnText();
   }
 </script>
 

@@ -124,60 +124,64 @@ const description =
           touchRafId = requestAnimationFrame(() => ScrollTrigger.update());
         };
         document.addEventListener("touchstart", updateOnTouch, {
-          passive: true,
+          passive: false,
         });
-        document.addEventListener("touchmove", updateOnTouch, { passive: true });
-        document.addEventListener("touchend", updateOnTouch, { passive: true });
+        document.addEventListener("touchmove", updateOnTouch, {
+          passive: false,
+        });
+        document.addEventListener("touchend", updateOnTouch, {
+          passive: false,
+        });
       }
     </script>
 
-  <script>
-    (() => {
-      const mountVariants = () => {
-        const hosts = document.querySelectorAll("[data-variant-host]");
-        if (!hosts.length) return;
+    <script>
+      (() => {
+        const mountVariants = () => {
+          const hosts = document.querySelectorAll("[data-variant-host]");
+          if (!hosts.length) return;
 
-        const isMobile = window.matchMedia(
-          "(max-width: 768px), (pointer: coarse)"
-        ).matches;
-        const variant = isMobile ? "mobile" : "desktop";
+          const isMobile = window.matchMedia(
+            "(max-width: 768px), (pointer: coarse)"
+          ).matches;
+          const variant = isMobile ? "mobile" : "desktop";
 
-        let mountedAny = false;
+          let mountedAny = false;
 
-        hosts.forEach((host) => {
-          const element = host as HTMLElement;
-          if (element.dataset.variantReady === variant) return;
+          hosts.forEach((host) => {
+            const element = host as HTMLElement;
+            if (element.dataset.variantReady === variant) return;
 
-          const template = element.querySelector(
-            `template[data-variant="${variant}"]`
-          ) as HTMLTemplateElement | null;
-          if (!template) return;
+            const template = element.querySelector(
+              `template[data-variant="${variant}"]`
+            ) as HTMLTemplateElement | null;
+            if (!template) return;
 
-          Array.from(element.children).forEach((child) => {
-            if (child.tagName !== "TEMPLATE") {
-              child.remove();
-            }
+            Array.from(element.children).forEach((child) => {
+              if (child.tagName !== "TEMPLATE") {
+                child.remove();
+              }
+            });
+
+            element.appendChild(template.content.cloneNode(true));
+            element.dataset.variantReady = variant;
+            mountedAny = true;
           });
 
-          element.appendChild(template.content.cloneNode(true));
-          element.dataset.variantReady = variant;
-          mountedAny = true;
-        });
+          if (mountedAny) {
+            requestAnimationFrame(() => {
+              window.dispatchEvent(new Event("resize"));
+            });
+          }
+        };
 
-        if (mountedAny) {
-          requestAnimationFrame(() => {
-            window.dispatchEvent(new Event("resize"));
-          });
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", mountVariants);
+        } else {
+          mountVariants();
         }
-      };
-
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", mountVariants);
-      } else {
-        mountVariants();
-      }
-    })();
-  </script>
+      })();
+    </script>
   </body>
 </html>
 
