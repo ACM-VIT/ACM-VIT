@@ -88,10 +88,6 @@ const formAction = rawEndpoint ? undefined : `mailto:${fallbackEmail}`;
       >
         Submit
       </button>
-      <p
-        class="text-center text-xs uppercase tracking-[0.35em] text-white/60"
-        data-form-status
-      ></p>
     </form>
   </div>
 </section>
@@ -104,13 +100,14 @@ const formAction = rawEndpoint ? undefined : `mailto:${fallbackEmail}`;
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const submitBtn = form.querySelector('button[type="submit"]');
-      const statusMsg = form.querySelector("[data-form-status]");
       const originalBtnText = submitBtn ? submitBtn.innerHTML : "Submit";
+      const setSubmitting = (submitting: boolean) => {
+        if (!submitBtn) return;
+        submitBtn.innerHTML = submitting ? "Sending..." : originalBtnText;
+        (submitBtn as HTMLButtonElement).disabled = submitting;
+      };
 
-      if (submitBtn) {
-        submitBtn.innerHTML = "Sending...";
-        (submitBtn as HTMLButtonElement).disabled = true;
-      }
+      setSubmitting(true);
 
       const formData = new FormData(form);
       // Handle radio buttons specifically if needed, but Object.fromEntries handles it if checked
@@ -126,25 +123,15 @@ const formAction = rawEndpoint ? undefined : `mailto:${fallbackEmail}`;
         });
 
         if (response.ok) {
-          if (statusMsg) statusMsg.textContent = "Message sent successfully!";
           form.reset();
-          setTimeout(() => {
-            if (statusMsg) statusMsg.textContent = "";
-          }, 5000);
         } else {
           const resData = await response.json();
-          if (statusMsg)
-            statusMsg.textContent = `Failed: ${resData.message || "Error"}`;
+          console.warn(`Failed to send message: ${resData.message || "Error"}`);
         }
       } catch (error) {
         console.error("Error:", error);
-        if (statusMsg)
-          statusMsg.textContent = "An error occurred. Please try again.";
       } finally {
-        if (submitBtn) {
-          submitBtn.innerHTML = originalBtnText;
-          (submitBtn as HTMLButtonElement).disabled = false;
-        }
+        setSubmitting(false);
       }
     });
   }

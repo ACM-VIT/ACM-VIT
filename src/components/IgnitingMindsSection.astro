@@ -116,7 +116,7 @@ import { getAssetUrl } from "../utils/cdn";
     class="relative z-20 py-12 md:py-20 border-t border-white/10 overflow-hidden"
   >
     <div
-      class="max-w-[1400px] mx-auto md:grid md:grid-cols-10 md:grid-rows-5 gap-0 relative z-10 md:min-h-[600px]"
+      class="max-w-[1400px] mx-auto flex flex-col md:grid md:grid-cols-10 md:grid-rows-5 gap-0 relative z-10 md:min-h-[600px]"
     >
       <!-- Horizontal Lines (Grid Row 3) - Visible on Left -->
       <div
@@ -128,12 +128,12 @@ import { getAssetUrl } from "../utils/cdn";
       <!-- Left Side -->
       <!-- Top Section - Empty (Rows 1-2) -->
       <div
-        class="flex flex-col h-full order-2 md:order-1 md:col-start-1 md:col-end-6 md:row-start-1 md:row-end-3 md:border-r-2 md:border-dashed md:border-[#999999]/50"
+        class="hidden md:flex flex-col h-full md:col-start-1 md:col-end-6 md:row-start-1 md:row-end-3 md:border-r-2 md:border-dashed md:border-[#999999]/50"
       >
         <div class="hidden md:block h-full p-10"></div>
       </div>
 
-      <!-- Middle Section - Beyond the Norm (Row 3) -->
+      <!-- Middle Section - Educate Young Minds (Row 3) -->
       <div
         class="flex flex-col h-full order-2 md:order-1 md:col-start-1 md:col-end-6 md:row-start-3 md:row-end-4 md:border-r-2 md:border-dashed md:border-[#999999]/50"
       >
@@ -142,13 +142,13 @@ import { getAssetUrl } from "../utils/cdn";
             <div
               class="text-[#FF5F4A] text-3xl sm:text-4xl md:text-5xl font-bold font-['Inter'] leading-tight md:leading-none"
             >
-              BEYOND <img
+              EDUCATE <img
                 src={getAssetUrl("/outreacch/beyond-norm-logo.svg")}
                 alt="Logo"
                 class="inline h-8 sm:h-10 md:h-12 ml-2 align-baseline"
                 loading="lazy"
                 decoding="async"
-              /><br />THE NORM
+              /><br />YOUNG MINDS
             </div>
           </div>
         </div>
@@ -156,7 +156,7 @@ import { getAssetUrl } from "../utils/cdn";
 
       <!-- Bottom Section - Description (Rows 4-5) -->
       <div
-        class="flex flex-col h-full order-2 md:order-1 md:col-start-1 md:col-end-6 md:row-start-4 md:row-end-6 md:border-r-2 md:border-dashed md:border-[#999999]/50"
+        class="flex flex-col h-full order-3 md:order-1 md:col-start-1 md:col-end-6 md:row-start-4 md:row-end-6 md:border-r-2 md:border-dashed md:border-[#999999]/50"
       >
         <div class="p-6 md:p-2 h-full flex items-start md:items-end">
           <div

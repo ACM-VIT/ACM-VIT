@@ -477,34 +477,13 @@ import { getAssetUrl } from "../utils/cdn";
       <div class="relative z-10 flex flex-col px-4 pt-4 gap-6">
         <!-- Title -->
         <div
-          class="text-yellow-50 text-base sm:text-lg font-bold leading-tight text-center font-['PolySans_Trial']"
+          class="text-yellow-50 text-base sm:text-lg font-bold leading-tight text-center font-['PolySans_Trial'] mb-2"
         >
           association for computing machinery
         </div>
 
-        <!-- Map under title for mobile -->
-        <div class="relative w-44 h-32 mt-2 self-start">
-          <a
-            href="https://w3w.co/static.grips.limelight"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              src={getAssetUrl("/footer/VIT-Map.png")}
-              alt="VIT Map"
-              class="w-full h-full object-cover rounded-lg shadow-lg border border-zinc-700"
-              loading="lazy"
-              decoding="async"
-            />
-            <div
-              class="absolute inset-0 opacity-40 bg-gradient-to-b from-white to-red-500 rounded-lg pointer-events-none"
-            >
-            </div>
-          </a>
-        </div>
-
         <!-- Navigation Sections (mobile grid) -->
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-2 gap-4 relative z-20">
           <!-- About Section -->
           <div
             class="w-full inline-flex flex-col justify-start items-start gap-2"
@@ -856,7 +835,7 @@ import { getAssetUrl } from "../utils/cdn";
       </div>
 
       <!-- Footer Background (mobile) -->
-      <div class="w-full flex justify-center items-end mt-4">
+      <div class="w-full flex justify-center items-end mt-4 pointer-events-none">
         <img
           src={getAssetUrl("/footer/footer-background.svg")}
           alt="Footer Background"

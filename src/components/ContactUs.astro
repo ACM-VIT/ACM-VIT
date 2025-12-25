@@ -376,11 +376,13 @@
       e.preventDefault();
       const submitBtn = form.querySelector('button[type="submit"]');
       const originalBtnText = submitBtn ? submitBtn.innerHTML : "Submit";
+      const setSubmitting = (submitting: boolean) => {
+        if (!submitBtn) return;
+        submitBtn.innerHTML = submitting ? "Sending..." : originalBtnText;
+        (submitBtn as HTMLButtonElement).disabled = submitting;
+      };
 
-      if (submitBtn) {
-        submitBtn.innerHTML = "Sending...";
-        (submitBtn as HTMLButtonElement).disabled = true;
-      }
+      setSubmitting(true);
 
       const formData = new FormData(form);
       const data = Object.fromEntries(formData.entries());
@@ -395,22 +397,17 @@
         });
 
         if (response.ok) {
-          alert("Message sent successfully!");
           form.reset();
         } else {
           const resData = await response.json();
-          alert(
+          console.warn(
             `Failed to send message: ${resData.message || "Unknown error"}`
           );
         }
       } catch (error) {
         console.error("Error:", error);
-        alert("An error occurred. Please try again later.");
       } finally {
-        if (submitBtn) {
-          submitBtn.innerHTML = originalBtnText;
-          (submitBtn as HTMLButtonElement).disabled = false;
-        }
+        setSubmitting(false);
       }
     });
   }
