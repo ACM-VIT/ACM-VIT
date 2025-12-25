@@ -9,24 +9,34 @@ async function fetchOgImage(url: string): Promise<string> {
       headers: { "User-Agent": "Mozilla/5.0 (compatible; AstroBot/1.0)" },
     });
     const html = await response.text();
-    
-    const ogImageMatch = html.match(/<meta[^>]*property=["']og:image["'][^>]*content=["']([^"']+)["']/i)
-      || html.match(/<meta[^>]*content=["']([^"']+)["'][^>]*property=["']og:image["']/i);
-    
+
+    const ogImageMatch =
+      html.match(
+        /<meta[^>]*property=["']og:image["'][^>]*content=["']([^"']+)["']/i
+      ) ||
+      html.match(
+        /<meta[^>]*content=["']([^"']+)["'][^>]*property=["']og:image["']/i
+      );
+
     if (ogImageMatch && ogImageMatch[1]) {
       return ogImageMatch[1];
     }
-    
-    const twitterImageMatch = html.match(/<meta[^>]*name=["']twitter:image["'][^>]*content=["']([^"']+)["']/i)
-      || html.match(/<meta[^>]*content=["']([^"']+)["'][^>]*name=["']twitter:image["']/i);
-    
+
+    const twitterImageMatch =
+      html.match(
+        /<meta[^>]*name=["']twitter:image["'][^>]*content=["']([^"']+)["']/i
+      ) ||
+      html.match(
+        /<meta[^>]*content=["']([^"']+)["'][^>]*name=["']twitter:image["']/i
+      );
+
     if (twitterImageMatch && twitterImageMatch[1]) {
       return twitterImageMatch[1];
     }
   } catch (error) {
     console.warn(`Failed to fetch OG image for ${url}:`, error);
   }
-  
+
   return "/blogs/placeholder.png";
 }
 
@@ -199,6 +209,15 @@ const blogsWithImages = await Promise.all(
       font-size: clamp(1.6rem, 14vh, 4rem);
     }
   }
+  @media (max-width: 450px) {
+    .blogs-title-bar {
+      height: clamp(56px, 28vh, 120px);
+    }
+
+    .blogs-title {
+      font-size: clamp(1.8rem, 14vh, 4rem);
+    }
+  }
 </style>
 
 <script>
@@ -215,7 +234,9 @@ const blogsWithImages = await Promise.all(
   const prevBtn = document.getElementById("prev-btn");
   const nextBtn = document.getElementById("next-btn");
   const dotsContainer = document.getElementById("dots-container");
-  const sliderWindow = document.querySelector(".slider-window") as HTMLElement | null;
+  const sliderWindow = document.querySelector(
+    ".slider-window"
+  ) as HTMLElement | null;
 
   let currentIndex = 0;
   let itemsPerPage = 3;
@@ -280,7 +301,8 @@ const blogsWithImages = await Promise.all(
   function handlePointerDown(event: Event) {
     const pointerEvent = event as PointerEvent;
     if (!sliderWindow || !track || !isMobileView()) return;
-    if (pointerEvent.pointerType === "mouse" && pointerEvent.button !== 0) return;
+    if (pointerEvent.pointerType === "mouse" && pointerEvent.button !== 0)
+      return;
 
     isDragging = true;
     dragDelta = 0;
@@ -294,7 +316,8 @@ const blogsWithImages = await Promise.all(
   function handlePointerMove(event: Event) {
     const pointerEvent = event as PointerEvent;
     if (!sliderWindow || !track || !isDragging) return;
-    if (activePointerId !== null && pointerEvent.pointerId !== activePointerId) return;
+    if (activePointerId !== null && pointerEvent.pointerId !== activePointerId)
+      return;
 
     const deltaX = pointerEvent.clientX - startX;
     const deltaY = pointerEvent.clientY - startY;
@@ -311,7 +334,8 @@ const blogsWithImages = await Promise.all(
   function handlePointerUp(event: Event) {
     const pointerEvent = event as PointerEvent;
     if (!sliderWindow || !track || !isDragging) return;
-    if (activePointerId !== null && pointerEvent.pointerId !== activePointerId) return;
+    if (activePointerId !== null && pointerEvent.pointerId !== activePointerId)
+      return;
 
     isDragging = false;
     sliderWindow.classList.remove("is-dragging");
@@ -333,11 +357,26 @@ const blogsWithImages = await Promise.all(
   }
 
   if (sliderWindow) {
-    sliderWindow.addEventListener("pointerdown", handlePointerDown as EventListener);
-    sliderWindow.addEventListener("pointermove", handlePointerMove as EventListener);
-    sliderWindow.addEventListener("pointerup", handlePointerUp as EventListener);
-    sliderWindow.addEventListener("pointercancel", handlePointerUp as EventListener);
-    sliderWindow.addEventListener("pointerleave", handlePointerUp as EventListener);
+    sliderWindow.addEventListener(
+      "pointerdown",
+      handlePointerDown as EventListener
+    );
+    sliderWindow.addEventListener(
+      "pointermove",
+      handlePointerMove as EventListener
+    );
+    sliderWindow.addEventListener(
+      "pointerup",
+      handlePointerUp as EventListener
+    );
+    sliderWindow.addEventListener(
+      "pointercancel",
+      handlePointerUp as EventListener
+    );
+    sliderWindow.addEventListener(
+      "pointerleave",
+      handlePointerUp as EventListener
+    );
   }
 
   function updateDots() {
