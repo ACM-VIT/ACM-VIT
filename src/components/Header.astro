@@ -295,8 +295,7 @@
       transform 0.24s cubic-bezier(0.22, 0.61, 0.36, 1);
     pointer-events: none;
   }
-  .more-menu.open,
-  #desktopMoreMenu:hover {
+  .more-menu.open {
     opacity: 1;
     transform: translateY(0) scale(1);
     pointer-events: auto;
@@ -343,16 +342,36 @@
       pointer-events: none;
     }
     .site-header {
-      top: auto;
-      bottom: 18px;
+      top: 15px;
+      bottom: auto;
+      padding: 0 15px;
     }
     .header-inner {
+      justify-content: flex-end;
+    }
+    body.hero-in-view .site-header {
+      top: auto;
+      bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+    }
+    body.hero-in-view .header-inner {
       justify-content: center;
     }
+    #mobile-menu-btn,
     #mobile-menu-close {
+      width: 45px;
+      height: 45px;
+    }
+    #mobile-menu-close {
+      top: 15px;
+      right: 15px;
+      bottom: auto;
+      left: auto;
+      transform: none;
+    }
+    body.hero-in-view #mobile-menu-close {
       top: auto;
       right: auto;
-      bottom: 18px;
+      bottom: calc(18px + env(safe-area-inset-bottom, 0px));
       left: 50%;
       transform: translateX(-50%);
     }
@@ -361,6 +380,38 @@
     }
     .nav-mobile {
       display: block;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .site-header {
+      top: 10px;
+      padding: 0 10px;
+    }
+    body.hero-in-view .site-header {
+      top: auto;
+      bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    }
+    #mobile-menu-btn,
+    #mobile-menu-close {
+      width: 35px;
+      height: 35px;
+    }
+    #mobile-menu-btn svg,
+    #mobile-menu-close svg {
+      width: 20px;
+      height: 20px;
+    }
+    #mobile-menu-close {
+      top: 10px;
+      right: 10px;
+    }
+    body.hero-in-view #mobile-menu-close {
+      top: auto;
+      right: auto;
+      bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+      left: 50%;
+      transform: translateX(-50%);
     }
   }
 </style>
@@ -589,6 +640,7 @@
 
     // EXISTING DROPDOWN LOGIC
     const toggles = Array.from(document.querySelectorAll(".more-toggle"));
+    const moreMenuLinks = document.querySelectorAll("#desktopMoreMenu a");
 
     const getMenuFor = (tg) => {
       const id = tg.getAttribute("aria-controls");
@@ -663,6 +715,12 @@
       });
       menu.addEventListener("mouseleave", () => {
         startCloseTimer();
+      });
+    });
+
+    moreMenuLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        closeAll();
       });
     });
 

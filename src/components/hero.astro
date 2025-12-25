@@ -185,14 +185,12 @@
           const io = new IntersectionObserver(
             (entries) => {
               entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                  section1.classList.add("in-view");
-                } else {
-                  section1.classList.remove("in-view");
-                }
+                const isInView = entry.isIntersecting;
+                section1.classList.toggle("in-view", isInView);
+                document.body.classList.toggle("hero-in-view", isInView);
               });
             },
-            { root: null, threshold: 0.05 }
+            { root: null, rootMargin: "10% 0px 0px 0px", threshold: 0.05 }
           );
 
           io.observe(section1);
