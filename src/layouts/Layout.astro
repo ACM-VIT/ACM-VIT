@@ -141,15 +141,15 @@ const description =
           const hosts = document.querySelectorAll("[data-variant-host]");
           if (!hosts.length) return;
 
-          const isMobile = window.matchMedia(
-            "(max-width: 768px), (pointer: coarse)"
-          ).matches;
-          const variant = isMobile ? "mobile" : "desktop";
+          const defaultQuery = "(max-width: 768px), (pointer: coarse)";
 
           let mountedAny = false;
 
           hosts.forEach((host) => {
             const element = host as HTMLElement;
+            const query = element.dataset.variantQuery || defaultQuery;
+            const isMobile = window.matchMedia(query).matches;
+            const variant = isMobile ? "mobile" : "desktop";
             if (element.dataset.variantReady === variant) return;
 
             const template = element.querySelector(

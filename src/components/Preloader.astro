@@ -134,52 +134,146 @@
     let windowLoaded = false;
     let assetsLoaded = false;
 
-    const collectAssetUrls = (): string[] => {
+    const collectAssetUrls = (): { urls: string[]; imageUrls: Set<string> } => {
       const urls = new Set<string>();
+      const imageUrls = new Set<string>();
 
-      Array.from(document.images).forEach((img) => {
-        if (img.src) urls.add(img.src);
-      });
-
-      Array.from(document.querySelectorAll('source[src], source[srcset]')).forEach((s) => {
-        const src = s.getAttribute('src') || s.getAttribute('srcset');
-        if (src) urls.add(src);
-      });
-
-      Array.from(document.querySelectorAll('*')).forEach((el) => {
+      const normalizeUrl = (
+        value: string | null | undefined,
+        baseUrl = location.href
+      ): string | null => {
+        if (!value) return null;
+        const trimmed = value.trim();
+        if (!trimmed || trimmed.startsWith('#')) return null;
+        if (trimmed.startsWith('data:') || trimmed.startsWith('blob:')) return null;
         try {
-          const style = window.getComputedStyle(el);
-          const bg = style && style.backgroundImage;
-          if (bg && bg !== 'none') {
-            const matches = [...bg.matchAll(/url\(["']?(.*?)["']?\)/g)];
-            matches.forEach((m) => {
-              if (m[1]) urls.add(m[1]);
-            });
+          return new URL(trimmed, baseUrl).href;
+        } catch (e) {
+          return trimmed;
+        }
+      };
+
+      const addUrl = (
+        value: string | null | undefined,
+        isImage = false,
+        baseUrl = location.href
+      ) => {
+        const normalized = normalizeUrl(value, baseUrl);
+        if (!normalized) return;
+        urls.add(normalized);
+        if (isImage) imageUrls.add(normalized);
+      };
+
+      const addSrcset = (
+        value: string | null | undefined,
+        isImage = false,
+        baseUrl = location.href
+      ) => {
+        if (!value) return;
+        value
+          .split(',')
+          .map((entry) => entry.trim().split(/\s+/)[0])
+          .filter(Boolean)
+          .forEach((src) => addUrl(src, isImage, baseUrl));
+      };
+
+      const addUrlsFromStyle = (
+        value: string | null | undefined,
+        isImage = false,
+        baseUrl = location.href
+      ) => {
+        if (!value || value === 'none') return;
+        const matches = [...value.matchAll(/url\(["']?(.*?)["']?\)/g)];
+        matches.forEach((match) => addUrl(match[1], isImage, baseUrl));
+      };
+
+      const collectFromRoot = (root: ParentNode, includeComputed = false) => {
+        root.querySelectorAll('img').forEach((img) => {
+          addUrl(img.getAttribute('src'), true);
+          addUrl(img.getAttribute('data-src'), true);
+          addSrcset(img.getAttribute('srcset'), true);
+          addSrcset(img.getAttribute('data-srcset'), true);
+        });
+
+        root.querySelectorAll('source').forEach((source) => {
+          addUrl(source.getAttribute('src'), true);
+          addUrl(source.getAttribute('data-src'), true);
+          addSrcset(source.getAttribute('srcset'), true);
+          addSrcset(source.getAttribute('data-srcset'), true);
+        });
+
+        root.querySelectorAll('video').forEach((video) => {
+          addUrl(video.getAttribute('src'));
+          addUrl(video.getAttribute('data-src'));
+          addUrl(video.getAttribute('poster'), true);
+          addUrl(video.getAttribute('data-poster'), true);
+        });
+
+        root.querySelectorAll('audio').forEach((audio) => {
+          addUrl(audio.getAttribute('src'));
+          addUrl(audio.getAttribute('data-src'));
+        });
+
+        root.querySelectorAll('image').forEach((image) => {
+          addUrl(image.getAttribute('href'), true);
+          addUrl(image.getAttribute('xlink:href'), true);
+        });
+
+        root.querySelectorAll('[style]').forEach((el) => {
+          addUrlsFromStyle(el.getAttribute('style'), true);
+        });
+
+        root
+          .querySelectorAll(
+            'link[rel="preload"], link[rel="prefetch"], link[rel="stylesheet"], link[rel="modulepreload"]'
+          )
+          .forEach((linkEl) => {
+            addUrl(linkEl.getAttribute('href'));
+          });
+
+        root.querySelectorAll('script[src]').forEach((scriptEl) => {
+          addUrl(scriptEl.getAttribute('src'));
+        });
+
+        if (includeComputed) {
+          root.querySelectorAll('*').forEach((el) => {
+            try {
+              const style = window.getComputedStyle(el);
+              if (!style) return;
+              addUrlsFromStyle(style.backgroundImage, true);
+              addUrlsFromStyle(style.getPropertyValue('mask-image'), true);
+              addUrlsFromStyle(style.getPropertyValue('-webkit-mask-image'), true);
+            } catch (e) {
+            }
+          });
+        }
+      };
+
+      collectFromRoot(document, true);
+
+      document.querySelectorAll('template').forEach((template) => {
+        collectFromRoot(template.content, false);
+      });
+
+      Array.from(document.styleSheets).forEach((sheet) => {
+        let rules: CSSRuleList | null = null;
+        try {
+          rules = sheet.cssRules;
+        } catch (e) {
+          return;
+        }
+        if (!rules) return;
+        Array.from(rules).forEach((rule) => {
+          if ('cssText' in rule) {
+            addUrlsFromStyle(rule.cssText, false, sheet.href || location.href);
           }
-        } catch (e) {
-        }
+        });
       });
 
-      Array.from(document.querySelectorAll('link[rel="preload"], link[rel="prefetch"]')).forEach((l) => {
-        const href = l.getAttribute('href');
-        if (href) urls.add(href);
-      });
-
-      Array.from(document.querySelectorAll('video[poster]')).forEach((v) => {
-        const p = v.getAttribute('poster');
-        if (p) urls.add(p);
-      });
-
-      return Array.from(urls).filter(Boolean).map((u: string) => {
-        try {
-          return new URL(u, location.href).href;
-        } catch (e) {
-          return u;
-        }
-      });
+      return { urls: Array.from(urls), imageUrls };
     };
 
-    const preloadImages = (urls: string[]): Promise<boolean> => {
+    const preloadAssets = (urls: string[], imageUrls: Set<string>): Promise<boolean> => {
       return new Promise((resolve) => {
         if (!urls || urls.length === 0) return resolve(true);
         let loaded = 0;
@@ -193,7 +287,8 @@
         };
 
         urls.forEach((u: string) => {
-          const isImage = /\.(png|jpe?g|gif|webp|avif|svg)(\?|$)/i.test(u);
+          const isImage =
+            imageUrls.has(u) || /\.(png|jpe?g|gif|webp|avif|svg)(\?|$)/i.test(u);
           if (isImage) {
             const img = new Image();
             img.onload = onProgress;
@@ -201,7 +296,7 @@
             img.src = u;
           } else {
             // fetch resource to warm cache
-            fetch(u, { method: 'GET', mode: 'cors' })
+            fetch(u, { method: 'GET', mode: 'cors', cache: 'force-cache' })
               .then(() => onProgress())
               .catch(() => onProgress());
           }
@@ -218,8 +313,8 @@
 
     const preloadAllAssets = async () => {
       try {
-        const urls = collectAssetUrls();
-        await Promise.all([preloadImages(urls), waitForFonts()]);
+        const { urls, imageUrls } = collectAssetUrls();
+        await Promise.all([preloadAssets(urls, imageUrls), waitForFonts()]);
       } catch (e) {
         console.warn('Asset preloading failed', e);
       }

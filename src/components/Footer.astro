@@ -5,15 +5,15 @@ import { getAssetUrl } from "../utils/cdn";
 
 <div data-variant-host>
   <template data-variant="desktop">
-    <footer id="footer" class="relative w-full w-full overflow-hidden m-0 p-0">
+    <footer id="footer" class="relative w-full overflow-hidden m-0 p-0 flex flex-col">
       <div
-        class="hidden md:block w-[1438.01px] h-0 outline outline-1 outline-offset-[-0.50px] outline-white mx-auto"
+        class="hidden md:block w-full max-w-[1438px] h-0 outline outline-1 outline-offset-[-0.50px] outline-white mx-auto"
       >
       </div>
 
       <div class="relative z-10 hidden md:flex flex-col min-h-[50vh] pb-8">
-        <div class="flex-grow flex items-start justify-between px-16 pt-6">
-          <div class="flex-shrink-0">
+        <div class="flex-grow flex flex-col lg:flex-row items-start gap-10 lg:gap-0 justify-between px-6 lg:px-16 pt-6">
+          <div class="flex-shrink-0 w-full lg:w-auto">
             <div
               class="text-yellow-50 text-xl font-bold font-['PolySans_Trial'] leading-tight"
               style="font-family: 'PolySans Bold', 'PolySans Trial', sans-serif;"
@@ -37,7 +37,7 @@ import { getAssetUrl } from "../utils/cdn";
               </div>
             </div>
 
-            <div class="mt-6 relative w-52 h-36">
+            <div class="mt-6 relative w-48 h-32 lg:w-52 lg:h-36">
               <a
                 href="https://w3w.co/static.grips.limelight"
                 target="_blank"
@@ -46,20 +46,20 @@ import { getAssetUrl } from "../utils/cdn";
                 <img
                   src={getAssetUrl("/footer/VIT-Map.png")}
                   alt="VIT Map"
-                  class="w-52 h-36 object-cover rounded-lg shadow-lg border border-zinc-700"
+                  class="w-full h-full object-cover rounded-lg shadow-lg border border-zinc-700"
                   loading="lazy"
                   decoding="async"
                 />
               </a>
               <div
-                class="absolute inset-0 w-52 h-36 opacity-30 bg-gradient-to-b from-white to-red-500 rounded-lg pointer-events-none"
+                class="absolute inset-0 opacity-30 bg-gradient-to-b from-white to-red-500 rounded-lg pointer-events-none"
               >
               </div>
             </div>
           </div>
 
           <!-- Navigation Sections -->
-          <div class="flex justify-start items-start gap-8 flex-wrap">
+          <div class="flex w-full lg:w-auto justify-start items-start gap-6 lg:gap-8 flex-wrap">
             <!-- About Section -->
             <div
               class="w-16 inline-flex flex-col justify-start items-start gap-4"
@@ -337,17 +337,15 @@ import { getAssetUrl } from "../utils/cdn";
         </div>
       </div>
 
-      <div
-        class="hidden md:flex w-full flex-col items-center justify-center relative"
-      >
+      <div class="hidden md:flex w-full flex-col items-center justify-center relative">
         <div
           class="flex flex-col items-center justify-center mb-4 z-30 relative"
         >
-          <p class="text-neutral-400 text-xl text-white mb-12">
+          <p class="text-neutral-400 text-lg lg:text-xl text-white mb-10 lg:mb-12">
             © 2025&nbsp;ACM-VIT. All rights reserved.
           </p>
           <!-- Social Icons -->
-          <div class="flex flex-row items-center gap-4 mb-12">
+          <div class="flex flex-row items-center gap-4 mb-10 lg:mb-12 flex-wrap justify-center">
             <a
               href="https://www.facebook.com/acmvitvellore"
               aria-label="Facebook"
@@ -356,7 +354,7 @@ import { getAssetUrl } from "../utils/cdn";
               ><img
                 src={getAssetUrl("/footer/Facebook.svg")}
                 alt="Facebook"
-                class="w-14 h-12 hover:scale-110 transition-transform"
+                class="w-10 h-10 lg:w-14 lg:h-12 hover:scale-110 transition-transform"
                 loading="lazy"
                 decoding="async"
               /></a
@@ -369,7 +367,7 @@ import { getAssetUrl } from "../utils/cdn";
               ><img
                 src={getAssetUrl("/footer/Twitter.svg")}
                 alt="Twitter"
-                class="w-10 h-8 hover:scale-110 transition-transform"
+                class="w-8 h-6 lg:w-10 lg:h-8 hover:scale-110 transition-transform"
                 loading="lazy"
                 decoding="async"
               /></a
@@ -382,7 +380,7 @@ import { getAssetUrl } from "../utils/cdn";
               ><img
                 src={getAssetUrl("/footer/Instagram.svg")}
                 alt="Instagram"
-                class="w-14 h-12 hover:scale-110 transition-transform"
+                class="w-10 h-10 lg:w-14 lg:h-12 hover:scale-110 transition-transform"
                 loading="lazy"
                 decoding="async"
               /></a
@@ -395,7 +393,7 @@ import { getAssetUrl } from "../utils/cdn";
               ><img
                 src={getAssetUrl("/footer/Medium.svg")}
                 alt="Medium"
-                class="w-14 h-12 hover:scale-110 transition-transform"
+                class="w-10 h-10 lg:w-14 lg:h-12 hover:scale-110 transition-transform"
                 loading="lazy"
                 decoding="async"
               /></a
@@ -408,7 +406,7 @@ import { getAssetUrl } from "../utils/cdn";
               ><img
                 src={getAssetUrl("/footer/Linkedin.svg")}
                 alt="Linkedin"
-                class="w-14 h-12 hover:scale-110 transition-transform"
+                class="w-10 h-10 lg:w-14 lg:h-12 hover:scale-110 transition-transform"
                 loading="lazy"
                 decoding="async"
               /></a
@@ -421,7 +419,7 @@ import { getAssetUrl } from "../utils/cdn";
               ><img
                 src={getAssetUrl("/footer/youtube icon.png")}
                 alt="YouTube"
-                class="w-7 h-7 rounded hover:scale-110 transition-transform"
+                class="w-6 h-6 lg:w-7 lg:h-7 rounded hover:scale-110 transition-transform"
                 loading="lazy"
                 decoding="async"
               /></a
@@ -431,29 +429,29 @@ import { getAssetUrl } from "../utils/cdn";
             <img
               src={getAssetUrl("/footer/pixel-heart.svg")}
               alt="pixel heart"
-              class="w-6 h-6"
+              class="w-5 h-5 lg:w-6 lg:h-6"
               loading="lazy"
               decoding="async"
             />
             <span
-              class="text-neutral-400 text-base text-white font-['PolySans_Trial']"
+              class="text-neutral-400 text-sm lg:text-base text-white font-['PolySans_Trial']"
               >crafted with love by ACM-VIT</span
             >
           </div>
         </div>
         <div
-          class="absolute left-1/2 -translate-x-1/2 -bottom-110 -z-10 text-neutral-400 text-[568.78px] font-bold font-['PolySans_Trial'] leading-none opacity-100 select-none pointer-events-none"
+          class="absolute left-1/2 -translate-x-1/2 -bottom-110 -z-10 text-neutral-400 text-[260px] md:text-[320px] lg:text-[460px] xl:text-[568.78px] font-bold font-['PolySans_Trial'] leading-none opacity-100 select-none pointer-events-none"
           style="line-height:0.8;"
         >
           acm
         </div>
       </div>
       <!-- Footer Background -->
-      <div class="hidden md:flex w-full justify-center items-end mt-0">
+      <div class="hidden md:flex w-full justify-center items-end mt-auto">
         <img
           src={getAssetUrl("/footer/footer-background.svg")}
           alt="Footer Background"
-          class="w-full max-w-none h-auto object-contain"
+          class="block w-full max-w-none h-auto object-contain"
           style="min-width:100vw;"
           loading="lazy"
           decoding="async"
@@ -464,8 +462,9 @@ import { getAssetUrl } from "../utils/cdn";
 
   <template data-variant="mobile">
     <!-- Phone Screen Version -->
-    <div
-      class="block md:hidden relative w-full h-auto overflow-hidden min-h-[1100px] pb-0"
+    <footer
+      id="footer"
+      class="relative w-full h-auto overflow-hidden min-h-[100svh] pb-0 flex flex-col"
     >
       <!-- Divider line -->
       <div
@@ -474,43 +473,43 @@ import { getAssetUrl } from "../utils/cdn";
       </div>
 
       <!-- Content -->
-      <div class="relative z-10 flex flex-col px-4 pt-4 gap-6">
+      <div class="relative z-10 flex flex-col px-4 sm:px-8 md:px-10 pt-4 gap-6">
         <!-- Title -->
         <div
-          class="text-yellow-50 text-base sm:text-lg font-bold leading-tight text-center font-['PolySans_Trial'] mb-2"
+          class="text-yellow-50 text-base sm:text-lg md:text-xl font-bold leading-tight text-center font-['PolySans_Trial'] mb-2"
         >
           association for computing machinery
         </div>
 
         <!-- Navigation Sections (mobile grid) -->
-        <div class="grid grid-cols-2 gap-4 relative z-20">
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6 md:gap-8 relative z-20">
           <!-- About Section -->
           <div
-            class="w-full inline-flex flex-col justify-start items-start gap-2"
+            class="w-full inline-flex flex-col justify-start items-start gap-2 sm:gap-3"
           >
             <div
-              class="text-yellow-50 text-xs font-light font-['PolySans_Trial'] uppercase"
+              class="text-yellow-50 text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase"
             >
               About
             </div>
             <div class="flex flex-col justify-start items-start gap-1">
               <a
                 href="#about"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >ACM-VIT</a
               >
               <a
                 href="https://vit.ac.in"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >VIT</a
               >
               <a
                 href="https://www.acm.org"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >ACM</a
               >
             </div>
@@ -518,37 +517,37 @@ import { getAssetUrl } from "../utils/cdn";
 
           <!-- Domains Section -->
           <div
-            class="w-full inline-flex flex-col justify-start items-start gap-2"
+            class="w-full inline-flex flex-col justify-start items-start gap-2 sm:gap-3"
           >
             <div
-              class="text-yellow-50 text-xs font-light font-['PolySans_Trial'] uppercase"
+              class="text-yellow-50 text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase"
             >
               Domains
             </div>
             <div class="flex flex-col justify-start items-start gap-1">
               <a
                 href="#domains"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >tech</a
               >
               <a
                 href="#domains"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >competitive coding</a
               >
               <a
                 href="#domains"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >design</a
               >
               <a
                 href="#domains"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >management</a
               >
               <a
                 href="#domains"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >research</a
               >
             </div>
@@ -556,52 +555,52 @@ import { getAssetUrl } from "../utils/cdn";
 
           <!-- Events Section -->
           <div
-            class="w-full inline-flex flex-col justify-start items-start gap-2"
+            class="w-full inline-flex flex-col justify-start items-start gap-2 sm:gap-3"
           >
             <div
-              class="text-yellow-50 text-xs font-light font-['PolySans_Trial'] uppercase"
+              class="text-yellow-50 text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase"
             >
               Events
             </div>
             <div class="flex flex-col justify-start items-start gap-1">
               <a
                 href="#events"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >Code2CREATE</a
               >
               <a
                 href="#events"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >CRYPTIC HUNT</a
               >
               <a
                 href="#events"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >REVERSE CODING</a
               >
               <a
                 href="#events"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >CODEX CRYPTUM</a
               >
               <a
                 href="#events"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >FORKTOBER</a
               >
               <a
                 href="#events"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >THE TINY HACK</a
               >
               <a
                 href="#events"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >APPTITUDE</a
               >
               <a
                 href="#events"
-                class="text-[#f95f4a] text-xs font-light font-['PolySans_Trial'] uppercase hover:text-red-400 transition-colors"
+                class="text-[#f95f4a] text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-red-400 transition-colors"
                 >MORE</a
               >
             </div>
@@ -609,47 +608,47 @@ import { getAssetUrl } from "../utils/cdn";
 
           <!-- Projects Section -->
           <div
-            class="w-full inline-flex flex-col justify-start items-start gap-2"
+            class="w-full inline-flex flex-col justify-start items-start gap-2 sm:gap-3"
           >
             <div
-              class="text-yellow-50 text-xs font-light font-['PolySans_Trial'] uppercase"
+              class="text-yellow-50 text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase"
             >
               Projects
             </div>
             <div class="flex flex-col justify-start items-start gap-1">
               <a
                 href="#projects"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >ACMONE</a
               >
               <a
                 href="#projects"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >CLI-RPG</a
               >
               <a
                 href="#projects"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >EXAMCOOKER</a
               >
               <a
                 href="#projects"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >CLITOP</a
               >
               <a
                 href="#projects"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >LOCALHOST</a
               >
               <a
                 href="#projects"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >OS</a
               >
               <a
                 href="#projects"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >UNIPOOL</a
               >
             </div>
@@ -657,22 +656,22 @@ import { getAssetUrl } from "../utils/cdn";
 
           <!-- ACM-W Section -->
           <div
-            class="w-full inline-flex flex-col justify-start items-start gap-2"
+            class="w-full inline-flex flex-col justify-start items-start gap-2 sm:gap-3"
           >
             <div
-              class="text-yellow-50 text-xs font-light font-['PolySans_Trial'] uppercase"
+              class="text-yellow-50 text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase"
             >
               ACM-W
             </div>
             <div class="flex flex-col justify-start items-start gap-1">
               <a
                 href="#acm-w"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >about w</a
               >
               <a
                 href="#acm-w"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >events</a
               >
             </div>
@@ -680,37 +679,37 @@ import { getAssetUrl } from "../utils/cdn";
 
           <!-- More Section -->
           <div
-            class="w-full inline-flex flex-col justify-start items-start gap-2"
+            class="w-full inline-flex flex-col justify-start items-start gap-2 sm:gap-3"
           >
             <div
-              class="text-[#f95f4a] text-xs font-light font-['PolySans_Trial'] uppercase"
+              class="text-[#f95f4a] text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase"
             >
               More
             </div>
             <div class="flex flex-col justify-start items-start gap-1">
               <a
                 href="#team"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >team</a
               >
               <a
                 href="#blogs"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >blogs</a
               >
               <a
                 href="#partners"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >partners</a
               >
               <a
                 href="#gallery"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >gallery</a
               >
               <a
                 href="#contact"
-                class="text-white text-xs font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
+                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >contact us</a
               >
             </div>
@@ -725,7 +724,7 @@ import { getAssetUrl } from "../utils/cdn";
         <div
           class="flex flex-col items-center justify-center mb-4 z-30 relative"
         >
-          <p class="text-white text-xs mb-4 text-center">
+          <p class="text-white text-xs sm:text-sm md:text-base mb-4 text-center">
             © 2025&nbsp;ACM-VIT. All rights reserved.
           </p>
           <!-- Social Icons -->
@@ -740,7 +739,7 @@ import { getAssetUrl } from "../utils/cdn";
               ><img
                 src={getAssetUrl("/footer/Facebook.svg")}
                 alt="Facebook"
-                class="w-8 h-8 hover:scale-110 transition-transform"
+                class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 hover:scale-110 transition-transform"
                 loading="lazy"
                 decoding="async"
               /></a
@@ -753,7 +752,7 @@ import { getAssetUrl } from "../utils/cdn";
               ><img
                 src={getAssetUrl("/footer/Twitter.svg")}
                 alt="Twitter"
-                class="w-6 h-6 hover:scale-110 transition-transform"
+                class="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 hover:scale-110 transition-transform"
                 loading="lazy"
                 decoding="async"
               /></a
@@ -766,7 +765,7 @@ import { getAssetUrl } from "../utils/cdn";
               ><img
                 src={getAssetUrl("/footer/Instagram.svg")}
                 alt="Instagram"
-                class="w-8 h-8 hover:scale-110 transition-transform"
+                class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 hover:scale-110 transition-transform"
                 loading="lazy"
                 decoding="async"
               /></a
@@ -779,7 +778,7 @@ import { getAssetUrl } from "../utils/cdn";
               ><img
                 src={getAssetUrl("/footer/Medium.svg")}
                 alt="Medium"
-                class="w-8 h-8 hover:scale-110 transition-transform"
+                class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 hover:scale-110 transition-transform"
                 loading="lazy"
                 decoding="async"
               /></a
@@ -792,7 +791,7 @@ import { getAssetUrl } from "../utils/cdn";
               ><img
                 src={getAssetUrl("/footer/Linkedin.svg")}
                 alt="Linkedin"
-                class="w-8 h-8 hover:scale-110 transition-transform"
+                class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 hover:scale-110 transition-transform"
                 loading="lazy"
                 decoding="async"
               /></a
@@ -805,7 +804,7 @@ import { getAssetUrl } from "../utils/cdn";
               ><img
                 src={getAssetUrl("/footer/youtube icon.png")}
                 alt="YouTube"
-                class="w-6 h-6 rounded hover:scale-110 transition-transform"
+                class="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded hover:scale-110 transition-transform"
                 loading="lazy"
                 decoding="async"
               /></a
@@ -815,17 +814,17 @@ import { getAssetUrl } from "../utils/cdn";
             <img
               src={getAssetUrl("/footer/pixel-heart.svg")}
               alt="pixel heart"
-              class="w-5 h-5"
+              class="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7"
               loading="lazy"
               decoding="async"
             />
-            <span class="text-white text-xs font-['PolySans_Trial']"
+            <span class="text-white text-xs sm:text-sm md:text-base font-['PolySans_Trial']"
               >crafted with love by ACM-VIT</span
             >
           </div>
           <div class="mt-6 text-center">
             <div
-              class="text-neutral-400 text-[160px] sm:text-[200px] font-bold font-['PolySans_Trial'] leading-none opacity-100 select-none pointer-events-none"
+              class="text-neutral-400 text-[160px] sm:text-[200px] md:text-[260px] font-bold font-['PolySans_Trial'] leading-none opacity-100 select-none pointer-events-none"
               style="line-height:0.8;"
             >
               acm
@@ -835,16 +834,16 @@ import { getAssetUrl } from "../utils/cdn";
       </div>
 
       <!-- Footer Background (mobile) -->
-      <div class="w-full flex justify-center items-end mt-4 pointer-events-none">
+      <div class="w-full flex justify-center items-end mt-auto pointer-events-none">
         <img
           src={getAssetUrl("/footer/footer-background.svg")}
           alt="Footer Background"
-          class="w-[560px] max-w-[100vw] h-auto object-contain opacity-90"
+          class="block w-full max-w-none h-auto object-contain opacity-90"
           loading="lazy"
           decoding="async"
         />
       </div>
-    </div>
+    </footer>
   </template>
 </div>
 

@@ -119,7 +119,10 @@ import ProjectsIntro from "../components/ProjectsIntro.astro";
   </section>
 
   <section id="contact" class="page-section">
-    <div data-variant-host>
+    <div
+      data-variant-host
+      data-variant-query="(max-width: 1024px), (pointer: coarse)"
+    >
       <template data-variant="desktop">
         <ContactUS />
       </template>

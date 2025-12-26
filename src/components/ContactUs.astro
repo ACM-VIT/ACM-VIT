@@ -141,22 +141,23 @@
   const section = document.querySelector(".laptop-section");
 
   const frameCount = 125;
-  let maxCacheSize = 14;
-  let preloadRadius = 6;
+  const narrowQuery = "(max-width: 1024px), (pointer: coarse)";
+  let maxCacheSize = frameCount;
+  let preloadRadius = 8;
   const pendingFrames = new Set<number>();
   const frameCache = new Map<number, HTMLImageElement>();
-  const prefersReducedMotion = false;
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
 
   const laptop = {
     frame: 0,
   };
 
   const updatePerfSettings = () => {
-    const isNarrow = window.matchMedia(
-      "(max-width: 768px), (pointer: coarse)"
-    ).matches;
-    maxCacheSize = isNarrow ? 8 : 14;
-    preloadRadius = isNarrow ? 3 : 6;
+    const isNarrow = window.matchMedia(narrowQuery).matches;
+    maxCacheSize = isNarrow ? Math.min(12, frameCount) : frameCount;
+    preloadRadius = isNarrow ? 3 : 8;
   };
 
   const currentFrame = (index: number) =>
@@ -165,16 +166,14 @@
     );
 
   const clampFrame = (index: number) =>
-    Math.max(0, Math.min(frameCount - 1, index));
+    Math.max(0, Math.min(frameCount - 1, Math.round(index)));
 
   const resizeCanvas = () => {
     if (!canvas || !context) return;
     updatePerfSettings();
     const rect = canvas.getBoundingClientRect();
     if (!rect.width || !rect.height) return;
-    const maxDpr = window.matchMedia(
-      "(max-width: 768px), (pointer: coarse)"
-    ).matches
+    const maxDpr = window.matchMedia(narrowQuery).matches
       ? 1.25
       : 1.5;
     const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
@@ -187,7 +186,7 @@
   };
 
   const trimCache = (center: number) => {
-    if (frameCache.size <= maxCacheSize) return;
+    if (maxCacheSize >= frameCount || frameCache.size <= maxCacheSize) return;
     const keys = Array.from(frameCache.keys()).sort(
       (a, b) => Math.abs(a - center) - Math.abs(b - center)
     );
@@ -241,6 +240,33 @@
     }
   };
 
+  let preloadAllScheduled = false;
+  const preloadAllFrames = async () => {
+    const concurrency = Math.min(6, frameCount);
+    let nextIndex = 0;
+
+    const worker = async () => {
+      while (nextIndex < frameCount) {
+        const index = nextIndex;
+        nextIndex += 1;
+        await loadFrame(index);
+      }
+    };
+
+    await Promise.all(
+      Array.from({ length: concurrency }, () => worker())
+    );
+  };
+
+  const schedulePreloadAll = () => {
+    if (prefersReducedMotion || preloadAllScheduled) return;
+    if (window.matchMedia(narrowQuery).matches) return;
+    preloadAllScheduled = true;
+    window.setTimeout(() => {
+      void preloadAllFrames();
+    }, 200);
+  };
+
   let lastRenderedFrame = -1;
   let lastCanvasWidth = 0;
   let lastCanvasHeight = 0;
@@ -251,7 +277,7 @@
     const img = frameCache.get(frame);
     if (!img) {
       void loadFrame(frame).then((loaded) => {
-        if (loaded && frame === laptop.frame) render();
+        if (loaded && frame === clampFrame(laptop.frame)) render();
       });
       return;
     }
@@ -277,6 +303,7 @@
     resizeCanvas();
     await loadFrame(0);
     render();
+    schedulePreloadAll();
 
     if (prefersReducedMotion) {
       const formOverlay = document.querySelector(

@@ -471,6 +471,8 @@
         }
 
         if (wasDynamic) pill.classList.add("dynamic-mode");
+        currentSectionId = null;
+        scheduleNavUpdate();
       });
     }
 
@@ -482,6 +484,19 @@
       "community",
       "team",
     ];
+    const idMapping = {
+      work: "events",
+      "igniting-minds-section": "about",
+      "projects-intro": "projects",
+      "community-outreach": "community",
+      "community-sdg": "community",
+      "community-conduct": "community",
+      "community-speaker": "community",
+    };
+    let currentSectionId = null;
+    let rafPending = false;
+    let lastScrollY = window.scrollY || window.pageYOffset;
+    let scrollDirection = "down";
 
     // Function to update blob position
     function updateBlob(targetLink) {
@@ -580,6 +595,102 @@
       }
     }
 
+    function applyNavState(sectionId) {
+      if (!sectionId) return;
+
+      if (sectionId === "footer") {
+        setDynamicMode(false);
+        hideBlob();
+        return;
+      }
+
+      if (moreSectionIds.includes(sectionId) || sectionId.startsWith("community-")) {
+        setDynamicMode(true, sectionId);
+        return;
+      }
+
+      const mappedId = idMapping[sectionId] || sectionId;
+      setDynamicMode(false);
+
+      const activeLink = document.querySelector(
+        `.nav-desktop .nav-link[href="#${mappedId}"]`
+      );
+      if (activeLink) {
+        updateBlob(activeLink);
+      } else {
+        hideBlob();
+      }
+    }
+
+    function getActiveSection() {
+      const focusLine = window.innerHeight * 0.3;
+      let activeSection = null;
+      let closestSection = null;
+      let closestDistance = Infinity;
+      let closestPosition = null;
+
+      sections.forEach((section) => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= focusLine && rect.bottom >= focusLine) {
+          activeSection = section;
+        }
+        let distance = 0;
+        let position = null;
+        if (rect.top > focusLine) {
+          distance = rect.top - focusLine;
+          position = "below";
+        } else if (rect.bottom < focusLine) {
+          distance = focusLine - rect.bottom;
+          position = "above";
+        }
+
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestSection = section;
+          closestPosition = position;
+        } else if (distance === closestDistance && closestSection) {
+          if (
+            scrollDirection === "down" &&
+            position === "below" &&
+            closestPosition !== "below"
+          ) {
+            closestSection = section;
+            closestPosition = position;
+          } else if (
+            scrollDirection === "up" &&
+            position === "above" &&
+            closestPosition !== "above"
+          ) {
+            closestSection = section;
+            closestPosition = position;
+          }
+        }
+      });
+
+      return activeSection || closestSection;
+    }
+
+    function updateActiveSection() {
+      rafPending = false;
+      const scrollY = window.scrollY || window.pageYOffset;
+      if (scrollY !== lastScrollY) {
+        scrollDirection = scrollY > lastScrollY ? "down" : "up";
+        lastScrollY = scrollY;
+      }
+      const activeSection = getActiveSection();
+      if (!activeSection) return;
+      const id = activeSection.getAttribute("id");
+      if (!id || id === currentSectionId) return;
+      currentSectionId = id;
+      applyNavState(id);
+    }
+
+    function scheduleNavUpdate() {
+      if (rafPending) return;
+      rafPending = true;
+      requestAnimationFrame(updateActiveSection);
+    }
+
     // Intersection Observer to track sections
     const observerOptions = {
       root: null,
@@ -587,54 +698,12 @@
       threshold: 0,
     };
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const id = entry.target.getAttribute("id");
-
-          if (id === "footer") {
-            // Explicitly disable dynamic mode for footer
-            setDynamicMode(false);
-            hideBlob();
-          } else if (moreSectionIds.includes(id)) {
-            // Enter Dynamic Mode
-            setDynamicMode(true, id);
-          } else {
-            // ID Mapping for internal sections
-            const idMapping = {
-              work: "events",
-              "igniting-minds-section": "about",
-              "projects-intro": "projects",
-              "community-outreach": "community",
-              "community-sdg": "community",
-              "community-conduct": "community",
-              "community-speaker": "community",
-            };
-            const mappedId = idMapping[id] || id;
-
-            // Check if it's a specific community subsection
-            if (id.startsWith("community-")) {
-              setDynamicMode(true, id);
-            } else {
-              // Exit Dynamic Mode
-              setDynamicMode(false);
-
-              // Update blob for normal sections
-              const activeLink = document.querySelector(
-                `.nav-desktop .nav-link[href="#${mappedId}"]`
-              );
-              if (activeLink) {
-                updateBlob(activeLink);
-              } else {
-                hideBlob();
-              }
-            }
-          }
-        }
-      });
+    const observer = new IntersectionObserver(() => {
+      scheduleNavUpdate();
     }, observerOptions);
 
     sections.forEach((section) => observer.observe(section));
+    window.addEventListener("scroll", scheduleNavUpdate, { passive: true });
 
     // Removed manual hover listener as requested
 
@@ -749,15 +818,9 @@
       history.replaceState(null, "", `#${id}`);
 
       // Manually update blob on click
-      if (moreSectionIds.includes(id)) {
-        setDynamicMode(true, id);
-      } else {
-        setDynamicMode(false);
-        const link = document.querySelector(
-          `.nav-desktop .nav-link[href="#${id}"]`
-        );
-        if (link) updateBlob(link);
-      }
+      applyNavState(id);
+      currentSectionId = id;
     });
+    scheduleNavUpdate();
   });
 </script>

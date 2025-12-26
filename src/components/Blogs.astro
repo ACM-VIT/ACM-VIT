@@ -3,48 +3,65 @@ import BlogsCard from "./BlogsCard.astro";
 import { blogData } from "../data/blogData";
 import { getAssetUrl } from "../utils/cdn";
 
-async function fetchOgImage(url: string): Promise<string> {
+const fallbackCover = "/blogs/placeholder.svg";
+const HASHNODE_HOST = "blog.acmvit.in";
+const HASHNODE_ENDPOINT = "https://gql.hashnode.com";
+
+async function fetchHashnodeCover(url: string): Promise<string | null> {
   try {
-    const response = await fetch(url, {
-      headers: { "User-Agent": "Mozilla/5.0 (compatible; AstroBot/1.0)" },
+    const parsed = new URL(url);
+    const slug = parsed.pathname.replace(/^\/|\/$/g, "");
+    if (!slug) return null;
+
+    const query = `
+      query PostBySlug($host: String!, $slug: String!) {
+        publication(host: $host) {
+          post(slug: $slug) {
+            coverImage {
+              url
+            }
+          }
+        }
+      }
+    `;
+
+    const response = await fetch(HASHNODE_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0 (compatible; AstroBot/1.0)",
+      },
+      body: JSON.stringify({
+        query,
+        variables: { host: HASHNODE_HOST, slug },
+      }),
     });
-    const html = await response.text();
 
-    const ogImageMatch =
-      html.match(
-        /<meta[^>]*property=["']og:image["'][^>]*content=["']([^"']+)["']/i
-      ) ||
-      html.match(
-        /<meta[^>]*content=["']([^"']+)["'][^>]*property=["']og:image["']/i
-      );
+    if (!response.ok) return null;
+    const payload = await response.json();
+    const post = payload?.data?.publication?.post;
+    if (!post) return null;
 
-    if (ogImageMatch && ogImageMatch[1]) {
-      return ogImageMatch[1];
-    }
-
-    const twitterImageMatch =
-      html.match(
-        /<meta[^>]*name=["']twitter:image["'][^>]*content=["']([^"']+)["']/i
-      ) ||
-      html.match(
-        /<meta[^>]*content=["']([^"']+)["'][^>]*name=["']twitter:image["']/i
-      );
-
-    if (twitterImageMatch && twitterImageMatch[1]) {
-      return twitterImageMatch[1];
+    if (typeof post.coverImage === "string") return post.coverImage;
+    if (post.coverImage && typeof post.coverImage.url === "string") {
+      return post.coverImage.url;
     }
   } catch (error) {
-    console.warn(`Failed to fetch OG image for ${url}:`, error);
+    console.warn(`Failed to fetch Hashnode cover for ${url}:`, error);
   }
 
-  return "/blogs/placeholder.png";
+  return null;
 }
 
 const blogsWithImages = await Promise.all(
-  blogData.map(async (blog) => ({
-    link: blog.link,
-    bgurl: await fetchOgImage(blog.link),
-  }))
+  blogData.map(async (blog) => {
+    if (blog.cover) {
+      return { link: blog.link, bgurl: blog.cover };
+    }
+
+    const hashnodeCover = await fetchHashnodeCover(blog.link);
+    return { link: blog.link, bgurl: hashnodeCover || fallbackCover };
+  })
 );
 ---
 

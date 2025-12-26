@@ -1,0 +1,12 @@
+<svg width="294" height="182" viewBox="0 0 294 182" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="294" y2="182" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#141414"/>
+      <stop offset="1" stop-color="#1F1F1F"/>
+    </linearGradient>
+  </defs>
+  <rect width="294" height="182" rx="12" fill="url(#bg)"/>
+  <rect x="10" y="10" width="274" height="162" rx="10" stroke="#F95F4A" stroke-width="1.5" opacity="0.5"/>
+  <text x="50%" y="50%" fill="#F95F4A" font-family="PolySans Trial, Arial, sans-serif" font-size="16" letter-spacing="2" text-anchor="middle" dominant-baseline="middle">ACM-VIT</text>
+  <text x="50%" y="62%" fill="#FFFFFF" font-family="PolySans Trial, Arial, sans-serif" font-size="10" letter-spacing="3" text-anchor="middle" dominant-baseline="middle">BLOG</text>
+</svg>
