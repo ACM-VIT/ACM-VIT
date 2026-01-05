@@ -117,20 +117,23 @@ const description =
         passive: true,
       });
 
+      let updateRafId = 0;
+      const scheduleUpdate = () => {
+        cancelAnimationFrame(updateRafId);
+        updateRafId = requestAnimationFrame(() => ScrollTrigger.update());
+      };
+
+      window.addEventListener("scroll", scheduleUpdate, { passive: true });
+
       if (isCoarsePointer) {
-        let touchRafId = 0;
-        const updateOnTouch = () => {
-          cancelAnimationFrame(touchRafId);
-          touchRafId = requestAnimationFrame(() => ScrollTrigger.update());
-        };
-        document.addEventListener("touchstart", updateOnTouch, {
-          passive: false,
+        document.addEventListener("touchstart", scheduleUpdate, {
+          passive: true,
         });
-        document.addEventListener("touchmove", updateOnTouch, {
-          passive: false,
+        document.addEventListener("touchmove", scheduleUpdate, {
+          passive: true,
         });
-        document.addEventListener("touchend", updateOnTouch, {
-          passive: false,
+        document.addEventListener("touchend", scheduleUpdate, {
+          passive: true,
         });
       }
     </script>

@@ -23,7 +23,7 @@
   let hasStartedCompletion = false;
   let hasFinished = false;
   let fallbackTimeoutId = 0;
-  let loadingRequestId = 0;
+  let fakeProgressTimer = 0;
 
   const getGsap = async () => {
     if (gsapInstance) return gsapInstance;
@@ -39,6 +39,114 @@
     return lottieInstance;
   };
 
+  const setProgress = (gsap: any, nextValue: number, duration = 0.2) => {
+    const clamped = Math.max(progressValue, Math.min(95, nextValue));
+    if (clamped === progressValue) return;
+    progressValue = clamped;
+    if (progressTween) progressTween.kill();
+    progressTween = gsap.to(progressFill, {
+      width: `${clamped}%`,
+      duration,
+      ease: "power1.out",
+      overwrite: "auto",
+    });
+  };
+
+  const startFakeProgress = (gsap: any) => {
+    if (fakeProgressTimer) window.clearInterval(fakeProgressTimer);
+    fakeProgressTimer = window.setInterval(() => {
+      if (hasFinished || hasStartedCompletion) return;
+      const increment = progressValue < 60 ? 6 : 3;
+      setProgress(gsap, progressValue + increment, 0.3);
+    }, 180);
+  };
+
+  const stopFakeProgress = () => {
+    if (!fakeProgressTimer) return;
+    window.clearInterval(fakeProgressTimer);
+    fakeProgressTimer = 0;
+  };
+
+  const waitForWindowLoad = () =>
+    new Promise<void>((resolve) => {
+      if (document.readyState === "complete") {
+        resolve();
+        return;
+      }
+      window.addEventListener("load", () => resolve(), { once: true });
+    });
+
+  const waitForFonts = () => {
+    if (document.fonts && document.fonts.ready) {
+      return document.fonts.ready.catch(() => {});
+    }
+    return Promise.resolve();
+  };
+
+  const loadingPath = getAssetUrl("/loader/loading_state.json");
+  const loadedPath = getAssetUrl("/loader/loaded_state.json");
+
+  const loadLoadingAnimation = async (lottie: any) => {
+    if (hasFinished || hasStartedCompletion || !lottieContainer) return;
+    try {
+      loadingAnimation = lottie.loadAnimation({
+        container: lottieContainer,
+        renderer: "svg",
+        loop: true,
+        autoplay: true,
+        path: loadingPath,
+      });
+    } catch (error) {
+      console.warn("Failed to load loading animation", error);
+    }
+  };
+
+  const loadLoadedAnimation = async (lottie: any) => {
+    if (hasFinished || !lottieContainer) return null;
+    try {
+      return lottie.loadAnimation({
+        container: lottieContainer,
+        renderer: "svg",
+        loop: false,
+        autoplay: true,
+        path: loadedPath,
+      });
+    } catch (error) {
+      console.warn("Failed to load completion animation", error);
+      return null;
+    }
+  };
+
+  const proceedToCompletion = async (gsap: any, lottie: any) => {
+    if (hasStartedCompletion || hasFinished) return;
+    hasStartedCompletion = true;
+    stopFakeProgress();
+    if (fallbackTimeoutId) window.clearTimeout(fallbackTimeoutId);
+
+    if (progressTween) progressTween.kill();
+    progressTween = gsap.to(progressFill, {
+      width: "100%",
+      duration: 0.45,
+      ease: "power1.out",
+      onComplete: async () => {
+        if (loadingAnimation) {
+          loadingAnimation.destroy();
+          loadingAnimation = null;
+        }
+        if (lottieContainer) {
+          lottieContainer.innerHTML = "";
+        }
+
+        loadedAnimation = await loadLoadedAnimation(lottie);
+        if (loadedAnimation) {
+          loadedAnimation.addEventListener("complete", finishLoading);
+        } else {
+          finishLoading();
+        }
+      },
+    });
+  };
+
   const initPreloader = async () => {
     if (!preloader || !progressFill || !lottieContainer) return;
     const preloaderShown = sessionStorage.getItem("preloaderShown");
@@ -48,341 +156,35 @@
       return;
     }
 
-    const gsap = await getGsap();
-    const lottie = await getLottie();
+    const [gsap, lottie] = await Promise.all([getGsap(), getLottie()]);
 
     gsap.set(preloader, { autoAlpha: 1 });
     gsap.set(progressFill, { width: "0%" });
+    progressValue = 0;
 
-    const updateProgress = (pct: number) => {
-      const nextValue = Math.max(progressValue, Math.min(90, pct));
-      if (nextValue === progressValue) return;
-      progressValue = nextValue;
-      if (progressTween) progressTween.kill();
-      progressTween = gsap.to(progressFill, {
-        width: `${nextValue}%`,
-        duration: 0.2,
-        ease: "power1.out",
-        overwrite: "auto",
-      });
-    };
+    const startTime = performance.now();
 
-    const startProgress = () => {
-      progressValue = 0;
-      if (progressTween) progressTween.kill();
-      gsap.set(progressFill, { width: "0%" });
-    };
+    await loadLoadingAnimation(lottie);
+    startFakeProgress(gsap);
 
-    const loadingPath = getAssetUrl("/loader/loading_state.json");
-    const loadedPath = getAssetUrl("/loader/loaded_state.json");
+    const softTimeoutId = window.setTimeout(() => {
+      void proceedToCompletion(gsap, lottie);
+    }, 2200);
 
-    const loadLoadingAnimation = async () => {
-      const requestId = ++loadingRequestId;
-      try {
-        const loadingResponse = await fetch(loadingPath);
-        const loadingData = await loadingResponse.json();
-        if (hasStartedCompletion || hasFinished || requestId !== loadingRequestId) return;
-        loadingAnimation = lottie.loadAnimation({
-          container: lottieContainer,
-          renderer: "svg",
-          loop: true,
-          autoplay: true,
-          animationData: loadingData,
-        });
-      } catch (error) {
-        console.error("Failed to load loading animation:", error);
-        if (hasStartedCompletion || hasFinished || requestId !== loadingRequestId) return;
-        loadingAnimation = lottie.loadAnimation({
-          container: lottieContainer,
-          renderer: "svg",
-          loop: true,
-          autoplay: true,
-          path: loadingPath,
-        });
-      }
-    };
-
-    const loadLoadedAnimation = async () => {
-      if (hasFinished) return null;
-      try {
-        const loadedResponse = await fetch(loadedPath);
-        const loadedData = await loadedResponse.json();
-        if (hasFinished) return null;
-        return lottie.loadAnimation({
-          container: lottieContainer,
-          renderer: "svg",
-          loop: false,
-          autoplay: true,
-          animationData: loadedData,
-        });
-      } catch (error) {
-        console.error("Failed to load completion animation:", error);
-        if (hasFinished) return null;
-        return lottie.loadAnimation({
-          container: lottieContainer,
-          renderer: "svg",
-          loop: false,
-          autoplay: true,
-          path: loadedPath,
-        });
-      }
-    };
-
-    startProgress();
-    loadLoadingAnimation();
-
-    let windowLoaded = false;
-    let assetsLoaded = false;
-
-    const collectAssetUrls = (): { urls: string[]; imageUrls: Set<string> } => {
-      const urls = new Set<string>();
-      const imageUrls = new Set<string>();
-
-      const normalizeUrl = (
-        value: string | null | undefined,
-        baseUrl = location.href
-      ): string | null => {
-        if (!value) return null;
-        const trimmed = value.trim();
-        if (!trimmed || trimmed.startsWith('#')) return null;
-        if (trimmed.startsWith('data:') || trimmed.startsWith('blob:')) return null;
-        try {
-          return new URL(trimmed, baseUrl).href;
-        } catch (e) {
-          return trimmed;
-        }
-      };
-
-      const addUrl = (
-        value: string | null | undefined,
-        isImage = false,
-        baseUrl = location.href
-      ) => {
-        const normalized = normalizeUrl(value, baseUrl);
-        if (!normalized) return;
-        urls.add(normalized);
-        if (isImage) imageUrls.add(normalized);
-      };
-
-      const addSrcset = (
-        value: string | null | undefined,
-        isImage = false,
-        baseUrl = location.href
-      ) => {
-        if (!value) return;
-        value
-          .split(',')
-          .map((entry) => entry.trim().split(/\s+/)[0])
-          .filter(Boolean)
-          .forEach((src) => addUrl(src, isImage, baseUrl));
-      };
-
-      const addUrlsFromStyle = (
-        value: string | null | undefined,
-        isImage = false,
-        baseUrl = location.href
-      ) => {
-        if (!value || value === 'none') return;
-        const matches = [...value.matchAll(/url\(["']?(.*?)["']?\)/g)];
-        matches.forEach((match) => addUrl(match[1], isImage, baseUrl));
-      };
-
-      const collectFromRoot = (root: ParentNode, includeComputed = false) => {
-        root.querySelectorAll('img').forEach((img) => {
-          addUrl(img.getAttribute('src'), true);
-          addUrl(img.getAttribute('data-src'), true);
-          addSrcset(img.getAttribute('srcset'), true);
-          addSrcset(img.getAttribute('data-srcset'), true);
-        });
-
-        root.querySelectorAll('source').forEach((source) => {
-          addUrl(source.getAttribute('src'), true);
-          addUrl(source.getAttribute('data-src'), true);
-          addSrcset(source.getAttribute('srcset'), true);
-          addSrcset(source.getAttribute('data-srcset'), true);
-        });
-
-        root.querySelectorAll('video').forEach((video) => {
-          addUrl(video.getAttribute('src'));
-          addUrl(video.getAttribute('data-src'));
-          addUrl(video.getAttribute('poster'), true);
-          addUrl(video.getAttribute('data-poster'), true);
-        });
-
-        root.querySelectorAll('audio').forEach((audio) => {
-          addUrl(audio.getAttribute('src'));
-          addUrl(audio.getAttribute('data-src'));
-        });
-
-        root.querySelectorAll('image').forEach((image) => {
-          addUrl(image.getAttribute('href'), true);
-          addUrl(image.getAttribute('xlink:href'), true);
-        });
-
-        root.querySelectorAll('[style]').forEach((el) => {
-          addUrlsFromStyle(el.getAttribute('style'), true);
-        });
-
-        root
-          .querySelectorAll(
-            'link[rel="preload"], link[rel="prefetch"], link[rel="stylesheet"], link[rel="modulepreload"]'
-          )
-          .forEach((linkEl) => {
-            addUrl(linkEl.getAttribute('href'));
-          });
-
-        root.querySelectorAll('script[src]').forEach((scriptEl) => {
-          addUrl(scriptEl.getAttribute('src'));
-        });
-
-        if (includeComputed) {
-          root.querySelectorAll('*').forEach((el) => {
-            try {
-              const style = window.getComputedStyle(el);
-              if (!style) return;
-              addUrlsFromStyle(style.backgroundImage, true);
-              addUrlsFromStyle(style.getPropertyValue('mask-image'), true);
-              addUrlsFromStyle(style.getPropertyValue('-webkit-mask-image'), true);
-            } catch (e) {
-            }
-          });
-        }
-      };
-
-      collectFromRoot(document, true);
-
-      document.querySelectorAll('template').forEach((template) => {
-        collectFromRoot(template.content, false);
-      });
-
-      Array.from(document.styleSheets).forEach((sheet) => {
-        let rules: CSSRuleList | null = null;
-        try {
-          rules = sheet.cssRules;
-        } catch (e) {
-          return;
-        }
-        if (!rules) return;
-        Array.from(rules).forEach((rule) => {
-          if ('cssText' in rule) {
-            addUrlsFromStyle(rule.cssText, false, sheet.href || location.href);
-          }
-        });
-      });
-
-      return { urls: Array.from(urls), imageUrls };
-    };
-
-    const preloadAssets = (urls: string[], imageUrls: Set<string>): Promise<boolean> => {
-      return new Promise((resolve) => {
-        if (!urls || urls.length === 0) return resolve(true);
-        let loaded = 0;
-        const total = urls.length;
-
-        const onProgress = () => {
-          loaded++;
-          const pct = Math.min(90, Math.round((loaded / total) * 90));
-          updateProgress(pct);
-          if (loaded >= total) resolve(true);
-        };
-
-        urls.forEach((u: string) => {
-          const isImage =
-            imageUrls.has(u) || /\.(png|jpe?g|gif|webp|avif|svg)(\?|$)/i.test(u);
-          if (isImage) {
-            const img = new Image();
-            img.onload = onProgress;
-            img.onerror = onProgress;
-            img.src = u;
-          } else {
-            // fetch resource to warm cache
-            fetch(u, { method: 'GET', mode: 'cors', cache: 'force-cache' })
-              .then(() => onProgress())
-              .catch(() => onProgress());
-          }
-        });
-      });
-    };
-
-    const waitForFonts = () => {
-      if (document.fonts && document.fonts.ready) {
-        return document.fonts.ready.catch(() => {});
-      }
-      return Promise.resolve();
-    };
-
-    const preloadAllAssets = async () => {
-      try {
-        const { urls, imageUrls } = collectAssetUrls();
-        await Promise.all([preloadAssets(urls, imageUrls), waitForFonts()]);
-      } catch (e) {
-        console.warn('Asset preloading failed', e);
-      }
-      assetsLoaded = true;
-      maybeProceed();
-    };
-
-    const maybeProceed = () => {
-      if (hasStartedCompletion || hasFinished) return;
-      if (windowLoaded && assetsLoaded) {
-        proceedAfterAssets();
-      }
-    };
-
-    const proceedAfterAssets = () => {
-      if (hasStartedCompletion || hasFinished) return;
-      hasStartedCompletion = true;
-      loadingRequestId += 1;
-      // Force progress to 100% first
-      if (progressTween) progressTween.kill();
-      progressTween = gsap.to(progressFill, {
-        width: '100%',
-        duration: 0.5,
-        onComplete: () => {
-          if (loadingAnimation) {
-            loadingAnimation.destroy();
-            loadingAnimation = null;
-          }
-          if (lottieContainer) {
-            lottieContainer.innerHTML = "";
-          }
-
-          loadLoadedAnimation()
-            .then((animation) => {
-              if (!animation) {
-                finishLoading();
-                return;
-              }
-              loadedAnimation = animation;
-              loadedAnimation.addEventListener('complete', finishLoading);
-            })
-            .catch(() => {
-              finishLoading();
-            });
-        },
-      });
-    };
-
-    preloadAllAssets();
-
-    const onWindowLoad = () => {
-      if (windowLoaded) return;
-      windowLoaded = true;
-      maybeProceed();
-    };
-
-    if (document.readyState === 'complete') {
-      onWindowLoad();
-    } else {
-      window.addEventListener('load', onWindowLoad, { once: true });
-    }
-
-    // Fallback safety timeout
     fallbackTimeoutId = window.setTimeout(() => {
-      if (hasStartedCompletion || hasFinished) return;
-      console.warn('Preloader timeout reached - forcing dismissal');
-      proceedAfterAssets();
-    }, 7000);
+      void proceedToCompletion(gsap, lottie);
+    }, 3500);
+
+    await Promise.allSettled([waitForWindowLoad(), waitForFonts()]);
+
+    const elapsed = performance.now() - startTime;
+    const minimumDisplay = 600;
+    const delay = Math.max(0, minimumDisplay - elapsed);
+
+    window.setTimeout(() => {
+      window.clearTimeout(softTimeoutId);
+      void proceedToCompletion(gsap, lottie);
+    }, delay);
   };
 
   function finishLoading() {
