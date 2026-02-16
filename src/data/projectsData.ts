@@ -1,7 +1,7 @@
 export const projectsData = [
   {
     "cassette": {
-      "src": "/projects/acmone.svg",
+      "src": "/projects/acmone.webp",
       "alt": "ACMOne Image"
     },
     "textContent": {
@@ -33,7 +33,7 @@ export const projectsData = [
   },
   {
     "cassette": {
-      "src": "/projects/examcooker.svg",
+      "src": "/projects/examcooker.webp",
       "alt": "ExamCooker Image"
     },
     "textContent": {
@@ -74,7 +74,7 @@ export const projectsData = [
   },
   {
     "cassette": {
-      "src": "/projects/CLI-RPG.svg",
+      "src": "/projects/CLI-RPG.webp",
       "alt": "CLI RPG Image"
     },
     "textContent": {
@@ -106,7 +106,7 @@ export const projectsData = [
   },
   {
     "cassette": {
-      "src": "/projects/UniPool.svg",
+      "src": "/projects/UniPool.webp",
       "alt": "UniPool Image"
     },
     "textContent": {
@@ -138,7 +138,7 @@ export const projectsData = [
   },
   {
     "cassette": {
-      "src": "/projects/localhost.svg",
+      "src": "/projects/localhost.webp",
       "alt": "Localhost Image"
     },
     "textContent": {
@@ -181,7 +181,7 @@ export const projectsData = [
   },
   {
     "cassette": {
-      "src": "/projects/Cover.svg",
+      "src": "/projects/Cover.webp",
       "alt": "OCS Website Image"
     },
     "textContent": {

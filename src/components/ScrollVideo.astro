@@ -1,0 +1,215 @@
+---
+import { getAssetUrl } from "../utils/cdn";
+
+interface Props {
+    /**
+     * Path to the video file (relative to public folder)
+     * Note: Video should be encoded with keyint=1 for smooth scrubbing
+     */
+    videoSrc?: string;
+    startTime?: number;
+    endTime?: number;
+}
+
+const {
+    videoSrc = "/ACMWebsiteVid.mp4",
+    startTime = 0,
+    endTime = undefined,
+} = Astro.props;
+---
+
+<div class="scroll-video-container" data-scroll-video-container>
+    <video
+        class="scroll-video"
+        data-scroll-video
+        data-start-time={startTime}
+        data-end-time={endTime ?? ""}
+        muted
+        playsinline
+        preload="auto"
+    >
+        <source src={getAssetUrl(videoSrc)} type="video/mp4" />
+    </video>
+
+    <div class="scroll-video-overlay" data-scroll-video-overlay></div>
+
+    <div class="scroll-video-content" data-scroll-video-content>
+        <slot />
+    </div>
+</div>
+
+<style>
+    .scroll-video-container {
+        position: relative;
+        width: 100%;
+    }
+
+    .scroll-video {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
+        z-index: -1;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.6s ease-out;
+    }
+
+    .scroll-video.visible {
+        opacity: 1;
+    }
+
+    .scroll-video-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: black;
+        opacity: 0;
+        z-index: -1;
+        pointer-events: none;
+        transition: opacity 0.6s ease-out;
+    }
+
+    .scroll-video-overlay.visible {
+        opacity: 0.6;
+    }
+
+    .scroll-video-content {
+        position: relative;
+        z-index: 1;
+    }
+</style>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    function initScrollVideo() {
+        const container = document.querySelector(
+            "[data-scroll-video-container]",
+        ) as HTMLElement;
+        const video = document.querySelector(
+            "[data-scroll-video]",
+        ) as HTMLVideoElement;
+        const overlay = document.querySelector(
+            "[data-scroll-video-overlay]",
+        ) as HTMLElement;
+
+        if (!container || !video) {
+            console.error("ScrollVideo: Missing container or video element");
+            return;
+        }
+
+        const startTime = parseFloat(video.dataset.startTime || "0");
+
+        // Wait for video metadata to load
+        const setupScrollTrigger = () => {
+            const videoDuration = video.duration;
+            if (!videoDuration || isNaN(videoDuration)) {
+                console.error("ScrollVideo: Invalid video duration");
+                return;
+            }
+
+            const endTime = video.dataset.endTime
+                ? parseFloat(video.dataset.endTime)
+                : videoDuration;
+            const playDuration = endTime - startTime;
+
+            console.log("ScrollVideo initialized:", {
+                startTime,
+                endTime,
+                playDuration,
+                videoDuration,
+            });
+
+            video.currentTime = startTime;
+
+            // Smooth interpolation variables
+            let targetTime = startTime;
+            let currentDisplayTime = startTime;
+            let rafId: number | null = null;
+            const lerpFactor = 0.05; // Lower = smoother but slower response
+
+            // Smooth animation loop using requestAnimationFrame
+            const smoothUpdate = () => {
+                // Lerp towards target time for smooth interpolation
+                currentDisplayTime += (targetTime - currentDisplayTime) * lerpFactor;
+                
+                // Only update video if difference is noticeable
+                if (Math.abs(video.currentTime - currentDisplayTime) > 0.001) {
+                    video.currentTime = currentDisplayTime;
+                }
+                
+                // Continue animation loop if not at target
+                if (Math.abs(targetTime - currentDisplayTime) > 0.0001) {
+                    rafId = requestAnimationFrame(smoothUpdate);
+                } else {
+                    rafId = null;
+                }
+            };
+
+            ScrollTrigger.create({
+                trigger: container,
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 0.5, // Smooth scrubbing with slight delay
+                onUpdate: (self) => {
+                    targetTime = startTime + self.progress * playDuration;
+                    
+                    // Start animation loop if not already running
+                    if (rafId === null) {
+                        rafId = requestAnimationFrame(smoothUpdate);
+                    }
+                },
+            });
+
+            ScrollTrigger.create({
+                trigger: container,
+                start: "top 90%",
+                end: "bottom 60%",
+                onEnter: () => {
+                    video.classList.add("visible");
+                    overlay?.classList.add("visible");
+                    document.body.classList.add("scroll-video-active");
+                },
+                onLeave: () => {
+                    video.classList.remove("visible");
+                    overlay?.classList.remove("visible");
+                    document.body.classList.remove("scroll-video-active");
+                },
+                onEnterBack: () => {
+                    video.classList.add("visible");
+                    overlay?.classList.add("visible");
+                    document.body.classList.add("scroll-video-active");
+                },
+                onLeaveBack: () => {
+                    video.classList.remove("visible");
+                    overlay?.classList.remove("visible");
+                    document.body.classList.remove("scroll-video-active");
+                },
+            });
+        };
+
+        if (video.readyState >= 1) {
+            setupScrollTrigger();
+        } else {
+            video.addEventListener("loadedmetadata", setupScrollTrigger, {
+                once: true,
+            });
+        }
+
+        video.currentTime = startTime;
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initScrollVideo);
+    } else {
+        initScrollVideo();
+    }
+</script>

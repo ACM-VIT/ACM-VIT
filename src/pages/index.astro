@@ -27,109 +27,118 @@ import IgnitingMinds from "../components/IgnitingMindsSection.astro";
 import CodeOfConduct from "../components/CodeOfConduct.astro";
 import DistinguishedSpeaker from "../components/DistinguishedSpeaker.astro";
 import ProjectsIntro from "../components/ProjectsIntro.astro";
+import ScrollVideo from "../components/ScrollVideo.astro";
+const videoStartTime = 0;
+const videoEndTime = undefined; // Use full video duration (set to specific seconds if needed)
 ---
 
 <Layout>
-  <section id="home" class="page-section relative">
-    <div class="relative h-screen w-screen">
-      <Hero />
-    </div>
-    <LegendPins />
-    <BecauseTechMatters />
-  </section>
-
-  <section id="about" class="page-section">
-    <div data-variant-host>
-      <template data-variant="desktop">
-        <About />
-      </template>
-      <template data-variant="mobile">
-        <About_Phone />
-      </template>
-    </div>
-  </section>
-
-  <IgnitingMinds />
-  <CodeOfConduct />
-  <DistinguishedSpeaker />
-
-  <section id="domains" class="page-section">
-    <div data-variant-host>
-      <template data-variant="desktop">
-        <Domains />
-      </template>
-      <template data-variant="mobile">
-        <DomainsPhone />
-      </template>
-    </div>
-  </section>
-
-  <section id="events" class="page-section">
-    <Events />
-  </section>
-
-  <ProjectsIntro />
-
-  <section id="projects" class="page-section">
-    <div data-variant-host>
-      <template data-variant="desktop">
-        <ProjectScreen projects={projectsData} />
-      </template>
-      <template data-variant="mobile">
-        <ProjectScreenPhone projects={projectsData} />
-      </template>
-    </div>
-    <div class="w-full flex justify-center py-10">
-      <a
-        href="https://github.com/ACM-VIT"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="inline-block text-white text-sm sm:text-lg border-2 border-[#F95F4A] hover:bg-[#F95F4A]/10 hover:cursor-pointer py-2 px-5 sm:py-4 sm:px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-['PolySans_Trial'] uppercase"
-      >
-        Checkout all cool projects
-      </a>
-    </div>
-  </section>
-
-  <section id="acm-w" class="page-section">
-    <AcmWMotto />
-    <AcmWContent />
-    <AcmWBento />
-  </section>
-
-  <Board />
-
-  <section id="blogs" class="page-section">
-    <Blogs />
-  </section>
-
-  <section id="partners" class="page-section">
-    <Partners />
-  </section>
-
-  <section id="gallery" class="page-section">
-    <div data-variant-host>
-      <template data-variant="desktop">
-        <Gallery />
-      </template>
-      <template data-variant="mobile">
-        <Gallery_Phone />
-      </template>
-    </div>
-  </section>
-
-  <section id="contact" class="page-section">
-    <div
-      data-variant-host
-      data-variant-query="(max-width: 1024px), (pointer: coarse)"
+    <ScrollVideo
+        videoSrc="/ACMWebsiteVid.mp4"
+        startTime={videoStartTime}
+        endTime={videoEndTime}
     >
-      <template data-variant="desktop">
-        <ContactUS />
-      </template>
-      <template data-variant="mobile">
-        <ContactUSPhone />
-      </template>
-    </div>
-  </section>
-  <Footer />
+        <section id="home" class="page-section relative">
+            <div class="relative h-screen w-screen">
+                <Hero />
+            </div>
+            <LegendPins />
+            <BecauseTechMatters />
+        </section>
+
+        <section id="about" class="page-section">
+            <div data-variant-host>
+                <template data-variant="desktop">
+                    <About />
+                </template>
+                <template data-variant="mobile">
+                    <About_Phone />
+                </template>
+            </div>
+        </section>
+    </ScrollVideo>
+
+    <IgnitingMinds />
+    <CodeOfConduct />
+    <DistinguishedSpeaker />
+
+    <section id="domains" class="page-section">
+        <div data-variant-host>
+            <template data-variant="desktop">
+                <Domains />
+            </template>
+            <template data-variant="mobile">
+                <DomainsPhone />
+            </template>
+        </div>
+    </section>
+
+    <section id="events" class="page-section">
+        <Events />
+    </section>
+
+    <ProjectsIntro />
+
+    <section id="projects" class="page-section">
+        <div data-variant-host>
+            <template data-variant="desktop">
+                <ProjectScreen projects={projectsData} />
+            </template>
+            <template data-variant="mobile">
+                <ProjectScreenPhone projects={projectsData} />
+            </template>
+        </div>
+        <div class="w-full flex justify-center py-10">
+            <a
+                href="https://github.com/ACM-VIT"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-block text-white text-sm sm:text-lg border-2 border-[#F95F4A] hover:bg-[#F95F4A]/10 hover:cursor-pointer py-2 px-5 sm:py-4 sm:px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-['PolySans_Trial'] uppercase"
+            >
+                Checkout all cool projects
+            </a>
+        </div>
+    </section>
+
+    <section id="acm-w" class="page-section">
+        <AcmWMotto />
+        <AcmWContent />
+        <AcmWBento />
+    </section>
+
+    <Board />
+
+    <section id="blogs" class="page-section">
+        <Blogs />
+    </section>
+
+    <section id="partners" class="page-section">
+        <Partners />
+    </section>
+
+    <section id="gallery" class="page-section">
+        <div data-variant-host>
+            <template data-variant="desktop">
+                <Gallery />
+            </template>
+            <template data-variant="mobile">
+                <Gallery_Phone />
+            </template>
+        </div>
+    </section>
+
+    <section id="contact" class="page-section">
+        <div
+            data-variant-host
+            data-variant-query="(max-width: 1024px), (pointer: coarse)"
+        >
+            <template data-variant="desktop">
+                <ContactUS />
+            </template>
+            <template data-variant="mobile">
+                <ContactUSPhone />
+            </template>
+        </div>
+    </section>
+    <Footer />
 </Layout>

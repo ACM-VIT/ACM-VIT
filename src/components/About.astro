@@ -6,15 +6,15 @@ import { getAssetUrl } from "../utils/cdn";
 <div class="about-container w-screen overflow-hidden">
   <!-- About Section 1: -->
   <section
-    class="about-section section-1 w-screen h-screen relative bg-center bg-cover bg-no-repeat js-lazy-bg"
-    data-bg={getAssetUrl("/about/about-acmvit.jpeg")}
-    style="background-color: #0d0e0d;"
+    id="about-acmvit"
+    data-section="about-acmvit"
+    class="about-section section-1 video-bg-section w-screen h-screen relative bg-center bg-cover bg-no-repeat"
   >
     <div
-      class="svg-container svg-left relative w-[500px] h-[500px] ml-[-50px] mb-[-600px]"
+      class="cassette-container cassette-left svg-container svg-left relative w-[500px] h-[500px] ml-[-50px] mb-[-600px]"
     >
       <img
-        src={getAssetUrl("/about/Cassette.svg")}
+        src={getAssetUrl("/about/Cassette.webp")}
         alt="Cassette 1"
         class="cassette-svg w-full h-auto origin-bottom-left rotate-[21deg]"
         loading="lazy"
@@ -46,9 +46,9 @@ import { getAssetUrl } from "../utils/cdn";
 
   <!-- About Section 2:-->
   <section
-    class="about-section section-2 w-screen h-screen relative bg-center bg-cover bg-no-repeat js-lazy-bg"
-    data-bg={getAssetUrl("/about/about-vit.jpeg")}
-    style="background-color: #0d0e0d;"
+    id="about-vit"
+    data-section="about-vit"
+    class="about-section section-2 video-bg-section w-screen h-screen relative bg-center bg-cover bg-no-repeat"
   >
     <div
       class="text-container text-left absolute top-1/2 -translate-y-1/2 text-white p-8 left-[10vw] w-[55vw] max-w-[800px]"
@@ -73,10 +73,10 @@ import { getAssetUrl } from "../utils/cdn";
       </div>
     </div>
     <div
-      class="svg-container svg-right w-[500px] h-[500px] absolute right-0 top-1/2 -translate-y-1/2 mr-[-100px]"
+      class="cassette-container cassette-right svg-container svg-right w-[500px] h-[500px] absolute right-0 top-1/2 -translate-y-1/2 mr-[-100px]"
     >
       <img
-        src={getAssetUrl("/about/3.svg")}
+        src={getAssetUrl("/about/3.webp")}
         alt="Cassette 2"
         class="cassette-svg w-full h-auto origin-bottom-right rotate-[-15deg]"
         loading="lazy"
@@ -87,15 +87,15 @@ import { getAssetUrl } from "../utils/cdn";
 
   <!-- About Section 3:-->
   <section
-    class="about-section section-3 w-screen h-screen relative bg-center bg-cover bg-no-repeat js-lazy-bg"
-    data-bg={getAssetUrl("/about/about-acm.jpeg")}
-    style="background-color: #0d0e0d;"
+    id="about-acm"
+    data-section="about-acm"
+    class="about-section section-3 video-bg-section w-screen h-screen relative bg-center bg-cover bg-no-repeat"
   >
     <div
-      class="svg-container svg-left-two relative w-[500px] h-[500px] ml-[-50px] mb-[200px]"
+      class="cassette-container cassette-left cassette-left-two svg-container svg-left-two relative w-[500px] h-[500px] ml-[-50px] mb-[200px]"
     >
       <img
-        src={getAssetUrl("/about/2.svg")}
+        src={getAssetUrl("/about/2.webp")}
         alt="Cassette 3"
         class="cassette-svg w-full h-auto origin-bottom-left rotate-[11deg]"
         loading="lazy"
@@ -138,21 +138,21 @@ import { getAssetUrl } from "../utils/cdn";
       gap: 1rem;
     }
 
-    .about-container .svg-container {
+    .about-container .cassette-container {
       width: 420px;
       height: 420px;
     }
 
-    .about-container .section-1 .svg-container {
+    .about-container .section-1 .cassette-container {
       margin-left: -20px;
       margin-bottom: -420px;
     }
 
-    .about-container .section-2 .svg-container {
+    .about-container .section-2 .cassette-container {
       margin-right: -60px;
     }
 
-    .about-container .section-3 .svg-container {
+    .about-container .section-3 .cassette-container {
       margin-left: -20px;
       margin-bottom: 100px;
     }
@@ -170,21 +170,21 @@ import { getAssetUrl } from "../utils/cdn";
       gap: 0.75rem;
     }
 
-    .about-container .svg-container {
+    .about-container .cassette-container {
       width: 360px;
       height: 360px;
     }
 
-    .about-container .section-1 .svg-container {
+    .about-container .section-1 .cassette-container {
       margin-bottom: -320px;
     }
 
-    .about-container .section-2 .svg-container {
+    .about-container .section-2 .cassette-container {
       top: 55%;
       margin-right: -40px;
     }
 
-    .about-container .section-3 .svg-container {
+    .about-container .section-3 .cassette-container {
       margin-bottom: 40px;
     }
   }
@@ -228,9 +228,16 @@ import { getAssetUrl } from "../utils/cdn";
     sections.forEach((section) => {
       const cassette = section.querySelector(".cassette-svg");
       const isLeft =
+        section.querySelector(".cassette-left") ||
+        section.querySelector(".cassette-left-two") ||
         section.querySelector(".svg-left") ||
-        section.querySelector(".svg-left-two");
-      const isRight = section.querySelector(".svg-right");
+        section.querySelector(".svg-left-two") ||
+        section.querySelector(".webp-left") ||
+        section.querySelector(".webp-left-two");
+      const isRight =
+        section.querySelector(".cassette-right") ||
+        section.querySelector(".svg-right") ||
+        section.querySelector(".webp-right");
 
       if (cassette && (isLeft || isRight)) {
         const xStart = isLeft ? -300 : 300;
