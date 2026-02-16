@@ -3,7 +3,7 @@ import BlogsCard from "./BlogsCard.astro";
 import { blogData } from "../data/blogData";
 import { getAssetUrl } from "../utils/cdn";
 
-const fallbackCover = "/blogs/placeholder.svg";
+const fallbackCover = "/blogs/placeholder.webp";
 const HASHNODE_HOST = "blog.acmvit.in";
 const HASHNODE_ENDPOINT = "https://gql.hashnode.com";
 
@@ -77,7 +77,7 @@ const blogsWithImages = await Promise.all(
       class="w-12 h-12 md:w-20 md:h-20 lg:w-24 lg:h-24 relative justify-self-start"
     >
       <img
-        src={getAssetUrl("/rotate.svg")}
+        src={getAssetUrl("/rotate.webp")}
         class="rotate-svg w-full h-full block"
         loading="lazy"
         decoding="async"
@@ -97,7 +97,7 @@ const blogsWithImages = await Promise.all(
       class="w-12 h-12 md:w-20 md:h-20 lg:w-24 lg:h-24 relative justify-self-end"
     >
       <img
-        src={getAssetUrl("/rotate.svg")}
+        src={getAssetUrl("/rotate.webp")}
         class="rotate-svg w-full h-full block"
         loading="lazy"
         decoding="async"

@@ -69,7 +69,7 @@ convert_with_ffmpeg() {
 }
 
 # Process files
-find "$TARGET_DIR" -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.svg' -o -iname '*.webp' -o -iname '*.gif' -o -iname '*.tif' -o -iname '*.tiff' \) -print0 |
+find "$TARGET_DIR" -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' -o -iname '*.webp' -o -iname '*.gif' -o -iname '*.tif' -o -iname '*.tiff' \) -print0 |
 while IFS= read -r -d '' file; do
   dst="${file%.*}.avif"
   if [ -e "$dst" ] && [ "$dst" -nt "$file" ] && [ "$FORCE" = false ]; then

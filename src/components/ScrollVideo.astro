@@ -54,7 +54,7 @@ const {
         z-index: -1;
         pointer-events: none;
         opacity: 0;
-        transition: opacity 0.15s ease;
+        transition: opacity 0.6s ease-out;
     }
 
     .scroll-video.visible {
@@ -71,7 +71,7 @@ const {
         opacity: 0;
         z-index: -1;
         pointer-events: none;
-        transition: opacity 0.15s ease;
+        transition: opacity 0.6s ease-out;
     }
 
     .scroll-video-overlay.visible {
@@ -130,16 +130,41 @@ const {
 
             video.currentTime = startTime;
 
+            // Smooth interpolation variables
+            let targetTime = startTime;
+            let currentDisplayTime = startTime;
+            let rafId: number | null = null;
+            const lerpFactor = 0.05; // Lower = smoother but slower response
+
+            // Smooth animation loop using requestAnimationFrame
+            const smoothUpdate = () => {
+                // Lerp towards target time for smooth interpolation
+                currentDisplayTime += (targetTime - currentDisplayTime) * lerpFactor;
+                
+                // Only update video if difference is noticeable
+                if (Math.abs(video.currentTime - currentDisplayTime) > 0.001) {
+                    video.currentTime = currentDisplayTime;
+                }
+                
+                // Continue animation loop if not at target
+                if (Math.abs(targetTime - currentDisplayTime) > 0.0001) {
+                    rafId = requestAnimationFrame(smoothUpdate);
+                } else {
+                    rafId = null;
+                }
+            };
+
             ScrollTrigger.create({
                 trigger: container,
                 start: "top top",
                 end: "bottom bottom",
-                scrub: true, // Direct 1:1 scrubbing
+                scrub: 0.5, // Smooth scrubbing with slight delay
                 onUpdate: (self) => {
-                    const targetTime = startTime + self.progress * playDuration;
-                    // Only update if significantly different to avoid jitter
-                    if (Math.abs(video.currentTime - targetTime) > 0.01) {
-                        video.currentTime = targetTime;
+                    targetTime = startTime + self.progress * playDuration;
+                    
+                    // Start animation loop if not already running
+                    if (rafId === null) {
+                        rafId = requestAnimationFrame(smoothUpdate);
                     }
                 },
             });
@@ -147,7 +172,7 @@ const {
             ScrollTrigger.create({
                 trigger: container,
                 start: "top 90%",
-                end: "bottom 10%",
+                end: "bottom 60%",
                 onEnter: () => {
                     video.classList.add("visible");
                     overlay?.classList.add("visible");
