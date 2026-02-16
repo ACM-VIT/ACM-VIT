@@ -28,7 +28,7 @@
 
   const CRITICAL_WARMUP_TIMEOUT = 7500;
   const VARIANTS_WAIT_TIMEOUT = 1600;
-  const VIDEO_METADATA_TIMEOUT = 2500;
+  const VIDEO_WARM_TIMEOUT = 7000;
 
   const getGsap = async () => {
     if (gsapInstance) return gsapInstance;
@@ -133,24 +133,90 @@
       window.setTimeout(done, VARIANTS_WAIT_TIMEOUT);
     });
 
-  const waitForScrollVideoMetadata = () =>
+  const isVideoBufferedEnough = (video: HTMLVideoElement) => {
+    if (video.readyState >= 4) return true;
+    const duration = video.duration;
+    if (!duration || !isFinite(duration)) return video.readyState >= 3;
+    const buffered = video.buffered;
+    if (!buffered.length) return false;
+    const end = buffered.end(buffered.length - 1);
+    return end / duration >= 0.96;
+  };
+
+  const warmScrollVideo = (timeoutMs = VIDEO_WARM_TIMEOUT) =>
     new Promise<void>((resolve) => {
       const video = document.querySelector(
         "[data-scroll-video]"
       ) as HTMLVideoElement | null;
 
-      if (!video || video.readyState >= 1) {
+      if (!video) {
         resolve();
         return;
       }
 
+      if (video.dataset.warmed === "true" && isVideoBufferedEnough(video)) {
+        resolve();
+        return;
+      }
+
+      if (video.getAttribute("preload") !== "auto") {
+        video.setAttribute("preload", "auto");
+      }
+
+      let settled = false;
+      let timeoutId = 0;
+
       const done = () => {
-        video.removeEventListener("loadedmetadata", done);
+        if (settled) return;
+        settled = true;
+        if (timeoutId) window.clearTimeout(timeoutId);
+        video.removeEventListener("canplaythrough", onReady);
+        video.removeEventListener("loadeddata", onReady);
+        video.removeEventListener("canplay", onReady);
+        video.removeEventListener("progress", onProgress);
+        video.removeEventListener("error", onError);
+        if (isVideoBufferedEnough(video)) {
+          video.dataset.warmed = "true";
+        }
         resolve();
       };
 
-      video.addEventListener("loadedmetadata", done, { once: true });
-      window.setTimeout(done, VIDEO_METADATA_TIMEOUT);
+      const onReady = () => {
+        if (isVideoBufferedEnough(video) || video.readyState >= 3) {
+          video.dataset.warmed = "true";
+          done();
+        }
+      };
+
+      const onProgress = () => {
+        if (isVideoBufferedEnough(video)) {
+          video.dataset.warmed = "true";
+          done();
+        }
+      };
+
+      const onError = () => done();
+
+      if (isVideoBufferedEnough(video)) {
+        video.dataset.warmed = "true";
+        resolve();
+        return;
+      }
+
+      video.addEventListener("canplaythrough", onReady, { once: true });
+      video.addEventListener("loadeddata", onReady, { once: true });
+      video.addEventListener("canplay", onReady, { once: true });
+      video.addEventListener("progress", onProgress);
+      video.addEventListener("error", onError, { once: true });
+      timeoutId = window.setTimeout(done, timeoutMs);
+
+      try {
+        if (video.networkState === HTMLMediaElement.NETWORK_EMPTY || video.readyState < 3) {
+          video.load();
+        }
+      } catch {
+        done();
+      }
     });
 
   const parseBackgroundImageUrls = (value: string | null | undefined) => {
@@ -416,6 +482,7 @@
     if (preloaderShown) {
       preloader.style.display = "none";
       await waitForVariantsMounted();
+      void warmScrollVideo();
       void warmCriticalAssets();
       void warmRemainingAssets();
       window.dispatchEvent(new CustomEvent("preloader:done"));
@@ -451,7 +518,7 @@
     await Promise.allSettled([
       waitForWindowLoad(),
       waitForFonts(),
-      waitForScrollVideoMetadata(),
+      withTimeout(warmScrollVideo(), VIDEO_WARM_TIMEOUT),
       criticalAssetPromise,
     ]);
 
@@ -482,6 +549,7 @@
         if (progressTween) progressTween.kill();
         if (loadingAnimation) loadingAnimation.destroy();
         if (loadedAnimation) loadedAnimation.destroy();
+        void warmScrollVideo();
         void warmRemainingAssets();
         window.dispatchEvent(new CustomEvent("preloader:done"));
       },

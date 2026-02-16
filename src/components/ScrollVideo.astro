@@ -22,7 +22,7 @@ const normalizedVideoSrc = videoSrc.startsWith("/") ? videoSrc : `/${videoSrc}`;
         data-end-time={endTime ?? ""}
         muted
         playsinline
-        preload="metadata"
+        preload="auto"
     >
         <!-- Intentionally bypass CDN for this asset -->
         <source src={normalizedVideoSrc} type="video/mp4" />
