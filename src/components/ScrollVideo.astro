@@ -26,7 +26,7 @@ const {
         data-end-time={endTime ?? ""}
         muted
         playsinline
-        preload="auto"
+        preload="metadata"
     >
         <source src={getAssetUrl(videoSrc)} type="video/mp4" />
     </video>
@@ -102,7 +102,6 @@ const {
         ) as HTMLElement;
 
         if (!container || !video) {
-            console.error("ScrollVideo: Missing container or video element");
             return;
         }
 
@@ -112,7 +111,6 @@ const {
         const setupScrollTrigger = () => {
             const videoDuration = video.duration;
             if (!videoDuration || isNaN(videoDuration)) {
-                console.error("ScrollVideo: Invalid video duration");
                 return;
             }
 
@@ -120,13 +118,6 @@ const {
                 ? parseFloat(video.dataset.endTime)
                 : videoDuration;
             const playDuration = endTime - startTime;
-
-            console.log("ScrollVideo initialized:", {
-                startTime,
-                endTime,
-                playDuration,
-                videoDuration,
-            });
 
             video.currentTime = startTime;
 

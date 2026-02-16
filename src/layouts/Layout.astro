@@ -6,6 +6,15 @@ import { getAssetUrl } from "../utils/cdn";
 const site = Astro.site ?? new URL("https://www.acmvit.in");
 const canonicalUrl = new URL(Astro.url.pathname, site);
 const ogImageUrl = new URL("/opengraph.png", site);
+const cdnEnv = import.meta.env.PUBLIC_CDN_URL;
+let cdnOrigin: string | null = null;
+if (cdnEnv) {
+  try {
+    cdnOrigin = new URL(cdnEnv).origin;
+  } catch {
+    cdnOrigin = null;
+  }
+}
 
 const title = "ACM-VIT";
 const description =
@@ -17,7 +26,7 @@ const description =
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href={getAssetUrl("/favicon.webp")} />
+    <link rel="icon" type="image/webp" href={getAssetUrl("/favicon.webp")} />
 
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -39,6 +48,21 @@ const description =
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl.toString()} />
+
+    {cdnOrigin && <link rel="dns-prefetch" href={cdnOrigin} />}
+    {cdnOrigin && <link rel="preconnect" href={cdnOrigin} crossorigin />}
+    <link
+      rel="preload"
+      as="image"
+      href={getAssetUrl("/acm_topleft.webp")}
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href={getAssetUrl("/background_pattern.webp")}
+      fetchpriority="high"
+    />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -73,8 +97,6 @@ const description =
       import { ScrollTrigger } from "gsap/ScrollTrigger";
 
       gsap.registerPlugin(ScrollTrigger);
-
-      const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
 
       ScrollTrigger.config({
         limitCallbacks: true,
@@ -116,33 +138,20 @@ const description =
       window.addEventListener("orientationchange", scheduleRefresh, {
         passive: true,
       });
-
-      let updateRafId = 0;
-      const scheduleUpdate = () => {
-        cancelAnimationFrame(updateRafId);
-        updateRafId = requestAnimationFrame(() => ScrollTrigger.update());
-      };
-
-      window.addEventListener("scroll", scheduleUpdate, { passive: true });
-
-      if (isCoarsePointer) {
-        document.addEventListener("touchstart", scheduleUpdate, {
-          passive: true,
-        });
-        document.addEventListener("touchmove", scheduleUpdate, {
-          passive: true,
-        });
-        document.addEventListener("touchend", scheduleUpdate, {
-          passive: true,
-        });
-      }
     </script>
 
     <script>
       (() => {
         const mountVariants = () => {
           const hosts = document.querySelectorAll("[data-variant-host]");
-          if (!hosts.length) return;
+          if (!hosts.length) {
+            window.dispatchEvent(
+              new CustomEvent("variants-mounted", {
+                detail: { mountedAny: false, hostCount: 0 },
+              })
+            );
+            return;
+          }
 
           const defaultQuery = "(max-width: 768px), (pointer: coarse)";
 
@@ -170,6 +179,12 @@ const description =
             element.dataset.variantReady = variant;
             mountedAny = true;
           });
+
+          window.dispatchEvent(
+            new CustomEvent("variants-mounted", {
+              detail: { mountedAny, hostCount: hosts.length },
+            })
+          );
 
           if (mountedAny) {
             requestAnimationFrame(() => {

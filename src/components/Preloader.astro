@@ -24,6 +24,11 @@
   let hasFinished = false;
   let fallbackTimeoutId = 0;
   let fakeProgressTimer = 0;
+  let remainingWarmupStarted = false;
+
+  const CRITICAL_WARMUP_TIMEOUT = 7500;
+  const VARIANTS_WAIT_TIMEOUT = 1600;
+  const VIDEO_METADATA_TIMEOUT = 2500;
 
   const getGsap = async () => {
     if (gsapInstance) return gsapInstance;
@@ -81,6 +86,263 @@
       return document.fonts.ready.catch(() => {});
     }
     return Promise.resolve();
+  };
+
+  const withTimeout = async (promise: Promise<unknown>, timeoutMs: number) => {
+    let timeoutId = 0;
+    try {
+      return await Promise.race([
+        promise,
+        new Promise<null>((resolve) => {
+          timeoutId = window.setTimeout(() => resolve(null), timeoutMs);
+        }),
+      ]);
+    } finally {
+      if (timeoutId) window.clearTimeout(timeoutId);
+    }
+  };
+
+  const waitForVariantsMounted = () =>
+    new Promise<void>((resolve) => {
+      const hosts = Array.from(
+        document.querySelectorAll("[data-variant-host]")
+      ) as HTMLElement[];
+
+      if (!hosts.length) {
+        resolve();
+        return;
+      }
+
+      const allReady = hosts.every((host) => host.dataset.variantReady);
+      if (allReady) {
+        resolve();
+        return;
+      }
+
+      let resolved = false;
+      const done = () => {
+        if (resolved) return;
+        resolved = true;
+        window.removeEventListener("variants-mounted", done as EventListener);
+        resolve();
+      };
+
+      window.addEventListener("variants-mounted", done as EventListener, {
+        once: true,
+      });
+      window.setTimeout(done, VARIANTS_WAIT_TIMEOUT);
+    });
+
+  const waitForScrollVideoMetadata = () =>
+    new Promise<void>((resolve) => {
+      const video = document.querySelector(
+        "[data-scroll-video]"
+      ) as HTMLVideoElement | null;
+
+      if (!video || video.readyState >= 1) {
+        resolve();
+        return;
+      }
+
+      const done = () => {
+        video.removeEventListener("loadedmetadata", done);
+        resolve();
+      };
+
+      video.addEventListener("loadedmetadata", done, { once: true });
+      window.setTimeout(done, VIDEO_METADATA_TIMEOUT);
+    });
+
+  const parseBackgroundImageUrls = (value: string | null | undefined) => {
+    if (!value) return [];
+    const urls: string[] = [];
+    const regex = /url\((['"]?)(.*?)\1\)/g;
+    let match: RegExpExecArray | null = null;
+    while ((match = regex.exec(value))) {
+      const url = match[2]?.trim();
+      if (!url || url.startsWith("data:")) continue;
+      urls.push(url);
+    }
+    return urls;
+  };
+
+  const normalizeUrl = (raw: string) => {
+    try {
+      return new URL(raw, window.location.href).href;
+    } catch {
+      return raw;
+    }
+  };
+
+  const isLikelyImageUrl = (url: string) =>
+    /\.(avif|webp|png|jpe?g|gif|svg|bmp|ico)(\?.*)?$/i.test(url);
+
+  const collectCriticalImageCandidates = () => {
+    const vh = window.innerHeight || 900;
+    const map = new Map<string, number>();
+
+    const upsert = (rawUrl: string, priority: number) => {
+      if (!rawUrl || !isLikelyImageUrl(rawUrl)) return;
+      const url = normalizeUrl(rawUrl);
+      const prev = map.get(url) ?? -Infinity;
+      if (priority > prev) map.set(url, priority);
+    };
+
+    const criticalSelector =
+      ".cassette-img, .cassette-svg, .mobile-cassette-img, #partners-svg, .acm-logo";
+
+    const images = Array.from(document.querySelectorAll("img[src]")) as HTMLImageElement[];
+    images.forEach((img) => {
+      const rect = img.getBoundingClientRect();
+      const inNearRange = rect.top < vh * 8 && rect.bottom > -vh;
+      const inSoonRange = rect.top < vh * 4 && rect.bottom > -vh;
+      const inView = rect.top < vh && rect.bottom > 0;
+      const isCritical = img.matches(criticalSelector);
+
+      let priority = 0;
+      if (img.getAttribute("fetchpriority") === "high") priority += 8;
+      if (img.getAttribute("loading") === "eager") priority += 5;
+      if (isCritical) priority += 6;
+      if (inView) priority += 8;
+      else if (inSoonRange) priority += 5;
+      else if (inNearRange) priority += 3;
+
+      if (priority > 0) {
+        const src = img.currentSrc || img.src;
+        upsert(src, priority);
+      }
+
+      if (inSoonRange || isCritical) {
+        img.loading = "eager";
+        if (!img.getAttribute("fetchpriority")) {
+          img.setAttribute("fetchpriority", "high");
+        }
+      }
+    });
+
+    const bgElements = Array.from(
+      document.querySelectorAll("[style*='background-image']")
+    ) as HTMLElement[];
+    bgElements.forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      const inNearRange = rect.top < vh * 8 && rect.bottom > -vh;
+      if (!inNearRange) return;
+
+      const inlineStyle = el.getAttribute("style");
+      const computedStyle = getComputedStyle(el).backgroundImage;
+      const urls = [
+        ...parseBackgroundImageUrls(inlineStyle),
+        ...parseBackgroundImageUrls(computedStyle),
+      ];
+
+      urls.forEach((url) => upsert(url, 4));
+    });
+
+    upsert(getAssetUrl("/background_pattern.webp"), 7);
+    upsert(getAssetUrl("/glow_ball_red.webp"), 7);
+    upsert(getAssetUrl("/acm_topleft.webp"), 9);
+    upsert(getAssetUrl("/acmw-bento.webp"), 5);
+    upsert(getAssetUrl("/acmw-bento-phone.webp"), 5);
+    upsert(getAssetUrl("/about/Cassette.webp"), 6);
+    upsert(getAssetUrl("/about/2.webp"), 6);
+    upsert(getAssetUrl("/about/3.webp"), 6);
+    upsert(getAssetUrl("/Cassette_Tech.webp"), 6);
+    upsert(getAssetUrl("/Cassette_cc.webp"), 6);
+    upsert(getAssetUrl("/Cassette_Design.webp"), 6);
+    upsert(getAssetUrl("/Cassette_Management.webp"), 6);
+    upsert(getAssetUrl("/Cassette_Research.webp"), 6);
+
+    return Array.from(map.entries())
+      .sort((a, b) => b[1] - a[1])
+      .map(([url]) => url);
+  };
+
+  const preloadImage = (url: string, timeoutMs = 3500) =>
+    new Promise<void>((resolve) => {
+      const image = new Image();
+      let settled = false;
+      let timeoutId = 0;
+
+      const done = () => {
+        if (settled) return;
+        settled = true;
+        if (timeoutId) window.clearTimeout(timeoutId);
+        resolve();
+      };
+
+      image.onload = done;
+      image.onerror = done;
+      timeoutId = window.setTimeout(done, timeoutMs);
+      image.decoding = "async";
+      image.src = url;
+
+      if (image.complete) {
+        done();
+      } else if (typeof image.decode === "function") {
+        image.decode().then(done).catch(() => {});
+      }
+    });
+
+  const preloadInBatches = async (
+    urls: string[],
+    concurrency: number,
+    onProgress?: (loaded: number, total: number) => void
+  ) => {
+    if (!urls.length) return;
+    const total = urls.length;
+    let nextIndex = 0;
+    let loaded = 0;
+
+    const worker = async () => {
+      while (nextIndex < total) {
+        const index = nextIndex++;
+        const url = urls[index];
+        await preloadImage(url);
+        loaded += 1;
+        onProgress?.(loaded, total);
+      }
+    };
+
+    const workerCount = Math.min(concurrency, total);
+    await Promise.all(Array.from({ length: workerCount }, () => worker()));
+  };
+
+  const warmCriticalAssets = async (gsap?: any) => {
+    const allCandidates = collectCriticalImageCandidates();
+    const isMobile =
+      window.matchMedia("(max-width: 768px), (pointer: coarse)").matches;
+    const maxCritical = isMobile ? 70 : 110;
+    const urls = allCandidates.slice(0, maxCritical);
+
+    await preloadInBatches(urls, 8, (loaded, total) => {
+      const normalized = total ? loaded / total : 1;
+      if (gsap) {
+        setProgress(gsap, 10 + normalized * 78, 0.15);
+      }
+    });
+  };
+
+  const warmRemainingAssets = async () => {
+    if (remainingWarmupStarted) return;
+    remainingWarmupStarted = true;
+
+    const schedule = (fn: () => void) => {
+      if ("requestIdleCallback" in window) {
+        (window as any).requestIdleCallback(fn, { timeout: 1200 });
+      } else {
+        window.setTimeout(fn, 350);
+      }
+    };
+
+    schedule(async () => {
+      const urls = Array.from(document.querySelectorAll("img[src]"))
+        .map((img) => img.getAttribute("src") || "")
+        .filter((url) => !!url && isLikelyImageUrl(url))
+        .map((url) => normalizeUrl(url));
+
+      const unique = Array.from(new Set(urls));
+      await preloadInBatches(unique, 4);
+    });
   };
 
   const loadingPath = getAssetUrl("/loader/loading_state.json");
@@ -153,6 +415,10 @@
 
     if (preloaderShown) {
       preloader.style.display = "none";
+      await waitForVariantsMounted();
+      void warmCriticalAssets();
+      void warmRemainingAssets();
+      window.dispatchEvent(new CustomEvent("preloader:done"));
       return;
     }
 
@@ -169,16 +435,28 @@
 
     const softTimeoutId = window.setTimeout(() => {
       void proceedToCompletion(gsap, lottie);
-    }, 2200);
+    }, 5200);
 
     fallbackTimeoutId = window.setTimeout(() => {
       void proceedToCompletion(gsap, lottie);
-    }, 3500);
+    }, 9000);
 
-    await Promise.allSettled([waitForWindowLoad(), waitForFonts()]);
+    await waitForVariantsMounted();
+
+    const criticalAssetPromise = withTimeout(
+      warmCriticalAssets(gsap),
+      CRITICAL_WARMUP_TIMEOUT
+    );
+
+    await Promise.allSettled([
+      waitForWindowLoad(),
+      waitForFonts(),
+      waitForScrollVideoMetadata(),
+      criticalAssetPromise,
+    ]);
 
     const elapsed = performance.now() - startTime;
-    const minimumDisplay = 600;
+    const minimumDisplay = 950;
     const delay = Math.max(0, minimumDisplay - elapsed);
 
     window.setTimeout(() => {
@@ -204,6 +482,8 @@
         if (progressTween) progressTween.kill();
         if (loadingAnimation) loadingAnimation.destroy();
         if (loadedAnimation) loadedAnimation.destroy();
+        void warmRemainingAssets();
+        window.dispatchEvent(new CustomEvent("preloader:done"));
       },
     });
 
@@ -282,7 +562,7 @@
   }
 
   .progress-fill::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: -100%;
