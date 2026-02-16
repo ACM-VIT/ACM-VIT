@@ -16,6 +16,11 @@ const {
     startTime = 0,
     endTime = undefined,
 } = Astro.props;
+
+const normalizedVideoSrc = videoSrc.startsWith("/") ? videoSrc : `/${videoSrc}`;
+const resolvedVideoSrc = getAssetUrl(normalizedVideoSrc);
+const fallbackVideoSrc =
+    resolvedVideoSrc !== normalizedVideoSrc ? normalizedVideoSrc : "";
 ---
 
 <div class="scroll-video-container" data-scroll-video-container>
@@ -24,11 +29,13 @@ const {
         data-scroll-video
         data-start-time={startTime}
         data-end-time={endTime ?? ""}
+        data-fallback-src={fallbackVideoSrc}
         muted
         playsinline
         preload="metadata"
     >
-        <source src={getAssetUrl(videoSrc)} type="video/mp4" />
+        <source src={resolvedVideoSrc} type="video/mp4" />
+        {fallbackVideoSrc && <source src={fallbackVideoSrc} type="video/mp4" />}
     </video>
 
     <div class="scroll-video-overlay" data-scroll-video-overlay></div>
@@ -106,6 +113,25 @@ const {
         }
 
         const startTime = parseFloat(video.dataset.startTime || "0");
+        const fallbackSrc = video.dataset.fallbackSrc || "";
+        let fallbackApplied = false;
+
+        const applyFallbackSource = () => {
+            if (!fallbackSrc || fallbackApplied) return;
+            fallbackApplied = true;
+            while (video.firstChild) {
+                video.removeChild(video.firstChild);
+            }
+            const source = document.createElement("source");
+            source.src = fallbackSrc;
+            source.type = "video/mp4";
+            video.appendChild(source);
+            video.load();
+        };
+
+        video.addEventListener("error", applyFallbackSource);
+        const initialSource = video.querySelector("source");
+        initialSource?.addEventListener("error", applyFallbackSource);
 
         // Wait for video metadata to load
         const setupScrollTrigger = () => {
