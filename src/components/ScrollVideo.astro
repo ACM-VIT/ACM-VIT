@@ -1,11 +1,5 @@
 ---
-import { getAssetUrl } from "../utils/cdn";
-
 interface Props {
-    /**
-     * Path to the video file (relative to public folder)
-     * Note: Video should be encoded with keyint=1 for smooth scrubbing
-     */
     videoSrc?: string;
     startTime?: number;
     endTime?: number;
@@ -18,9 +12,6 @@ const {
 } = Astro.props;
 
 const normalizedVideoSrc = videoSrc.startsWith("/") ? videoSrc : `/${videoSrc}`;
-const resolvedVideoSrc = getAssetUrl(normalizedVideoSrc);
-const fallbackVideoSrc =
-    resolvedVideoSrc !== normalizedVideoSrc ? normalizedVideoSrc : "";
 ---
 
 <div class="scroll-video-container" data-scroll-video-container>
@@ -29,13 +20,12 @@ const fallbackVideoSrc =
         data-scroll-video
         data-start-time={startTime}
         data-end-time={endTime ?? ""}
-        data-fallback-src={fallbackVideoSrc}
         muted
         playsinline
         preload="metadata"
     >
-        <source src={resolvedVideoSrc} type="video/mp4" />
-        {fallbackVideoSrc && <source src={fallbackVideoSrc} type="video/mp4" />}
+        <!-- Intentionally bypass CDN for this asset -->
+        <source src={normalizedVideoSrc} type="video/mp4" />
     </video>
 
     <div class="scroll-video-overlay" data-scroll-video-overlay></div>
@@ -113,27 +103,7 @@ const fallbackVideoSrc =
         }
 
         const startTime = parseFloat(video.dataset.startTime || "0");
-        const fallbackSrc = video.dataset.fallbackSrc || "";
-        let fallbackApplied = false;
 
-        const applyFallbackSource = () => {
-            if (!fallbackSrc || fallbackApplied) return;
-            fallbackApplied = true;
-            while (video.firstChild) {
-                video.removeChild(video.firstChild);
-            }
-            const source = document.createElement("source");
-            source.src = fallbackSrc;
-            source.type = "video/mp4";
-            video.appendChild(source);
-            video.load();
-        };
-
-        video.addEventListener("error", applyFallbackSource);
-        const initialSource = video.querySelector("source");
-        initialSource?.addEventListener("error", applyFallbackSource);
-
-        // Wait for video metadata to load
         const setupScrollTrigger = () => {
             const videoDuration = video.duration;
             if (!videoDuration || isNaN(videoDuration)) {
@@ -147,23 +117,18 @@ const fallbackVideoSrc =
 
             video.currentTime = startTime;
 
-            // Smooth interpolation variables
             let targetTime = startTime;
             let currentDisplayTime = startTime;
             let rafId: number | null = null;
-            const lerpFactor = 0.05; // Lower = smoother but slower response
+            const lerpFactor = 0.05;
 
-            // Smooth animation loop using requestAnimationFrame
             const smoothUpdate = () => {
-                // Lerp towards target time for smooth interpolation
                 currentDisplayTime += (targetTime - currentDisplayTime) * lerpFactor;
-                
-                // Only update video if difference is noticeable
+
                 if (Math.abs(video.currentTime - currentDisplayTime) > 0.001) {
                     video.currentTime = currentDisplayTime;
                 }
-                
-                // Continue animation loop if not at target
+
                 if (Math.abs(targetTime - currentDisplayTime) > 0.0001) {
                     rafId = requestAnimationFrame(smoothUpdate);
                 } else {
@@ -175,11 +140,10 @@ const fallbackVideoSrc =
                 trigger: container,
                 start: "top top",
                 end: "bottom bottom",
-                scrub: 0.5, // Smooth scrubbing with slight delay
+                scrub: 0.5,
                 onUpdate: (self) => {
                     targetTime = startTime + self.progress * playDuration;
-                    
-                    // Start animation loop if not already running
+
                     if (rafId === null) {
                         rafId = requestAnimationFrame(smoothUpdate);
                     }
