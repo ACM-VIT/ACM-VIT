@@ -1,17 +1,20 @@
 ---
 interface Props {
-    videoSrc?: string;
+    webmSrc?: string;
+    mp4Src?: string;
     startTime?: number;
     endTime?: number;
 }
 
 const {
-    videoSrc = "/ACMWebsiteVid.mp4",
+    webmSrc = "/ACMWebsiteVid.webm",
+    mp4Src = "/ACMWebsiteVid.mp4",
     startTime = 0,
     endTime = undefined,
 } = Astro.props;
 
-const normalizedVideoSrc = videoSrc.startsWith("/") ? videoSrc : `/${videoSrc}`;
+const normalizedWebmSrc = webmSrc.startsWith("/") ? webmSrc : `/${webmSrc}`;
+const normalizedMp4Src = mp4Src.startsWith("/") ? mp4Src : `/${mp4Src}`;
 ---
 
 <div class="scroll-video-container" data-scroll-video-container>
@@ -25,7 +28,8 @@ const normalizedVideoSrc = videoSrc.startsWith("/") ? videoSrc : `/${videoSrc}`;
         preload="auto"
     >
         <!-- Intentionally bypass CDN for this asset -->
-        <source src={normalizedVideoSrc} type="video/mp4" />
+        <source src={normalizedWebmSrc} type="video/webm" />
+        <source src={normalizedMp4Src} type="video/mp4" />
     </video>
 
     <div class="scroll-video-overlay" data-scroll-video-overlay></div>
