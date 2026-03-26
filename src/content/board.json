@@ -116,6 +116,13 @@
       "position": "gugugaga",
       "imageUrl": "/board/items/16/imageUrl.jpg",
       "isW": true
+    },
+    {
+      "title": "Dr",
+      "fullName": "Chodu",
+      "position": "Gandu",
+      "imageUrl": "/board/items/17/imageUrl.svg",
+      "isW": false
     }
   ]
 }
