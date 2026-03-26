@@ -1,9 +1,17 @@
 import { config, fields, singleton } from '@keystatic/core';
 
 export default config({
-  storage: {
-    kind: 'local',
-  },
+  storage: process.env.NODE_ENV === 'production' 
+    ? {
+        kind: 'github',
+        repo: {
+          owner: 'pokymono',
+          name: 'ACM-VIT',
+        },
+      }
+    : {
+        kind: 'local',
+      },
 
   ui: {
     brand: {
