@@ -1,0 +1,121 @@
+{
+  "items": [
+    {
+      "title": "Dr.",
+      "fullName": "Aswani Kumar Cherukuri",
+      "position": "Faculty Coordinator",
+      "linkedinUrl": "https://www.linkedin.com/in/cherukuri9/",
+      "googleScholarUrl": "https://scholar.google.com/citations?user=8vttwsYAAAAJ&hl=en",
+      "isW": false
+    },
+    {
+      "fullName": "Manan Shah",
+      "position": "Chairperson",
+      "linkedinUrl": "https://www.linkedin.com/in/manan-shah-0918/",
+      "githubUrl": "https://github.com/mananssh",
+      "isW": false
+    },
+    {
+      "fullName": "Kairav Sheth",
+      "position": "Vice Chair",
+      "linkedinUrl": "https://www.linkedin.com/in/kairavsheth/",
+      "githubUrl": "https://github.com/kairavsheth",
+      "isW": false
+    },
+    {
+      "fullName": "Sunny Gogoi",
+      "position": "Secretary",
+      "linkedinUrl": "https://www.linkedin.com/in/sunnygogoi/",
+      "githubUrl": "https://github.com/sgogoigh",
+      "isW": false
+    },
+    {
+      "fullName": "Eshita Chokhani",
+      "position": "Co - Secretary",
+      "linkedinUrl": "https://www.linkedin.com/in/eshita-chokhani/",
+      "githubUrl": "https://github.com/eshita241",
+      "isW": false
+    },
+    {
+      "fullName": "Tanush Golwala",
+      "position": "Technical Director",
+      "linkedinUrl": "https://www.linkedin.com/in/tanushgolwala/",
+      "githubUrl": "https://github.com/tanushgolwala",
+      "isW": false
+    },
+    {
+      "fullName": "Yasha Pacholee",
+      "position": "Research Lead",
+      "linkedinUrl": "https://www.linkedin.com/in/yashapacholee/",
+      "githubUrl": "https://github.com/Yaxa-p",
+      "isW": false
+    },
+    {
+      "fullName": "Supratim Ghose",
+      "position": "Projects Lead",
+      "linkedinUrl": "https://www.linkedin.com/in/ghosesupratim/",
+      "githubUrl": "https://github.com/Supratim69",
+      "isW": false
+    },
+    {
+      "fullName": "Garv Jain",
+      "position": "Developer Relations Lead",
+      "linkedinUrl": "https://www.linkedin.com/in/garvjainpb/",
+      "githubUrl": "https://github.com/notcoolgarv",
+      "isW": false
+    },
+    {
+      "fullName": "Yash Raj Singh",
+      "position": "Design Lead",
+      "linkedinUrl": "https://www.linkedin.com/in/juxtaryct/",
+      "githubUrl": "https://github.com/JuxtaRYCT",
+      "isW": false
+    },
+    {
+      "fullName": "Srija Puvvada",
+      "position": "Creative Lead",
+      "linkedinUrl": "https://www.linkedin.com/in/ojal-binoj-koshy-b6b376244",
+      "isW": false
+    },
+    {
+      "fullName": "Harshitaa Kashyap",
+      "position": "ACM-W Chairperson",
+      "linkedinUrl": "https://www.linkedin.com/in/harshitaa-kashyap/",
+      "githubUrl": "https://github.com/harshitaak07",
+      "isW": true
+    },
+    {
+      "fullName": "NIGGER",
+      "position": "ACM-W Vice Chair",
+      "linkedinUrl": "https://www.linkedin.com/in/aastik-narang-856006259/",
+      "githubUrl": "https://github.com/aastikn",
+      "isW": true
+    },
+    {
+      "fullName": "Shambhavi Paygude",
+      "position": "ACM-W Secretary",
+      "linkedinUrl": "https://www.linkedin.com/in/shambhavi-paygude-aa8b02274/",
+      "githubUrl": "https://github.com/shambhavipaygude",
+      "isW": true
+    },
+    {
+      "title": "Mr",
+      "fullName": "Harshit Narang",
+      "position": "Competitions Lead",
+      "isW": false
+    },
+    {
+      "title": "Mr",
+      "fullName": "testying",
+      "position": "bacdwd",
+      "isW": true
+    },
+    {
+      "title": "er",
+      "fullName": "gugu",
+      "position": "gugugaga",
+      "imageUrl": "/board/items/16/imageUrl.jpg",
+      "isW": true
+    }
+  ]
+}
