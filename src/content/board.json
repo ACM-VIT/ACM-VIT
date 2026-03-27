@@ -118,10 +118,12 @@
       "isW": true
     },
     {
-      "title": "Dr",
-      "fullName": "Chodu",
-      "position": "Gandu",
-      "imageUrl": "/board/items/17/imageUrl.svg",
+      "fullName": "Rishit Shivam",
+      "position": "Research Leader",
+      "imageUrl": "/board/items/17/imageUrl.jpg",
+      "linkedinUrl": "https://google.com",
+      "googleScholarUrl": "https://google.com",
+      "githubUrl": "https://google.com",
       "isW": false
     }
   ]
