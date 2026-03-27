@@ -9,122 +9,118 @@
       "isW": false
     },
     {
-      "fullName": "Manan Shah",
+      "fullName": "Prakhar Joshi",
       "position": "Chairperson",
+      "imageUrl": "/board/items/1/imageUrl.webp",
       "linkedinUrl": "https://www.linkedin.com/in/manan-shah-0918/",
       "githubUrl": "https://github.com/mananssh",
       "isW": false
     },
     {
-      "fullName": "Kairav Sheth",
+      "fullName": "Rohit Sakamuri",
       "position": "Vice Chair",
+      "imageUrl": "/board/items/2/imageUrl.webp",
       "linkedinUrl": "https://www.linkedin.com/in/kairavsheth/",
       "githubUrl": "https://github.com/kairavsheth",
       "isW": false
     },
     {
-      "fullName": "Sunny Gogoi",
+      "fullName": "Drashti Shukla",
       "position": "Secretary",
+      "imageUrl": "/board/items/3/imageUrl.webp",
       "linkedinUrl": "https://www.linkedin.com/in/sunnygogoi/",
       "githubUrl": "https://github.com/sgogoigh",
       "isW": false
     },
     {
-      "fullName": "Eshita Chokhani",
+      "title": "Mr",
+      "fullName": "Shaurya Garg",
       "position": "Co - Secretary",
+      "imageUrl": "/board/items/4/imageUrl.webp",
       "linkedinUrl": "https://www.linkedin.com/in/eshita-chokhani/",
       "githubUrl": "https://github.com/eshita241",
       "isW": false
     },
     {
-      "fullName": "Tanush Golwala",
+      "fullName": "Ishaan Samdani",
       "position": "Technical Director",
+      "imageUrl": "/board/items/5/imageUrl.webp",
       "linkedinUrl": "https://www.linkedin.com/in/tanushgolwala/",
       "githubUrl": "https://github.com/tanushgolwala",
       "isW": false
     },
     {
-      "fullName": "Yasha Pacholee",
+      "fullName": "Rishit Shivam ",
       "position": "Research Lead",
+      "imageUrl": "/board/items/6/imageUrl.webp",
       "linkedinUrl": "https://www.linkedin.com/in/yashapacholee/",
       "githubUrl": "https://github.com/Yaxa-p",
       "isW": false
     },
     {
-      "fullName": "Supratim Ghose",
+      "fullName": "Harshit Narang",
+      "position": "Competitions Lead",
+      "imageUrl": "/board/items/7/imageUrl.webp",
+      "isW": false
+    },
+    {
+      "fullName": "Vansh Dhir",
       "position": "Projects Lead",
+      "imageUrl": "/board/items/8/imageUrl.webp",
       "linkedinUrl": "https://www.linkedin.com/in/ghosesupratim/",
       "githubUrl": "https://github.com/Supratim69",
       "isW": false
     },
     {
-      "fullName": "Garv Jain",
-      "position": "Developer Relations Lead",
-      "linkedinUrl": "https://www.linkedin.com/in/garvjainpb/",
-      "githubUrl": "https://github.com/notcoolgarv",
-      "isW": false
-    },
-    {
-      "fullName": "Yash Raj Singh",
+      "fullName": "Nishtha Agrawal ",
       "position": "Design Lead",
+      "imageUrl": "/board/items/9/imageUrl.webp",
       "linkedinUrl": "https://www.linkedin.com/in/juxtaryct/",
       "githubUrl": "https://github.com/JuxtaRYCT",
       "isW": false
     },
     {
-      "fullName": "Srija Puvvada",
+      "fullName": "Krishika Sureka",
       "position": "Creative Lead",
+      "imageUrl": "/board/items/10/imageUrl.webp",
       "linkedinUrl": "https://www.linkedin.com/in/ojal-binoj-koshy-b6b376244",
       "isW": false
     },
     {
-      "fullName": "Harshitaa Kashyap",
+      "fullName": "Lavanya Jain",
       "position": "ACM-W Chairperson",
+      "imageUrl": "/board/items/11/imageUrl.webp",
       "linkedinUrl": "https://www.linkedin.com/in/harshitaa-kashyap/",
       "githubUrl": "https://github.com/harshitaak07",
       "isW": true
     },
     {
-      "fullName": "NIGGER",
+      "fullName": "Mahendra Chaudhary ",
       "position": "ACM-W Vice Chair",
+      "imageUrl": "/board/items/12/imageUrl.webp",
       "linkedinUrl": "https://www.linkedin.com/in/aastik-narang-856006259/",
       "githubUrl": "https://github.com/aastikn",
       "isW": true
     },
     {
-      "fullName": "Shambhavi Paygude",
+      "fullName": "Navdha Sharma",
       "position": "ACM-W Secretary",
+      "imageUrl": "/board/items/13/imageUrl.webp",
       "linkedinUrl": "https://www.linkedin.com/in/shambhavi-paygude-aa8b02274/",
       "githubUrl": "https://github.com/shambhavipaygude",
       "isW": true
     },
     {
-      "title": "Mr",
-      "fullName": "Harshit Narang",
-      "position": "Competitions Lead",
-      "isW": false
-    },
-    {
-      "title": "Mr",
-      "fullName": "testying",
-      "position": "bacdwd",
+      "fullName": "Aarjav Jain ",
+      "position": "ACM-W Design Lead",
+      "imageUrl": "/board/items/14/imageUrl.webp",
       "isW": true
     },
     {
-      "title": "er",
-      "fullName": "gugu",
-      "position": "gugugaga",
-      "imageUrl": "/board/items/16/imageUrl.jpg",
+      "fullName": "Asheesh Garg",
+      "position": "ACM-W Technical Director ",
+      "imageUrl": "/board/items/15/imageUrl.webp",
       "isW": true
-    },
-    {
-      "fullName": "Rishit Shivam",
-      "position": "Research Leader",
-      "imageUrl": "/board/items/17/imageUrl.jpg",
-      "linkedinUrl": "https://google.com",
-      "googleScholarUrl": "https://google.com",
-      "githubUrl": "https://google.com",
-      "isW": false
     }
   ]
 }
