@@ -58,13 +58,6 @@
       "isW": false
     },
     {
-      "fullName": "Garv Jain",
-      "position": "Developer Relations Lead",
-      "linkedinUrl": "https://www.linkedin.com/in/garvjainpb/",
-      "githubUrl": "https://github.com/notcoolgarv",
-      "isW": false
-    },
-    {
       "fullName": "Yash Raj Singh",
       "position": "Design Lead",
       "linkedinUrl": "https://www.linkedin.com/in/juxtaryct/",
@@ -99,7 +92,6 @@
       "isW": true
     },
     {
-      "title": "Mr",
       "fullName": "Harshit Narang",
       "position": "Competitions Lead",
       "isW": false
@@ -114,14 +106,14 @@
       "title": "er",
       "fullName": "gugu",
       "position": "gugugaga",
-      "imageUrl": "/board/items/16/imageUrl.jpg",
+      "imageUrl": "/board/items/15/imageUrl.jpg",
       "isW": true
     },
     {
       "title": "Dr",
       "fullName": "Chodu",
       "position": "Gandu",
-      "imageUrl": "/board/items/17/imageUrl.svg",
+      "imageUrl": "/board/items/16/imageUrl.svg",
       "isW": false
     }
   ]
