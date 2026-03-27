@@ -31,7 +31,9 @@ import ProjectsIntro from "../components/ProjectsIntro.astro";
 import ScrollVideo from "../components/ScrollVideo.astro";
 
 const projectsCms = await reader.singletons.projects.read();
-const projectsData = (projectsCms?.items ?? []).map((p) => ({
+const projectsData = (projectsCms?.items ?? [])
+  .filter((project) => project.cassetteSrc && project.cassetteAlt && project.description1)
+  .map((p) => ({
   cassette: { src: p.cassetteSrc, alt: p.cassetteAlt },
   textContent: { blocks: [p.description1, ...(p.description2 ? [p.description2] : [])] },
   buttons: {
