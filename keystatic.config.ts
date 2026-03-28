@@ -5,7 +5,7 @@ export default config({
     ? {
         kind: 'github',
         repo: {
-          owner: 'pokymono',
+          owner: 'ACM-VIT',
           name: 'ACM-VIT',
         },
       }
