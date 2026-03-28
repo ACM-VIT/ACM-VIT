@@ -58,15 +58,9 @@
       "isW": false
     },
     {
-      "fullName": "Harshit Narang",
-      "position": "Competitions Lead",
-      "imageUrl": "/board/items/7/imageUrl.webp",
-      "isW": false
-    },
-    {
       "fullName": "Vansh Dhir",
       "position": "Projects Lead",
-      "imageUrl": "/board/items/8/imageUrl.webp",
+      "imageUrl": "/board/items/7/imageUrl.webp",
       "linkedinUrl": "https://www.linkedin.com/in/ghosesupratim/",
       "githubUrl": "https://github.com/Supratim69",
       "isW": false
@@ -74,7 +68,7 @@
     {
       "fullName": "Nishtha Agrawal ",
       "position": "Design Lead",
-      "imageUrl": "/board/items/9/imageUrl.webp",
+      "imageUrl": "/board/items/8/imageUrl.webp",
       "linkedinUrl": "https://www.linkedin.com/in/juxtaryct/",
       "githubUrl": "https://github.com/JuxtaRYCT",
       "isW": false
@@ -82,24 +76,32 @@
     {
       "fullName": "Krishika Sureka",
       "position": "Creative Lead",
-      "imageUrl": "/board/items/10/imageUrl.webp",
+      "imageUrl": "/board/items/9/imageUrl.webp",
       "linkedinUrl": "https://www.linkedin.com/in/ojal-binoj-koshy-b6b376244",
       "isW": false
     },
     {
-      "fullName": "Lavanya Jain",
-      "position": "ACM-W Chairperson",
-      "imageUrl": "/board/items/11/imageUrl.webp",
-      "linkedinUrl": "https://www.linkedin.com/in/harshitaa-kashyap/",
-      "githubUrl": "https://github.com/harshitaak07",
-      "isW": true
+      "fullName": "Harshit Narang",
+      "position": "Competitions Lead",
+      "imageUrl": "/board/items/10/imageUrl.webp",
+      "linkedinUrl": "https://www.linkedin.com/in/harshitnarang28",
+      "githubUrl": "https://github.com/harshitnarang28",
+      "isW": false
     },
     {
       "fullName": "Mahendra Chaudhary ",
       "position": "ACM-W Vice Chair",
-      "imageUrl": "/board/items/12/imageUrl.webp",
+      "imageUrl": "/board/items/11/imageUrl.webp",
       "linkedinUrl": "https://www.linkedin.com/in/aastik-narang-856006259/",
       "githubUrl": "https://github.com/aastikn",
+      "isW": true
+    },
+    {
+      "fullName": "Lavanya Jain",
+      "position": "ACM-W Chairperson",
+      "imageUrl": "/board/items/12/imageUrl.webp",
+      "linkedinUrl": "https://www.linkedin.com/in/harshitaa-kashyap/",
+      "githubUrl": "https://github.com/harshitaak07",
       "isW": true
     },
     {
