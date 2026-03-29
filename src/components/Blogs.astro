@@ -1,7 +1,10 @@
 ---
 import BlogsCard from "./BlogsCard.astro";
-import { blogData } from "../data/blogData";
+import { reader } from "../utils/reader";
 import { getAssetUrl } from "../utils/cdn";
+
+const blogsData = await reader.singletons.blogs.read();
+const blogData = blogsData?.items ?? [];
 
 const fallbackCover = "/blogs/placeholder.webp";
 const HASHNODE_HOST = "blog.acmvit.in";
@@ -84,9 +87,9 @@ const blogsWithImages = await Promise.all(
       />
     </div>
 
-    <div class="py-4 justify-self-center">
+    <div class="flex items-center justify-center h-full">
       <span
-        class="blogs-title font-normal font-['PolySans_Trial'] text-4xl sm:text-6xl md:text-8xl lg:text-[150px]"
+        class="blogs-title font-normal font-['PolySans_Trial'] text-4xl sm:text-6xl md:text-8xl lg:text-[150px] leading-none text-center transform translate-y-[5%]"
       >
         BLOGS
       </span>

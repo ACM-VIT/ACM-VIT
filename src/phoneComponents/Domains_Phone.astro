@@ -1,6 +1,24 @@
 ---
 import { getAssetUrl } from "../utils/cdn";
+import { reader } from "../utils/reader";
+
+const domainsDataCms = await reader.singletons.domains.read();
+const domainItems = domainsDataCms?.items ?? [];
+const domainConfigs: Record<string, any> = {};
+for (const item of domainItems) {
+  domainConfigs[item.key] = {
+    title: item.title,
+    description: item.description,
+    themeColor: item.themeColor,
+    cassetteSvg: item.cassetteSvg,
+    buttonText: item.buttonText || '',
+    techIcons: item.techIcons ?? [],
+    aois: item.aois ?? [],
+  };
+}
 ---
+
+<script is:inline type="application/json" id="domains-phone-data" set:html={JSON.stringify(domainConfigs)}></script>
 
 <style>
   @keyframes slideInUp {
@@ -146,8 +164,9 @@ import { getAssetUrl } from "../utils/cdn";
 <script>
   import { gsap } from "gsap";
   import { ScrollTrigger } from "gsap/ScrollTrigger";
-  import { domainConfigs } from "../data/domainsData";
   import { getAssetUrl } from "../utils/cdn";
+
+  const domainConfigs = JSON.parse(document.getElementById('domains-phone-data')!.textContent!) as Record<string, any>;
 
   gsap.registerPlugin(ScrollTrigger);
 

@@ -1,8 +1,13 @@
 ---
 // Shared bottom legends for home page
-import { ButtonData } from "../data/legendData";
+import { reader } from "../utils/reader";
 import { getAssetUrl } from "../utils/cdn";
 
+const siteConfig = await reader.singletons.siteConfig.read();
+const ButtonData = {
+  text: siteConfig?.buttonText ?? "CHECK OUT GREP",
+  link: siteConfig?.buttonLink ?? "/grep",
+};
 const isExternalLink = ButtonData.link.startsWith("http");
 ---
 
