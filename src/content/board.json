@@ -3,6 +3,7 @@
     {
       "title": "Dr.",
       "fullName": "Aswani Kumar Cherukuri",
+      "imageUrl": "/board/items/0/imageUrl.webp",
       "position": "Faculty Coordinator",
       "linkedinUrl": "https://www.linkedin.com/in/cherukuri9/",
       "googleScholarUrl": "https://scholar.google.com/citations?user=8vttwsYAAAAJ&hl=en",
@@ -33,7 +34,7 @@
       "isW": false
     },
     {
-      "title": "Mr",
+      "title": "",
       "fullName": "Shaurya Garg",
       "position": "Co - Secretary",
       "imageUrl": "/board/items/4/imageUrl.webp",
@@ -119,7 +120,7 @@
       "isW": true
     },
     {
-      "fullName": "Asheesh Garg",
+      "fullName": "Adheesh Garg",
       "position": "ACM-W Technical Director ",
       "imageUrl": "/board/items/15/imageUrl.webp",
       "isW": true

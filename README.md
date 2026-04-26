@@ -48,21 +48,33 @@ This website is a testament to our journey. :3
 
 # Install the dependencies
 npm install
+# or
+bun install
 
 # Starts local dev server at localhost:4321
 npm run dev
+# or
+bun dev
 
 # Build your production site to ./dist/
 npm run build
+# or
+bun run build
 
 # Preview your build locally, before deploying
 npm run preview
+# or
+bun run preview
 
 # Run CLI commands like astro add, astro check
 npm run astro ...
+# or
+bunx astro ...
 
 # Get help using the Astro CLI
 npm run astro -- --help
+# or
+bunx astro --help
 ```
 
 ---
