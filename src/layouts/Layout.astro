@@ -147,6 +147,80 @@ const description =
       window.addEventListener("orientationchange", scheduleRefresh, {
         passive: true,
       });
+      window.addEventListener("app:variants-mounted", () => {
+        requestAnimationFrame(() => {
+          refreshHard();
+          setTimeout(refreshHard, 150);
+        });
+      });
+
+      const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
+      if (isCoarsePointer) {
+        let scrollRafId = 0;
+        let stableScrollFrames = 0;
+        let lastScrollSnapshot = "";
+
+        const getScrollSnapshot = () => {
+          const viewport = window.visualViewport;
+          return [
+            window.scrollY || window.pageYOffset || 0,
+            document.documentElement.scrollTop || 0,
+            document.body.scrollTop || 0,
+            viewport?.pageTop || 0,
+            viewport?.offsetTop || 0,
+          ].join(":");
+        };
+
+        const runScrollMonitor = (force = false) => {
+          const nextSnapshot = getScrollSnapshot();
+          const scrollChanged = nextSnapshot !== lastScrollSnapshot;
+          lastScrollSnapshot = nextSnapshot;
+
+          ScrollTrigger.update();
+
+          stableScrollFrames =
+            force || scrollChanged ? 0 : stableScrollFrames + 1;
+
+          if (scrollChanged || stableScrollFrames < 12) {
+            scrollRafId = requestAnimationFrame(() => runScrollMonitor(false));
+            return;
+          }
+
+          scrollRafId = 0;
+        };
+
+        const queueScrollMonitor = (force = false) => {
+          if (force) stableScrollFrames = 0;
+          if (scrollRafId) return;
+          scrollRafId = requestAnimationFrame(() => runScrollMonitor(force));
+        };
+
+        const updateOnTouch = () => {
+          queueScrollMonitor(true);
+        };
+
+        const updateOnScroll = () => {
+          ScrollTrigger.update();
+          queueScrollMonitor(true);
+        };
+
+        document.addEventListener("touchstart", updateOnTouch, {
+          passive: true,
+        });
+        document.addEventListener("touchmove", updateOnTouch, {
+          passive: true,
+        });
+        document.addEventListener("touchend", updateOnTouch, {
+          passive: true,
+        });
+        window.addEventListener("scroll", updateOnScroll, { passive: true });
+        window.visualViewport?.addEventListener("scroll", updateOnScroll, {
+          passive: true,
+        });
+        window.visualViewport?.addEventListener("resize", updateOnScroll, {
+          passive: true,
+        });
+      }
     </script>
 
     <script>
@@ -165,6 +239,7 @@ const description =
           const defaultQuery = "(max-width: 768px), (pointer: coarse)";
 
           let mountedAny = false;
+          let mountedVariant = "";
 
           hosts.forEach((host) => {
             const element = host as HTMLElement;
@@ -187,6 +262,7 @@ const description =
             element.appendChild(template.content.cloneNode(true));
             element.dataset.variantReady = variant;
             mountedAny = true;
+            mountedVariant = variant;
           });
 
           window.dispatchEvent(
@@ -196,6 +272,11 @@ const description =
           );
 
           if (mountedAny) {
+            window.dispatchEvent(
+              new CustomEvent("app:variants-mounted", {
+                detail: { variant: mountedVariant },
+              })
+            );
             requestAnimationFrame(() => {
               window.dispatchEvent(new Event("resize"));
             });
