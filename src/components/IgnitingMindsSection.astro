@@ -199,6 +199,84 @@ import { getAssetUrl } from "../utils/cdn";
       </div>
     </div>
   </section>
+
+  <section
+    id="community-award"
+    class="relative z-20 py-12 md:py-20 border-t border-white/10 overflow-hidden"
+  >
+    <div
+      class="max-w-[1400px] mx-auto flex flex-col md:grid md:grid-cols-10 md:grid-rows-5 gap-0 relative z-10 md:min-h-[640px]"
+    >
+      <div
+        class="order-2 md:order-1 flex flex-col h-full md:col-start-1 md:col-end-6 md:row-start-1 md:row-end-6"
+      >
+        <div class="p-6 md:p-10 md:pr-14 h-full flex flex-col justify-between gap-8">
+          <div class="space-y-6">
+            <p
+              class="text-[#FF5F4A] text-xs sm:text-sm font-mono tracking-[0.28em] uppercase"
+            >
+              Community Recognition
+            </p>
+            <h1
+              class="text-5xl sm:text-6xl md:text-7xl lg:text-[6.75rem] leading-[0.86] font-bold text-[#FFFDD0] uppercase tracking-tighter"
+            >
+              ACM<br />
+              <span class="text-[#FF5F4A]">INTERNATIONAL</span><br />
+              AWARD
+            </h1>
+          </div>
+
+          <div class="max-w-xl space-y-5">
+            <h2
+              class="text-[#FFFDD0] text-xl sm:text-2xl md:text-3xl font-semibold leading-tight"
+            >
+              Outstanding School Service
+            </h2>
+            <p
+              class="text-gray-300 text-xs sm:text-sm font-mono leading-relaxed uppercase"
+            >
+              Happy to annouce that ACM-VIT has been awarded the ACM
+              International Chapter Award for Outstanding School Service.
+            </p>
+            <p
+              class="text-gray-400 text-xs sm:text-sm font-mono leading-relaxed"
+            >
+              The recognition reflects a year of community-first work across
+              outreach, student initiatives, and chapter-led experiences built
+              with the same intent that defines the rest of ACM-VIT.
+            </p>
+            <a
+              href="https://www.acm.org/chapters/student-chapter-excellence-awards"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-3 text-[#FFFDD0] text-xs sm:text-sm font-mono uppercase tracking-[0.18em] border border-white/12 px-4 py-3 transition-colors duration-300 hover:border-[#FF5F4A] hover:text-[#FF5F4A]"
+            >
+              check out the awards and more 
+              <span aria-hidden="true" class="text-[#FF5F4A]">↗</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="order-1 md:order-2 relative md:col-start-6 md:col-end-11 md:row-start-1 md:row-end-6 min-h-[320px] sm:min-h-[420px] md:min-h-0"
+      >
+        <div class="absolute inset-0 p-4 md:p-10 md:pl-32 flex items-center justify-center">
+          <div
+            class="relative h-full w-full flex items-center justify-center overflow-hidden"
+          >
+            <img
+              src={getAssetUrl("/acm-celeb.png")}
+              alt="ACM-VIT with the ACM International Chapter Award"
+              class="max-h-full w-full object-contain object-center"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>
 
 <style>

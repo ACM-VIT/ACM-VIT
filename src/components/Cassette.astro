@@ -1,6 +1,6 @@
 ---
 export interface Props {
-  overlaySrc: string;
+  overlaySrc?: string;
   color: string;
   offsetXPercent?: number;
   offsetYPercent?: number;
@@ -38,14 +38,18 @@ const idSuffix = Math.random().toString(36).substr(2, 9);
 <div
   style="position: relative; display: block; width: 100%; max-width: 576px; aspect-ratio: 576/353;"
 >
-  <img
-    src={overlaySrc}
-    alt={alt}
-    class="rounded-3xl"
-    style={`position: absolute; left: calc(50% + ${ox}); top: calc(50% + ${oy}); transform: translate(-50%, -50%); ${sizeStyle}; z-index: -10;`}
-    loading="lazy"
-    decoding="async"
-  />
+  {
+    overlaySrc && (
+      <img
+        src={overlaySrc}
+        alt={alt}
+        class="rounded-3xl"
+        style={`position: absolute; left: calc(50% + ${ox}); top: calc(50% + ${oy}); transform: translate(-50%, -50%); ${sizeStyle}; z-index: -10;`}
+        loading="lazy"
+        decoding="async"
+      />
+    )
+  }
   <svg
     width="100%"
     height="auto"
