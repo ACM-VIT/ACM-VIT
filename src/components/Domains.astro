@@ -1,6 +1,25 @@
 ---
 import { getAssetUrl } from "../utils/cdn";
+import { reader } from "../utils/reader";
+
+const domainsDataCms = await reader.singletons.domains.read();
+const domainItems = domainsDataCms?.items ?? [];
+// Reconstruct the key-based object that client script expects
+const domainConfigs: Record<string, any> = {};
+for (const item of domainItems) {
+  domainConfigs[item.key] = {
+    title: item.title,
+    description: item.description,
+    themeColor: item.themeColor,
+    cassetteSvg: item.cassetteSvg,
+    buttonText: item.buttonText || '',
+    techIcons: item.techIcons ?? [],
+    aois: item.aois ?? [],
+  };
+}
 ---
+
+<script is:inline type="application/json" id="domains-data" set:html={JSON.stringify(domainConfigs)}></script>
 
 <section class="domains-section relative h-[300vh] motion-reduce:h-screen">
   <!-- Fixed Background Layer -->
@@ -36,73 +55,83 @@ import { getAssetUrl } from "../utils/cdn";
       class="domains-grid relative flex h-screen w-screen items-center justify-center overflow-visible p-5 origin-center will-change-transform [transform-style:preserve-3d] backface-hidden"
     >
       <div
-        class="domain-item absolute left-1/2 top-1/2 m-2.5 p-2.5 -translate-x-1/2 -translate-y-1/2 will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden [contain:layout_style_paint]"
+        class="domain-item absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
         data-domain="tech"
       >
-        <div class="cassette-wrapper">
-          <img
-            src={getAssetUrl("/Cassette_Tech.svg")}
-            alt="Tech Development"
-            class="cassette-img block h-auto w-[160px] md:w-[300px] origin-center transform-gpu drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] will-change-transform [image-rendering:optimizeQuality] backface-hidden"
-            loading="lazy"
-            decoding="async"
-          />
+        <div class="domain-frame m-2.5 p-2.5 will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden">
+          <div class="cassette-wrapper">
+            <img
+              src={getAssetUrl("/Cassette_Tech.svg")}
+              alt="Tech Development"
+              class="cassette-img block h-auto w-[160px] md:w-[300px] origin-center transform-gpu drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] will-change-transform [image-rendering:optimizeQuality] backface-hidden"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
         </div>
       </div>
       <div
-        class="domain-item absolute left-1/2 top-1/2 m-2.5 p-2.5 -translate-x-1/2 -translate-y-1/2 will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden [contain:layout_style_paint]"
+        class="domain-item absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
         data-domain="cc"
       >
-        <div class="cassette-wrapper">
-          <img
-            src={getAssetUrl("/Cassette_cc.svg")}
-            alt="Competitive Coding"
-            class="cassette-img block h-auto w-[160px] md:w-[300px] origin-center transform-gpu drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] will-change-transform [image-rendering:optimizeQuality] backface-hidden"
-            loading="lazy"
-            decoding="async"
-          />
+        <div class="domain-frame m-2.5 p-2.5 will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden">
+          <div class="cassette-wrapper">
+            <img
+              src={getAssetUrl("/Cassette_cc.svg")}
+              alt="Competitive Coding"
+              class="cassette-img block h-auto w-[160px] md:w-[300px] origin-center transform-gpu drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] will-change-transform [image-rendering:optimizeQuality] backface-hidden"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
         </div>
       </div>
       <div
-        class="domain-item absolute left-1/2 top-1/2 m-2.5 p-2.5 -translate-x-1/2 -translate-y-1/2 will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden [contain:layout_style_paint]"
+        class="domain-item absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
         data-domain="design"
       >
-        <div class="cassette-wrapper">
-          <img
-            src={getAssetUrl("/Cassette_Design.svg")}
-            alt="Design"
-            class="cassette-img block h-auto w-[160px] md:w-[300px] origin-center transform-gpu drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] will-change-transform [image-rendering:optimizeQuality] backface-hidden"
-            loading="lazy"
-            decoding="async"
-          />
+        <div class="domain-frame m-2.5 p-2.5 will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden">
+          <div class="cassette-wrapper">
+            <img
+              src={getAssetUrl("/Cassette_Design.svg")}
+              alt="Design"
+              class="cassette-img block h-auto w-[160px] md:w-[300px] origin-center transform-gpu drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] will-change-transform [image-rendering:optimizeQuality] backface-hidden"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
         </div>
       </div>
       <div
-        class="domain-item absolute left-1/2 top-1/2 m-2.5 p-2.5 -translate-x-1/2 -translate-y-1/2 will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden [contain:layout_style_paint]"
+        class="domain-item absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
         data-domain="management"
       >
-        <div class="cassette-wrapper">
-          <img
-            src={getAssetUrl("/Cassette_Management.svg")}
-            alt="Management"
-            class="cassette-img block h-auto w-[160px] md:w-[300px] origin-center transform-gpu drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] will-change-transform [image-rendering:optimizeQuality] backface-hidden"
-            loading="lazy"
-            decoding="async"
-          />
+        <div class="domain-frame m-2.5 p-2.5 will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden">
+          <div class="cassette-wrapper">
+            <img
+              src={getAssetUrl("/Cassette_Management.svg")}
+              alt="Management"
+              class="cassette-img block h-auto w-[160px] md:w-[300px] origin-center transform-gpu drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] will-change-transform [image-rendering:optimizeQuality] backface-hidden"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
         </div>
       </div>
       <div
-        class="domain-item absolute left-1/2 top-1/2 m-2.5 p-2.5 -translate-x-1/2 -translate-y-1/2 will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden [contain:layout_style_paint]"
+        class="domain-item absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
         data-domain="research"
       >
-        <div class="cassette-wrapper">
-          <img
-            src={getAssetUrl("/Cassette_Research.svg")}
-            alt="Research"
-            class="cassette-img block h-auto w-[160px] md:w-[300px] origin-center transform-gpu drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] will-change-transform [image-rendering:optimizeQuality] backface-hidden"
-            loading="lazy"
-            decoding="async"
-          />
+        <div class="domain-frame m-2.5 p-2.5 will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden">
+          <div class="cassette-wrapper">
+            <img
+              src={getAssetUrl("/Cassette_Research.svg")}
+              alt="Research"
+              class="cassette-img block h-auto w-[160px] md:w-[300px] origin-center transform-gpu drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] will-change-transform [image-rendering:optimizeQuality] backface-hidden"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -211,8 +240,9 @@ import { getAssetUrl } from "../utils/cdn";
     <script>
       import { gsap } from "gsap";
       import { ScrollTrigger } from "gsap/ScrollTrigger";
-      import { domainConfigs } from "../data/domainsData";
       import { getAssetUrl } from "../utils/cdn";
+
+      const domainConfigs = JSON.parse(document.getElementById('domains-data')!.textContent!) as Record<string, any>;
 
       if (typeof gsap !== "undefined") {
         gsap.registerPlugin(ScrollTrigger);
@@ -262,14 +292,15 @@ import { getAssetUrl } from "../utils/cdn";
           ];
 
           const items = document.querySelectorAll(".domain-item");
+          const frames = document.querySelectorAll(".domain-frame");
           const grid = document.querySelector(".domains-grid");
           const subtitle = document.querySelector(".section-subtitle");
           const bgLayer = document.querySelector(".domain-bg-layer");
 
-          if (!items.length || !grid || !subtitle || !bgLayer) return;
+          if (!items.length || !frames.length || !grid || !subtitle || !bgLayer) return;
 
           // Set initial state
-          gsap.set(items, {
+          gsap.set(frames, {
             x: 0,
             y: 0,
             scale: 0.6,
@@ -317,7 +348,7 @@ import { getAssetUrl } from "../utils/cdn";
             ease: "power2.out",
           })
             .to(
-              items,
+              frames,
               {
                 opacity: 1,
                 scale: 1,
@@ -328,7 +359,7 @@ import { getAssetUrl } from "../utils/cdn";
               "<+=0.2"
             )
             .to(
-              items,
+              frames,
               {
                 x: (i) => gridPos[i].x,
                 y: (i) => gridPos[i].y,
@@ -339,7 +370,7 @@ import { getAssetUrl } from "../utils/cdn";
             );
 
           // Phase 2: Form horizontal line
-          tl.to(items, {
+          tl.to(frames, {
             x: (i) => linePos[i].x,
             y: (i) => linePos[i].y,
             scale: 0.7,
@@ -363,7 +394,7 @@ import { getAssetUrl } from "../utils/cdn";
             duration: 5,
             ease: "power1.inOut",
           }).to(
-            items,
+            frames,
             {
               x: (i) => zoomPos[i].x,
               y: (i) => zoomPos[i].y,
@@ -421,7 +452,7 @@ import { getAssetUrl } from "../utils/cdn";
           document.body.style.overflow = "hidden";
 
           // Hide all cassettes and subtitle with animation
-          const items = document.querySelectorAll(".domain-item");
+          const frames = document.querySelectorAll(".domain-frame");
           const subtitle = document.querySelector(".section-subtitle");
           const bgLayer = document.querySelector(".domain-bg-layer");
 
@@ -442,7 +473,7 @@ import { getAssetUrl } from "../utils/cdn";
           }
 
           tl.to(
-            items,
+            frames,
             {
               opacity: 0,
               scale: 0.8,
@@ -693,7 +724,7 @@ import { getAssetUrl } from "../utils/cdn";
         // Global function to hide domain screen
         (window as any).hideDomainScreen = function () {
           const domainScreen = document.getElementById("domain-screen");
-          const items = document.querySelectorAll(".domain-item");
+          const frames = document.querySelectorAll(".domain-frame");
           const subtitle = document.querySelector(".section-subtitle");
           const bgLayer = document.querySelector(".domain-bg-layer");
 
@@ -727,7 +758,7 @@ import { getAssetUrl } from "../utils/cdn";
                 // Then bring back cassettes and subtitle with stagger
                 entranceTl
                   .to(
-                    items,
+                    frames,
                     {
                       opacity: 1,
                       scale: 1,

@@ -1,7 +1,16 @@
 ---
-import { cassetteImages, info } from "../data/eventsData";
+import { reader } from "../utils/reader";
 import { getAssetUrl } from "../utils/cdn";
 import EventDetails from "./EventDetails.astro";
+
+const eventsData = await reader.singletons.events.read();
+const cassetteImages = eventsData?.cassetteImages ?? [];
+// Reconstruct the key-based info object from the CMS array
+const infoArray = eventsData?.info ?? [];
+const info: Record<string, { title: string; site: string; description: string }> = {};
+for (const item of infoArray) {
+  info[item.key] = { title: item.title, site: item.site ?? '', description: item.description };
+}
 
 interface Project {
   caption: string;

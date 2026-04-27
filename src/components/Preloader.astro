@@ -23,12 +23,14 @@
   let hasStartedCompletion = false;
   let hasFinished = false;
   let fallbackTimeoutId = 0;
+  let loadedAnimationTimeoutId = 0;
   let fakeProgressTimer = 0;
   let remainingWarmupStarted = false;
 
   const CRITICAL_WARMUP_TIMEOUT = 7500;
   const VARIANTS_WAIT_TIMEOUT = 1600;
   const VIDEO_WARM_TIMEOUT = 10000;
+  const COMPLETION_ANIMATION_TIMEOUT = 4000;
 
   const getGsap = async () => {
     if (gsapInstance) return gsapInstance;
@@ -411,8 +413,10 @@
     });
   };
 
-  const loadingPath = getAssetUrl("/loader/loading_state.json");
-  const loadedPath = getAssetUrl("/loader/loaded_state.json");
+  // Lottie fetches JSON via XHR/fetch under the hood.
+  // Keep these on the same origin so CDN CORS cannot stall the preloader.
+  const loadingPath = "/loader/loading_state.json";
+  const loadedPath = "/loader/loaded_state.json";
 
   const loadLoadingAnimation = async (lottie: any) => {
     if (hasFinished || hasStartedCompletion || !lottieContainer) return;
@@ -450,6 +454,7 @@
     hasStartedCompletion = true;
     stopFakeProgress();
     if (fallbackTimeoutId) window.clearTimeout(fallbackTimeoutId);
+    if (loadedAnimationTimeoutId) window.clearTimeout(loadedAnimationTimeoutId);
 
     if (progressTween) progressTween.kill();
     progressTween = gsap.to(progressFill, {
@@ -468,6 +473,11 @@
         loadedAnimation = await loadLoadedAnimation(lottie);
         if (loadedAnimation) {
           loadedAnimation.addEventListener("complete", finishLoading);
+          loadedAnimation.addEventListener("data_failed", finishLoading);
+          loadedAnimationTimeoutId = window.setTimeout(
+            finishLoading,
+            COMPLETION_ANIMATION_TIMEOUT
+          );
         } else {
           finishLoading();
         }
@@ -538,8 +548,13 @@
     hasFinished = true;
     hasStartedCompletion = true;
     if (fallbackTimeoutId) window.clearTimeout(fallbackTimeoutId);
+    if (loadedAnimationTimeoutId) {
+      window.clearTimeout(loadedAnimationTimeoutId);
+      loadedAnimationTimeoutId = 0;
+    }
     if (loadedAnimation) {
       loadedAnimation.removeEventListener("complete", finishLoading);
+      loadedAnimation.removeEventListener("data_failed", finishLoading);
     }
 
     const tl = gsapInstance.timeline({
