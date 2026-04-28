@@ -1,8 +1,11 @@
 ---
 import BoardMemberCardSingular from "../components/BoardMemberCardSingular.astro";
 
-import { boardMembers } from "../data/boardData";
+import { reader } from "../utils/reader";
 import { getAssetUrl } from "../utils/cdn";
+
+const boardData = await reader.singletons.board.read();
+const boardMembers = boardData?.items ?? [];
 
 const mainBoardMembers = boardMembers.filter(
   (member) => !member.isW && member.position !== "Faculty Coordinator"

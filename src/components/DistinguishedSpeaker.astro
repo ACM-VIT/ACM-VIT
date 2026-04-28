@@ -1,7 +1,10 @@
 ---
 import "../styles/globals.css";
 import { getAssetUrl } from "../utils/cdn";
-import { speakerData } from "../data/speakerData";
+import { reader } from "../utils/reader";
+
+const speakersData = await reader.singletons.speakers.read();
+const speakerData = speakersData?.items ?? [];
 ---
 
 <div class="h-full overflow-x-hidden">

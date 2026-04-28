@@ -1,7 +1,16 @@
 ---
-import { cassetteImages, info } from "../data/eventsData";
+import { reader } from "../utils/reader";
 import { getAssetUrl } from "../utils/cdn";
 import EventDetails from "./EventDetails.astro";
+
+const eventsData = await reader.singletons.events.read();
+const cassetteImages = eventsData?.cassetteImages ?? [];
+// Reconstruct the key-based info object from the CMS array
+const infoArray = eventsData?.info ?? [];
+const info: Record<string, { title: string; site: string; description: string }> = {};
+for (const item of infoArray) {
+  info[item.key] = { title: item.title, site: item.site ?? '', description: item.description };
+}
 
 interface Project {
   caption: string;
@@ -65,7 +74,7 @@ const worksHeightMobile = works.length * 45;
   id="work"
   class="s-work"
   data-intersect
-  style={`--height: ${worksHeight}lvh; --height-mobile: ${worksHeightMobile}lvh;`}
+  style={`--height: ${worksHeight}svh; --height-mobile: ${worksHeightMobile}svh;`}
 >
   <div class="s__outer">
     <div class="s__inner js-container">
@@ -385,6 +394,12 @@ const worksHeightMobile = works.length * 45;
     state = 0;
     speed!: number;
     isPaused: boolean;
+    isTouchDevice: boolean;
+    touchScrollRafId: number;
+    touchSectionTop: number;
+    touchSectionHeight: number;
+    touchLastScrollY: number;
+    touchStableFrames: number;
     loadIsStarted: boolean;
     reducedMotion: boolean;
     reducedData: boolean;
@@ -439,9 +454,19 @@ const worksHeightMobile = works.length * 45;
       };
 
       this.isPaused = true;
+      this.isTouchDevice =
+        ScrollTrigger.isTouch === 1 ||
+        window.matchMedia("(max-width: 768px), (pointer: coarse)").matches;
+      this.touchScrollRafId = 0;
+      this.touchSectionTop = 0;
+      this.touchSectionHeight = 0;
+      this.touchLastScrollY = -1;
+      this.touchStableFrames = 0;
       this.loadIsStarted = false;
-      this.reducedMotion = false;
-      this.reducedData = false;
+      this.reducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+      this.reducedData = Boolean((navigator as any).connection?.saveData);
 
       if (document.readyState === "complete") {
         ticker.nextTick(this.init, this);
@@ -468,6 +493,15 @@ const worksHeightMobile = works.length * 45;
       emitter.on("contrastchange", this.setCtxStyle, this);
       emitter.on("resize", this.onResize, this);
       window.addEventListener("resize", () => this.onResize(true)); // Fallback
+      window.addEventListener("scroll", this.onTouchScroll, { passive: true });
+      window.visualViewport?.addEventListener("scroll", this.onTouchScroll, {
+        passive: true,
+      });
+      window.visualViewport?.addEventListener(
+        "resize",
+        this.onTouchViewportResize,
+        { passive: true }
+      );
 
       this.el.addEventListener(
         "intersect",
@@ -496,6 +530,13 @@ const worksHeightMobile = works.length * 45;
         const width = window.innerWidth;
         if (width === this.lastWidth) return;
         this.lastWidth = width;
+        this.isTouchDevice =
+          ScrollTrigger.isTouch === 1 ||
+          window.matchMedia("(max-width: 768px), (pointer: coarse)").matches;
+        this.reducedMotion = window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        ).matches;
+        this.reducedData = Boolean((navigator as any).connection?.saveData);
 
         this.setCtxStyle();
         this.setSize();
@@ -504,17 +545,166 @@ const worksHeightMobile = works.length * 45;
         this.setLetters();
         this.setWorks();
         this.setTimeline();
+
+        if (this.isTouchDevice) {
+          ScrollTrigger.refresh();
+          this.queueTouchSync(true);
+        } else {
+          this.stopTouchSync();
+        }
       }
     }
 
     onIntersect(e: CustomEvent<{ isIntersecting: boolean }>) {
       this.isPaused = !e.detail.isIntersecting;
+      emitter.off("tick", this.tick, this);
 
-      if (this.isPaused) {
-        emitter.off("tick", this.tick, this);
-      } else {
+      if (this.isTouchDevice) {
+        this.queueTouchSync(true);
+        return;
+      }
+
+      if (!this.isPaused) {
         emitter.on("tick", this.tick, this);
       }
+    }
+
+    getCurrentScrollY() {
+      const windowScroll =
+        window.scrollY ||
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop ||
+        0;
+
+      if (Number.isFinite(windowScroll)) {
+        return windowScroll;
+      }
+
+      const visualViewportScroll = window.visualViewport?.pageTop;
+      return typeof visualViewportScroll === "number" &&
+        Number.isFinite(visualViewportScroll)
+        ? visualViewportScroll
+        : 0;
+    }
+
+    getViewportHeight() {
+      const visualViewportHeight = window.visualViewport?.height;
+      if (
+        typeof visualViewportHeight === "number" &&
+        Number.isFinite(visualViewportHeight)
+      ) {
+        return visualViewportHeight;
+      }
+
+      return window.innerHeight || this.bounding.height || 1;
+    }
+
+    measureTouchRange() {
+      const scrollY = this.getCurrentScrollY();
+      const rect = this.el.getBoundingClientRect();
+      this.touchSectionTop = rect.top + scrollY;
+      this.touchSectionHeight = this.el.offsetHeight;
+    }
+
+    isTouchSectionActive() {
+      const rect = this.el.getBoundingClientRect();
+      const viewportHeight = this.getViewportHeight();
+      return rect.bottom >= -viewportHeight && rect.top <= viewportHeight * 2;
+    }
+
+    getTouchTimelineProgress(scrollY = this.getCurrentScrollY()) {
+      const totalScrollableDistance = Math.max(
+        this.touchSectionHeight - this.getViewportHeight(),
+        1
+      );
+
+      return Math.max(
+        0,
+        Math.min(1, (scrollY - this.touchSectionTop) / totalScrollableDistance)
+      );
+    }
+
+    getTouchScrollEffectProgress(scrollY = this.getCurrentScrollY()) {
+      const viewportHeight = this.getViewportHeight();
+      const top = this.touchSectionTop - scrollY;
+      const bottom = top + this.touchSectionHeight;
+      const topProgress = Math.max(Math.min(top / viewportHeight, 1), 0);
+      const bottomProgress = Math.max(Math.min(bottom / viewportHeight, 1), 0);
+
+      return -topProgress + (1 - bottomProgress);
+    }
+
+    onTouchScroll = () => {
+      if (!this.isTouchDevice || !this.tl) return;
+      this.queueTouchSync();
+    };
+
+    onTouchViewportResize = () => {
+      if (!this.isTouchDevice || !this.tl) return;
+      this.setSize();
+      this.setMask();
+      this.setLetters();
+      this.measureTouchRange();
+      ScrollTrigger.refresh();
+      this.updateTouchTimeline(true);
+      this.queueTouchSync(true);
+    };
+
+    queueTouchSync(force = false) {
+      if (this.touchScrollRafId) return;
+
+      const sync = () => {
+        if (!this.isTouchDevice || !this.tl) {
+          this.touchScrollRafId = 0;
+          return;
+        }
+
+        const scrollY = this.getCurrentScrollY();
+        const scrollChanged = Math.abs(scrollY - this.touchLastScrollY) > 0.25;
+        const isActive = this.isTouchSectionActive();
+
+        this.touchLastScrollY = scrollY;
+        this.touchStableFrames = scrollChanged ? 0 : this.touchStableFrames + 1;
+
+        if (isActive) {
+          this.updateTouchTimeline(force || scrollChanged, scrollY);
+        }
+
+        if (scrollChanged || this.touchStableFrames < 8) {
+          this.touchScrollRafId = requestAnimationFrame(sync);
+          return;
+        }
+
+        this.touchScrollRafId = 0;
+      };
+
+      this.touchScrollRafId = requestAnimationFrame(sync);
+    }
+
+    stopTouchSync() {
+      if (!this.touchScrollRafId) return;
+      cancelAnimationFrame(this.touchScrollRafId);
+      this.touchScrollRafId = 0;
+    }
+
+    updateTouchTimeline(force = false, scrollY = this.getCurrentScrollY()) {
+      if (
+        !this.isTouchDevice ||
+        !this.tl ||
+        this.reducedMotion ||
+        this.reducedData
+      ) {
+        return;
+      }
+
+      const nextProgress = this.getTouchTimelineProgress(scrollY);
+
+      if (force || Math.abs(nextProgress - this.tl.progress()) > 0.0005) {
+        this.tl.progress(nextProgress, false);
+      }
+
+      this.syncScrollEffects(force, scrollY);
     }
 
     setCtxStyle() {
@@ -527,7 +717,11 @@ const worksHeightMobile = works.length * 45;
     }
 
     setSize() {
-      this.el.style.setProperty("--height", this.works.length * 50 + "lvh");
+      const sectionHeightPerWork = this.isTouchDevice ? 45 : 50;
+      this.el.style.setProperty(
+        "--height",
+        this.works.length * sectionHeightPerWork + "svh"
+      );
       const bounding = this.container.getBoundingClientRect();
       // Fallback for window.safeWidth/Height
       const safeWidth = window.safeWidth || window.innerWidth;
@@ -543,6 +737,10 @@ const worksHeightMobile = works.length * 45;
       this.canvas.width = this.bounding.width;
       this.canvas.height = this.bounding.height;
       this.speed = Math.hypot(this.bounding.width, this.bounding.height) * 4;
+
+      if (this.isTouchDevice) {
+        this.measureTouchRange();
+      }
     }
 
     setMask() {
@@ -706,6 +904,7 @@ const worksHeightMobile = works.length * 45;
       const worksEl = works.map((work) => work.el);
       let { tl } = this;
       if (tl) {
+        tl.scrollTrigger?.kill();
         tl.kill();
       }
 
@@ -713,17 +912,29 @@ const worksHeightMobile = works.length * 45;
       const cardsDelay = 0.35;
       const cardsStart = introDuration + cardsDelay;
 
-      tl = gsap.timeline({
-        scrollTrigger: {
+      const timelineConfig: gsap.TimelineVars = {
+        paused: this.isTouchDevice || this.reducedMotion || this.reducedData,
+        onUpdate: () => {
+          scene.style.setProperty("--state", String(this.state));
+        },
+      };
+
+      if (!this.isTouchDevice && !this.reducedMotion && !this.reducedData) {
+        timelineConfig.scrollTrigger = {
           trigger: el,
           start: "top top",
           end: "bottom bottom",
           scrub: 1,
-        },
-        onUpdate: () => {
-          scene.style.setProperty("--state", String(this.state));
-        },
-      });
+          invalidateOnRefresh: true,
+          fastScrollEnd: false,
+          onUpdate: () => {
+            this.syncScrollEffects(false);
+          },
+        };
+      }
+
+      tl = gsap.timeline(timelineConfig);
+      this.tl = tl;
 
       const isMobile = window.matchMedia(
         "(max-width: 768px), (pointer: coarse)"
@@ -845,6 +1056,17 @@ const worksHeightMobile = works.length * 45;
         { pointsProgress: 0, duration: 1, ease: "power4.inOut" },
         "-=1"
       );
+
+      if (this.isTouchDevice) {
+        this.measureTouchRange();
+        this.updateTouchTimeline(true);
+        this.queueTouchSync(true);
+      }
+
+      if (this.reducedMotion || this.reducedData) {
+        tl.progress(1);
+        this.syncScrollEffects(true);
+      }
     }
 
     moveLetters() {
@@ -924,27 +1146,45 @@ const worksHeightMobile = works.length * 45;
       last.animationProgress = rAnimationProgress;
     }
 
+    syncScrollEffects(force = false, touchScrollY?: number) {
+      const nextScrollProgress = this.isTouchDevice
+        ? this.getTouchScrollEffectProgress(touchScrollY)
+        : (() => {
+            const viewportHeight = window.innerHeight || this.bounding.height || 1;
+            const rect = this.el.getBoundingClientRect();
+            const topProgress = Math.max(
+              Math.min(rect.top / viewportHeight, 1),
+              0
+            );
+            const bottomProgress = Math.max(
+              Math.min(rect.bottom / viewportHeight, 1),
+              0
+            );
+
+            return -topProgress + (1 - bottomProgress);
+          })();
+
+      if (
+        force ||
+        Math.abs(nextScrollProgress - this.scrollProgress) > 0.001
+      ) {
+        this.scrollProgress = nextScrollProgress;
+        this.smoothScrollProgress +=
+          (this.scrollProgress - this.smoothScrollProgress) * 0.1;
+        this.el.style.setProperty(
+          "--scroll-progress",
+          String(this.scrollProgress)
+        );
+      }
+
+      this.moveLetters();
+    }
+
     tick() {
-      this.scrollProgress =
-        Math.max(
-          Math.min(1, ScrollTrigger.positionInViewport(this.el, "top")),
-          0
-        ) *
-          -1 +
-        (1 -
-          Math.max(
-            Math.min(1, ScrollTrigger.positionInViewport(this.el, "bottom")),
-            0
-          ));
-      this.smoothScrollProgress +=
-        (this.scrollProgress - this.smoothScrollProgress) * 0.1;
-      this.el.style.setProperty(
-        "--scroll-progress",
-        String(this.scrollProgress)
-      );
+      this.syncScrollEffects();
 
       // Movement
-      this.moveLetters();
+      // handled in syncScrollEffects
 
       // Draw
       if (window.innerWidth >= 768) {
@@ -994,12 +1234,9 @@ const worksHeightMobile = works.length * 45;
 
   /* --- SWork Styles --- */
   .s-work {
-    --height: 100lvh;
+    --height: 100svh;
     position: relative;
     z-index: 2;
-    height: var(--height);
-    height: var(--height);
-    background: #f95f4a;
     height: var(--height);
     background: #f95f4a;
     /* pointer-events: none; REMOVED - this might break scrolling/child interactions unpredictably */
@@ -1020,7 +1257,7 @@ const worksHeightMobile = works.length * 45;
       top: 0;
       left: 0;
       width: 100%;
-      height: 100lvh;
+      height: 100svh;
       overflow: hidden;
       pointer-events: none !important;
       z-index: 10; /* Ensure it's above but click-through */
@@ -1092,9 +1329,8 @@ const worksHeightMobile = works.length * 45;
       top: 0;
       left: 0;
       width: 100%;
-      height: 100lvh;
+      height: 100svh;
       background: var(--color-secondary);
-      transform: translate3d(0, calc(var(--scroll-progress) * -15%), 0);
       transform: translate3d(0, calc(var(--scroll-progress) * -15%), 0);
       color: white;
       will-change: clip-path, transform;
@@ -1109,10 +1345,10 @@ const worksHeightMobile = works.length * 45;
     .s__ruler {
       --width: min(16.6667%, 19.625rem);
       position: absolute;
-      top: 10lvh;
+      top: 10svh;
       left: calc(50% - var(--width) / 2);
       width: var(--width);
-      height: 80lvh;
+      height: 80svh;
       pointer-events: none;
 
       @media only screen and (max-width: 987px) {
@@ -1127,7 +1363,7 @@ const worksHeightMobile = works.length * 45;
 
     .s__title,
     .s__scene {
-      font: 700 min(12.5rem, 16lvh) / 1 var(--font-family-bigger);
+      font: 700 min(12.5rem, 16svh) / 1 var(--font-family-bigger);
       text-align: center;
       text-transform: uppercase;
     }
