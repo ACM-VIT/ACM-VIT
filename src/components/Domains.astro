@@ -299,6 +299,23 @@ for (const item of domainItems) {
 
           if (!items.length || !frames.length || !grid || !subtitle || !bgLayer) return;
 
+          const setDomainInteractivity = (isInteractive: boolean) => {
+            items.forEach((item) => {
+              (item as HTMLElement).style.pointerEvents = isInteractive
+                ? "auto"
+                : "none";
+            });
+          };
+
+          const isDomainsSectionInView = () => {
+            const section = document.querySelector(".domains-section");
+            if (!(section instanceof HTMLElement)) return false;
+            const rect = section.getBoundingClientRect();
+            return rect.bottom > 0 && rect.top < window.innerHeight;
+          };
+
+          setDomainInteractivity(false);
+
           // Set initial state
           gsap.set(frames, {
             x: 0,
@@ -326,14 +343,25 @@ for (const item of domainItems) {
               anticipatePin: 1,
               invalidateOnRefresh: true,
               markers: false,
-              onEnter: () =>
-                gsap.to(bgLayer, { opacity: 1, duration: 0.5, delay: 0.5 }),
-              onLeave: () =>
-                gsap.to(bgLayer, { opacity: 0, duration: 0.5, delay: 0.5 }), // Fade out with delay
-              onEnterBack: () =>
-                gsap.to(bgLayer, { opacity: 1, duration: 0.5 }),
-              onLeaveBack: () =>
-                gsap.to(bgLayer, { opacity: 0, duration: 0.5 }),
+              onRefresh: (self) => {
+                setDomainInteractivity(self.isActive && isDomainsSectionInView());
+              },
+              onEnter: () => {
+                setDomainInteractivity(true);
+                gsap.to(bgLayer, { opacity: 1, duration: 0.5, delay: 0.5 });
+              },
+              onLeave: () => {
+                setDomainInteractivity(false);
+                gsap.to(bgLayer, { opacity: 0, duration: 0.5, delay: 0.5 });
+              },
+              onEnterBack: () => {
+                setDomainInteractivity(true);
+                gsap.to(bgLayer, { opacity: 1, duration: 0.5 });
+              },
+              onLeaveBack: () => {
+                setDomainInteractivity(false);
+                gsap.to(bgLayer, { opacity: 0, duration: 0.5 });
+              },
             },
           });
           
@@ -435,7 +463,11 @@ for (const item of domainItems) {
             });
 
             // Add click event handler for domain screen
-            item.addEventListener("click", () => {
+            item.addEventListener("click", (event) => {
+              event.stopPropagation();
+              if (!isDomainsSectionInView()) return;
+              if (document.getElementById("domain-screen")) return;
+
               const domain = item.getAttribute("data-domain");
               if (domain) {
                 showDomainScreen(domain);
