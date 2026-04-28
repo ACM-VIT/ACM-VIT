@@ -101,7 +101,8 @@ const worksHeightMobile = works.length * 45;
             return (
               <a-work
                 class="s__scene__work s__scene__work--video js-work"
-                style="pointer-events: auto !important; cursor: pointer !important; z-index: 9999 !important;"
+                progress="1"
+                style="--progress: 1; cursor: pointer;"
               >
                 <div class="a__inner">
                   <a
@@ -1465,8 +1466,14 @@ const worksHeightMobile = works.length * 45;
             calc(var(--progress) * var(--progress) * -5rem)
           )
           scale(var(--size));
+        opacity: 0;
         will-change: transform;
-        pointer-events: auto; /* Ensure clickable */
+        pointer-events: none;
+
+        &.is-inview {
+          opacity: 1;
+          pointer-events: auto;
+        }
 
         @media only screen and (max-width: 987px) {
           transform: rotateY(calc(var(--progress) * -20deg))
@@ -1511,7 +1518,6 @@ const worksHeightMobile = works.length * 45;
     /* content-visibility: hidden; -- REMOVED to prevent interactivity issues */
     transform-style: preserve-3d;
     will-change: transform;
-    pointer-events: auto; /* Double ensure clickable */
 
     @media only screen and (max-width: 767px) and (orientation: landscape),
       only screen and (max-width: 576px) {
