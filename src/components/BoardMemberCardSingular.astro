@@ -8,6 +8,7 @@ interface Props {
   googleScholarUrl?: string;
   githubUrl?: string;
   isW?: boolean;
+  preloadImage?: boolean;
 }
 
 const {
@@ -19,13 +20,18 @@ const {
   googleScholarUrl,
   githubUrl,
   isW,
+  preloadImage = false,
 } = Astro.props;
 
 import { getAssetUrl } from "../utils/cdn";
+
+const displayName = `${title?.trim() ? `${title.trim()} ` : ""}${fullName.trim()}`;
+const isFaculty = position.toLowerCase().includes("faculty");
 ---
 
 <div
-  class="relative w-full aspect-[1.6] rounded-lg bg-white overflow-hidden flex items-end justify-center"
+  class="board-member-card relative w-full aspect-[1.6] rounded-lg bg-white overflow-hidden flex items-end justify-center"
+  data-faculty={isFaculty}
 >
   <!-- Background Pattern -->
   <div
@@ -68,32 +74,33 @@ import { getAssetUrl } from "../utils/cdn";
         class="h-full w-full object-cover object-top"
         loading="lazy"
         decoding="async"
+        data-board-preload={preloadImage}
+        data-preloader-ignore={preloadImage}
       />
     </div>
 
     <div
-      class="w-3/5 z-20 text-left flex flex-col justify-center mb-10 gap-1.5 pl-8 pr-4"
+      class="board-card-copy w-3/5 min-w-0 z-20 text-left flex flex-col justify-center mb-10 gap-1.5 pl-5 pr-4 sm:pl-6"
     >
       <div class="">
         <h3
           style="font-family: 'PolySans Bold';"
-          class="text-[100%] text-gray-900 m-0"
+          class="board-card-name text-gray-900 m-0"
         >
-          {title}
-          {fullName}
+          {displayName}
         </h3>
         <p
           style="font-family: PolySans Slim;"
           class={!isW
-            ? "text-[80%] text-primary-orange m-0"
-            : "text-[80%] text-[#FF007A] m-0"}
+            ? "board-card-role text-primary-orange m-0"
+            : "board-card-role text-[#FF007A] m-0"}
         >
           {position}
         </p>
       </div>
 
       <!-- Social Links -->
-      <div class="flex justify-center gap-3 mt-2">
+      <div class="board-card-social flex justify-center gap-3 mt-2">
         {
           linkedinUrl && (
             <a
@@ -109,7 +116,7 @@ import { getAssetUrl } from "../utils/cdn";
                     : getAssetUrl("/linkedin-orange.webp")
                 }
                 alt="LinkedIn"
-                class="w-[5vw] h-[5vw] sm:w-[2vw] sm:h-[2vw] lg:w-[1.7vw] lg:h-[1.7vw]"
+                class="board-card-icon"
                 loading="lazy"
                 decoding="async"
               />
@@ -132,7 +139,7 @@ import { getAssetUrl } from "../utils/cdn";
                     : getAssetUrl("/google-scholar-orange.webp")
                 }
                 alt="Google Scholar"
-                class="w-[5vw] h-[5vw] sm:w-[2vw] sm:h-[2vw] lg:w-[1.7vw] lg:h-[1.7vw]"
+                class="board-card-icon"
                 loading="lazy"
                 decoding="async"
               />
@@ -155,7 +162,7 @@ import { getAssetUrl } from "../utils/cdn";
                     : getAssetUrl("/github-orange.webp")
                 }
                 alt="GitHub"
-                class="w-[5vw] h-[5vw] sm:w-[2vw] sm:h-[2vw] lg:w-[1.7vw] lg:h-[1.7vw]"
+                class="board-card-icon"
                 loading="lazy"
                 decoding="async"
               />
@@ -168,5 +175,45 @@ import { getAssetUrl } from "../utils/cdn";
 </div>
 
 <style>
-  /* Local font-face definitions removed in favor of globals.css */
+  .board-card-name {
+    display: block;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    font-size: clamp(0.82rem, 2.9vw, 1.16rem);
+    line-height: 1.08;
+  }
+
+  .board-card-role {
+    display: block;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    font-size: clamp(0.72rem, 2.25vw, 0.98rem);
+    line-height: 1.16;
+  }
+
+  .board-card-icon {
+    width: clamp(1.1rem, 4.8vw, 1.75rem);
+    height: clamp(1.1rem, 4.8vw, 1.75rem);
+    object-fit: contain;
+  }
+
+  .board-member-card[data-faculty="true"] .board-card-copy {
+    padding-left: clamp(0.85rem, 3vw, 1.25rem);
+    padding-right: clamp(0.85rem, 3vw, 1.25rem);
+    margin-bottom: clamp(1.35rem, 5vw, 2.25rem);
+  }
+
+  .board-member-card[data-faculty="true"] .board-card-name {
+    font-size: clamp(0.76rem, 2.55vw, 1.02rem);
+    line-height: 1.04;
+  }
+
+  .board-member-card[data-faculty="true"] .board-card-role {
+    font-size: clamp(0.68rem, 2.2vw, 0.9rem);
+  }
+
+  .board-member-card[data-faculty="true"] .board-card-social {
+    gap: clamp(0.4rem, 1.8vw, 0.75rem);
+    margin-top: clamp(0.2rem, 1vw, 0.5rem);
+  }
 </style>

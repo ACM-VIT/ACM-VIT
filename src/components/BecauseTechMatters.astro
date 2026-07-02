@@ -76,6 +76,12 @@
     -webkit-text-stroke: 2px #f95f4a;
   }
 
+  @media (max-width: 768px), (pointer: coarse) {
+    .tech-word.outlined {
+      -webkit-text-stroke-width: 1px;
+    }
+  }
+
   .side-text {
     font-family: "PolySans Trial", sans-serif;
     font-size: clamp(1.5rem, 6vw, 5rem);
@@ -88,7 +94,7 @@
         rgba(26, 26, 26, 0.6) 0%,
         rgba(6, 6, 6, 0.85) 70%
       ),
-      url("/about/rishit.jpeg");
+      url("/about/rishit.webp");
     background-repeat: no-repeat, no-repeat;
     background-position:
       center center,
@@ -100,6 +106,13 @@
 
   @media (max-width: 768px) {
     .radial-bg {
+      background-image:
+        radial-gradient(
+          circle at 30% 50%,
+          rgba(26, 26, 26, 0.3) 0%,
+          rgba(6, 6, 6, 0.425) 70%
+        ),
+        url("/about/rishit.webp");
       background-attachment: scroll, scroll;
     }
     .tech-word {
@@ -119,6 +132,9 @@
     const isMobile = window.matchMedia(
       "(max-width: 768px)"
     ).matches;
+    const isTouch = window.matchMedia("(pointer: coarse)").matches;
+    const useThinStroke = isMobile || isTouch;
+    const strokeWidth = useThinStroke ? "1px" : "2px";
     const lineHeight = isMobile ? 50 : 75;
 
     // All lines start stacked at center (y: 0)
@@ -129,10 +145,15 @@
     gsap.set("#line5", { y: 0, opacity: 0 });
     gsap.set(".side-text", { opacity: 1, x: 0 });
 
-    // Initial state for the outlined word in line 3 (starts as normal text)
+    // Initial state for the outlined word in line 3 (starts as normal text).
+    // On touch devices the stroke is kept at its final width from the start so
+    // GSAP only animates color — animating sub-pixel webkit-text-stroke widths
+    // smears badly on mobile rasterizers.
     gsap.set("#line3 .outlined", {
       color: "#FEFCD9",
-      webkitTextStroke: "0px #F95F4A",
+      webkitTextStroke: useThinStroke
+        ? `${strokeWidth} #F95F4A`
+        : "0px #F95F4A",
     });
 
     const tl = gsap.timeline({
@@ -203,7 +224,7 @@
         "#line3 .outlined",
         {
           color: "transparent",
-          webkitTextStroke: "2px #F95F4A",
+          webkitTextStroke: `${strokeWidth} #F95F4A`,
           duration: 0.5,
           ease: "power1.inOut",
         },

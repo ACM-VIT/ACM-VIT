@@ -348,6 +348,11 @@ for (const item of domainItems) {
             };
           };
 
+          let layout = getLayout();
+          const refreshLayout = () => {
+            layout = getLayout();
+          };
+
           const items = document.querySelectorAll(".domain-item");
           const frames = document.querySelectorAll(".domain-frame");
           const grid = document.querySelector(".domains-grid");
@@ -378,7 +383,7 @@ for (const item of domainItems) {
           gsap.set(frames, {
             x: 0,
             y: 0,
-            scale: () => 0.6 * getLayout().cassetteScale,
+            scale: () => 0.6 * layout.cassetteScale,
             opacity: 0,
             force3D: true,
           });
@@ -401,6 +406,7 @@ for (const item of domainItems) {
               anticipatePin: 1,
               invalidateOnRefresh: true,
               markers: false,
+              onRefreshInit: refreshLayout,
               onRefresh: (self) => {
                 setDomainInteractivity(
                   self.isActive && isDomainsSectionInView(),
@@ -439,7 +445,7 @@ for (const item of domainItems) {
               frames,
               {
                 opacity: 1,
-                scale: () => getLayout().cassetteScale,
+                scale: () => layout.cassetteScale,
                 duration: 2,
                 ease: "power2.out",
                 stagger: 0.1,
@@ -449,8 +455,8 @@ for (const item of domainItems) {
             .to(
               frames,
               {
-                x: (i) => getLayout().gridPos[i].x,
-                y: (i) => getLayout().gridPos[i].y,
+                x: (i) => layout.gridPos[i].x,
+                y: (i) => layout.gridPos[i].y,
                 duration: 3,
                 ease: "power2.inOut",
               },
@@ -459,9 +465,9 @@ for (const item of domainItems) {
 
           // Phase 2: Form horizontal line
           tl.to(frames, {
-            x: (i) => getLayout().linePos[i].x,
-            y: (i) => getLayout().linePos[i].y,
-            scale: () => 0.7 * getLayout().cassetteScale,
+            x: (i) => layout.linePos[i].x,
+            y: (i) => layout.linePos[i].y,
+            scale: () => 0.7 * layout.cassetteScale,
             duration: 3,
             ease: "power1.inOut",
             stagger: 0,
@@ -484,10 +490,10 @@ for (const item of domainItems) {
           }).to(
             frames,
             {
-              x: (i) => getLayout().zoomPos[i].x,
-              y: (i) => getLayout().zoomPos[i].y,
+              x: (i) => layout.zoomPos[i].x,
+              y: (i) => layout.zoomPos[i].y,
               opacity: 100,
-              scale: () => 0.5 * getLayout().cassetteScale,
+              scale: () => 0.5 * layout.cassetteScale,
               duration: 2,
               ease: "power2.in",
               stagger: 0.0,

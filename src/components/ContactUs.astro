@@ -162,8 +162,16 @@
 
   const currentFrame = (index: number) =>
     getAssetUrl(
-      `/outputFolder/frame_${(index + 1).toString().padStart(4, "0")}.png`
+      `/outputFolder/frame_${(index + 1).toString().padStart(4, "0")}.avif`
     );
+
+  const normalizeFrameUrl = (url: string) => {
+    try {
+      return new URL(url, window.location.href).href;
+    } catch {
+      return url;
+    }
+  };
 
   const clampFrame = (index: number) =>
     Math.max(0, Math.min(frameCount - 1, Math.round(index)));
@@ -200,12 +208,22 @@
     const clampedIndex = clampFrame(index);
     const cached = frameCache.get(clampedIndex);
     if (cached) return cached;
+    const frameUrl = currentFrame(clampedIndex);
+    const frameKey = normalizeFrameUrl(frameUrl);
+    const sharedFrameCache = (window as any).__contactLaptopFrameCache as
+      | Map<string, HTMLImageElement>
+      | undefined;
+    const sharedFrame = sharedFrameCache?.get(frameKey);
+    if (sharedFrame) {
+      frameCache.set(clampedIndex, sharedFrame);
+      return sharedFrame;
+    }
     if (pendingFrames.has(clampedIndex)) return null;
     pendingFrames.add(clampedIndex);
 
     const img = new Image();
     img.decoding = "async";
-    img.src = currentFrame(clampedIndex);
+    img.src = frameUrl;
     const awaitLoad = () =>
       new Promise((resolve) => {
         if (img.complete) {
@@ -228,6 +246,7 @@
 
     pendingFrames.delete(clampedIndex);
     frameCache.set(clampedIndex, img);
+    sharedFrameCache?.set(frameKey, img);
     trimCache(clampedIndex);
     return img;
   };

@@ -26,11 +26,13 @@
   let loadedAnimationTimeoutId = 0;
   let fakeProgressTimer = 0;
   let remainingWarmupStarted = false;
+  const preloadHintUrls = new Set<string>();
 
-  const CRITICAL_WARMUP_TIMEOUT = 7500;
+  const CRITICAL_WARMUP_TIMEOUT = 5000;
   const VARIANTS_WAIT_TIMEOUT = 1600;
-  const VIDEO_WARM_TIMEOUT = 10000;
   const COMPLETION_ANIMATION_TIMEOUT = 4000;
+  const CONTACT_LAPTOP_FRAME_COUNT = 125;
+  const DESKTOP_CONTACT_QUERY = "(min-width: 769px) and (pointer: fine)";
 
   const getGsap = async () => {
     if (gsapInstance) return gsapInstance;
@@ -135,6 +137,20 @@
       window.setTimeout(done, VARIANTS_WAIT_TIMEOUT);
     });
 
+  const addPreloadHint = (href: string, as: "image" | "video", type?: string) => {
+    const absoluteHref = new URL(href, window.location.href).href;
+    const key = `${as}:${absoluteHref}`;
+    if (preloadHintUrls.has(key)) return;
+    preloadHintUrls.add(key);
+
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.as = as;
+    link.href = absoluteHref;
+    if (type) link.type = type;
+    document.head.appendChild(link);
+  };
+
   const isVideoBufferedEnough = (video: HTMLVideoElement) => {
     if (video.readyState >= 4) return true;
     const duration = video.duration;
@@ -145,81 +161,123 @@
     return end / duration >= 0.995;
   };
 
-  const warmScrollVideo = (timeoutMs = VIDEO_WARM_TIMEOUT) =>
+  const getPreferredVideoSource = (video: HTMLVideoElement) => {
+    const sources = Array.from(
+      video.querySelectorAll("source[src]")
+    ) as HTMLSourceElement[];
+    const playableSource =
+      sources.find((source) => {
+        const mediaMatches =
+          !source.media || window.matchMedia(source.media).matches;
+        const canPlay =
+          !source.type || video.canPlayType(source.type) !== "";
+        return mediaMatches && canPlay;
+      }) || sources.find((source) => !source.media);
+
+    return playableSource?.src || video.currentSrc || video.src;
+  };
+
+  const fetchVideoBlob = async (
+    src: string,
+    fallbackType: string,
+    onProgress?: (progress: number) => void
+  ) => {
+    const response = await fetch(src, { cache: "force-cache" });
+    if (!response.ok) {
+      throw new Error(`Unable to preload scroll video: ${response.status}`);
+    }
+
+    const contentType = response.headers.get("content-type") || fallbackType;
+    const contentLength = Number(response.headers.get("content-length") || 0);
+
+    if (!response.body) {
+      const blob = await response.blob();
+      onProgress?.(1);
+      return blob;
+    }
+
+    const reader = response.body.getReader();
+    const chunks: Uint8Array[] = [];
+    let received = 0;
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (!value) continue;
+
+      chunks.push(value);
+      received += value.byteLength;
+      if (contentLength > 0) {
+        onProgress?.(Math.min(received / contentLength, 1));
+      }
+    }
+
+    onProgress?.(1);
+    return new Blob(chunks, { type: contentType });
+  };
+
+  const waitForVideoMetadata = (video: HTMLVideoElement) =>
     new Promise<void>((resolve) => {
-      const video = document.querySelector(
-        "[data-scroll-video]"
-      ) as HTMLVideoElement | null;
-
-      if (!video) {
+      if (video.readyState >= 1) {
         resolve();
         return;
       }
-
-      if (video.dataset.warmed === "true" && isVideoBufferedEnough(video)) {
-        resolve();
-        return;
-      }
-
-      if (video.getAttribute("preload") !== "auto") {
-        video.setAttribute("preload", "auto");
-      }
-
-      let settled = false;
-      let timeoutId = 0;
 
       const done = () => {
-        if (settled) return;
-        settled = true;
-        if (timeoutId) window.clearTimeout(timeoutId);
-        video.removeEventListener("canplaythrough", onReady);
-        video.removeEventListener("loadeddata", onReady);
-        video.removeEventListener("canplay", onReady);
-        video.removeEventListener("progress", onProgress);
-        video.removeEventListener("error", onError);
-        if (isVideoBufferedEnough(video)) {
-          video.dataset.warmed = "true";
-        }
+        video.removeEventListener("loadedmetadata", done);
+        video.removeEventListener("error", done);
         resolve();
       };
 
-      const onReady = () => {
-        if (isVideoBufferedEnough(video) || video.readyState >= 3) {
-          video.dataset.warmed = "true";
-          done();
-        }
-      };
-
-      const onProgress = () => {
-        if (isVideoBufferedEnough(video)) {
-          video.dataset.warmed = "true";
-          done();
-        }
-      };
-
-      const onError = () => done();
-
-      if (isVideoBufferedEnough(video)) {
-        video.dataset.warmed = "true";
-        resolve();
-        return;
-      }
-
-      video.addEventListener("canplaythrough", onReady, { once: true });
-      video.addEventListener("loadeddata", onReady, { once: true });
-      video.addEventListener("canplay", onReady, { once: true });
-      video.addEventListener("progress", onProgress);
-      video.addEventListener("error", onError, { once: true });
-      timeoutId = window.setTimeout(done, timeoutMs);
-
-      try {
-        if (video.networkState === HTMLMediaElement.NETWORK_EMPTY || video.readyState < 3) {
-          video.load();
-        }
-      } catch {
-        done();
-      }
+      video.addEventListener("loadedmetadata", done, { once: true });
+      video.addEventListener("error", done, { once: true });
     });
+
+  const warmScrollVideo = async (gsap?: any) => {
+    const video = document.querySelector(
+      "[data-scroll-video]"
+    ) as HTMLVideoElement | null;
+
+    if (!video || video.dataset.warmed === "true") return;
+
+    if (video.getAttribute("preload") !== "auto") {
+      video.setAttribute("preload", "auto");
+    }
+
+    const src = getPreferredVideoSource(video);
+    if (!src) return;
+
+    const sourceType = src.endsWith(".webm") ? "video/webm" : "video/mp4";
+    addPreloadHint(src, "video", sourceType);
+
+    try {
+      const blob = await fetchVideoBlob(src, sourceType, (progress) => {
+        if (gsap) setProgress(gsap, 10 + progress * 40, 0.1);
+      });
+      const previousObjectUrl = video.dataset.videoObjectUrl;
+      if (previousObjectUrl) {
+        URL.revokeObjectURL(previousObjectUrl);
+      }
+
+      const objectUrl = URL.createObjectURL(blob);
+      video.dataset.videoObjectUrl = objectUrl;
+      video.src = objectUrl;
+      video.load();
+      await waitForVideoMetadata(video);
+      video.pause();
+      video.currentTime = parseFloat(video.dataset.startTime || "0");
+      video.dataset.warmed = "true";
+      if (gsap) setProgress(gsap, 50, 0.15);
+    } catch (error) {
+      console.warn("Scroll video preload failed", error);
+      try {
+        video.load();
+        await waitForVideoMetadata(video);
+      } finally {
+        video.dataset.warmed = "true";
+      }
+    }
+  };
 
   const parseBackgroundImageUrls = (value: string | null | undefined) => {
     if (!value) return [];
@@ -261,6 +319,8 @@
 
     const images = Array.from(document.querySelectorAll("img[src]")) as HTMLImageElement[];
     images.forEach((img) => {
+      if (img.hasAttribute("data-preloader-ignore")) return;
+
       const rect = img.getBoundingClientRect();
       const inNearRange = rect.top < vh * 8 && rect.bottom > -vh;
       const inSoonRange = rect.top < vh * 4 && rect.bottom > -vh;
@@ -340,21 +400,47 @@
 
       image.onload = done;
       image.onerror = done;
-      timeoutId = window.setTimeout(done, timeoutMs);
+      if (timeoutMs > 0) {
+        timeoutId = window.setTimeout(done, timeoutMs);
+      }
       image.decoding = "async";
       image.src = url;
 
       if (image.complete) {
         done();
       } else if (typeof image.decode === "function") {
-        image.decode().then(done).catch(() => {});
+        image.decode().then(done).catch(done);
+      }
+    });
+
+  const preloadDecodedImage = (url: string) =>
+    new Promise<HTMLImageElement>((resolve) => {
+      const image = new Image();
+      let settled = false;
+
+      const done = () => {
+        if (settled) return;
+        settled = true;
+        resolve(image);
+      };
+
+      image.onload = done;
+      image.onerror = done;
+      image.decoding = "async";
+      image.src = url;
+
+      if (image.complete) {
+        done();
+      } else if (typeof image.decode === "function") {
+        image.decode().then(done).catch(done);
       }
     });
 
   const preloadInBatches = async (
     urls: string[],
     concurrency: number,
-    onProgress?: (loaded: number, total: number) => void
+    onProgress?: (loaded: number, total: number) => void,
+    timeoutMs = 3500
   ) => {
     if (!urls.length) return;
     const total = urls.length;
@@ -365,7 +451,7 @@
       while (nextIndex < total) {
         const index = nextIndex++;
         const url = urls[index];
-        await preloadImage(url);
+        await preloadImage(url, timeoutMs);
         loaded += 1;
         onProgress?.(loaded, total);
       }
@@ -379,7 +465,7 @@
     const allCandidates = collectCriticalImageCandidates();
     const isMobile =
       window.matchMedia("(max-width: 768px)").matches;
-    const maxCritical = isMobile ? 70 : 110;
+    const maxCritical = isMobile ? 32 : 48;
     const urls = allCandidates.slice(0, maxCritical);
 
     await preloadInBatches(urls, 8, (loaded, total) => {
@@ -390,27 +476,96 @@
     });
   };
 
-  const warmRemainingAssets = async () => {
-    if (remainingWarmupStarted) return;
-    remainingWarmupStarted = true;
+  const collectEventCassetteUrls = () =>
+    Array.from(
+      document.querySelectorAll<HTMLImageElement>(".s-work img.js-video[src]")
+    )
+      .map((img) => img.currentSrc || img.src)
+      .filter(Boolean)
+      .map((url) => normalizeUrl(url));
 
-    const schedule = (fn: () => void) => {
-      if ("requestIdleCallback" in window) {
-        (window as any).requestIdleCallback(fn, { timeout: 1200 });
-      } else {
-        window.setTimeout(fn, 350);
+  const warmEventCassettes = async (gsap?: any) => {
+    const urls = Array.from(new Set(collectEventCassetteUrls()));
+    if (!urls.length) {
+      if (gsap) setProgress(gsap, 65, 0.15);
+      return;
+    }
+
+    urls.forEach((url) => addPreloadHint(url, "image"));
+    await preloadInBatches(
+      urls,
+      6,
+      (loaded, total) => {
+        const normalized = total ? loaded / total : 1;
+        if (gsap) setProgress(gsap, 50 + normalized * 15, 0.12);
+      },
+      0
+    );
+  };
+
+  const collectContactLaptopFrameUrls = () =>
+    Array.from({ length: CONTACT_LAPTOP_FRAME_COUNT }, (_, index) =>
+      normalizeUrl(
+        getAssetUrl(
+          `/outputFolder/frame_${(index + 1).toString().padStart(4, "0")}.avif`
+        )
+      )
+    );
+
+  const warmContactLaptopFrames = async (gsap?: any) => {
+    const shouldWarmLaptop =
+      window.matchMedia(DESKTOP_CONTACT_QUERY).matches &&
+      !!document.querySelector(".laptop-section");
+
+    if (!shouldWarmLaptop) {
+      if (gsap) setProgress(gsap, 90, 0.15);
+      return;
+    }
+
+    const urls = collectContactLaptopFrameUrls();
+    urls.slice(0, 6).forEach((url) => addPreloadHint(url, "image", "image/avif"));
+
+    const frameCache =
+      ((window as any).__contactLaptopFrameCache as
+        | Map<string, HTMLImageElement>
+        | undefined) || new Map<string, HTMLImageElement>();
+    (window as any).__contactLaptopFrameCache = frameCache;
+
+    const concurrency = 8;
+    let nextIndex = 0;
+    let loaded = 0;
+
+    const worker = async () => {
+      while (nextIndex < urls.length) {
+        const index = nextIndex++;
+        const url = urls[index];
+        if (!frameCache.has(url)) {
+          const image = await preloadDecodedImage(url);
+          frameCache.set(url, image);
+        }
+        loaded += 1;
+        const normalized = urls.length ? loaded / urls.length : 1;
+        if (gsap) setProgress(gsap, 65 + normalized * 25, 0.08);
       }
     };
 
-    schedule(async () => {
-      const urls = Array.from(document.querySelectorAll("img[src]"))
-        .map((img) => img.getAttribute("src") || "")
-        .filter((url) => !!url && isLikelyImageUrl(url))
-        .map((url) => normalizeUrl(url));
+    await Promise.all(
+      Array.from({ length: Math.min(concurrency, urls.length) }, () => worker())
+    );
+  };
 
-      const unique = Array.from(new Set(urls));
-      await preloadInBatches(unique, 4);
-    });
+  const warmRequiredAssets = async (gsap?: any) => {
+    await Promise.all([
+      warmScrollVideo(gsap),
+      warmEventCassettes(gsap),
+      warmContactLaptopFrames(gsap),
+    ]);
+    if (gsap) setProgress(gsap, 90, 0.2);
+  };
+
+  const warmRemainingAssets = async () => {
+    if (remainingWarmupStarted) return;
+    remainingWarmupStarted = true;
   };
 
   // Lottie fetches JSON via XHR/fetch under the hood.
@@ -487,17 +642,6 @@
 
   const initPreloader = async () => {
     if (!preloader || !progressFill || !lottieContainer) return;
-    const preloaderShown = sessionStorage.getItem("preloaderShown");
-
-    if (preloaderShown) {
-      preloader.style.display = "none";
-      await waitForVariantsMounted();
-      void warmScrollVideo();
-      void warmCriticalAssets();
-      void warmRemainingAssets();
-      window.dispatchEvent(new CustomEvent("preloader:done"));
-      return;
-    }
 
     const [gsap, lottie] = await Promise.all([getGsap(), getLottie()]);
 
@@ -510,14 +654,6 @@
     await loadLoadingAnimation(lottie);
     startFakeProgress(gsap);
 
-    const softTimeoutId = window.setTimeout(() => {
-      void proceedToCompletion(gsap, lottie);
-    }, 5200);
-
-    fallbackTimeoutId = window.setTimeout(() => {
-      void proceedToCompletion(gsap, lottie);
-    }, 9000);
-
     await waitForVariantsMounted();
 
     const criticalAssetPromise = withTimeout(
@@ -528,7 +664,7 @@
     await Promise.allSettled([
       waitForWindowLoad(),
       waitForFonts(),
-      withTimeout(warmScrollVideo(), VIDEO_WARM_TIMEOUT),
+      warmRequiredAssets(gsap),
       criticalAssetPromise,
     ]);
 
@@ -537,7 +673,6 @@
     const delay = Math.max(0, minimumDisplay - elapsed);
 
     window.setTimeout(() => {
-      window.clearTimeout(softTimeoutId);
       void proceedToCompletion(gsap, lottie);
     }, delay);
   };
@@ -559,13 +694,12 @@
 
     const tl = gsapInstance.timeline({
       onComplete: () => {
-        sessionStorage.setItem("preloaderShown", "true");
         // Clean up animations
         if (progressTween) progressTween.kill();
         if (loadingAnimation) loadingAnimation.destroy();
         if (loadedAnimation) loadedAnimation.destroy();
-        void warmScrollVideo();
         void warmRemainingAssets();
+        (window as any).__preloaderDone = true;
         window.dispatchEvent(new CustomEvent("preloader:done"));
       },
     });

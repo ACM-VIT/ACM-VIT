@@ -29,9 +29,9 @@ const normalizedMp4Src = mp4Src.startsWith("/") ? mp4Src : `/${mp4Src}`;
         playsinline
         preload="auto"
     >
-        <!-- Use CDN resolved URL if configured, fallback to local path -->
-        <source src={getAssetUrl(normalizedWebmSrc)} type="video/webm" />
+        <!-- H.264 is the primary source so every device gets the frame-dense encode. -->
         <source src={getAssetUrl(normalizedMp4Src)} type="video/mp4" />
+        <source src={getAssetUrl(normalizedWebmSrc)} type="video/webm" />
     </video>
 
     <div class="scroll-video-overlay" data-scroll-video-overlay></div>
@@ -117,7 +117,9 @@ const normalizedMp4Src = mp4Src.startsWith("/") ? mp4Src : `/${mp4Src}`;
         video.dataset.scrollInit = "true";
 
         const startTime = parseFloat(video.dataset.startTime || "0");
-        const minStep = 1 / 240;
+        const sourceFrameRate = 60;
+        const frameDuration = 1 / sourceFrameRate;
+        const minStep = frameDuration / 4;
         const desktopSmoothQuery = window.matchMedia(
             "(min-width: 769px) and (pointer: fine)",
         );
@@ -128,6 +130,39 @@ const normalizedMp4Src = mp4Src.startsWith("/") ? mp4Src : `/${mp4Src}`;
         let rafId = 0;
         let lastFrameAt = 0;
         let useSmoothDesktopScrub = desktopSmoothQuery.matches;
+        let removeDesktopModeListener: (() => void) | null = null;
+
+        const removeDesktopModeQueryListener = () => {
+            removeDesktopModeListener?.();
+            removeDesktopModeListener = null;
+        };
+
+        const addDesktopModeQueryListener = (handler: () => void) => {
+            removeDesktopModeQueryListener();
+
+            desktopSmoothQuery.addEventListener("change", handler);
+            removeDesktopModeListener = () => {
+                desktopSmoothQuery.removeEventListener("change", handler);
+            };
+        };
+
+        const cleanupScrollVideo = () => {
+            removeDesktopModeQueryListener();
+
+            if (rafId) {
+                cancelAnimationFrame(rafId);
+                rafId = 0;
+            }
+
+            scrubTrigger?.kill();
+            scrubTrigger = null;
+            visibilityTrigger?.kill();
+            visibilityTrigger = null;
+            video.dataset.scrollInit = "";
+
+            window.removeEventListener("pagehide", cleanupScrollVideo);
+            document.removeEventListener("astro:before-swap", cleanupScrollVideo);
+        };
 
         const setupScrollTrigger = () => {
             const videoDuration = video.duration;
@@ -150,6 +185,26 @@ const normalizedMp4Src = mp4Src.startsWith("/") ? mp4Src : `/${mp4Src}`;
 
             video.pause();
 
+            removeDesktopModeQueryListener();
+            if (rafId) {
+                cancelAnimationFrame(rafId);
+                rafId = 0;
+            }
+            lastFrameAt = 0;
+            scrubTrigger?.kill();
+            scrubTrigger = null;
+            visibilityTrigger?.kill();
+            visibilityTrigger = null;
+
+            const snapToSourceFrame = (time: number) => {
+                const clamped = Math.max(startTime, Math.min(endTime, time));
+                const frameIndex = Math.round((clamped - startTime) / frameDuration);
+                return Math.max(
+                    startTime,
+                    Math.min(endTime, startTime + frameIndex * frameDuration),
+                );
+            };
+
             // Attempt to unlock the video decoder for frame-exact seeking in Safari and mobile browsers
             const unlockVideo = async () => {
                 try {
@@ -162,7 +217,7 @@ const normalizedMp4Src = mp4Src.startsWith("/") ? mp4Src : `/${mp4Src}`;
             unlockVideo();
 
             const commitVideoTime = (nextTime: number) => {
-                const clamped = Math.max(startTime, Math.min(endTime, nextTime));
+                const clamped = snapToSourceFrame(nextTime);
                 if (Math.abs(video.currentTime - clamped) <= minStep) return;
 
                 try {
@@ -195,8 +250,8 @@ const normalizedMp4Src = mp4Src.startsWith("/") ? mp4Src : `/${mp4Src}`;
                     return;
                 }
 
-                const ease = 1 - Math.exp(-delta / 0.12);
-                const maxStep = Math.max(1 / 60, delta * 3.2);
+                const ease = 1 - Math.exp(-delta / 0.08);
+                const maxStep = frameDuration;
                 const easedStep = diff * ease;
                 const step =
                     Math.sign(diff) *
@@ -236,15 +291,9 @@ const normalizedMp4Src = mp4Src.startsWith("/") ? mp4Src : `/${mp4Src}`;
                 scheduleVideoRender();
             };
 
-            desktopSmoothQuery.addEventListener?.(
-                "change",
-                handleDesktopModeChange,
-            );
+            addDesktopModeQueryListener(handleDesktopModeChange);
 
             applyVideoTime(startTime, true);
-
-            scrubTrigger?.kill();
-            visibilityTrigger?.kill();
 
             scrubTrigger = ScrollTrigger.create({
                 trigger: container,
@@ -303,6 +352,11 @@ const normalizedMp4Src = mp4Src.startsWith("/") ? mp4Src : `/${mp4Src}`;
         if (video.readyState >= 1) {
             setupScrollTrigger();
         }
+
+        window.addEventListener("pagehide", cleanupScrollVideo, { once: true });
+        document.addEventListener("astro:before-swap", cleanupScrollVideo, {
+            once: true,
+        });
 
         video.pause();
         video.currentTime = startTime;

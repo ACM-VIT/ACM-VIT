@@ -73,8 +73,8 @@ const description =
     <link
       rel="preload"
       as="video"
-      href={getAssetUrl("/ACMWebsiteVid.webm")}
-      type="video/webm"
+      href={getAssetUrl("/ACMWebsiteVid.mp4")}
+      type="video/mp4"
       fetchpriority="high"
     />
 
@@ -401,6 +401,7 @@ const description =
     width: 100%;
     height: 100%;
     overflow-x: hidden;
+    overscroll-behavior-y: none;
     position: relative;
     background: #0d0e0d;
     font-family:

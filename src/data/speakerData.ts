@@ -3,7 +3,7 @@ export const speakerData = [
     name: "Dr. Peter Robinson",
     subtitle: "University of Cambridge",
     role: "Director of Research and Emeritus Professor",
-    image: "/community/peter-robinson.jpg",
+    image: "/community/peter-robinson.webp",
     sessionTitle: "COMPUTERS HAVE",
     sessionTitleHighlight: "FEELINGS TOO",
     description: [

@@ -32,7 +32,7 @@ import { getAssetUrl } from "../utils/cdn";
 
     <div class="celebration-popup__content">
       <img
-        src={getAssetUrl("/acm-celeb.png")}
+        src={getAssetUrl("/acm-celeb.webp")}
         alt="ACM-VIT celebrating the chapter award"
         class="celebration-popup__image"
         loading="eager"
@@ -91,7 +91,7 @@ import { getAssetUrl } from "../utils/cdn";
         window.setTimeout(openPopup, OPEN_DELAY_MS);
       };
 
-      if (sessionStorage.getItem("preloaderShown")) {
+      if ((window as any).__preloaderDone) {
         scheduleOpen();
         return;
       }

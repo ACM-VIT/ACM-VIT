@@ -32,6 +32,7 @@ async function fetchHashnodeCover(url: string): Promise<string | null> {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Accept: "application/json",
         "User-Agent": "Mozilla/5.0 (compatible; AstroBot/1.0)",
       },
       body: JSON.stringify({
@@ -41,7 +42,11 @@ async function fetchHashnodeCover(url: string): Promise<string | null> {
     });
 
     if (!response.ok) return null;
-    const payload = await response.json();
+
+    const contentType = response.headers.get("content-type") ?? "";
+    if (!contentType.includes("application/json")) return null;
+
+    const payload = await response.json().catch(() => null);
     const post = payload?.data?.publication?.post;
     if (!post) return null;
 
@@ -49,8 +54,8 @@ async function fetchHashnodeCover(url: string): Promise<string | null> {
     if (post.coverImage && typeof post.coverImage.url === "string") {
       return post.coverImage.url;
     }
-  } catch (error) {
-    console.warn(`Failed to fetch Hashnode cover for ${url}:`, error);
+  } catch {
+    // Network errors and unexpected failures fall back to placeholder silently.
   }
 
   return null;

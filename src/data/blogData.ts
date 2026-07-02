@@ -1,49 +1,49 @@
 export const blogData = [
   {
     link: "https://blog.acmvit.in/the-cryptic-hunt-2024-blog",
-    cover: "/blogs/chfailure-blog.png",
+    cover: "/blogs/chfailure-blog.webp",
   },
   {
     link: "https://blog.acmvit.in/how-do-computers-see-us",
-    cover: "/blogs/computervision-blog.png",
+    cover: "/blogs/computervision-blog.webp",
   },
   {
     link: "https://blog.acmvit.in/the-chefs-secrets-the-story-behind-examcooker",
-    cover: "/blogs/examcooker-blog.png",
+    cover: "/blogs/examcooker-blog.webp",
   },
   {
     link: "https://blog.acmvit.in/git-happens",
-    cover: "/blogs/githappens-blog.png",
+    cover: "/blogs/githappens-blog.webp",
   },
   {
     link: "https://blog.acmvit.in/self-improving-ai",
   },
   {
     link: "https://blog.acmvit.in/defi-101",
-    cover: "/blogs/defi-blog.png",
+    cover: "/blogs/defi-blog.webp",
   },
   {
     link: "https://blog.acmvit.in/the-metaverses-cousin-you-didnt-know-existed-meet-the-digital-twin",
   },
   {
     link: "https://blog.acmvit.in/quantum-timebomb",
-    cover: "/blogs/quantum-blog.png",
+    cover: "/blogs/quantum-blog.webp",
   },
   {
     link: "https://blog.acmvit.in/redis-a-stellar-intro",
-    cover: "/blogs/redis-blog.png",
+    cover: "/blogs/redis-blog.webp",
   },
   {
     link: "https://blog.acmvit.in/rc",
-    cover: "/blogs/rc-blog.png",
+    cover: "/blogs/rc-blog.webp",
   },
   {
     link: "https://blog.acmvit.in/how-i-met-your-ai-the-matrix-of-microchips",
-    cover: "/blogs/microchips-blog.png",
+    cover: "/blogs/microchips-blog.webp",
   },
   {
     link: "https://blog.acmvit.in/micro-interactions",
-    cover: "/blogs/microinteraction-blog.png",
+    cover: "/blogs/microinteraction-blog.webp",
   },
   {
     link: "https://blog.acmvit.in/beyond-the-totem-ai-driven-dream-manipulation-the-future-of-lucid-dreaming",
