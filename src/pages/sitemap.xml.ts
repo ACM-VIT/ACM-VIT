@@ -52,6 +52,8 @@ const staticPaths = [
   "/design/website",
   "/design/footers",
   "/design/resources",
+  "/sleeve-notes",
+  "/sleeve-notes/giants",
 ];
 
 const paths = [

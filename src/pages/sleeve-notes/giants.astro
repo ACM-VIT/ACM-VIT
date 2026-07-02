@@ -1,0 +1,467 @@
+---
+export const prerender = true;
+import Layout from "../../layouts/Layout.astro";
+import "../../styles/globals.css";
+import Footer from "../../layouts/Footer.astro";
+import SectionHeading from "../../components/ui/SectionHeading.astro";
+import { getAssetUrl } from "../../utils/cdn";
+
+type Giant = {
+  aoi: string;
+  company: string;
+  hq: string;
+  blurb: string;
+  cassette: string;
+};
+
+type Group = {
+  label: string;
+  num: string;
+  accent: string;
+  items: Giant[];
+};
+
+const groups: Group[] = [
+  {
+    label: "Tech",
+    num: "01",
+    accent: "#9B51E0",
+    items: [
+      {
+        aoi: "App Development",
+        company: "Apple Inc.",
+        hq: "Apple Park · Cupertino, California",
+        blurb:
+          "Turned the phone into a platform. The App Store handed a generation of developers a way to ship software straight into millions of pockets, and set the interface bar every mobile app is still measured against.",
+        cassette: "/aois/tech/cassettes/aois-tech-cassettes-appdev.webp",
+      },
+      {
+        aoi: "Web Development",
+        company: "Google LLC",
+        hq: "Googleplex · Mountain View, California",
+        blurb:
+          "Built most of the modern web's plumbing. Search indexed it, Chrome and the V8 engine made it fast, and the open projects and web standards Google pushed shape how sites get built today.",
+        cassette: "/aois/tech/cassettes/aois-tech-cassettes-webdev.webp",
+      },
+      {
+        aoi: "FOSS",
+        company: "Red Hat, Inc.",
+        hq: "Red Hat Tower · Raleigh, North Carolina",
+        blurb:
+          "Proved open source could be an industry, not a hobby. Enterprise Linux and its stewardship of projects from the kernel to Kubernetes made free software the default in the data center.",
+        cassette: "/aois/tech/cassettes/aois-tech-cassettes-foss.webp",
+      },
+      {
+        aoi: "Game Studios",
+        company: "Rockstar Games, Inc.",
+        hq: "Rockstar Games · New York City, New York",
+        blurb:
+          "Made the open world a serious craft. Grand Theft Auto and Red Dead Redemption showed how far a living, systemic world and a real narrative could go on consumer hardware.",
+        cassette: "/aois/tech/cassettes/aois-tech-cassettes-gamestudios.webp",
+      },
+      {
+        aoi: "DevOps",
+        company: "Amazon Web Services (AWS)",
+        hq: "Amazon HQ · Seattle, Washington",
+        blurb:
+          "Invented the modern cloud. On-demand infrastructure like EC2 and S3 made shipping in minutes normal and gave DevOps the primitives it runs on.",
+        cassette: "/aois/tech/cassettes/aois-tech-cassettes-devops.webp",
+      },
+    ],
+  },
+  {
+    label: "Design",
+    num: "02",
+    accent: "#FF0054",
+    items: [
+      {
+        aoi: "UI / UX",
+        company: "Figma, Inc.",
+        hq: "Figma · San Francisco, California",
+        blurb:
+          "Moved interface design into the browser and made it collaborative. Real-time, multiplayer editing turned UI/UX from a solo file into a shared canvas the whole team works in at once.",
+        cassette: "/aois/design/cassettes/aois-design-cassettes-uiux.webp",
+      },
+      {
+        aoi: "Illustrations",
+        company: "Adobe Inc.",
+        hq: "Adobe · San Jose, California",
+        blurb:
+          "Set the tools illustration is drawn with. Illustrator and Photoshop defined vector and raster workflows, and the file formats behind them became the common language of digital art.",
+        cassette: "/aois/design/cassettes/aois-design-cassettes-illustrations.webp",
+      },
+      {
+        aoi: "Motion Graphics",
+        company: "Maxon Computer GmbH",
+        hq: "Maxon · Friedrichsdorf, Germany",
+        blurb:
+          "Powers the motion graphics look. Cinema 4D became the studio standard for broadcast and title design, and its tools sit in most motion artists' pipelines.",
+        cassette: "/aois/design/cassettes/aois-design-cassettes-motiongraphics.webp",
+      },
+      {
+        aoi: "3D",
+        company: "Blender Foundation",
+        hq: "Blender · Amsterdam, Netherlands",
+        blurb:
+          "Made professional 3D free for everyone. A fully open pipeline for modelling, sculpting, and rendering put film-grade tools in the hands of anyone with a laptop.",
+        cassette: "/aois/design/cassettes/aois-design-cassettes-3d.webp",
+      },
+      {
+        aoi: "Video Editing",
+        company: "Blackmagic Design",
+        hq: "Blackmagic Design · Melbourne, Australia",
+        blurb:
+          "Put a pro edit suite within reach. DaVinci Resolve folded editing, color grading, and finishing into one free application and reset what a video workflow costs.",
+        cassette: "/aois/design/cassettes/aois-design-cassettes-video-editing.webp",
+      },
+    ],
+  },
+  {
+    label: "Research",
+    num: "03",
+    accent: "#135DE2",
+    items: [
+      {
+        aoi: "AI / ML",
+        company: "NVIDIA Corporation",
+        hq: "NVIDIA · Santa Clara, California",
+        blurb:
+          "Turned the GPU into the engine of AI. CUDA and its accelerators made deep learning practical at scale, and nearly every modern model is trained on its hardware.",
+        cassette: "/aois/research/cassettes/aois-research-cassettes-aiml.webp",
+      },
+      {
+        aoi: "Cybersecurity",
+        company: "Palo Alto Networks, Inc.",
+        hq: "Palo Alto Networks · Santa Clara, California",
+        blurb:
+          "Redefined the firewall for a cloud world. Next-generation firewalls and a platform spanning network, cloud, and AI-driven detection set the pace for modern cybersecurity.",
+        cassette: "/aois/research/cassettes/aois-research-cassettes-cybersecurity.webp",
+      },
+      {
+        aoi: "IoT",
+        company: "Cisco Systems, Inc.",
+        hq: "Cisco · San Jose, California",
+        blurb:
+          "Built the internet's routing backbone. The routers and switching that carry the world's traffic also made Cisco a driving force in connecting billions of IoT devices.",
+        cassette: "/aois/research/cassettes/aois-research-cassettes-iot.webp",
+      },
+      {
+        aoi: "Blockchain",
+        company: "Microsoft Corporation",
+        hq: "Microsoft Campus · Redmond, Washington",
+        blurb:
+          "Took blockchain into the enterprise. Azure's ledger services and research like the ION decentralized identity network explored what distributed ledgers do beyond currency.",
+        cassette: "/aois/research/cassettes/aois-research-cassettes-blockchain.webp",
+      },
+      {
+        aoi: "Quantum Computing",
+        company: "International Business Machines Corporation (IBM)",
+        hq: "IBM Thomas J. Watson Research Center · Yorktown Heights, New York",
+        blurb:
+          "Put quantum computing in public hands. IBM Quantum runs real superconducting processors over the cloud and drives the open Qiskit toolkit the field learns on.",
+        cassette: "/aois/research/cassettes/aois-research-cassettes-quantum.webp",
+      },
+      {
+        aoi: "Bioinformatics",
+        company: "Illumina, Inc.",
+        hq: "Illumina · San Diego, California",
+        blurb:
+          "Made reading the genome affordable. Its sequencers drove the cost of a human genome from millions to hundreds, and most of the world's DNA data now runs through them.",
+        cassette: "/aois/research/cassettes/aois-research-cassettes-bioinformatics.webp",
+      },
+    ],
+  },
+];
+---
+
+<Layout pageTitle="Standing on Giants" backHref="/sleeve-notes">
+  <main class="gt-page relative w-full overflow-hidden">
+    <div class="gt-glow" aria-hidden="true"></div>
+    <div class="gt-grid-bg" aria-hidden="true">
+      <span class="gt-v" style="left: 20%"></span>
+      <span class="gt-v" style="left: 50%"></span>
+      <span class="gt-v" style="left: 80%"></span>
+    </div>
+
+    <div class="gt-inner relative z-10 mx-auto w-full max-w-5xl px-5 pb-28 pt-32 sm:px-8">
+      <SectionHeading
+        eyebrow="ACM-VIT · Sleeve Notes"
+        title="Standing on"
+        accent="Giants"
+        subtitle="Every Area of Interest cassette hides a headquarters. Each tape is set against the home of a company that moved its field forward - our quiet thanks to the work we build on top of."
+        align="left"
+        class="mb-14 !px-0"
+      />
+
+      {
+        groups.map((group) => (
+          <section class="gt-group" data-reveal style={`--gt: ${group.accent}`}>
+            <header class="gt-group-head">
+              <span class="gt-num">{group.num}</span>
+              <h2 class="gt-group-title">{group.label}</h2>
+            </header>
+
+            <div class="gt-rows">
+              {group.items.map((g) => (
+                <article class="gt-row">
+                  <div class="gt-tape">
+                    <img
+                      src={getAssetUrl(g.cassette)}
+                      alt={`${g.aoi} cassette - ${g.company} headquarters`}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                  <div class="gt-info">
+                    <span class="gt-aoi">{g.aoi}</span>
+                    <h3 class="gt-company">{g.company}</h3>
+                    <span class="gt-hq">{g.hq}</span>
+                    <p class="gt-blurb">{g.blurb}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        ))
+      }
+
+      <figure class="gt-quote" data-reveal>
+        <blockquote>
+          If I have seen further, it is by standing on the shoulders of giants.
+        </blockquote>
+        <figcaption>Sir Isaac Newton</figcaption>
+      </figure>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .gt-page {
+    min-height: 100vh;
+  }
+
+  .gt-glow {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(45% 30% at 20% 8%, rgba(155, 81, 224, 0.16), transparent 70%),
+      radial-gradient(40% 35% at 85% 40%, rgba(19, 93, 226, 0.08), transparent 70%);
+  }
+  .gt-grid-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .gt-v {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: repeating-linear-gradient(to bottom, rgba(254, 252, 217, 0.06) 0 3px, transparent 3px 18px);
+  }
+  :global(html[data-theme="light"]) .gt-v {
+    background: repeating-linear-gradient(to bottom, rgba(38, 59, 51, 0.07) 0 3px, transparent 3px 18px);
+  }
+
+  /* ── Group ── */
+  .gt-group {
+    margin-bottom: 4.5rem;
+  }
+  .gt-group-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.9rem;
+    margin-bottom: 1.8rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid rgba(254, 252, 217, 0.12);
+  }
+  .gt-num {
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--gt);
+  }
+  .gt-group-title {
+    margin: 0;
+    font-family: "PolySans Trial", sans-serif;
+    font-size: clamp(1.3rem, 3vw, 1.7rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    color: #fefcd9;
+  }
+  :global(html[data-theme="light"]) .gt-group-head {
+    border-bottom-color: rgba(26, 26, 26, 0.12);
+  }
+  :global(html[data-theme="light"]) .gt-group-title {
+    color: #1a1a1a;
+  }
+
+  /* ── Rows ── */
+  .gt-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .gt-row {
+    display: grid;
+    grid-template-columns: minmax(0, 300px) 1fr;
+    gap: 2rem;
+    align-items: center;
+  }
+  .gt-tape {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--gt) 30%, transparent);
+    background: rgba(254, 252, 217, 0.02);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.4);
+  }
+  .gt-tape img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .gt-info {
+    min-width: 0;
+  }
+  .gt-aoi {
+    display: block;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    /* fallback before color-mix for older WebKit */
+    color: var(--gt);
+    color: color-mix(in srgb, var(--gt) 82%, #fefcd9);
+    margin-bottom: 0.5rem;
+  }
+  .gt-company {
+    margin: 0;
+    font-family: "PolySans Trial", sans-serif;
+    font-size: clamp(1.1rem, 2.4vw, 1.4rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #fefcd9;
+  }
+  .gt-hq {
+    display: block;
+    margin-top: 0.35rem;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.02em;
+    color: rgba(254, 252, 217, 0.5);
+  }
+  .gt-blurb {
+    margin: 0.9rem 0 0;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.82rem;
+    line-height: 1.65;
+    color: rgba(254, 252, 217, 0.66);
+  }
+  :global(html[data-theme="light"]) .gt-company {
+    color: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .gt-hq {
+    color: rgba(26, 26, 26, 0.5);
+  }
+  :global(html[data-theme="light"]) .gt-blurb {
+    color: rgba(26, 26, 26, 0.68);
+  }
+  :global(html[data-theme="light"]) .gt-tape {
+    background: rgba(0, 0, 0, 0.02);
+  }
+
+  /* ── Closing quote ── */
+  .gt-quote {
+    margin: 1.5rem 0 0;
+    padding-top: 2.8rem;
+    text-align: center;
+    border-top: 1px solid rgba(254, 252, 217, 0.12);
+  }
+  .gt-quote blockquote {
+    margin: 0 auto;
+    max-width: 40ch;
+    font-family: "PolySans Trial", sans-serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: clamp(1.15rem, 2.6vw, 1.6rem);
+    line-height: 1.35;
+    letter-spacing: 0.02em;
+    color: #fefcd9;
+  }
+  .gt-quote figcaption {
+    margin-top: 1rem;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #135de2;
+  }
+  :global(html[data-theme="light"]) .gt-quote {
+    border-top-color: rgba(26, 26, 26, 0.12);
+  }
+  :global(html[data-theme="light"]) .gt-quote blockquote {
+    color: #1a1a1a;
+  }
+
+  [data-reveal] {
+    opacity: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal] {
+      opacity: 1;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .gt-row {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .gt-tape {
+      max-width: 340px;
+    }
+  }
+</style>
+
+<script>
+  function initGiantsReveal() {
+    const els = document.querySelectorAll<HTMLElement>("[data-reveal]");
+    if (!els.length) return;
+
+    import("gsap").then(({ gsap }) => {
+      import("gsap/ScrollTrigger").then(({ ScrollTrigger }) => {
+        gsap.registerPlugin(ScrollTrigger);
+        const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        els.forEach((el) => {
+          if (reduce) {
+            gsap.set(el, { opacity: 1 });
+            return;
+          }
+          gsap.fromTo(
+            el,
+            { opacity: 0, y: 24 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.8,
+              ease: "power3.out",
+              scrollTrigger: { trigger: el, start: "top 88%" },
+            },
+          );
+        });
+      });
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initGiantsReveal);
+  } else {
+    initGiantsReveal();
+  }
+</script>

@@ -6,7 +6,7 @@ import Footer from "../layouts/Footer.astro";
 import SectionHeading from "../components/ui/SectionHeading.astro";
 import FillButton from "../components/ui/FillButton.astro";
 
-type Faq = { q: string; a: string };
+type Faq = { q: string; a: string; link?: { href: string; text: string } };
 type Category = { id: string; label: string; accent: string; faqs: Faq[] };
 
 const categories: Category[] = [
@@ -133,6 +133,7 @@ const categories: Category[] = [
       {
         q: "Why is everything on this site designed like a cassette tape?",
         a: "Because the web has enough stock photos of laptops. We'd rather it had more analog nostalgia and reels that actually spin.",
+        link: { href: "/sleeve-notes#homage", text: "The serious answer is here" },
       },
     ],
   },
@@ -204,6 +205,11 @@ let counter = 0;
                         <div class="faq-panel-wrap">
                           <div class="faq-panel-inner">
                             <p class="faq-a">{item.a}</p>
+                            {item.link && (
+                              <p class="faq-a faq-a-link">
+                                <a href={item.link.href}>{item.link.text}</a>
+                              </p>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -466,6 +472,19 @@ let counter = 0;
   }
   :global(html[data-theme="light"]) .faq-a {
     color: rgba(26, 26, 26, 0.68);
+  }
+  .faq-a-link {
+    margin-top: -0.7rem;
+  }
+  .faq-a-link a {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+    transition: border-color 0.2s ease;
+  }
+  .faq-a-link a:hover {
+    border-bottom-color: var(--accent);
   }
 
   /* ── Bottom CTA ── */

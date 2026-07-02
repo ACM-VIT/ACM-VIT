@@ -737,7 +737,7 @@ export const productGuides: ProductGuide[] = [
     ],
     links: [
       { label: "acmvit.in", href: "https://www.acmvit.in", kind: "website" },
-      { label: "Website-specific guide", href: "/design-guide", kind: "read" },
+      { label: "Website-specific guide", href: "/sleeve-notes", kind: "read" },
     ],
     googleFonts:
       "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&display=swap",

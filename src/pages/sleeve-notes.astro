@@ -65,15 +65,6 @@ const dontList = [
         class="mb-10 !px-0"
       />
 
-      <div class="dg-hero-art" data-reveal>
-        <img
-          src={getAssetUrl("/design-guide/design-guide-hero.webp")}
-          alt="Illustrated doodle collage - the Design Guide cover art"
-          loading="eager"
-          decoding="async"
-        />
-      </div>
-
       <a
         href="/design"
         class="dg-system-link"
@@ -88,10 +79,61 @@ const dontList = [
         <span class="dg-system-link-cta">Open guidelines →</span>
       </a>
 
+      <!-- ─────────── Inspiration & Homage ─────────── -->
+      <section class="dg-section" id="homage" data-reveal>
+        <header class="dg-head">
+          <span class="dg-num">01</span>
+          <h2 class="dg-title">Inspiration &amp; Homage</h2>
+        </header>
+
+        <p class="dg-homage-lead">
+          Why a cassette? Because it is one of those small inventions that quietly rewired how people live with technology.
+        </p>
+
+        <p class="dg-lede">
+          The compact cassette showed up in the 1960s and did something radical for its moment. It let ordinary
+          people record, copy, and carry sound without a studio, a label, or anyone's permission. Portable audio
+          stopped being a promise and turned into something you could drop in a pocket. It gave us the Walkman, the
+          mixtape you made for one specific person, the bootleg passed hand to hand at the back of a class. That
+          instinct - personal, portable, made to be shared - is the same one running through everything we stream
+          today. The cassette did not just play music. It changed who got to be the one pressing record.
+        </p>
+
+        <p class="dg-lede">
+          We build the site around that idea instead of printing it on top as decoration. A cassette holds
+          recordings; this site holds ACM-VIT's events, projects, and the things we have actually shipped. Every
+          section is a track. Moving through the page is meant to feel closer to playing a tape than clicking through
+          a menu, and the whole thing should read like a mixtape someone sequenced on purpose, not a shuffle of
+          random links.
+        </p>
+
+        <p class="dg-lede">
+          The metaphor is not just skin. Sections behave like tracks, each one self-contained enough to stand on its
+          own. Navigation borrows the grammar of a tape deck instead of a form, so the site asks you to play it rather
+          than process it. The archive is the recording itself: events, projects, and the wins we are proud of, all
+          spooled onto a single reel you can wind back through whenever you want. And the site as a whole is sequenced
+          rather than shuffled, meant to be played front to back the way a good mixtape is.
+        </p>
+
+        <p class="dg-lede">
+          There is a reason the cassette fits a computer science chapter and not just any design mood. It was hacker
+          hardware before the word existed. People spliced tape, dubbed copies for friends, wrote liner notes by hand,
+          and traded the results in hostels and hallways. That is the same loop we still run on: build something, ship
+          it, remix what someone else made, pass it forward. The medium moved from tape to repos and streams, but the
+          instinct behind it is exactly what a student tech community is for.
+        </p>
+
+        <p class="dg-lede dg-homage-close">
+          So the cassette is not nostalgia for its own sake. It is a small tribute to everyone who kept pressing record
+          before any of this was easy, and a reminder of what we are here for. Honour the inventions that got us this
+          far, then go build the ones that come next.
+        </p>
+      </section>
+
       <!-- ─────────── Brand Marks ─────────── -->
       <section class="dg-section" id="marks" data-reveal>
         <header class="dg-head">
-          <span class="dg-num">01</span>
+          <span class="dg-num">02</span>
           <h2 class="dg-title">Brand Marks</h2>
         </header>
 
@@ -137,7 +179,7 @@ const dontList = [
       <!-- ─────────── Color System ─────────── -->
       <section class="dg-section" id="color" data-reveal>
         <header class="dg-head">
-          <span class="dg-num">02</span>
+          <span class="dg-num">03</span>
           <h2 class="dg-title">Color System</h2>
         </header>
         <p class="dg-lede">
@@ -179,7 +221,7 @@ const dontList = [
       <!-- ─────────── Typography ─────────── -->
       <section class="dg-section" id="type" data-reveal>
         <header class="dg-head">
-          <span class="dg-num">03</span>
+          <span class="dg-num">04</span>
           <h2 class="dg-title">Typography</h2>
         </header>
 
@@ -205,7 +247,7 @@ const dontList = [
       <!-- ─────────── Voice & Tone ─────────── -->
       <section class="dg-section" id="voice" data-reveal>
         <header class="dg-head">
-          <span class="dg-num">04</span>
+          <span class="dg-num">05</span>
           <h2 class="dg-title">Voice &amp; Tone</h2>
         </header>
         <p class="dg-lede">Write like a person who's actually building this stuff, not marketing it.</p>
@@ -225,7 +267,7 @@ const dontList = [
       <!-- ─────────── Components ─────────── -->
       <section class="dg-section" id="components" data-reveal>
         <header class="dg-head">
-          <span class="dg-num">05</span>
+          <span class="dg-num">06</span>
           <h2 class="dg-title">Components</h2>
         </header>
 
@@ -266,7 +308,7 @@ const dontList = [
       <!-- ─────────── Motion ─────────── -->
       <section class="dg-section" id="motion" data-reveal>
         <header class="dg-head">
-          <span class="dg-num">06</span>
+          <span class="dg-num">07</span>
           <h2 class="dg-title">Motion</h2>
         </header>
         <div class="dg-motion-grid">
@@ -283,6 +325,32 @@ const dontList = [
             <p class="dg-motion-body">Opacity + <code>y: 24–30px</code>, staggered lightly. Always guarded by <code>prefers-reduced-motion</code>.</p>
           </div>
         </div>
+      </section>
+
+      <!-- ─────────── Standing on Giants ─────────── -->
+      <section class="dg-section" id="giants" data-reveal>
+        <header class="dg-head">
+          <span class="dg-num">08</span>
+          <h2 class="dg-title">Standing on Giants</h2>
+        </header>
+        <p class="dg-lede">
+          Look closely at the cassette on any Area of Interest page and the label art is not decoration. Each tape is
+          set against the headquarters of a company that pushed that field forward - Apple Park behind App
+          Development, the Googleplex behind Web, and so on across Tech, Design, and Research. A quiet nod to the work
+          we build on top of.
+        </p>
+        <a
+          href="/sleeve-notes/giants"
+          class="dg-system-link"
+          aria-label="See every Area of Interest cassette and the company behind it"
+        >
+          <span class="dg-system-link-text">
+            <strong>See every cassette and the giant behind it</strong>
+            A full breakdown of which headquarters hides on each Area of Interest tape, and what that company did for
+            its field.
+          </span>
+          <span class="dg-system-link-cta">Open the collection →</span>
+        </a>
       </section>
 
       <!-- ─────────── Assets ─────────── -->
@@ -382,35 +450,6 @@ const dontList = [
   }
   :global(html[data-theme="light"]) .dg-lede {
     color: rgba(26, 26, 26, 0.65);
-  }
-
-  /* ── Hero art ── */
-  .dg-hero-art {
-    position: relative;
-    margin-bottom: 4rem;
-    border-radius: 20px;
-    overflow: hidden;
-    border: 1px solid rgba(254, 252, 217, 0.12);
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
-  }
-  .dg-hero-art img {
-    display: block;
-    width: 100%;
-    height: clamp(220px, 34vw, 420px);
-    object-fit: cover;
-  }
-  .dg-hero-art::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(13, 14, 13, 0) 45%, rgba(13, 14, 13, 0.85) 100%);
-    pointer-events: none;
-  }
-  :global(html[data-theme="light"]) .dg-hero-art {
-    border-color: rgba(26, 26, 26, 0.12);
-  }
-  :global(html[data-theme="light"]) .dg-hero-art::after {
-    background: linear-gradient(180deg, rgba(245, 237, 228, 0) 45%, rgba(245, 237, 228, 0.9) 100%);
   }
 
   /* ── Link to the full design system ── */
@@ -762,6 +801,27 @@ const dontList = [
   }
   :global(html[data-theme="light"]) .dg-motion-body {
     color: rgba(26, 26, 26, 0.6);
+  }
+
+  /* ── Inspiration & Homage ── */
+  #homage .dg-lede {
+    max-width: none;
+  }
+  .dg-homage-lead {
+    margin: 0 0 1.6rem;
+    max-width: none;
+    font-family: "PolySans Trial", sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.15rem, 2.4vw, 1.5rem);
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    color: #fefcd9;
+  }
+  .dg-homage-close {
+    margin-top: 0.4rem;
+  }
+  :global(html[data-theme="light"]) .dg-homage-lead {
+    color: #1a1a1a;
   }
 
   /* ── Bottom CTA ── */
