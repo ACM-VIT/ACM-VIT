@@ -1,0 +1,196 @@
+---
+export const prerender = true;
+import Layout from "../layouts/Layout.astro";
+import "../styles/globals.css";
+import FillButton from "../components/ui/FillButton.astro";
+import { getAssetUrl } from "../utils/cdn";
+---
+
+<Layout pageTitle="404" backHref="/">
+  <main class="nf-page relative w-full overflow-hidden">
+    <div class="nf-glow" aria-hidden="true"></div>
+    <div class="nf-grid-bg" aria-hidden="true">
+      <span class="nf-v" style="left: 20%"></span>
+      <span class="nf-v" style="left: 50%"></span>
+      <span class="nf-v" style="left: 80%"></span>
+    </div>
+
+    <div class="nf-inner relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center px-5 text-center">
+      <span class="nf-eyebrow" data-nf-reveal>ACM-VIT · Side B</span>
+
+      <!-- Tangled-tape cassette -->
+      <div class="nf-cassette" data-nf-reveal>
+        <img
+          src={getAssetUrl("/error/error-uh-oh-cassette.webp")}
+          alt="A cassette with its tape spilled out in a tangle - uh-oh, something went wrong"
+          width="1200"
+          height="800"
+          loading="eager"
+          decoding="async"
+        />
+      </div>
+
+      <h1 class="nf-title" data-nf-reveal>This track skipped.</h1>
+      <p class="nf-body" data-nf-reveal>
+        The page you were after isn't on this tape. Either the link snapped somewhere along the way, or it was
+        never recorded to begin with. Happens to the best mixtapes.
+      </p>
+
+      <div class="nf-actions" data-nf-reveal>
+        <FillButton label="Rewind to home" href="/" class="nf-btn" />
+        <FillButton label="Browse the tracklist" href="/sitemap" class="nf-btn nf-btn-alt" />
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .nf-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7rem 0 5rem;
+  }
+
+  .nf-glow {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(45% 35% at 50% 20%, rgba(249, 95, 74, 0.18), transparent 70%),
+      radial-gradient(40% 35% at 85% 80%, rgba(0, 180, 216, 0.08), transparent 70%);
+  }
+  .nf-grid-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .nf-v {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: repeating-linear-gradient(to bottom, rgba(254, 252, 217, 0.06) 0 3px, transparent 3px 18px);
+  }
+  :global(html[data-theme="light"]) .nf-v {
+    background: repeating-linear-gradient(to bottom, rgba(38, 59, 51, 0.07) 0 3px, transparent 3px 18px);
+  }
+
+  .nf-eyebrow {
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: #f95f4a;
+    margin-bottom: 1.6rem;
+  }
+
+  /* ── Cassette ── */
+  .nf-cassette {
+    width: min(560px, 88vw);
+    border-radius: 18px;
+    overflow: hidden;
+    filter: drop-shadow(0 26px 48px rgba(0, 0, 0, 0.5));
+    animation: nf-float 5s ease-in-out infinite;
+  }
+  .nf-cassette img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  @keyframes nf-float {
+    0%,
+    100% {
+      transform: translateY(0) rotate(-1deg);
+    }
+    50% {
+      transform: translateY(-10px) rotate(1deg);
+    }
+  }
+
+  /* ── Copy ── */
+  .nf-title {
+    margin: 2.4rem 0 0;
+    font-family: "PolySans Trial", sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: clamp(1.7rem, 5vw, 2.8rem);
+    letter-spacing: -0.02em;
+    color: #fefcd9;
+  }
+  .nf-body {
+    margin: 1rem auto 0;
+    max-width: 46ch;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.86rem;
+    line-height: 1.65;
+    color: rgba(254, 252, 217, 0.66);
+  }
+  .nf-actions {
+    margin-top: 2.4rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1.4rem;
+  }
+  .nf-actions :global(.nf-btn) {
+    --proj-color: #f95f4a;
+    --proj-color-secondary: #0d0e0d;
+  }
+  .nf-actions :global(.nf-btn-alt) {
+    --proj-color: #fefcd9;
+    --proj-color-secondary: #1c1917;
+  }
+
+  :global(html[data-theme="light"]) .nf-title {
+    color: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .nf-body {
+    color: rgba(26, 26, 26, 0.66);
+  }
+
+  [data-nf-reveal] {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nf-cassette {
+      animation: none;
+    }
+    [data-nf-reveal] {
+      opacity: 1;
+    }
+  }
+</style>
+
+<script>
+  function initNotFound() {
+    const els = document.querySelectorAll<HTMLElement>("[data-nf-reveal]");
+    if (!els.length) return;
+
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) {
+      els.forEach((el) => (el.style.opacity = "1"));
+      return;
+    }
+
+    import("gsap").then(({ gsap }) => {
+      gsap.fromTo(
+        els,
+        { opacity: 0, y: 24 },
+        { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", stagger: 0.12 },
+      );
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initNotFound);
+  } else {
+    initNotFound();
+  }
+</script>
