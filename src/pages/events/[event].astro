@@ -25,6 +25,14 @@ if (!data) return Astro.redirect("/");
 const themeColor = data.themeColor ?? getEventThemeHex(data.themeKey);
 const themeColorSecondary = data.themeColorSecondary ?? themeColor;
 
+// FillButton needs a dark ink/bg companion color for contrast (dark-mode text
+// on the bright accent bg, light-mode bg under fixed white text). Most events
+// don't define themeColorSecondary as a dark tone (it's often == themeColor),
+// so darken the accent for the button specifically rather than reuse it raw.
+const fillButtonStyle = `--proj-color: ${themeColor}; --proj-color-secondary: ${
+  data.themeColorSecondary ?? `color-mix(in srgb, ${themeColor} 55%, black)`
+};`;
+
 const titleArt = titleToArt(data.title);
 
 const titleWords = data.title.split(" ");
@@ -63,18 +71,23 @@ const otherEvents = Object.values(eventDetails)
           </div>
 
           <div class="event-hero-actions" data-animate="fade-up">
-            <a
-              href={data.registrationUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="event-cta-primary"
-            >
-              {data.primaryCtaLabel}
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-              </svg>
-            </a>
-            <a href="#event-about" class="event-cta-secondary">Learn More</a>
+            {data.registrationUrl !== "https://acmvit.in" && (
+              <FillButton
+                href={data.registrationUrl}
+                label={data.primaryCtaLabel}
+                style={fillButtonStyle}
+                external
+              >
+                <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </FillButton>
+            )}
+            <FillButton
+              href="#event-about"
+              label="Learn More"
+              style={fillButtonStyle}
+            />
           </div>
         </div>
 
@@ -269,17 +282,16 @@ const otherEvents = Object.values(eventDetails)
         <div class="event-cta-banner" data-animate="fade-up">
           <h3>Be part of the next {data.title}</h3>
           <p>Hosted by {data.organizedBy}{data.firstHeld ? ` · First held ${data.firstHeld}` : ""}</p>
-          <a
+          <FillButton
             href={data.registrationUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="event-cta-primary"
+            label={data.primaryCtaLabel}
+            style={fillButtonStyle}
+            external
           >
-            {data.primaryCtaLabel}
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M7 17L17 7M9 7h8v8"/>
             </svg>
-          </a>
+          </FillButton>
           {data.socials && data.socials.length > 0 && (
             <div class="event-cta-socials">
               {data.socials.map((s) => (
