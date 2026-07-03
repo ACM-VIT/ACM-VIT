@@ -9,7 +9,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "deploy:cdn": "node scripts/upload-r2.mjs",
-    "deploy:media": "node scripts/upload-media-r2.mjs"
+    "deploy:media": "node scripts/upload-media-r2.mjs",
+    "deploy:images": "node scripts/upload-images-r2.mjs"
   },
   "dependencies": {
     "@astrojs/cloudflare": "12.6.13",

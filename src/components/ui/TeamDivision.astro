@@ -1,27 +1,17 @@
 ---
 import BoardMemberCardSingular from "./BoardMemberCardSingular.astro";
-import { getAssetUrl } from "../../utils/cdn";
-import {
-  getDivisionMembers,
-  type TeamDivisionDef,
-  type TeamMember,
-} from "../../data/teamData";
+import type { TeamDivisionDef, TeamMember } from "../../data/teamData";
 
 /**
- * TeamDivision - one division (Board, Developers, Designers, etc.) for a given
- * year: an accent heading + a responsive grid of cassette member cards.
- * Pass `members` to use real data; otherwise placeholders are generated.
- * Reusable.
+ * TeamDivision - the Board for a given year: an accent heading + a
+ * responsive grid of cassette member cards.
  */
 export interface Props {
-  year: number;
   division: TeamDivisionDef;
-  count?: number;
-  members?: TeamMember[];
+  members: TeamMember[];
 }
 
-const { year, division, count = 10, members: provided } = Astro.props;
-const members = provided ?? getDivisionMembers(year, division, count);
+const { division, members } = Astro.props;
 ---
 
 <div class="team-division" style={`--div-accent: ${division.accent};`}>
@@ -44,7 +34,7 @@ const members = provided ?? getDivisionMembers(year, division, count);
             title={m.title}
             fullName={m.fullName}
             position={m.position}
-            imageUrl={getAssetUrl(m.imageUrl)}
+            imageUrl={m.imageUrl}
             linkedinUrl={m.linkedinUrl}
             githubUrl={m.githubUrl}
             googleScholarUrl={m.googleScholarUrl}

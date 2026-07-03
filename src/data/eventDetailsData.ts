@@ -1015,7 +1015,7 @@ export const eventDetails: Record<string, EventDetail> = {
           { label: "Solutions", href: "https://github.com/ACM-VIT/rc26-solutions" },
         ],
         collectibles: [
-          { name: "RCPC Sticker", desc: "Limited-edition RCPC sticker from the 2026 edition." },
+          { name: "RCPC Sticker", image: "/events/events-reverse-coding-sticker-2026.webp", desc: "Limited-edition RCPC sticker from the 2026 edition." },
         ],
       },
       {
@@ -1027,7 +1027,7 @@ export const eventDetails: Record<string, EventDetail> = {
           { label: "Solutions", href: "https://github.com/ACM-VIT/rc-2025-solutions" },
         ],
         collectibles: [
-          { name: "RCPC Sticker", desc: "Limited-edition RCPC sticker from the 2025 edition." },
+          { name: "RCPC Sticker", image: "/events/events-reverse-coding-sticker-2025.webp", desc: "Limited-edition RCPC sticker from the 2025 edition." },
         ],
         sponsors: [
           { name: "EaseMyTrip", tier: "Sponsor" },

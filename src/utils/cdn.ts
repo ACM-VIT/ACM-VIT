@@ -26,3 +26,19 @@ export function getMediaUrl(path: string | null | undefined): string {
   }
   return path;
 }
+
+// Team/board photos are offloaded to a dedicated CDN bucket (R2), same
+// pattern as getMediaUrl(). When PUBLIC_IMAGE_CDN_URL is unset, paths
+// resolve locally from public/board and public/team.
+export function getImageUrl(path: string | null | undefined): string {
+  if (typeof path !== "string" || path.length === 0) {
+    return "";
+  }
+
+  const imageUrl = import.meta.env.PUBLIC_IMAGE_CDN_URL;
+  if (imageUrl && path.startsWith("/")) {
+    const cleanImageUrl = imageUrl.replace(/\/$/, "");
+    return `${cleanImageUrl}${path}`;
+  }
+  return path;
+}

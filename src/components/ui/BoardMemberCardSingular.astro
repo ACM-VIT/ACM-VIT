@@ -21,7 +21,15 @@ const {
   isW,
 } = Astro.props;
 
-import { getAssetUrl } from "../../utils/cdn";
+import { getAssetUrl, getImageUrl } from "../../utils/cdn";
+
+// Photo is fetched from the image CDN first; if that fails, fall back to the
+// local webp, then the local png. `imageUrl` is expected to be a local
+// `/board/...` or `/team/...` path with a `.webp` extension.
+const localWebp = imageUrl;
+const localPng = imageUrl ? imageUrl.replace(/\.webp$/i, ".png") : "";
+const cdnSrc = getImageUrl(imageUrl);
+const photoFallbacks = JSON.stringify([localWebp, localPng].filter((u) => u && u !== cdnSrc));
 ---
 
 <div
@@ -63,7 +71,9 @@ import { getAssetUrl } from "../../utils/cdn";
   <div class="flex items-center w-full h-full text-center z-10">
     <div class="h-full w-2/5 flex items-end overflow-hidden">
       <img
-        src={imageUrl}
+        src={cdnSrc}
+        data-photo-fallbacks={photoFallbacks}
+        onerror="window.__acmImgFallback && window.__acmImgFallback(this)"
         alt={fullName}
         class="h-full w-full object-cover object-top"
         loading="lazy"
@@ -166,6 +176,34 @@ import { getAssetUrl } from "../../utils/cdn";
     </div>
   </div>
 </div>
+
+<script>
+  // Shared photo fallback chain: CDN webp -> local webp -> local png.
+  // Astro dedupes this script across every card instance on the page.
+  declare global {
+    interface Window {
+      __acmImgFallback?: (img: HTMLImageElement) => void;
+    }
+  }
+
+  if (!window.__acmImgFallback) {
+    window.__acmImgFallback = (img: HTMLImageElement) => {
+      let list: string[] = [];
+      try {
+        list = JSON.parse(img.dataset.photoFallbacks || "[]");
+      } catch {
+        list = [];
+      }
+      const next = list.shift();
+      if (next) {
+        img.dataset.photoFallbacks = JSON.stringify(list);
+        img.src = next;
+      } else {
+        img.onerror = null;
+      }
+    };
+  }
+</script>
 
 <style>
   /* Local font-face definitions removed in favor of globals.css */
