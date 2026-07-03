@@ -6,7 +6,9 @@
       "runtimeExecutable": "npx",
       "runtimeArgs": [
         "astro",
-        "dev"
+        "dev",
+        "--port",
+        "4322"
       ],
       "port": 4322,
       "autoPort": true
