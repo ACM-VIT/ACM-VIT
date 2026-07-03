@@ -82,7 +82,7 @@ export const board2023: TeamMember[] = [
   member("Gagan Malvi", "Technical Head", "gagan-malvi", 2023),
   member("Swarup Kharul", "Projects Head", "swarup-kharul", 2023),
   member("Jeet Kaushik", "Design Head", "jeet-kaushik", 2023),
-  member("Dhriti Khangrara", "Creative Head", "dhriti-khangrara", 2023),
+  member("Dhriti Kharangra", "Creative Head", "dhriti-khangrara", 2023),
   member("Pramika Garg", "Finance Head", "pramika-garg", 2023),
   member("Ananya Grover", "Chairperson (ACM-W)", "ananya-grover", 2023, true),
   member("Aishwarya Manjunath", "Vice Chairperson (ACM-W)", "aishwarya-manjunath", 2023, true),
