@@ -432,6 +432,13 @@ html[data-theme="light"] #footer .text-\[\#fefcd9\] {
   color: #fefcd9 !important;
 }
 
+/* ── Blog marquee cards: theme-immune. Always a dark photo card, so undo
+   the generic light-theme utility recolors for anything inside it. ── */
+html[data-theme="light"] .blog-mcard .text-\[\#FEFCD9\],
+html[data-theme="light"] .blog-mcard .text-\[\#fefcd9\] {
+  color: #fefcd9 !important;
+}
+
 /* ── Preloader ── */
 html[data-theme="light"] .preloader,
 html[data-theme="light"] [class*="preloader"] {

@@ -357,31 +357,6 @@
   border-top: 1px solid rgba(255,255,255,0.06);
 }
 
-.domain-back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  color: #FFFDD0;
-  font-family: 'PolySans Mono', monospace;
-  font-size: 0.8rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  text-decoration: none;
-  border: 1px solid rgba(255,255,255,0.1);
-  padding: 14px 24px;
-  border-radius: 100px;
-  transition: all 0.3s ease;
-}
-
-.domain-back-link:hover {
-  border-color: var(--domain-color, #F95F4A);
-  color: var(--domain-color, #F95F4A);
-}
-
-.domain-back-link span {
-  color: var(--domain-color, #F95F4A);
-}
-
 /* ═══════════════════════════════════════════════════════
    Responsive
    ═══════════════════════════════════════════════════════ */
@@ -519,11 +494,6 @@ html[data-theme="light"] .domain-stat-value {
 
 html[data-theme="light"] .domain-stat-label {
   color: rgba(26, 26, 26, 0.4);
-}
-
-html[data-theme="light"] .domain-back-link {
-  color: #1a1a1a;
-  border-color: rgba(0, 0, 0, 0.15);
 }
 
 html[data-theme="light"] .domain-marquee-section {

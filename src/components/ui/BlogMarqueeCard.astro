@@ -44,6 +44,16 @@ const imageUrl = bgUrl.startsWith("http") ? bgUrl : getAssetUrl(bgUrl);
   >
   </div>
 
+  <!-- Cassette shell cues: corner screws + reel spools -->
+  <span class="blog-mcard-screw" style="top: 10px; left: 10px;"></span>
+  <span class="blog-mcard-screw" style="top: 10px; right: 10px;"></span>
+  <span class="blog-mcard-screw" style="bottom: 10px; left: 10px;"></span>
+  <span class="blog-mcard-screw" style="bottom: 10px; right: 10px;"></span>
+  <div class="blog-mcard-reels" aria-hidden="true">
+    <span class="blog-mcard-reel"></span>
+    <span class="blog-mcard-reel"></span>
+  </div>
+
   <!-- Tag pill -->
   {
     tag && (
@@ -78,6 +88,53 @@ const imageUrl = bgUrl.startsWith("http") ? bgUrl : getAssetUrl(bgUrl);
 </a>
 
 <style>
+  .blog-mcard-screw {
+    position: absolute;
+    z-index: 10;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(254, 252, 217, 0.35);
+    background: rgba(0, 0, 0, 0.35);
+  }
+
+  .blog-mcard-reels {
+    position: absolute;
+    z-index: 5;
+    top: 18%;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 22%;
+    pointer-events: none;
+  }
+  .blog-mcard-reel {
+    position: relative;
+    width: 15%;
+    aspect-ratio: 1;
+    max-width: 42px;
+    border-radius: 50%;
+    border: 2px solid rgba(254, 252, 217, 0.28);
+    background: radial-gradient(circle, rgba(0, 0, 0, 0.25) 35%, transparent 60%);
+    transition: transform 0.6s ease, border-color 0.4s ease;
+  }
+  .blog-mcard-reel::before {
+    content: "";
+    position: absolute;
+    inset: 32%;
+    border-radius: 50%;
+    background: rgba(254, 252, 217, 0.28);
+  }
+  .group:hover .blog-mcard-reel {
+    border-color: rgba(249, 95, 74, 0.6);
+    transform: rotate(140deg);
+  }
+  .group:hover .blog-mcard-reel:last-child {
+    transform: rotate(-140deg);
+  }
+
   .blog-mcard-title {
     display: -webkit-box;
     -webkit-line-clamp: 2;

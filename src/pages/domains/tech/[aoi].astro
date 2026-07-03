@@ -8,6 +8,7 @@ import "../../../styles/design-domain.css";
 import { getAssetUrl } from "../../../utils/cdn";
 import ToolCard from "../../../components/ToolCard.astro";
 import ProjectCassetteCard from "../../../components/ui/ProjectCassetteCard.astro";
+import FillButton from "../../../components/ui/FillButton.astro";
 import {
   TECH_THEME_COLOR,
   techAOIs,
@@ -182,10 +183,9 @@ const otherAOIs = techAOIs.filter((a) => a.key !== aoiSlug);
         ))}
       </div>
       <p class="dsg-footer-msg">{techFooterMessage}</p>
-      <a href="/domains/tech" class="dsg-back-link">
-        <span aria-hidden="true">&larr;</span>
-        Back to Tech
-      </a>
+      <FillButton href="/domains/tech" label="Back to Tech" style={`--proj-color: ${TECH_THEME_COLOR}; --proj-color-secondary: #0d0e0d;`}>
+        <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </FillButton>
     </section>
   </div>
 

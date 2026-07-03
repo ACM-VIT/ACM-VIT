@@ -7,6 +7,7 @@ import "../../styles/globals.css";
 import "../../styles/domain.css";
 import { getAssetUrl } from "../../utils/cdn";
 import { reader } from "../../utils/reader";
+import FillButton from "../../components/ui/FillButton.astro";
 
 const domainsData = await reader.singletons.domains.read();
 const allDomains = domainsData?.items ?? [];
@@ -173,10 +174,9 @@ const titleAccent = titleWords.length > 1 ? titleWords.slice(1).join(" ") : "";
 
     <!-- Back to Home -->
     <section class="domain-back-section">
-      <a href="/" class="domain-back-link">
-        <span aria-hidden="true">&larr;</span>
-        Back to Home
-      </a>
+      <FillButton href="/" label="Back to Home" style={`--proj-color: ${themeColor}; --proj-color-secondary: #0d0e0d;`}>
+        <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </FillButton>
     </section>
   </div>
 

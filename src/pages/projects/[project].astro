@@ -516,6 +516,7 @@ const hasTechStack = data.techStack.some((g) => g.slugs.length > 0);
                             decoding="async"
                           />
                           <span>@{dev.github}</span>
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
                         </a>
                       ))}
                     </div>
@@ -535,6 +536,7 @@ const hasTechStack = data.techStack.some((g) => g.slugs.length > 0);
                         >
                           <span class="proj-mini-avatar proj-mini-avatar--initial">{des.name.charAt(0)}</span>
                           <span>{des.name}</span>
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
                         </a>
                       ))}
                     </div>
@@ -582,20 +584,18 @@ const hasTechStack = data.techStack.some((g) => g.slugs.length > 0);
           )}
         </div>
         <p class="proj-endroad-caption">{footerLine}</p>
-        <a href="/projects" class="proj-back-link">
-          <span aria-hidden="true">&larr;</span>
-          Back to all projects
-        </a>
+        <FillButton href="/projects" label="Back to all projects">
+          <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </FillButton>
       </section>
     )}
 
     {!(deco.parking || deco.motorcycle) && (
       <section class="proj-back-section">
         {footerLine && <p class="proj-endroad-caption">{footerLine}</p>}
-        <a href="/projects" class="proj-back-link">
-          <span aria-hidden="true">&larr;</span>
-          Back to all projects
-        </a>
+        <FillButton href="/projects" label="Back to all projects">
+          <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </FillButton>
       </section>
     )}
   </div>
@@ -1225,20 +1225,6 @@ const hasTechStack = data.techStack.some((g) => g.slugs.length > 0);
     padding: 3rem 1.5rem 5rem;
     text-align: center;
   }
-  .proj-back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    color: rgba(254, 252, 217, 0.55);
-    text-decoration: none;
-    font-family: 'PolySans Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    transition: color 0.2s ease;
-  }
-  .proj-back-link:hover { color: var(--proj-color); }
-
   /* ───── LIGHT THEME ───── */
   :global(html[data-theme="light"]) .proj-section-title,
   :global(html[data-theme="light"]) .proj-feature-title,
@@ -1317,7 +1303,6 @@ const hasTechStack = data.techStack.some((g) => g.slugs.length > 0);
   :global(html[data-theme="light"]) .proj-mini-person {
     color: rgba(26,26,26,0.7);
   }
-  :global(html[data-theme="light"]) .proj-back-link { color: rgba(26,26,26,0.55); }
   :global(html[data-theme="light"]) .proj-commit-cell {
     background: rgba(0,0,0,0.04);
   }
@@ -1336,10 +1321,6 @@ const hasTechStack = data.techStack.some((g) => g.slugs.length > 0);
   :global(html[data-theme="light"]) .proj-mini-person:hover {
     border-color: var(--proj-color-secondary, #263B33);
   }
-  :global(html[data-theme="light"]) .proj-back-link:hover {
-    color: var(--proj-color-secondary, #263B33);
-  }
-
   /* ── Responsive ── */
   @media (max-width: 880px) {
     .proj-hero-cassette { order: -1; max-width: 320px; margin: 0 auto; }

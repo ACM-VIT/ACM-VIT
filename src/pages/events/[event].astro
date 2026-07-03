@@ -7,6 +7,7 @@ import Footer from "../../layouts/Footer.astro";
 import "../../styles/globals.css";
 import "../../styles/event.css";
 import { getAssetUrl } from "../../utils/cdn";
+import FillButton from "../../components/ui/FillButton.astro";
 import {
   eventDetails,
   eventSlugs,
@@ -276,13 +277,16 @@ const otherEvents = Object.values(eventDetails)
           >
             {data.primaryCtaLabel}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
+              <path d="M7 17L17 7M9 7h8v8"/>
             </svg>
           </a>
           {data.socials && data.socials.length > 0 && (
             <div class="event-cta-socials">
               {data.socials.map((s) => (
-                <a href={s.href} target="_blank" rel="noopener noreferrer" class="event-cta-social">{s.label}</a>
+                <a href={s.href} target="_blank" rel="noopener noreferrer" class="event-cta-social">
+                  {s.label}
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+                </a>
               ))}
             </div>
           )}
@@ -325,10 +329,9 @@ const otherEvents = Object.values(eventDetails)
 
     <!-- Back -->
     <section class="event-back-section">
-      <a href="/#work" class="event-back-link">
-        <span aria-hidden="true">&larr;</span>
-        Back to All Events
-      </a>
+      <FillButton href="/#work" label="Back to All Events">
+        <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </FillButton>
     </section>
   </div>
 

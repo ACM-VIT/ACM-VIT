@@ -5,9 +5,10 @@ interface Props {
   external?: boolean;
   class?: string;
   type?: "button" | "submit" | "reset";
+  style?: string;
 }
 
-const { href, label, external = false, class: className = "", type } = Astro.props;
+const { href, label, external = false, class: className = "", type, style } = Astro.props;
 const Tag = href ? "a" : "button";
 ---
 
@@ -15,6 +16,7 @@ const Tag = href ? "a" : "button";
   href={href}
   type={href ? undefined : type || "button"}
   class:list={["fill-btn", className]}
+  style={style}
   {...href && external ? { target: "_blank", rel: "noopener noreferrer" } : {}}
   data-fill-btn
 >
@@ -42,7 +44,7 @@ const Tag = href ? "a" : "button";
     font-weight: 700;
     background: var(--proj-color, #1c1917);
     color: var(--proj-color-secondary, #fefcd9);
-    border: 1px solid var(--proj-color, #1c1917);
+    border: 1px solid var(--proj-color, rgba(254, 252, 217, 0.22));
     overflow: hidden;
     cursor: pointer;
     transition: color 0.35s ease, border-color 0.35s ease, transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
@@ -73,7 +75,7 @@ const Tag = href ? "a" : "button";
   }
 
   .fill-btn:hover {
-    color: var(--proj-color);
+    color: var(--proj-color, #F95F4A);
     border-color: var(--fill-bg);
     transform: translateY(-2px);
   }

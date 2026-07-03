@@ -599,27 +599,6 @@
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.event-back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  color: #FFFDD0;
-  font-family: 'PolySans Mono', monospace;
-  font-size: 0.8rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  text-decoration: none;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 14px 24px;
-  border-radius: 100px;
-  transition: all 0.3s ease;
-}
-
-.event-back-link:hover {
-  border-color: var(--event-color, #F95F4A);
-  color: var(--event-color, #F95F4A);
-}
-
 /* ── Divider ── */
 .event-divider {
   max-width: 1400px;
@@ -721,8 +700,7 @@ html[data-theme="light"] .event-prize-value,
 html[data-theme="light"] .event-highlight-title,
 html[data-theme="light"] .event-faq-q,
 html[data-theme="light"] .event-cta-banner h3,
-html[data-theme="light"] .event-other-card-name,
-html[data-theme="light"] .event-back-link {
+html[data-theme="light"] .event-other-card-name {
   color: #1a1a1a;
 }
 
@@ -961,6 +939,9 @@ html[data-theme="light"] .event-cta-primary {
 }
 
 .event-cta-social {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   font-family: 'PolySans Mono', monospace;
   font-size: 0.7rem;
   letter-spacing: 0.18em;

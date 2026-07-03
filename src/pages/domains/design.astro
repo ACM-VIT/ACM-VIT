@@ -7,6 +7,7 @@ import "../../styles/globals.css";
 import "../../styles/design-domain.css";
 import { getAssetUrl } from "../../utils/cdn";
 import ToolCard from "../../components/ToolCard.astro";
+import FillButton from "../../components/ui/FillButton.astro";
 import {
   DESIGN_THEME_COLOR,
   designTools,
@@ -191,7 +192,10 @@ for (const size of pyramidSizes) {
                 loading="lazy"
                 decoding="async"
               />
-              <h4>{event.title}</h4>
+              <h4>
+                {event.title}
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; margin-left:0.35em; vertical-align:middle;"><path d="M7 17L17 7M9 7h8v8"/></svg>
+              </h4>
               <p>{event.desc}</p>
             </a>
           )
@@ -214,10 +218,9 @@ for (const size of pyramidSizes) {
         ))}
       </div>
       <p class="dsg-footer-msg">{designFooterMessage}</p>
-      <a href="/" class="dsg-back-link">
-        <span aria-hidden="true">&larr;</span>
-        Back to Home
-      </a>
+      <FillButton href="/" label="Back to Home" style={`--proj-color: ${DESIGN_THEME_COLOR}; --proj-color-secondary: #0d0e0d;`}>
+        <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </FillButton>
     </section>
   </div>
 

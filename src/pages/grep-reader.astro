@@ -2,6 +2,7 @@
 export const prerender = true;
 import { getAssetUrl } from "../utils/cdn";
 import viewerScript from "../scripts/grep-viewer.ts?url";
+import FillButton from "../components/ui/FillButton.astro";
 
 const pdfUrl = getAssetUrl("/docs/docs-grep-v0.pdf");
 ---
@@ -80,7 +81,9 @@ const pdfUrl = getAssetUrl("/docs/docs-grep-v0.pdf");
       <div class="grep-end" data-grep-end>
         <div class="grep-end-card">
           <p class="grep-end-title">End of GREP</p>
-          <a class="grep-end-link" href="/">Back to Main Site</a>
+          <FillButton href="/" label="Back to Main Site">
+            <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </FillButton>
         </div>
       </div>
 
@@ -385,27 +388,6 @@ const pdfUrl = getAssetUrl("/docs/docs-grep-v0.pdf");
     letter-spacing: 0.25em;
     text-transform: uppercase;
     color: rgba(254, 252, 217, 0.7);
-  }
-
-  .grep-end-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 10px 20px;
-    border-radius: 999px;
-    border: 1px solid #f95f4a;
-    color: #fefcd9;
-    text-decoration: none;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.18em;
-    transition: background 0.3s ease, color 0.3s ease;
-  }
-
-  .grep-end-link:hover {
-    background: #f95f4a;
-    color: #1a1a1a;
   }
 
   .grep-start {

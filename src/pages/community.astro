@@ -2,7 +2,7 @@
 export const prerender = true;
 import Layout from "../layouts/Layout.astro";
 import "../styles/globals.css";
-import AnimatedButton from "../components/ui/AnimatedButton.astro";
+import FillButton from "../components/ui/FillButton.astro";
 
 import Outreach from "../sections/Outreach.astro";
 import Sdg from "../sections/Sdg.astro";
@@ -72,7 +72,9 @@ const yearsSince = new Date().getFullYear() - 2009;
         <p class="closing-years">{yearsSince}</p>
         <p class="closing-text">years of igniting minds</p>
         <div class="closing-cta">
-          <AnimatedButton text="Back to home" href="/" />
+          <FillButton href="/" label="Back to home">
+            <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </FillButton>
         </div>
       </div>
     </section>

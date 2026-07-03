@@ -627,31 +627,6 @@
   max-width: 600px;
 }
 
-.dsg-back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  color: #FFFDD0;
-  font-family: 'PolySans Mono', monospace;
-  font-size: 0.8rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  text-decoration: none;
-  border: 1px solid rgba(255,255,255,0.1);
-  padding: 14px 24px;
-  border-radius: 100px;
-  transition: all 0.3s ease;
-}
-
-.dsg-back-link:hover {
-  border-color: var(--domain-color, #FF0054);
-  color: var(--domain-color, #FF0054);
-}
-
-.dsg-back-link span {
-  color: var(--domain-color, #FF0054);
-}
-
 /* ═══════════════════════════════════════════════════════
    Responsive
    ═══════════════════════════════════════════════════════ */
@@ -928,11 +903,6 @@ html[data-theme="light"] .dsg-event-card p {
 html[data-theme="light"] .dsg-footer-msg {
   color: var(--domain-color, #FF0054); /* fallback: WebKit <16.2 lacks color-mix */
   color: color-mix(in srgb, var(--domain-color, #FF0054) 65%, #1a1a1a 35%);
-}
-
-html[data-theme="light"] .dsg-back-link {
-  color: #1a1a1a;
-  border-color: rgba(0, 0, 0, 0.15);
 }
 
 html[data-theme="light"] .dsg-footer-section {
