@@ -9,6 +9,7 @@ import "../../styles/design-domain.css";
 import ToolCard from "../../components/ToolCard.astro";
 import FillButton from "../../components/ui/FillButton.astro";
 import { getAssetUrl } from "../../utils/cdn";
+import { reader } from "../../utils/reader";
 import {
   projectDetails,
   projectSlugs,
@@ -66,6 +67,24 @@ for (let i = 0; i < COLS * ROWS; i++) {
 const otherProjects = Object.values(projectDetails)
   .filter((p) => p.slug !== data.slug)
   .slice(0, 6);
+
+// Pull the canonical project cassettes from the CMS (same source the homepage
+// showcase uses) and key them by slug. The CMS has no slug field, so derive one
+// from the cassette alt ("ACMOne Image" -> "acmone"), mirroring index.astro.
+const slugAliases: Record<string, string> = { "ocs website": "ocs-25" };
+const validSlugs = new Set(projectSlugs);
+const resolveSlug = (alt: string): string | undefined => {
+  const base = alt.replace(/\s*image$/i, "").trim().toLowerCase();
+  const derived = slugAliases[base] ?? base.replace(/\s+/g, "-");
+  return validSlugs.has(derived) ? derived : undefined;
+};
+const projectsCms = await reader.singletons.projects.read();
+const cassetteBySlug: Record<string, string> = {};
+for (const item of projectsCms?.items ?? []) {
+  if (!item.cassetteSrc || !item.cassetteAlt) continue;
+  const slug = resolveSlug(item.cassetteAlt);
+  if (slug) cassetteBySlug[slug] = item.cassetteSrc;
+}
 
 const statusMap: Record<typeof data.status, { label: string; dot: string }> = {
   online: { label: data.statusNote ?? "All systems online", dot: "#42CD9D" },
@@ -560,13 +579,28 @@ const hasTechStack = data.techStack.some((g) => g.slugs.length > 0);
               Other <span>projects</span>
             </h2>
           </div>
-          <div class="flex flex-wrap gap-4">
-            {otherProjects.map((p) => (
-              <a href={`/projects/${p.slug}`} class="proj-other-card" data-anim="up">
-                <span class="proj-other-card-name">{p.title}</span>
-                <span class="proj-other-card-tag">{p.tagline}</span>
-              </a>
-            ))}
+          <div class="proj-other-grid">
+            {otherProjects.map((p) => {
+              const cassette = cassetteBySlug[p.slug] ?? p.cassetteSvg;
+              return (
+                <a href={`/projects/${p.slug}`} class="proj-other-card" data-anim="up">
+                  {cassette && (
+                    <div class="proj-other-card-art">
+                      <img
+                        src={getAssetUrl(cassette)}
+                        alt=""
+                        aria-hidden="true"
+                        class="proj-other-card-art-img"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </div>
+                  )}
+                  <span class="proj-other-card-name">{p.title}</span>
+                  <span class="proj-other-card-tag">{p.tagline}</span>
+                </a>
+              );
+            })}
           </div>
         </section>
       </>
@@ -1159,6 +1193,11 @@ const hasTechStack = data.techStack.some((g) => g.slugs.length > 0);
   }
 
   /* ── Other projects strip ── */
+  .proj-other-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+  }
   .proj-other-card {
     display: flex;
     flex-direction: column;
@@ -1168,12 +1207,27 @@ const hasTechStack = data.techStack.some((g) => g.slugs.length > 0);
     border-radius: 14px;
     background: rgba(255,255,255,0.02);
     text-decoration: none;
-    min-width: 220px;
     transition: all 0.25s ease;
   }
   .proj-other-card:hover {
     border-color: var(--proj-color);
     transform: translateY(-2px);
+  }
+  .proj-other-card-art {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    aspect-ratio: 2 / 1;
+    border-radius: 10px;
+    background: #1e1e1e;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+  .proj-other-card-art-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
   }
   .proj-other-card-name {
     font-family: 'PolySans Trial', sans-serif;

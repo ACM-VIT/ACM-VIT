@@ -349,10 +349,6 @@ export const projectDetails: Record<string, ProjectDetail> = {
         developers: [
           { github: "theg1239", role: "Lead developer" },
         ],
-        designers: [
-          { name: "Alan J Bibins", linkedin: "https://www.linkedin.com/in/alanjbibins/", role: "Design" },
-          { name: "Krishika Sureka", linkedin: "https://www.linkedin.com/in/krishikasureka/", role: "Design" },
-        ],
       },
       {
         label: "ExamCooker Website",
@@ -383,6 +379,10 @@ export const projectDetails: Record<string, ProjectDetail> = {
           { github: "pj4real", role: "Developer" },
           { github: "Passive-Coder", role: "Developer" },
           { github: "ant1v3n0m", role: "Developer" },
+        ],
+        designers: [
+          { name: "Alan J Bibins", linkedin: "https://www.linkedin.com/in/alanjbibins/", role: "Design" },
+          { name: "Krishika Sureka", linkedin: "https://www.linkedin.com/in/krishikasureka/", role: "Design" },
         ],
       },
     ],
