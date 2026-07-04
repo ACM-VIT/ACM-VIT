@@ -30,6 +30,10 @@ const localWebp = imageUrl;
 const localPng = imageUrl ? imageUrl.replace(/\.webp$/i, ".png") : "";
 const cdnSrc = getImageUrl(imageUrl);
 const photoFallbacks = JSON.stringify([localWebp, localPng].filter((u) => u && u !== cdnSrc));
+
+// When no photo is available (e.g. an old board with no usable headshots),
+// render a name-only cassette: drop the photo column and center the info.
+const hasPhoto = !!imageUrl;
 ---
 
 <div
@@ -69,20 +73,29 @@ const photoFallbacks = JSON.stringify([localWebp, localPng].filter((u) => u && u
 
   <!-- Member Info -->
   <div class="flex items-center w-full h-full text-center z-10">
-    <div class="h-full w-2/5 flex items-end overflow-hidden">
-      <img
-        src={cdnSrc}
-        data-photo-fallbacks={photoFallbacks}
-        onerror="window.__acmImgFallback && window.__acmImgFallback(this)"
-        alt={fullName}
-        class="h-full w-full object-cover object-top"
-        loading="lazy"
-        decoding="async"
-      />
-    </div>
+    {
+      hasPhoto && (
+        <div class="h-full w-2/5 flex items-end overflow-hidden">
+          <img
+            src={cdnSrc}
+            data-photo-fallbacks={photoFallbacks}
+            onerror="window.__acmImgFallback && window.__acmImgFallback(this)"
+            alt={fullName}
+            class="h-full w-full object-cover object-top"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      )
+    }
 
     <div
-      class="w-3/5 z-20 text-left flex flex-col justify-center mb-4 sm:mb-10 gap-1 sm:gap-1.5 pl-3 pr-2 sm:pl-8 sm:pr-4"
+      class:list={[
+        "z-20 flex flex-col justify-center mb-4 sm:mb-10 gap-1 sm:gap-1.5",
+        hasPhoto
+          ? "w-3/5 text-left pl-3 pr-2 sm:pl-8 sm:pr-4"
+          : "w-full text-center items-center px-6",
+      ]}
     >
       <div class="">
         <h3

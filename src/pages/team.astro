@@ -13,6 +13,7 @@ import {
   teamYears,
   boardDivision,
   historicalBoards,
+  yearLabel,
   type TeamMember,
 } from "../data/teamData";
 
@@ -138,7 +139,7 @@ const CURRENT_BOARD_YEAR = 2026;
             <SectionHeading
               eyebrow="ACM-VIT Board"
               title="Board of"
-              accent={String(year)}
+              accent={yearLabel(year)}
               align="left"
               class="mb-14 !px-0"
             />

@@ -2,7 +2,20 @@
 // live from the Keystatic `board` singleton in team.astro; every other year
 // here is a static historical roster with real photos under public/board/<year>/.
 
-export const teamYears = [2026, 2025, 2024, 2023, 2022] as const;
+export const teamYears = [
+  2026, 2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017,
+] as const;
+
+// Display label for a board year. Most render as the plain start-year; older
+// boards spanned two academic years and are shown as a range.
+export const yearLabels: Record<number, string> = {
+  2020: "2019-2020",
+  2019: "2018-2019",
+  2018: "2017-2018",
+  2017: "2016-2017",
+};
+export const yearLabel = (year: number): string =>
+  yearLabels[year] ?? String(year);
 
 export interface TeamDivisionDef {
   key: string;
@@ -109,6 +122,98 @@ export const board2022: TeamMember[] = [
   member("Aritri Basu", "General Secretary (ACM-W)", "aritri-basu", 2022, true),
 ];
 
+export const board2021: TeamMember[] = [
+  member("Sarthak Gupta", "President", "sarthak-gupta", 2021),
+  member("Hrishita Chakrabarti", "Managing Director", "hrishita-chakrabarti", 2021),
+  member("Eesha Shetty", "Technical Director", "eesha-shetty", 2021),
+  member("Anjali Roy", "General Secretary", "anjali-roy", 2021),
+  member("Dhruv Roy", "Treasurer", "dhruv-roy", 2021),
+  member("Kashish Mittal", "Web-Master", "kashish-mittal", 2021),
+  member("Devansh Mehta", "App Lead", "devansh-mehta", 2021),
+  member("Shovin Kakaraddi", "UI/UX Lead", "shovin-kakaraddi", 2021),
+  member("Iishi Patel", "Research Lead", "iishi-patel", 2021),
+  member("Nimit Jain", "Competitive Lead", "nimit-jain", 2021),
+  member("Garima Bothra", "App Projects Guide", "garima-bothra", 2021),
+  member("Elio Jordan Lopes", "Web Projects Guide", "elio-jordan-lopes", 2021),
+  member("Siddharth Nahar", "Competitive Guide", "siddharth-nahar", 2021),
+  member("Sriya Reddi", "Operations Head", "sriya-reddi", 2021),
+  member("Jerelyn Preeja", "ACM-W Lead", "jerelyn-preeja", 2021, true),
+];
+
+export const board2020: TeamMember[] = [
+  member("Kartik Soni", "Chair", "kartik-soni", 2020),
+  member("Nimisha Bhatia", "Managing Director", "nimisha-bhatia", 2020),
+  member("Shubham Awasthi", "Technical Director", "shubham-awasthi", 2020),
+  member("Fiza Rasool", "General Secretary", "fiza-rasool", 2020),
+  member("Aditya Srivastava", "Web-Master", "aditya-srivastava", 2020),
+  member("Sarthak Dandotiya", "UI/UX Lead", "sarthak-dandotiya", 2020),
+  member("Svetansu Singh", "Treasurer", "svetansu-singh", 2020),
+  member("Sparsh Srivastava", "App Lead", "sparsh-srivastava", 2020),
+  member("Subhaditya Mukherjee", "Research Lead", "subhaditya-mukherjee", 2020),
+  member("Rajat Gupta", "Competitive Lead", "rajat-gupta", 2020),
+  member("Madhur Dixit", "Research Projects Guide", "madhur-dixit", 2020),
+  member("Shrey Sindher", "App Projects Guide", "shrey-sindher", 2020),
+  member("Shivank Sahai", "Web Projects Guide", "shivank-sahai", 2020),
+  member("Bhumij Gupta", "Creative Head", "bhumij-gupta", 2020),
+];
+
+export const board2019: TeamMember[] = [
+  member("Suchita Mehta", "Chair", "suchita-mehta", 2019),
+  member("Navin Agarwalla", "Co-Vice Chair (Management)", "navin-agarwalla", 2019),
+  member("Akshit Grover", "Co-Vice Chair (Technical)", "akshit-grover", 2019),
+  member("Ankit Prasad", "Secretary (Internal Affairs)", "ankit-prasad", 2019),
+  member("Akash Tushar", "Secretary (External Affairs)", "akash-tushar", 2019),
+  member("Deep Baldha", "Competitive Programming Lead", "deep-baldha", 2019),
+  member("Prateek Singh", "Web Master", "prateek-singh", 2019),
+  member("Pravigya Pariyar", "R&D Lead", "pravigya-pariyar", 2019),
+  member("Anant Mishra", "DevOps Lead", "anant-mishra", 2019),
+  member("Mufaddal Ibrahimjee", "App Dev Lead", "mufaddal-ibrahimjee", 2019),
+  member("Sanya Taneja", "Outreach Head", "sanya-taneja", 2019),
+  member("Tanmay Jain", "UI/UX Lead", "tanmay-jain", 2019),
+  member("Shyamli Singh", "Program Lead", "shyamli-singh", 2019),
+  member("Mudit Agarwal", "Treasurer", "mudit-agarwal", 2019),
+  member("Arnav Saxena", "Operations Head (ACM)", "arnav-saxena", 2019),
+  member("Kumar Shaswat", "Creative Head", "kumar-shaswat", 2019),
+  // ACM-W positions listed at the end.
+  member("Sasya Reddi", "ACM-W Lead", "sasya-reddi", 2019, true),
+  member("Ankita Ghosh", "Operations Head (ACM-W)", "ankita-ghosh", 2019, true),
+];
+
+export const board2018: TeamMember[] = [
+  member("Abhitej Singh", "President", "abhitej-singh", 2018),
+  member("Hardika Goyal", "Managing Director", "hardika-goyal", 2018),
+  member("Sourish Banerjee", "Technical Director", "sourish-banerjee", 2018),
+  member("Harshit Kedia", "Associate Technical Head", "harshit-kedia", 2018),
+  member("Shivam", "Public Relations", "shivam", 2018),
+  member("Anmol", "Marketing Head", "anmol", 2018),
+  member("Rishabh", "Operations Head", "rishabh", 2018),
+  member("Yash Shah", "Research and ICPC Head", "yash-shah", 2018),
+  member("Vinit Bodhwani", "Associate Research Lead", "vinit-bodhwani", 2018),
+  member("Vibhore Gupta", "Finance Head", "vibhore-gupta", 2018),
+];
+
+// 2016-2017: only a low-res circular group poster exists, so these render as
+// name-only cassettes (no `imageUrl`) rather than showing poor cropped faces.
+const nameOnly = (fullName: string, position: string): TeamMember => ({
+  title: "",
+  fullName,
+  position,
+  imageUrl: "",
+});
+
+export const board2017: TeamMember[] = [
+  nameOnly("Abhinav Das", "President"),
+  nameOnly("Pranay Gupta", "Vice President"),
+  nameOnly("Mugdha Pandya", "General Secretary"),
+  nameOnly("Ashwini Purohit", "Technical Head"),
+  nameOnly("Rishi Raj", "Deputy Technical Head"),
+  nameOnly("Tanish Noah", "Treasurer"),
+  nameOnly("Aarti Susan Kuruvilla", "Communication Head"),
+  nameOnly("Rahul Nigam", "Marketing & Design Head"),
+  nameOnly("Mallika Rai", "University Relations"),
+  nameOnly("Lekhani Ray", "Membership Coordinator"),
+];
+
 // Keyed by the same start-year labels used in `teamYears`. The current year
 // (2026) is intentionally absent here - it's read live from board.json.
 export const historicalBoards: Record<number, TeamMember[]> = {
@@ -116,4 +221,9 @@ export const historicalBoards: Record<number, TeamMember[]> = {
   2024: board2024,
   2023: board2023,
   2022: board2022,
+  2021: board2021,
+  2020: board2020,
+  2019: board2019,
+  2018: board2018,
+  2017: board2017,
 };
