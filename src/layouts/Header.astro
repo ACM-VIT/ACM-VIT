@@ -161,10 +161,6 @@ const dropdowns: Record<string, DropdownItem[]> = {
             <span class="nav-dot"></span>
             <span class="nav-label">More</span>
           </a>
-          <!-- Progress bar track inside pill -->
-          <div class="pill-progress" id="pillProgress">
-            <div class="pill-progress__fill" id="pillProgressFill"></div>
-          </div>
         </div>
 
         {/* Back button bubble - separate from pill, Dynamic Island style */}
@@ -262,8 +258,7 @@ const dropdowns: Record<string, DropdownItem[]> = {
     justify-content: center;
   }
 
-  .header-pill.pill-collapsed .nav-item,
-  .header-pill.pill-collapsed .pill-progress {
+  .header-pill.pill-collapsed .nav-item {
     opacity: 0;
     pointer-events: none;
   }
@@ -741,35 +736,6 @@ const dropdowns: Record<string, DropdownItem[]> = {
     transform: scale(1.04);
   }
 
-  /* ── Pill progress bar ── */
-  .pill-progress {
-    position: absolute;
-    bottom: 3px;
-    left: 16px;
-    right: 16px;
-    height: 2px;
-    border-radius: 2px;
-    background: rgba(254, 252, 217, 0.08);
-    overflow: hidden;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-  }
-
-  /* Show progress when pill is visible (after intro) */
-  .header-pill.pill-intro-play .pill-progress {
-    opacity: 1;
-  }
-
-  .pill-progress__fill {
-    height: 100%;
-    width: 0%;
-    border-radius: 2px;
-    background: #F95F4A;
-    box-shadow: 0 0 6px rgba(249, 95, 74, 0.4);
-    transition: width 0.15s linear;
-  }
-
   /* ── Pink mode for ACM-W ── */
   .nav-item.active.pink-mode .nav-dot {
     background: #ff007a;
@@ -848,11 +814,6 @@ const dropdowns: Record<string, DropdownItem[]> = {
     transition: max-width 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
                 opacity 0.25s ease,
                 padding 0.3s ease;
-  }
-
-  .header-pill.subpage-mode .pill-progress {
-    opacity: 0;
-    pointer-events: none;
   }
 
   /* On hover: expand nav items, hide island label, revert to glass bg */
@@ -1474,20 +1435,5 @@ const dropdowns: Record<string, DropdownItem[]> = {
       }
     }
 
-    // ── Scroll progress bar ──
-    const progressFill = document.getElementById("pillProgressFill");
-
-    function updateScrollProgress() {
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = docHeight > 0 ? Math.min(scrollTop / docHeight, 1) : 0;
-
-      if (progressFill) {
-        progressFill.style.width = `${(progress * 100).toFixed(1)}%`;
-      }
-    }
-
-    window.addEventListener("scroll", updateScrollProgress, { passive: true });
-    updateScrollProgress();
   });
 </script>

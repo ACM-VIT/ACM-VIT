@@ -691,11 +691,16 @@ const isLandingPage = Astro.url.pathname === "/";
   body {
     margin: 0;
     width: 100%;
-    height: 100%;
-    overflow-x: hidden;
-    /* Body is the real scroller here (html+body overflow-x:hidden makes body an
-       inner scroll container). Without this, macOS trackpads rubber-band past
-       the footer and expose the page background below it. */
+    /* overflow-x: clip, NOT hidden, and no height: 100%. The old combo
+       (height: 100% + overflow-x: hidden) turned <body> into an inner scroll
+       container: the page scrolled inside body while the window never scrolled
+       (window.scrollY stuck at 0). That broke native scrolling guarantees -
+       macOS trackpads could overscroll past the footer into a void without
+       bouncing back; scroll restoration and window.scrollTo were no-ops.
+       clip cuts horizontal overflow without creating a scroll container, so
+       the viewport scrolls the page and position: sticky sections still pin
+       to it. */
+    overflow-x: clip;
     overscroll-behavior-y: none;
     position: relative;
     background: #0d0e0d;
@@ -708,12 +713,23 @@ const isLandingPage = Astro.url.pathname === "/";
     -ms-overflow-style: none;
   }
 
-  /* Body is the scroll container, so macOS trackpads elastic-bounce past the
-     footer. Safari/WebKit ignores overscroll-behavior for that document bounce,
+  /* Safari/WebKit ignores overscroll-behavior for the document rubber-band,
      and the exposed gutter paints the viewport canvas = html's background.
-     Match it to the footer's black so pulling past the footer shows no strip. */
+     Match it to the footer's black so a bounce past the footer shows no strip. */
   html {
     background: #000;
+  }
+
+  /* Legacy WebKit (Safari < 16 / older iPads) has no overflow: clip. There,
+     overflow-x: hidden would make body a non-scrolling scroll container and
+     kill every position: sticky section, so restore the old body-scroller
+     setup (body scrolls the page) for those browsers only. */
+  @supports not (overflow: clip) {
+    html,
+    body {
+      height: 100%;
+      overflow-x: hidden;
+    }
   }
 
   /* Hide scrollbar for Chrome, Safari and Opera */

@@ -5,10 +5,10 @@
     --color-primary-pink: #ff007a;
 }
 
-/* Global smooth scrolling */
-html {
-    scroll-behavior: smooth;
-}
+/* No html { scroll-behavior: smooth } here. It was inert while <body> was the
+   scroll container, but now that the window scrolls it would fight the JS
+   scroll tweens (Header/MobileNavbar step scrollTop per frame) and GSAP
+   ScrollTrigger refreshes. Smooth in-page nav is handled in JS explicitly. */
 
 /* ── Theme transition (View Transition API) ── */
 ::view-transition-old(root),
@@ -207,9 +207,6 @@ html[data-theme="light"] .header-pill.pill-menu-open .nav-item:not(.active) .nav
 html[data-theme="light"] .header-pill:hover .nav-item.active .nav-dot,
 html[data-theme="light"] .header-pill.pill-menu-open .nav-item.active .nav-dot {
   background: #FEFCD9 !important;
-}
-html[data-theme="light"] .pill-progress {
-  background: rgba(254, 252, 217, 0.08) !important;
 }
 /* Pink mode dot stays pink */
 html[data-theme="light"] .nav-item.active.pink-mode .nav-dot {

@@ -293,8 +293,14 @@ const worksHeightMobile = works.length * 45;
       newValue: string | null
     ) {
       if (name === "progress") {
-        this.style.setProperty("--progress", newValue);
+        // Clamp to the designed [-1, 1] range. Out-of-range/NaN values rotate
+        // the card near the perspective singularity and its projected box
+        // balloons to millions of px, blowing up the page's scroll height.
         const progressValue = Number(newValue);
+        const safeProgress = Number.isFinite(progressValue)
+          ? Math.max(-1, Math.min(1, progressValue))
+          : 1;
+        this.style.setProperty("--progress", String(safeProgress));
         if (Number.isFinite(progressValue)) {
           this.style.zIndex = String(
             Math.round((1 - Math.min(Math.abs(progressValue), 1)) * 1000) + 10
@@ -1345,6 +1351,12 @@ const worksHeightMobile = works.length * 45;
     position: relative;
     z-index: 2;
     height: var(--height);
+    /* The perspective scene inside can project card/letter boxes millions of
+       px tall at some scrub angles. Without this, that visual overflow inflates
+       the page's scrollable area far below the footer (endless black void at
+       the bottom). clip - not hidden - so no scroll container is created and
+       the sticky scene inside keeps pinning to the viewport. */
+    overflow: clip;
     background: #f95f4a;
     /* pointer-events: none; REMOVED - this might break scrolling/child interactions unpredictably */
 
