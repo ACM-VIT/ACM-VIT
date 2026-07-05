@@ -273,6 +273,43 @@ for (const item of domainItems) {
         // Debounced initialization
         let initialized = false;
         let mainTl: gsap.core.Timeline | null = null;
+        const domainsSectionKey = "domains-section-instance-" + Math.random();
+
+        function cleanupAnimation() {
+          // Close any open domain screen without animation
+          const domainScreen = document.getElementById("domain-screen");
+          if (domainScreen) {
+            domainScreen.remove();
+          }
+          
+          // Kill all GSAP timelines and ScrollTriggers
+          if (mainTl) {
+            if (mainTl.scrollTrigger) {
+              mainTl.scrollTrigger.kill();
+            }
+            mainTl.kill();
+            mainTl = null;
+          }
+          
+          // Kill any remaining ScrollTriggers tied to this component
+          const triggers = ScrollTrigger.getAll();
+          triggers.forEach(trigger => {
+            const target = trigger.trigger;
+            if (target && target.classList && target.classList.contains("domains-section")) {
+              trigger.kill();
+            }
+          });
+          
+          // Restore overflow and header visibility
+          document.body.style.overflow = "";
+          const header = document.querySelector("header");
+          if (header) {
+            (header as HTMLElement).style.transform = "";
+            (header as HTMLElement).style.opacity = "";
+          }
+          
+          initialized = false;
+        }
 
         function initAnimation() {
           if (initialized) return;
@@ -897,11 +934,34 @@ for (const item of domainItems) {
           }
         };
 
+        // Initialize on page load
         if (document.readyState === "loading") {
           document.addEventListener("DOMContentLoaded", initAnimation);
         } else {
           initAnimation();
         }
+
+        // Listen for when this variant is mounted (both initial and remounts)
+        window.addEventListener("app:variants-mounted", (e: any) => {
+          // If desktop variant was just mounted, (re)initialize
+          if (e.detail?.variant === "desktop") {
+            // Reset initialized flag to allow reinitialization
+            initialized = false;
+            // Use setTimeout to ensure DOM is ready
+            setTimeout(() => {
+              initAnimation();
+            }, 50);
+          }
+          // If we're switching away from desktop (to mobile), cleanup
+          if (e.detail?.variant === "mobile") {
+            cleanupAnimation();
+          }
+        });
+
+        // Cleanup when page unloads
+        window.addEventListener("beforeunload", () => {
+          cleanupAnimation();
+        });
       }
     </script>
   </div>

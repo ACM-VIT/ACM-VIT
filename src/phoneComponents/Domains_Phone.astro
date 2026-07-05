@@ -495,4 +495,45 @@ for (const item of domainItems) {
   } else {
     initMobileAnimation();
   }
+
+  // Cleanup function
+  function cleanupMobileAnimation() {
+    // Close any open domain screen without animation
+    const mobileDomainScreen = document.getElementById("mobile-domain-screen");
+    if (mobileDomainScreen) {
+      mobileDomainScreen.remove();
+    }
+    
+    // Kill all GSAP animations
+    const triggers = ScrollTrigger.getAll();
+    triggers.forEach(trigger => {
+      const target = trigger.trigger;
+      if (target && target.classList && target.classList.contains("domains-mobile-section")) {
+        trigger.kill();
+      }
+    });
+    
+    // Restore overflow
+    document.body.style.overflow = "";
+  }
+
+  // Listen for when mobile variant is mounted (both initial and remounts)
+  window.addEventListener("app:variants-mounted", (e: any) => {
+    // If mobile variant was just mounted, (re)initialize
+    if (e.detail?.variant === "mobile") {
+      setTimeout(() => {
+        initMobileAnimation();
+      }, 50);
+    }
+    // If we're switching away from mobile (to desktop), cleanup
+    if (e.detail?.variant === "desktop") {
+      cleanupMobileAnimation();
+    }
+  });
+
+  // Cleanup when page unloads
+  window.addEventListener("beforeunload", () => {
+    cleanupMobileAnimation();
+  });
+
 </script>
