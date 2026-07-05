@@ -148,6 +148,332 @@
   const esc = (s) =>
     String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
+  // ── Custom color picker ──
+  const THEME_SWATCHES = [
+    "#F95F4A", "#FFFDD0", "#FCE6D2", "#202020", "#EDA35F", "#F0EE75",
+    "#259F6C", "#86ACE7", "#E94560", "#A855F7", "#1D3557", "#FFFFFF",
+  ];
+  const RECENT_KEY = "cb-recent-colors";
+
+  const clamp01 = (n) => Math.min(1, Math.max(0, n));
+
+  function hexToRgbArr(hex) {
+    let h = hex.replace("#", "");
+    if (h.length === 3) h = h.split("").map((c) => c + c).join("");
+    return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+  }
+
+  const rgbToHexStr = (r, g, b) =>
+    "#" + [r, g, b].map((n) => n.toString(16).padStart(2, "0")).join("");
+
+  function rgbToHsv(r, g, b) {
+    r /= 255; g /= 255; b /= 255;
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    const d = max - min;
+    let h = 0;
+    if (d) {
+      if (max === r) h = ((g - b) / d) % 6;
+      else if (max === g) h = (b - r) / d + 2;
+      else h = (r - g) / d + 4;
+      h *= 60;
+      if (h < 0) h += 360;
+    }
+    return { h, s: max ? d / max : 0, v: max };
+  }
+
+  function hsvToRgb(h, s, v) {
+    const c = v * s;
+    const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+    const m = v - c;
+    let r = 0, g = 0, b = 0;
+    if (h < 60) { r = c; g = x; }
+    else if (h < 120) { r = x; g = c; }
+    else if (h < 180) { g = c; b = x; }
+    else if (h < 240) { g = x; b = c; }
+    else if (h < 300) { r = x; b = c; }
+    else { r = c; b = x; }
+    return [Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)];
+  }
+
+  function createColorPicker() {
+    const wrap = document.createElement("div");
+    wrap.className = "cbp-wrap";
+    wrap.hidden = true;
+    wrap.innerHTML = `
+      <div class="cbp-backdrop"></div>
+      <div class="cbp-panel" role="dialog" aria-label="Color picker">
+        <div class="cbp-head">
+          <span class="cbp-title"></span>
+          <button type="button" class="cbp-close" aria-label="Close">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+        <div class="cbp-sv" tabindex="0" aria-label="Saturation and brightness. Arrow keys to adjust, hold Shift for bigger steps.">
+          <div class="cbp-sv-thumb"></div>
+        </div>
+        <div class="cbp-hue" tabindex="0" aria-label="Hue. Arrow keys to adjust, hold Shift for bigger steps.">
+          <div class="cbp-hue-thumb"></div>
+        </div>
+        <div class="cbp-io">
+          <span class="cbp-chip"></span>
+          <div class="cbp-hexwrap">
+            <span class="cbp-hash">#</span>
+            <input class="cbp-hexin" maxlength="6" spellcheck="false" autocomplete="off" aria-label="Hex color" />
+          </div>
+          <button type="button" class="cbp-eye" title="Pick a color from the screen" aria-label="Eyedropper">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 22 1-1h3l9-9"></path><path d="M3 21v-3l9-9"></path><path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l.4.4a2.1 2.1 0 1 1-3 3l-3.8-3.8a2.1 2.1 0 1 1 3-3l.4.4Z"></path></svg>
+          </button>
+        </div>
+        <div class="cbp-vals"></div>
+        <span class="cbp-sec">Theme</span>
+        <div class="cbp-grid cbp-theme"></div>
+        <div class="cbp-recent-block" hidden>
+          <span class="cbp-sec">Recent</span>
+          <div class="cbp-grid cbp-recent"></div>
+        </div>
+      </div>`;
+    document.body.appendChild(wrap);
+
+    const panel = wrap.querySelector(".cbp-panel");
+    const backdrop = wrap.querySelector(".cbp-backdrop");
+    const titleEl = wrap.querySelector(".cbp-title");
+    const closeBtn = wrap.querySelector(".cbp-close");
+    const svEl = wrap.querySelector(".cbp-sv");
+    const svThumb = wrap.querySelector(".cbp-sv-thumb");
+    const hueEl = wrap.querySelector(".cbp-hue");
+    const hueThumb = wrap.querySelector(".cbp-hue-thumb");
+    const chip = wrap.querySelector(".cbp-chip");
+    const hexIn = wrap.querySelector(".cbp-hexin");
+    const eyeBtn = wrap.querySelector(".cbp-eye");
+    const valsEl = wrap.querySelector(".cbp-vals");
+    const themeGrid = wrap.querySelector(".cbp-theme");
+    const recentBlock = wrap.querySelector(".cbp-recent-block");
+    const recentGrid = wrap.querySelector(".cbp-recent");
+
+    let hsv = { h: 0, s: 0, v: 1 };
+    let onChange = null;
+    let trigger = null;
+    let openedWith = "";
+    let current = "";
+    let hideTimer = null;
+
+    const getRecent = () => {
+      try { return JSON.parse(localStorage.getItem(RECENT_KEY)) || []; } catch { return []; }
+    };
+    const saveRecent = (c) => {
+      const list = [c, ...getRecent().filter((x) => x.toLowerCase() !== c.toLowerCase())].slice(0, 8);
+      try { localStorage.setItem(RECENT_KEY, JSON.stringify(list)); } catch { /* ignore */ }
+    };
+
+    function fillGrid(grid, colors) {
+      grid.innerHTML = "";
+      colors.forEach((c) => {
+        const cell = document.createElement("button");
+        cell.type = "button";
+        cell.className = "cbp-cell";
+        cell.style.background = c;
+        cell.dataset.color = c.toLowerCase();
+        cell.title = c.toUpperCase();
+        cell.setAttribute("aria-label", c.toUpperCase());
+        cell.addEventListener("click", () => setHex(c));
+        grid.appendChild(cell);
+      });
+    }
+
+    function markActive(grid, hex) {
+      grid.querySelectorAll(".cbp-cell").forEach((cell) => {
+        cell.classList.toggle("is-active", cell.dataset.color === hex.toLowerCase());
+      });
+    }
+
+    function paint(skipHexInput) {
+      const hex = rgbToHexStr(...hsvToRgb(hsv.h, hsv.s, hsv.v));
+      current = hex;
+      const hueHex = rgbToHexStr(...hsvToRgb(hsv.h, 1, 1));
+      svEl.style.background = `linear-gradient(to top, #000, rgba(0,0,0,0)), linear-gradient(to right, #fff, ${hueHex})`;
+      svThumb.style.left = hsv.s * 100 + "%";
+      svThumb.style.top = (1 - hsv.v) * 100 + "%";
+      svThumb.style.background = hex;
+      hueThumb.style.left = (hsv.h / 360) * 100 + "%";
+      hueThumb.style.background = hueHex;
+      chip.style.background = hex;
+      if (!skipHexInput) hexIn.value = hex.slice(1).toUpperCase();
+      const [r, g, b] = hexToRgbArr(hex);
+      valsEl.textContent = `R ${r} · G ${g} · B ${b}`;
+      markActive(themeGrid, hex);
+      markActive(recentGrid, hex);
+      if (onChange) onChange(hex);
+    }
+
+    function setHex(hex, skipHexInput) {
+      const [r, g, b] = hexToRgbArr(hex);
+      const next = rgbToHsv(r, g, b);
+      // Keep hue/saturation position when the color collapses to grayscale
+      if (next.s === 0) next.h = hsv.h;
+      if (next.v === 0) next.s = hsv.s;
+      hsv = next;
+      paint(skipHexInput);
+    }
+
+    // ── Drag ──
+    function svFromEvent(e) {
+      const r = svEl.getBoundingClientRect();
+      hsv.s = clamp01((e.clientX - r.left) / r.width);
+      hsv.v = 1 - clamp01((e.clientY - r.top) / r.height);
+      paint();
+    }
+    function hueFromEvent(e) {
+      const r = hueEl.getBoundingClientRect();
+      hsv.h = Math.min(359.99, clamp01((e.clientX - r.left) / r.width) * 360);
+      paint();
+    }
+    function dragify(el, handler) {
+      el.addEventListener("pointerdown", (e) => {
+        e.preventDefault();
+        el.setPointerCapture(e.pointerId);
+        handler(e);
+        const move = (ev) => handler(ev);
+        const up = () => {
+          el.removeEventListener("pointermove", move);
+          el.removeEventListener("pointerup", up);
+          el.removeEventListener("pointercancel", up);
+        };
+        el.addEventListener("pointermove", move);
+        el.addEventListener("pointerup", up);
+        el.addEventListener("pointercancel", up);
+      });
+    }
+    dragify(svEl, svFromEvent);
+    dragify(hueEl, hueFromEvent);
+
+    // ── Keyboard ──
+    svEl.addEventListener("keydown", (e) => {
+      const step = e.shiftKey ? 0.1 : 0.02;
+      if (e.key === "ArrowLeft") hsv.s = clamp01(hsv.s - step);
+      else if (e.key === "ArrowRight") hsv.s = clamp01(hsv.s + step);
+      else if (e.key === "ArrowUp") hsv.v = clamp01(hsv.v + step);
+      else if (e.key === "ArrowDown") hsv.v = clamp01(hsv.v - step);
+      else return;
+      e.preventDefault();
+      paint();
+    });
+    hueEl.addEventListener("keydown", (e) => {
+      const step = e.shiftKey ? 18 : 4;
+      if (e.key === "ArrowLeft" || e.key === "ArrowDown") hsv.h = Math.max(0, hsv.h - step);
+      else if (e.key === "ArrowRight" || e.key === "ArrowUp") hsv.h = Math.min(359.99, hsv.h + step);
+      else return;
+      e.preventDefault();
+      paint();
+    });
+
+    // ── Hex input ──
+    hexIn.addEventListener("input", () => {
+      const v = hexIn.value.replace(/[^0-9a-fA-F]/g, "").slice(0, 6);
+      hexIn.value = v.toUpperCase();
+      if (v.length === 3 || v.length === 6) setHex("#" + v, true);
+    });
+    hexIn.addEventListener("blur", () => {
+      if (current) hexIn.value = current.slice(1).toUpperCase();
+    });
+    hexIn.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") hexIn.blur();
+    });
+
+    // ── Eyedropper (Chromium only) ──
+    if (window.EyeDropper) {
+      eyeBtn.addEventListener("click", async () => {
+        try {
+          const res = await new window.EyeDropper().open();
+          setHex(res.sRGBHex);
+        } catch { /* cancelled */ }
+      });
+    } else {
+      eyeBtn.hidden = true;
+    }
+
+    // ── Open / close / position ──
+    function position() {
+      if (window.matchMedia("(max-width: 639px)").matches) {
+        wrap.classList.add("is-sheet");
+        panel.style.left = "";
+        panel.style.top = "";
+        return;
+      }
+      wrap.classList.remove("is-sheet");
+      const r = trigger.getBoundingClientRect();
+      const pw = panel.offsetWidth;
+      const ph = panel.offsetHeight;
+      const x = Math.min(Math.max(12, r.left + r.width / 2 - pw / 2), window.innerWidth - pw - 12);
+      let y = r.bottom + 10;
+      if (y + ph > window.innerHeight - 12) y = r.top - ph - 10;
+      if (y < 12) y = 12;
+      panel.style.left = x + "px";
+      panel.style.top = y + "px";
+    }
+
+    const onScroll = () => { if (trigger) position(); };
+    const onKey = (e) => { if (e.key === "Escape") close(); };
+
+    function open(triggerEl, value, name, cb) {
+      clearTimeout(hideTimer);
+      if (trigger) trigger.classList.remove("is-open");
+      trigger = triggerEl;
+      openedWith = value.toLowerCase();
+      titleEl.textContent = name;
+      onChange = null;
+      setHex(value);
+      onChange = cb;
+      fillGrid(themeGrid, THEME_SWATCHES);
+      const rec = getRecent();
+      recentBlock.hidden = !rec.length;
+      fillGrid(recentGrid, rec);
+      markActive(themeGrid, current);
+      markActive(recentGrid, current);
+      wrap.hidden = false;
+      wrap.style.pointerEvents = "";
+      trigger.classList.add("is-open");
+      position();
+      void panel.offsetWidth; /* flush styles so the open transition runs */
+      wrap.classList.add("is-visible");
+      svEl.focus({ preventScroll: true });
+      document.addEventListener("keydown", onKey);
+      window.addEventListener("scroll", onScroll, true);
+      window.addEventListener("resize", position);
+    }
+
+    function close() {
+      if (wrap.hidden) return;
+      if (current && current.toLowerCase() !== openedWith) saveRecent(current);
+      wrap.classList.remove("is-visible");
+      wrap.style.pointerEvents = "none";
+      hideTimer = setTimeout(() => { wrap.hidden = true; }, 180);
+      if (trigger) trigger.classList.remove("is-open");
+      onChange = null;
+      trigger = null;
+      document.removeEventListener("keydown", onKey);
+      window.removeEventListener("scroll", onScroll, true);
+      window.removeEventListener("resize", position);
+    }
+
+    closeBtn.addEventListener("click", close);
+    backdrop.addEventListener("pointerdown", (e) => {
+      close();
+      // Let a click on another swatch land in one tap
+      const under = document.elementFromPoint(e.clientX, e.clientY);
+      const nextSwatch = under && under.closest(".cb-swatch");
+      if (nextSwatch) nextSwatch.click();
+    });
+
+    return { open, close, el: wrap };
+  }
+
+  let sharedPicker = null;
+  function getPicker() {
+    if (!sharedPicker) sharedPicker = createColorPicker();
+    return sharedPicker;
+  }
+
   // ── State ──
   const state = {
     bodyColor: "#FCE6D2",
@@ -379,20 +705,21 @@
       });
     }
 
-    function makeSwatch(value, onChange) {
-      const label = document.createElement("label");
-      label.className = "cb-swatch";
-      label.style.background = value;
-      const input = document.createElement("input");
-      input.type = "color";
-      input.value = value;
-      input.addEventListener("input", (e) => {
-        const v = e.target.value;
-        label.style.background = v;
-        onChange(v);
+    function makeSwatch(value, onChange, name) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "cb-swatch";
+      b.style.background = value;
+      b.dataset.color = value;
+      b.setAttribute("aria-label", `${name || "Color"}: ${value}`);
+      b.addEventListener("click", () => {
+        getPicker().open(b, b.dataset.color, name || "Color", (v) => {
+          b.dataset.color = v;
+          b.style.background = v;
+          onChange(v);
+        });
       });
-      label.appendChild(input);
-      return label;
+      return b;
     }
 
     function colorRow(labelText, get, set) {
@@ -411,7 +738,7 @@
         hex.textContent = v;
         renderSVG();
         renderPresets();
-      });
+      }, labelText);
       right.appendChild(hex);
       right.appendChild(swatch);
       row.appendChild(name);
@@ -436,7 +763,7 @@
           makeSwatch(c, (v) => {
             state.stripes = state.stripes.map((s, idx) => (idx === i ? v : s));
             renderSVG();
-          })
+          }, "Stripe " + (i + 1))
         );
       });
       stripesWrap.appendChild(lbl);
@@ -662,6 +989,10 @@
   boot();
   document.addEventListener("astro:page-load", boot);
   document.addEventListener("variants-mounted", boot);
+  document.addEventListener("astro:before-swap", () => {
+    if (sharedPicker) sharedPicker.el.remove();
+    sharedPicker = null;
+  });
 </script>
 
 <style is:global>
@@ -810,6 +1141,7 @@
     display: block;
     width: 40px;
     height: 40px;
+    padding: 0;
     flex-shrink: 0;
     border-radius: 12px;
     border: 2px solid rgba(255, 255, 255, 0.18);
@@ -819,19 +1151,265 @@
     transition: all 0.2s ease;
   }
 
-  .cb-swatch:hover {
+  .cb-swatch:hover,
+  .cb-swatch.is-open {
     border-color: #f95f4a;
     box-shadow: 0 0 0 3px rgba(249, 95, 74, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.2);
     transform: scale(1.12);
   }
 
-  .cb-swatch input {
+  /* ── Custom color picker ── */
+  .cbp-wrap {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+  }
+
+  .cbp-backdrop {
     position: absolute;
     inset: 0;
-    width: 100%;
-    height: 100%;
+    background: transparent;
+    transition: background 0.2s;
+  }
+
+  .cbp-panel {
+    position: absolute;
+    width: 272px;
+    padding: 0.9rem;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(18, 18, 18, 0.92);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     opacity: 0;
+    transform: translateY(8px) scale(0.97);
+    transition: opacity 0.18s ease, transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .cbp-wrap.is-visible .cbp-panel {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Bottom sheet on phones */
+  .cbp-wrap.is-sheet .cbp-backdrop {
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .cbp-wrap.is-sheet .cbp-panel {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    top: auto;
+    width: auto;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding-bottom: calc(0.9rem + env(safe-area-inset-bottom));
+    transform: translateY(24px);
+  }
+
+  .cbp-wrap.is-sheet.is-visible .cbp-panel {
+    transform: none;
+  }
+
+  .cbp-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.65rem;
+  }
+
+  .cbp-title {
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #f95f4a;
+  }
+
+  .cbp-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: rgba(255, 253, 208, 0.5);
     cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .cbp-close:hover {
+    color: #f95f4a;
+    background: rgba(249, 95, 74, 0.12);
+  }
+
+  .cbp-sv {
+    position: relative;
+    height: 150px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    cursor: crosshair;
+    touch-action: none;
+  }
+
+  .cbp-sv-thumb {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2.5px solid #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5), inset 0 0 2px rgba(0, 0, 0, 0.3);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .cbp-hue {
+    position: relative;
+    height: 14px;
+    margin-top: 0.75rem;
+    border-radius: 100px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);
+    cursor: pointer;
+    touch-action: none;
+  }
+
+  .cbp-hue-thumb {
+    position: absolute;
+    top: 50%;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2.5px solid #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .cbp-io {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .cbp-chip {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.15);
+  }
+
+  .cbp-hexwrap {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+    height: 34px;
+    padding: 0 0.6rem;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.25);
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.75rem;
+  }
+
+  .cbp-hash {
+    color: rgba(255, 253, 208, 0.4);
+    margin-right: 2px;
+  }
+
+  .cbp-hexin {
+    width: 100%;
+    min-width: 0;
+    border: none;
+    background: transparent;
+    color: #fffdd0;
+    font-family: inherit;
+    font-size: inherit;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    outline: none;
+  }
+
+  .cbp-eye {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    padding: 0;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 253, 208, 0.7);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .cbp-eye:hover {
+    color: #f95f4a;
+    border-color: rgba(249, 95, 74, 0.5);
+    background: rgba(249, 95, 74, 0.12);
+  }
+
+  .cbp-vals {
+    margin-top: 0.45rem;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    color: rgba(255, 253, 208, 0.4);
+  }
+
+  .cbp-sec {
+    display: block;
+    margin: 0.7rem 0 0.45rem;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #f95f4a;
+  }
+
+  .cbp-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+  }
+
+  .cbp-cell {
+    aspect-ratio: 1;
+    padding: 0;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+
+  .cbp-cell:hover {
+    transform: scale(1.12);
+  }
+
+  .cbp-cell.is-active {
+    outline: 2px solid #f95f4a;
+    outline-offset: 2px;
+  }
+
+  .cbp-sv:focus-visible,
+  .cbp-hue:focus-visible,
+  .cbp-cell:focus-visible,
+  .cbp-eye:focus-visible,
+  .cbp-close:focus-visible {
+    outline: 2px solid #f95f4a;
+    outline-offset: 2px;
   }
 
   /* ── Action buttons ── */
@@ -905,6 +1483,43 @@
   html[data-theme="light"] .cb-swatch {
     border-color: rgba(0, 0, 0, 0.15);
     box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.3);
+  }
+  html[data-theme="light"] .cb-swatch:hover,
+  html[data-theme="light"] .cb-swatch.is-open {
+    border-color: #f95f4a;
+    box-shadow: 0 0 0 3px rgba(249, 95, 74, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.3);
+  }
+  html[data-theme="light"] .cbp-panel {
+    border-color: rgba(0, 0, 0, 0.1);
+    background: rgba(255, 253, 244, 0.95);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+  }
+  html[data-theme="light"] .cbp-close {
+    color: rgba(0, 0, 0, 0.45);
+  }
+  html[data-theme="light"] .cbp-sv,
+  html[data-theme="light"] .cbp-hue,
+  html[data-theme="light"] .cbp-chip,
+  html[data-theme="light"] .cbp-cell {
+    border-color: rgba(0, 0, 0, 0.12);
+  }
+  html[data-theme="light"] .cbp-hexwrap {
+    border-color: rgba(0, 0, 0, 0.12);
+    background: rgba(0, 0, 0, 0.05);
+  }
+  html[data-theme="light"] .cbp-hash {
+    color: rgba(0, 0, 0, 0.35);
+  }
+  html[data-theme="light"] .cbp-hexin {
+    color: #1a1a1a;
+  }
+  html[data-theme="light"] .cbp-eye {
+    border-color: rgba(0, 0, 0, 0.12);
+    background: rgba(0, 0, 0, 0.04);
+    color: rgba(0, 0, 0, 0.55);
+  }
+  html[data-theme="light"] .cbp-vals {
+    color: rgba(0, 0, 0, 0.4);
   }
   html[data-theme="light"] .cb-action.secondary {
     background: rgba(0, 0, 0, 0.04);
