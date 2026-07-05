@@ -764,10 +764,10 @@ const ICON_SVGS: Record<string, string> = {
   .reel-tape-right { stroke-width: 3; stroke: rgba(255,255,255,0.12); }
 
   .reel-spokes-l { animation: reelSpin 2s linear infinite; }
-  .reel-spokes-r { animation: reelSpin 1.4s linear infinite reverse; }
+  .reel-spokes-r { animation: reelSpin 1.4s linear infinite; }
 
   @keyframes reelSpin {
-    to { transform: rotate(360deg); }
+    to { transform: rotate(-360deg); }
   }
 
   .tape-path { fill: none; stroke: rgba(255,255,255,0.2); stroke-width: 0.8; }
@@ -1300,7 +1300,7 @@ const ICON_SVGS: Record<string, string> = {
           setTimeout(() => {
             const playing = cpAudio && !cpAudio.paused;
             if (reelL) { reelL.style.animationDirection = "normal"; }
-            if (reelR) { reelR.style.animationDirection = "reverse"; }
+            if (reelR) { reelR.style.animationDirection = "normal"; }
             syncReels(!!playing);
           }, 800);
         } else if (action === "forward") {
@@ -1312,7 +1312,7 @@ const ICON_SVGS: Record<string, string> = {
           setTimeout(() => {
             const playing = cpAudio && !cpAudio.paused;
             if (reelL) { reelL.style.animationDirection = "normal"; }
-            if (reelR) { reelR.style.animationDirection = "reverse"; }
+            if (reelR) { reelR.style.animationDirection = "normal"; }
             syncReels(!!playing);
           }, 800);
         }

@@ -215,10 +215,10 @@ const REEL_GEAR =
     transform-origin: 50% 50%;
   }
   .reel:last-of-type svg {
-    animation-direction: reverse;
+    animation-direction: normal;
   }
   @keyframes tileReelSpin {
-    to { transform: rotate(360deg); }
+    to { transform: rotate(-360deg); }
   }
   .tile-window {
     flex: 1;
