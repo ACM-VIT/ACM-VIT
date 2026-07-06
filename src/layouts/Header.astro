@@ -1252,14 +1252,16 @@ const dropdowns: Record<string, DropdownItem[]> = {
         gsap.set(pill, { opacity: 0, y: -24, scale: 0.7 });
         if (label) gsap.set(label, { opacity: 0, maxWidth: 0, padding: 0 });
         if (backBubble) {
+          // Kill CSS transitions so GSAP owns transform during the intro
+          backBubble.style.transition = 'none';
           gsap.set(backBubble, {
-            opacity: 0, x: -30, marginLeft: 0,
+            opacity: 0, x: -56, scale: 0.85, marginLeft: 8,
             background: solidDark,
             backdropFilter: 'none', webkitBackdropFilter: 'none',
             borderColor: 'transparent', boxShadow: 'none',
           });
         }
-        if (bubbleIcon) gsap.set(bubbleIcon, { opacity: 0 });
+        if (bubbleIcon) gsap.set(bubbleIcon, { opacity: 0, scale: 0.5, transformOrigin: '50% 50%' });
 
         function playSubpageIntro() {
         const dropTl = gsap.timeline({ delay: 0.25 });
@@ -1294,49 +1296,80 @@ const dropdowns: Record<string, DropdownItem[]> = {
               pill.style.borderColor = 'transparent';
               pill.style.boxShadow = 'none';
 
+              // Reveal bubble while it is still fully tucked behind the pill edge
               if (backBubble) gsap.set(backBubble, { opacity: 1 });
               if (gooeyWrap) gooeyWrap.classList.add('gooey-active');
 
+              const glassBg = 'rgba(6, 2, 2, 0.22)';
+              const glassBorder = 'rgba(249, 95, 74, 0.75)';
+              const gooeyBlur = document.querySelector('#gooey-filter feGaussianBlur');
+
               const breakTl = gsap.timeline({
                 onComplete() {
+                  // Restore CSS transitions first, then clear inline styles so
+                  // remaining deltas (box-shadow, glow) ease in via CSS
                   pill.style.transition = '';
                   pill.style.background = '';
                   pill.style.backdropFilter = '';
                   pill.style.webkitBackdropFilter = '';
                   pill.style.borderColor = '';
                   pill.style.boxShadow = '';
+                  gsap.set(pill, { clearProps: 'scaleX,backgroundColor,borderColor' });
                   if (backBubble) {
+                    backBubble.style.transition = '';
                     gsap.set(backBubble, {
-                      clearProps: 'x,marginLeft,background,backdropFilter,webkitBackdropFilter,borderColor,boxShadow',
+                      clearProps: 'x,scale,marginLeft,background,backdropFilter,webkitBackdropFilter,borderColor,boxShadow',
                     });
                   }
+                  if (bubbleIcon) gsap.set(bubbleIcon, { clearProps: 'scale,transformOrigin' });
+                  if (gooeyBlur) gsap.set(gooeyBlur, { attr: { stdDeviation: 8 } });
                 },
               });
 
-              // Bubble slides out - gooey metaball bridge
+              // Bubble oozes out of the pill - slow stretch, slight overshoot as neck snaps
               breakTl.to(backBubble, {
-                x: 0, marginLeft: 8,
-                duration: 0.2, ease: 'power3.out',
-              })
-              // Bridge snap - restore pill to glass
-              .add(() => {
-                if (gooeyWrap) gooeyWrap.classList.remove('gooey-active');
-                pill.style.background = '';
-                pill.style.backdropFilter = '';
-                pill.style.webkitBackdropFilter = '';
-                pill.style.boxShadow = '';
-                pill.style.borderColor = '';
-              }, '<0.15')
-              // Bubble dark → orange
+                x: 0, scale: 1,
+                duration: 0.6, ease: 'back.out(1.4)',
+              }, 0)
+              // Pill recoils from its right edge as the bridge lets go
+              .to(pill, {
+                scaleX: 0.98, transformOrigin: '100% 50%',
+                duration: 0.12, ease: 'power2.out',
+              }, 0.34)
+              .to(pill, {
+                scaleX: 1,
+                duration: 0.4, ease: 'elastic.out(1, 0.6)',
+              }, 0.46)
+              // Bubble melts dark → orange while still separating
               .to(backBubble, {
                 background: '#F95F4A',
-                borderColor: 'rgba(254, 252, 217, 0.35)',
-                duration: 0.15, ease: 'power2.out',
-              }, '<0.02')
-              // Show back arrow icon
+                duration: 0.35, ease: 'sine.inOut',
+              }, 0.28)
+              // Back arrow resolves in
               .to(bubbleIcon, {
-                opacity: 1, duration: 0.15, ease: 'power2.out',
-              }, '<0.04');
+                opacity: 1, scale: 1,
+                duration: 0.3, ease: 'power2.out',
+              }, 0.4)
+              // Thin the metaball neck to nothing (resting 8px gap stays bridged at blur 8)
+              .to(gooeyBlur, {
+                attr: { stdDeviation: 2.5 },
+                duration: 0.3, ease: 'power2.inOut',
+              }, 0.48)
+              // Shapes fully apart: drop metaball filter, ease glass back in
+              .add(() => {
+                if (gooeyWrap) gooeyWrap.classList.remove('gooey-active');
+                pill.style.backdropFilter = '';
+                pill.style.webkitBackdropFilter = '';
+                if (backBubble) gsap.set(backBubble, { backdropFilter: '', webkitBackdropFilter: '' });
+              }, 0.8)
+              .to(pill, {
+                backgroundColor: glassBg, borderColor: glassBorder,
+                duration: 0.35, ease: 'power2.out',
+              }, 0.8)
+              .to(backBubble, {
+                borderColor: 'rgba(254, 252, 217, 0.35)',
+                duration: 0.35, ease: 'power2.out',
+              }, 0.8);
             },
           });
         });

@@ -308,6 +308,7 @@ const footerColumnsHtml = footerNav
         </video>
         <div class="footer-video-tint" aria-hidden="true"></div>
         <div class="footer-video-fade" aria-hidden="true"></div>
+        <canvas class="footer-rain" aria-hidden="true"></canvas>
         <span class="footer-wordmark">because technology matters</span>
         <div class="footer-acm-block" aria-hidden="true">
           <span class="footer-acm-mark">acm</span>
@@ -318,10 +319,14 @@ const footerColumnsHtml = footerNav
           © {currentYear}&nbsp;ACM-VIT. All rights reserved.
         </p>
 
-        <!-- Location pinned bottom-right -->
-        <p class="absolute bottom-3 right-12 z-30 text-[10px] lg:text-xs font-light text-white">
-          Vellore, Tamil Nadu, India
-        </p>
+        <!-- Location + live weather pinned bottom-right -->
+        <div class="absolute bottom-3 right-12 z-30 pr-14 text-right text-[10px] lg:text-xs font-light text-white">
+          <p class="footer-weather" data-footer-weather hidden>
+            <span data-weather-fact></span><br />
+            <span class="footer-weather-mood" data-weather-mood></span>
+          </p>
+          <p>Vellore, Tamil Nadu, India</p>
+        </div>
 
         <!-- Bottom section overlaid on the video, pushed lower -->
         <div class="absolute inset-0 z-20 flex w-full flex-col items-center justify-end pb-20 lg:pb-28">
@@ -440,6 +445,14 @@ const footerColumnsHtml = footerNav
         <p class="text-white text-[10px] font-light text-center">
           © {currentYear}&nbsp;ACM-VIT. All rights reserved.
         </p>
+        <p
+          class="footer-weather text-white text-[10px] font-light text-center"
+          data-footer-weather
+          hidden
+        >
+          <span data-weather-fact></span><br />
+          <span class="footer-weather-mood" data-weather-mood></span>
+        </p>
       </div>
 
       <!-- Footer video banner (mobile) with overlaid bottom section -->
@@ -457,6 +470,7 @@ const footerColumnsHtml = footerNav
         </video>
         <div class="footer-video-tint" aria-hidden="true"></div>
         <div class="footer-video-fade" aria-hidden="true"></div>
+        <canvas class="footer-rain" aria-hidden="true"></canvas>
         <span class="footer-wordmark footer-wordmark--mobile">because technology matters</span>
 
         <!-- Bottom section overlaid on the video, lifted clear of the wordmark -->
@@ -745,7 +759,65 @@ const footerColumnsHtml = footerNav
     mix-blend-mode: multiply;
     opacity: 0.55;
     pointer-events: none;
+    transition: background-color 1.6s ease, opacity 1.6s ease;
   }
+  /* Rainy colour grade: warm orange cools down to wet slate blue */
+  .footer-video.is-rainy .footer-video-tint {
+    background-color: #64789a;
+    opacity: 0.5;
+  }
+  /* Live rain overlay - activated by script only when it is actually
+     raining at VIT Vellore (Open-Meteo current weather). Sits above the
+     tint/fade so drops stay crisp, below the z-20 text overlays. */
+  .footer-rain {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1.6s ease;
+    /* Wind slant; JS animates gusts around this. Scale hides rotated corners */
+    transform: rotate(6deg) scale(1.32);
+  }
+  .footer-rain.is-raining {
+    opacity: 1;
+  }
+  /* Live weather summary, fades in once data arrives */
+  .footer-weather {
+    opacity: 0;
+    transition: opacity 1s ease;
+    margin-bottom: 0.4em;
+  }
+  .footer-weather.is-live {
+    opacity: 1;
+  }
+  .footer-weather-mood {
+    opacity: 0.7;
+    font-style: italic;
+  }
+
+  /* Ground mist while raining */
+  .footer-video::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+    background: linear-gradient(
+      to top,
+      rgba(150, 172, 198, 0.18),
+      rgba(150, 172, 198, 0.05) 35%,
+      transparent 60%
+    );
+    opacity: 0;
+    transition: opacity 1.6s ease;
+  }
+  .footer-video.is-rainy::after {
+    opacity: 1;
+  }
+
   /* Fade top of video into footer background - soft ramp, no hard black cap */
   .footer-video-fade {
     position: absolute;
@@ -819,6 +891,439 @@ const footerColumnsHtml = footerNav
   } else {
     initFooterAcm();
   }
-  // Re-init when variant templates mount (variant host)
-  document.addEventListener("variants-mounted", initFooterAcm);
+  // Re-init when variant templates mount (variant host, dispatches on window)
+  window.addEventListener("variants-mounted", initFooterAcm);
+
+  /* ------------------------------------------------------------------ */
+  /* Live rain on the footer video when it's raining at VIT Vellore.    */
+  /* Weather source: Open-Meteo (free, no API key, ~300 byte response). */
+  /* ------------------------------------------------------------------ */
+
+  const VIT_LAT = 12.9692;
+  const VIT_LON = 79.1559;
+  const WEATHER_URL = `https://api.open-meteo.com/v1/forecast?latitude=${VIT_LAT}&longitude=${VIT_LON}&current=weather_code,temperature_2m,relative_humidity_2m,wind_speed_10m`;
+  const WEATHER_CACHE_KEY = "vit-weather-v2";
+  const WEATHER_TTL_MS = 10 * 60 * 1000;
+
+  type VitWeather = {
+    code: number;
+    temp: number | null;
+    humidity: number | null;
+    wind: number | null;
+  };
+
+  // WMO weather codes -> rain intensity (drops per 10k px²)
+  const rainIntensity = (code: number): number => {
+    if (code >= 95) return 1.6; // thunderstorm
+    if (code >= 80 && code <= 82) return 1.2; // rain showers
+    if (code >= 61 && code <= 67) return 0.9; // rain
+    if (code >= 51 && code <= 57) return 0.45; // drizzle
+    return 0;
+  };
+
+  const fetchVitWeather = async (): Promise<VitWeather> => {
+    try {
+      const cached = sessionStorage.getItem(WEATHER_CACHE_KEY);
+      if (cached) {
+        const { w, at } = JSON.parse(cached);
+        if (Date.now() - at < WEATHER_TTL_MS) return w;
+      }
+    } catch {
+      /* corrupt cache - refetch */
+    }
+
+    const res = await fetch(WEATHER_URL);
+    if (!res.ok) throw new Error(`weather fetch failed: ${res.status}`);
+    const data = await res.json();
+    const cur = data?.current ?? {};
+    const w: VitWeather = {
+      code: Number(cur.weather_code ?? -1),
+      temp: cur.temperature_2m ?? null,
+      humidity: cur.relative_humidity_2m ?? null,
+      wind: cur.wind_speed_10m ?? null,
+    };
+    try {
+      sessionStorage.setItem(
+        WEATHER_CACHE_KEY,
+        JSON.stringify({ w, at: Date.now() })
+      );
+    } catch {
+      /* storage unavailable - fine, just no cache */
+    }
+    return w;
+  };
+
+  const getVitWeather = async (): Promise<VitWeather> => {
+    let w: VitWeather;
+    try {
+      w = await fetchVitWeather();
+    } catch {
+      w = { code: -1, temp: null, humidity: null, wind: null };
+    }
+    // ?rain=1 forces moderate rain, ?rain=dry forces dry, ?rain=<code> any
+    // WMO code (0 = clear); ?temp=<n> forces temperature (heat messages)
+    const params = new URLSearchParams(location.search);
+    const forced = params.get("rain");
+    if (forced === "1") w.code = 63;
+    else if (forced === "dry") w.code = -1;
+    else if (forced) w.code = Number(forced);
+    const forcedTemp = params.get("temp");
+    if (forcedTemp) w.temp = Number(forcedTemp);
+    return w;
+  };
+
+  // Two-line summary: [facts, mood]. Mood lines lean into the footer's
+  // late-night walkman energy.
+  const weatherText = (w: VitWeather): [string, string] | null => {
+    const c = w.code;
+    const vitHour = (new Date().getUTCHours() + 5.5) % 24; // IST
+    const day = vitHour >= 6 && vitHour < 18;
+    let label: string;
+    let mood: string;
+    if (c >= 95) {
+      label = "thunderstorm";
+      mood = "the sky is running a live demo. stay for the light show";
+    } else if (c === 85 || c === 86 || (c >= 71 && c <= 77)) {
+      label = "snow";
+      mood = "snow in vellore. screenshot it, nobody will believe you";
+    } else if (c >= 80) {
+      label = "rain showers";
+      mood = "rain in bursts, like inspiration. save your work";
+    } else if (c >= 61) {
+      label = "rain";
+      mood = "rain on the pavement, lo-fi in the headphones";
+    } else if (c >= 51) {
+      label = "drizzle";
+      mood = "barely rain. commit anyway";
+    } else if (c === 45 || c === 48) {
+      label = "fog";
+      mood = "low visibility, high introspection";
+    } else if (c === 3) {
+      label = "overcast";
+      mood = "grey sky. good focus weather";
+    } else if (c === 2) {
+      label = "partly cloudy";
+      mood = "some clouds, mostly possibility";
+    } else if (c === 1) {
+      label = day ? "mainly clear" : "mainly clear night";
+      mood = "almost cloudless. almost a metaphor";
+    } else if (c === 0) {
+      label = day ? "sunny" : "clear night";
+      mood = day
+        ? "not a cloud over campus. go touch grass"
+        : "zero clouds. the stars compile in silence";
+    } else {
+      return null;
+    }
+
+    // Heat overrides: sky code says "clear", the thermometer says otherwise.
+    // Vellore summers regularly cook past 38°c.
+    const t = w.temp;
+    if (c <= 3 && t != null) {
+      if (t >= 40) {
+        if (day && c <= 2) label = "scorching";
+        mood = "the sun is overclocked and thermal limits mean nothing. stay indoors";
+      } else if (t >= 36) {
+        if (day && c <= 2) label = "very hot";
+        mood = "peak vellore summer. hydration is not optional";
+      } else if (day && t >= 32) {
+        mood = "bright, hot, unapologetic. carry water";
+      } else if (!day && t >= 30) {
+        mood = `still ${Math.round(t)}°c after dark. the day refuses to log off`;
+      } else if (w.humidity != null && w.humidity >= 80 && t >= 27) {
+        mood = "the air is basically soup. everything sticks, including motivation";
+      }
+    }
+    const facts = [`${label} in vellore`];
+    if (w.temp != null) facts.push(`${Math.round(w.temp)}°c`);
+    if (w.humidity != null) facts.push(`${Math.round(w.humidity)}% humidity`);
+    return [facts.join(" · "), mood];
+  };
+
+  const showFooterWeather = (w: VitWeather) => {
+    const text = weatherText(w);
+    if (!text) return;
+    document
+      .querySelectorAll<HTMLElement>("[data-footer-weather]")
+      .forEach((el) => {
+        const fact = el.querySelector("[data-weather-fact]");
+        const mood = el.querySelector("[data-weather-mood]");
+        if (fact) fact.textContent = text[0];
+        if (mood) mood.textContent = text[1];
+        el.hidden = false;
+        requestAnimationFrame(() => el.classList.add("is-live"));
+      });
+  };
+
+  type Drop = {
+    x: number;
+    y: number;
+    len: number;
+    speed: number;
+    w: number;
+    ground: number;
+  };
+  type Splash = {
+    x: number;
+    y: number;
+    maxR: number;
+    age: number;
+    life: number;
+    base: number;
+  };
+  type RainLayer = {
+    share: number;
+    speed: [number, number];
+    len: [number, number];
+    width: number;
+    alpha: number;
+    /* fraction of canvas height where drops of this depth hit the ground */
+    ground: [number, number];
+    splash: number;
+    drops: Drop[];
+  };
+
+  const rand = (a: number, b: number) => a + Math.random() * (b - a);
+
+  // Pre-rendered streak sprite: transparent tail tapering to a bright head.
+  // drawImage-ing this beats per-drop gradients by a wide margin.
+  const makeStreakSprite = (): HTMLCanvasElement => {
+    const s = document.createElement("canvas");
+    s.width = 8;
+    s.height = 128;
+    const c = s.getContext("2d")!;
+    const g = c.createLinearGradient(0, 0, 0, 128);
+    g.addColorStop(0, "rgba(195, 215, 245, 0)");
+    g.addColorStop(0.72, "rgba(195, 215, 245, 0.5)");
+    g.addColorStop(1, "rgba(228, 240, 255, 0.95)");
+    c.fillStyle = g;
+    c.beginPath();
+    c.moveTo(3.2, 0);
+    c.lineTo(4.8, 0);
+    c.lineTo(6.6, 121);
+    c.arc(4, 121, 2.6, 0, Math.PI);
+    c.closePath();
+    c.fill();
+    return s;
+  };
+
+  /* Thunder rumble, synthesized (no audio asset). Browsers block sound
+     until the user interacts, so the AudioContext is armed on first
+     pointerdown and strikes before that stay silent. */
+  let audioCtx: AudioContext | null = null;
+  const armThunderAudio = () => {
+    document.addEventListener(
+      "pointerdown",
+      () => {
+        if (!audioCtx) audioCtx = new AudioContext();
+      },
+      { once: true, passive: true }
+    );
+  };
+
+  const playThunder = () => {
+    if (!audioCtx || audioCtx.state !== "running" || document.hidden) return;
+    const dur = rand(1.8, 3.2);
+    const sr = audioCtx.sampleRate;
+    const buf = audioCtx.createBuffer(1, Math.floor(sr * dur), sr);
+    const data = buf.getChannelData(0);
+    let v = 0;
+    for (let i = 0; i < data.length; i++) {
+      const t = i / data.length;
+      v = (v + 0.02 * (Math.random() * 2 - 1)) / 1.02; // brown noise
+      const crack = t < 0.12 ? 1.6 - t * 5 : 1; // sharper onset
+      data[i] = v * 3.5 * Math.pow(1 - t, 1.7) * crack;
+    }
+    const src = audioCtx.createBufferSource();
+    src.buffer = buf;
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(420, audioCtx.currentTime);
+    filter.frequency.exponentialRampToValueAtTime(90, audioCtx.currentTime + dur);
+    const gain = audioCtx.createGain();
+    gain.gain.value = 0.22;
+    src.connect(filter).connect(gain).connect(audioCtx.destination);
+    src.start();
+  };
+
+  const startRain = (canvas: HTMLCanvasElement, intensity: number) => {
+    if (canvas.dataset.rainInit === "1") return;
+    canvas.dataset.rainInit = "1";
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const sprite = makeStreakSprite();
+
+    // Three depth layers: far = short/slow/faint/dense, near = long/fast/bright.
+    // Ground bands follow the road's perspective: far drops land higher up.
+    const layers: RainLayer[] = [
+      { share: 0.5, speed: [650, 900], len: [16, 28], width: 2.6, alpha: 0.28, ground: [0.55, 0.8], splash: 0, drops: [] },
+      { share: 0.3, speed: [1050, 1450], len: [36, 58], width: 3.6, alpha: 0.42, ground: [0.66, 0.92], splash: 3.5, drops: [] },
+      { share: 0.2, speed: [1700, 2300], len: [70, 110], width: 5, alpha: 0.58, ground: [0.78, 1.06], splash: 5.5, drops: [] },
+    ];
+    const thunder = intensity >= 1.5;
+    const splashes: Splash[] = [];
+    const flashQueue: { at: number; a: number }[] = [];
+
+    let width = 0;
+    let height = 0;
+    let raf = 0;
+    let visible = false;
+    let flashAlpha = 0;
+    let nextFlash = performance.now() + rand(3000, 9000);
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    const spawn = (layer: RainLayer, randomY: boolean): Drop => {
+      const ground = height * rand(layer.ground[0], layer.ground[1]);
+      return {
+        x: Math.random() * width,
+        y: randomY
+          ? Math.random() * ground
+          : -rand(layer.len[1], layer.len[1] * 3),
+        len: rand(layer.len[0], layer.len[1]),
+        speed: rand(layer.speed[0], layer.speed[1]),
+        w: layer.width * rand(0.7, 1.3),
+        ground,
+      };
+    };
+
+    const resize = () => {
+      // offsetWidth/Height = layout size, unaffected by the CSS rotation
+      width = canvas.offsetWidth;
+      height = canvas.offsetHeight;
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const total = ((width * height) / 9000) * intensity;
+      for (const layer of layers) {
+        const count = Math.round(total * layer.share);
+        layer.drops = Array.from({ length: count }, () => spawn(layer, true));
+      }
+    };
+
+    let last = 0;
+    const frame = (now: number) => {
+      const dt = Math.min((now - last) / 1000, 0.05);
+      last = now;
+
+      // Wind gusts: slant drifts slowly instead of a frozen angle
+      const t = now / 1000;
+      const gust = 6 + 2.4 * Math.sin(t * 0.33) + 0.9 * Math.sin(t * 1.07);
+      canvas.style.transform = `rotate(${gust.toFixed(2)}deg) scale(1.32)`;
+
+      ctx.clearRect(0, 0, width, height);
+      for (const layer of layers) {
+        ctx.globalAlpha = layer.alpha;
+        for (const d of layer.drops) {
+          d.y += d.speed * dt;
+          if (d.y >= d.ground) {
+            if (layer.splash && d.ground < height - 2 && splashes.length < 90) {
+              splashes.push({
+                x: d.x,
+                y: d.ground,
+                maxR: layer.splash * rand(0.7, 1.3),
+                age: 0,
+                life: rand(0.2, 0.34),
+                base: layer.alpha * 1.1,
+              });
+            }
+            Object.assign(d, spawn(layer, false));
+          }
+          ctx.drawImage(sprite, d.x, d.y - d.len, d.w, d.len);
+        }
+      }
+
+      // Impact ripples: flattened ellipses expanding and fading on the ground
+      ctx.strokeStyle = "rgba(205, 224, 248, 0.9)";
+      ctx.lineWidth = 1;
+      let live = 0;
+      for (const s of splashes) {
+        s.age += dt;
+        const p = s.age / s.life;
+        if (p >= 1) continue;
+        splashes[live++] = s;
+        const e = 1 - (1 - p) * (1 - p);
+        ctx.globalAlpha = s.base * (1 - p);
+        ctx.beginPath();
+        ctx.ellipse(s.x, s.y, s.maxR * e, s.maxR * e * 0.32, 0, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      splashes.length = live;
+
+      // Lightning: each strike flickers 2-3 times like the real thing
+      if (thunder) {
+        if (now >= nextFlash) {
+          const pulses = 2 + Math.floor(Math.random() * 2);
+          let at = now;
+          for (let i = 0; i < pulses; i++) {
+            flashQueue.push({ at, a: rand(0.25, 0.5) * (i ? 0.7 : 1) });
+            at += rand(60, 140);
+          }
+          nextFlash = now + rand(6000, 16000);
+          if (visible) setTimeout(playThunder, rand(400, 1200));
+        }
+        while (flashQueue.length && flashQueue[0].at <= now) {
+          flashAlpha = Math.max(flashAlpha, flashQueue.shift()!.a);
+        }
+        if (flashAlpha > 0.005) {
+          ctx.globalAlpha = Math.min(flashAlpha, 1);
+          ctx.fillStyle = "#dfe9ff";
+          ctx.fillRect(0, 0, width, height);
+          flashAlpha -= dt * 3.5;
+        }
+      }
+      ctx.globalAlpha = 1;
+      raf = requestAnimationFrame(frame);
+    };
+
+    const play = () => {
+      if (raf || !visible) return;
+      last = performance.now();
+      raf = requestAnimationFrame(frame);
+    };
+    const pause = () => {
+      cancelAnimationFrame(raf);
+      raf = 0;
+    };
+
+    // Only burn frames while the footer video is on screen
+    new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+        visible ? play() : pause();
+      },
+      { rootMargin: "80px" }
+    ).observe(canvas);
+
+    document.addEventListener("visibilitychange", () => {
+      document.hidden ? pause() : play();
+    });
+
+    new ResizeObserver(resize).observe(canvas);
+    resize();
+    canvas.classList.add("is-raining");
+    canvas.parentElement?.classList.add("is-rainy");
+  };
+
+  const initFooterRain = async () => {
+    const w = await getVitWeather();
+    showFooterWeather(w);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const intensity = rainIntensity(w.code);
+    if (intensity <= 0) return;
+    if (intensity >= 1.5) armThunderAudio();
+    document
+      .querySelectorAll<HTMLCanvasElement>(".footer-rain")
+      .forEach((canvas) => startRain(canvas, intensity));
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initFooterRain);
+  } else {
+    initFooterRain();
+  }
+  // variants-mounted is dispatched on window, not document
+  window.addEventListener("variants-mounted", initFooterRain);
 </script>
