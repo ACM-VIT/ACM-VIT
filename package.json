@@ -2,6 +2,9 @@
   "name": "acm-vit-website-official",
   "type": "module",
   "version": "0.0.1",
+  "engines": {
+    "node": ">=22.18"
+  },
   "scripts": {
     "content:compile": "node src/platform/compiler/compile.ts",
     "predev": "npm run content:compile",
