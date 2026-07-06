@@ -1,0 +1,34 @@
+// AUTO-GENERATED from content/ by the content compiler. DO NOT EDIT.
+// Edit content/**/speakers entries (or the Keystatic admin UI) and run: npm run content:compile
+import type { SpeakerEntry } from "../platform/schema/collections/site.ts";
+
+export const items: SpeakerEntry[] = [
+  {
+    "slug": "dr-peter-robinson",
+    "order": 0,
+    "name": "Dr. Peter Robinson",
+    "subtitle": "University of Cambridge",
+    "role": "Director of Research and Emeritus Professor",
+    "image": "/community/community-peter-robinson.webp",
+    "sessionTitle": "COMPUTERS HAVE",
+    "sessionTitleHighlight": "FEELINGS TOO",
+    "description": [
+      "A DISTINGUISHED SPEAKER SESSION WHERE DR. ROBINSON TALKED ABOUT HUMAN-COMPUTER INTERACTION (HCI) AND ITS INTERSECTION WITH AFFECTIVE COMPUTING.",
+      "THE SESSION EXPLORED HOW EMERGING TECHNOLOGIES ARE BEING DESIGNED TO RECOGNIZE, INTERPRET AND SIMULATE HUMAN EMOTIONS. THE EVENT PROVIDED VALUABLE INSIGHTS INTO THE EVOLVING RELATIONSHIP BETWEEN HUMANS AND MACHINES, EMPHASIZING THE ROLE OF PSYCHOLOGY AND DESIGN IN SHAPING INTELLIGENT, EMOTION-AWARE SYSTEMS."
+    ]
+  },
+  {
+    "slug": "dr-federica-sarro",
+    "order": 10,
+    "name": "Dr. Federica Sarro",
+    "subtitle": "DSP November 2025",
+    "role": "Distinguished Researcher in Software Engineering",
+    "image": "/community/community-federica-sarro.webp",
+    "sessionTitle": "SEARCH BASED",
+    "sessionTitleHighlight": "SOFTWARE ENGINEERING",
+    "description": [
+      "ACM-VIT HOSTED AN INSIGHTFUL SESSION WITH DR. FEDERICA SARRO, A DISTINGUISHED RESEARCHER IN SOFTWARE ENGINEERING. THE TALK EXPLORED KEY AREAS SUCH AS SOFTWARE OPTIMIZATION, PREDICTIVE ANALYTICS, AND EMPIRICAL SOFTWARE ENGINEERING, WITH A FOCUSED DISCUSSION ON SEARCH-BASED SOFTWARE ENGINEERING FOR MODERN SOFTWARE SYSTEMS.",
+      "DR. SARRO SHARED HOW INTELLIGENT OPTIMIZATION AND DATA-DRIVEN TECHNIQUES ARE TRANSFORMING THE WAY COMPLEX SOFTWARE CHALLENGES ARE ADDRESSED IN PRACTICE. THE SESSION PROVIDED ATTENDEES WITH VALUABLE PERSPECTIVES ON IMPROVING SOFTWARE QUALITY, EFFICIENCY, AND DECISION-MAKING, AND CONCLUDED WITH AN ENGAGING INTERACTION THAT ENCOURAGED DEEPER UNDERSTANDING OF EMERGING TRENDS IN SOFTWARE ENGINEERING."
+    ]
+  }
+];

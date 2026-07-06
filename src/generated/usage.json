@@ -1,0 +1,881 @@
+{
+  "tools-tech": {
+    "react-native": [
+      "project-details/acmone",
+      "project-details/unipool",
+      "project-details/examcooker",
+      "project-details/conclave",
+      "aois-tech/appdev"
+    ],
+    "expo": [
+      "project-details/acmone",
+      "project-details/unipool",
+      "project-details/examcooker",
+      "project-details/conclave",
+      "aois-tech/appdev"
+    ],
+    "typescript": [
+      "project-details/acmone",
+      "project-details/unipool",
+      "project-details/examcooker",
+      "project-details/localhost",
+      "project-details/ocs-25",
+      "project-details/ocs-26",
+      "project-details/conclave",
+      "project-details/wenvy",
+      "project-details/open-with-browser",
+      "project-details/digital-circuit-simulator",
+      "forktober-projects/open-with-browser",
+      "forktober-projects/digital-circuit-simulator",
+      "aois-tech/appdev",
+      "aois-tech/webdev"
+    ],
+    "firebase": [
+      "project-details/acmone",
+      "project-details/unipool",
+      "aois-tech/webdev"
+    ],
+    "python": [
+      "project-details/acmone",
+      "project-details/examcooker",
+      "project-details/scrag",
+      "project-details/pdfmaker",
+      "project-details/qchat",
+      "project-details/algos-for-all-amigos",
+      "forktober-projects/scrag",
+      "forktober-projects/pdfmaker",
+      "forktober-projects/qchat",
+      "forktober-projects/algos-for-all-amigos"
+    ],
+    "postgresql": [
+      "project-details/acmone",
+      "project-details/unipool",
+      "aois-tech/webdev"
+    ],
+    "cockroachdb": [
+      "project-details/acmone",
+      "project-details/examcooker",
+      "project-details/localhost",
+      "project-details/ocs-25",
+      "aois-tech/webdev"
+    ],
+    "docker": [
+      "project-details/acmone",
+      "project-details/ocs-26",
+      "project-details/conclave",
+      "aois-tech/webdev",
+      "aois-tech/devops"
+    ],
+    "gcp": [
+      "project-details/acmone",
+      "project-details/unipool",
+      "project-details/examcooker",
+      "aois-tech/devops"
+    ],
+    "git": [
+      "project-details/acmone",
+      "project-details/unipool",
+      "project-details/examcooker",
+      "project-details/localhost",
+      "project-details/ocs-25",
+      "project-details/ocs-26",
+      "project-details/ocs-22",
+      "project-details/cli-rpg",
+      "project-details/conclave",
+      "project-details/wenvy",
+      "project-details/open-with-browser",
+      "project-details/scrag",
+      "project-details/digital-circuit-simulator",
+      "project-details/echolink",
+      "project-details/ride-safe",
+      "project-details/pdfmaker",
+      "project-details/fludget",
+      "project-details/gitpositive",
+      "project-details/muscle-magic",
+      "project-details/alarmit",
+      "project-details/sticky-links",
+      "project-details/10-000-hours",
+      "project-details/certify",
+      "project-details/golly-bot",
+      "project-details/maildart-backend",
+      "project-details/paint-me",
+      "project-details/cryptodash",
+      "project-details/todo-app",
+      "project-details/create-boilerplate-node",
+      "project-details/qchat",
+      "project-details/algos-for-all-amigos",
+      "project-details/maildart-frontend",
+      "project-details/acm-github-bot",
+      "project-details/discord-hackpot",
+      "forktober-projects/open-with-browser",
+      "forktober-projects/scrag",
+      "forktober-projects/digital-circuit-simulator",
+      "forktober-projects/echolink",
+      "forktober-projects/ride-safe",
+      "forktober-projects/pdfmaker",
+      "forktober-projects/fludget",
+      "forktober-projects/gitpositive",
+      "forktober-projects/muscle-magic",
+      "forktober-projects/alarmit",
+      "forktober-projects/sticky-links",
+      "forktober-projects/10-000-hours",
+      "forktober-projects/certify",
+      "forktober-projects/golly-bot",
+      "forktober-projects/maildart-backend",
+      "forktober-projects/paint-me",
+      "forktober-projects/cryptodash",
+      "forktober-projects/todo-app",
+      "forktober-projects/create-boilerplate-node",
+      "forktober-projects/qchat",
+      "forktober-projects/algos-for-all-amigos",
+      "forktober-projects/maildart-frontend",
+      "forktober-projects/acm-github-bot",
+      "forktober-projects/discord-hackpot",
+      "aois-tech/appdev",
+      "aois-tech/webdev",
+      "aois-tech/foss",
+      "aois-tech/gamestudios"
+    ],
+    "github": [
+      "project-details/acmone",
+      "project-details/unipool",
+      "project-details/examcooker",
+      "project-details/localhost",
+      "project-details/ocs-25",
+      "project-details/ocs-26",
+      "project-details/cli-rpg",
+      "project-details/conclave",
+      "project-details/wenvy",
+      "project-details/open-with-browser",
+      "project-details/scrag",
+      "project-details/digital-circuit-simulator",
+      "project-details/echolink",
+      "project-details/ride-safe",
+      "project-details/pdfmaker",
+      "project-details/fludget",
+      "project-details/gitpositive",
+      "project-details/muscle-magic",
+      "project-details/alarmit",
+      "project-details/sticky-links",
+      "project-details/10-000-hours",
+      "project-details/certify",
+      "project-details/golly-bot",
+      "project-details/maildart-backend",
+      "project-details/paint-me",
+      "project-details/cryptodash",
+      "project-details/todo-app",
+      "project-details/create-boilerplate-node",
+      "project-details/qchat",
+      "project-details/algos-for-all-amigos",
+      "project-details/maildart-frontend",
+      "project-details/acm-github-bot",
+      "project-details/discord-hackpot",
+      "forktober-projects/open-with-browser",
+      "forktober-projects/scrag",
+      "forktober-projects/digital-circuit-simulator",
+      "forktober-projects/echolink",
+      "forktober-projects/ride-safe",
+      "forktober-projects/pdfmaker",
+      "forktober-projects/fludget",
+      "forktober-projects/gitpositive",
+      "forktober-projects/muscle-magic",
+      "forktober-projects/alarmit",
+      "forktober-projects/sticky-links",
+      "forktober-projects/10-000-hours",
+      "forktober-projects/certify",
+      "forktober-projects/golly-bot",
+      "forktober-projects/maildart-backend",
+      "forktober-projects/paint-me",
+      "forktober-projects/cryptodash",
+      "forktober-projects/todo-app",
+      "forktober-projects/create-boilerplate-node",
+      "forktober-projects/qchat",
+      "forktober-projects/algos-for-all-amigos",
+      "forktober-projects/maildart-frontend",
+      "forktober-projects/acm-github-bot",
+      "forktober-projects/discord-hackpot",
+      "aois-tech/webdev",
+      "aois-tech/foss"
+    ],
+    "postman": [
+      "project-details/acmone",
+      "project-details/unipool",
+      "project-details/localhost",
+      "project-details/ocs-25",
+      "project-details/ocs-26",
+      "project-details/ocs-22",
+      "aois-tech/webdev"
+    ],
+    "react": [
+      "project-details/unipool",
+      "project-details/examcooker",
+      "project-details/localhost",
+      "project-details/ocs-25",
+      "project-details/ocs-26",
+      "project-details/ocs-22",
+      "project-details/conclave",
+      "project-details/wenvy",
+      "project-details/digital-circuit-simulator",
+      "project-details/todo-app",
+      "project-details/maildart-frontend",
+      "forktober-projects/digital-circuit-simulator",
+      "forktober-projects/todo-app",
+      "forktober-projects/maildart-frontend",
+      "aois-tech/webdev"
+    ],
+    "go": [
+      "project-details/unipool",
+      "project-details/ocs-22",
+      "project-details/golly-bot",
+      "forktober-projects/golly-bot",
+      "aois-tech/webdev"
+    ],
+    "nextjs": [
+      "project-details/examcooker",
+      "project-details/localhost",
+      "project-details/ocs-25",
+      "project-details/ocs-26",
+      "project-details/conclave",
+      "aois-tech/webdev"
+    ],
+    "tailwindcss": [
+      "project-details/examcooker",
+      "project-details/localhost",
+      "project-details/ocs-25",
+      "project-details/ocs-26",
+      "project-details/conclave",
+      "aois-tech/webdev"
+    ],
+    "prisma": [
+      "project-details/examcooker",
+      "project-details/localhost",
+      "project-details/ocs-25",
+      "project-details/ocs-26",
+      "aois-tech/webdev"
+    ],
+    "redis": [
+      "project-details/examcooker",
+      "project-details/ocs-26",
+      "aois-tech/webdev"
+    ],
+    "vercel": [
+      "project-details/examcooker",
+      "project-details/localhost",
+      "project-details/ocs-25",
+      "project-details/ocs-26",
+      "aois-tech/webdev"
+    ],
+    "shadcn": [
+      "project-details/ocs-25",
+      "aois-tech/webdev"
+    ],
+    "aws": [
+      "project-details/ocs-25",
+      "aois-tech/devops"
+    ],
+    "cloudflare": [
+      "project-details/ocs-25",
+      "project-details/ocs-26",
+      "project-details/wenvy",
+      "aois-tech/webdev"
+    ],
+    "mongodb": [
+      "project-details/ocs-26",
+      "project-details/create-boilerplate-node",
+      "forktober-projects/create-boilerplate-node",
+      "aois-tech/webdev"
+    ],
+    "nodejs": [
+      "project-details/ocs-26",
+      "project-details/conclave",
+      "project-details/maildart-backend",
+      "project-details/create-boilerplate-node",
+      "project-details/acm-github-bot",
+      "project-details/discord-hackpot",
+      "forktober-projects/maildart-backend",
+      "forktober-projects/create-boilerplate-node",
+      "forktober-projects/acm-github-bot",
+      "forktober-projects/discord-hackpot",
+      "aois-tech/webdev"
+    ],
+    "rust": [
+      "project-details/cli-rpg"
+    ],
+    "supabase": [
+      "project-details/cli-rpg",
+      "aois-tech/webdev"
+    ],
+    "swift": [
+      "project-details/conclave",
+      "project-details/sticky-links",
+      "forktober-projects/sticky-links",
+      "aois-tech/appdev"
+    ],
+    "kotlin": [
+      "project-details/conclave",
+      "project-details/gitpositive",
+      "project-details/alarmit",
+      "project-details/paint-me",
+      "forktober-projects/gitpositive",
+      "forktober-projects/alarmit",
+      "forktober-projects/paint-me",
+      "aois-tech/appdev"
+    ],
+    "hono": [
+      "project-details/wenvy",
+      "aois-tech/webdev"
+    ],
+    "flutter": [
+      "project-details/echolink",
+      "project-details/ride-safe",
+      "project-details/fludget",
+      "project-details/muscle-magic",
+      "project-details/10-000-hours",
+      "project-details/cryptodash",
+      "forktober-projects/echolink",
+      "forktober-projects/ride-safe",
+      "forktober-projects/fludget",
+      "forktober-projects/muscle-magic",
+      "forktober-projects/10-000-hours",
+      "forktober-projects/cryptodash",
+      "aois-tech/appdev"
+    ],
+    "cplusplus": [
+      "project-details/ride-safe",
+      "project-details/algos-for-all-amigos",
+      "forktober-projects/ride-safe",
+      "forktober-projects/algos-for-all-amigos",
+      "aois-tech/gamestudios"
+    ],
+    "android-studio": [
+      "project-details/gitpositive",
+      "project-details/alarmit",
+      "project-details/paint-me",
+      "forktober-projects/gitpositive",
+      "forktober-projects/alarmit",
+      "forktober-projects/paint-me",
+      "aois-tech/appdev"
+    ],
+    "javascript": [
+      "project-details/certify",
+      "project-details/maildart-backend",
+      "project-details/todo-app",
+      "project-details/create-boilerplate-node",
+      "project-details/maildart-frontend",
+      "project-details/acm-github-bot",
+      "project-details/discord-hackpot",
+      "forktober-projects/certify",
+      "forktober-projects/maildart-backend",
+      "forktober-projects/todo-app",
+      "forktober-projects/create-boilerplate-node",
+      "forktober-projects/maildart-frontend",
+      "forktober-projects/acm-github-bot",
+      "forktober-projects/discord-hackpot",
+      "aois-tech/webdev"
+    ],
+    "express": [
+      "project-details/create-boilerplate-node",
+      "forktober-projects/create-boilerplate-node",
+      "aois-tech/webdev"
+    ],
+    "swiftui": [
+      "aois-tech/appdev"
+    ],
+    "jetpack-compose": [
+      "aois-tech/appdev"
+    ],
+    "xcode": [
+      "aois-tech/appdev"
+    ],
+    "realm": [
+      "aois-tech/appdev"
+    ],
+    "sqlite": [
+      "aois-tech/appdev"
+    ],
+    "appwrite": [
+      "aois-tech/appdev"
+    ],
+    "fastlane": [
+      "aois-tech/appdev"
+    ],
+    "trpc": [
+      "aois-tech/webdev"
+    ],
+    "graphql": [
+      "aois-tech/webdev"
+    ],
+    "apollographql": [
+      "aois-tech/webdev"
+    ],
+    "fastify": [
+      "aois-tech/webdev"
+    ],
+    "nestjs": [
+      "aois-tech/webdev"
+    ],
+    "mysql": [
+      "aois-tech/webdev"
+    ],
+    "kubernetes": [
+      "aois-tech/webdev",
+      "aois-tech/devops"
+    ],
+    "nginx": [
+      "aois-tech/webdev",
+      "aois-tech/devops"
+    ],
+    "gitlab": [
+      "aois-tech/foss"
+    ],
+    "ubuntu": [
+      "aois-tech/foss"
+    ],
+    "arch-linux": [
+      "aois-tech/foss"
+    ],
+    "debian": [
+      "aois-tech/foss"
+    ],
+    "fedora": [
+      "aois-tech/foss"
+    ],
+    "gnu": [
+      "aois-tech/foss"
+    ],
+    "gcc": [
+      "aois-tech/foss"
+    ],
+    "cmake": [
+      "aois-tech/foss"
+    ],
+    "bazel": [
+      "aois-tech/foss"
+    ],
+    "meson": [
+      "aois-tech/foss"
+    ],
+    "nix": [
+      "aois-tech/foss"
+    ],
+    "homebrew": [
+      "aois-tech/foss"
+    ],
+    "podman": [
+      "aois-tech/foss"
+    ],
+    "openapi": [
+      "aois-tech/foss"
+    ],
+    "apache": [
+      "aois-tech/foss"
+    ],
+    "neovim": [
+      "aois-tech/foss"
+    ],
+    "vim": [
+      "aois-tech/foss"
+    ],
+    "blender": [
+      "aois-tech/foss"
+    ],
+    "krita": [
+      "aois-tech/foss"
+    ],
+    "gimp": [
+      "aois-tech/foss"
+    ],
+    "libreoffice": [
+      "aois-tech/foss"
+    ],
+    "linux": [
+      "aois-tech/foss",
+      "aois-tech/devops"
+    ],
+    "unity": [
+      "aois-tech/gamestudios"
+    ],
+    "unreal-engine": [
+      "aois-tech/gamestudios"
+    ],
+    "godot": [
+      "aois-tech/gamestudios"
+    ],
+    "houdini": [
+      "aois-tech/gamestudios"
+    ],
+    "aseprite": [
+      "aois-tech/gamestudios"
+    ],
+    "spine": [
+      "aois-tech/gamestudios"
+    ],
+    "rive": [
+      "aois-tech/gamestudios"
+    ],
+    "csharp": [
+      "aois-tech/gamestudios"
+    ],
+    "opengl": [
+      "aois-tech/gamestudios"
+    ],
+    "vulkan": [
+      "aois-tech/gamestudios"
+    ],
+    "sdl": [
+      "aois-tech/gamestudios"
+    ],
+    "terraform": [
+      "aois-tech/devops"
+    ],
+    "ansible": [
+      "aois-tech/devops"
+    ],
+    "helm": [
+      "aois-tech/devops"
+    ],
+    "jenkins": [
+      "aois-tech/devops"
+    ],
+    "github-actions": [
+      "aois-tech/devops"
+    ],
+    "gitlab-ci": [
+      "aois-tech/devops"
+    ],
+    "circleci": [
+      "aois-tech/devops"
+    ],
+    "argo-cd": [
+      "aois-tech/devops"
+    ],
+    "prometheus": [
+      "aois-tech/devops"
+    ],
+    "grafana": [
+      "aois-tech/devops"
+    ],
+    "traefik": [
+      "aois-tech/devops"
+    ],
+    "azure": [
+      "aois-tech/devops"
+    ],
+    "opentelemetry": [
+      "aois-tech/devops"
+    ],
+    "vault": [
+      "aois-tech/devops"
+    ],
+    "consul": [
+      "aois-tech/devops"
+    ]
+  },
+  "project-details": {
+    "acmone": [
+      "project-cassettes/acmone",
+      "home-projects/acmone"
+    ],
+    "examcooker": [
+      "project-cassettes/examcooker",
+      "home-projects/examcooker"
+    ],
+    "cli-rpg": [
+      "project-cassettes/cli-rpg",
+      "home-projects/cli-rpg"
+    ],
+    "unipool": [
+      "project-cassettes/unipool",
+      "home-projects/unipool"
+    ],
+    "ocs-22": [
+      "project-cassettes/ocs-2022"
+    ],
+    "ocs-23": [
+      "project-cassettes/ocs-2023"
+    ],
+    "localhost": [
+      "project-cassettes/localhost",
+      "home-projects/localhost"
+    ],
+    "ocs-25": [
+      "project-cassettes/ocs",
+      "home-projects/ocs-25"
+    ],
+    "ocs-26": [
+      "project-cassettes/ocs-2026"
+    ],
+    "conclave": [
+      "project-cassettes/conclave"
+    ],
+    "wenvy": [
+      "project-cassettes/wenvy"
+    ],
+    "cli-top": [
+      "project-cassettes/cli-top"
+    ],
+    "abcd": [
+      "home-projects/abcd"
+    ],
+    "testing": [
+      "home-projects/testing"
+    ],
+    "pls-work": [
+      "home-projects/pls-work"
+    ]
+  },
+  "events": {
+    "code2create": [
+      "aois-tech/appdev",
+      "aois-tech/webdev",
+      "singleton:domain-management",
+      "singleton:event-links"
+    ],
+    "cryptic-hunt": [
+      "aois-tech/appdev",
+      "aois-tech/webdev",
+      "aois-tech/gamestudios",
+      "singleton:domain-management",
+      "singleton:event-links"
+    ],
+    "reverse-coding": [
+      "aois-tech/webdev",
+      "singleton:domain-management",
+      "singleton:domain-cc",
+      "singleton:event-links"
+    ],
+    "forktober": [
+      "aois-tech/foss",
+      "singleton:event-links"
+    ],
+    "code-plus-plus": [
+      "singleton:domain-cc",
+      "singleton:event-links"
+    ],
+    "apptitude": [
+      "singleton:event-links"
+    ],
+    "codart": [
+      "singleton:event-links"
+    ],
+    "codex-cryptum": [
+      "singleton:event-links"
+    ],
+    "inspiher": [
+      "singleton:event-links"
+    ],
+    "neural-hack": [
+      "singleton:event-links"
+    ],
+    "the-tiny-hack": [
+      "singleton:event-links"
+    ],
+    "be-the-builder": [
+      "singleton:event-links"
+    ],
+    "casa": [
+      "singleton:event-links"
+    ],
+    "deepfake": [
+      "singleton:event-links"
+    ],
+    "dr-peter-robinson": [
+      "singleton:event-links"
+    ],
+    "dr-federica-sarro": [
+      "singleton:event-links"
+    ],
+    "kickstart-learn": [
+      "singleton:event-links"
+    ],
+    "sdg-workshops": [
+      "singleton:event-links"
+    ]
+  },
+  "tools-design": {
+    "figma": [
+      "aois-design/uiux"
+    ],
+    "framer": [
+      "aois-design/uiux"
+    ],
+    "sketch": [
+      "aois-design/uiux"
+    ],
+    "canva": [
+      "aois-design/uiux"
+    ],
+    "shadcn": [
+      "aois-design/uiux"
+    ],
+    "illustrator": [
+      "aois-design/illustrations"
+    ],
+    "krita": [
+      "aois-design/illustrations"
+    ],
+    "photoshop": [
+      "aois-design/illustrations"
+    ],
+    "affinity-designer": [
+      "aois-design/illustrations"
+    ],
+    "after-effects": [
+      "aois-design/motion-graphics",
+      "aois-design/video-editing"
+    ],
+    "rive": [
+      "aois-design/motion-graphics"
+    ],
+    "gsap": [
+      "aois-design/motion-graphics"
+    ],
+    "premiere-pro": [
+      "aois-design/motion-graphics",
+      "aois-design/video-editing"
+    ],
+    "blender": [
+      "aois-design/3d"
+    ],
+    "spline": [
+      "aois-design/3d"
+    ],
+    "unity": [
+      "aois-design/3d"
+    ],
+    "unreal-engine": [
+      "aois-design/3d"
+    ],
+    "houdini": [
+      "aois-design/3d"
+    ],
+    "davinci-resolve": [
+      "aois-design/video-editing"
+    ],
+    "lightroom": [
+      "aois-design/video-editing"
+    ]
+  },
+  "tools-research": {
+    "python": [
+      "aois-research/aiml",
+      "aois-research/cybersecurity",
+      "aois-research/iot",
+      "aois-research/blockchain",
+      "aois-research/quantum",
+      "aois-research/bioinformatics"
+    ],
+    "pytorch": [
+      "aois-research/aiml"
+    ],
+    "tensorflow": [
+      "aois-research/aiml"
+    ],
+    "keras": [
+      "aois-research/aiml"
+    ],
+    "huggingface": [
+      "aois-research/aiml"
+    ],
+    "langchain": [
+      "aois-research/aiml"
+    ],
+    "scikit-learn": [
+      "aois-research/aiml"
+    ],
+    "numpy": [
+      "aois-research/aiml",
+      "aois-research/quantum",
+      "aois-research/bioinformatics"
+    ],
+    "pandas": [
+      "aois-research/aiml",
+      "aois-research/bioinformatics"
+    ],
+    "opencv": [
+      "aois-research/aiml"
+    ],
+    "jupyter": [
+      "aois-research/aiml"
+    ],
+    "google-colab": [
+      "aois-research/aiml"
+    ],
+    "ghidra": [
+      "aois-research/cybersecurity"
+    ],
+    "burp-suite": [
+      "aois-research/cybersecurity"
+    ],
+    "owasp-zap": [
+      "aois-research/cybersecurity"
+    ],
+    "wireshark": [
+      "aois-research/cybersecurity"
+    ],
+    "nmap": [
+      "aois-research/cybersecurity"
+    ],
+    "metasploit": [
+      "aois-research/cybersecurity"
+    ],
+    "kali-linux": [
+      "aois-research/cybersecurity"
+    ],
+    "linux": [
+      "aois-research/cybersecurity",
+      "aois-research/iot"
+    ],
+    "arduino": [
+      "aois-research/iot"
+    ],
+    "platformio": [
+      "aois-research/iot"
+    ],
+    "esp-idf": [
+      "aois-research/iot"
+    ],
+    "node-red": [
+      "aois-research/iot"
+    ],
+    "mqtt": [
+      "aois-research/iot"
+    ],
+    "raspberry-pi": [
+      "aois-research/iot"
+    ],
+    "tensorflow-lite": [
+      "aois-research/iot"
+    ],
+    "solidity": [
+      "aois-research/blockchain"
+    ],
+    "hardhat": [
+      "aois-research/blockchain"
+    ],
+    "openzeppelin": [
+      "aois-research/blockchain"
+    ],
+    "ethereum": [
+      "aois-research/blockchain"
+    ],
+    "ipfs": [
+      "aois-research/blockchain"
+    ],
+    "qiskit": [
+      "aois-research/quantum"
+    ],
+    "pennylane": [
+      "aois-research/quantum"
+    ],
+    "biopython": [
+      "aois-research/bioinformatics"
+    ],
+    "blast": [
+      "aois-research/bioinformatics"
+    ],
+    "galaxy": [
+      "aois-research/bioinformatics"
+    ]
+  }
+}

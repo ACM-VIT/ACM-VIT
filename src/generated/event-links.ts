@@ -1,0 +1,80 @@
+// AUTO-GENERATED from content/ by the content compiler. DO NOT EDIT.
+// Edit content/**/event-links entries (or the Keystatic admin UI) and run: npm run content:compile
+import type { EventLinks } from "../platform/schema/singletons/pages.ts";
+
+export const data: EventLinks = {
+  "titleToSlug": [
+    {
+      "title": "Apptitude",
+      "slug": "apptitude"
+    },
+    {
+      "title": "Code2Create",
+      "slug": "code2create"
+    },
+    {
+      "title": "Codart",
+      "slug": "codart"
+    },
+    {
+      "title": "Code Plus Plus",
+      "slug": "code-plus-plus"
+    },
+    {
+      "title": "Codex Cryptum",
+      "slug": "codex-cryptum"
+    },
+    {
+      "title": "Cryptic Hunt",
+      "slug": "cryptic-hunt"
+    },
+    {
+      "title": "Forktober Fest",
+      "slug": "forktober"
+    },
+    {
+      "title": "inspiHer",
+      "slug": "inspiher"
+    },
+    {
+      "title": "The Neural Hack",
+      "slug": "neural-hack"
+    },
+    {
+      "title": "Reverse Coding",
+      "slug": "reverse-coding"
+    },
+    {
+      "title": "The Tiny Hack",
+      "slug": "the-tiny-hack"
+    },
+    {
+      "title": "Be The Builder",
+      "slug": "be-the-builder"
+    },
+    {
+      "title": "CASA",
+      "slug": "casa"
+    },
+    {
+      "title": "Deepfake: The Digital Doppelganger",
+      "slug": "deepfake"
+    },
+    {
+      "title": "Computers Have Feelings Too",
+      "slug": "dr-peter-robinson"
+    },
+    {
+      "title": "Search-Based Software Engineering",
+      "slug": "dr-federica-sarro"
+    },
+    {
+      "title": "Kickstart Learn",
+      "slug": "kickstart-learn"
+    },
+    {
+      "title": "SDG Workshops",
+      "slug": "sdg-workshops"
+    }
+  ]
+};

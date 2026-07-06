@@ -1,0 +1,251 @@
+// AUTO-GENERATED from content/ by the content compiler. DO NOT EDIT.
+// Edit content/**/z0d1ak entries (or the Keystatic admin UI) and run: npm run content:compile
+import type { Z0d1akData } from "../platform/schema/singletons/z0d1ak.ts";
+
+export const data: Z0d1akData = {
+  "ratingHistory": [
+    {
+      "year": 2026,
+      "globalRank": 8,
+      "countryRank": 1,
+      "ratingPoints": 607.192,
+      "events": 59
+    },
+    {
+      "year": 2025,
+      "globalRank": 675,
+      "countryRank": 48,
+      "ratingPoints": 93.971,
+      "events": 20
+    }
+  ],
+  "bestWorldRank": 7,
+  "achievements": [
+    {
+      "event": "Hackअस्त्र",
+      "place": 1,
+      "ratingPoints": 50,
+      "ctfPoints": 9016,
+      "x": 10,
+      "y": 30,
+      "magnitude": 1
+    },
+    {
+      "event": "GPN CTF 2026",
+      "place": 2,
+      "ratingPoints": 97.334,
+      "ctfPoints": 4127,
+      "x": 24,
+      "y": 22,
+      "magnitude": 1
+    },
+    {
+      "event": "Incognito 7.0",
+      "place": 3,
+      "ratingPoints": 20.781,
+      "ctfPoints": 4700,
+      "x": 38,
+      "y": 44,
+      "magnitude": 1
+    },
+    {
+      "event": "KAALCHAKRA Finals",
+      "place": 4,
+      "ctfPoints": 6850,
+      "x": 52,
+      "y": 34,
+      "magnitude": 2
+    },
+    {
+      "event": "DalCTF 2026",
+      "place": 29,
+      "ctfPoints": 5358,
+      "x": 64,
+      "y": 58,
+      "magnitude": 3
+    },
+    {
+      "event": "JerseyCTF VI",
+      "place": 30,
+      "ctfPoints": 15586,
+      "x": 78,
+      "y": 40,
+      "magnitude": 3
+    },
+    {
+      "event": "KubSTU CTF",
+      "place": 41,
+      "ctfPoints": 21301,
+      "x": 90,
+      "y": 52,
+      "magnitude": 3
+    }
+  ],
+  "achievementLines": [
+    {
+      "from": 0,
+      "to": 1
+    },
+    {
+      "from": 1,
+      "to": 2
+    },
+    {
+      "from": 2,
+      "to": 3
+    },
+    {
+      "from": 3,
+      "to": 4
+    },
+    {
+      "from": 4,
+      "to": 5
+    },
+    {
+      "from": 5,
+      "to": 6
+    }
+  ],
+  "members": [
+    {
+      "name": "ant1v3n0m",
+      "id": 219143
+    },
+    {
+      "name": "theg1239",
+      "id": 219679
+    },
+    {
+      "name": "ret2.libc",
+      "id": 248725
+    },
+    {
+      "name": "neerajcodz",
+      "id": 252682
+    },
+    {
+      "name": "ludicrouslytrue",
+      "id": 252882
+    },
+    {
+      "name": "AncientDragon",
+      "id": 252885
+    },
+    {
+      "name": "afishchan",
+      "id": 253530
+    },
+    {
+      "name": "TitanCode",
+      "id": 253873
+    },
+    {
+      "name": "P4kh1H3y4a",
+      "id": 256809
+    },
+    {
+      "name": "Abhi404",
+      "id": 257684
+    }
+  ],
+  "recentResults": [
+    {
+      "event": "Scarlet CTF 2026",
+      "place": 68,
+      "ctfPoints": 3369,
+      "ratingPoints": 6.812
+    },
+    {
+      "event": "UofTCTF 2026",
+      "place": 666,
+      "ctfPoints": 132,
+      "ratingPoints": 0.974
+    },
+    {
+      "event": "Pragyan CTF 2026",
+      "place": 32,
+      "ctfPoints": 3384,
+      "ratingPoints": 0.983
+    },
+    {
+      "event": "BITSCTF 2026",
+      "place": 89,
+      "ctfPoints": 1428,
+      "ratingPoints": 10.312
+    },
+    {
+      "event": "Batman's Kitchen CTF 2026",
+      "place": 98,
+      "ctfPoints": 4773,
+      "ratingPoints": 8.759
+    },
+    {
+      "event": "EHAX CTF 2026",
+      "place": 25,
+      "ctfPoints": 5311,
+      "ratingPoints": 14.071
+    },
+    {
+      "event": "Srdnlen CTF 2026 Quals",
+      "place": 92,
+      "ctfPoints": 400,
+      "ratingPoints": 4.461
+    },
+    {
+      "event": "CryptoNite CTF 2026",
+      "place": 24,
+      "ctfPoints": 3136,
+      "ratingPoints": 20.698
+    },
+    {
+      "event": "UNbreakable International 2026",
+      "place": 53,
+      "ctfPoints": 481,
+      "ratingPoints": 2.184
+    },
+    {
+      "event": "ApoorvCTF 2026",
+      "place": 6,
+      "ctfPoints": 8647,
+      "ratingPoints": 26.747
+    },
+    {
+      "event": "CodeVinci CTF 2026",
+      "place": 14,
+      "ctfPoints": 9603,
+      "ratingPoints": 15.435
+    },
+    {
+      "event": "DiceCTF 2026 Quals",
+      "place": 73,
+      "ctfPoints": 1515,
+      "ratingPoints": 57.089
+    }
+  ],
+  "timeline": [
+    {
+      "year": 2025,
+      "title": "First Light",
+      "rank": "World #675 · India #48",
+      "rating": 93.971,
+      "events": 20,
+      "blurb": "The team charts its opening season on CTFtime, playing 20 events and finding its footing on the global board.",
+      "highlight": "First 20 events charted"
+    },
+    {
+      "year": 2026,
+      "title": "Supernova",
+      "rank": "World #7 · India #1",
+      "rating": 607.192,
+      "events": 59,
+      "blurb": "A 59-event campaign carries z0d1ak to 8th in the world and 1st in India, with a maiden win at Hackअस्त्र and podiums at GPN CTF and Incognito 7.0.",
+      "highlight": "1st at Hackअस्त्र · Top 10 worldwide"
+    }
+  ],
+  "present": {
+    "label": "Present day",
+    "rank": "World #7 · India #1",
+    "note": "1st in India and charting new constellations every season."
+  }
+};
