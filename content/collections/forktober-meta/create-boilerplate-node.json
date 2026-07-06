@@ -1,0 +1,10 @@
+{
+  "slug": "create-boilerplate-node",
+  "title": "create-boilerplate-node",
+  "repo": "create-boilerplate-node",
+  "years": [
+    2022
+  ],
+  "description": "A CLI tool which generates boilerplate code for nodejs server applications taking in various configuration parameters.",
+  "order": 180
+}

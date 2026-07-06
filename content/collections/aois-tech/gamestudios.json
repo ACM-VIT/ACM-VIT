@@ -1,0 +1,49 @@
+{
+  "slug": "gamestudios",
+  "order": 30,
+  "key": "gamestudios",
+  "title": "Game Studios",
+  "shortDescription": "Building games for ACM's events and original titles, from CLI RPGs in Rust to map-based games set in VIT.",
+  "longDescription": [
+    "Game Studios is the newest AOI but has already shipped a few titles. CLI-RPG is a command-line role playing game written in Rust. Tagred is set in VIT itself, using the campus map as its world with original characters and storylines.",
+    "The Cryptic Hunt game uses the VIT map to deliver puzzle questions during the event's night leg, guiding participants as they navigate the campus. The team also builds game elements for hackathon and coding portals across ACM's other events."
+  ],
+  "cassetteSrc": "/aois/tech/cassettes/aois-tech-cassettes-gamestudios.webp",
+  "tools": [
+    "unity",
+    "unreal-engine",
+    "godot",
+    "houdini",
+    "aseprite",
+    "spine",
+    "rive",
+    "csharp",
+    "cplusplus",
+    "opengl",
+    "vulkan",
+    "sdl",
+    "git"
+  ],
+  "projects": [
+    {
+      "title": "CLI-RPG",
+      "desc": "Command-line role playing game written in Rust."
+    },
+    {
+      "title": "Tagred",
+      "desc": "Game set in VIT using the campus map as its world, with original characters and story."
+    },
+    {
+      "title": "Cryptic Hunt Game",
+      "desc": "Map-based puzzle game guiding Cryptic Hunt participants through campus at night."
+    }
+  ],
+  "events": [
+    {
+      "title": "Cryptic Hunt",
+      "cassette": "/events/events-cryptic-hunt-cassette.svg",
+      "desc": "Game systems and map-based puzzles powering Cryptic Hunt nights.",
+      "slug": "cryptic-hunt"
+    }
+  ]
+}

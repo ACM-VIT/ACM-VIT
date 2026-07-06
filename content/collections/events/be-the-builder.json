@@ -1,0 +1,40 @@
+{
+  "slug": "be-the-builder",
+  "title": "Be The Builder",
+  "tagline": "Meet your chapter. Build your first idea together.",
+  "eyebrow": "ACM-VIT · Internal Ideathon",
+  "themeKey": "brand",
+  "themeColor": "#7496D8",
+  "hideCtaBanner": true,
+  "cassetteSvg": "/events/events-bethebuilder-cassette.webp",
+  "shortDescription": "Be The Builder is ACM-VIT's internal ideathon for new recruits - a space where freshly inducted members meet each other, ideate together, interact across domains, and get to know how the chapter functions.",
+  "longDescription": [
+    "Be The Builder is ACM-VIT's annual internal ideathon, created for the chapter's newest recruits. The event serves as the first collaborative experience for new members after induction, giving them a chance to meet their peers across domains, brainstorm ideas together, and understand how ACM-VIT operates as a team.",
+    "More than a competition, Be The Builder is about onboarding through action. New members form cross-domain teams, pitch ideas, and work through the ideation process together. It's where friendships form, working styles are discovered, and the culture of building at ACM-VIT takes root.",
+    "First conducted in 2024, Be The Builder has become a yearly tradition that sets the tone for every new cohort's journey within the chapter."
+  ],
+  "format": "Internal ideathon",
+  "duration": "1 day",
+  "mode": "Offline",
+  "audience": "ACM-VIT new recruits",
+  "team": "Cross-domain teams",
+  "organizedBy": "ACM-VIT",
+  "firstHeld": "2024",
+  "recurrence": "Annual",
+  "registrationUrl": "https://acmvit.in",
+  "primaryCtaLabel": "Learn More",
+  "stats": [],
+  "tracks": [],
+  "schedule": [],
+  "prizes": [],
+  "highlights": [],
+  "perks": [],
+  "faq": [],
+  "socials": [
+    {
+      "label": "Instagram · @acmvit",
+      "href": "https://instagram.com/acmvit"
+    }
+  ],
+  "order": 110
+}

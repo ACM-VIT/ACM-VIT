@@ -1,0 +1,74 @@
+{
+  "slug": "research",
+  "order": 30,
+  "key": "research",
+  "title": "RESEARCH",
+  "description": "Curiosity, collaboration, and a passion for exploration drive everything we do. We explore cutting-edge technologies, work across disciplines, and drive innovation through hands-on mentorship and real-world problem solving. From crafting thought-provoking challenges for our flagship events to publishing insightful blogs, we turn questions into breakthroughs. We also host the System's Reading Group (SRG), a peer-led initiative to deep-dive into foundational research. With interests spanning AI, cybersecurity, quantum computing, and more, we're always pushing boundaries through learning and discovery.",
+  "themeColor": "research",
+  "cassetteSvg": "/cassettes/cassettes-cassette-research.webp",
+  "buttonText": "Areas of Interest (AOIs)",
+  "techIcons": [
+    {
+      "src": "/domains/research/domains-research-google-colab.webp",
+      "alt": "Collab"
+    },
+    {
+      "src": "/domains/research/domains-research-burp-suite.webp",
+      "alt": "BurpSuite"
+    },
+    {
+      "src": "/domains/research/domains-research-owasp-streamline-simple-icons.webp",
+      "alt": "Owasp"
+    },
+    {
+      "src": "/domains/research/domains-research-llvm.webp",
+      "alt": "LLVM"
+    },
+    {
+      "src": "/domains/research/domains-research-tensorflow.webp",
+      "alt": "TensorFlow"
+    },
+    {
+      "src": "/domains/research/domains-research-pytorch.webp",
+      "alt": "PyTorch"
+    },
+    {
+      "src": "/domains/research/domains-research-pandas.webp",
+      "alt": "Pandas"
+    },
+    {
+      "src": "/domains/research/domains-research-python.webp",
+      "alt": "Python"
+    },
+    {
+      "src": "/domains/research/domains-research-qiskit.webp",
+      "alt": "Qiskit"
+    }
+  ],
+  "aois": [
+    {
+      "src": "/aois/research/aois-research-aiml.webp",
+      "alt": "AI/ML"
+    },
+    {
+      "src": "/aois/research/aois-research-bioinfo.webp",
+      "alt": "Bioinformatics"
+    },
+    {
+      "src": "/aois/research/aois-research-blockchain.webp",
+      "alt": "Blockchain"
+    },
+    {
+      "src": "/aois/research/aois-research-cybersec.webp",
+      "alt": "Cybersecurity"
+    },
+    {
+      "src": "/aois/research/aois-research-iot.webp",
+      "alt": "IoT"
+    },
+    {
+      "src": "/aois/research/aois-research-quantum.webp",
+      "alt": "Quantum Computing"
+    }
+  ]
+}

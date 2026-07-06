@@ -1,0 +1,8 @@
+{
+  "name": "Arch Linux",
+  "slug": "arch-linux",
+  "svgFile": "/domains/tech/tools/tech-tool-arch-linux.svg",
+  "colorHex": "#1793D1",
+  "monochrome": true,
+  "order": 650
+}

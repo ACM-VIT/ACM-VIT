@@ -1,0 +1,8 @@
+{
+  "name": "Discord",
+  "slug": "discord",
+  "svgFile": "/domains/management/tools/management-tool-discord.svg",
+  "colorHex": "#5865F2",
+  "monochrome": true,
+  "order": 20
+}

@@ -1,0 +1,98 @@
+{
+  "slug": "webdev",
+  "order": 10,
+  "key": "webdev",
+  "title": "Web Development",
+  "shortDescription": "Websites, dashboards and backends for every ACM event and project, plus the enrollments portal that gets a fresh theme every year.",
+  "longDescription": [
+    "Web Development covers everything from event websites and project frontends to the backends powering apps and portals. We also build the enrollments website every year, each edition gets a brand new theme, fresh features and a few hidden easter eggs.",
+    "We write the backends for Cryptic Hunt, Code2Create and Reverse Coding among others. Several events draw huge participation, so keeping these systems fast and resilient under load is part of the job."
+  ],
+  "cassetteSrc": "/aois/tech/cassettes/aois-tech-cassettes-webdev.webp",
+  "tools": [
+    "nextjs",
+    "react",
+    "nodejs",
+    "go",
+    "typescript",
+    "javascript",
+    "tailwindcss",
+    "shadcn",
+    "prisma",
+    "trpc",
+    "graphql",
+    "apollographql",
+    "express",
+    "fastify",
+    "nestjs",
+    "hono",
+    "postgresql",
+    "mysql",
+    "mongodb",
+    "redis",
+    "cockroachdb",
+    "supabase",
+    "firebase",
+    "docker",
+    "kubernetes",
+    "nginx",
+    "vercel",
+    "cloudflare",
+    "git",
+    "github",
+    "postman"
+  ],
+  "projects": [
+    {
+      "title": "ExamCooker",
+      "desc": "Web counterpart to the ExamCooker app, indexed and searchable VIT academic resources."
+    },
+    {
+      "title": "Localhost",
+      "desc": "ACM-VIT's hub for student-built tools and internal services."
+    },
+    {
+      "title": "OCS",
+      "desc": "On-Campus Services platform connecting students with campus utilities."
+    },
+    {
+      "title": "UniPool",
+      "desc": "Web companion for the UniPool carpooling app."
+    },
+    {
+      "title": "CLI-RPG",
+      "desc": "Web frontends and infra around the CLI-RPG game project."
+    },
+    {
+      "title": "ACMOne",
+      "desc": "Web dashboard for ACM's internal management tool."
+    }
+  ],
+  "events": [
+    {
+      "title": "Code2Create",
+      "cassette": "/events/events-c2c-cassette.webp",
+      "desc": "Event website + backend for ACM-VIT's flagship hackathon.",
+      "slug": "code2create"
+    },
+    {
+      "title": "Cryptic Hunt",
+      "cassette": "/events/events-cryptic-hunt-cassette.svg",
+      "desc": "Backend systems powering the Cryptic Hunt app and live event.",
+      "slug": "cryptic-hunt"
+    },
+    {
+      "title": "Neural Hack Portal",
+      "cassette": "/events/events-neural-hack-cassette.svg",
+      "desc": "Submission and judging portal for Neural Hack.",
+      "external": true,
+      "href": "https://nh.acmvit.in/"
+    },
+    {
+      "title": "Reverse Coding",
+      "cassette": "/events/events-reverse-coding-cassette.svg",
+      "desc": "Contest portal and backend infra for Reverse Coding.",
+      "slug": "reverse-coding"
+    }
+  ]
+}

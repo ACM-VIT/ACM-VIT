@@ -1,0 +1,81 @@
+{
+  "slug": "gitpositive",
+  "title": "gitpositive",
+  "tagline": "An efficient GitHub profile app, written in Kotlin!",
+  "eyebrow": "ACM-VIT · Forktober 2021, 2022 · Open Source",
+  "themeColor": "#EFEFEF",
+  "themeColorSecondary": "#1a1a1a",
+  "shortDescription": "An efficient GitHub profile app, written in Kotlin!",
+  "longDescription": [
+    "An efficient GitHub profile app, written in Kotlin!",
+    "gitpositive was part of ACM-VIT's Forktober open-source drive across 2021, 2022, opening up to student contributors during Hacktoberfest.",
+    "The repository is archived. It remains on GitHub as a record of the Forktober edition that ran it, but is no longer accepting new contributions.",
+    "Across its lifetime, the project drew 18 contributors, 41 pull requests and 95 commits."
+  ],
+  "status": "archived",
+  "statusNote": "Forktober 2022 · Archived",
+  "cassetteSvg": "/events/events-forktober-cassette.svg",
+  "stats": [
+    {
+      "value": "18",
+      "label": "Contributors"
+    },
+    {
+      "value": "41",
+      "label": "Pull requests"
+    },
+    {
+      "value": "95",
+      "label": "Commits"
+    },
+    {
+      "value": "15",
+      "label": "Stars"
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Stack",
+      "slugs": [
+        "kotlin",
+        "android-studio"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "prasoonsoni"
+    },
+    {
+      "github": "rishuyadav"
+    },
+    {
+      "github": "rooparsh"
+    },
+    {
+      "github": "Avinaash7"
+    },
+    {
+      "github": "ersascape"
+    },
+    {
+      "github": "DarthBenro008"
+    }
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/ACM-VIT/gitpositive",
+      "kind": "github"
+    }
+  ],
+  "commitGraphSeed": 207,
+  "order": 70
+}

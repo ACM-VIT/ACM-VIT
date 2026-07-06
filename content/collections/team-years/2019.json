@@ -1,0 +1,133 @@
+{
+  "slug": "2019",
+  "year": 2019,
+  "label": "2018-2019",
+  "members": [
+    {
+      "title": "",
+      "fullName": "Suchita Mehta",
+      "position": "Chair",
+      "imageUrl": "/board/2019/suchita-mehta.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Navin Agarwalla",
+      "position": "Co-Vice Chair (Management)",
+      "imageUrl": "/board/2019/navin-agarwalla.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Akshit Grover",
+      "position": "Co-Vice Chair (Technical)",
+      "imageUrl": "/board/2019/akshit-grover.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Ankit Prasad",
+      "position": "Secretary (Internal Affairs)",
+      "imageUrl": "/board/2019/ankit-prasad.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Akash Tushar",
+      "position": "Secretary (External Affairs)",
+      "imageUrl": "/board/2019/akash-tushar.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Deep Baldha",
+      "position": "Competitive Programming Lead",
+      "imageUrl": "/board/2019/deep-baldha.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Prateek Singh",
+      "position": "Web Master",
+      "imageUrl": "/board/2019/prateek-singh.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Pravigya Pariyar",
+      "position": "R&D Lead",
+      "imageUrl": "/board/2019/pravigya-pariyar.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Anant Mishra",
+      "position": "DevOps Lead",
+      "imageUrl": "/board/2019/anant-mishra.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Mufaddal Ibrahimjee",
+      "position": "App Dev Lead",
+      "imageUrl": "/board/2019/mufaddal-ibrahimjee.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Sanya Taneja",
+      "position": "Outreach Head",
+      "imageUrl": "/board/2019/sanya-taneja.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Tanmay Jain",
+      "position": "UI/UX Lead",
+      "imageUrl": "/board/2019/tanmay-jain.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Shyamli Singh",
+      "position": "Program Lead",
+      "imageUrl": "/board/2019/shyamli-singh.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Mudit Agarwal",
+      "position": "Treasurer",
+      "imageUrl": "/board/2019/mudit-agarwal.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Arnav Saxena",
+      "position": "Operations Head (ACM)",
+      "imageUrl": "/board/2019/arnav-saxena.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Kumar Shaswat",
+      "position": "Creative Head",
+      "imageUrl": "/board/2019/kumar-shaswat.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Sasya Reddi",
+      "position": "ACM-W Lead",
+      "imageUrl": "/board/2019/sasya-reddi.webp",
+      "isW": true
+    },
+    {
+      "title": "",
+      "fullName": "Ankita Ghosh",
+      "position": "Operations Head (ACM-W)",
+      "imageUrl": "/board/2019/ankita-ghosh.webp",
+      "isW": true
+    }
+  ]
+}

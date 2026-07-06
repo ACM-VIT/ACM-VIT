@@ -1,0 +1,7 @@
+{
+  "name": "GitLab CI",
+  "slug": "gitlab-ci",
+  "svgFile": "/domains/tech/tools/tech-tool-gitlab-ci.svg",
+  "colorHex": "#FC6D26",
+  "order": 500
+}

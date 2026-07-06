@@ -1,0 +1,15 @@
+{
+  "slug": "abcd",
+  "order": 60,
+  "cassetteAlt": "abcd",
+  "description1": "grgrgehe qwewfwgw wf",
+  "primaryBgColor": "#ffffff",
+  "primaryTextColor": "white",
+  "primaryBorderColor": "#FEFCD9",
+  "visitWebsiteText": "VISIT WEBSITE",
+  "visitWebsiteTextColor": "white",
+  "visitWebsiteBorderColor": "#FEFCD9",
+  "icons": [],
+  "textColor": "white",
+  "contentBlockBackground": "rgba(0, 0, 0, 0.15)"
+}

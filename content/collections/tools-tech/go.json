@@ -1,0 +1,7 @@
+{
+  "name": "Go",
+  "slug": "go",
+  "svgFile": "/domains/tech/tools/tech-tool-go.svg",
+  "colorHex": "#00ADD8",
+  "order": 30
+}

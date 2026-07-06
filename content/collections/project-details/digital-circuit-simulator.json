@@ -1,0 +1,81 @@
+{
+  "slug": "digital-circuit-simulator",
+  "title": "Digital Circuit Simulator",
+  "tagline": "A web-based tool for building and testing digital logic circuits visually using click-and-drop gates, switches, and real-time simulation without physical hardware.",
+  "eyebrow": "ACM-VIT · Forktober 2025 · Open Source",
+  "themeColor": "#EFEFEF",
+  "themeColorSecondary": "#1a1a1a",
+  "shortDescription": "A web-based tool for building and testing digital logic circuits visually using click-and-drop gates, switches, and real-time simulation without physical hardware.",
+  "longDescription": [
+    "A web-based tool for building and testing digital logic circuits visually using click-and-drop gates, switches, and real-time simulation without physical hardware.",
+    "Digital Circuit Simulator was part of ACM-VIT's Forktober open-source drive in 2025, opening up to student contributors during Hacktoberfest.",
+    "The repository is still being maintained. New contributions, issues and pull requests are welcome on GitHub.",
+    "Across its lifetime, the project drew 11 contributors, 22 pull requests and 103 commits."
+  ],
+  "status": "online",
+  "statusNote": "Actively maintained · Forktober 2025",
+  "cassetteSvg": "/events/events-forktober-cassette.svg",
+  "stats": [
+    {
+      "value": "11",
+      "label": "Contributors"
+    },
+    {
+      "value": "22",
+      "label": "Pull requests"
+    },
+    {
+      "value": "103",
+      "label": "Commits"
+    },
+    {
+      "value": "9",
+      "label": "Stars"
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Stack",
+      "slugs": [
+        "typescript",
+        "react"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "fabjenny13"
+    },
+    {
+      "github": "beetlejusse"
+    },
+    {
+      "github": "adii2ma"
+    },
+    {
+      "github": "utk2602"
+    },
+    {
+      "github": "NeerajCodz"
+    },
+    {
+      "github": "farazmirzax"
+    }
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/ACM-VIT/Digital-Circuit-Simulator",
+      "kind": "github"
+    }
+  ],
+  "commitGraphSeed": 571,
+  "order": 140
+}

@@ -1,0 +1,8 @@
+{
+  "name": "GNU",
+  "slug": "gnu",
+  "svgFile": "/domains/tech/tools/tech-tool-gnu.svg",
+  "colorHex": "#A42E2B",
+  "monochrome": true,
+  "order": 680
+}

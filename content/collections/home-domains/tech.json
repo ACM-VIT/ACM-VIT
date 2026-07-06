@@ -1,0 +1,118 @@
+{
+  "slug": "tech",
+  "order": 0,
+  "key": "tech",
+  "title": "TECH",
+  "description": "We build tools that people actually use in a world driven by digital experiences. From frontend finesse to backend logic, we focus on developing full-stack applications that solve real problems. We collaborate on real-world projects, explore the latest technologies, and grow as developers through hands-on experience. It's where curiosity turns into code and ideas turn into seamless digital experiences.",
+  "themeColor": "tech",
+  "cassetteSvg": "/cassettes/cassettes-cassette-tech.webp",
+  "buttonText": "Areas of Interest (AOIs)",
+  "techIcons": [
+    {
+      "src": "/domains/app/domains-app-android.webp",
+      "alt": "Android"
+    },
+    {
+      "src": "/domains/app/domains-app-dart.webp",
+      "alt": "Dart"
+    },
+    {
+      "src": "/domains/app/domains-app-flutter.webp",
+      "alt": "Flutter"
+    },
+    {
+      "src": "/domains/app/domains-app-java.webp",
+      "alt": "Java"
+    },
+    {
+      "src": "/domains/app/domains-app-kotlin.webp",
+      "alt": "Kotlin"
+    },
+    {
+      "src": "/domains/app/domains-app-reactjs.webp",
+      "alt": "React Native"
+    },
+    {
+      "src": "/domains/app/domains-app-swift.webp",
+      "alt": "Swift"
+    },
+    {
+      "src": "/domains/app/domains-app-typescript.webp",
+      "alt": "TypeScript"
+    },
+    {
+      "src": "/domains/web/domains-web-cloudflare.webp",
+      "alt": "Cloudflare"
+    },
+    {
+      "src": "/domains/web/domains-web-cockroachdb.webp",
+      "alt": "CockroachDB"
+    },
+    {
+      "src": "/domains/web/domains-web-docker.webp",
+      "alt": "Docker"
+    },
+    {
+      "src": "/domains/web/domains-web-go-gopher-svgrepo-com.webp",
+      "alt": "Go"
+    },
+    {
+      "src": "/domains/web/domains-web-group.webp",
+      "alt": "Group"
+    },
+    {
+      "src": "/domains/web/domains-web-nextjs2.webp",
+      "alt": "Next.js"
+    },
+    {
+      "src": "/domains/web/domains-web-nodejs.webp",
+      "alt": "Node.js"
+    },
+    {
+      "src": "/domains/web/domains-web-npm2.webp",
+      "alt": "npm"
+    },
+    {
+      "src": "/domains/web/domains-web-postgresql.webp",
+      "alt": "PostgreSQL"
+    },
+    {
+      "src": "/domains/web/domains-web-postman.webp",
+      "alt": "Postman"
+    },
+    {
+      "src": "/domains/web/domains-web-prisma.webp",
+      "alt": "Prisma"
+    },
+    {
+      "src": "/domains/web/domains-web-redis.webp",
+      "alt": "Redis"
+    },
+    {
+      "src": "/domains/web/domains-web-tailwindcss.webp",
+      "alt": "TailwindCSS"
+    }
+  ],
+  "aois": [
+    {
+      "src": "/aois/tech/aois-tech-app.webp",
+      "alt": "App Development"
+    },
+    {
+      "src": "/aois/tech/aois-tech-foss.webp",
+      "alt": "FOSS"
+    },
+    {
+      "src": "/aois/tech/aois-tech-gamedev.webp",
+      "alt": "Game Dev"
+    },
+    {
+      "src": "/aois/tech/aois-tech-web.webp",
+      "alt": "Web Development"
+    },
+    {
+      "src": "/aois/tech/aois-tech-devops.webp",
+      "alt": "DevOps"
+    }
+  ]
+}

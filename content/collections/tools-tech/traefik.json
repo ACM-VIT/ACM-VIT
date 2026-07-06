@@ -1,0 +1,7 @@
+{
+  "name": "Traefik",
+  "slug": "traefik",
+  "svgFile": "/domains/tech/tools/tech-tool-traefik.svg",
+  "colorHex": "#24A1C1",
+  "order": 550
+}

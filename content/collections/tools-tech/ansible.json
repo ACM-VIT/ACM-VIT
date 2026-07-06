@@ -1,0 +1,7 @@
+{
+  "name": "Ansible",
+  "slug": "ansible",
+  "svgFile": "/domains/tech/tools/tech-tool-ansible.svg",
+  "colorHex": "#EE0000",
+  "order": 460
+}

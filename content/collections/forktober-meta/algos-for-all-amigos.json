@@ -1,0 +1,10 @@
+{
+  "slug": "algos-for-all-amigos",
+  "title": "Algos for all Amigos",
+  "repo": "Algos-for-all-Amigos",
+  "years": [
+    2021
+  ],
+  "description": "This repository consists an implementation of the Algorithms encountered in Computer Science, Physics and Mathematics.",
+  "order": 200
+}

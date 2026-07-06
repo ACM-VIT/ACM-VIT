@@ -1,0 +1,7 @@
+{
+  "name": "Fedora",
+  "slug": "fedora",
+  "svgFile": "/domains/tech/tools/tech-tool-fedora.svg",
+  "colorHex": "#51A2DA",
+  "order": 670
+}

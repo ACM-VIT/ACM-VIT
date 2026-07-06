@@ -1,0 +1,7 @@
+{
+  "name": "Krita",
+  "slug": "krita",
+  "svgFile": "/domains/design/tools/design-tool-krita.svg",
+  "colorHex": "#3BABFF",
+  "order": 120
+}

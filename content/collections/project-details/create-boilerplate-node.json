@@ -1,0 +1,68 @@
+{
+  "slug": "create-boilerplate-node",
+  "title": "create-boilerplate-node",
+  "tagline": "A CLI tool which generates boilerplate code for nodejs server applications taking in various configuration parameters.",
+  "eyebrow": "ACM-VIT · Forktober 2022 · Open Source",
+  "themeColor": "#EFEFEF",
+  "themeColorSecondary": "#1a1a1a",
+  "shortDescription": "A CLI tool which generates boilerplate code for nodejs server applications taking in various configuration parameters.",
+  "longDescription": [
+    "A CLI tool which generates boilerplate code for nodejs server applications taking in various configuration parameters.",
+    "create-boilerplate-node was part of ACM-VIT's Forktober open-source drive in 2022, opening up to student contributors during Hacktoberfest.",
+    "The repository is archived. It remains on GitHub as a record of the Forktober edition that ran it, but is no longer accepting new contributions.",
+    "Across its lifetime, the project drew 1 contributors, 2 pull requests and 7 commits."
+  ],
+  "status": "archived",
+  "statusNote": "Forktober 2022 · Archived",
+  "cassetteSvg": "/events/events-forktober-cassette.svg",
+  "stats": [
+    {
+      "value": "1",
+      "label": "Contributors"
+    },
+    {
+      "value": "2",
+      "label": "Pull requests"
+    },
+    {
+      "value": "7",
+      "label": "Commits"
+    },
+    {
+      "value": "1",
+      "label": "Stars"
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Stack",
+      "slugs": [
+        "nodejs",
+        "javascript",
+        "express",
+        "mongodb"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "kaushalrathi24"
+    }
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/ACM-VIT/create-boilerplate-node",
+      "kind": "github"
+    }
+  ],
+  "commitGraphSeed": 311,
+  "order": 300
+}

@@ -1,0 +1,74 @@
+{
+  "slug": "cryptodash",
+  "title": "CryptoDash",
+  "tagline": "CryptoDash allows you to track the price of popular cryptocurrencies and see their performance over time.",
+  "eyebrow": "ACM-VIT · Forktober 2022 · Open Source",
+  "themeColor": "#EFEFEF",
+  "themeColorSecondary": "#1a1a1a",
+  "shortDescription": "CryptoDash allows you to track the price of popular cryptocurrencies and see their performance over time.",
+  "longDescription": [
+    "CryptoDash allows you to track the price of popular cryptocurrencies and see their performance over time.",
+    "CryptoDash was part of ACM-VIT's Forktober open-source drive in 2022, opening up to student contributors during Hacktoberfest.",
+    "The repository is archived. It remains on GitHub as a record of the Forktober edition that ran it, but is no longer accepting new contributions.",
+    "Across its lifetime, the project drew 5 contributors, 5 pull requests and 12 commits."
+  ],
+  "status": "archived",
+  "statusNote": "Forktober 2022 · Archived",
+  "cassetteSvg": "/events/events-forktober-cassette.svg",
+  "stats": [
+    {
+      "value": "5",
+      "label": "Contributors"
+    },
+    {
+      "value": "5",
+      "label": "Pull requests"
+    },
+    {
+      "value": "12",
+      "label": "Commits"
+    },
+    {
+      "value": "2",
+      "label": "Stars"
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Stack",
+      "slugs": [
+        "flutter"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "AryanKhubchandani"
+    },
+    {
+      "github": "ersascape"
+    },
+    {
+      "github": "RohanKhatua"
+    },
+    {
+      "github": "blyncnov"
+    }
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/ACM-VIT/CryptoDash",
+      "kind": "github"
+    }
+  ],
+  "commitGraphSeed": 89,
+  "order": 160
+}

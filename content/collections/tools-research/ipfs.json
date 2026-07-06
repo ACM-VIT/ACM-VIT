@@ -1,0 +1,8 @@
+{
+  "name": "IPFS",
+  "slug": "ipfs",
+  "svgFile": "/domains/research/tools/research-tool-ipfs.svg",
+  "colorHex": "#65C2CB",
+  "isDark": true,
+  "order": 180
+}

@@ -1,0 +1,8 @@
+{
+  "name": "TopCoder",
+  "slug": "topcoder",
+  "svgFile": "/domains/cc/tools/cc-tool-topcoder.svg",
+  "colorHex": "#F69322",
+  "monochrome": true,
+  "order": 70
+}

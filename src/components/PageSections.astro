@@ -1,0 +1,52 @@
+---
+import { blocks } from "../platform/blocks/registry";
+import type { PageSection } from "../platform/schema/collections/pages";
+
+import IntroBlock from "../blocks/IntroBlock.astro";
+import DomainsBlock from "../blocks/DomainsBlock.astro";
+import EventsBlock from "../blocks/EventsBlock.astro";
+import ProjectsBlock from "../blocks/ProjectsBlock.astro";
+import AcmWBlock from "../blocks/AcmWBlock.astro";
+import CommunityBlock from "../blocks/CommunityBlock.astro";
+import BoardBlock from "../blocks/BoardBlock.astro";
+import BlogsBlock from "../blocks/BlogsBlock.astro";
+import PartnersBlock from "../blocks/PartnersBlock.astro";
+import GalleryBlock from "../blocks/GalleryBlock.astro";
+import ContactBlock from "../blocks/ContactBlock.astro";
+import OutroBlock from "../blocks/OutroBlock.astro";
+
+interface Props {
+  sections: PageSection[];
+}
+
+const components: Record<string, any> = {
+  intro: IntroBlock,
+  domains: DomainsBlock,
+  events: EventsBlock,
+  projects: ProjectsBlock,
+  "acm-w": AcmWBlock,
+  community: CommunityBlock,
+  board: BoardBlock,
+  blogs: BlogsBlock,
+  partners: PartnersBlock,
+  gallery: GalleryBlock,
+  contact: ContactBlock,
+  outro: OutroBlock,
+};
+
+// Registry and component map must not drift: fail the build if they do.
+for (const b of blocks) {
+  if (!components[b.name]) throw new Error(`Block "${b.name}" registered but has no component in PageSections.astro`);
+}
+
+const { sections } = Astro.props;
+const rendered = sections.filter((s) => s.enabled);
+for (const s of rendered) {
+  if (!components[s.block]) throw new Error(`Unknown block "${s.block}" in page content`);
+}
+---
+
+{rendered.map((s) => {
+  const Block = components[s.block];
+  return <Block />;
+})}

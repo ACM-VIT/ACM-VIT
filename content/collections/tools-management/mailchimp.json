@@ -1,0 +1,8 @@
+{
+  "name": "Mailchimp",
+  "slug": "mailchimp",
+  "svgFile": "/domains/management/tools/management-tool-mailchimp.svg",
+  "colorHex": "#FFE01B",
+  "monochrome": true,
+  "order": 200
+}

@@ -1,0 +1,7 @@
+{
+  "name": "Consul",
+  "slug": "consul",
+  "svgFile": "/domains/tech/tools/tech-tool-consul.svg",
+  "colorHex": "#CA2171",
+  "order": 610
+}

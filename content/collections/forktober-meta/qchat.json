@@ -1,0 +1,10 @@
+{
+  "slug": "qchat",
+  "title": "QChat",
+  "repo": "QChat",
+  "years": [
+    2022
+  ],
+  "description": "Mobile chat application with end-to-end encryption using Quantum Key Distribution (QKD)",
+  "order": 190
+}

@@ -1,0 +1,8 @@
+{
+  "name": "HubSpot",
+  "slug": "hubspot",
+  "svgFile": "/domains/management/tools/management-tool-hubspot.svg",
+  "colorHex": "#FF7A59",
+  "monochrome": true,
+  "order": 210
+}

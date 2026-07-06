@@ -6,9 +6,9 @@ import Layout from "../layouts/Layout.astro";
 import "../styles/globals.css";
 import Footer from "../layouts/Footer.astro";
 import { getAssetUrl } from "../utils/cdn";
-import { reader } from "../utils/reader";
 import { eventDetails } from "../data/eventDetailsData";
 import PartnerGridCard from "../components/ui/PartnerGridCard.astro";
+import { items as cmsPartnerItems } from "../generated/partners";
 
 type GridPartner = {
   name: string;
@@ -91,8 +91,7 @@ const normalizeName = (n: string) =>
     .trim();
 
 // 1) Official partners from the CMS singleton (each ships a real logo image).
-const partnersData = await reader.singletons.partners.read();
-const cmsPartners: GridPartner[] = (partnersData?.items ?? []).map((p) => {
+const cmsPartners: GridPartner[] = cmsPartnerItems.map((p) => {
   const mode = classifyLogo(p.imageUrl);
   return {
     name: p.title,

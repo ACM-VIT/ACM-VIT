@@ -1,0 +1,377 @@
+{
+  "slug": "examcooker",
+  "title": "ExamCooker",
+  "tagline": "Cramming, made easy.",
+  "eyebrow": "ACM-VIT · Web + Mobile · EdTech",
+  "themeColor": "#27BAEC",
+  "themeColorSecondary": "#253EE0",
+  "shortDescription": "One-stop platform for exam resources. Past papers, notes, syllabi, forums, and a resource repo - built by students, for the 2 AM crammer.",
+  "longDescription": [
+    "ExamCooker started as a summer project idea from a senior who wanted a single place for past year papers and notes. Four maintainers from ACM-VIT shaped it into a full-stack platform that now serves 15,000+ students across VIT Vellore.",
+    "Students upload and access past papers, contribute notes, check syllabi, and discuss on forums. The platform verifies VIT email addresses via Google OAuth, generates PDF thumbnails on the fly, and caches aggressively with Redis so it doesn't fall over during exam week traffic spikes.",
+    "The app ships on web, Android, and iOS. Under the hood it runs Next.js 14 with server-side rendering on Vercel, a FastAPI microservice for PDF processing, CockroachDB for distributed storage, and Google Cloud Storage for file hosting."
+  ],
+  "status": "online",
+  "statusNote": "Actively maintained",
+  "heroImage": "/projects/examcooker/projects-examcooker-logo.webp",
+  "gallery": [
+    {
+      "src": "/projects/examcooker/projects-examcooker-shot-1.webp",
+      "alt": "ExamCooker papers view"
+    },
+    {
+      "src": "/projects/examcooker/projects-examcooker-shot-2.webp",
+      "alt": "ExamCooker syllabus repository"
+    },
+    {
+      "src": "/projects/examcooker/projects-examcooker-shot-3.webp",
+      "alt": "ExamCooker home screen"
+    }
+  ],
+  "stats": [
+    {
+      "value": "15,000+",
+      "label": "Active users"
+    },
+    {
+      "value": "Web + iOS + Android",
+      "label": "Platforms"
+    },
+    {
+      "value": "100+",
+      "label": "Courses covered"
+    },
+    {
+      "value": "2024",
+      "label": "First shipped"
+    }
+  ],
+  "features": [
+    {
+      "title": "Past papers",
+      "description": "Searchable repository of previous exam papers across 100+ courses, tagged by semester and subject."
+    },
+    {
+      "title": "Student notes",
+      "description": "Community-contributed notes. Upload your own or study from someone else's."
+    },
+    {
+      "title": "Syllabus tracker",
+      "description": "Know exactly what's in scope before you start cramming."
+    },
+    {
+      "title": "Forums",
+      "description": "Discussion boards for peer-to-peer Q&A and exam strategy."
+    },
+    {
+      "title": "Resource repo",
+      "description": "Curated links to articles, videos, and external learning material."
+    },
+    {
+      "title": "PDF preview",
+      "description": "Instant thumbnail previews of uploaded PDFs. No more downloading to check if it's the right paper."
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Frontend",
+      "slugs": [
+        "nextjs",
+        "react",
+        "typescript",
+        "tailwindcss"
+      ]
+    },
+    {
+      "category": "Backend",
+      "slugs": [
+        "python",
+        "cockroachdb",
+        "prisma",
+        "redis"
+      ]
+    },
+    {
+      "category": "Infrastructure",
+      "slugs": [
+        "vercel",
+        "gcp"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "theg1239",
+      "role": "Lead developer"
+    },
+    {
+      "github": "Supratim69",
+      "role": "Maintainer"
+    },
+    {
+      "github": "Alan-J-Bibins",
+      "role": "Developer"
+    },
+    {
+      "github": "RohitPhaniramSakamuri",
+      "role": "Developer"
+    },
+    {
+      "github": "kairavsheth",
+      "role": "Maintainer"
+    },
+    {
+      "github": "nitine",
+      "role": "Developer"
+    },
+    {
+      "github": "AnishaDhoot",
+      "role": "Developer"
+    },
+    {
+      "github": "ojask99",
+      "role": "Developer"
+    },
+    {
+      "github": "Nitesh-04",
+      "role": "Maintainer"
+    },
+    {
+      "github": "thinkter",
+      "role": "Developer"
+    },
+    {
+      "github": "Kaustubh-sandy",
+      "role": "Developer"
+    },
+    {
+      "github": "mahendra785",
+      "role": "Developer"
+    },
+    {
+      "github": "tanushgolwala",
+      "role": "Developer"
+    },
+    {
+      "github": "adii2ma",
+      "role": "Developer"
+    },
+    {
+      "github": "drashtishukla",
+      "role": "Developer"
+    },
+    {
+      "github": "SarupaVL",
+      "role": "Developer"
+    },
+    {
+      "github": "bhatiyavansh",
+      "role": "Developer"
+    },
+    {
+      "github": "vianmangal",
+      "role": "Developer"
+    },
+    {
+      "github": "eshita241",
+      "role": "Maintainer"
+    },
+    {
+      "github": "pj4real",
+      "role": "Developer"
+    },
+    {
+      "github": "Passive-Coder",
+      "role": "Developer"
+    },
+    {
+      "github": "ant1v3n0m",
+      "role": "Developer"
+    }
+  ],
+  "designers": [
+    {
+      "name": "Alan J Bibins",
+      "linkedin": "https://www.linkedin.com/in/alanjbibins/",
+      "role": "Design"
+    },
+    {
+      "name": "Krishika Sureka",
+      "linkedin": "https://www.linkedin.com/in/krishikasureka/",
+      "role": "Design"
+    }
+  ],
+  "links": [
+    {
+      "label": "Website",
+      "href": "https://examcooker.acmvit.in/",
+      "kind": "website"
+    },
+    {
+      "label": "GitHub",
+      "href": "https://github.com/ACM-VIT/ExamCooker",
+      "kind": "github"
+    },
+    {
+      "label": "Google Play",
+      "href": "https://play.google.com/store/apps/details?id=in.acmvit.examcooker",
+      "kind": "play"
+    },
+    {
+      "label": "App Store",
+      "href": "https://apps.apple.com/ng/app/examcooker/id6765768416",
+      "kind": "appstore"
+    },
+    {
+      "label": "Blog",
+      "href": "https://blog.acmvit.in/the-chefs-secrets-the-story-behind-examcooker",
+      "kind": "external"
+    }
+  ],
+  "versions": [
+    {
+      "label": "ExamCooker App",
+      "year": "2025",
+      "blurb": "Native mobile app on iOS and Android, bringing past papers and notes to phones. Growth to 15,000+ users.",
+      "techSlugs": [
+        "react-native",
+        "expo",
+        "typescript"
+      ],
+      "developers": [
+        {
+          "github": "theg1239",
+          "role": "Lead developer"
+        }
+      ]
+    },
+    {
+      "label": "ExamCooker Website",
+      "year": "2024",
+      "blurb": "Full-stack web platform. Built during ACM summer project cycle. Hit 1,500 users during the first exam season.",
+      "techSlugs": [
+        "nextjs",
+        "react",
+        "typescript",
+        "tailwindcss",
+        "python",
+        "cockroachdb",
+        "prisma",
+        "redis",
+        "vercel",
+        "gcp"
+      ],
+      "developers": [
+        {
+          "github": "theg1239",
+          "role": "Lead developer"
+        },
+        {
+          "github": "Supratim69",
+          "role": "Maintainer"
+        },
+        {
+          "github": "Alan-J-Bibins",
+          "role": "Developer"
+        },
+        {
+          "github": "RohitPhaniramSakamuri",
+          "role": "Developer"
+        },
+        {
+          "github": "kairavsheth",
+          "role": "Maintainer"
+        },
+        {
+          "github": "nitine",
+          "role": "Developer"
+        },
+        {
+          "github": "AnishaDhoot",
+          "role": "Developer"
+        },
+        {
+          "github": "ojask99",
+          "role": "Developer"
+        },
+        {
+          "github": "Nitesh-04",
+          "role": "Maintainer"
+        },
+        {
+          "github": "thinkter",
+          "role": "Developer"
+        },
+        {
+          "github": "Kaustubh-sandy",
+          "role": "Developer"
+        },
+        {
+          "github": "mahendra785",
+          "role": "Developer"
+        },
+        {
+          "github": "tanushgolwala",
+          "role": "Developer"
+        },
+        {
+          "github": "adii2ma",
+          "role": "Developer"
+        },
+        {
+          "github": "drashtishukla",
+          "role": "Developer"
+        },
+        {
+          "github": "SarupaVL",
+          "role": "Developer"
+        },
+        {
+          "github": "bhatiyavansh",
+          "role": "Developer"
+        },
+        {
+          "github": "vianmangal",
+          "role": "Developer"
+        },
+        {
+          "github": "eshita241",
+          "role": "Maintainer"
+        },
+        {
+          "github": "pj4real",
+          "role": "Developer"
+        },
+        {
+          "github": "Passive-Coder",
+          "role": "Developer"
+        },
+        {
+          "github": "ant1v3n0m",
+          "role": "Developer"
+        }
+      ],
+      "designers": [
+        {
+          "name": "Alan J Bibins",
+          "linkedin": "https://www.linkedin.com/in/alanjbibins/",
+          "role": "Design"
+        },
+        {
+          "name": "Krishika Sureka",
+          "linkedin": "https://www.linkedin.com/in/krishikasureka/",
+          "role": "Design"
+        }
+      ]
+    }
+  ],
+  "commitGraphSeed": 137,
+  "order": 20
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Microsoft PowerPoint",
+  "slug": "microsoftpowerpoint",
+  "svgFile": "/domains/management/tools/management-tool-microsoftpowerpoint.svg",
+  "colorHex": "#B7472A",
+  "monochrome": true,
+  "order": 100
+}

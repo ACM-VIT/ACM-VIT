@@ -1,0 +1,8 @@
+{
+  "name": "Asana",
+  "slug": "asana",
+  "svgFile": "/domains/management/tools/management-tool-asana.svg",
+  "colorHex": "#F06A6A",
+  "monochrome": true,
+  "order": 130
+}

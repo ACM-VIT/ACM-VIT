@@ -1,0 +1,18 @@
+{
+  "slug": "illustrations",
+  "order": 10,
+  "key": "illustrations",
+  "title": "Illustrations",
+  "shortDescription": "Hand-crafted visual storytelling that gives ACM-VIT its distinctive voice across every touchpoint.",
+  "longDescription": [
+    "Illustrations are the signature element of ACM-VIT's visual identity. From social media posts and event posters to merchandise and website assets, our illustrators create original artwork that sets us apart.",
+    "We work across digital and traditional media, blending vector art, raster painting, and mixed-media techniques to tell stories that resonate with our audience."
+  ],
+  "cassetteSrc": "/aois/design/cassettes/aois-design-cassettes-illustrations.webp",
+  "tools": [
+    "illustrator",
+    "krita",
+    "photoshop",
+    "affinity-designer"
+  ]
+}

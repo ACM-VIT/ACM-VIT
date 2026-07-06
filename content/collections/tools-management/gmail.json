@@ -1,0 +1,8 @@
+{
+  "name": "Gmail",
+  "slug": "gmail",
+  "svgFile": "/domains/management/tools/management-tool-gmail.svg",
+  "colorHex": "#EA4335",
+  "monochrome": true,
+  "order": 30
+}

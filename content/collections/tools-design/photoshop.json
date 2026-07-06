@@ -1,0 +1,7 @@
+{
+  "name": "Photoshop",
+  "slug": "photoshop",
+  "svgFile": "/domains/design/tools/design-tool-photoshop.svg",
+  "colorHex": "#31A8FF",
+  "order": 10
+}

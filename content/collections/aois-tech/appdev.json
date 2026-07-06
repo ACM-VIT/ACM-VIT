@@ -1,0 +1,69 @@
+{
+  "slug": "appdev",
+  "order": 0,
+  "key": "appdev",
+  "title": "App Development",
+  "shortDescription": "Native and cross-platform apps shipped to real users on the Play Store and App Store, built across React Native, Flutter, Kotlin and Swift.",
+  "longDescription": [
+    "App Development is one of the oldest and strongest teams at VIT. We build apps both for ACM events and during our project cycles, then push them live so people actually use them.",
+    "We work across the entire mobile stack, React Native, Flutter, Kotlin, SwiftUI, picking whichever fits the project. Members rotate through every layer so the team grows engineers, not framework specialists."
+  ],
+  "cassetteSrc": "/aois/tech/cassettes/aois-tech-cassettes-appdev.webp",
+  "tools": [
+    "flutter",
+    "react-native",
+    "expo",
+    "swift",
+    "swiftui",
+    "kotlin",
+    "jetpack-compose",
+    "android-studio",
+    "xcode",
+    "realm",
+    "sqlite",
+    "appwrite",
+    "fastlane",
+    "typescript",
+    "git"
+  ],
+  "projects": [
+    {
+      "title": "UniPool",
+      "desc": "Carpooling app for university students, matching riders and drivers across campus routes."
+    },
+    {
+      "title": "ExamCooker",
+      "desc": "Past papers, notes and syllabi for VIT students in a single place."
+    },
+    {
+      "title": "Cryptic Hunt",
+      "desc": "Flagship app for ACM-VIT's signature scavenger hunt, with live puzzles, map navigation and team play."
+    },
+    {
+      "title": "Conclave",
+      "desc": "Powerful meeting app built for organised, low-friction discussions."
+    },
+    {
+      "title": "ACMOne",
+      "desc": "ACM's internal management tool, work, meetings, events, attendance and messaging in one app."
+    },
+    {
+      "title": "Code2Create",
+      "desc": "Companion app for ACM-VIT's flagship hackathon Code2Create."
+    }
+  ],
+  "events": [
+    {
+      "title": "Code2Create",
+      "cassette": "/events/events-c2c-cassette.webp",
+      "desc": "Companion app for ACM-VIT's hackathon, shipped each edition.",
+      "slug": "code2create"
+    },
+    {
+      "title": "Cryptic Hunt",
+      "cassette": "/events/events-cryptic-hunt-cassette.svg",
+      "desc": "Mobile app powering one of India's largest scavenger hunts.",
+      "slug": "cryptic-hunt"
+    }
+  ]
+}

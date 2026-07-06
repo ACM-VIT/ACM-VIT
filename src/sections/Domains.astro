@@ -1,9 +1,7 @@
 ---
 import { getAssetUrl } from "../utils/cdn";
-import { reader } from "../utils/reader";
 
-const domainsDataCms = await reader.singletons.domains.read();
-const domainItems = domainsDataCms?.items ?? [];
+import { items as domainItems } from "../generated/home-domains";
 // Reconstruct the key-based object that client script expects
 const domainConfigs: Record<string, any> = {};
 for (const item of domainItems) {

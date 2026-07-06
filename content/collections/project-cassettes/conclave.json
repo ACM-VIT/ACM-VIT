@@ -1,0 +1,10 @@
+{
+  "slug": "conclave",
+  "order": 90,
+  "kind": "svg",
+  "name": "Conclave",
+  "color": "#FF6B35",
+  "cassetteSvg": "/projects/cassettes/projects-cassettes-conclave.svg",
+  "alt": "Conclave",
+  "url": "/projects/conclave"
+}

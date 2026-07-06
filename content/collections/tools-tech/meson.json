@@ -1,0 +1,8 @@
+{
+  "name": "Meson",
+  "slug": "meson",
+  "svgFile": "/domains/tech/tools/tech-tool-meson.svg",
+  "colorHex": "#3F75B5",
+  "isDark": false,
+  "order": 720
+}

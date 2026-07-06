@@ -1,0 +1,8 @@
+{
+  "name": "Express.js",
+  "slug": "express",
+  "svgFile": "/domains/tech/tools/tech-tool-express.svg",
+  "colorHex": "#FFFDD0",
+  "monochrome": true,
+  "order": 130
+}

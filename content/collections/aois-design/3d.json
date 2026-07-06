@@ -1,0 +1,58 @@
+{
+  "slug": "3d",
+  "order": 30,
+  "key": "3d",
+  "title": "3D Design",
+  "shortDescription": "Sculpting digital worlds and objects that push the boundaries of visual storytelling.",
+  "longDescription": [
+    "3D design at ACM-VIT spans product visualization, environment modeling, and real-time 3D experiences. We use Blender, Spline, and game engines to create assets for events, the website, and experimental projects.",
+    "From stylized low-poly scenes to photorealistic renders, 3D work adds a layer of depth and immersion that flat design simply cannot match."
+  ],
+  "cassetteSrc": "/aois/design/cassettes/aois-design-cassettes-3d.webp",
+  "tools": [
+    "blender",
+    "spline",
+    "unity",
+    "unreal-engine",
+    "houdini"
+  ],
+  "works": [
+    {
+      "title": "Cryptic Hunt 2024 App Reveal",
+      "href": "https://www.youtube.com/watch?v=Rdrg_lSXtgE",
+      "platform": "youtube",
+      "thumb": "/aois/design/works/aois-design-works-yt-Rdrg_lSXtgE.webp"
+    },
+    {
+      "title": "Cryptic Hunt - The Experience",
+      "href": "https://www.youtube.com/watch?v=yROgeFeoOAo",
+      "platform": "youtube",
+      "thumb": "/aois/design/works/aois-design-works-yt-yROgeFeoOAo.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/CikTCbdgJVL/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-CikTCbdgJVL.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/DOATYouErEk/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-DOATYouErEk.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/DPCbtT1EzaO/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-DPCbtT1EzaO.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/DUWDekTkgRE/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-DUWDekTkgRE.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/DUZ6CD0Acf3/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-DUZ6CD0Acf3.webp"
+    }
+  ]
+}

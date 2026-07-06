@@ -1,0 +1,8 @@
+{
+  "name": "Unreal Engine",
+  "slug": "unreal-engine",
+  "svgFile": "/domains/design/tools/design-tool-unreal-engine.svg",
+  "colorHex": "#0E1128",
+  "isDark": true,
+  "order": 70
+}

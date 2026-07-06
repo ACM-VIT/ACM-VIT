@@ -1,0 +1,11 @@
+{
+  "slug": "fludget",
+  "title": "Fludget",
+  "repo": "fludget",
+  "years": [
+    2021,
+    2022
+  ],
+  "description": "Learn Flutter on Flutter! A widget directory with implementation samples!",
+  "order": 60
+}

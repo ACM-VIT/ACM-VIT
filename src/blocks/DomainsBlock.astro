@@ -1,0 +1,15 @@
+---
+import Domains from "../sections/Domains.astro";
+import DomainsPhone from "../responsive/DomainsPhone.astro";
+---
+
+<section id="domains" class="page-section">
+    <div data-variant-host>
+        <template data-variant="desktop">
+            <Domains />
+        </template>
+        <template data-variant="mobile">
+            <DomainsPhone />
+        </template>
+    </div>
+</section>

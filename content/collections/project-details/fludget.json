@@ -1,0 +1,80 @@
+{
+  "slug": "fludget",
+  "title": "Fludget",
+  "tagline": "Learn Flutter on Flutter! A widget directory with implementation samples!",
+  "eyebrow": "ACM-VIT · Forktober 2021, 2022 · Open Source",
+  "themeColor": "#EFEFEF",
+  "themeColorSecondary": "#1a1a1a",
+  "shortDescription": "Learn Flutter on Flutter! A widget directory with implementation samples!",
+  "longDescription": [
+    "Learn Flutter on Flutter! A widget directory with implementation samples!",
+    "Fludget was part of ACM-VIT's Forktober open-source drive across 2021, 2022, opening up to student contributors during Hacktoberfest.",
+    "The repository is archived. It remains on GitHub as a record of the Forktober edition that ran it, but is no longer accepting new contributions.",
+    "Across its lifetime, the project drew 65 contributors, 171 pull requests and 573 commits."
+  ],
+  "status": "archived",
+  "statusNote": "Forktober 2022 · Archived",
+  "cassetteSvg": "/events/events-forktober-cassette.svg",
+  "stats": [
+    {
+      "value": "65",
+      "label": "Contributors"
+    },
+    {
+      "value": "171",
+      "label": "Pull requests"
+    },
+    {
+      "value": "573",
+      "label": "Commits"
+    },
+    {
+      "value": "31",
+      "label": "Stars"
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Stack",
+      "slugs": [
+        "flutter"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "AryanKhubchandani"
+    },
+    {
+      "github": "Kunal-8789"
+    },
+    {
+      "github": "suryaa62"
+    },
+    {
+      "github": "sidheshwar-s"
+    },
+    {
+      "github": "yuran09"
+    },
+    {
+      "github": "sachin161kr"
+    }
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/ACM-VIT/fludget",
+      "kind": "github"
+    }
+  ],
+  "commitGraphSeed": 747,
+  "order": 180
+}

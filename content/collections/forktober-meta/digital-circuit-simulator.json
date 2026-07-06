@@ -1,0 +1,10 @@
+{
+  "slug": "digital-circuit-simulator",
+  "title": "Digital Circuit Simulator",
+  "repo": "Digital-Circuit-Simulator",
+  "years": [
+    2025
+  ],
+  "description": "A web-based tool for building and testing digital logic circuits visually using click-and-drop gates, switches, and real-time simulation without physical hardware.",
+  "order": 20
+}

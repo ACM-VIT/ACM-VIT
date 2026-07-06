@@ -1,0 +1,7 @@
+{
+  "name": "Nmap",
+  "slug": "nmap",
+  "svgFile": "/domains/research/tools/research-tool-nmap.svg",
+  "colorHex": "#88C040",
+  "order": 230
+}

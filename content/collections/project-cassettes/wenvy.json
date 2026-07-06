@@ -1,0 +1,10 @@
+{
+  "slug": "wenvy",
+  "order": 100,
+  "kind": "svg",
+  "name": "WENVY",
+  "color": "#F03104",
+  "cassetteSvg": "/projects/cassettes/projects-cassettes-wenvy.svg",
+  "alt": "WENVY",
+  "url": "/projects/wenvy"
+}

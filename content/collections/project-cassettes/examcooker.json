@@ -1,0 +1,13 @@
+{
+  "slug": "examcooker",
+  "order": 10,
+  "kind": "overlay",
+  "name": "ExamCooker",
+  "color": "#2664e4",
+  "image": "/projects/items/1/cassetteSrc.webp",
+  "alt": "ExamCooker",
+  "url": "/projects/examcooker",
+  "sizePercent": 80,
+  "sizeAxis": "width",
+  "offsetY": -3
+}

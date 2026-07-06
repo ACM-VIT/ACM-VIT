@@ -1,0 +1,81 @@
+{
+  "slug": "maildart-frontend",
+  "title": "MailDart Frontend",
+  "tagline": "A mass mailer operating through a given set of emails in CSV/JSON",
+  "eyebrow": "ACM-VIT · Forktober 2021 · Open Source",
+  "themeColor": "#EFEFEF",
+  "themeColorSecondary": "#1a1a1a",
+  "shortDescription": "A mass mailer operating through a given set of emails in CSV/JSON",
+  "longDescription": [
+    "A mass mailer operating through a given set of emails in CSV/JSON",
+    "MailDart Frontend was part of ACM-VIT's Forktober open-source drive in 2021, opening up to student contributors during Hacktoberfest.",
+    "The repository is archived. It remains on GitHub as a record of the Forktober edition that ran it, but is no longer accepting new contributions.",
+    "Across its lifetime, the project drew 7 contributors, 13 pull requests and 40 commits."
+  ],
+  "status": "archived",
+  "statusNote": "Forktober 2021 · Archived",
+  "cassetteSvg": "/events/events-forktober-cassette.svg",
+  "stats": [
+    {
+      "value": "7",
+      "label": "Contributors"
+    },
+    {
+      "value": "13",
+      "label": "Pull requests"
+    },
+    {
+      "value": "40",
+      "label": "Commits"
+    },
+    {
+      "value": "5",
+      "label": "Stars"
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Stack",
+      "slugs": [
+        "javascript",
+        "react"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "Rachel-glitch"
+    },
+    {
+      "github": "satyamsingh07"
+    },
+    {
+      "github": "ANISH0309"
+    },
+    {
+      "github": "ayushgoswamiabr"
+    },
+    {
+      "github": "YashKumarVerma"
+    },
+    {
+      "github": "Likkiii"
+    }
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/ACM-VIT/maildart-frontend",
+      "kind": "github"
+    }
+  ],
+  "commitGraphSeed": 755,
+  "order": 210
+}

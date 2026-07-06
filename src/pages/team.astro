@@ -8,7 +8,6 @@ import SectionHeading from "../components/ui/SectionHeading.astro";
 import TeamDivision from "../components/ui/TeamDivision.astro";
 import BoardMemberCardSingular from "../components/ui/BoardMemberCardSingular.astro";
 import { getAssetUrl } from "../utils/cdn";
-import { reader } from "../utils/reader";
 import {
   teamYears,
   boardDivision,
@@ -18,8 +17,7 @@ import {
 } from "../data/teamData";
 
 // Real current board (2026) - same source as the landing "The Team" section.
-const boardData = await reader.singletons.board.read();
-const boardMembers = boardData?.items ?? [];
+import { items as boardMembers } from "../generated/board-members";
 const toMember = (m: (typeof boardMembers)[number]): TeamMember => ({
   title: m.title ?? "",
   fullName: m.fullName ?? "",

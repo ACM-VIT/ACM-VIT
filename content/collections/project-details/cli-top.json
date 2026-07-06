@@ -1,0 +1,64 @@
+{
+  "slug": "cli-top",
+  "title": "CLI-TOP",
+  "tagline": "VTOP, but in your terminal.",
+  "eyebrow": "ACM-VIT · CLI · Campus Utility",
+  "themeColor": "#48BB78",
+  "themeColorSecondary": "#0A2A15",
+  "shortDescription": "A command-line interface for seamless interaction with VIT's student portal, VTOP. Skip the browser, check your timetable, attendance, and marks straight from the terminal. Available on Windows, macOS, Linux, and Android.",
+  "longDescription": [
+    "VTOP is the student portal every VIT student lives in - timetables, attendance, marks, exam schedules, the works. CLI-TOP strips away the browser and puts the same data in your terminal.",
+    "The tool ships as a lightweight binary across Windows, macOS, Linux, and Android. On Windows there's an automated installer that drops the binary into AppData and configures PATH for you. On macOS and Linux, it's a manual download with shell profile setup.",
+    "CLI-TOP was built by ACM-VIT as a utility project - the kind of tool that saves five minutes every day for thousands of students on campus."
+  ],
+  "status": "online",
+  "statusNote": "Available for download",
+  "cassetteSvg": "/projects/cassettes/projects-cassettes-cli-top.svg",
+  "stats": [
+    {
+      "value": "4",
+      "label": "Platforms"
+    },
+    {
+      "value": "CLI",
+      "label": "Interface"
+    },
+    {
+      "value": "VTOP",
+      "label": "Data source"
+    },
+    {
+      "value": "Campus-wide",
+      "label": "Audience"
+    }
+  ],
+  "features": [
+    {
+      "title": "Cross-platform",
+      "description": "Ships on Windows, macOS, Linux, and Android. Dedicated installer on Windows."
+    },
+    {
+      "title": "Terminal-native",
+      "description": "No browser needed. Access timetable, attendance, and marks from the command line."
+    },
+    {
+      "title": "Lightweight binary",
+      "description": "Small compiled binary. Download, configure PATH, and go."
+    },
+    {
+      "title": "VTOP integration",
+      "description": "Pulls data directly from VIT's student portal."
+    }
+  ],
+  "techStack": [],
+  "developers": [],
+  "links": [
+    {
+      "label": "Website",
+      "href": "https://clitop.acmvit.in/",
+      "kind": "website"
+    }
+  ],
+  "commitGraphSeed": 448,
+  "order": 110
+}

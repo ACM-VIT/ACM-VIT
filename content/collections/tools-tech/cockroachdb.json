@@ -1,0 +1,8 @@
+{
+  "name": "CockroachDB",
+  "slug": "cockroachdb",
+  "svgFile": "/domains/tech/tools/tech-tool-cockroachdb.svg",
+  "colorHex": "#6933FF",
+  "monochrome": true,
+  "order": 210
+}

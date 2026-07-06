@@ -1,0 +1,25 @@
+---
+export const prerender = true;
+import Layout from "../../layouts/Layout.astro";
+import "../../styles/globals.css";
+import PageSections from "../../components/PageSections.astro";
+import Footer from "../../layouts/Footer.astro";
+import { items as pages } from "../../generated/pages";
+
+// Editor-composed pages: add an entry to the `pages` collection in the CMS
+// and it ships at /p/<slug> on the next build - no code needed. The homepage
+// keeps its own route; everything else lands under /p/ so composed pages can
+// never shadow a hand-built route.
+export function getStaticPaths() {
+  return pages
+    .filter((p) => p.slug !== "home")
+    .map((p) => ({ params: { page: p.slug }, props: { page: p } }));
+}
+
+const { page } = Astro.props;
+---
+
+<Layout>
+    <PageSections sections={page.sections} />
+    <Footer />
+</Layout>

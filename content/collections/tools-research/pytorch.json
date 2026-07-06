@@ -1,0 +1,7 @@
+{
+  "name": "PyTorch",
+  "slug": "pytorch",
+  "svgFile": "/domains/research/tools/research-tool-pytorch.svg",
+  "colorHex": "#EE4C2C",
+  "order": 10
+}

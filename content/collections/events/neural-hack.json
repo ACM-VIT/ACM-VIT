@@ -1,0 +1,149 @@
+{
+  "slug": "neural-hack",
+  "title": "The Neural Hack",
+  "tagline": "An AI-based hackathon. An ACM-W initiative.",
+  "eyebrow": "ACM-VIT · ACM-W · AI/ML Hackathon",
+  "themeKey": "research",
+  "themeColor": "#FA0148",
+  "hideCtaBanner": true,
+  "cassetteSvg": "/events/events-neural-hack-cassette.svg",
+  "shortDescription": "The Neural Hack is a 36-hour data-centric AI and Machine Learning hackathon by ACM-W VIT that emphasises data understanding, cleaning, pipeline design, and problem-solving beyond basic model-building.",
+  "longDescription": [
+    "The Neural Hack is ACM-W VIT's dedicated AI/ML hackathon, first held online in 2020 and returning in-person in 2026. It invites developers of all skill levels to create machine learning solutions addressing real-world challenges, with a strong emphasis on promoting women in STEM.",
+    "The hackathon is data-centric at its core - participants are evaluated not just on model accuracy but on their approach to data understanding, cleaning, pipeline design, solution efficiency, inference speed, novelty, implementation strategy, and code quality. Teams work through multiple review rounds with eliminatory checkpoints before final pitches.",
+    "Each team requires at least one female member, reflecting ACM-W's commitment to championing women in tech. The first edition in 2020 ran online with tracks spanning Community and Equality, Healthcare and Crisis Response, Entertainment and Life Hacks, and Security and Surveillance."
+  ],
+  "format": "Hackathon · Data-centric AI/ML with review rounds",
+  "duration": "36 hours",
+  "mode": "Hybrid",
+  "audience": "Undergrad students of all skill levels",
+  "team": "Teams of 2 to 4 (at least one female member required)",
+  "organizedBy": "ACM-W VIT · ACM-VIT",
+  "firstHeld": "2020",
+  "recurrence": "2 editions to date",
+  "registrationUrl": "https://nh.acmvit.in",
+  "primaryCtaLabel": "Visit nh.acmvit.in",
+  "isAcmW": true,
+  "stats": [
+    {
+      "value": "2",
+      "label": "Editions"
+    },
+    {
+      "value": "36h",
+      "label": "Per Edition"
+    }
+  ],
+  "tracks": [
+    {
+      "name": "Community and Equality",
+      "description": "ML solutions for social impact, inclusion, and accessibility."
+    },
+    {
+      "name": "Healthcare and Crisis Response",
+      "description": "AI for medical, public health, and emergency use cases."
+    },
+    {
+      "name": "Entertainment and Life Hacks",
+      "description": "Creative AI applications for everyday life and entertainment."
+    },
+    {
+      "name": "Security and Surveillance",
+      "description": "ML-driven solutions for safety, threat detection, and monitoring."
+    }
+  ],
+  "schedule": [
+    {
+      "time": "Day 1 · 8 AM",
+      "title": "Arrival & Registration"
+    },
+    {
+      "time": "Day 1 · 12:15 PM",
+      "title": "Dataset Release"
+    },
+    {
+      "time": "Day 1 · 5 PM",
+      "title": "Review 0",
+      "description": "Initial checkpoint."
+    },
+    {
+      "time": "Day 2 · 12 AM",
+      "title": "Review 1",
+      "description": "Midnight review round."
+    },
+    {
+      "time": "Day 2 · 9 AM",
+      "title": "Participants Return"
+    },
+    {
+      "time": "Day 2 · 4 PM",
+      "title": "Review 2 (Eliminatory)",
+      "description": "Teams shortlisted for final pitches."
+    },
+    {
+      "time": "Day 2 · 5-8 PM",
+      "title": "Final Pitches & Awards"
+    }
+  ],
+  "prizes": [],
+  "highlights": [],
+  "perks": [
+    "Free registration",
+    "Discord server for team formation",
+    "Datasets and problem statements provided"
+  ],
+  "faq": [
+    {
+      "q": "Do I need deep ML experience?",
+      "a": "No. The Neural Hack welcomes developers of all skill levels."
+    },
+    {
+      "q": "What's the team composition requirement?",
+      "a": "Teams of 2-4, with at least one female member per team."
+    },
+    {
+      "q": "What gets evaluated?",
+      "a": "Accuracy, precision/recall/F1-score, solution efficiency, inference speed, novelty, implementation strategy, code quality, and round-wise improvement."
+    }
+  ],
+  "instagramHandle": "acmvit",
+  "socials": [
+    {
+      "label": "Website",
+      "href": "https://nh.acmvit.in"
+    },
+    {
+      "label": "Devpost",
+      "href": "https://theneuralhack.devpost.com/"
+    },
+    {
+      "label": "Instagram · @acmvit",
+      "href": "https://instagram.com/acmvit"
+    }
+  ],
+  "pastEditions": [
+    {
+      "year": "2026",
+      "edition": "The Neural Hack 2.0",
+      "description": "In-person return at Shakespeare Gallery, VIT Vellore. 36-hour data-centric AI hackathon with multiple review rounds and eliminatory checkpoints. Teams of exactly 3 with at least one female member.",
+      "links": [
+        {
+          "label": "Website",
+          "href": "https://nh.acmvit.in"
+        }
+      ]
+    },
+    {
+      "year": "2020",
+      "edition": "The Neural Hack 1.0",
+      "description": "First edition, held online December 4-5 2020. 66 participants across four impact-focused tracks. Featured a guest speaker session by Dr. Ganna Pogrebna. Teams of 2-4 with at least 50% women participants.",
+      "links": [
+        {
+          "label": "Devpost",
+          "href": "https://theneuralhack.devpost.com/"
+        }
+      ]
+    }
+  ],
+  "order": 80
+}

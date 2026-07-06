@@ -1,0 +1,8 @@
+{
+  "name": "Hugging Face",
+  "slug": "huggingface",
+  "svgFile": "/domains/research/tools/research-tool-huggingface.svg",
+  "colorHex": "#FFD21E",
+  "isDark": true,
+  "order": 40
+}

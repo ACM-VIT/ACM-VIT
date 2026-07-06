@@ -1,0 +1,199 @@
+{
+  "slug": "examcooker",
+  "name": "ExamCooker",
+  "tagline": "Cramming, made easy.",
+  "category": "Web · Academics",
+  "story": [
+    "ExamCooker is where VIT students go the week before exams: past papers, notes, syllabus PDFs, and forums for 100+ courses, searchable half-asleep. It runs on Next.js with community-uploaded resources and a search bar built to forgive typos.",
+    "The identity is a kitchen at two times of day. Light mode is steam and porcelain - pale blues on near-white. Dark mode is the midnight-before-the-exam: a deep navy that most users actually live in. One typeface, Plus Jakarta Sans, holds the whole thing together."
+  ],
+  "accent": "#5FC4E7",
+  "accentTonal": "#e7f5fb",
+  "hero": {
+    "bg": "#0C1222",
+    "fg": "#EAF6FF",
+    "sub": "#5FC4E7"
+  },
+  "logo": {
+    "src": "/projects/examcooker/projects-examcooker-logo.webp",
+    "width": 120
+  },
+  "facts": [
+    {
+      "label": "Platforms",
+      "value": "Web · iOS · Android"
+    },
+    {
+      "label": "Resources",
+      "value": "Papers · Notes · Syllabi · Forums"
+    },
+    {
+      "label": "Stack",
+      "value": "Next.js · CockroachDB · Drizzle"
+    },
+    {
+      "label": "Access",
+      "value": "VIT Google sign-in"
+    }
+  ],
+  "logos": [
+    {
+      "label": "App icon - gradient tile",
+      "src": "/design/products/examcooker-app-icon.png",
+      "width": 96,
+      "bg": "#EAF6FF",
+      "fg": "#0C1222"
+    },
+    {
+      "label": "Site logo",
+      "src": "/projects/examcooker/projects-examcooker-logo.webp",
+      "width": 104,
+      "bg": "#0C1222",
+      "fg": "#EAF6FF"
+    }
+  ],
+  "logoNote": "The mark is a monoline cooker: a pot with crossed utensils beneath it, drawn in a single white stroke. Store surfaces get the blue gradient tile; inside the product the mark runs flat - white on midnight, midnight on porcelain. The gradient never appears in the UI itself.",
+  "palette": [
+    {
+      "name": "Steam",
+      "hex": "#5FC4E7",
+      "on": "#0C1222",
+      "use": "Primary accent. Links, active states, and the brand blue in both themes."
+    },
+    {
+      "name": "Royal",
+      "hex": "#253EE0",
+      "on": "#FFFFFF",
+      "use": "Deep accent for emphasis, buttons, and headings on light surfaces."
+    },
+    {
+      "name": "Mist",
+      "hex": "#C2E6EC",
+      "on": "#0C1222",
+      "use": "Tonal fill for cards and tags in light mode."
+    },
+    {
+      "name": "Sky",
+      "hex": "#82BEE9",
+      "on": "#0C1222",
+      "use": "Secondary accent - hover states and illustration fills."
+    },
+    {
+      "name": "Mint spark",
+      "hex": "#3BF4C7",
+      "on": "#0C1222",
+      "use": "Success and 'fresh upload' moments. Use in pinches, not spreads."
+    },
+    {
+      "name": "Midnight",
+      "hex": "#0C1222",
+      "on": "#EAF6FF",
+      "use": "Dark-mode surface. The default mood the night before an exam."
+    },
+    {
+      "name": "Porcelain",
+      "hex": "#EAF6FF",
+      "on": "#0C1222",
+      "use": "Light-mode paper."
+    }
+  ],
+  "paletteNote": "Every accent is a blue relative - the palette deliberately avoids alarm reds and warning yellows. An exam-resources product should lower the pulse, not raise it.",
+  "type": [
+    {
+      "family": "Plus Jakarta Sans",
+      "role": "Everything",
+      "weights": "500 / 600 / 700 / 800",
+      "css": "'Plus Jakarta Sans', sans-serif",
+      "sample": "Past papers, notes & syllabus - in one place.",
+      "sampleSize": "34px",
+      "sampleWeight": 800
+    },
+    {
+      "family": "Plus Jakarta Sans",
+      "role": "Body & UI",
+      "weights": "500",
+      "css": "'Plus Jakarta Sans', sans-serif",
+      "sample": "Type approximately anything half asleep and we will fetch the best results.",
+      "sampleSize": "16px",
+      "sampleWeight": 500
+    }
+  ],
+  "typeNote": "One family, four weights. Medium (500) is the workhorse body weight; ExtraBold (800) headlines. No second face, no serifs - the product's calm comes from repetition.",
+  "icons": {
+    "images": [
+      {
+        "src": "/design/products/examcooker-app-icon.png",
+        "alt": "ExamCooker cooker mark",
+        "label": "cooker mark",
+        "bg": "#EAF6FF"
+      }
+    ],
+    "bullets": [
+      "Rounded line icons on the same monoline weight as the cooker mark.",
+      "Icons pick up steam blue for interactive states and stay neutral at rest.",
+      "The favicon family reduces the mark to the pot alone - white and gradient cuts exist for dark and light tabs.",
+      "Kitchen glyphs (pot, hat, utensils) are reserved for brand moments, not for navigation."
+    ]
+  },
+  "personality": {
+    "do": [
+      "Calm, slightly wry - it knows you left everything to the last minute.",
+      "Kitchen wordplay in features and empty states: cooking, recipes, fresh out the oven.",
+      "Design light and dark together; dark navy is the primary mood, not an afterthought.",
+      "Generous information density - it is a reference tool, let tables be tables."
+    ],
+    "dont": [
+      "No panic mechanics: no red badges, no 'exam in 3 days!!' countdowns.",
+      "Don't mix a second typeface into UI - Jakarta covers every register.",
+      "Don't use mint spark for anything other than success or freshness.",
+      "No gatekeeping copy - a first-year finding the site at 2 am is the target user."
+    ]
+  },
+  "motifs": [
+    {
+      "title": "The kitchen",
+      "desc": "Cooking is the product metaphor - the Figma page is literally called Kitchen Ideas. Features get plated, resources get cooked."
+    },
+    {
+      "title": "Two kitchens",
+      "desc": "Light (steam on porcelain) and dark (midnight navy) are equal citizens; every component ships in both."
+    },
+    {
+      "title": "The search bar",
+      "desc": "The hero of every layout. Whatever the page, search stays one glance away."
+    }
+  ],
+  "shots": [
+    {
+      "src": "/projects/examcooker/projects-examcooker-shot-1.webp",
+      "alt": "ExamCooker home"
+    },
+    {
+      "src": "/projects/examcooker/projects-examcooker-shot-2.webp",
+      "alt": "ExamCooker resource view"
+    },
+    {
+      "src": "/projects/examcooker/projects-examcooker-shot-3.webp",
+      "alt": "ExamCooker search results"
+    }
+  ],
+  "links": [
+    {
+      "label": "examcooker.acmvit.in",
+      "href": "https://examcooker.acmvit.in",
+      "kind": "website"
+    },
+    {
+      "label": "Google Play",
+      "href": "https://play.google.com/store/apps/details?id=in.acmvit.examcooker",
+      "kind": "play"
+    },
+    {
+      "label": "App Store",
+      "href": "https://apps.apple.com/ng/app/examcooker/id6765768416",
+      "kind": "appstore"
+    }
+  ],
+  "googleFonts": "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap",
+  "order": 10
+}

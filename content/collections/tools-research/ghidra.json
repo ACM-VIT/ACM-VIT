@@ -1,0 +1,7 @@
+{
+  "name": "Ghidra",
+  "slug": "ghidra",
+  "svgFile": "/domains/research/tools/research-tool-ghidra.svg",
+  "colorHex": "#FF6900",
+  "order": 190
+}

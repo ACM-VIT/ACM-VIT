@@ -1,0 +1,12 @@
+{
+  "slug": "3",
+  "order": 20,
+  "id": "3",
+  "title": "Design Tapas",
+  "date": "2026-07-08",
+  "startTime": "16:00",
+  "endTime": "18:00",
+  "domain": "design",
+  "description": "A hands-on UI/UX workshop covering Figma fundamentals, design tokens, and component systems.",
+  "location": "SJT Seminar Hall, VIT Vellore"
+}

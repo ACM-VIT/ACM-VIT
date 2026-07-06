@@ -1,0 +1,8 @@
+{
+  "name": "Krita",
+  "slug": "krita",
+  "svgFile": "/domains/tech/tools/tech-tool-krita.svg",
+  "colorHex": "#3BABFF",
+  "monochrome": true,
+  "order": 810
+}

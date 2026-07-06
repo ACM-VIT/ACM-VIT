@@ -8,8 +8,8 @@ import "../../styles/globals.css";
 import "../../styles/design-domain.css";
 import ToolCard from "../../components/ToolCard.astro";
 import FillButton from "../../components/ui/FillButton.astro";
+import { items as homeProjectItems } from "../../generated/home-projects";
 import { getAssetUrl } from "../../utils/cdn";
-import { reader } from "../../utils/reader";
 import {
   projectDetails,
   projectSlugs,
@@ -78,9 +78,8 @@ const resolveSlug = (alt: string): string | undefined => {
   const derived = slugAliases[base] ?? base.replace(/\s+/g, "-");
   return validSlugs.has(derived) ? derived : undefined;
 };
-const projectsCms = await reader.singletons.projects.read();
 const cassetteBySlug: Record<string, string> = {};
-for (const item of projectsCms?.items ?? []) {
+for (const item of homeProjectItems) {
   if (!item.cassetteSrc || !item.cassetteAlt) continue;
   const slug = resolveSlug(item.cassetteAlt);
   if (slug) cassetteBySlug[slug] = item.cassetteSrc;

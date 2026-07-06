@@ -1,0 +1,7 @@
+{
+  "name": "BLAST",
+  "slug": "blast",
+  "svgFile": "/domains/research/tools/research-tool-blast.svg",
+  "colorHex": "#0F62FE",
+  "order": 340
+}

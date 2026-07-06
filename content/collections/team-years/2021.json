@@ -1,0 +1,111 @@
+{
+  "slug": "2021",
+  "year": 2021,
+  "members": [
+    {
+      "title": "",
+      "fullName": "Sarthak Gupta",
+      "position": "President",
+      "imageUrl": "/board/2021/sarthak-gupta.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Hrishita Chakrabarti",
+      "position": "Managing Director",
+      "imageUrl": "/board/2021/hrishita-chakrabarti.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Eesha Shetty",
+      "position": "Technical Director",
+      "imageUrl": "/board/2021/eesha-shetty.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Anjali Roy",
+      "position": "General Secretary",
+      "imageUrl": "/board/2021/anjali-roy.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Dhruv Roy",
+      "position": "Treasurer",
+      "imageUrl": "/board/2021/dhruv-roy.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Kashish Mittal",
+      "position": "Web-Master",
+      "imageUrl": "/board/2021/kashish-mittal.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Devansh Mehta",
+      "position": "App Lead",
+      "imageUrl": "/board/2021/devansh-mehta.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Shovin Kakaraddi",
+      "position": "UI/UX Lead",
+      "imageUrl": "/board/2021/shovin-kakaraddi.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Iishi Patel",
+      "position": "Research Lead",
+      "imageUrl": "/board/2021/iishi-patel.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Nimit Jain",
+      "position": "Competitive Lead",
+      "imageUrl": "/board/2021/nimit-jain.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Garima Bothra",
+      "position": "App Projects Guide",
+      "imageUrl": "/board/2021/garima-bothra.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Elio Jordan Lopes",
+      "position": "Web Projects Guide",
+      "imageUrl": "/board/2021/elio-jordan-lopes.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Siddharth Nahar",
+      "position": "Competitive Guide",
+      "imageUrl": "/board/2021/siddharth-nahar.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Sriya Reddi",
+      "position": "Operations Head",
+      "imageUrl": "/board/2021/sriya-reddi.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Jerelyn Preeja",
+      "position": "ACM-W Lead",
+      "imageUrl": "/board/2021/jerelyn-preeja.webp",
+      "isW": true
+    }
+  ]
+}

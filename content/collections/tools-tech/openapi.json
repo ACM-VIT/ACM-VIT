@@ -1,0 +1,8 @@
+{
+  "name": "OpenAPI",
+  "slug": "openapi",
+  "svgFile": "/domains/tech/tools/tech-tool-openapi.svg",
+  "colorHex": "#6BA539",
+  "monochrome": true,
+  "order": 760
+}

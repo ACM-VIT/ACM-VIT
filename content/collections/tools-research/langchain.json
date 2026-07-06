@@ -1,0 +1,8 @@
+{
+  "name": "LangChain",
+  "slug": "langchain",
+  "svgFile": "/domains/research/tools/research-tool-langchain.svg",
+  "colorHex": "#1C3C3C",
+  "isDark": true,
+  "order": 50
+}

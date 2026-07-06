@@ -1,99 +1,16 @@
-// z0d1ak — ACM-VIT competitive CTF team.
-// Source: https://ctftime.org/team/373452 (pulled 2026-06-30).
-// Only verified CTFtime figures live here. Do not invent results.
+// COMPAT SHIM - content now lives in content/singletons/z0d1ak.json and is
+// edited via the CMS. Only verified CTFtime figures live there; do not invent
+// results. Star-map line segments are stored as {from,to} objects and mapped
+// back to tuples here. This module re-exports the compiled snapshot from
+// src/generated/.
+import { data } from "../generated/z0d1ak";
+import type { RatingYear, CtfAchievement } from "../platform/schema/singletons/z0d1ak";
 
-export interface RatingYear {
-  year: number;
-  globalRank: number;
-  countryRank: number; // India
-  ratingPoints: number;
-  events: number;
-}
-
-export const ratingHistory: RatingYear[] = [
-  { year: 2026, globalRank: 8, countryRank: 1, ratingPoints: 607.192, events: 59 },
-  { year: 2025, globalRank: 675, countryRank: 48, ratingPoints: 93.971, events: 20 },
-];
-
-export const current = ratingHistory[0];
-
-// Best world rank z0d1ak has ever held. Shown as the headline "World Rank".
-// RULE: when pulling fresh CTFtime data, if the new world rank is BETTER
-// (numerically smaller) than this, lower it. Never raise it.
-export const bestWorldRank = 7;
-
-export interface Achievement {
-  event: string;
-  place: number;          // finishing position
-  ratingPoints?: number;  // CTFtime rating points earned
-  ctfPoints?: number;     // in-competition score
-  // star-map coordinates, percentage of the map viewport
-  x: number;
-  y: number;
-  magnitude: number;      // 1 = brightest / most significant
-}
-
-// Achievements plotted as a star atlas - a single chart line traced through
-// the season's results, left to right. magnitude 1 = podium finish.
-export const achievements: Achievement[] = [
-  { event: "Hackअस्त्र",        place: 1,  ratingPoints: 50.0,   ctfPoints: 9016,  x: 10, y: 30, magnitude: 1 },
-  { event: "GPN CTF 2026",      place: 2,  ratingPoints: 97.334, ctfPoints: 4127,  x: 24, y: 22, magnitude: 1 },
-  { event: "Incognito 7.0",     place: 3,  ratingPoints: 20.781, ctfPoints: 4700,  x: 38, y: 44, magnitude: 1 },
-  { event: "KAALCHAKRA Finals", place: 4,                        ctfPoints: 6850,  x: 52, y: 34, magnitude: 2 },
-  { event: "DalCTF 2026",       place: 29,                       ctfPoints: 5358,  x: 64, y: 58, magnitude: 3 },
-  { event: "JerseyCTF VI",      place: 30,                       ctfPoints: 15586, x: 78, y: 40, magnitude: 3 },
-  { event: "KubSTU CTF",        place: 41,                       ctfPoints: 21301, x: 90, y: 52, magnitude: 3 },
-];
-
-// A single sequential trail traced through the results, left to right.
-export const achievementLines: [number, number][] = [
-  [0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6],
-];
-
-// Active roster on CTFtime. id = CTFtime user id (profile at /user/<id>).
-export interface Member {
-  name: string;
-  id: number;
-}
-
-export const members: Member[] = [
-  { name: "ant1v3n0m",       id: 219143 },
-  { name: "theg1239",        id: 219679 },
-  { name: "ret2.libc",       id: 248725 },
-  { name: "neerajcodz",      id: 252682 },
-  { name: "ludicrouslytrue", id: 252882 },
-  { name: "AncientDragon",   id: 252885 },
-  { name: "afishchan",       id: 253530 },
-  { name: "TitanCode",       id: 253873 },
-  { name: "P4kh1H3y4a",      id: 256809 },
-  { name: "Abhi404",         id: 257684 },
-];
-
-export interface ResultRow {
-  event: string;
-  place: number;
-  ctfPoints: number;
-  ratingPoints: number;
-}
-
-// Recent rated events, most recent first. Source: CTFtime 2026 ratings table
-// (pulled 2026-07-01). CTFtime does not publish per-event dates on this view.
-export const recentResults: ResultRow[] = [
-  { event: "Scarlet CTF 2026",                       place: 68,  ctfPoints: 3369, ratingPoints: 6.812 },
-  { event: "UofTCTF 2026",                           place: 666, ctfPoints: 132,  ratingPoints: 0.974 },
-  { event: "Pragyan CTF 2026",                       place: 32,  ctfPoints: 3384, ratingPoints: 0.983 },
-  { event: "BITSCTF 2026",                           place: 89,  ctfPoints: 1428, ratingPoints: 10.312 },
-  { event: "Batman's Kitchen CTF 2026",              place: 98,  ctfPoints: 4773, ratingPoints: 8.759 },
-  { event: "EHAX CTF 2026",                          place: 25,  ctfPoints: 5311, ratingPoints: 14.071 },
-  { event: "Srdnlen CTF 2026 Quals",                 place: 92,  ctfPoints: 400,  ratingPoints: 4.461 },
-  { event: "CryptoNite CTF 2026",                    place: 24,  ctfPoints: 3136, ratingPoints: 20.698 },
-  { event: "UNbreakable International 2026",          place: 53,  ctfPoints: 481,  ratingPoints: 2.184 },
-  { event: "ApoorvCTF 2026",                         place: 6,   ctfPoints: 8647, ratingPoints: 26.747 },
-  { event: "CodeVinci CTF 2026",                     place: 14,  ctfPoints: 9603, ratingPoints: 15.435 },
-  { event: "DiceCTF 2026 Quals",                     place: 73,  ctfPoints: 1515, ratingPoints: 57.089 },
-];
-
-export interface TimelineEra {
+export type { RatingYear } from "../platform/schema/singletons/z0d1ak";
+export type Achievement = CtfAchievement;
+export type Member = { name: string; id: number };
+export type ResultRow = { event: string; place: number; ctfPoints: number; ratingPoints: number };
+export type TimelineEra = {
   year: number;
   title: string;
   rank: string;
@@ -101,34 +18,22 @@ export interface TimelineEra {
   events: number;
   blurb: string;
   highlight: string;
-}
-
-export const timeline: TimelineEra[] = [
-  {
-    year: 2025,
-    title: "First Light",
-    rank: "World #675 · India #48",
-    rating: 93.971,
-    events: 20,
-    blurb:
-      "The team charts its opening season on CTFtime, playing 20 events and finding its footing on the global board.",
-    highlight: "First 20 events charted",
-  },
-  {
-    year: 2026,
-    title: "Supernova",
-    rank: "World #7 · India #1",
-    rating: 607.192,
-    events: 59,
-    blurb:
-      "A 59-event campaign carries z0d1ak to 8th in the world and 1st in India, with a maiden win at Hackअस्त्र and podiums at GPN CTF and Incognito 7.0.",
-    highlight: "1st at Hackअस्त्र · Top 10 worldwide",
-  },
-];
-
-// Where the team stands today - the comet head of the journey.
-export const present = {
-  label: "Present day",
-  rank: "World #7 · India #1",
-  note: "1st in India and charting new constellations every season.",
 };
+
+export const ratingHistory: RatingYear[] = data.ratingHistory;
+export const current = ratingHistory[0];
+
+/** Best world rank ever held. Only ever lower this, never raise it. */
+export const bestWorldRank = data.bestWorldRank;
+
+export const achievements: Achievement[] = data.achievements;
+
+/** A single sequential trail traced through the results, left to right. */
+export const achievementLines: [number, number][] = data.achievementLines.map(
+  (l) => [l.from, l.to]
+);
+
+export const members: Member[] = data.members;
+export const recentResults: ResultRow[] = data.recentResults;
+export const timeline: TimelineEra[] = data.timeline;
+export const present = data.present;

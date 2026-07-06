@@ -1,0 +1,22 @@
+{
+  "slug": "ocs-25",
+  "order": 50,
+  "cassetteSrc": "/projects/items/5/cassetteSrc.webp",
+  "cassetteAlt": "OCS Website Image",
+  "description1": "OCS is ACM VIT's 2025 organizing committee selection portal featuring a sleek macOS-inspired interface that transforms recruitment into an interactive desktop experience. The platform showcases the chapter's projects, events, and memories while allowing you to enjoy mini-games like ACM Draw, Doom, and 2048.",
+  "description2": "The platform serves as both a recruitment tool and digital showcase, combining nostalgic design with innovative functionality to create a memorable selection experience that reflects the chapter's commitment to creative technical solutions.",
+  "primaryBgColor": "linear-gradient(91deg, #8710DB -8.19%, #EB5757 100.39%)",
+  "primaryTextColor": "white",
+  "primaryBorderColor": "#FEFCD9",
+  "primaryBorderRadius": "41px",
+  "visitWebsiteText": "VISIT WEBSITE",
+  "visitWebsiteUrl": "https://os.acmvit.in",
+  "visitWebsiteBgColor": "linear-gradient(91deg, #8710DB -8.19%, #EB5757 100.39%)",
+  "visitWebsiteTextColor": "white",
+  "visitWebsiteBorderColor": "#FEFCD9",
+  "visitWebsiteBorderRadius": "41px",
+  "icons": [],
+  "textColor": "white",
+  "contentBlockBackground": "rgba(0, 0, 0, 0.15)",
+  "hoverShadow": "rgba(135, 16, 219, 0.4)"
+}

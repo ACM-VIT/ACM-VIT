@@ -1,0 +1,10 @@
+{
+  "slug": "muscle-magic",
+  "title": "Muscle Magic",
+  "repo": "muscle_magic",
+  "years": [
+    2022
+  ],
+  "description": "A complete fitness mobile app in flutter",
+  "order": 80
+}

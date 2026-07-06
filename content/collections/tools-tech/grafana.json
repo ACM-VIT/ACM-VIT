@@ -1,0 +1,7 @@
+{
+  "name": "Grafana",
+  "slug": "grafana",
+  "svgFile": "/domains/tech/tools/tech-tool-grafana.svg",
+  "colorHex": "#F46800",
+  "order": 540
+}

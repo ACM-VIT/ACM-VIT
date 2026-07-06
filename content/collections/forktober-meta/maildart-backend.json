@@ -1,0 +1,11 @@
+{
+  "slug": "maildart-backend",
+  "title": "MailDart Backend",
+  "repo": "maildart-backend",
+  "years": [
+    2021,
+    2022
+  ],
+  "description": "A mass mailer operating through a given set of emails in JSON",
+  "order": 140
+}

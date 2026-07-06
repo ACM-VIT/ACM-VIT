@@ -1,0 +1,7 @@
+{
+  "name": "Podman",
+  "slug": "podman",
+  "svgFile": "/domains/tech/tools/tech-tool-podman.svg",
+  "colorHex": "#892CA0",
+  "order": 750
+}

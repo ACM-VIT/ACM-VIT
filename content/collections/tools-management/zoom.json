@@ -1,0 +1,8 @@
+{
+  "name": "Zoom",
+  "slug": "zoom",
+  "svgFile": "/domains/management/tools/management-tool-zoom.svg",
+  "colorHex": "#0B5CFF",
+  "monochrome": true,
+  "order": 230
+}

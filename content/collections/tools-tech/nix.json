@@ -1,0 +1,8 @@
+{
+  "name": "Nix",
+  "slug": "nix",
+  "svgFile": "/domains/tech/tools/tech-tool-nix.svg",
+  "colorHex": "#5277C3",
+  "monochrome": true,
+  "order": 730
+}

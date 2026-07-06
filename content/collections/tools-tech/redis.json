@@ -1,0 +1,7 @@
+{
+  "name": "Redis",
+  "slug": "redis",
+  "svgFile": "/domains/tech/tools/tech-tool-redis.svg",
+  "colorHex": "#FF4438",
+  "order": 200
+}

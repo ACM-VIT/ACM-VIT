@@ -1,0 +1,58 @@
+{
+  "slug": "design",
+  "order": 20,
+  "key": "design",
+  "title": "DESIGN",
+  "description": "We craft visual experiences that bring our ideas and events to life - from UI/UX design and motion graphics to social media posts and video edits. With a focus on aesthetics, usability, and storytelling, we shape how the world sees ACM. Whether it's building brand identity or designing user-first interfaces, we blend art with purpose to create meaningful designs. Every pixel, frame, and layout is intentional, because great design isn't just seen, it's felt.",
+  "themeColor": "design",
+  "cassetteSvg": "/cassettes/cassettes-cassette-design.webp",
+  "buttonText": "Areas of Interest (AOIs)",
+  "techIcons": [
+    {
+      "src": "/domains/design/domains-design-ae.webp",
+      "alt": "AE"
+    },
+    {
+      "src": "/domains/design/domains-design-ai.webp",
+      "alt": "AI"
+    },
+    {
+      "src": "/domains/design/domains-design-figma.webp",
+      "alt": "Figma"
+    },
+    {
+      "src": "/domains/design/domains-design-final-cut-pro-new.webp",
+      "alt": "FinalCut"
+    },
+    {
+      "src": "/domains/design/domains-design-ps.webp",
+      "alt": "PS"
+    },
+    {
+      "src": "/domains/design/domains-design-blender.webp",
+      "alt": "Blender"
+    }
+  ],
+  "aois": [
+    {
+      "src": "/aois/design/aois-design-3d.webp",
+      "alt": "3D Design"
+    },
+    {
+      "src": "/aois/design/aois-design-illustrations.webp",
+      "alt": "Illustrations"
+    },
+    {
+      "src": "/aois/design/aois-design-motion-graphics.webp",
+      "alt": "Motion Graphics"
+    },
+    {
+      "src": "/aois/design/aois-design-uiux.webp",
+      "alt": "UI/UX"
+    },
+    {
+      "src": "/aois/design/aois-design-video-editing.webp",
+      "alt": "Video Editing"
+    }
+  ]
+}

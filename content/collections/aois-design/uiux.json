@@ -1,0 +1,19 @@
+{
+  "slug": "uiux",
+  "order": 0,
+  "key": "uiux",
+  "title": "UI/UX Design",
+  "shortDescription": "Crafting interfaces that balance beauty with usability, turning user research into seamless digital experiences.",
+  "longDescription": [
+    "UI/UX design at ACM-VIT is about building interfaces that feel intuitive from the first tap. We research user behavior, wireframe flows, prototype interactions, and test with real people before a single line of code is written.",
+    "From event registration portals to our own website, every surface a user touches is shaped by this AOI. We work closely with the Tech domain to ensure our designs translate faithfully into production."
+  ],
+  "cassetteSrc": "/aois/design/cassettes/aois-design-cassettes-uiux.webp",
+  "tools": [
+    "figma",
+    "framer",
+    "sketch",
+    "canva",
+    "shadcn"
+  ]
+}

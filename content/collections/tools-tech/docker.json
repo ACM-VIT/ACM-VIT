@@ -1,0 +1,7 @@
+{
+  "name": "Docker",
+  "slug": "docker",
+  "svgFile": "/domains/tech/tools/tech-tool-docker.svg",
+  "colorHex": "#2496ED",
+  "order": 240
+}

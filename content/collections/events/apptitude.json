@@ -1,0 +1,98 @@
+{
+  "slug": "apptitude",
+  "order": 0,
+  "title": "Apptitude",
+  "tagline": "Put your App on the Map.",
+  "eyebrow": "ACM-VIT · National App Development Hackathon",
+  "themeKey": "tech",
+  "cassetteSvg": "/events/events-apptitude-cassette.svg",
+  "shortDescription": "Apptitude is ACM-VIT's national-level app development hackathon designed to encourage students to build innovative mobile applications that solve real-world problems. Free registration, 36 hours, open to all.",
+  "longDescription": [
+    "Apptitude is ACM-VIT's national-level app development hackathon designed to encourage students to build innovative mobile applications that solve real-world problems. The event welcomes both beginners and experienced developers, providing participants with an opportunity to learn, collaborate, and create an application from scratch within a 36-hour hacking period.",
+    "The hackathon revolves around solving real-world problems using mobile applications. Participants choose one of the United Nations Sustainable Development Goals as their problem domain: Industry, Innovation and Infrastructure; Quality Education; Good Health and Well-being; or Climate Action.",
+    "The event had a dedicated Android and iOS app for participants. Registration was completely free, with the landing page initially collecting RSVPs through an email-based system before full registration opened. Cross-college teams are allowed, and participants without teammates can find partners through the event Discord server."
+  ],
+  "format": "Virtual · 36-hour app development hackathon",
+  "duration": "36 hours",
+  "mode": "Online",
+  "audience": "Students from colleges across India - no prior app dev experience required",
+  "team": "Teams of 1 to 2",
+  "organizedBy": "ACM-VIT",
+  "firstHeld": "2018",
+  "recurrence": "Annual",
+  "registrationUrl": "https://apptitude.acmvit.in",
+  "primaryCtaLabel": "Visit apptitude.acmvit.in",
+  "stats": [
+    {
+      "value": "36h",
+      "label": "Build Window"
+    },
+    {
+      "value": "Free",
+      "label": "Registration"
+    }
+  ],
+  "tracks": [
+    {
+      "name": "Industry, Innovation and Infrastructure",
+      "description": "UN SDG 9 - build apps for resilient infrastructure and sustainable industrialisation."
+    },
+    {
+      "name": "Quality Education",
+      "description": "UN SDG 4 - apps that improve access to inclusive, equitable education."
+    },
+    {
+      "name": "Good Health and Well-being",
+      "description": "UN SDG 3 - mobile solutions for healthcare and wellness."
+    },
+    {
+      "name": "Climate Action",
+      "description": "UN SDG 13 - apps that address climate change and its impacts."
+    }
+  ],
+  "schedule": [],
+  "prizes": [],
+  "highlights": [],
+  "perks": [
+    "Free registration",
+    "Dedicated Android and iOS app for the event",
+    "Mentors and speaker sessions",
+    "Discord server for team formation"
+  ],
+  "faq": [
+    {
+      "q": "Do I need prior app development experience?",
+      "a": "No. Beginners are encouraged to participate."
+    },
+    {
+      "q": "Can I form a cross-college team?",
+      "a": "Yes. Cross-college teams are allowed. You can also find partners on the event Discord server."
+    },
+    {
+      "q": "Is there a registration fee?",
+      "a": "No. Registration is completely free."
+    },
+    {
+      "q": "What do I need to submit?",
+      "a": "Original work built during the official 36-hour hackathon. Previously completed projects are not allowed."
+    }
+  ],
+  "socials": [
+    {
+      "label": "Website",
+      "href": "https://apptitude.acmvit.in"
+    },
+    {
+      "label": "Instagram · @acmvit",
+      "href": "https://instagram.com/acmvit"
+    }
+  ],
+  "pastEditions": [],
+  "collectibles": [],
+  "isAcmW": false,
+  "hideCtaBanner": true,
+  "themeColor": "#D4A341",
+  "speaker": {
+    "bio": []
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Metasploit",
+  "slug": "metasploit",
+  "svgFile": "/domains/research/tools/research-tool-metasploit.svg",
+  "colorHex": "#2596CD",
+  "isDark": true,
+  "order": 240
+}

@@ -1,0 +1,7 @@
+{
+  "name": "SQLite",
+  "slug": "sqlite",
+  "svgFile": "/domains/tech/tools/tech-tool-sqlite.svg",
+  "colorHex": "#003B57",
+  "order": 420
+}

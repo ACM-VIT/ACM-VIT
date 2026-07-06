@@ -1,0 +1,8 @@
+{
+  "name": "Spine",
+  "slug": "spine",
+  "svgFile": "/domains/tech/tools/tech-tool-spine.svg",
+  "colorHex": "#F47B30",
+  "isDark": false,
+  "order": 890
+}

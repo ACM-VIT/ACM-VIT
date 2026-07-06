@@ -1,0 +1,7 @@
+{
+  "name": "Debian",
+  "slug": "debian",
+  "svgFile": "/domains/tech/tools/tech-tool-debian.svg",
+  "colorHex": "#A81D33",
+  "order": 660
+}

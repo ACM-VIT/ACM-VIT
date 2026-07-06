@@ -1,0 +1,8 @@
+{
+  "name": "Homebrew",
+  "slug": "homebrew",
+  "svgFile": "/domains/tech/tools/tech-tool-homebrew.svg",
+  "colorHex": "#FBB040",
+  "monochrome": true,
+  "order": 740
+}

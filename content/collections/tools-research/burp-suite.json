@@ -1,0 +1,7 @@
+{
+  "name": "Burp Suite",
+  "slug": "burp-suite",
+  "svgFile": "/domains/research/tools/research-tool-burp-suite.svg",
+  "colorHex": "#FF6633",
+  "order": 200
+}

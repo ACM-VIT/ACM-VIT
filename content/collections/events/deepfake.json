@@ -1,0 +1,52 @@
+{
+  "slug": "deepfake",
+  "title": "Deepfake: The Digital Doppelganger",
+  "tagline": "Detect the fake. Defend the real.",
+  "eyebrow": "ACM-VIT · AI/ML Workshop",
+  "themeKey": "research",
+  "themeColor": "#2C4840",
+  "hideCtaBanner": true,
+  "cassetteSvg": "/events/events-deepfake-cassette.webp",
+  "shortDescription": "Deepfake: The Digital Doppelganger is a workshop conducted by ACM-VIT in 2025 on deepfake detection and the basics of machine learning, attended by more than 100 participants.",
+  "longDescription": [
+    "Deepfake: The Digital Doppelganger was a hands-on workshop conducted by ACM-VIT in 2025, focused on deepfake detection and the fundamentals of machine learning. With over 100 participants, it introduced students to the growing challenge of AI-generated synthetic media and equipped them with practical skills to identify and combat it.",
+    "The session taught participants about the mechanics of deepfake generation, the basics of machine learning that power it, and practical deepfake detection techniques. Participants got hands-on experience running detection models on their own devices, making it an accessible introduction to applied AI security."
+  ],
+  "format": "Workshop · Hands-on deepfake detection",
+  "duration": "1 day",
+  "mode": "Offline",
+  "audience": "All students",
+  "team": "Individual",
+  "organizedBy": "ACM-VIT",
+  "firstHeld": "2025",
+  "recurrence": "1 edition to date",
+  "registrationUrl": "https://acmvit.in",
+  "primaryCtaLabel": "Learn More",
+  "stats": [
+    {
+      "value": "100+",
+      "label": "Participants"
+    },
+    {
+      "value": "1",
+      "label": "Edition"
+    }
+  ],
+  "tracks": [],
+  "schedule": [],
+  "prizes": [],
+  "highlights": [],
+  "perks": [
+    "Hands-on deepfake detection on personal devices",
+    "Introduction to machine learning fundamentals",
+    "Practical AI security skills"
+  ],
+  "faq": [],
+  "socials": [
+    {
+      "label": "Instagram · @acmvit",
+      "href": "https://instagram.com/acmvit"
+    }
+  ],
+  "order": 130
+}

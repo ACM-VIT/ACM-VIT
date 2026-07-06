@@ -1,0 +1,135 @@
+{
+  "slug": "motion-graphics",
+  "order": 20,
+  "key": "motion-graphics",
+  "title": "Motion Graphics",
+  "shortDescription": "Bringing static designs to life through animation, making every frame count.",
+  "longDescription": [
+    "Motion graphics bridge the gap between static design and full video production. We create animated logos, event teasers, social media reels, and UI micro-interactions that capture attention and communicate quickly.",
+    "Our motion designers work with After Effects, Rive, and GSAP to build everything from short promotional loops to complex interactive animations on the web."
+  ],
+  "cassetteSrc": "/aois/design/cassettes/aois-design-cassettes-motiongraphics.webp",
+  "tools": [
+    "after-effects",
+    "rive",
+    "gsap",
+    "premiere-pro"
+  ],
+  "works": [
+    {
+      "href": "https://www.instagram.com/reel/DFAx7IySwDk/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-DFAx7IySwDk.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/DOIsnc3Elfz/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-DOIsnc3Elfz.webp"
+    },
+    {
+      "title": "Opening Ceremony | Cryptic Hunt 4.0 | graVITas 2025",
+      "href": "https://www.youtube.com/watch?v=tHOMKNF29u4&t=784s",
+      "platform": "youtube",
+      "thumb": "/aois/design/works/aois-design-works-yt-tHOMKNF29u4.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/DZztruly_0a/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-DZztruly_0a.webp"
+    },
+    {
+      "title": "Cryptic Hunt 2024 App Reveal",
+      "href": "https://www.youtube.com/watch?v=Rdrg_lSXtgE",
+      "platform": "youtube",
+      "thumb": "/aois/design/works/aois-design-works-yt-Rdrg_lSXtgE.webp"
+    },
+    {
+      "title": "Code2Create Spring 2018 Promo Video",
+      "href": "https://www.youtube.com/watch?v=uv73-uuGcsk",
+      "platform": "youtube",
+      "thumb": "/aois/design/works/aois-design-works-yt-uv73-uuGcsk.webp"
+    },
+    {
+      "title": "Core Committee Selections `22 | ACMVIT",
+      "href": "https://www.youtube.com/shorts/nRVoQCC4EGA",
+      "platform": "youtube",
+      "thumb": "/aois/design/works/aois-design-works-yt-nRVoQCC4EGA.webp"
+    },
+    {
+      "title": "Core Committee Selections `22 | ACMVIT",
+      "href": "https://www.youtube.com/shorts/fZd-Kz_U5MI",
+      "platform": "youtube",
+      "thumb": "/aois/design/works/aois-design-works-yt-fZd-Kz_U5MI.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/CjDeKtBA8HM/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-CjDeKtBA8HM.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/CpVZT5ugvDa/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-CpVZT5ugvDa.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/C0HCzlJvmMj/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-C0HCzlJvmMj.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/C1Z-v7MPdkN/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-C1Z-v7MPdkN.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/C89eXbHvHOC/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-C89eXbHvHOC.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/C-P5bWNp-BO/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-C-P5bWNp-BO.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/C-fW66VvmO3/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-C-fW66VvmO3.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/C_2_GxdPTFH/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-C_2_GxdPTFH.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/DAJH_k4vt5u/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-DAJH_k4vt5u.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/DB_td3MpjLy/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-DB_td3MpjLy.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/DEiI0DnSX4x/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-DEiI0DnSX4x.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/DOJu3HzkoWd/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-DOJu3HzkoWd.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/DPEFiockvDl/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-DPEFiockvDl.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/DUfhCWQEkyX/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-DUfhCWQEkyX.webp"
+    }
+  ]
+}

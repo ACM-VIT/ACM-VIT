@@ -1,0 +1,13 @@
+{
+  "slug": "cli-rpg",
+  "order": 20,
+  "kind": "overlay",
+  "name": "CLI-RPG",
+  "color": "#16A34A",
+  "image": "/projects/items/2/cassetteSrc.webp",
+  "alt": "CLI RPG",
+  "url": "/projects/cli-rpg",
+  "sizePercent": 75,
+  "sizeAxis": "width",
+  "offsetY": -5
+}

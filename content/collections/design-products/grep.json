@@ -1,0 +1,183 @@
+{
+  "slug": "grep",
+  "name": "GREP",
+  "tagline": "Your search query for ACM-VIT updates.",
+  "category": "Print · Newsletter",
+  "story": [
+    "GREP is the chapter's quarterly newsletter - a print-first, A4 publication that reads like a zine and files like a report. Edition v0, the Origins Edition, retraced ACM-VIT's fifteen-year journey; every edition after tracks a quarter of events, projects, and people.",
+    "The identity is a keyboard on paper: warm cream stock, a single cobalt blue doing all the talking, a pixel-LED wordmark, and a cursive script for the human moments. It is the loudest single-color system in the family - one ink, total commitment."
+  ],
+  "accent": "#2023FE",
+  "accentTonal": "#e6e7ff",
+  "hero": {
+    "bg": "#FEFBE7",
+    "fg": "#2023FE",
+    "sub": "#686868"
+  },
+  "logo": {
+    "src": "/grep/grep-wordmark.png",
+    "width": 180
+  },
+  "facts": [
+    {
+      "label": "Format",
+      "value": "A4 print + web reader"
+    },
+    {
+      "label": "Cadence",
+      "value": "Quarterly"
+    },
+    {
+      "label": "First edition",
+      "value": "v0 · Origins (2025)"
+    },
+    {
+      "label": "Read at",
+      "value": "acmvit.in/grep"
+    }
+  ],
+  "logos": [
+    {
+      "label": "Pixel wordmark",
+      "src": "/grep/grep-wordmark.png",
+      "width": 170,
+      "bg": "#2023FE",
+      "fg": "#FEFBE7"
+    },
+    {
+      "label": "Cobalt on paper",
+      "text": {
+        "content": "GREP",
+        "css": "'ChessType DS', monospace",
+        "size": "44px"
+      },
+      "bg": "#FEFBE7",
+      "fg": "#2023FE"
+    }
+  ],
+  "logoNote": "The wordmark is typeset, not drawn: GREP in ChessType's pixel-LED dots, usually stacked GR over EP on covers, with 'by acm-vit' underneath in Borel script. Two colorways exist - cobalt on paper, paper on cobalt - and no third. Never anti-alias it into softness; the hard pixel edge is the point.",
+  "palette": [
+    {
+      "name": "Cobalt",
+      "hex": "#2023FE",
+      "on": "#FEFBE7",
+      "use": "The ink. Headers, illustrations, rules, folios - if it prints, it prints cobalt."
+    },
+    {
+      "name": "Paper",
+      "hex": "#FEFBE7",
+      "on": "#2023FE",
+      "use": "The stock. Every page starts here; large cobalt blocks reverse onto it."
+    },
+    {
+      "name": "Keycap",
+      "hex": "#ECECEC",
+      "on": "#686868",
+      "use": "The keyboard motif's resting key color and subtle panel fill."
+    },
+    {
+      "name": "Graphite",
+      "hex": "#686868",
+      "on": "#FEFBE7",
+      "use": "Long-form body text - full cobalt paragraphs would vibrate."
+    },
+    {
+      "name": "ACM-W Pink",
+      "hex": "#FF007A",
+      "on": "#FEFBE7",
+      "use": "Full-page takeover: ACM-W features swap every cobalt element to pink."
+    }
+  ],
+  "paletteNote": "One ink on one paper. The discipline is the identity - when a page needs a second voice (ACM-W), the whole page changes ink rather than mixing two.",
+  "type": [
+    {
+      "family": "ChessType",
+      "role": "Wordmark & section numbers",
+      "weights": "400",
+      "note": "Pixel-LED face. Wordmark and folio numbers only.",
+      "css": "'ChessType DS', monospace",
+      "sample": "GREP",
+      "sampleSize": "52px",
+      "sampleWeight": 400
+    },
+    {
+      "family": "Borel",
+      "role": "Script headings",
+      "weights": "400",
+      "note": "The handwritten voice - chapter headings and pull quotes.",
+      "css": "'Borel', cursive",
+      "sample": "Table of Contents",
+      "sampleSize": "30px",
+      "sampleWeight": 400
+    },
+    {
+      "family": "Inter",
+      "role": "Body",
+      "weights": "500",
+      "css": "'Inter', sans-serif",
+      "sample": "A curated snapshot of the chapter's journey - initiatives, impactful work, and the people who make it happen.",
+      "sampleSize": "16px",
+      "sampleWeight": 500
+    }
+  ],
+  "typeNote": "Three registers, three faces: the machine (ChessType), the hand (Borel), the report (Inter). Each stays in its lane - the pixel face never sets a sentence, the script never sets a caption.",
+  "icons": {
+    "images": [
+      {
+        "src": "/grep/grep-keyboard.svg",
+        "alt": "GREP keyboard illustration",
+        "label": "the keyboard",
+        "bg": "#FEFBE7"
+      },
+      {
+        "src": "/grep/grep-mailbox.svg",
+        "alt": "GREP mailbox illustration",
+        "label": "the mailbox",
+        "bg": "#FEFBE7"
+      }
+    ],
+    "bullets": [
+      "GREP doesn't separate icons from illustration - everything is one monoline cobalt pen.",
+      "Spot illustrations mark every section: a thinker for questions, a balloon for milestones, a mailbox for delivery.",
+      "Keycaps double as UI: highlighted keys spell the issue, single keys badge the sections.",
+      "No fills except flat cobalt shapes; no gradients, ever - it has to survive a photocopier."
+    ]
+  },
+  "personality": {
+    "do": [
+      "Editorial and warm - a zine assembled by people who care, not a corporate PDF.",
+      "Keyboard everywhere: keycaps frame the cover, highlighted keys spell the issue.",
+      "Monoline cobalt illustrations on every page - people, mailboxes, balloons.",
+      "The wavy header band and the footer line - 'Because Technology Matters' - anchor every page."
+    ],
+    "dont": [
+      "No photography inside the newsletter - illustration carries it all.",
+      "Never mix cobalt and pink on one page; a page picks its ink.",
+      "Don't set body copy in cobalt - graphite exists so paragraphs stay readable.",
+      "No gradient, no shadow, no halftone - flat ink on paper, like actual print."
+    ]
+  },
+  "motifs": [
+    {
+      "title": "The keyboard",
+      "desc": "Cream keycaps in a full spread; lavender-highlighted keys spell g-r-e-p. The cover is the logo."
+    },
+    {
+      "title": "The mailbox",
+      "desc": "The delivery mascot - a cobalt monoline mailbox with a letter on a spring. Marks subscription and delivery moments."
+    },
+    {
+      "title": "The wavy band",
+      "desc": "Every page tops out with a cobalt wave - the newsletter's running header and its most recognizable silhouette."
+    }
+  ],
+  "links": [
+    {
+      "label": "Read GREP",
+      "href": "/grep",
+      "kind": "read"
+    }
+  ],
+  "googleFonts": "https://fonts.googleapis.com/css2?family=Borel&family=Inter:wght@500;600&display=swap",
+  "order": 30
+}
