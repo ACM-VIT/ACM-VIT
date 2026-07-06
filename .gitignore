@@ -33,3 +33,4 @@ AGENTS.md
 graphify-out/
 # Compiled content snapshot (run: npm run content:compile)
 src/generated/
+public/_redirects

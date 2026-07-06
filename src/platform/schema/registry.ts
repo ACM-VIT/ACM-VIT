@@ -11,8 +11,19 @@ import {
   forktoberMetaSchema,
 } from "./collections/misc.ts";
 import { productGuideSchema } from "./collections/design-products.ts";
-import { domainPageSchema, achievementsPageSchema, eventLinksSchema } from "./singletons/pages.ts";
+import { domainPageSchema, achievementsPageSchema, eventLinksSchema, redirectsSchema } from "./singletons/pages.ts";
 import { z0d1akSchema } from "./singletons/z0d1ak.ts";
+import { pageSchema } from "./collections/pages.ts";
+import {
+  boardMemberSchema,
+  partnerSchema,
+  homeDomainSchema,
+  homeProjectSchema,
+  blogRefSchema,
+  speakerSchema,
+  eventsSectionSchema,
+  siteConfigSchema,
+} from "./collections/site.ts";
 
 const DOMAINS = domainKey.options;
 /** Domains whose landing page is structured around AOI sub-pages. */
@@ -77,6 +88,16 @@ const domainPageSingletons = DOMAINS.map((domain) =>
 );
 
 export const registry: ContentDef[] = [
+  defineCollection({
+    name: "pages",
+    label: "Pages",
+    schema: pageSchema,
+    idField: "slug",
+    orderBy: "order",
+    typeName: "PageEntry",
+    typeImport: "../platform/schema/collections/pages.ts",
+    keystatic: { itemLabel: "title" },
+  }),
   defineCollection({
     name: "events",
     label: "Events",
@@ -193,9 +214,109 @@ export const registry: ContentDef[] = [
     typeImport: "../platform/schema/collections/design-products.ts",
     keystatic: { itemLabel: "name" },
   }),
+  defineCollection({
+    name: "board-members",
+    label: "Board · current year",
+    schema: boardMemberSchema,
+    idField: "slug",
+    orderBy: "order",
+    typeName: "BoardMemberEntry",
+    typeImport: "../platform/schema/collections/site.ts",
+    keystatic: { itemLabel: "fullName" },
+    images: { imageUrl: { directory: "public/board", publicPath: "/board/" } },
+  }),
+  defineCollection({
+    name: "partners",
+    label: "Partners",
+    schema: partnerSchema,
+    idField: "slug",
+    orderBy: "order",
+    typeName: "PartnerEntry",
+    typeImport: "../platform/schema/collections/site.ts",
+    keystatic: { itemLabel: "title" },
+    images: { imageUrl: { directory: "public/partners", publicPath: "/partners/" } },
+  }),
+  defineCollection({
+    name: "home-domains",
+    label: "Homepage domain cards",
+    schema: homeDomainSchema,
+    idField: "slug",
+    orderBy: "order",
+    typeName: "HomeDomainEntry",
+    typeImport: "../platform/schema/collections/site.ts",
+    keystatic: { itemLabel: "title" },
+    images: {
+      cassetteSvg: { directory: "public", publicPath: "/" },
+      "techIcons.src": { directory: "public/domains", publicPath: "/domains/" },
+      "aois.src": { directory: "public/aois", publicPath: "/aois/" },
+    },
+  }),
+  defineCollection({
+    name: "home-projects",
+    label: "Homepage projects showcase",
+    schema: homeProjectSchema,
+    idField: "slug",
+    orderBy: "order",
+    typeName: "HomeProjectEntry",
+    typeImport: "../platform/schema/collections/site.ts",
+    keystatic: { itemLabel: "cassetteAlt" },
+    images: { cassetteSrc: { directory: "public/projects", publicPath: "/projects/" } },
+    refs: [
+      {
+        to: "project-details",
+        level: "warn",
+        describe: "Homepage showcase cassettes should match a project detail page",
+        collect: (e) => [e.slug],
+      },
+    ],
+  }),
+  defineCollection({
+    name: "blog-refs",
+    label: "Blog links",
+    schema: blogRefSchema,
+    idField: "slug",
+    orderBy: "order",
+    typeName: "BlogRefEntry",
+    typeImport: "../platform/schema/collections/site.ts",
+    keystatic: { itemLabel: "link" },
+    images: { cover: { directory: "public/blogs", publicPath: "/blogs/" } },
+  }),
+  defineCollection({
+    name: "speakers",
+    label: "Distinguished speakers",
+    schema: speakerSchema,
+    idField: "slug",
+    orderBy: "order",
+    typeName: "SpeakerEntry",
+    typeImport: "../platform/schema/collections/site.ts",
+    keystatic: { itemLabel: "name" },
+    images: { image: { directory: "public/community", publicPath: "/community/" } },
+  }),
   ...toolCollections,
   ...aoiCollections,
   ...domainPageSingletons,
+  defineSingleton({
+    name: "events-section",
+    label: "Homepage events section",
+    schema: eventsSectionSchema,
+    typeName: "EventsSection",
+    typeImport: "../platform/schema/collections/site.ts",
+    images: { cassetteImages: { directory: "public/events", publicPath: "/events/" } },
+  }),
+  defineSingleton({
+    name: "redirects",
+    label: "Redirects",
+    schema: redirectsSchema,
+    typeName: "Redirects",
+    typeImport: "../platform/schema/singletons/pages.ts",
+  }),
+  defineSingleton({
+    name: "site-config",
+    label: "Site config",
+    schema: siteConfigSchema,
+    typeName: "SiteConfig",
+    typeImport: "../platform/schema/collections/site.ts",
+  }),
   defineSingleton({
     name: "achievements-page",
     label: "Achievements page",

@@ -1,0 +1,36 @@
+{
+  "slug": "management",
+  "order": 40,
+  "key": "management",
+  "title": "MANAGEMENT",
+  "description": "Nothing comes together on its own, and we're the ones ensuring every part is in place. We handle sponsorships, logistics, outreach, and content with precision and intent. Some days it's drafting timelines and emails, other days it's finding the perfect hook or navigating last-minute surprises. We work across teams, juggle priorities, and keep the chaos in check. It's this quiet consistency that ensures every event runs smoothly, start to finish.",
+  "themeColor": "management",
+  "cassetteSvg": "/cassettes/cassettes-cassette-management.webp",
+  "techIcons": [
+    {
+      "src": "/domains/management/domains-management-slack.webp",
+      "alt": "Slack"
+    },
+    {
+      "src": "/domains/management/domains-management-discord.webp",
+      "alt": "Discord"
+    },
+    {
+      "src": "/domains/management/domains-management-notion-512.webp",
+      "alt": "Notion"
+    },
+    {
+      "src": "/domains/management/domains-management-gmail.webp",
+      "alt": "Gmail"
+    },
+    {
+      "src": "/domains/management/domains-management-microsoft-word.webp",
+      "alt": "Word"
+    },
+    {
+      "src": "/domains/management/domains-management-excel-240.webp",
+      "alt": "Excel"
+    }
+  ],
+  "aois": []
+}

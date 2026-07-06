@@ -24,3 +24,18 @@ export const eventLinksSchema = z.object({
   titleToSlug: z.array(z.object({ title: z.string(), slug: z.string() })),
 });
 export type EventLinks = z.infer<typeof eventLinksSchema>;
+
+/**
+ * URL redirects, emitted as public/_redirects (Cloudflare Pages format) by
+ * the compiler. Add a rule whenever a slug changes so old URLs never 404.
+ */
+export const redirectsSchema = z.object({
+  rules: z.array(
+    z.object({
+      from: z.string().describe("Old path, e.g. /events/old-slug"),
+      to: z.string().describe("New path or absolute URL"),
+      status: z.enum(["301", "302"]).describe("301 permanent, 302 temporary"),
+    })
+  ),
+});
+export type Redirects = z.infer<typeof redirectsSchema>;

@@ -1,0 +1,14 @@
+---
+import MoreTapes from "../sections/MoreTapes.astro";
+import Socials from "../sections/Socials.astro";
+---
+
+<!-- Curtain: #more sits on top and lifts away to reveal the pinned boombox -->
+<section id="more" class="page-section relative z-20">
+    <MoreTapes />
+</section>
+
+<!-- Boombox is pinned behind; pulled up so it's already in place under #more -->
+<div class="relative z-[5] -mt-[100vh]">
+    <Socials />
+</div>

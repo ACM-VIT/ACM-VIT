@@ -1,4 +1,4 @@
-import type { z } from "zod";
+import { z } from "zod";
 
 /**
  * Content platform schema core.
@@ -37,6 +37,13 @@ export interface CollectionDef {
   typeImport: string;
   /** false = hidden from the Keystatic admin UI (still compiled + validated). */
   keystatic?: false | { itemLabel?: string };
+  /**
+   * Dot-paths of string fields that hold image public paths, mapped to their
+   * upload location. The admin UI renders these as image upload fields; the
+   * stored value stays a plain public path string. Array elements use the
+   * array field's path (e.g. "techIcons.src", "cassetteImages").
+   */
+  images?: Record<string, { directory: string; publicPath: string }>;
 }
 
 export interface SingletonDef {
@@ -48,6 +55,7 @@ export interface SingletonDef {
   typeName: string;
   typeImport: string;
   keystatic?: false | object;
+  images?: Record<string, { directory: string; publicPath: string }>;
 }
 
 export type ContentDef = CollectionDef | SingletonDef;
@@ -57,8 +65,33 @@ export const COLLECTIONS_DIR = `${CONTENT_ROOT}/collections`;
 export const SINGLETONS_DIR = `${CONTENT_ROOT}/singletons`;
 export const GENERATED_DIR = "src/generated";
 
+/**
+ * Publishing workflow fields, added to every object-shaped collection schema.
+ * The compiler drops entries that are drafts or outside their publish window
+ * and strips these fields from the emitted snapshot, so the site never sees
+ * them. Scheduling is realized by any rebuild (set up a cron deploy hook -
+ * see PLATFORM.md).
+ */
+export const publishingFields = {
+  visibility: z
+    .enum(["published", "draft"])
+    .optional()
+    .describe("Draft entries are excluded from the built site"),
+  publishFrom: z
+    .string()
+    .optional()
+    .describe("ISO date (YYYY-MM-DD); entry is hidden before this date"),
+  publishUntil: z
+    .string()
+    .optional()
+    .describe("ISO date (YYYY-MM-DD); entry is hidden after this date"),
+};
+export const PUBLISHING_KEYS = Object.keys(publishingFields);
+
 export function defineCollection(def: Omit<CollectionDef, "kind">): CollectionDef {
-  return { kind: "collection", ...def };
+  const schema =
+    def.schema instanceof z.ZodObject ? def.schema.extend(publishingFields) : def.schema;
+  return { kind: "collection", ...def, schema };
 }
 
 export function defineSingleton(def: Omit<SingletonDef, "kind">): SingletonDef {

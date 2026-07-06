@@ -17,6 +17,7 @@ import {
   COLLECTIONS_DIR,
   SINGLETONS_DIR,
   GENERATED_DIR,
+  PUBLISHING_KEYS,
   type CollectionDef,
   type SingletonDef,
 } from "../schema/core.ts";
@@ -47,66 +48,26 @@ function formatZodIssues(prefix: string, issues: { path: (string | number)[]; me
   }
 }
 
-// ---- Canonicalization ------------------------------------------------------
-// Keystatic can't express "absent" for optional fields: it writes "" for empty
-// optional text, null for empty optional numbers, [] for empty optional arrays
-// and an all-empty object for optional objects (e.g. an event without a
-// speaker). Normalize those back to "absent" before validation so the compiled
-// snapshot keeps the original semantics. Explicit `false` booleans are kept -
-// some entries store them deliberately (e.g. a tool's isDark: false).
+import { normalizeValue } from "./normalize.ts";
+import { scanPublic, collectAssetRefs, assetExists, collectCodeRefs, isDynamicPath, stemOf } from "./media.ts";
 
-function unwrapZod(schema: any): { inner: any; required: boolean } {
-  let s = schema;
-  let required = true;
-  for (;;) {
-    const t = s._def?.typeName;
-    if (t === "ZodOptional" || t === "ZodNullable" || t === "ZodDefault") {
-      required = false;
-      s = s._def.innerType;
-    } else if (t === "ZodEffects") {
-      s = s._def.schema;
-    } else {
-      return { inner: s, required };
-    }
-  }
+// ---- Publishing workflow ---------------------------------------------------
+// Drafts and entries outside their publish window are excluded from the
+// snapshot; the workflow fields themselves never reach the site bundle.
+
+const today = new Date().toISOString().slice(0, 10);
+let unpublished = 0;
+
+function isLive(entry: any): boolean {
+  if (entry.visibility === "draft") return false;
+  if (entry.publishFrom && today < entry.publishFrom) return false;
+  if (entry.publishUntil && today > entry.publishUntil) return false;
+  return true;
 }
 
-function isDeepEmpty(v: unknown): boolean {
-  if (v === null || v === undefined || v === "" || v === false) return true;
-  if (Array.isArray(v)) return v.length === 0;
-  if (typeof v === "object") return Object.values(v as object).every(isDeepEmpty);
-  return false;
-}
-
-function normalizeValue(schema: any, value: any): any {
-  const { inner } = unwrapZod(schema);
-  const t = inner._def?.typeName;
-  if (t === "ZodObject" && value && typeof value === "object" && !Array.isArray(value)) {
-    const shape = inner._def.shape();
-    const out: Record<string, any> = {};
-    for (const [k, raw] of Object.entries(value)) {
-      const child = shape[k];
-      if (!child) {
-        out[k] = raw;
-        continue;
-      }
-      const { inner: childInner, required: childRequired } = unwrapZod(child);
-      const v = normalizeValue(child, raw);
-      if (!childRequired) {
-        const ct = childInner._def?.typeName;
-        if (v === null || v === undefined) continue;
-        if (ct === "ZodString" && v === "") continue;
-        if (ct === "ZodArray" && Array.isArray(v) && v.length === 0) continue;
-        if (ct === "ZodObject" && typeof v === "object" && isDeepEmpty(v)) continue;
-      }
-      out[k] = v;
-    }
-    return out;
-  }
-  if (t === "ZodArray" && Array.isArray(value)) {
-    return value.map((el) => normalizeValue(inner._def.type, el));
-  }
-  return value;
+function stripPublishing(entry: any): any {
+  for (const k of PUBLISHING_KEYS) delete entry[k];
+  return entry;
 }
 
 // ---- Load + validate ------------------------------------------------------
@@ -139,7 +100,11 @@ for (const def of registry) {
       }
       if (seen.has(id)) fail(`[${def.name}] duplicate id "${id}"`);
       seen.add(id);
-      entries.push(entry);
+      if (!isLive(entry)) {
+        unpublished++;
+        continue;
+      }
+      entries.push(stripPublishing(entry));
     }
     if (def.orderBy === "order") {
       entries.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
@@ -212,6 +177,52 @@ for (const def of registry) {
   }
 }
 
+// ---- Media audit ------------------------------------------------------------
+
+const mediaFiles = scanPublic(root);
+const mediaByPath = new Map(mediaFiles.map((f) => [f.path, f]));
+const assetUsage: Record<string, string[]> = {};
+const missingAssets: string[] = [];
+
+function auditAssets(sourceId: string, value: unknown) {
+  const refs = new Set<string>();
+  collectAssetRefs(value, refs);
+  for (const path of refs) {
+    (assetUsage[path] ??= []).push(sourceId);
+    if (!assetExists(root, path)) {
+      missingAssets.push(`${sourceId} -> ${path}`);
+      warn(`[media] ${sourceId}: references missing asset ${path}`);
+    }
+  }
+}
+
+for (const def of registry) {
+  if (def.kind === "collection") {
+    for (const entry of compiledCollections.get(def.name) ?? []) {
+      auditAssets(`${def.name}/${entry[def.idField]}`, entry);
+    }
+  } else {
+    const data = compiledSingletons.get(def.name);
+    if (data) auditAssets(`singleton:${def.name}`, data);
+  }
+}
+
+const codeRefs = collectCodeRefs(root);
+// The webp pipeline keeps original-format failsafes next to every .webp, and
+// domain pages swap extensions at runtime - so a file counts as referenced if
+// any extension-sibling (same stem) is referenced.
+const referencedStems = new Set(
+  [...Object.keys(assetUsage), ...codeRefs].map(stemOf)
+);
+const orphanCandidates = mediaFiles
+  .filter(
+    (f) =>
+      !referencedStems.has(stemOf(f.path)) &&
+      !isDynamicPath(f.path) &&
+      !/favicon|robots|_redirects|assetsignore|\.txt$|\.xml$/.test(f.path)
+  )
+  .map((f) => f.path);
+
 // ---- Emit -----------------------------------------------------------------
 
 if (errors.length === 0) {
@@ -253,6 +264,34 @@ if (errors.length === 0) {
     join(outDir, "manifest.json"),
     JSON.stringify({ builtAt: new Date().toISOString(), content: manifest }, null, 2)
   );
+  // Cloudflare Pages picks up public/_redirects at deploy time. Generated
+  // from the redirects singleton so slug changes never strand old URLs.
+  const redirects = compiledSingletons.get("redirects");
+  if (redirects) {
+    const lines = redirects.rules.map((r: any) => `${r.from} ${r.to} ${r.status}`);
+    writeFileSync(
+      join(root, "public", "_redirects"),
+      "# GENERATED from content/singletons/redirects.json - do not edit.\n" + lines.join("\n") + "\n"
+    );
+  }
+
+  writeFileSync(
+    join(outDir, "media-report.json"),
+    JSON.stringify(
+      {
+        files: mediaFiles.length,
+        bytesTotal: mediaFiles.reduce((n, f) => n + f.bytes, 0),
+        contentReferenced: Object.keys(assetUsage).length,
+        missing: missingAssets,
+        // Advisory only - dynamic loaders and slug-built paths mean absence of
+        // a reference here does NOT prove an asset is unused.
+        orphanCandidates,
+        usage: assetUsage,
+      },
+      null,
+      2
+    )
+  );
 }
 
 // ---- Report ---------------------------------------------------------------
@@ -265,7 +304,12 @@ for (const w of warnings) console.warn(`  warn  ${w}`);
 for (const e of errors) console.error(`  ERROR ${e}`);
 console.log(
   `content: ${nEntries} entries across ${nCollections} collections + ${nSingletons} singletons - ` +
-    `${errors.length} error(s), ${warnings.length} warning(s)`
+    `${errors.length} error(s), ${warnings.length} warning(s)` +
+    (unpublished ? ` - ${unpublished} draft/scheduled entr${unpublished === 1 ? "y" : "ies"} held back` : "")
+);
+console.log(
+  `media: ${mediaByPath.size} files, ${Object.keys(assetUsage).length} referenced by content, ` +
+    `${missingAssets.length} missing, ${orphanCandidates.length} orphan candidate(s) (advisory - see media-report.json)`
 );
 if (errors.length > 0) {
   console.error("content compile FAILED - nothing emitted");

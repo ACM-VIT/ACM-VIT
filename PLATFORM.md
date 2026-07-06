@@ -13,93 +13,120 @@ editors ──> /keystatic admin ──┐
                                │                          │
                                ▼                          │
                      content compiler  ◄──────────────────┘
-             validate · normalize · check refs · derive
+     validate · normalize · refs · publishing · media audit · redirects
                                │
                                ▼
-                    src/generated/ (typed modules)
+              src/generated/ (typed modules + reports)
                                │
                                ▼
-                  src/data/* shims ──> pages/sections ──> astro build ──> CF edge
+      blocks + shims ──> pages/sections ──> astro build ──> CF edge
 ```
 
 ## The one rule
 
 **Editors ship content. Developers ship capability.**
-Content changes = edit JSON via `/keystatic` (or directly) - no code review
-needed, the compiler gates correctness. New *kinds* of content = add a schema
-in `src/platform/schema/` - the admin form, validation, and types follow
+Content changes = edit JSON via `/keystatic` - no code review needed, the
+compiler gates correctness. New *kinds* of content = add a schema in
+`src/platform/schema/`; new *sections* = add a block in `src/blocks/` +
+`src/platform/blocks/registry.ts`. Forms, validation, and types follow
 automatically.
 
 ## Layout
 
 | Path | What |
 |---|---|
-| `content/collections/<name>/<id>.json` | One file per entry (events, projects, tools, AOIs, team years, calendar, achievements, design products, forktober, cassettes) |
-| `content/singletons/<name>.json` | One-off documents (domain pages, z0d1ak, achievements stat band, event link map) |
+| `content/collections/<name>/<id>.json` | One file per entry - 24 collections (events, projects, tools, AOIs, team years, board, partners, home-domains, home-projects, blog-refs, speakers, pages, ...) |
+| `content/singletons/<name>.json` | One-off documents (domain pages, z0d1ak, events-section, redirects, site-config, ...) |
 | `src/platform/schema/` | Zod schemas + `registry.ts` - **single source of truth** for every content shape |
-| `src/platform/compiler/compile.ts` | Validates content, checks refs, normalizes, emits `src/generated/` |
-| `src/platform/keystatic/` | Generates the Keystatic admin config from the schema registry |
-| `src/generated/` | Compiled snapshot (gitignored - run `npm run content:compile`) |
+| `src/platform/blocks/registry.ts` | Block catalogue: the sections pages can be composed from |
+| `src/platform/compiler/` | Validation, ref integrity, publishing filter, media audit, redirects emission |
+| `src/platform/keystatic/` | Generates the entire Keystatic admin config from the registry |
+| `src/blocks/*.astro` | Block components (section wrappers), mapped in `src/components/PageSections.astro` |
+| `src/generated/` | Compiled snapshot + `usage.json` + `media-report.json` + `manifest.json` (gitignored) |
 | `src/data/*.ts` | Compat shims re-exporting the snapshot under the old import paths |
-| `src/content/*.json` | Legacy Keystatic singletons (board, blogs, partners, speakers...) - predate the platform, still work |
 
 ## Commands
 
-- `npm run content:compile` - validate + regenerate the snapshot. Runs
-  automatically before `dev` and `build`, so a broken entry can never ship:
-  the build fails first, with the file and field named.
-- Fresh clone: run `npm run content:compile` once before the editor stops
-  complaining about `src/generated/` imports.
-- Content edited while `astro dev` is running? Re-run `content:compile` to
-  refresh the snapshot (the dev server hot-reloads the generated modules).
+- `npm run content:compile` - validate + regenerate everything. Runs before
+  `dev` and `build`; a broken entry can never ship. Rerun manually after
+  editing content while the dev server is up.
+- Fresh clone: run it once so `src/generated/` exists.
 
 ## What the compiler enforces
 
-- Every entry validates against its Zod schema (unknown fields are lossless -
-  schemas cover every field; a parity check proved 379/379 entries roundtrip).
-- Entry `slug` must match its filename; duplicates fail.
-- Referential integrity: project tech slugs must exist in `tools-tech`, AOI
-  tool lists must exist in the domain's tool collection, the Events-section
-  link map must point at real event pages, etc. Dangling error-level refs fail
-  the build (this caught a real broken link on the CC domain page on day one).
-- A usage reverse-index (`src/generated/usage.json`) records who references
-  what - the seed for safe-delete and orphan reporting.
-- Canonicalization: Keystatic writes `""` / `null` / `[]` / all-empty objects
-  for empty optional fields; the compiler prunes those back to "absent" so
-  site logic keeps its original semantics. Explicit `false` booleans are kept.
+- Schema validation per entry; slug must match filename; duplicates fail.
+- Referential integrity (project tech slugs -> tools, AOI tools -> domain
+  tools, link maps -> event pages...). Error-level dangles fail the build.
+- **Publishing workflow**: every collection entry accepts `visibility:
+  "draft"`, `publishFrom`, `publishUntil` (ISO dates). Drafts and out-of-window
+  entries are excluded from the snapshot; the fields never reach the bundle.
+  Scheduling is realized by rebuilds - see infra setup below.
+- **Media audit**: every asset path referenced from content must exist under
+  `public/` (extension-swap tolerant for the webp/svg fallback pipelines).
+  `src/generated/media-report.json` carries a usage index and an *advisory*
+  orphan-candidate list - dynamic loaders (gallery, scroll frames, merch,
+  design guides) are excluded, but never delete without checking.
+- **Redirects**: `content/singletons/redirects.json` emits `public/_redirects`
+  (Cloudflare Pages format). Add a rule whenever a slug changes.
+- Canonicalization of Keystatic's empty-optional serialization ("" / null /
+  [] / empty objects -> absent). Explicit `false` booleans are kept.
+- Usage reverse-index (`usage.json`) - who references what, for safe deletes.
+
+## Composed pages
+
+Pages are ordered lists of **blocks** (`pages` collection). The homepage is
+`content/collections/pages/home.json`: reorder sections or toggle them off in
+the CMS. New entries in the collection ship at `/p/<slug>` on the next build
+with zero code (namespaced under `/p/` so they can never shadow a hand-built
+route).
+
+Blocks are deliberately code: they own animation, layout, and data access.
+Adding one = component in `src/blocks/`, entry in the block registry, mapping
+in `PageSections.astro` - the build fails if the three drift. Blocks read
+their own content from the snapshot, so section instances stay tiny
+(`{block, enabled}`).
 
 ## Adding things
 
-**A new entry** - `/keystatic`, pick the collection, Add. Or drop a JSON file
-in the collection directory. Compile validates either way.
-
-**A new field** - add it to the schema in `src/platform/schema/collections/`.
-The admin form, TS type, and validation update automatically. Optional fields
-are backwards-compatible with existing entries; required fields will list
-every entry that needs backfilling when you compile.
-
-**A new collection** - schema file + entry in `registry.ts` + a directory
-under `content/collections/`. That's all: form UI, validation, generated
-module, manifest hash all follow from the registry entry.
-
-**Shapes Keystatic can't model** (discriminated unions like the projects-grid
-cassettes): mark `keystatic: false` in the registry. Entries stay compiler-
-validated; edit the JSON directly.
+- **Entry**: `/keystatic` -> collection -> Add (or drop a JSON file).
+- **Field**: extend the schema; form/type/validation update automatically.
+- **Collection**: schema file + registry entry + content directory.
+- **Block**: component + registry entry + `PageSections` mapping.
+- **Image fields**: list them in the registry def's `images:` map and the
+  admin renders an upload widget storing a plain public path.
+- Shapes Keystatic can't model (discriminated unions like project-cassettes):
+  `keystatic: false` - still compiled + validated, edit the JSON directly.
 
 ## Theme tokens stay in code
 
-Domain theme colors (`TECH_THEME_COLOR`...), `DOMAIN_COLORS`, and the board
-division accent are presentation, not content - they live in the shims. An
-editor cannot change brand colors from the dashboard; a redesign is a code
-change, reviewed like one.
+Domain theme colors, `DOMAIN_COLORS`, animation presets - presentation lives
+in code and is reviewed like code. Editors cannot change brand from the CMS.
 
-## Roadmap (see the architecture doc for the full phasing)
+## Infra setup (not automatable from the repo)
 
-- Phase 2: block registry + page composition (pages as ordered section
-  instances referencing schema-validated block props).
-- Phase 3: media manifest on R2 (hash-addressed, usage-tracked, upload-time
-  variants).
-- Phase 4: roles via Cloudflare Access, branch-based drafts + preview deploys,
-  cron rebuilds so `publishWindow` fields make scheduling/expiry data-driven.
-- Migrate the legacy `src/content/` singleton-arrays into per-entry
-  collections under `content/` and retire the handwritten Keystatic config.
+1. **Scheduled publishing**: create a Cloudflare Pages deploy hook, then a
+   Cloudflare Worker cron trigger (or GitHub Actions `schedule:`) that POSTs
+   it daily (hourly if embargo times matter). `publishFrom`/`publishUntil`
+   then take effect without anyone touching anything.
+2. **Admin access control**: put `/keystatic` and `/api/keystatic/*` behind
+   Cloudflare Access (Zero Trust -> Applications; allow the org's Google
+   Workspace). Keystatic's production GitHub storage additionally requires
+   `KEYSTATIC_GITHUB_REPO_OWNER`/`KEYSTATIC_GITHUB_REPO_NAME` and its GitHub
+   App setup; until that's configured, edit locally and push - the compiler
+   gates either path.
+3. **Per-collection roles**: Keystatic has no RBAC. Enforce socially +
+   via GitHub branch protection now; a thin authz proxy in front of
+   `/api/keystatic` keyed on CF Access identity is the upgrade path.
+
+## Remaining roadmap
+
+- OG image generation at compile (satori/resvg) - needs new deps.
+- Static site search (Pagefind postbuild).
+- Hash-addressed media on R2 with upload-time variants (extend
+  `scripts/upload-images-r2.mjs` against `media-report.json`).
+- Block-level props in the page composer (per-block Zod props schemas are
+  already supported by the registry types; the Keystatic conditional-field
+  mapping is the missing piece).
+- Known cleanup: 3 junk test entries in `home-projects` (`abcd`, `testing`,
+  `pls-work` - flagged by compile warnings, runtime-filtered today); the
+  8 advisory orphan candidates in `media-report.json`.

@@ -1,0 +1,30 @@
+{
+  "slug": "localhost",
+  "order": 40,
+  "cassetteSrc": "/projects/items/4/cassetteSrc.webp",
+  "cassetteAlt": "Localhost Image",
+  "description1": "Localhost is a VS Code-inspired platform built for ACM VIT's 2024 organizing committee selections. With its familiar code-editor interface, the platform streamlines the entire recruitment process from application submission to candidate evaluation.",
+  "description2": "The system provides organizing teams with efficient tools to assess prospective members while creating an engaging, developer-friendly experience for applicants. By reimagining familiar development environments for organizational processes, Localhost demonstrates innovative thinking in recruitment technology tailored specifically for the tech-savvy ACM community.",
+  "primaryBgColor": "#eb5757",
+  "primaryTextColor": "white",
+  "primaryBorderColor": "#FEFCD9",
+  "visitWebsiteText": "VISIT WEBSITE",
+  "visitWebsiteUrl": "https://localhost.acmvit.in",
+  "visitWebsiteBgColor": "#eb5757",
+  "visitWebsiteTextColor": "white",
+  "visitWebsiteBorderColor": "#FEFCD9",
+  "icons": [
+    {
+      "type": "github",
+      "backgroundColor": "#eb5757",
+      "textColor": "white",
+      "borderColor": "#FEFCD9",
+      "iconColor": "#FEFCD9",
+      "borderRadius": "41px",
+      "url": "https://github.com/ACM-VIT/enrollment-website-2024"
+    }
+  ],
+  "textColor": "white",
+  "contentBlockBackground": "rgba(0, 0, 0, 0.15)",
+  "hoverShadow": "rgba(235, 87, 87, 0.4)"
+}

@@ -1,0 +1,33 @@
+---
+import Hero from "../sections/Hero.astro";
+import About from "../sections/About.astro";
+import AboutPhone from "../responsive/AboutPhone.astro";
+import LegendPins from "../components/ui/LegendPins.astro";
+import BecauseTechMatters from "../sections/BecauseTechMatters.astro";
+import ScrollVideo from "../components/ui/ScrollVideo.astro";
+
+// Hero + About share the pinned scroll video, so they compose as one block.
+const videoStartTime = 0;
+const videoEndTime = undefined; // Use full video duration (set to specific seconds if needed)
+---
+
+<ScrollVideo startTime={videoStartTime} endTime={videoEndTime}>
+    <section id="home" class="page-section relative">
+        <div class="relative h-screen w-screen">
+            <Hero />
+        </div>
+        <LegendPins />
+        <BecauseTechMatters />
+    </section>
+
+    <section id="about" class="page-section">
+        <div data-variant-host>
+            <template data-variant="desktop">
+                <About />
+            </template>
+            <template data-variant="mobile">
+                <AboutPhone />
+            </template>
+        </div>
+    </section>
+</ScrollVideo>

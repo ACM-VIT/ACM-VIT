@@ -43,30 +43,55 @@ function unwrap(schema: AnyZod): { inner: AnyZod; required: boolean } {
   }
 }
 
-/** First string field of an object schema - used for array item labels. */
+/** First string/enum field of an object schema - used for array item labels. */
 function labelKey(objectSchema: any): string | undefined {
   for (const [k, v] of Object.entries<any>(objectSchema._def.shape())) {
-    if (unwrap(v).inner._def.typeName === "ZodString") return k;
+    const t = unwrap(v).inner._def.typeName;
+    if (t === "ZodString" || t === "ZodEnum") return k;
   }
   return undefined;
 }
+
+type ImageHints = Record<string, { directory: string; publicPath: string }>;
 
 /**
  * `insideOptional` - Keystatic has no "optional object" concept, so children
  * of an optional object must not be required in the form, or entries without
  * that object (e.g. events without a speaker) fail client-side validation.
  * The compiler prunes deep-empty optional objects back to "absent" on save.
+ *
+ * `path`/`images` - fields listed in a def's image hints render as image
+ * upload widgets; the stored value stays a public path string.
  */
-function fieldFor(schema: AnyZod, key: string, insideOptional = false): any {
+function fieldFor(
+  schema: AnyZod,
+  key: string,
+  insideOptional = false,
+  path = "",
+  images: ImageHints = {}
+): any {
   const { inner, required: ownRequired } = unwrap(schema);
   const required = ownRequired && !insideOptional;
   const t = (inner as any)._def.typeName;
   const label = humanize(key);
+  const description: string | undefined =
+    (schema as any)._def?.description ?? (inner as any)._def?.description;
+  const imageHint = images[path];
 
   switch (t) {
     case "ZodString":
+      if (imageHint) {
+        return fields.image({
+          label,
+          description,
+          directory: imageHint.directory,
+          publicPath: imageHint.publicPath,
+          validation: required ? { isRequired: true } : undefined,
+        });
+      }
       return fields.text({
         label,
+        description,
         validation: required ? { isRequired: true, length: { min: 1 } } : undefined,
       });
     case "ZodNumber":
@@ -88,14 +113,21 @@ function fieldFor(schema: AnyZod, key: string, insideOptional = false): any {
       const el = unwrap((inner as any)._def.type).inner;
       const elType = (el as any)._def.typeName;
       if (elType === "ZodString") {
-        return fields.array(fields.text({ label }), {
+        const element = imageHint
+          ? fields.image({
+              label,
+              directory: imageHint.directory,
+              publicPath: imageHint.publicPath,
+            })
+          : fields.text({ label });
+        return fields.array(element, {
           label,
           itemLabel: (props: any) => props.value || label,
         });
       }
       if (elType === "ZodObject") {
         const lk = labelKey(el);
-        return fields.array(fieldFor(el, key, insideOptional), {
+        return fields.array(fieldFor(el, key, insideOptional, path, images), {
           label,
           itemLabel: (props: any) =>
             (lk && props.fields[lk]?.value) || label,
@@ -110,7 +142,9 @@ function fieldFor(schema: AnyZod, key: string, insideOptional = false): any {
       const shape = Object.entries<any>((inner as any)._def.shape());
       const obj: Record<string, any> = {};
       const childrenOptional = insideOptional || !ownRequired;
-      for (const [k, v] of shape) obj[k] = fieldFor(v, k, childrenOptional);
+      for (const [k, v] of shape) {
+        obj[k] = fieldFor(v, k, childrenOptional, path ? `${path}.${k}` : k, images);
+      }
       return fields.object(obj, { label });
     }
     default:
@@ -134,7 +168,7 @@ export function keystaticCollection(def: CollectionDef) {
               validation: { isRequired: true, length: { min: 1 } },
             },
           })
-        : fieldFor(v, k);
+        : fieldFor(v, k, false, k, def.images ?? {});
   }
   return collection({
     label: def.label,
@@ -151,7 +185,7 @@ export function keystaticSingleton(def: SingletonDef) {
   }
   const shape = Object.entries<any>((def.schema as any)._def.shape());
   const schema: Record<string, any> = {};
-  for (const [k, v] of shape) schema[k] = fieldFor(v, k);
+  for (const [k, v] of shape) schema[k] = fieldFor(v, k, false, k, def.images ?? {});
   return singleton({
     label: def.label,
     path: `${SINGLETONS_DIR}/${def.name}`,
