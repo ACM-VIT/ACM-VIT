@@ -1,0 +1,8 @@
+{
+  "name": "OpenCV",
+  "slug": "opencv",
+  "svgFile": "/domains/research/tools/research-tool-opencv.svg",
+  "colorHex": "#5C3EE8",
+  "isDark": true,
+  "order": 90
+}

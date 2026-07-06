@@ -1,0 +1,8 @@
+{
+  "name": "Google Workspace",
+  "slug": "googleworkspace",
+  "svgFile": "/domains/management/tools/management-tool-googleworkspace.svg",
+  "colorHex": "#4285F4",
+  "monochrome": true,
+  "order": 40
+}

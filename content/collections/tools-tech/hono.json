@@ -1,0 +1,8 @@
+{
+  "name": "Hono",
+  "slug": "hono",
+  "svgFile": "/domains/tech/tools/tech-tool-hono.svg",
+  "colorHex": "#E36002",
+  "monochrome": true,
+  "order": 160
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Microsoft Word",
+  "slug": "microsoftword",
+  "svgFile": "/domains/management/tools/management-tool-microsoftword.svg",
+  "colorHex": "#2B579A",
+  "monochrome": true,
+  "order": 80
+}

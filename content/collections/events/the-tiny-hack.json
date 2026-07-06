@@ -1,0 +1,109 @@
+{
+  "slug": "the-tiny-hack",
+  "title": "The Tiny Hack",
+  "tagline": "\\\\tiny ideas, huge impact!",
+  "eyebrow": "ACM-VIT · Mini Hackathon",
+  "themeKey": "tech",
+  "themeColor": "#D6696E",
+  "themeColorSecondary": "#0D8ADE",
+  "hideCtaBanner": true,
+  "cassetteSvg": "/events/events-the-tiny-hack-cassette.webp",
+  "shortDescription": "The Tiny Hack is a 10-hour hackathon designed for individuals interested in developing innovative projects in a short amount of time, focused on creating small but impactful solutions to real-world problems using technology.",
+  "longDescription": [
+    "The Tiny Hack is a 10-hour-long hackathon designed for individuals who are interested in developing and building innovative projects in a short amount of time. The event is focused on creating small but impactful solutions to real-world problems using technology. Participants have the opportunity to collaborate and work with like-minded individuals from diverse backgrounds to develop their ideas.",
+    "At the end of the 10 hours, participants present their projects to a panel of judges who select the top projects to receive cash prizes. The hack began with a session from keynote speaker Dr. Celestine Iwendi, one of ACM International's Most Distinguished Speakers.",
+    "The Tiny Hack is a great opportunity for individuals to test their skills, network with other professionals, and potentially launch a new project or business idea."
+  ],
+  "format": "Hybrid · 10-hour hackathon with 4 problem statements",
+  "duration": "10 hours",
+  "mode": "Hybrid",
+  "audience": "All students",
+  "team": "Teams of 1 to 5",
+  "organizedBy": "ACM-VIT · Technical Domain",
+  "firstHeld": "2023",
+  "recurrence": "1 edition to date",
+  "registrationUrl": "https://unstop.com/hackathons/the-tiny-hack-vellore-institute-of-technology-vit-vellore-587842",
+  "primaryCtaLabel": "View on Unstop",
+  "stats": [
+    {
+      "value": "1",
+      "label": "Edition"
+    },
+    {
+      "value": "10h",
+      "label": "Build Window"
+    },
+    {
+      "value": "4",
+      "label": "Problem Statements"
+    }
+  ],
+  "tracks": [],
+  "schedule": [
+    {
+      "time": "10:00 AM",
+      "title": "Round 1 (Non-Elimination)",
+      "description": "Hacking begins. Non-VIT-V participants on Discord."
+    },
+    {
+      "time": "1:00 PM",
+      "title": "Round 2 (Elimination)",
+      "description": "Elimination round."
+    },
+    {
+      "time": "5:00 PM",
+      "title": "Final Round",
+      "description": "Last stretch before the pitch off."
+    },
+    {
+      "time": "7:30 PM",
+      "title": "Pitch Off",
+      "description": "Final pitches presented in Sarojini Naidu Gallery."
+    }
+  ],
+  "prizes": [],
+  "highlights": [],
+  "perks": [
+    "Keynote session by Dr. Celestine Iwendi, ACM International's Most Distinguished Speaker",
+    "Any tech stack allowed",
+    "Cash prizes for top projects"
+  ],
+  "faq": [
+    {
+      "q": "How many members can be in a team?",
+      "a": "Maximum 5 members in a team."
+    },
+    {
+      "q": "Is this online or offline?",
+      "a": "VIT Vellore teams are present at Sarojini Naidu Gallery. Non-VIT-V participants join via ACM-VIT's official Discord server."
+    },
+    {
+      "q": "What tech stack can I use?",
+      "a": "Participants can implement their solutions via the tech stack of their choice."
+    }
+  ],
+  "socials": [
+    {
+      "label": "Unstop",
+      "href": "https://unstop.com/hackathons/the-tiny-hack-vellore-institute-of-technology-vit-vellore-587842"
+    },
+    {
+      "label": "Instagram · @acmvit",
+      "href": "https://instagram.com/acmvit"
+    }
+  ],
+  "pastEditions": [
+    {
+      "year": "2023",
+      "edition": "The Tiny Hack 1.0",
+      "description": "Held on 18th January 2023 at Sarojini Naidu Gallery, VIT Vellore (hybrid with Discord for non-VIT participants). 10-hour hackathon with 4 problem statements, keynote by Dr. Celestine Iwendi, and cash prizes. Teams of up to 5.",
+      "links": [
+        {
+          "label": "Unstop",
+          "href": "https://unstop.com/hackathons/the-tiny-hack-vellore-institute-of-technology-vit-vellore-587842"
+        }
+      ]
+    }
+  ],
+  "order": 100
+}

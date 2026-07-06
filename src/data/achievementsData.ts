@@ -1,20 +1,11 @@
-// Achievements page data. Placeholder content - swap for real awards, ranks and
-// milestones once details are in. Keep the shapes; the page renders off these.
+// COMPAT SHIM - content now lives in content/collections/achievements/ and
+// content/singletons/achievements-page.json, edited via the CMS. This module
+// re-exports the compiled snapshot from src/generated/.
+import { items as achievementEntries } from "../generated/achievements";
+import { data as pageData } from "../generated/achievements-page";
+import type { AchievementEntry } from "../platform/schema/collections/misc";
 
-export type Achievement = {
-  /** Award / recognition title. */
-  title: string;
-  /** The body or program that granted it. */
-  org: string;
-  /** Year (or range) it was earned. */
-  year: string;
-  /** One-line context. */
-  blurb: string;
-  /** Optional placement tag, e.g. "1st", "Gold", "Winner". */
-  place?: string;
-  /** Optional visual asset (badge, photo, logo). Public path, e.g. "/ui/ui-acm-celeb.webp". */
-  image?: string;
-};
+export type Achievement = AchievementEntry;
 
 export type Stat = {
   num: string;
@@ -22,37 +13,8 @@ export type Stat = {
   sub?: string;
 };
 
-// Headline numbers for the stat band.
-export const stats: Stat[] = [
-  { num: "—", label: "Awards Won", sub: "All-time" },
-  { num: "—", label: "Hackathons", sub: "Placed at" },
-  { num: "—", label: "Members Recognized", sub: "And counting" },
-  { num: "—", label: "Years Running", sub: "Since founding" },
-];
+/** Headline numbers for the stat band. */
+export const stats: Stat[] = pageData.stats;
 
-// The reel of achievements, newest first.
-export const achievements: Achievement[] = [
-  {
-    title: "Placeholder Achievement",
-    org: "Granting Body",
-    year: "2026",
-    place: "Winner",
-    blurb: "Replace with the real story once the details land.",
-    // Drop a public asset path here to show a badge/photo on the card:
-    // image: "/ui/ui-acm-celeb.webp",
-  },
-  {
-    title: "Another Milestone",
-    org: "Program / Event",
-    year: "2025",
-    place: "1st",
-    blurb: "Short line describing what the team pulled off.",
-  },
-  {
-    title: "Recognition",
-    org: "Body",
-    year: "2024",
-    place: "Gold",
-    blurb: "Context goes here.",
-  },
-];
+/** The reel of achievements, newest first. */
+export const achievements: Achievement[] = achievementEntries;

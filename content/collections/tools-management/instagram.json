@@ -1,0 +1,8 @@
+{
+  "name": "Instagram",
+  "slug": "instagram",
+  "svgFile": "/domains/management/tools/management-tool-instagram.svg",
+  "colorHex": "#E4405F",
+  "monochrome": true,
+  "order": 180
+}

@@ -1,0 +1,12 @@
+{
+  "slug": "7",
+  "order": 60,
+  "id": "7",
+  "title": "App Dev Workshop",
+  "date": "2026-07-10",
+  "startTime": "14:00",
+  "endTime": "17:00",
+  "domain": "tech",
+  "description": "Flutter crash course - from zero to deploying your first cross-platform mobile app.",
+  "location": "SJT 302, VIT Vellore"
+}

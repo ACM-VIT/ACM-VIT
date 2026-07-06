@@ -1,0 +1,26 @@
+{
+  "slug": "aiml",
+  "order": 0,
+  "key": "aiml",
+  "title": "AI / ML",
+  "shortDescription": "Building intelligent systems, from classical machine learning models to large language model pipelines and agentic workflows.",
+  "longDescription": [
+    "Students in the AI/ML AOI work across computer vision, natural language processing, reinforcement learning, and agent orchestration, turning paper ideas into working systems.",
+    "Alongside individual research, members build projects in the field and ship them, from training pipelines and inference servers to full applications powered by modern ML."
+  ],
+  "cassetteSrc": "/aois/research/cassettes/aois-research-cassettes-aiml.webp",
+  "tools": [
+    "python",
+    "pytorch",
+    "tensorflow",
+    "keras",
+    "huggingface",
+    "langchain",
+    "scikit-learn",
+    "numpy",
+    "pandas",
+    "opencv",
+    "jupyter",
+    "google-colab"
+  ]
+}

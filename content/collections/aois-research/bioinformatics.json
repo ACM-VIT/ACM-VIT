@@ -1,0 +1,20 @@
+{
+  "slug": "bioinformatics",
+  "order": 50,
+  "key": "bioinformatics",
+  "title": "Bioinformatics",
+  "shortDescription": "Computation meets biology, from genomic sequence analysis to machine learning on biological data.",
+  "longDescription": [
+    "The Bioinformatics AOI works on sequence alignment, structural biology, and ML pipelines applied to biological datasets.",
+    "Members build tools for genomic data processing and collaborate on research projects that sit at the boundary of life sciences and computer science."
+  ],
+  "cassetteSrc": "/aois/research/cassettes/aois-research-cassettes-bioinformatics.webp",
+  "tools": [
+    "biopython",
+    "blast",
+    "galaxy",
+    "python",
+    "pandas",
+    "numpy"
+  ]
+}

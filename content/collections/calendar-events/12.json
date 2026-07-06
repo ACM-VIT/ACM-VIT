@@ -1,0 +1,12 @@
+{
+  "slug": "12",
+  "order": 110,
+  "id": "12",
+  "title": "Code++",
+  "date": "2026-07-05",
+  "startTime": "14:00",
+  "endTime": "16:00",
+  "domain": "cc",
+  "description": "Competitive programming contest for beginners - solve algorithmic challenges and win prizes.",
+  "location": "Online (HackerRank)"
+}

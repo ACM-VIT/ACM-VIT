@@ -1,0 +1,7 @@
+{
+  "name": "Vault",
+  "slug": "vault",
+  "svgFile": "/domains/tech/tools/tech-tool-vault.svg",
+  "colorHex": "#FFEC6E",
+  "order": 600
+}

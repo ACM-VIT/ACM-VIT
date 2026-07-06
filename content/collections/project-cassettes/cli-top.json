@@ -1,0 +1,10 @@
+{
+  "slug": "cli-top",
+  "order": 110,
+  "kind": "svg",
+  "name": "CLI-TOP",
+  "color": "#48BB78",
+  "cassetteSvg": "/projects/cassettes/projects-cassettes-cli-top.svg",
+  "alt": "CLI-TOP",
+  "url": "/projects/cli-top"
+}

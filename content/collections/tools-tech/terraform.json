@@ -1,0 +1,7 @@
+{
+  "name": "Terraform",
+  "slug": "terraform",
+  "svgFile": "/domains/tech/tools/tech-tool-terraform.svg",
+  "colorHex": "#844FBA",
+  "order": 450
+}

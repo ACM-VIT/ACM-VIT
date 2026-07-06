@@ -1,0 +1,8 @@
+{
+  "name": "Framer",
+  "slug": "framer",
+  "svgFile": "/domains/design/tools/design-tool-framer.svg",
+  "colorHex": "#0055FF",
+  "isDark": true,
+  "order": 80
+}

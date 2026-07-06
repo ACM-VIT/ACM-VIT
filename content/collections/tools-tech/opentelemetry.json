@@ -1,0 +1,8 @@
+{
+  "name": "OpenTelemetry",
+  "slug": "opentelemetry",
+  "svgFile": "/domains/tech/tools/tech-tool-opentelemetry.svg",
+  "colorHex": "#FF9E2C",
+  "monochrome": true,
+  "order": 590
+}

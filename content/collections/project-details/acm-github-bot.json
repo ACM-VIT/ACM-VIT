@@ -1,0 +1,69 @@
+{
+  "slug": "acm-github-bot",
+  "title": "ACM GitHub Bot",
+  "tagline": "Github bot for ACM Organization",
+  "eyebrow": "ACM-VIT · Forktober 2021 · Open Source",
+  "themeColor": "#EFEFEF",
+  "themeColorSecondary": "#1a1a1a",
+  "shortDescription": "Github bot for ACM Organization",
+  "longDescription": [
+    "Github bot for ACM Organization",
+    "ACM GitHub Bot was part of ACM-VIT's Forktober open-source drive in 2021, opening up to student contributors during Hacktoberfest.",
+    "The repository is archived. It remains on GitHub as a record of the Forktober edition that ran it, but is no longer accepting new contributions.",
+    "Across its lifetime, the project drew 3 contributors, 9 pull requests and 32 commits."
+  ],
+  "status": "archived",
+  "statusNote": "Forktober 2021 · Archived",
+  "cassetteSvg": "/events/events-forktober-cassette.svg",
+  "stats": [
+    {
+      "value": "3",
+      "label": "Contributors"
+    },
+    {
+      "value": "9",
+      "label": "Pull requests"
+    },
+    {
+      "value": "32",
+      "label": "Commits"
+    },
+    {
+      "value": "3",
+      "label": "Stars"
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Stack",
+      "slugs": [
+        "javascript",
+        "nodejs"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "SwarupKharul"
+    },
+    {
+      "github": "YashKumarVerma"
+    }
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/ACM-VIT/acm-github-bot",
+      "kind": "github"
+    }
+  ],
+  "commitGraphSeed": 363,
+  "order": 340
+}

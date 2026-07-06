@@ -1,0 +1,8 @@
+{
+  "name": "Pandas",
+  "slug": "pandas",
+  "svgFile": "/domains/research/tools/research-tool-pandas.svg",
+  "colorHex": "#150458",
+  "isDark": true,
+  "order": 60
+}

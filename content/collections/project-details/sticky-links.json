@@ -1,0 +1,80 @@
+{
+  "slug": "sticky-links",
+  "title": "Sticky Links",
+  "tagline": "Bookmark important links with categories to read them later on the go!",
+  "eyebrow": "ACM-VIT · Forktober 2021, 2022 · Open Source",
+  "themeColor": "#EFEFEF",
+  "themeColorSecondary": "#1a1a1a",
+  "shortDescription": "Bookmark important links with categories to read them later on the go!",
+  "longDescription": [
+    "Bookmark important links with categories to read them later on the go!",
+    "Sticky Links was part of ACM-VIT's Forktober open-source drive across 2021, 2022, opening up to student contributors during Hacktoberfest.",
+    "The repository is archived. It remains on GitHub as a record of the Forktober edition that ran it, but is no longer accepting new contributions.",
+    "Across its lifetime, the project drew 10 contributors, 23 pull requests and 62 commits."
+  ],
+  "status": "archived",
+  "statusNote": "Forktober 2022 · Archived",
+  "cassetteSvg": "/events/events-forktober-cassette.svg",
+  "stats": [
+    {
+      "value": "10",
+      "label": "Contributors"
+    },
+    {
+      "value": "23",
+      "label": "Pull requests"
+    },
+    {
+      "value": "62",
+      "label": "Commits"
+    },
+    {
+      "value": "7",
+      "label": "Stars"
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Stack",
+      "slugs": [
+        "swift"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "Samridh29"
+    },
+    {
+      "github": "kevalvadoliya"
+    },
+    {
+      "github": "kangarooSurfer"
+    },
+    {
+      "github": "IgorChernyshov"
+    },
+    {
+      "github": "darshilagrawal"
+    },
+    {
+      "github": "agustiyann"
+    }
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/ACM-VIT/sticky-links",
+      "kind": "github"
+    }
+  ],
+  "commitGraphSeed": 253,
+  "order": 220
+}

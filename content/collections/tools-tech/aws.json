@@ -1,0 +1,8 @@
+{
+  "name": "AWS",
+  "slug": "aws",
+  "svgFile": "/domains/tech/tools/tech-tool-aws.svg",
+  "colorHex": "#FF9900",
+  "monochrome": true,
+  "order": 560
+}

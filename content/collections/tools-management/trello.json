@@ -1,0 +1,7 @@
+{
+  "name": "Trello",
+  "slug": "trello",
+  "svgFile": "/domains/management/tools/management-tool-trello.svg",
+  "colorHex": "#0079BF",
+  "order": 120
+}

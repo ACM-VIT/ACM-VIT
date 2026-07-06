@@ -1,0 +1,7 @@
+{
+  "name": "Blender",
+  "slug": "blender",
+  "svgFile": "/domains/design/tools/design-tool-blender.svg",
+  "colorHex": "#E87D0D",
+  "order": 50
+}

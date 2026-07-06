@@ -1,0 +1,12 @@
+{
+  "slug": "5",
+  "order": 40,
+  "id": "5",
+  "title": "Summer Bootcamp",
+  "date": "2026-07-01",
+  "startTime": "10:00",
+  "endTime": "13:00",
+  "domain": "tech",
+  "description": "Week 1: Introduction to modern web development with React, Next.js, and Tailwind CSS.",
+  "location": "GDN 128, VIT Vellore"
+}

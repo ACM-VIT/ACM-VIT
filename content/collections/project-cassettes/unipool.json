@@ -1,0 +1,13 @@
+{
+  "slug": "unipool",
+  "order": 30,
+  "kind": "overlay",
+  "name": "UniPool",
+  "color": "#7100FF",
+  "image": "/projects/items/3/cassetteSrc.webp",
+  "alt": "UniPool",
+  "url": "/projects/unipool",
+  "sizePercent": 80,
+  "sizeAxis": "width",
+  "offsetY": -3
+}

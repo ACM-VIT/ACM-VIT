@@ -1,0 +1,8 @@
+{
+  "name": "MQTT",
+  "slug": "mqtt",
+  "svgFile": "/domains/research/tools/research-tool-mqtt.svg",
+  "colorHex": "#660066",
+  "isDark": true,
+  "order": 310
+}

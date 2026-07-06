@@ -1,4 +1,5 @@
 import { config, fields, singleton } from '@keystatic/core';
+import { generatedCollections, generatedSingletons } from './src/platform/keystatic/generated-config.ts';
 
 export default config({
   storage: process.env.NODE_ENV === 'production' 
@@ -19,7 +20,16 @@ export default config({
     },
   },
 
+  // Generated from src/platform/schema/registry.ts - the Zod schemas are the
+  // single source of truth. Add a collection there; the admin UI follows.
+  collections: {
+    ...generatedCollections,
+  },
+
   singletons: {
+    // Generated content/ singletons (domain pages, z0d1ak, achievements band...)
+    ...generatedSingletons,
+
     // ─── Blogs ──────────────────────────────────────────────
     blogs: singleton({
       label: 'Blogs',

@@ -1,0 +1,80 @@
+{
+  "slug": "open-with-browser",
+  "title": "Open with Browser",
+  "tagline": "Smart link manager that opens URLs in specific browsers and profiles based on customizable rules.",
+  "eyebrow": "ACM-VIT · Forktober 2025 · Open Source",
+  "themeColor": "#EFEFEF",
+  "themeColorSecondary": "#1a1a1a",
+  "shortDescription": "Smart link manager that opens URLs in specific browsers and profiles based on customizable rules.",
+  "longDescription": [
+    "Smart link manager that opens URLs in specific browsers and profiles based on customizable rules.",
+    "Open with Browser was part of ACM-VIT's Forktober open-source drive in 2025, opening up to student contributors during Hacktoberfest.",
+    "The repository is still being maintained. New contributions, issues and pull requests are welcome on GitHub.",
+    "Across its lifetime, the project drew 13 contributors, 36 pull requests and 118 commits."
+  ],
+  "status": "online",
+  "statusNote": "Actively maintained · Forktober 2025",
+  "cassetteSvg": "/events/events-forktober-cassette.svg",
+  "stats": [
+    {
+      "value": "13",
+      "label": "Contributors"
+    },
+    {
+      "value": "36",
+      "label": "Pull requests"
+    },
+    {
+      "value": "118",
+      "label": "Commits"
+    },
+    {
+      "value": "3",
+      "label": "Stars"
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Stack",
+      "slugs": [
+        "typescript"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "theg1239"
+    },
+    {
+      "github": "Maitri-shah29"
+    },
+    {
+      "github": "POSTI-25"
+    },
+    {
+      "github": "AdityaVKochar"
+    },
+    {
+      "github": "toygma"
+    },
+    {
+      "github": "anshukaushik4700"
+    }
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/ACM-VIT/open-with-browser",
+      "kind": "github"
+    }
+  ],
+  "commitGraphSeed": 740,
+  "order": 120
+}

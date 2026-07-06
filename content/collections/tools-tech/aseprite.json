@@ -1,0 +1,8 @@
+{
+  "name": "Aseprite",
+  "slug": "aseprite",
+  "svgFile": "/domains/tech/tools/tech-tool-aseprite.svg",
+  "colorHex": "#7D929E",
+  "monochrome": true,
+  "order": 880
+}

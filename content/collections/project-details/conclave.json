@@ -1,0 +1,154 @@
+{
+  "slug": "conclave",
+  "title": "Conclave",
+  "tagline": "Meetings, built from scratch.",
+  "eyebrow": "ACM-VIT · Video · Meetings Platform",
+  "themeColor": "#FF6B35",
+  "themeColorSecondary": "#1A0E05",
+  "shortDescription": "A real-time meetings platform with web and mobile clients, a custom SFU, instant breakout rooms, shared browser, and an in-meeting apps SDK. Born out of ACM-VIT's OCS 2026 portal - every interview that cycle ran on it.",
+  "longDescription": [
+    "Conclave started life as the meeting infrastructure inside Explore, ACM-VIT's 2026 OCS portal. The chapter needed a meeting client that could handle hundreds of applicant interviews without leaning on Google Meet or Zoom, so the team built one from scratch.",
+    "The result was good enough to extract into its own product. Conclave ships a Next.js web client, a React Native + Expo mobile app, and a native Swift/Kotlin client. The media backbone is a custom SFU built on mediasoup with low-bandwidth profiles, transitions, and observability baked in.",
+    "Beyond basic video calls, Conclave supports one-click breakout rooms from inside a live call, a shared browser powered by VNC for distributed screen interaction, and an in-meeting apps runtime with real-time data sync via Yjs. The apps SDK lets developers build collaborative tools that run inside a Conclave call.",
+    "The whole thing is containerised with Docker, managed as a pnpm monorepo, and ships under an MIT licence."
+  ],
+  "status": "online",
+  "statusNote": "Actively maintained",
+  "cassetteSvg": "/projects/cassettes/projects-cassettes-conclave.svg",
+  "stats": [
+    {
+      "value": "Web + Mobile",
+      "label": "Platforms"
+    },
+    {
+      "value": "Custom SFU",
+      "label": "Media backbone"
+    },
+    {
+      "value": "2025",
+      "label": "Extracted"
+    },
+    {
+      "value": "MIT",
+      "label": "Licence"
+    }
+  ],
+  "features": [
+    {
+      "title": "Custom SFU",
+      "description": "mediasoup-based selective forwarding unit with low-bandwidth profiles, transitions, and observability."
+    },
+    {
+      "title": "One-click breakout rooms",
+      "description": "Spin up a breakout from inside a live call. Used heavily during OCS round interviews."
+    },
+    {
+      "title": "Shared browser",
+      "description": "VNC-based shared browsing so participants can interact with the same page in real time."
+    },
+    {
+      "title": "In-meeting apps SDK",
+      "description": "Build collaborative tools that run inside a call. Data sync powered by Yjs."
+    },
+    {
+      "title": "Cross-platform clients",
+      "description": "Web (Next.js), mobile (React Native + Expo), and native (Swift, Kotlin) clients."
+    },
+    {
+      "title": "Docker-ready",
+      "description": "Containerised and ready to self-host. Docker Compose for local dev, production configs included."
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Frontend",
+      "slugs": [
+        "nextjs",
+        "react",
+        "typescript",
+        "tailwindcss"
+      ]
+    },
+    {
+      "category": "Mobile",
+      "slugs": [
+        "react-native",
+        "expo",
+        "swift",
+        "kotlin"
+      ]
+    },
+    {
+      "category": "Realtime",
+      "slugs": [
+        "nodejs",
+        "typescript"
+      ]
+    },
+    {
+      "category": "Infrastructure",
+      "slugs": [
+        "docker"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "theg1239",
+      "role": "Lead developer"
+    },
+    {
+      "github": "thinkter",
+      "role": "Developer"
+    },
+    {
+      "github": "technical-director-acmvit",
+      "role": "Developer"
+    },
+    {
+      "github": "Krishang-Zinzuwadia",
+      "role": "Developer"
+    },
+    {
+      "github": "TarunRam-git",
+      "role": "Developer"
+    },
+    {
+      "github": "AdityaVKochar",
+      "role": "Developer"
+    },
+    {
+      "github": "ananyab1404",
+      "role": "Developer"
+    },
+    {
+      "github": "m-rithik",
+      "role": "Developer"
+    },
+    {
+      "github": "vim-all",
+      "role": "Developer"
+    }
+  ],
+  "links": [
+    {
+      "label": "Website",
+      "href": "https://conclave.acmvit.in",
+      "kind": "website"
+    },
+    {
+      "label": "GitHub",
+      "href": "https://github.com/ACM-VIT/conclave",
+      "kind": "github"
+    }
+  ],
+  "commitGraphSeed": 735,
+  "order": 90
+}

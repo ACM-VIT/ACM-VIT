@@ -31,3 +31,5 @@ AGENTS.md
 
 # graphify
 graphify-out/
+# Compiled content snapshot (run: npm run content:compile)
+src/generated/

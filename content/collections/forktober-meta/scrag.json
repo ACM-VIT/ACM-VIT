@@ -1,0 +1,10 @@
+{
+  "slug": "scrag",
+  "title": "Scrag",
+  "repo": "scrag",
+  "years": [
+    2025
+  ],
+  "description": "A flexible web scraper that intelligently adapts to different website structures using multiple extraction strategies (newspaper3k, readability-lxml, BeautifulSoup, and optional headless rendering). It outputs clean, structured data for RAG pipelines or local LLMs, with an optional extension to automatically build RAG indexes from web queries.",
+  "order": 10
+}

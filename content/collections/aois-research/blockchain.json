@@ -1,0 +1,20 @@
+{
+  "slug": "blockchain",
+  "order": 30,
+  "key": "blockchain",
+  "title": "Blockchain",
+  "shortDescription": "Smart contracts, decentralized applications, and the cryptographic primitives behind modern Web3 systems.",
+  "longDescription": [
+    "The Blockchain AOI studies consensus protocols, zero-knowledge systems, and smart contract security, then puts that into practice through audits and projects.",
+    "Members build dApps, write contracts, and experiment with new chains and toolchains, turning theory into deployed code."
+  ],
+  "cassetteSrc": "/aois/research/cassettes/aois-research-cassettes-blockchain.webp",
+  "tools": [
+    "solidity",
+    "hardhat",
+    "openzeppelin",
+    "ethereum",
+    "ipfs",
+    "python"
+  ]
+}

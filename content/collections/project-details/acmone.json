@@ -1,0 +1,200 @@
+{
+  "slug": "acmone",
+  "title": "ACMOne",
+  "tagline": "All of ACM, in one.",
+  "eyebrow": "ACM-VIT · Mobile · Chapter Ops",
+  "themeColor": "#F95F4A",
+  "themeColorSecondary": "#2A1410",
+  "shortDescription": "Internal app for ACM-VIT's 100+ organising committee. Announcements, events calendar, meetings, ID scanning for On Duty and Night Slips, learning resources - one place for everything chapter ops.",
+  "longDescription": [
+    "Running a 100-strong student chapter gets messy fast. Meetings stack up, deadlines slip through DMs, ODs get lost in spreadsheets. ACMOne is what ACM-VIT built so the people running ACM-VIT could stop firefighting and start shipping.",
+    "Members get real-time announcements, a shared events calendar, meeting agendas + minutes in one place, and an ID scanner that takes On Duty and Night Slip registrations from a 10-minute Google Form ritual down to a tap. Leads manage roles, assign tasks, and track who's actually around for the next event.",
+    "The Android app is built in React Native + Expo with Firebase + Auth0 for sign-in. The backend is FastAPI on Docker, SQLAlchemy talking to PostgreSQL on CockroachDB, and a Google APIs integration so calendar + sheets stay in sync with the chapter's existing workflows."
+  ],
+  "status": "online",
+  "statusNote": "Internal - chapter only",
+  "heroImage": "/projects/acmone/projects-acmone-logo.webp",
+  "gallery": [
+    {
+      "src": "/projects/acmone/projects-acmone-screen-1.webp",
+      "alt": "ACMOne home screen"
+    },
+    {
+      "src": "/projects/acmone/projects-acmone-screen-2.webp",
+      "alt": "ACMOne events view"
+    },
+    {
+      "src": "/projects/acmone/projects-acmone-screen-3.webp",
+      "alt": "ACMOne ID scanning flow"
+    }
+  ],
+  "galleryLayout": "landscape",
+  "stats": [
+    {
+      "value": "100+",
+      "label": "Committee members"
+    },
+    {
+      "value": "Android",
+      "label": "Platform"
+    },
+    {
+      "value": "2024",
+      "label": "First shipped"
+    },
+    {
+      "value": "Internal",
+      "label": "Audience"
+    }
+  ],
+  "features": [
+    {
+      "title": "Real-time announcements",
+      "description": "Push updates to the whole committee so nothing lives in a forgotten DM."
+    },
+    {
+      "title": "Events calendar",
+      "description": "Every workshop, meeting, and deadline in one shared view. No more 'when was that again?'"
+    },
+    {
+      "title": "Meeting ops",
+      "description": "Schedule, set agendas, capture minutes. Past meetings stay searchable."
+    },
+    {
+      "title": "ID scanning for OD / Night Slip",
+      "description": "Camera-based scanner registers On Duty and Night Slip entries in seconds."
+    },
+    {
+      "title": "Roles and tasks",
+      "description": "Assign responsibilities, track ownership, see who's handling what at a glance."
+    },
+    {
+      "title": "Learning resources",
+      "description": "Workshop material and reading lists pulled straight into the app for new inductees."
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Mobile",
+      "slugs": [
+        "react-native",
+        "expo",
+        "typescript",
+        "firebase"
+      ]
+    },
+    {
+      "category": "Backend",
+      "slugs": [
+        "python",
+        "postgresql",
+        "cockroachdb",
+        "docker"
+      ]
+    },
+    {
+      "category": "Infrastructure",
+      "slugs": [
+        "gcp"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github",
+        "postman"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "tanushgolwala",
+      "role": "Lead developer"
+    },
+    {
+      "github": "theg1239",
+      "role": "Developer"
+    },
+    {
+      "github": "Balaji-3009",
+      "role": "Developer"
+    },
+    {
+      "github": "TejasGhatte",
+      "role": "Developer"
+    },
+    {
+      "github": "DibyashaktiMoharana",
+      "role": "Developer"
+    },
+    {
+      "github": "ShreyasM09",
+      "role": "Developer"
+    },
+    {
+      "github": "harshitaak07",
+      "role": "Developer"
+    },
+    {
+      "github": "TaniyaRajesh",
+      "role": "Developer"
+    },
+    {
+      "github": "Pratishtha36",
+      "role": "Developer"
+    },
+    {
+      "github": "JothishKamal",
+      "role": "Developer"
+    },
+    {
+      "github": "yashsinha1224",
+      "role": "Developer"
+    },
+    {
+      "github": "Van5sh",
+      "role": "Developer"
+    },
+    {
+      "github": "Kashishsingh4",
+      "role": "Developer"
+    },
+    {
+      "github": "Mkrishbl4z3",
+      "role": "Developer"
+    },
+    {
+      "github": "RealAradhyaGupta",
+      "role": "Developer"
+    },
+    {
+      "github": "nishthaaggarwal24",
+      "role": "Developer"
+    }
+  ],
+  "links": [
+    {
+      "label": "Website",
+      "href": "https://acmone.acmvit.in",
+      "kind": "website"
+    },
+    {
+      "label": "App repo",
+      "href": "https://github.com/ACM-VIT/ACMOne-app",
+      "kind": "github"
+    },
+    {
+      "label": "Backend repo",
+      "href": "https://github.com/ACM-VIT/ACMOne-backend",
+      "kind": "github"
+    },
+    {
+      "label": "Google Play",
+      "href": "https://play.google.com/store/apps/details?id=com.acmvit.acmone&hl=en_IN",
+      "kind": "play"
+    }
+  ],
+  "commitGraphSeed": 42,
+  "order": 0
+}

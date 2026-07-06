@@ -1,0 +1,8 @@
+{
+  "name": "HackerEarth",
+  "slug": "hackerearth",
+  "svgFile": "/domains/cc/tools/cc-tool-hackerearth.svg",
+  "colorHex": "#2C3454",
+  "monochrome": true,
+  "order": 50
+}

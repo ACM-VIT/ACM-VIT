@@ -1,0 +1,88 @@
+{
+  "slug": "code-plus-plus",
+  "title": "Code Plus Plus",
+  "tagline": "Think Fast, Code Faster!",
+  "eyebrow": "ACM-VIT · Competitive Coding",
+  "themeKey": "cc",
+  "themeColor": "#FF007A",
+  "themeColorSecondary": "#7F30FF",
+  "hideCtaBanner": true,
+  "cassetteSvg": "/events/events-code-plusplus-cassette.svg",
+  "shortDescription": "Code Plus Plus (Code++) is ACM-VIT's annual competitive coding competition that challenges an individual's mathematical prowess and logical thinking skills. Open to everyone - from absolute beginners to seasoned professionals.",
+  "longDescription": [
+    "Code Plus Plus is ACM-VIT's competitive coding competition held on HackerRank. The event is a four-hour contest in which participants are awarded points based on the number of test cases they can pass successfully.",
+    "Participation is open for all - there is something for everyone, from absolute beginners to seasoned professionals. There are no restrictions on programming languages, so participants can use whatever they're most comfortable with.",
+    "It is a valuable opportunity to recognise and develop one's true potential in competitive coding."
+  ],
+  "format": "Online · 4-hour contest on HackerRank",
+  "duration": "4 hours",
+  "mode": "Online",
+  "audience": "Open for all - beginners to professionals",
+  "team": "Individual",
+  "organizedBy": "ACM-VIT · Competitive Coding Domain",
+  "firstHeld": "2022",
+  "recurrence": "1 edition to date",
+  "registrationUrl": "https://codeplusplus.acmvit.in",
+  "primaryCtaLabel": "Visit codeplusplus.acmvit.in",
+  "stats": [
+    {
+      "value": "1",
+      "label": "Edition"
+    },
+    {
+      "value": "4h",
+      "label": "Contest Window"
+    }
+  ],
+  "tracks": [],
+  "schedule": [
+    {
+      "time": "2:00 PM",
+      "title": "Contest Begins",
+      "description": "Problems go live on HackerRank."
+    },
+    {
+      "time": "6:00 PM",
+      "title": "Contest Ends"
+    }
+  ],
+  "prizes": [],
+  "highlights": [],
+  "perks": [
+    "No language restrictions",
+    "Open to all skill levels",
+    "Discord server for questions and support"
+  ],
+  "faq": [
+    {
+      "q": "Where will Code Plus Plus be held?",
+      "a": "Code Plus Plus is held on HackerRank."
+    },
+    {
+      "q": "What programming languages can be used?",
+      "a": "There are no restrictions on the programming languages that can be used to solve the problems."
+    },
+    {
+      "q": "Who all can participate?",
+      "a": "Participation is open for all - from absolute beginners to seasoned professionals."
+    }
+  ],
+  "socials": [
+    {
+      "label": "Website",
+      "href": "https://codeplusplus.acmvit.in"
+    },
+    {
+      "label": "Instagram · @acmvit",
+      "href": "https://instagram.com/acmvit"
+    }
+  ],
+  "pastEditions": [
+    {
+      "year": "2022",
+      "edition": "Code Plus Plus 1.0",
+      "description": "Inaugural edition held on 3rd July 2022 (Sunday), 2:00 PM to 6:00 PM IST on HackerRank. A four-hour competitive coding contest open to all skill levels."
+    }
+  ],
+  "order": 30
+}

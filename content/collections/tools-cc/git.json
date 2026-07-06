@@ -1,0 +1,7 @@
+{
+  "name": "Git",
+  "slug": "git",
+  "svgFile": "/domains/cc/tools/cc-tool-git.svg",
+  "colorHex": "#F05032",
+  "order": 150
+}

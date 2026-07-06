@@ -1,0 +1,104 @@
+{
+  "slug": "ocs-22",
+  "title": "OCS '22",
+  "tagline": "Recruitment, but you have to play the game.",
+  "eyebrow": "ACM-VIT · 2022 · Organising Committee Selections",
+  "themeColor": "#C0D470",
+  "themeColorSecondary": "#78C0AB",
+  "shortDescription": "Organising Committee Selections portal for ACM-VIT, 2022. A playable 2D RPG world where applicants navigated the map, met characters, and finished the in-game registration form to enrol.",
+  "longDescription": [
+    "OCS '22 was ACM-VIT's recruitment portal for the 2022 organising committee, built around a single idea - make the application itself a game.",
+    "The site put applicants inside a 2D top-down RPG world. Instead of filling out a static form, candidates moved a character around the map, ran into NPCs, and progressed through the in-game flow until they reached the registration step - which was also built directly into the world.",
+    "The form section ran inside the website itself, so submitting an application meant actually playing through the game first."
+  ],
+  "status": "archived",
+  "statusNote": "Recruitment cycle closed",
+  "cassetteSvg": "/projects/cassettes/projects-cassettes-ocs-22.svg",
+  "gallery": [
+    {
+      "src": "/projects/ocs-22/projects-ocs-22-screen-1.webp",
+      "alt": "OCS '22 in-game scene"
+    },
+    {
+      "src": "/projects/ocs-22/projects-ocs-22-screen-2.webp",
+      "alt": "OCS '22 in-game scene"
+    },
+    {
+      "src": "/projects/ocs-22/projects-ocs-22-screen-3.webp",
+      "alt": "OCS '22 in-game scene"
+    },
+    {
+      "src": "/projects/ocs-22/projects-ocs-22-screen-4.webp",
+      "alt": "OCS '22 in-game scene"
+    }
+  ],
+  "galleryLayout": "landscape",
+  "stats": [
+    {
+      "value": "2022",
+      "label": "Year"
+    },
+    {
+      "value": "Web",
+      "label": "Platform"
+    },
+    {
+      "value": "2D RPG",
+      "label": "Theme"
+    }
+  ],
+  "features": [
+    {
+      "title": "Playable 2D world",
+      "description": "Top-down RPG map applicants actually navigated to apply."
+    },
+    {
+      "title": "In-game registration",
+      "description": "Form section was built into the world. No bounce to an external typeform."
+    },
+    {
+      "title": "RPG theming end-to-end",
+      "description": "UI, NPCs, and flow all leaned into the game premise."
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Frontend",
+      "slugs": [
+        "react"
+      ]
+    },
+    {
+      "category": "Backend",
+      "slugs": [
+        "go"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "postman"
+      ]
+    }
+  ],
+  "links": [
+    {
+      "label": "Live portal",
+      "href": "https://acm-recruitment-2022-portal-tau.vercel.app/",
+      "kind": "website"
+    },
+    {
+      "label": "Walkthrough 1",
+      "href": "https://www.youtube.com/shorts/nRVoQCC4EGA",
+      "kind": "demo"
+    },
+    {
+      "label": "Walkthrough 2",
+      "href": "https://www.youtube.com/shorts/fZd-Kz_U5MI",
+      "kind": "demo"
+    }
+  ],
+  "commitGraphSeed": 122,
+  "order": 60
+}

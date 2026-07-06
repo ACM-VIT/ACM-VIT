@@ -1,0 +1,12 @@
+{
+  "slug": "15",
+  "order": 140,
+  "id": "15",
+  "title": "Hour of Code",
+  "date": "2026-06-28",
+  "startTime": "11:00",
+  "endTime": "13:00",
+  "domain": "cc",
+  "description": "Community outreach event introducing coding to non-CS students through fun, interactive challenges.",
+  "location": "SJT Seminar Hall, VIT Vellore"
+}

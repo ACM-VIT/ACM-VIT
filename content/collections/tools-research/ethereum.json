@@ -1,0 +1,8 @@
+{
+  "name": "Ethereum",
+  "slug": "ethereum",
+  "svgFile": "/domains/research/tools/research-tool-ethereum.svg",
+  "colorHex": "#3C3C3D",
+  "isDark": true,
+  "order": 170
+}

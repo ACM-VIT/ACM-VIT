@@ -1,0 +1,8 @@
+{
+  "name": "Microsoft Teams",
+  "slug": "microsoftteams",
+  "svgFile": "/domains/management/tools/management-tool-microsoftteams.svg",
+  "colorHex": "#6264A7",
+  "monochrome": true,
+  "order": 110
+}

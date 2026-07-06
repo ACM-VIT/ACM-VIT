@@ -1,0 +1,77 @@
+{
+  "slug": "2018",
+  "year": 2018,
+  "label": "2017-2018",
+  "members": [
+    {
+      "title": "",
+      "fullName": "Abhitej Singh",
+      "position": "President",
+      "imageUrl": "/board/2018/abhitej-singh.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Hardika Goyal",
+      "position": "Managing Director",
+      "imageUrl": "/board/2018/hardika-goyal.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Sourish Banerjee",
+      "position": "Technical Director",
+      "imageUrl": "/board/2018/sourish-banerjee.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Harshit Kedia",
+      "position": "Associate Technical Head",
+      "imageUrl": "/board/2018/harshit-kedia.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Shivam",
+      "position": "Public Relations",
+      "imageUrl": "/board/2018/shivam.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Anmol",
+      "position": "Marketing Head",
+      "imageUrl": "/board/2018/anmol.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Rishabh",
+      "position": "Operations Head",
+      "imageUrl": "/board/2018/rishabh.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Yash Shah",
+      "position": "Research and ICPC Head",
+      "imageUrl": "/board/2018/yash-shah.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Vinit Bodhwani",
+      "position": "Associate Research Lead",
+      "imageUrl": "/board/2018/vinit-bodhwani.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Vibhore Gupta",
+      "position": "Finance Head",
+      "imageUrl": "/board/2018/vibhore-gupta.webp",
+      "isW": false
+    }
+  ]
+}

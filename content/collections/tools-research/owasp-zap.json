@@ -1,0 +1,7 @@
+{
+  "name": "OWASP ZAP",
+  "slug": "owasp-zap",
+  "svgFile": "/domains/research/tools/research-tool-owasp-zap.svg",
+  "colorHex": "#00549E",
+  "order": 210
+}

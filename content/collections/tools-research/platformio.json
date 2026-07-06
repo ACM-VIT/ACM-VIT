@@ -1,0 +1,8 @@
+{
+  "name": "PlatformIO",
+  "slug": "platformio",
+  "svgFile": "/domains/research/tools/research-tool-platformio.svg",
+  "colorHex": "#F18A1F",
+  "isDark": true,
+  "order": 280
+}

@@ -1,0 +1,7 @@
+{
+  "name": "Vim",
+  "slug": "vim",
+  "svgFile": "/domains/cc/tools/cc-tool-vim.svg",
+  "colorHex": "#019733",
+  "order": 130
+}

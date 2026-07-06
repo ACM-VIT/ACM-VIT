@@ -1,0 +1,8 @@
+{
+  "name": "OpenZeppelin",
+  "slug": "openzeppelin",
+  "svgFile": "/domains/research/tools/research-tool-openzeppelin.svg",
+  "colorHex": "#4E5EE4",
+  "isDark": true,
+  "order": 160
+}

@@ -1,0 +1,10 @@
+{
+  "slug": "echolink",
+  "title": "EchoLink",
+  "repo": "EchoLink",
+  "years": [
+    2023
+  ],
+  "description": "An app to sync audio devices",
+  "order": 30
+}

@@ -1,0 +1,10 @@
+{
+  "slug": "cryptodash",
+  "title": "CryptoDash",
+  "repo": "CryptoDash",
+  "years": [
+    2022
+  ],
+  "description": "CryptoDash allows you to track the price of popular cryptocurrencies and see their performance over time.",
+  "order": 160
+}

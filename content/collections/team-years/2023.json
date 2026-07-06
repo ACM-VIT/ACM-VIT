@@ -1,0 +1,97 @@
+{
+  "slug": "2023",
+  "year": 2023,
+  "members": [
+    {
+      "title": "",
+      "fullName": "Harsh Avinash",
+      "position": "Chairperson",
+      "imageUrl": "/board/2023/harsh-avinash.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Aryan Khubchandani",
+      "position": "Vice Chairperson",
+      "imageUrl": "/board/2023/aryan-khubchandani.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Sumona Sud",
+      "position": "Secretary",
+      "imageUrl": "/board/2023/sumona-sud.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Chirayu Sharma",
+      "position": "Co-Secretary",
+      "imageUrl": "/board/2023/chirayu-sharma.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Aryaman Kolhe",
+      "position": "Research & Competitive Head",
+      "imageUrl": "/board/2023/aryaman-kolhe.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Gagan Malvi",
+      "position": "Technical Head",
+      "imageUrl": "/board/2023/gagan-malvi.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Swarup Kharul",
+      "position": "Projects Head",
+      "imageUrl": "/board/2023/swarup-kharul.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Jeet Kaushik",
+      "position": "Design Head",
+      "imageUrl": "/board/2023/jeet-kaushik.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Dhriti Kharangra",
+      "position": "Creative Head",
+      "imageUrl": "/board/2023/dhriti-khangrara.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Pramika Garg",
+      "position": "Finance Head",
+      "imageUrl": "/board/2023/pramika-garg.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Ananya Grover",
+      "position": "Chairperson (ACM-W)",
+      "imageUrl": "/board/2023/ananya-grover.webp",
+      "isW": true
+    },
+    {
+      "title": "",
+      "fullName": "Aishwarya Manjunath",
+      "position": "Vice Chairperson (ACM-W)",
+      "imageUrl": "/board/2023/aishwarya-manjunath.webp",
+      "isW": true
+    },
+    {
+      "title": "",
+      "fullName": "Vaishnavi Mangnale",
+      "position": "Secretary (ACM-W)",
+      "imageUrl": "/board/2023/vaishnavi-mangnale.webp",
+      "isW": true
+    }
+  ]
+}

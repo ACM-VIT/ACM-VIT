@@ -1,0 +1,8 @@
+{
+  "name": "Apollo GraphQL",
+  "slug": "apollographql",
+  "svgFile": "/domains/tech/tools/tech-tool-apollographql.svg",
+  "colorHex": "#311C87",
+  "monochrome": true,
+  "order": 120
+}

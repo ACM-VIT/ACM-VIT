@@ -1,0 +1,78 @@
+{
+  "slug": "ride-safe",
+  "title": "Ride-Safe",
+  "tagline": "A travel companion app to make your travel safer through driver feedbacks and live tracking functionality",
+  "eyebrow": "ACM-VIT · Forktober 2023 · Open Source",
+  "themeColor": "#EFEFEF",
+  "themeColorSecondary": "#1a1a1a",
+  "shortDescription": "A travel companion app to make your travel safer through driver feedbacks and live tracking functionality",
+  "longDescription": [
+    "A travel companion app to make your travel safer through driver feedbacks and live tracking functionality",
+    "Ride-Safe was part of ACM-VIT's Forktober open-source drive in 2023, opening up to student contributors during Hacktoberfest.",
+    "The repository is archived. It remains on GitHub as a record of the Forktober edition that ran it, but is no longer accepting new contributions.",
+    "Across its lifetime, the project drew 5 contributors, 3 pull requests and 18 commits."
+  ],
+  "status": "archived",
+  "statusNote": "Forktober 2023 · Archived",
+  "cassetteSvg": "/events/events-forktober-cassette.svg",
+  "stats": [
+    {
+      "value": "5",
+      "label": "Contributors"
+    },
+    {
+      "value": "3",
+      "label": "Pull requests"
+    },
+    {
+      "value": "18",
+      "label": "Commits"
+    },
+    {
+      "value": "3",
+      "label": "Forks"
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Stack",
+      "slugs": [
+        "flutter",
+        "cplusplus"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "aastikn"
+    },
+    {
+      "github": "RohanKhatua"
+    },
+    {
+      "github": "harshitaak07"
+    },
+    {
+      "github": "tanushgolwala"
+    },
+    {
+      "github": "eshita241"
+    }
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/ACM-VIT/Ride-Safe",
+      "kind": "github"
+    }
+  ],
+  "commitGraphSeed": 880,
+  "order": 40
+}

@@ -1,0 +1,204 @@
+{
+  "slug": "cryptic-hunt",
+  "title": "Cryptic Hunt",
+  "tagline": "Expect the Unexpected",
+  "eyebrow": "ACM-VIT · Campus Scavenger Hunt",
+  "themeKey": "cc",
+  "themeColor": "#F5753B",
+  "cassetteSvg": "/events/events-cryptic-hunt-cassette.svg",
+  "shortDescription": "Cryptic Hunt is ACM-VIT's flagship scavenger hunt - a 36-hour campus-wide adventure where teams decode multi-layered clues, scan QR codes, and race across VIT Vellore to top the leaderboard.",
+  "longDescription": [
+    "Cryptic Hunt is a campus-wide scavenger hunt packed with riddles, QR codes, and hidden clues scattered across VIT Vellore. Teams of 2 to 5 race against the clock over 36 hours, solving puzzles that blend lateral thinking, internet sleuthing, steganography, and physical exploration of the campus.",
+    "The entire hunt runs through a custom-built app developed by ACM-VIT, available on both Android and iOS. Every clue, submission, and leaderboard update happens in real time through the app, making it a seamless mobile-first experience from start to finish.",
+    "Since its debut in 2022, Cryptic Hunt has grown into one of the most anticipated events on the VIT calendar. With 2,700+ participants across four editions, it has become a tradition that brings together puzzle enthusiasts, curious explorers, and competitive teams every fall semester.",
+    "What sets Cryptic Hunt apart is its blend of digital and physical. You're not just sitting at a laptop - you're running across campus, scanning hidden QR codes behind buildings, decoding ciphers in the library, and piecing together clues that span the real and the virtual.",
+    "For the latest updates, follow @acmvit on Instagram and visit cryptichunt.acmvit.in."
+  ],
+  "format": "Offline · Campus scavenger hunt via mobile app",
+  "duration": "36 hours",
+  "mode": "Offline",
+  "audience": "All VIT students",
+  "team": "Teams of 2 to 5",
+  "organizedBy": "ACM-VIT · Cross-domain",
+  "firstHeld": "2022",
+  "recurrence": "Annual · Fall semester",
+  "registrationUrl": "https://cryptichunt.acmvit.in",
+  "primaryCtaLabel": "Visit cryptichunt.acmvit.in",
+  "hideCtaBanner": true,
+  "stats": [
+    {
+      "value": "4",
+      "label": "Editions"
+    },
+    {
+      "value": "36h",
+      "label": "Per Edition"
+    },
+    {
+      "value": "2700+",
+      "label": "Past Participants"
+    },
+    {
+      "value": "App",
+      "label": "Android & iOS"
+    }
+  ],
+  "tracks": [
+    {
+      "name": "Lateral Thinking",
+      "description": "Wordplay, riddles, cryptic crosswords, lateral logic puzzles."
+    },
+    {
+      "name": "Campus Exploration",
+      "description": "QR codes, physical clues, and hidden markers scattered across VIT Vellore."
+    },
+    {
+      "name": "Steganography",
+      "description": "Hidden data in images, audio spectrograms, and encoded files."
+    },
+    {
+      "name": "Web Sleuthing",
+      "description": "URL surgery, view-source, image EXIF, deep-Google."
+    }
+  ],
+  "schedule": [
+    {
+      "time": "T-0",
+      "title": "Hunt Opens",
+      "description": "First clues drop on the Cryptic Hunt app."
+    },
+    {
+      "time": "T+12h",
+      "title": "Mid-hunt Checkpoint"
+    },
+    {
+      "time": "T+24h",
+      "title": "Final Stretch"
+    },
+    {
+      "time": "T+36h",
+      "title": "Hunt Closes + Results"
+    }
+  ],
+  "prizes": [
+    {
+      "place": "1st Team",
+      "value": "Cash + ACM-VIT custom merch"
+    },
+    {
+      "place": "2nd & 3rd",
+      "value": "Cash + swag kit"
+    },
+    {
+      "place": "Fastest Solve Bounties",
+      "value": "Special prizes for first-to-crack milestones"
+    }
+  ],
+  "highlights": [],
+  "perks": [
+    "Custom mobile app experience on Android & iOS",
+    "Real-time leaderboard and hint system",
+    "Full solution walkthroughs released post-event",
+    "Custom merch and stickers for participants"
+  ],
+  "faq": [
+    {
+      "q": "Do I need to be on campus?",
+      "a": "Yes. Cryptic Hunt is a physical scavenger hunt across VIT Vellore campus."
+    },
+    {
+      "q": "Do I need to download an app?",
+      "a": "Yes. The hunt runs entirely through the Cryptic Hunt app, available on both Android and iOS."
+    },
+    {
+      "q": "What's a good team size?",
+      "a": "3 to 4 is the sweet spot - enough coverage to split up and explore while staying coordinated."
+    }
+  ],
+  "instagramHandle": "acmvit",
+  "socials": [
+    {
+      "label": "Instagram · @acmvit",
+      "href": "https://instagram.com/acmvit"
+    },
+    {
+      "label": "Website",
+      "href": "https://cryptichunt.acmvit.in"
+    }
+  ],
+  "pastEditions": [
+    {
+      "year": "2025",
+      "edition": "Cryptic Hunt 4.0",
+      "description": "Largest edition yet, featuring refined app experience, new puzzle mechanics, and collectible stickers for participants. Sponsored by Hey Hoku.",
+      "links": [
+        {
+          "label": "Website",
+          "href": "https://cryptichunt.acmvit.in"
+        },
+        {
+          "label": "Solutions",
+          "href": "https://github.com/ACM-VIT/Cryptic-Hunt-Solutions-2025"
+        }
+      ],
+      "collectibles": [
+        {
+          "name": "CH Espresso Sticker",
+          "image": "/events/cryptic-hunt/events-cryptic-hunt-ch-espresso.webp",
+          "desc": "Limited-edition Cryptic Hunt sticker from the 2025 edition."
+        },
+        {
+          "name": "CH Timeless Sticker",
+          "image": "/events/cryptic-hunt/events-cryptic-hunt-ch-timeless.webp",
+          "desc": "Limited-edition Cryptic Hunt sticker from the 2025 edition."
+        }
+      ],
+      "sponsors": [
+        {
+          "name": "Hey Hoku",
+          "tier": "Sponsor"
+        }
+      ]
+    },
+    {
+      "year": "2024",
+      "edition": "Cryptic Hunt 3.0",
+      "description": "Third edition that expanded the puzzle chain and campus coverage, with Urban Jungle coming on board as sponsor.",
+      "links": [
+        {
+          "label": "Solutions",
+          "href": "https://github.com/ACM-VIT/Cryptic-Hunt-Solutions-2024"
+        }
+      ],
+      "sponsors": [
+        {
+          "name": "Urban Jungle",
+          "tier": "Sponsor"
+        }
+      ]
+    },
+    {
+      "year": "2023",
+      "edition": "Cryptic Hunt 2.0",
+      "description": "Second edition building on the inaugural format with more puzzles, wider campus coverage, and a growing participant base.",
+      "links": [
+        {
+          "label": "Solutions",
+          "href": "https://github.com/ACM-VIT/Cryptic-Hunt-Solutions-2023"
+        }
+      ]
+    },
+    {
+      "year": "2022",
+      "edition": "Cryptic Hunt 1.0",
+      "description": "The inaugural edition. A brand-new campus scavenger hunt format powered by a custom-built app, setting the foundation for what would become one of ACM-VIT's most beloved events.",
+      "links": [
+        {
+          "label": "Solutions",
+          "href": "https://github.com/ACM-VIT/Cryptic-Hunt-22-solutions"
+        }
+      ]
+    }
+  ],
+  "order": 50
+}

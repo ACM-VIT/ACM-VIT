@@ -1,0 +1,38 @@
+{
+  "slug": "kickstart-learn",
+  "title": "Kickstart Learn",
+  "tagline": "Your launchpad into campus life and tech.",
+  "eyebrow": "ACM-VIT · Fresher Orientation",
+  "themeKey": "brand",
+  "themeColor": "#F95F4A",
+  "hideCtaBanner": true,
+  "cassetteSvg": "/events/events-kickstart-learn-cassette.webp",
+  "shortDescription": "ACM-VIT's orientation event for freshers - helping new students navigate campus life, kickstart their tech journey, and discover how to become a part of ACM-VIT.",
+  "longDescription": [
+    "Kickstart Learn is ACM-VIT's dedicated event for freshers arriving at campus. Designed to ease the transition into college life, the event addresses everything new students need to know - from navigating academics and campus resources to finding their footing in the tech community.",
+    "The session covers common queries about college life, how to start building skills in tech, and what opportunities await within ACM-VIT. Members share their own experiences and guide freshers on how to make the most of their time at VIT, while also walking them through the process of joining ACM-VIT and getting involved in its projects, events, and community."
+  ],
+  "format": "Orientation · Interactive Session",
+  "duration": "1 session",
+  "mode": "Offline",
+  "audience": "Freshers",
+  "team": "Individual",
+  "organizedBy": "ACM-VIT",
+  "recurrence": "Annual",
+  "registrationUrl": "https://instagram.com/acmvit",
+  "primaryCtaLabel": "Follow ACM-VIT",
+  "stats": [],
+  "tracks": [],
+  "schedule": [],
+  "prizes": [],
+  "highlights": [],
+  "perks": [],
+  "faq": [],
+  "socials": [
+    {
+      "label": "Instagram · @acmvit",
+      "href": "https://instagram.com/acmvit"
+    }
+  ],
+  "order": 160
+}

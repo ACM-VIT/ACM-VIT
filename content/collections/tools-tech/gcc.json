@@ -1,0 +1,8 @@
+{
+  "name": "GCC",
+  "slug": "gcc",
+  "svgFile": "/domains/tech/tools/tech-tool-gcc.svg",
+  "colorHex": "#A42E2B",
+  "monochrome": true,
+  "order": 690
+}

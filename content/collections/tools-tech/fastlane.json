@@ -1,0 +1,8 @@
+{
+  "name": "Fastlane",
+  "slug": "fastlane",
+  "svgFile": "/domains/tech/tools/tech-tool-fastlane.svg",
+  "colorHex": "#00F200",
+  "monochrome": true,
+  "order": 440
+}

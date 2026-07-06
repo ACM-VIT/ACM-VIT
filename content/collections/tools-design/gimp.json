@@ -1,0 +1,7 @@
+{
+  "name": "GIMP",
+  "slug": "gimp",
+  "svgFile": "/domains/design/tools/design-tool-gimp.svg",
+  "colorHex": "#5C5543",
+  "order": 240
+}

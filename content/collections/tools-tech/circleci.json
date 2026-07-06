@@ -1,0 +1,7 @@
+{
+  "name": "CircleCI",
+  "slug": "circleci",
+  "svgFile": "/domains/tech/tools/tech-tool-circleci.svg",
+  "colorHex": "#343434",
+  "order": 510
+}

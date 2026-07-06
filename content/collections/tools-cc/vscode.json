@@ -1,0 +1,7 @@
+{
+  "name": "VS Code",
+  "slug": "vscode",
+  "svgFile": "/domains/cc/tools/cc-tool-vscode.svg",
+  "colorHex": "#007ACC",
+  "order": 120
+}

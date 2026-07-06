@@ -1,0 +1,97 @@
+{
+  "slug": "2024",
+  "year": 2024,
+  "members": [
+    {
+      "title": "",
+      "fullName": "Manav Muthanna",
+      "position": "Chairperson",
+      "imageUrl": "/board/2024/manav-muthanna.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Anand Rajaram",
+      "position": "Vice Chairperson",
+      "imageUrl": "/board/2024/anand-rajaram.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Shambhavi Sinha",
+      "position": "Secretary",
+      "imageUrl": "/board/2024/shambhavi-sinha.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Saharsh Bhansali",
+      "position": "Research Lead",
+      "imageUrl": "/board/2024/saharsh-bhansali.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Rohan Khatua",
+      "position": "Tech Lead",
+      "imageUrl": "/board/2024/rohan-khatua.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Sarthak Gupta",
+      "position": "Project Lead",
+      "imageUrl": "/board/2024/sarthak-gupta.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Vidit Kothari",
+      "position": "Developer Relations Lead",
+      "imageUrl": "/board/2024/vidit-kothari.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Ritaank Gunjesh",
+      "position": "Design Lead",
+      "imageUrl": "/board/2024/ritaank-gunjesh.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Ojal Binoj Koshy",
+      "position": "Content Lead",
+      "imageUrl": "/board/2024/ojal-binoj-koshy.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Hari R. Kartha",
+      "position": "Internal Lead",
+      "imageUrl": "/board/2024/hari-r-kartha.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Anshuman Gupta",
+      "position": "ACM-W Chairperson",
+      "imageUrl": "/board/2024/anshuman-gupta.webp",
+      "isW": true
+    },
+    {
+      "title": "",
+      "fullName": "Devanshi Tripathi",
+      "position": "ACM-W Vice Chairperson",
+      "imageUrl": "/board/2024/devanshi-tripathi.webp",
+      "isW": true
+    },
+    {
+      "title": "",
+      "fullName": "Aryan Chaudhary",
+      "position": "ACM-W Secretary",
+      "imageUrl": "/board/2024/aryan-chaudhary.webp",
+      "isW": true
+    }
+  ]
+}

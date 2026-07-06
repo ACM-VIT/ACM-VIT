@@ -1,0 +1,8 @@
+{
+  "name": "Codeforces",
+  "slug": "codeforces",
+  "svgFile": "/domains/cc/tools/cc-tool-codeforces.svg",
+  "colorHex": "#1F8ACB",
+  "monochrome": true,
+  "order": 10
+}

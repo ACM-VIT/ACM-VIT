@@ -1,0 +1,231 @@
+{
+  "slug": "website",
+  "name": "acmvit.in",
+  "tagline": "The mixtape the chapter ships.",
+  "category": "Web · Chapter Site",
+  "story": [
+    "acmvit.in is the chapter's home - projects, events, recruitment, the blog, merch, and the player. It runs dark by default: Ink surfaces, Cream text, orange accents, and the cassette-and-mixtape identity threaded through heroes, tiles, and empty states. Light mode swaps to Paper with charcoal text.",
+    "It is also the reference implementation of everything in these guidelines. Every product guide in this section describes a descendant of this system; the website is where the skeleton - the mark, the 4pt rhythm, the motion rules, the 1024px flip - lives at full strength."
+  ],
+  "accent": "#F95F4A",
+  "accentTonal": "#ffeae5",
+  "hero": {
+    "bg": "#0D0E0D",
+    "fg": "#FEFCD9",
+    "sub": "#F95F4A"
+  },
+  "logo": {
+    "src": "/design/logos/acm-horizontal-white.svg",
+    "width": 210
+  },
+  "facts": [
+    {
+      "label": "Surfaces",
+      "value": "Dark-first + light mode"
+    },
+    {
+      "label": "Type",
+      "value": "PolySans · DM Sans"
+    },
+    {
+      "label": "Motion",
+      "value": "GSAP + Lenis · power3.out"
+    },
+    {
+      "label": "Layout",
+      "value": "Splits flip at 1024px"
+    }
+  ],
+  "logos": [
+    {
+      "label": "Horizontal - on dark",
+      "src": "/design/logos/acm-horizontal-white.svg",
+      "width": 190,
+      "bg": "#0D0E0D",
+      "fg": "#FEFCD9"
+    },
+    {
+      "label": "Diamond - on light",
+      "src": "/design/logos/acm-diamond-dark.svg",
+      "width": 84,
+      "bg": "#F5EDE4",
+      "fg": "#1A1A1A"
+    }
+  ],
+  "logoNote": "The website only ever uses the approved cuts - white on Ink, dark (#333) on Paper - with the diamond alone where space is tight. Full variant, clearspace, and misuse rules live in the Logo section of these guidelines.",
+  "palette": [
+    {
+      "name": "Ink",
+      "hex": "#0D0E0D",
+      "on": "#FEFCD9",
+      "use": "Default site background. Every dark surface is Ink or a tonal step above it."
+    },
+    {
+      "name": "Cream",
+      "hex": "#FEFCD9",
+      "on": "#0D0E0D",
+      "use": "Primary text on dark, and the sticker-label fill on cassette tiles."
+    },
+    {
+      "name": "Paper",
+      "hex": "#F5EDE4",
+      "on": "#1A1A1A",
+      "use": "Light-mode background."
+    },
+    {
+      "name": "Charcoal",
+      "hex": "#1A1A1A",
+      "on": "#F5EDE4",
+      "use": "Primary text in light mode."
+    },
+    {
+      "name": "ACM Orange",
+      "hex": "#F95F4A",
+      "on": "#FFFFFF",
+      "use": "The brand accent - CTAs, links, focus states, the player."
+    },
+    {
+      "name": "Gold",
+      "hex": "#F2C94C",
+      "on": "#0D0E0D",
+      "use": "Context accent: achievements and celebratory moments."
+    },
+    {
+      "name": "Cyan",
+      "hex": "#00B4D8",
+      "on": "#0D0E0D",
+      "use": "Context accent: FAQs, reference, and docs pages."
+    }
+  ],
+  "paletteNote": "One accent per context, not a rainbow per page: orange is the default everywhere; gold belongs to achievements, cyan to FAQs and docs, pink to ACM-W, green to z0d1ak. The full chapter palette lives in the Color section.",
+  "type": [
+    {
+      "family": "PolySans",
+      "role": "Display & headings",
+      "weights": "Bulky / Median",
+      "css": "'PolySans Wide DS', 'DM Sans', sans-serif",
+      "sample": "Because Technology Matters",
+      "sampleSize": "36px",
+      "sampleWeight": 700
+    },
+    {
+      "family": "PolySans Mono",
+      "role": "Labels, tags & body",
+      "weights": "Median",
+      "css": "'PolySans Mono DS', monospace",
+      "sample": "eyebrows, tags, and running copy - wide tracking, comfortable line-height",
+      "sampleSize": "15px",
+      "sampleWeight": 500
+    },
+    {
+      "family": "Cormorant Garamond",
+      "role": "Editorial accent",
+      "weights": "400 / 500 / 600",
+      "note": "One-off editorial moments (the Achievements page). Not a default.",
+      "css": "'Cormorant Garamond', Georgia, serif",
+      "sample": "Reserved for the rare page that earns a serif.",
+      "sampleSize": "28px",
+      "sampleWeight": 500
+    }
+  ],
+  "typeNote": "PolySans in two voices - the standard cut for headings, Mono for labels and body - with a sanctioned serif exception. Headings run bold, uppercase, tight; labels run small, wide, patient.",
+  "icons": {
+    "images": [
+      {
+        "src": "/favicon.webp",
+        "alt": "acmvit.in favicon",
+        "label": "favicon",
+        "bg": "#0D0E0D"
+      }
+    ],
+    "bullets": [
+      "Line icons on the chapter spec: 1.75px stroke, 24px grid, rounded caps and joins.",
+      "Icons inherit text color - Cream on dark, Charcoal on light - never a color of their own.",
+      "Cassette glyphs (reels, tapes, screws) badge the landing tiles and the player.",
+      "Sizes stay on the 4pt scale: 16, 20, 24, 32."
+    ]
+  },
+  "personality": {
+    "do": [
+      "Write like a person who builds this stuff - dry wit, specific numbers.",
+      "Cassette and mixtape metaphors where they fit naturally.",
+      "Dark-first: design the Ink version, then translate to Paper.",
+      "Ship WebP with an original-format fallback, and an OpenGraph image on every page."
+    ],
+    "dont": [
+      "Don't force a cassette pun where it doesn't fit.",
+      "Don't reach for a new accent when a context color already exists.",
+      "Don't bypass the 1024px flip - chrome and split layouts change together.",
+      "Don't write copy that could belong to any other org."
+    ]
+  },
+  "motifs": [
+    {
+      "title": "The cassette",
+      "desc": "Reels, sleeves, and mixtapes are the running metaphor - project tiles are tapes, the player actually plays."
+    },
+    {
+      "title": "Screws & stickers",
+      "desc": "Corner screws and cream sticker labels give cards their hardware feel - the UI as a physical object."
+    },
+    {
+      "title": "Floating docks",
+      "desc": "Desktop sections carry floating docks that collapse into navbar panels on mobile - one convention, everywhere."
+    }
+  ],
+  "extras": [
+    {
+      "title": "Signature components",
+      "intro": "The pieces that make the site feel like the site. Live demos on the website-specific guide.",
+      "items": [
+        {
+          "name": "Fill Button",
+          "desc": "Primary action - flat fill, uppercase PolySans label, snappy hover."
+        },
+        {
+          "name": "Animated Button",
+          "desc": "Hero CTA - a dark pill with an accent circle that expands to reveal its label on hover."
+        },
+        {
+          "name": "Cassette Tile",
+          "desc": "Corner screws, cream sticker, spinning reels on hover. The landing page's More section."
+        },
+        {
+          "name": "Accordion",
+          "desc": "FAQs - same card language, a grid-rows collapse and a rotating play icon."
+        }
+      ]
+    },
+    {
+      "title": "Motion rules",
+      "items": [
+        {
+          "name": "Easing",
+          "desc": "power3.out for reveals; cubic-bezier(0.25, 0.1, 0.25, 1) for hovers. Nothing bounces unless it's a bulb cord."
+        },
+        {
+          "name": "Scroll reveals",
+          "desc": "Opacity + y: 24-30px, lightly staggered, always guarded by prefers-reduced-motion."
+        },
+        {
+          "name": "Buttons",
+          "desc": "Snappy expand, not a slow reveal - state changes read in under 200ms."
+        }
+      ]
+    }
+  ],
+  "links": [
+    {
+      "label": "acmvit.in",
+      "href": "https://www.acmvit.in",
+      "kind": "website"
+    },
+    {
+      "label": "Website-specific guide",
+      "href": "/sleeve-notes",
+      "kind": "read"
+    }
+  ],
+  "googleFonts": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&display=swap",
+  "order": 50
+}

@@ -1,0 +1,7 @@
+{
+  "name": "Kubernetes",
+  "slug": "kubernetes",
+  "svgFile": "/domains/tech/tools/tech-tool-kubernetes.svg",
+  "colorHex": "#326CE5",
+  "order": 250
+}

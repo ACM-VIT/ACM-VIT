@@ -1,0 +1,8 @@
+{
+  "name": "Helm",
+  "slug": "helm",
+  "svgFile": "/domains/tech/tools/tech-tool-helm.svg",
+  "colorHex": "#0F1689",
+  "monochrome": true,
+  "order": 470
+}

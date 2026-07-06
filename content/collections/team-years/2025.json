@@ -1,0 +1,97 @@
+{
+  "slug": "2025",
+  "year": 2025,
+  "members": [
+    {
+      "title": "",
+      "fullName": "Manan Shah",
+      "position": "Chairperson",
+      "imageUrl": "/board/2025/manan-shah.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Kairav Sheth",
+      "position": "Vice Chairperson",
+      "imageUrl": "/board/2025/kairav-sheth.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Sunny Gogoi",
+      "position": "Secretary",
+      "imageUrl": "/board/2025/sunny-gogoi.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Eshita Chokhani",
+      "position": "Co-Secretary",
+      "imageUrl": "/board/2025/eshita-chokhani.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Yasha Pacholee",
+      "position": "Research Lead",
+      "imageUrl": "/board/2025/yasha-pacholee.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Tanush Golwala",
+      "position": "Technical Director",
+      "imageUrl": "/board/2025/tanush-golwala.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Supratim Ghose",
+      "position": "Projects Lead",
+      "imageUrl": "/board/2025/supratim-ghose.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Garv Jain",
+      "position": "Developer Relations",
+      "imageUrl": "/board/2025/garv-jain.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Yash Raj Singh",
+      "position": "Design Lead",
+      "imageUrl": "/board/2025/yash-raj-singh.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Srija Puvvada",
+      "position": "Creative Lead",
+      "imageUrl": "/board/2025/srija-puvvada.webp",
+      "isW": false
+    },
+    {
+      "title": "",
+      "fullName": "Harshitaa Kashyap",
+      "position": "ACM-W Chairperson",
+      "imageUrl": "/board/2025/harshitaa-kashyap.webp",
+      "isW": true
+    },
+    {
+      "title": "",
+      "fullName": "Aastik Narang",
+      "position": "ACM-W Vice Chairperson",
+      "imageUrl": "/board/2025/aastik-narang.webp",
+      "isW": true
+    },
+    {
+      "title": "",
+      "fullName": "Shambhavi Paygude",
+      "position": "ACM-W Secretary",
+      "imageUrl": "/board/2025/shambhavi-paygude.webp",
+      "isW": true
+    }
+  ]
+}

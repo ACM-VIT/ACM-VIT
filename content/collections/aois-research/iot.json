@@ -1,0 +1,23 @@
+{
+  "slug": "iot",
+  "order": 20,
+  "key": "iot",
+  "title": "IoT",
+  "shortDescription": "Connecting hardware to the cloud, prototyping smart devices and edge AI systems that live in the physical world.",
+  "longDescription": [
+    "The IoT AOI works at the intersection of embedded systems, sensor networks, and cloud platforms, from low-power microcontroller design to edge ML deployment.",
+    "Members prototype end-to-end systems, sensors talking to gateways, gateways talking to the cloud, and dashboards that actually do something useful with the data."
+  ],
+  "cassetteSrc": "/aois/research/cassettes/aois-research-cassettes-iot.webp",
+  "tools": [
+    "arduino",
+    "platformio",
+    "esp-idf",
+    "node-red",
+    "mqtt",
+    "raspberry-pi",
+    "python",
+    "tensorflow-lite",
+    "linux"
+  ]
+}

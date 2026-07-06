@@ -1,0 +1,8 @@
+{
+  "name": "Solidity",
+  "slug": "solidity",
+  "svgFile": "/domains/research/tools/research-tool-solidity.svg",
+  "colorHex": "#363636",
+  "isDark": true,
+  "order": 140
+}

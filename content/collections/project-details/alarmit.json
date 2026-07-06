@@ -1,0 +1,81 @@
+{
+  "slug": "alarmit",
+  "title": "AlarmIT",
+  "tagline": "AlarmIT is a simple alarm app. The alarms can be turned off via three methods - normal turnoff, by shaking the device a number of times, by solving maths questions.",
+  "eyebrow": "ACM-VIT · Forktober 2022 · Open Source",
+  "themeColor": "#EFEFEF",
+  "themeColorSecondary": "#1a1a1a",
+  "shortDescription": "AlarmIT is a simple alarm app. The alarms can be turned off via three methods - normal turnoff, by shaking the device a number of times, by solving maths questions.",
+  "longDescription": [
+    "AlarmIT is a simple alarm app. The alarms can be turned off via three methods - normal turnoff, by shaking the device a number of times, by solving maths questions.",
+    "AlarmIT was part of ACM-VIT's Forktober open-source drive in 2022, opening up to student contributors during Hacktoberfest.",
+    "The repository is archived. It remains on GitHub as a record of the Forktober edition that ran it, but is no longer accepting new contributions.",
+    "Across its lifetime, the project drew 7 contributors, 9 pull requests and 28 commits."
+  ],
+  "status": "archived",
+  "statusNote": "Forktober 2022 · Archived",
+  "cassetteSvg": "/events/events-forktober-cassette.svg",
+  "stats": [
+    {
+      "value": "7",
+      "label": "Contributors"
+    },
+    {
+      "value": "9",
+      "label": "Pull requests"
+    },
+    {
+      "value": "28",
+      "label": "Commits"
+    },
+    {
+      "value": "8",
+      "label": "Stars"
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Stack",
+      "slugs": [
+        "kotlin",
+        "android-studio"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "rudrankbasant"
+    },
+    {
+      "github": "watermelon3093"
+    },
+    {
+      "github": "AryanKhubchandani"
+    },
+    {
+      "github": "risingstar-bit"
+    },
+    {
+      "github": "SHREYAS-NIRGUDE"
+    },
+    {
+      "github": "Kardelio"
+    }
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/ACM-VIT/AlarmIT",
+      "kind": "github"
+    }
+  ],
+  "commitGraphSeed": 746,
+  "order": 210
+}

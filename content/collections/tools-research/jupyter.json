@@ -1,0 +1,8 @@
+{
+  "name": "Jupyter",
+  "slug": "jupyter",
+  "svgFile": "/domains/research/tools/research-tool-jupyter.svg",
+  "colorHex": "#F37626",
+  "isDark": true,
+  "order": 100
+}

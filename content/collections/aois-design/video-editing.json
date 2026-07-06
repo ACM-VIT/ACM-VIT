@@ -1,0 +1,154 @@
+{
+  "slug": "video-editing",
+  "order": 40,
+  "key": "video-editing",
+  "title": "Video Editing",
+  "shortDescription": "Cutting, grading, and shipping videos that document and amplify everything ACM-VIT does.",
+  "longDescription": [
+    "Video editing is the final mile of our visual pipeline. Event recaps, promotional trailers, speaker highlight reels, and documentary-style content all pass through our editors before reaching an audience.",
+    "We focus on pacing, color grading, sound design, and platform-specific formatting to ensure every video lands with maximum impact."
+  ],
+  "cassetteSrc": "/aois/design/cassettes/aois-design-cassettes-video-editing.webp",
+  "tools": [
+    "premiere-pro",
+    "davinci-resolve",
+    "after-effects",
+    "lightroom"
+  ],
+  "works": [
+    {
+      "title": "ACM-VIT Rewind 2025",
+      "href": "https://www.youtube.com/watch?v=qf84GjdWBSY",
+      "platform": "youtube",
+      "thumb": "/aois/design/works/aois-design-works-yt-qf84GjdWBSY.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/DOIsnc3Elfz/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-DOIsnc3Elfz.webp"
+    },
+    {
+      "title": "ACMW-VIT Rewind 2025",
+      "href": "https://www.youtube.com/watch?v=Br65LiZmOA4",
+      "platform": "youtube",
+      "thumb": "/aois/design/works/aois-design-works-yt-Br65LiZmOA4.webp"
+    },
+    {
+      "title": "Organising Committee Selections 2025-26 | ACM-VIT",
+      "href": "https://www.youtube.com/watch?v=moRwDA0pHSk",
+      "platform": "youtube",
+      "thumb": "/aois/design/works/aois-design-works-yt-moRwDA0pHSk.webp"
+    },
+    {
+      "title": "Reverse Coding 2026 - Aftermovie",
+      "href": "https://www.youtube.com/watch?v=aL5iNSCdJlQ",
+      "platform": "youtube",
+      "thumb": "/aois/design/works/aois-design-works-yt-aL5iNSCdJlQ.webp"
+    },
+    {
+      "title": "Code2Create 6.0 | Official Aftermovie | ACM-VIT",
+      "href": "https://www.youtube.com/watch?v=1evjuued5Ao",
+      "platform": "youtube",
+      "thumb": "/aois/design/works/aois-design-works-yt-1evjuued5Ao.webp"
+    },
+    {
+      "title": "Opening Ceremony | Cryptic Hunt 4.0 | graVITas 2025",
+      "href": "https://www.youtube.com/watch?v=tHOMKNF29u4&t=784s",
+      "platform": "youtube",
+      "thumb": "/aois/design/works/aois-design-works-yt-tHOMKNF29u4.webp"
+    },
+    {
+      "title": "Cryptic Hunt 2024 - The Aftermovie",
+      "href": "https://www.youtube.com/watch?v=FF5XqPccatk",
+      "platform": "youtube",
+      "thumb": "/aois/design/works/aois-design-works-yt-FF5XqPccatk.webp"
+    },
+    {
+      "title": "Cryptic Hunt - The Experience",
+      "href": "https://www.youtube.com/watch?v=yROgeFeoOAo",
+      "platform": "youtube",
+      "thumb": "/aois/design/works/aois-design-works-yt-yROgeFeoOAo.webp"
+    },
+    {
+      "title": "Somethings can't be reversed",
+      "href": "https://www.youtube.com/shorts/9YyPB4jK1lQ",
+      "platform": "youtube",
+      "thumb": "/aois/design/works/aois-design-works-yt-9YyPB4jK1lQ.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/CyDjOzsJWgu/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-CyDjOzsJWgu.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/C1Z-v7MPdkN/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-C1Z-v7MPdkN.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/C4YPlHhvnGC/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-C4YPlHhvnGC.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/C6ioT8EvPK1/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-C6ioT8EvPK1.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/C9FT3tuPZEh/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-C9FT3tuPZEh.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/C92L7EOJBxX/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-C92L7EOJBxX.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/C_kIncKPwP9/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-C_kIncKPwP9.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/DEP_b1-yaco/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-DEP_b1-yaco.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/DEiI0DnSX4x/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-DEiI0DnSX4x.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/DFP_GoRpv3W/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-DFP_GoRpv3W.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/DG0dCpiSk58/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-DG0dCpiSk58.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/DOJu3HzkoWd/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-DOJu3HzkoWd.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/DOO4J2njBuP/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-DOO4J2njBuP.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/DP5dgCvkrWo/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-DP5dgCvkrWo.webp"
+    },
+    {
+      "href": "https://www.instagram.com/reel/DQoOvq5EmWJ/",
+      "platform": "instagram",
+      "thumb": "/aois/design/works/aois-design-works-ig-DQoOvq5EmWJ.webp"
+    }
+  ]
+}

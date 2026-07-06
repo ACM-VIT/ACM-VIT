@@ -1,0 +1,7 @@
+{
+  "name": "InDesign",
+  "slug": "indesign",
+  "svgFile": "/domains/design/tools/design-tool-indesign.svg",
+  "colorHex": "#FF3366",
+  "order": 150
+}

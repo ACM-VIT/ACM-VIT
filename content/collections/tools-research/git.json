@@ -1,0 +1,8 @@
+{
+  "name": "Git",
+  "slug": "git",
+  "svgFile": "/domains/research/tools/research-tool-git.svg",
+  "colorHex": "#F05032",
+  "isDark": true,
+  "order": 390
+}

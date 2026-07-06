@@ -3,7 +3,10 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
+    "content:compile": "node src/platform/compiler/compile.ts",
+    "predev": "npm run content:compile",
     "dev": "astro dev",
+    "prebuild": "npm run content:compile",
     "build": "astro build",
     "postbuild": "node updateCDN.js",
     "preview": "astro preview",

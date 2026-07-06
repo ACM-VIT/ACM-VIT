@@ -1,0 +1,10 @@
+{
+  "slug": "golly-bot",
+  "title": "Golly Bot",
+  "repo": "golly-bot",
+  "years": [
+    2022
+  ],
+  "description": "A general purpose discord bot, written in GO!",
+  "order": 130
+}

@@ -1,0 +1,10 @@
+{
+  "slug": "10-000-hours",
+  "title": "10,000 Hours",
+  "repo": "10-000-Hours",
+  "years": [
+    2022
+  ],
+  "description": "A flutter application to track the number of hours you devoted a particular skill. Helps you track your process in a neat and organised way",
+  "order": 110
+}

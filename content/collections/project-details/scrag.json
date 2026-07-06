@@ -1,0 +1,80 @@
+{
+  "slug": "scrag",
+  "title": "Scrag",
+  "tagline": "A flexible web scraper that intelligently adapts to different website structures using multiple extraction strategies (newspaper3k, readability-lxml, BeautifulSoup, and optional headless rendering). It outputs clean, structured data for RAG pipelines or local LLMs, with an optional extension to automatically build RAG indexes from web queries.",
+  "eyebrow": "ACM-VIT · Forktober 2025 · Open Source",
+  "themeColor": "#EFEFEF",
+  "themeColorSecondary": "#1a1a1a",
+  "shortDescription": "A flexible web scraper that intelligently adapts to different website structures using multiple extraction strategies (newspaper3k, readability-lxml, BeautifulSoup, and optional headless rendering). It outputs clean, structured data for RAG pipelines or local LLMs, with an optional extension to automatically build RAG indexes from web queries.",
+  "longDescription": [
+    "A flexible web scraper that intelligently adapts to different website structures using multiple extraction strategies (newspaper3k, readability-lxml, BeautifulSoup, and optional headless rendering). It outputs clean, structured data for RAG pipelines or local LLMs, with an optional extension to automatically build RAG indexes from web queries.",
+    "Scrag was part of ACM-VIT's Forktober open-source drive in 2025, opening up to student contributors during Hacktoberfest.",
+    "The repository is still being maintained. New contributions, issues and pull requests are welcome on GitHub.",
+    "Across its lifetime, the project drew 8 contributors, 20 pull requests and 76 commits."
+  ],
+  "status": "online",
+  "statusNote": "Actively maintained · Forktober 2025",
+  "cassetteSvg": "/events/events-forktober-cassette.svg",
+  "stats": [
+    {
+      "value": "8",
+      "label": "Contributors"
+    },
+    {
+      "value": "20",
+      "label": "Pull requests"
+    },
+    {
+      "value": "76",
+      "label": "Commits"
+    },
+    {
+      "value": "4",
+      "label": "Stars"
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Stack",
+      "slugs": [
+        "python"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "POSTI-25"
+    },
+    {
+      "github": "pokymono"
+    },
+    {
+      "github": "theg1239"
+    },
+    {
+      "github": "Ryuga-17"
+    },
+    {
+      "github": "samarthnaikk"
+    },
+    {
+      "github": "AdityaVKochar"
+    }
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/ACM-VIT/scrag",
+      "kind": "github"
+    }
+  ],
+  "commitGraphSeed": 528,
+  "order": 130
+}

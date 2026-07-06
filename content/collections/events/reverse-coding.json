@@ -1,0 +1,260 @@
+{
+  "slug": "reverse-coding",
+  "title": "Reverse Coding",
+  "tagline": "Code, Invert, Conquer!",
+  "eyebrow": "ACM-VIT · RCPC · Competitive Coding",
+  "themeKey": "cc",
+  "themeColor": "#9B51E0",
+  "cassetteSvg": "/events/events-reverse-coding-cassette.svg",
+  "shortDescription": "Reverse Coding (RCPC) is one of the premier competitive coding events hosted by ACM-VIT. An unconventional reverse-engineering competition where participants decipher hidden code logic based on provided input-output patterns or executable files - no problem statements, just test cases.",
+  "longDescription": [
+    "Reverse Coding is one of the largest competitive coding events at VIT Vellore. Nicknamed RCPC - in homage to ICPC, once conducted by ACM-VIT's parent body ACM International - it has been running since 2018 and has grown into an ACM-VIT staple with 7 editions and over 5,000 participants to date.",
+    "Instead of being given a problem statement and writing code from scratch, participants must deduce the underlying logic of a mystery program. They are provided with runnable or executable files that display specific input and output test cases. Programmers analyse the relationship between inputs and outputs to spot hidden patterns in strings, numbers, or sequences, then reverse-engineer the algorithm and submit code in C, C++, Java, or Python to pass hidden test cases on a custom portal.",
+    "The entire event runs on a portal fully developed by ACM-VIT - frontend, backend, everything. Since the 2024 edition every year's portal has had a new theme: the 2024 edition was themed around algorithms and time complexity, the 2025 edition embraced Star Wars, and the 2026 edition went with Formula 1.",
+    "Reverse Coding is an annual event held during the winter semester. It rewards pattern recognition, hypothesis-testing, and the ability to write code from a fuzzy specification. Some problems are simple math, others are string manipulation, others involve lateral reasoning. The lore is real."
+  ],
+  "format": "Online · Reverse-engineering coding contest on custom portal",
+  "duration": "3 hours",
+  "mode": "Online",
+  "audience": "All undergraduate students",
+  "team": "Teams of 2 to 4",
+  "organizedBy": "ACM-VIT · Competitive Coding Domain",
+  "firstHeld": "2018",
+  "recurrence": "Annual · Winter semester",
+  "registrationUrl": "https://rcpc.acmvit.in",
+  "primaryCtaLabel": "Visit rcpc.acmvit.in",
+  "stats": [
+    {
+      "value": "7",
+      "label": "Editions"
+    },
+    {
+      "value": "5000+",
+      "label": "Past Participants"
+    }
+  ],
+  "tracks": [
+    {
+      "name": "Pattern Recognition",
+      "description": "Most problems reduce to spotting the rule that maps input to output."
+    },
+    {
+      "name": "Math & Number Theory",
+      "description": "Sequences, modular arithmetic, prime properties - common building blocks."
+    },
+    {
+      "name": "String Transformation",
+      "description": "Encoding, decoding, character mapping - read carefully."
+    }
+  ],
+  "schedule": [
+    {
+      "time": "00:00",
+      "title": "Contest Opens",
+      "description": "Problem set drops as I/O pairs only on the custom portal."
+    },
+    {
+      "time": "02:30",
+      "title": "Scoreboard Frozen - Final 30 Minutes"
+    },
+    {
+      "time": "03:00",
+      "title": "Contest Ends + Editorials Released"
+    }
+  ],
+  "prizes": [
+    {
+      "place": "1st",
+      "value": "Cash + ACM-VIT custom merch"
+    },
+    {
+      "place": "2nd & 3rd",
+      "value": "Cash + swag kit"
+    },
+    {
+      "place": "First Solve Bonuses",
+      "value": "Recognition per problem for fastest solve"
+    }
+  ],
+  "highlights": [],
+  "perks": [
+    "Full editorials with worked examples post-contest",
+    "Community Discord with hint and discussion channels",
+    "Pathway into ACM-VIT's internal CP cohort",
+    "Custom-themed portal experience each year"
+  ],
+  "faq": [
+    {
+      "q": "How do I know what to code without a problem statement?",
+      "a": "That's the contest. The I/O pairs are the specification. Analyse the patterns and reverse-engineer the logic."
+    },
+    {
+      "q": "What language can I use?",
+      "a": "C, C++, Java, or Python - submitted through the custom RCPC portal."
+    },
+    {
+      "q": "Is partial credit awarded?",
+      "a": "Yes - submissions are graded per test case."
+    },
+    {
+      "q": "What is RCPC?",
+      "a": "RCPC is the nickname for Reverse Coding, in homage to ICPC which was conducted by ACM-VIT's parent body ACM International."
+    }
+  ],
+  "instagramHandle": "acmvit",
+  "socials": [
+    {
+      "label": "Instagram · @acmvit",
+      "href": "https://instagram.com/acmvit"
+    },
+    {
+      "label": "2026 Portal · rcpc.acmvit.in",
+      "href": "https://rcpc.acmvit.in"
+    },
+    {
+      "label": "2025 Portal · futureportal.acmvit.in",
+      "href": "http://futureportal.acmvit.in/"
+    }
+  ],
+  "pastEditions": [
+    {
+      "year": "2026",
+      "edition": "RCPC 2026",
+      "description": "Formula 1-themed edition. The portal at rcpc.acmvit.in featured an F1-inspired design, continuing the tradition of a unique portal theme each year.",
+      "links": [
+        {
+          "label": "Portal",
+          "href": "https://rcpc.acmvit.in"
+        },
+        {
+          "label": "Solutions",
+          "href": "https://github.com/ACM-VIT/rc26-solutions"
+        }
+      ],
+      "collectibles": [
+        {
+          "name": "RCPC Sticker",
+          "image": "/events/events-reverse-coding-sticker-2026.webp",
+          "desc": "Limited-edition RCPC sticker from the 2026 edition."
+        }
+      ]
+    },
+    {
+      "year": "2025",
+      "edition": "RCPC 2025",
+      "description": "Star Wars-themed edition. The portal at futureportal.acmvit.in brought a galaxy far, far away to competitive coding. Sponsored by EaseMyTrip.",
+      "links": [
+        {
+          "label": "Portal",
+          "href": "http://futureportal.acmvit.in/"
+        },
+        {
+          "label": "Solutions",
+          "href": "https://github.com/ACM-VIT/rc-2025-solutions"
+        }
+      ],
+      "collectibles": [
+        {
+          "name": "RCPC Sticker",
+          "image": "/events/events-reverse-coding-sticker-2025.webp",
+          "desc": "Limited-edition RCPC sticker from the 2025 edition."
+        }
+      ],
+      "sponsors": [
+        {
+          "name": "EaseMyTrip",
+          "tier": "Sponsor"
+        }
+      ]
+    },
+    {
+      "year": "2024",
+      "edition": "RCPC 2024",
+      "description": "Algorithms and time complexity-themed edition. First year with a themed portal experience, setting the standard for future editions. Sponsored by EaseMyTrip.",
+      "sponsors": [
+        {
+          "name": "EaseMyTrip",
+          "tier": "Sponsor"
+        }
+      ]
+    },
+    {
+      "year": "2023",
+      "edition": "RCPC 2023",
+      "description": "Continued the annual tradition with a growing participant base and a refined contest format. Sponsored by Into The Verse.",
+      "sponsors": [
+        {
+          "name": "Into The Verse",
+          "tier": "Sponsor"
+        }
+      ]
+    },
+    {
+      "year": "2022",
+      "edition": "RCPC 2022",
+      "description": "Return after a pandemic-year gap, bigger than ever. Sponsored by Nuclei.",
+      "links": [
+        {
+          "label": "Solutions",
+          "href": "https://github.com/ACM-VIT/Reverse-Coding-2022-Solutions"
+        }
+      ],
+      "sponsors": [
+        {
+          "name": "Nuclei",
+          "tier": "Sponsor"
+        }
+      ]
+    },
+    {
+      "year": "2020",
+      "edition": "RCPC 2020",
+      "description": "Edition held during a challenging year, backed by a strong roster of sponsors.",
+      "sponsors": [
+        {
+          "name": "Recover",
+          "tier": "Sponsor"
+        },
+        {
+          "name": "Uacelt",
+          "tier": "Sponsor"
+        },
+        {
+          "name": "Code Asylums",
+          "tier": "Sponsor"
+        },
+        {
+          "name": "ClassRoom",
+          "tier": "Sponsor"
+        },
+        {
+          "name": "Replit",
+          "tier": "Sponsor"
+        }
+      ]
+    },
+    {
+      "year": "2019",
+      "edition": "RCPC 2019",
+      "description": "Second edition, building on the inaugural format with increased participation. Sponsored by Coding Blocks.",
+      "sponsors": [
+        {
+          "name": "Coding Blocks",
+          "tier": "Sponsor"
+        }
+      ]
+    },
+    {
+      "year": "2018",
+      "edition": "RCPC 2018",
+      "description": "The inaugural edition. A brand-new reverse-engineering coding format that would grow into one of ACM-VIT's most beloved events. Sponsored by Foxmula.",
+      "sponsors": [
+        {
+          "name": "Foxmula",
+          "tier": "Sponsor"
+        }
+      ]
+    }
+  ],
+  "order": 90
+}

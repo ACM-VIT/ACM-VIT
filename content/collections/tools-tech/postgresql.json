@@ -1,0 +1,7 @@
+{
+  "name": "PostgreSQL",
+  "slug": "postgresql",
+  "svgFile": "/domains/tech/tools/tech-tool-postgresql.svg",
+  "colorHex": "#4169E1",
+  "order": 170
+}

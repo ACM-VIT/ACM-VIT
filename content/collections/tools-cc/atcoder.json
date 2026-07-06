@@ -1,0 +1,8 @@
+{
+  "name": "AtCoder",
+  "slug": "atcoder",
+  "svgFile": "/domains/cc/tools/cc-tool-atcoder.svg",
+  "colorHex": "#222222",
+  "isDark": false,
+  "order": 40
+}

@@ -1,0 +1,7 @@
+{
+  "name": "Bazel",
+  "slug": "bazel",
+  "svgFile": "/domains/tech/tools/tech-tool-bazel.svg",
+  "colorHex": "#43A047",
+  "order": 710
+}

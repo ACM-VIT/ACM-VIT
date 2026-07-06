@@ -1,0 +1,8 @@
+{
+  "name": "Google Meet",
+  "slug": "googlemeet",
+  "svgFile": "/domains/management/tools/management-tool-googlemeet.svg",
+  "colorHex": "#00897B",
+  "monochrome": true,
+  "order": 70
+}

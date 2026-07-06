@@ -1,0 +1,8 @@
+{
+  "name": "GitHub",
+  "slug": "github",
+  "svgFile": "/domains/cc/tools/cc-tool-github.svg",
+  "colorHex": "#FFFDD0",
+  "monochrome": true,
+  "order": 140
+}

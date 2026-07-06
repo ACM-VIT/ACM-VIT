@@ -1,0 +1,123 @@
+{
+  "slug": "wenvy",
+  "title": "Wenvy",
+  "tagline": "Version your secrets like you version your code.",
+  "eyebrow": "ACM-VIT · CLI · Secrets Management",
+  "themeColor": "#F03104",
+  "themeColorSecondary": "#1A0505",
+  "shortDescription": "A TypeScript-first, Cloudflare-native encrypted environment state platform. Push, pull, and snapshot your .env files with proper versioning, encryption, and team sync - all from the terminal.",
+  "longDescription": [
+    "Wenvy treats environment variables the way Git treats source code. Instead of passing .env files over Slack or stuffing them into shared drives, teams init a project, snapshot their local state, and push encrypted diffs to a Cloudflare-backed store. Pulling on another machine restores the exact environment.",
+    "The CLI ships commands that mirror a familiar workflow: wenvy init, wenvy snapshot, wenvy push, wenvy pull, wenvy doctor. Authentication uses service account tokens, and every secret is encrypted before it leaves the machine.",
+    "Under the hood, Wenvy runs on Cloudflare Workers with Hono for routing, Durable Objects for state, Queues for async work, and Workflows for multi-step operations. The shared domain package enforces type-safe business logic and security rules across the stack. The landing page is a React + Vite app.",
+    "The whole project is a pnpm monorepo with Vitest for testing, and it's open-source under ACM-VIT."
+  ],
+  "status": "online",
+  "statusNote": "Actively maintained",
+  "heroImage": "/projects/wenvy/projects-wenvy-koi.svg",
+  "cassetteSvg": "/projects/cassettes/projects-cassettes-wenvy.svg",
+  "stats": [
+    {
+      "value": "TypeScript",
+      "label": "Built in"
+    },
+    {
+      "value": "Cloudflare",
+      "label": "Runtime"
+    },
+    {
+      "value": "CLI",
+      "label": "Interface"
+    },
+    {
+      "value": "Encrypted",
+      "label": "By default"
+    }
+  ],
+  "features": [
+    {
+      "title": "Git-style workflow",
+      "description": "init, snapshot, push, pull - manage secrets with commands that feel like version control."
+    },
+    {
+      "title": "End-to-end encryption",
+      "description": "Secrets are encrypted before they leave your machine. The server never sees plaintext."
+    },
+    {
+      "title": "Team sync",
+      "description": "Push encrypted state to a shared store. Team members pull the latest env to their machine."
+    },
+    {
+      "title": "Cloudflare-native",
+      "description": "Runs on Workers, Durable Objects, Queues, and Workflows. Fast globally, zero cold starts."
+    },
+    {
+      "title": "Doctor command",
+      "description": "wenvy doctor validates your local setup, checks connectivity, and flags misconfigurations."
+    },
+    {
+      "title": "Type-safe domain layer",
+      "description": "Shared business logic package with security rules enforced across CLI and API."
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Core",
+      "slugs": [
+        "typescript"
+      ]
+    },
+    {
+      "category": "Backend",
+      "slugs": [
+        "cloudflare",
+        "hono"
+      ]
+    },
+    {
+      "category": "Frontend",
+      "slugs": [
+        "react"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "theg1239",
+      "role": "Lead developer"
+    },
+    {
+      "github": "qwerty-dvorak",
+      "role": "Developer"
+    },
+    {
+      "github": "harshitnarang28",
+      "role": "Developer"
+    },
+    {
+      "github": "pokymono",
+      "role": "Developer"
+    }
+  ],
+  "links": [
+    {
+      "label": "Website",
+      "href": "https://wenvy.dev",
+      "kind": "website"
+    },
+    {
+      "label": "GitHub",
+      "href": "https://github.com/ACM-VIT/wenvy",
+      "kind": "github"
+    }
+  ],
+  "commitGraphSeed": 891,
+  "order": 100
+}

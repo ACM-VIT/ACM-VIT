@@ -1,0 +1,8 @@
+{
+  "name": "Galaxy",
+  "slug": "galaxy",
+  "svgFile": "/domains/research/tools/research-tool-galaxy.svg",
+  "colorHex": "#2C3143",
+  "isDark": true,
+  "order": 350
+}

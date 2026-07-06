@@ -1,0 +1,7 @@
+{
+  "name": "Cloudflare",
+  "slug": "cloudflare",
+  "svgFile": "/domains/tech/tools/tech-tool-cloudflare.svg",
+  "colorHex": "#F38020",
+  "order": 280
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Kali Linux",
+  "slug": "kali-linux",
+  "svgFile": "/domains/research/tools/research-tool-kali-linux.svg",
+  "colorHex": "#557C94",
+  "isDark": true,
+  "order": 250
+}
