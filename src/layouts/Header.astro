@@ -66,11 +66,6 @@ const dropdowns: Record<string, DropdownItem[]> = {
     { title: "Initiatives", desc: "Programs & activities", href: "/#acm-w-content", img: "/acmw/acmw-acmwmotto.webp" },
     { title: "Showcase", desc: "Highlights of our work", href: "/#acm-w-bento", img: "/acmw/acmw-bento.webp" },
   ],
-  team: [
-    { title: "Faculty", desc: "Dr. Aswani Kumar Cherukuri", href: "/#team", img: "/board/items/0/imageUrl.webp" },
-    { title: "Board", desc: "Core leadership team", href: "/#team", img: "/team/team-the-team.webp" },
-    { title: "ACM-W Board", desc: "Women's chapter leadership", href: "/#team", img: "/team/team-full-core.webp" },
-  ],
   blogs: [
     { title: "All Blogs", desc: "Browse every article we've published", href: "/blogs", img: "/blogs/blogs-placeholder.webp" },
     { title: "Hashnode", desc: "Our latest technical deep-dives", href: "/blogs#all-blogs", img: "/logos/logos-acm-topleft.webp" },
@@ -1134,7 +1129,7 @@ const dropdowns: Record<string, DropdownItem[]> = {
     // ── Megamenu interaction ──
     const megamenu = document.getElementById("navMegamenu");
     const megamenuPanels = megamenu ? megamenu.querySelectorAll(".megamenu-panel") : [];
-    const sectionsWithDropdowns = ["about", "community", "domains", "events", "projects", "acm-w", "team", "more"];
+    const sectionsWithDropdowns = ["about", "community", "domains", "events", "projects", "acm-w", "more"];
     let megamenuTimer = null;
     let currentPanel = null;
 
