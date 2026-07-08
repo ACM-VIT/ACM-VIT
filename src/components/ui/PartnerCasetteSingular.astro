@@ -7,9 +7,17 @@ interface Props {
 
 import { getAssetUrl } from "../../utils/cdn";
 const { title, imageUrl, link } = Astro.props;
+
+// Link to the partner's homepage when we have one ("#" means unknown -> plain tile).
+const Tag = link && link !== "#" ? "a" : "div";
+const anchorProps =
+  Tag === "a"
+    ? { href: link, target: "_blank", rel: "noopener noreferrer", "aria-label": title }
+    : {};
 ---
 
-<div
+<Tag
+  {...anchorProps}
   class="partner-casette-shell w-[80vw] h-[49vw] sm:w-[30vw] sm:h-[18.4vw] lg:w-[17vw] lg:h-[10.4vw] shadow-lg flex flex-col items-center justify-center relative"
 >
   <div class="partner-casette-frame z-0 absolute inset-0">
@@ -30,13 +38,18 @@ const { title, imageUrl, link } = Astro.props;
       decoding="async"
     />
   </div>
-</div>
+</Tag>
 
 <style>
   .partner-casette-shell {
     overflow: hidden;
     background: transparent;
     border-radius: 16px;
+    text-decoration: none;
+    transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+  a.partner-casette-shell:hover {
+    transform: translateY(-4px);
   }
 
   .partner-casette-frame {

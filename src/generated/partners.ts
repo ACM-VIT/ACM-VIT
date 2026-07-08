@@ -8,21 +8,21 @@ export const items: PartnerEntry[] = [
     "order": 0,
     "title": "GitHub",
     "imageUrl": "/icons/icons-github-icon.webp",
-    "link": "#"
+    "link": "https://github.com"
   },
   {
     "slug": "cloudsploit",
     "order": 10,
     "title": "CloudSploit",
     "imageUrl": "/partners/partner-cloudsploit.webp",
-    "link": "#"
+    "link": "https://cloudsploit.com"
   },
   {
     "slug": "coding-blocks",
     "order": 20,
     "title": "Coding Blocks",
     "imageUrl": "/partners/partner-coding-blocks.webp",
-    "link": "#"
+    "link": "https://codingblocks.com"
   },
   {
     "slug": "fold",
@@ -36,14 +36,14 @@ export const items: PartnerEntry[] = [
     "order": 40,
     "title": "Slack",
     "imageUrl": "/partners/partner-slack.webp",
-    "link": "#"
+    "link": "https://slack.com"
   },
   {
     "slug": "devfolio",
     "order": 50,
     "title": "Devfolio",
     "imageUrl": "/partners/partner-devfolio.webp",
-    "link": "#"
+    "link": "https://devfolio.co"
   },
   {
     "slug": "matic",
@@ -57,28 +57,28 @@ export const items: PartnerEntry[] = [
     "order": 70,
     "title": "Wolfram Language",
     "imageUrl": "/partners/partner-wolfram-language.webp",
-    "link": "#"
+    "link": "https://www.wolfram.com/language/"
   },
   {
     "slug": "bugsee",
     "order": 80,
     "title": "Bugsee",
     "imageUrl": "/partners/partner-bugsee.webp",
-    "link": "#"
+    "link": "https://www.bugsee.com"
   },
   {
     "slug": "creative-tim",
     "order": 90,
     "title": "Creative Tim",
     "imageUrl": "/partners/partner-creative-tim.webp",
-    "link": "#"
+    "link": "https://www.creative-tim.com"
   },
   {
     "slug": "digitalocean",
     "order": 100,
     "title": "DigitalOcean",
     "imageUrl": "/partners/partner-digitalocean.webp",
-    "link": "#"
+    "link": "https://www.digitalocean.com"
   },
   {
     "slug": "cis",
@@ -92,77 +92,77 @@ export const items: PartnerEntry[] = [
     "order": 120,
     "title": "Taskade",
     "imageUrl": "/partners/partner-taskade.webp",
-    "link": "#"
+    "link": "https://www.taskade.com"
   },
   {
     "slug": "jetbrains",
     "order": 130,
     "title": "JetBrains",
     "imageUrl": "/partners/partner-jetbrains.webp",
-    "link": "#"
+    "link": "https://www.jetbrains.com"
   },
   {
     "slug": "invision",
     "order": 140,
     "title": "InVision",
     "imageUrl": "/partners/partner-invision.webp",
-    "link": "#"
+    "link": "https://www.invisionapp.com"
   },
   {
     "slug": "geeksforgeeks",
     "order": 150,
     "title": "GeeksforGeeks",
     "imageUrl": "/partners/partner-geeksforgeeks.webp",
-    "link": "#"
+    "link": "https://www.geeksforgeeks.org"
   },
   {
     "slug": "ibm",
     "order": 160,
     "title": "IBM",
     "imageUrl": "/partners/partner-ibm.webp",
-    "link": "#"
+    "link": "https://www.ibm.com"
   },
   {
     "slug": "hasura",
     "order": 170,
     "title": "Hasura",
     "imageUrl": "/partners/partner-hasura.webp",
-    "link": "#"
+    "link": "https://hasura.io"
   },
   {
     "slug": "hackerearth",
     "order": 180,
     "title": "HackerEarth",
     "imageUrl": "/partners/partner-hackerearth.webp",
-    "link": "#"
+    "link": "https://www.hackerearth.com"
   },
   {
     "slug": "orient-electric",
     "order": 190,
     "title": "Orient Electric",
     "imageUrl": "/partners/partner-orient-electric.webp",
-    "link": "#"
+    "link": "https://www.orientelectric.com"
   },
   {
     "slug": "tech-domains",
     "order": 200,
     "title": ".Tech Domains",
     "imageUrl": "/partners/partner-tech-domains.webp",
-    "link": "#"
+    "link": "https://get.tech"
   },
   {
     "slug": "axure",
     "order": 210,
     "title": "Axure",
     "imageUrl": "/partners/partner-axure.webp",
-    "link": "#"
+    "link": "https://www.axure.com"
   },
   {
     "slug": "sticker-mule",
     "order": 220,
     "title": "Sticker Mule",
     "imageUrl": "/partners/partner-sticker-mule.webp",
-    "link": "#"
+    "link": "https://www.stickermule.com"
   },
   {
     "slug": "cosmos-india",
@@ -176,21 +176,21 @@ export const items: PartnerEntry[] = [
     "order": 240,
     "title": "Slang Labs",
     "imageUrl": "/partners/partner-slang-labs.webp",
-    "link": "#"
+    "link": "https://www.slanglabs.in"
   },
   {
     "slug": "sketch",
     "order": 250,
     "title": "Sketch",
     "imageUrl": "/partners/partner-sketch.webp",
-    "link": "#"
+    "link": "https://www.sketch.com"
   },
   {
     "slug": "rosenfeld",
     "order": 260,
     "title": "Rosenfeld",
     "imageUrl": "/partners/partner-rosenfeld.webp",
-    "link": "#"
+    "link": "https://rosenfeldmedia.com"
   },
   {
     "slug": "glam-studios",
@@ -204,7 +204,7 @@ export const items: PartnerEntry[] = [
     "order": 280,
     "title": "EaseMyTrip",
     "imageUrl": "/partners/partner-easemytrip.webp",
-    "link": "#"
+    "link": "https://www.easemytrip.com"
   },
   {
     "slug": "into-the-verse",
@@ -225,7 +225,7 @@ export const items: PartnerEntry[] = [
     "order": 310,
     "title": "HackerRank",
     "imageUrl": "/partners/partner-hackerrank.webp",
-    "link": "#"
+    "link": "https://www.hackerrank.com"
   },
   {
     "slug": "urban-jungle",
@@ -239,21 +239,21 @@ export const items: PartnerEntry[] = [
     "order": 330,
     "title": "Judge0",
     "imageUrl": "/partners/partner-judge0.webp",
-    "link": "#"
+    "link": "https://judge0.com"
   },
   {
     "slug": "elevenlabs",
     "order": 340,
     "title": "ElevenLabs",
     "imageUrl": "/partners/partner-elevenlabs.webp",
-    "link": "#"
+    "link": "https://elevenlabs.io"
   },
   {
     "slug": "runpod",
     "order": 350,
     "title": "RunPod",
     "imageUrl": "/partners/partner-runpod.webp",
-    "link": "#"
+    "link": "https://www.runpod.io"
   },
   {
     "slug": "hey-hoku",
