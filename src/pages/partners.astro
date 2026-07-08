@@ -90,13 +90,42 @@ const normalizeName = (n: string) =>
     .replace(/[^a-z0-9]+/g, "")
     .trim();
 
+// Known partner homepages, keyed by brand name. Applied to both CMS partners
+// (as a fallback when they have no link) and event-edition sponsors (which ship
+// no link at all). Brands we couldn't confidently resolve are left out -> no link.
+const linkByName: Record<string, string> = {
+  "AnitaB.org": "https://anitab.org",
+  "Balsamiq": "https://balsamiq.com",
+  "Docker": "https://www.docker.com",
+  "Egghead.io": "https://egghead.io",
+  "GitLab": "https://gitlab.com",
+  "Iconscout": "https://iconscout.com",
+  "Jenkins": "https://www.jenkins.io",
+  "O'Reilly": "https://www.oreilly.com",
+  "Ozonetel": "https://ozonetel.com",
+  "Product Hunt": "https://www.producthunt.com",
+  "Replit": "https://replit.com",
+  "Travis CI": "https://www.travis-ci.com",
+  "Tricentis": "https://www.tricentis.com",
+  "Twilio": "https://www.twilio.com",
+  "Zeplin": "https://zeplin.io",
+  "Zulip": "https://zulip.com",
+  "npm": "https://www.npmjs.com",
+  "Zuddl": "https://www.zuddl.com",
+  "Sashido": "https://www.sashido.io",
+  "EchoAR": "https://www.echo3d.com",
+};
+const linkFor = (name: string): string | undefined =>
+  linkByName[name] ??
+  Object.entries(linkByName).find(([k]) => normalizeName(k) === normalizeName(name))?.[1];
+
 // 1) Official partners from the CMS singleton (each ships a real logo image).
 const cmsPartners: GridPartner[] = cmsPartnerItems.map((p) => {
   const mode = classifyLogo(p.imageUrl);
   return {
     name: p.title,
     logoUrl: getAssetUrl(p.imageUrl),
-    link: p.link,
+    link: p.link && p.link !== "#" ? p.link : linkFor(p.title),
     whiten: mode === "whiten",
   };
 });
@@ -141,6 +170,7 @@ for (const s of rawSponsors) {
   byBrand.set(nameKey, {
     name: s.name,
     logoUrl: logoOnDisk ? getAssetUrl(logoOnDisk) : undefined,
+    link: linkFor(s.name),
     whiten: mode === "whiten",
     // Label every added event partner with its company name.
     showName: true,
