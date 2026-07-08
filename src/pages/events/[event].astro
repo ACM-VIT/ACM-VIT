@@ -26,12 +26,22 @@ const themeColor = data.themeColor ?? getEventThemeHex(data.themeKey);
 const themeColorSecondary = data.themeColorSecondary ?? themeColor;
 
 // FillButton needs a dark ink/bg companion color for contrast (dark-mode text
-// on the bright accent bg, light-mode bg under fixed white text). Most events
-// don't define themeColorSecondary as a dark tone (it's often == themeColor),
-// so darken the accent for the button specifically rather than reuse it raw.
-const fillButtonStyle = `--proj-color: ${themeColor}; --proj-color-secondary: ${
-  data.themeColorSecondary ?? `color-mix(in srgb, ${themeColor} 55%, black)`
-};`;
+// on the bright accent bg, light-mode bg under fixed white text). themeColorSecondary
+// is a bright accent (used for page highlights), NOT a dark ink - reusing it here gives
+// unreadable bright-on-bright text. So always derive the button ink by darkening the
+// accent. Precompute the hex (no color-mix) so old iPad WebKit still gets the color
+// (see color-mix iPad fallback note).
+const darkenHex = (hex: string, factor: number): string => {
+  const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
+  if (!m) return hex;
+  const n = parseInt(m[1], 16);
+  const ch = (shift: number) =>
+    Math.round(((n >> shift) & 0xff) * factor)
+      .toString(16)
+      .padStart(2, "0");
+  return `#${ch(16)}${ch(8)}${ch(0)}`;
+};
+const fillButtonStyle = `--proj-color: ${themeColor}; --proj-color-secondary: ${darkenHex(themeColor, 0.55)};`;
 
 const titleArt = titleToArt(data.title);
 
@@ -44,7 +54,7 @@ const otherEvents = Object.values(eventDetails)
   .slice(0, 6);
 ---
 
-<Layout pageTitle={data.title} backHref="/#work">
+<Layout pageTitle={data.title} backHref="/#events">
   <script is:inline define:vars={{ themeColor, titleArt }}>
     console.log("%c" + titleArt, "color:" + themeColor + ";font-family:monospace;line-height:1;");
   </script>
@@ -341,7 +351,7 @@ const otherEvents = Object.values(eventDetails)
 
     <!-- Back -->
     <section class="event-back-section">
-      <FillButton href="/#work" label="Back to All Events">
+      <FillButton href="/#events" label="Back to All Events">
         <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
       </FillButton>
     </section>
