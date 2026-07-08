@@ -77,6 +77,8 @@ const dropdowns: Record<string, DropdownItem[]> = {
     { title: "Medium", desc: "Earlier publications & tutorials", href: "/blogs#all-blogs", img: "/logos/logos-acm-topleft.webp" },
   ],
   more: [
+    { title: "FAQs", desc: "Everything you wanted to know, answered", href: "/faqs", img: "/icons/icons-faq.svg" },
+    { title: "Design Guide", desc: "Brand marks, colors, type & the rules we bend", href: "/design", img: "/cassettes/cassettes-cassette-design.webp" },
     { title: "Code of Conduct", desc: "ACM ethical principles & values", href: "/code-of-conduct", img: "/logos/logos-acm-logo-black.webp" },
     { title: "Merchandise", desc: "Official ACM-VIT merch & collectibles", href: "/merchandise", img: "/merch/2025/black-back/merch-2025-black-back-design.webp" },
     { title: "GREP Newsletter", desc: "Our bi-annual technical newsletter", href: "/grep", img: "/grep/grep-wordmark.png" },
@@ -549,13 +551,7 @@ const dropdowns: Record<string, DropdownItem[]> = {
     grid-column: span 3;
   }
 
-  /* More panel: 7 items - 3 top, 2 middle (span 3), 2 bottom (span 3) */
-  .megamenu-panel[data-panel="more"] .megamenu-tile:nth-child(4),
-  .megamenu-panel[data-panel="more"] .megamenu-tile:nth-child(5),
-  .megamenu-panel[data-panel="more"] .megamenu-tile:nth-child(6),
-  .megamenu-panel[data-panel="more"] .megamenu-tile:nth-child(7) {
-    grid-column: span 3;
-  }
+  /* More panel: 9 items - clean 3×3 (every tile spans 2 in the 6-col grid). */
 
   /* 6-item panel: clean 3×2 grid */
   .megamenu-panel[data-panel="projects"] .megamenu-grid {
