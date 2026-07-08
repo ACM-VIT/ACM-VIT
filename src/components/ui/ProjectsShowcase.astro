@@ -14,7 +14,7 @@ import { getAssetUrl } from "../../utils/cdn";
 export interface Props {
   projects: Array<{
     slug?: string;
-    cassette: { src: string; alt: string };
+    cassette: { src?: string; svg?: string; alt: string };
     textContent: { blocks: string[] };
     buttons: {
       primary: { backgroundColor: string };
@@ -138,11 +138,23 @@ const sectionHeightVh = Math.max(1, items.length) * 100;
               data-cassette-slide
               data-index={i}
             >
-              <Cassette
-                overlaySrc={getAssetUrl(it.cassette.src)}
-                alt={it.cassette.alt}
-                color={it.accent}
-              />
+              {it.cassette.svg ? (
+                <div class="proj-svg-cassette">
+                  <img
+                    src={getAssetUrl(it.cassette.svg)}
+                    alt={it.cassette.alt}
+                    class="proj-svg-cassette-img"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+              ) : (
+                <Cassette
+                  overlaySrc={it.cassette.src ? getAssetUrl(it.cassette.src) : undefined}
+                  alt={it.cassette.alt}
+                  color={it.accent}
+                />
+              )}
             </div>
           ))
         }
@@ -202,11 +214,23 @@ const sectionHeightVh = Math.max(1, items.length) * 100;
             </div>
 
             <div class="mt-7 w-full max-w-[250px]">
-              <Cassette
-                overlaySrc={getAssetUrl(it.cassette.src)}
-                alt={it.cassette.alt}
-                color={it.accent}
-              />
+              {it.cassette.svg ? (
+                <div class="proj-svg-cassette">
+                  <img
+                    src={getAssetUrl(it.cassette.svg)}
+                    alt={it.cassette.alt}
+                    class="proj-svg-cassette-img"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+              ) : (
+                <Cassette
+                  overlaySrc={it.cassette.src ? getAssetUrl(it.cassette.src) : undefined}
+                  alt={it.cassette.alt}
+                  color={it.accent}
+                />
+              )}
             </div>
           </article>
         ))
@@ -359,6 +383,25 @@ const sectionHeightVh = Math.max(1, items.length) * 100;
   .cassette-slide.is-prev {
     opacity: 0;
     transform: rotate(7deg) scale(0.82);
+  }
+
+  /* Full standalone cassette art (SVG). The art uses white strokes/fills, so in
+     light mode it needs a dark backing to stay visible - mirrors the /projects
+     grid treatment (.proj-svg-cassette). */
+  .proj-svg-cassette {
+    width: 100%;
+    border-radius: 16px;
+  }
+  .proj-svg-cassette-img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  :global(html[data-theme="light"]) .proj-svg-cassette {
+    background: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .proj-svg-cassette-img {
+    filter: sepia(0.15) brightness(0.98);
   }
 
   .stepper-inner::-webkit-scrollbar {

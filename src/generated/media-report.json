@@ -11,6 +11,7 @@
     "/events/c2c/sponsors/events-c2c-sponsors-framer.svg",
     "/events/events-rc.webp",
     "/icons/icons-redis.webp",
+    "/projects/projects-acmone.svg",
     "/ui/ui-bloglayout.webp"
   ],
   "usage": {
@@ -493,7 +494,8 @@
     ],
     "/projects/cassettes/projects-cassettes-conclave.svg": [
       "project-details/conclave",
-      "project-cassettes/conclave"
+      "project-cassettes/conclave",
+      "home-projects/conclave"
     ],
     "/projects/cassettes/projects-cassettes-wenvy.svg": [
       "project-details/wenvy",
@@ -507,8 +509,7 @@
       "project-cassettes/cli-top"
     ],
     "/projects/items/0/cassetteSrc.webp": [
-      "project-cassettes/acmone",
-      "home-projects/acmone"
+      "project-cassettes/acmone"
     ],
     "/projects/items/1/cassetteSrc.webp": [
       "project-cassettes/examcooker",

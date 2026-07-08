@@ -1,0 +1,29 @@
+{
+  "slug": "conclave",
+  "order": 0,
+  "cassetteSvg": "/projects/cassettes/projects-cassettes-conclave.svg",
+  "cassetteAlt": "Conclave",
+  "description1": "Conclave is a real-time meetings platform with web and mobile clients, a custom SFU, instant breakout rooms, a shared browser, and an in-meeting apps SDK. Born out of ACM-VIT's OCS 2026 portal, every interview that cycle ran on it.",
+  "description2": "The chapter needed a meeting client that could handle hundreds of applicant interviews without leaning on Google Meet or Zoom, so the team built one from scratch. The result was good enough to extract into its own product: a Next.js web client, a React Native + Expo mobile app, and native Swift/Kotlin clients, all backed by a custom mediasoup-based SFU. Beyond video calls, Conclave supports one-click breakout rooms, a VNC-powered shared browser, and an apps runtime with real-time data sync via Yjs. The whole thing is containerised with Docker and ships under an MIT licence.",
+  "primaryBgColor": "#FF6B35",
+  "primaryTextColor": "white",
+  "primaryBorderColor": "#FEFCD9",
+  "visitWebsiteText": "VISIT WEBSITE",
+  "visitWebsiteUrl": "https://conclave.acmvit.in",
+  "visitWebsiteBgColor": "#FF6B35",
+  "visitWebsiteTextColor": "white",
+  "visitWebsiteBorderColor": "#FEFCD9",
+  "icons": [
+    {
+      "type": "github",
+      "backgroundColor": "#FF6B35",
+      "textColor": "white",
+      "borderColor": "#FEFCD9",
+      "iconColor": "#FEFCD9",
+      "url": "https://github.com/ACM-VIT/conclave"
+    }
+  ],
+  "textColor": "white",
+  "contentBlockBackground": "rgba(0, 0, 0, 0.15)",
+  "hoverShadow": "rgba(255, 107, 53, 0.4)"
+}

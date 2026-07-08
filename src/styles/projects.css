@@ -88,7 +88,10 @@
   content: '';
   position: absolute;
   inset: -4px;
-  border-radius: 28px;
+  /* Match the cassette frame corner (Cassette.astro / SVG rx 23.4655 on a
+     588x360 box = 3.99% / 6.52%). This box is offset 4px outward (inset -4px),
+     so a concentric corner needs radius + that offset - hence the +4px. */
+  border-radius: calc(3.99% + 4px) / calc(6.52% + 4px);
   opacity: 0;
   transition: opacity 0.35s ease;
   pointer-events: none;

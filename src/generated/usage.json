@@ -573,8 +573,7 @@
   },
   "project-details": {
     "acmone": [
-      "project-cassettes/acmone",
-      "home-projects/acmone"
+      "project-cassettes/acmone"
     ],
     "examcooker": [
       "project-cassettes/examcooker",
@@ -606,7 +605,8 @@
       "project-cassettes/ocs-2026"
     ],
     "conclave": [
-      "project-cassettes/conclave"
+      "project-cassettes/conclave",
+      "home-projects/conclave"
     ],
     "wenvy": [
       "project-cassettes/wenvy"

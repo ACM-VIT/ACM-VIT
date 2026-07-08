@@ -20,10 +20,10 @@ const resolveSlug = (alt: string): string | undefined => {
 };
 
 const projectsData = homeProjectItems
-  .filter((project) => project.cassetteSrc && project.cassetteAlt && project.description1)
+  .filter((project) => (project.cassetteSrc || project.cassetteSvg) && project.cassetteAlt && project.description1)
   .map((p) => ({
   slug: resolveSlug(p.cassetteAlt!),
-  cassette: { src: p.cassetteSrc!, alt: p.cassetteAlt! },
+  cassette: { src: p.cassetteSrc, svg: p.cassetteSvg, alt: p.cassetteAlt! },
   textContent: { blocks: [p.description1, ...(p.description2 ? [p.description2] : [])] },
   buttons: {
     primary: {

@@ -42,6 +42,9 @@ export const homeProjectSchema = z.object({
   slug: z.string(),
   order: z.number().optional(),
   cassetteSrc: z.string().optional(),
+  // Full standalone cassette art (like the /projects grid). When set, the
+  // showcase renders it directly instead of wrapping a photo in a Cassette frame.
+  cassetteSvg: z.string().optional(),
   cassetteAlt: z.string(),
   description1: z.string(),
   description2: z.string().optional(),

@@ -53,7 +53,7 @@ const dropdowns: Record<string, DropdownItem[]> = {
     { title: "All Events", desc: "Browse every event we run", href: "/events", img: "", all: true },
   ],
   projects: [
-    { title: "ACMOne", desc: "Centralized chapter management platform", href: "/projects/acmone", img: "/projects/projects-acmone.svg" },
+    { title: "Conclave", desc: "Real-time meetings platform, built from scratch", href: "/projects/conclave", img: "/projects/cassettes/projects-cassettes-conclave.svg" },
     { title: "ExamCooker", desc: "Exam prep hub for VIT students", href: "/projects/examcooker", img: "/projects/projects-examcooker.svg" },
     { title: "CLI RPG", desc: "Terminal-based role-playing game", href: "/projects/cli-rpg", img: "/projects/projects-cli-rpg.svg" },
     { title: "UniPool", desc: "Campus carpooling made easy", href: "/projects/unipool", img: "/projects/projects-unipool.svg" },
@@ -97,16 +97,6 @@ const dropdowns: Record<string, DropdownItem[]> = {
     <nav>
       <!-- Desktop nav -->
       <div class="nav-desktop">
-        <!-- SVG gooey metaball filter (hidden, referenced by CSS) -->
-        <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;pointer-events:none;">
-          <defs>
-            <filter id="gooey-filter">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
-              <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -9" result="gooey" />
-              <feComposite in="SourceGraphic" in2="gooey" operator="atop" />
-            </filter>
-          </defs>
-        </svg>
         <div class="pill-island-wrap" id="pillIslandWrap">
         <div class={`header-pill ${isSubpage ? 'subpage-mode' : ''}`} id="headerPill" data-subpage={isSubpage ? 'true' : undefined}>
           {/* Subpage title - shown only on subpages, hidden when nav expands */}
@@ -223,29 +213,35 @@ const dropdowns: Record<string, DropdownItem[]> = {
 </header>
 
 <style>
-  /* ── Gooey metaball wrapper ── */
+  /* ── Pill + back-bubble wrapper ── */
   .pill-island-wrap {
     display: flex;
     align-items: center;
     position: relative;
   }
 
-  .pill-island-wrap.gooey-active {
-    filter: url(#gooey-filter);
+  /* During the split morph: solid shapes, kill glass effects so the two
+     overlapping shapes read as one seamless silhouette. The drop-shadows
+     trace the UNION outline (waist included) - a faux border that keeps the
+     silhouette visible on near-black pages, matching the glass border glow */
+  .pill-island-wrap.split-active {
+    filter:
+      drop-shadow(0 0 1px rgba(249, 95, 74, 0.85))
+      drop-shadow(0 0 1px rgba(249, 95, 74, 0.45))
+      drop-shadow(0 8px 20px rgba(0, 0, 0, 0.55));
   }
 
-  /* During gooey: solid bg, kill glass effects (SVG filter needs opaque shapes) */
-  .pill-island-wrap.gooey-active .header-pill,
-  .pill-island-wrap.gooey-active .subpage-back-bubble {
+  .pill-island-wrap.split-active .header-pill,
+  .pill-island-wrap.split-active .subpage-back-bubble {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     border-color: transparent !important;
     box-shadow: none !important;
   }
 
-  .pill-island-wrap.gooey-active .header-pill::before,
-  .pill-island-wrap.gooey-active .header-pill::after,
-  .pill-island-wrap.gooey-active .subpage-back-bubble::before {
+  .pill-island-wrap.split-active .header-pill::before,
+  .pill-island-wrap.split-active .header-pill::after,
+  .pill-island-wrap.split-active .subpage-back-bubble::before {
     display: none !important;
   }
 
@@ -288,6 +284,9 @@ const dropdowns: Record<string, DropdownItem[]> = {
     height: 44px;
     padding: 0 16px;
     border-radius: 100px;
+    /* Safari: backdrop-filter region ignores border-radius without an
+       explicit clip - glass corners poke past the border otherwise */
+    overflow: hidden;
     box-shadow:
       0 8px 32px var(--glass-shadow),
       0 0 18px rgba(249, 95, 74, 0.10),
@@ -324,13 +323,12 @@ const dropdowns: Record<string, DropdownItem[]> = {
     opacity: 0.85;
   }
 
-  /* Top inner highlight - like a glass rim catching light */
+  /* Top inner highlight - like a glass rim catching light. Full inset so
+     border-radius: inherit isn't clamped by a half-height box (which gives
+     the sheen tighter corners than the pill) */
   .header-pill::after {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent);
-    height: 50%;
-    left: 0;
-    right: 0;
-    top: 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 50%);
+    inset: 0;
   }
 
   /* Intro complete - GSAP sets opacity/transform, this class gates child visibility */
@@ -851,6 +849,8 @@ const dropdowns: Record<string, DropdownItem[]> = {
     width: 44px;
     height: 44px;
     border-radius: 50%;
+    /* Safari backdrop-filter radius clip (same as .header-pill) */
+    overflow: hidden;
     background: var(--glass-bg);
     backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
@@ -1236,15 +1236,15 @@ const dropdowns: Record<string, DropdownItem[]> = {
     if (pill) {
       let introFired = false;
 
-      // ── Subpage intro: circle drop → Flip expand → gooey breakoff ──
+      // ── Subpage intro: circle drop → Flip expand full capsule → constriction pinch-off ──
       if (pill.dataset.subpage === 'true') {
         introFired = true;
 
-        const gooeyWrap = document.getElementById('pillIslandWrap');
+        const splitWrap = document.getElementById('pillIslandWrap');
         const backBubble = document.querySelector('.subpage-back-bubble');
         const label = pill.querySelector('.subpage-island-label');
         const bubbleIcon = backBubble ? backBubble.querySelector('svg') : null;
-        const solidDark = 'rgba(18, 14, 14, 0.92)';
+        const solidDark = 'rgb(24, 18, 18)';
 
         // Start as collapsed circle
         pill.classList.add('pill-collapsed');
@@ -1254,8 +1254,12 @@ const dropdowns: Record<string, DropdownItem[]> = {
         if (backBubble) {
           // Kill CSS transitions so GSAP owns transform during the intro
           backBubble.style.transition = 'none';
+          // Out of flow for the whole intro, anchored to the capsule's right
+          // edge: the wrap width equals the visible capsule width, so the
+          // header's flex centering never shifts as the pill expands/retracts
           gsap.set(backBubble, {
-            opacity: 0, x: -56, scale: 0.85, marginLeft: 8,
+            opacity: 0, scale: 1,
+            position: 'absolute', top: 0, right: 0, marginLeft: 0,
             background: solidDark,
             backdropFilter: 'none', webkitBackdropFilter: 'none',
             borderColor: 'transparent', boxShadow: 'none',
@@ -1264,45 +1268,65 @@ const dropdowns: Record<string, DropdownItem[]> = {
         if (bubbleIcon) gsap.set(bubbleIcon, { opacity: 0, scale: 0.5, transformOrigin: '50% 50%' });
 
         function playSubpageIntro() {
-        const dropTl = gsap.timeline({ delay: 0.25 });
+        const dropTl = gsap.timeline({ delay: 0.1 });
 
         // Phase 1: Circle drops in
         dropTl.to(pill, {
           opacity: 1, y: 8, scale: 1.05,
-          duration: 0.35, ease: 'power2.out',
+          duration: 0.28, ease: 'power2.out',
         })
         // Phase 2: Bounce back
-        .to(pill, { y: -5, scale: 1, duration: 0.2, ease: 'power2.inOut' })
+        .to(pill, { y: -5, scale: 1, duration: 0.16, ease: 'power2.inOut' })
         // Phase 3: Settle
-        .to(pill, { y: 0, duration: 0.15, ease: 'power2.out' })
+        .to(pill, { y: 0, duration: 0.12, ease: 'power2.out' })
         // Phase 4: Flip expand circle → pill
         .add(() => {
-          if (label) gsap.set(label, { opacity: 1, maxWidth: 300, padding: '0 4px' });
+          // Reserve the label's layout space now so capsule width == final
+          // pill+bubble width, but keep it invisible until the split is done
+          if (label) gsap.set(label, { opacity: 0, maxWidth: 300, padding: '0 4px' });
 
           const state = Flip.getState(pill);
           pill.classList.remove('pill-collapsed');
           pill.classList.add('pill-intro-play');
+          // Expand to the FULL capsule width - pill + bubble footprint drawn
+          // as one shape (16px base + 44px bubble + 8px gap)
+          pill.style.paddingRight = '68px';
 
           Flip.from(state, {
-            duration: 0.4,
+            duration: 0.32,
             ease: 'power3.out',
             clearProps: 'all',
             onComplete() {
-              // Phase 5: Gooey breakoff - bubble breaks from pill edge
+              // Phase 5: constriction split - the full-width capsule pinches
+              // its right end off into the back bubble. Pure geometry: two
+              // solid same-color shapes overlap, so the union silhouette
+              // narrows into a waist as the pill edge retracts across the
+              // bubble. (No SVG gooey filter - Safari renders feColorMatrix
+              // metaballs as a plain blur smear.)
               pill.style.transition = 'none';
               pill.style.background = solidDark;
               pill.style.backdropFilter = 'none';
               pill.style.webkitBackdropFilter = 'none';
               pill.style.borderColor = 'transparent';
               pill.style.boxShadow = 'none';
+              // clearProps: 'all' wiped the inline padding - re-reserve the
+              // bubble footprint before this frame paints
+              pill.style.paddingRight = '68px';
 
-              // Reveal bubble while it is still fully tucked behind the pill edge
+              // Lock the wrap width so flex centering can't shift while the
+              // pill retracts - pill+bubble bounds stay identical to the capsule
+              if (splitWrap) {
+                splitWrap.style.width = splitWrap.getBoundingClientRect().width + 'px';
+                splitWrap.classList.add('split-active');
+              }
+
+              // Bubble sits embedded in the capsule's right end (absolute,
+              // right: 0), already at its final screen position, invisible
+              // against the solid pill
               if (backBubble) gsap.set(backBubble, { opacity: 1 });
-              if (gooeyWrap) gooeyWrap.classList.add('gooey-active');
 
               const glassBg = 'rgba(6, 2, 2, 0.22)';
               const glassBorder = 'rgba(249, 95, 74, 0.75)';
-              const gooeyBlur = document.querySelector('#gooey-filter feGaussianBlur');
 
               const breakTl = gsap.timeline({
                 onComplete() {
@@ -1314,62 +1338,82 @@ const dropdowns: Record<string, DropdownItem[]> = {
                   pill.style.webkitBackdropFilter = '';
                   pill.style.borderColor = '';
                   pill.style.boxShadow = '';
-                  gsap.set(pill, { clearProps: 'scaleX,backgroundColor,borderColor' });
+                  pill.style.paddingRight = '';
+                  gsap.set(pill, { clearProps: 'x,scaleX,backgroundColor,borderColor,paddingRight' });
+                  // Back into flex flow + unlock wrap: natural layout is the
+                  // same total width, so nothing moves on screen
+                  if (splitWrap) splitWrap.style.width = '';
                   if (backBubble) {
                     backBubble.style.transition = '';
                     gsap.set(backBubble, {
-                      clearProps: 'x,scale,marginLeft,background,backdropFilter,webkitBackdropFilter,borderColor,boxShadow',
+                      clearProps: 'position,top,right,marginLeft,x,scale,scaleX,scaleY,transformOrigin,background,backdropFilter,webkitBackdropFilter,borderColor,boxShadow',
                     });
                   }
                   if (bubbleIcon) gsap.set(bubbleIcon, { clearProps: 'scale,transformOrigin' });
-                  if (gooeyBlur) gsap.set(gooeyBlur, { attr: { stdDeviation: 8 } });
                 },
               });
 
-              // Bubble oozes out of the pill - slow stretch, slight overshoot as neck snaps
-              breakTl.to(backBubble, {
-                x: 0, scale: 1,
-                duration: 0.6, ease: 'back.out(1.4)',
-              }, 0)
-              // Pill recoils from its right edge as the bridge lets go
-              .to(pill, {
-                scaleX: 0.98, transformOrigin: '100% 50%',
-                duration: 0.12, ease: 'power2.out',
-              }, 0.34)
-              .to(pill, {
-                scaleX: 1,
-                duration: 0.4, ease: 'elastic.out(1, 0.6)',
-              }, 0.46)
-              // Bubble melts dark → orange while still separating
+              // Brief beat so the full capsule registers, then the pill's
+              // right edge retracts - the silhouette necks down over the
+              // embedded bubble and pinches off
+              breakTl.to(pill, {
+                paddingRight: 16,
+                duration: 0.22, ease: 'power2.inOut',
+              }, 0.04)
+              // Surface tension: bubble stretches toward the receding edge...
+              .to(backBubble, {
+                scaleX: 1.07, transformOrigin: '100% 50%',
+                duration: 0.08, ease: 'power2.out',
+              }, 0.17)
+              // ...and bounces apart as the shapes let go: quick pop away
+              // from the pill, then an elastic settle back to resting spot
+              .to(backBubble, {
+                scaleX: 1.1, scaleY: 1.06, x: 7,
+                duration: 0.09, ease: 'power2.out',
+              }, 0.26)
+              .to(backBubble, {
+                scaleX: 1, scaleY: 1, x: 0,
+                duration: 0.45, ease: 'elastic.out(1.1, 0.4)',
+              }, 0.35)
+              // Bubble melts dark → orange as the waist narrows
               .to(backBubble, {
                 background: '#F95F4A',
-                duration: 0.35, ease: 'sine.inOut',
-              }, 0.28)
+                duration: 0.15, ease: 'sine.inOut',
+              }, 0.17)
               // Back arrow resolves in
               .to(bubbleIcon, {
                 opacity: 1, scale: 1,
-                duration: 0.3, ease: 'power2.out',
-              }, 0.4)
-              // Thin the metaball neck to nothing (resting 8px gap stays bridged at blur 8)
-              .to(gooeyBlur, {
-                attr: { stdDeviation: 2.5 },
-                duration: 0.3, ease: 'power2.inOut',
-              }, 0.48)
-              // Shapes fully apart: drop metaball filter, ease glass back in
+                duration: 0.14, ease: 'power2.out',
+              }, 0.24)
+              // Title fades in once the pill has separated
+              .to(label, {
+                opacity: 1,
+                duration: 0.22, ease: 'power2.out',
+              }, 0.3)
+              // Pill recoils off the separation - kicks left, springs back
+              .to(pill, {
+                scaleX: 0.97, x: -4, transformOrigin: '100% 50%',
+                duration: 0.07, ease: 'power2.out',
+              }, 0.26)
+              .to(pill, {
+                scaleX: 1, x: 0,
+                duration: 0.35, ease: 'elastic.out(1, 0.45)',
+              }, 0.33)
+              // Shapes fully apart: ease glass back in
               .add(() => {
-                if (gooeyWrap) gooeyWrap.classList.remove('gooey-active');
+                if (splitWrap) splitWrap.classList.remove('split-active');
                 pill.style.backdropFilter = '';
                 pill.style.webkitBackdropFilter = '';
                 if (backBubble) gsap.set(backBubble, { backdropFilter: '', webkitBackdropFilter: '' });
-              }, 0.8)
+              }, 0.34)
               .to(pill, {
                 backgroundColor: glassBg, borderColor: glassBorder,
-                duration: 0.35, ease: 'power2.out',
-              }, 0.8)
+                duration: 0.25, ease: 'power2.out',
+              }, 0.34)
               .to(backBubble, {
                 borderColor: 'rgba(254, 252, 217, 0.35)',
-                duration: 0.35, ease: 'power2.out',
-              }, 0.8);
+                duration: 0.25, ease: 'power2.out',
+              }, 0.34);
             },
           });
         });
@@ -1378,7 +1422,7 @@ const dropdowns: Record<string, DropdownItem[]> = {
 
         // Wait for preloader to finish before playing subpage intro
         window.addEventListener("preloader:done", () => {
-          setTimeout(playSubpageIntro, 500);
+          setTimeout(playSubpageIntro, 250);
         }, { once: true });
 
         // ── Subpage hover: pill only (not bubble), debounced ──
@@ -1418,27 +1462,27 @@ const dropdowns: Record<string, DropdownItem[]> = {
           opacity: 1,
           y: 8,
           scale: 1.05,
-          duration: 0.35,
+          duration: 0.28,
           ease: "power2.out",
         })
         // Phase 2: Bounce back up
         .to(pill, {
           y: -5,
           scale: 1,
-          duration: 0.2,
+          duration: 0.16,
           ease: "power2.inOut",
         })
         // Phase 3: Settle + expand circle → pill (Flip)
         .to(pill, {
           y: 0,
-          duration: 0.15,
+          duration: 0.12,
           ease: "power2.out",
           onStart: () => {
             const state = Flip.getState(pill);
             pill.classList.remove("pill-collapsed");
 
             Flip.from(state, {
-              duration: 0.5,
+              duration: 0.38,
               ease: "power3.out",
               clearProps: "all",
               onComplete: () => {
@@ -1447,9 +1491,9 @@ const dropdowns: Record<string, DropdownItem[]> = {
                 // Phase 4: Dots stagger in after expansion
                 gsap.to(dots, {
                   opacity: 1,
-                  duration: 0.25,
+                  duration: 0.2,
                   ease: "power2.out",
-                  stagger: 0.025,
+                  stagger: 0.02,
                 });
               },
             });
@@ -1459,11 +1503,11 @@ const dropdowns: Record<string, DropdownItem[]> = {
 
       // If preloader already shown before, 500ms delay then drop
       if (sessionStorage.getItem("preloaderShown")) {
-        setTimeout(triggerPillIntro, 500);
+        setTimeout(triggerPillIntro, 250);
       } else {
         // First visit - wait for preloader to fully finish
         window.addEventListener("preloader:done", () => {
-          setTimeout(triggerPillIntro, 500);
+          setTimeout(triggerPillIntro, 250);
         }, { once: true });
       }
     }

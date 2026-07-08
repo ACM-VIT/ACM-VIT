@@ -5,7 +5,7 @@ import ProjectsShowcase from "../components/ui/ProjectsShowcase.astro";
 export interface Props {
   projects: Array<{
     slug?: string;
-    cassette: { src: string; alt: string };
+    cassette: { src?: string; svg?: string; alt: string };
     textContent: { blocks: string[] };
     buttons: {
       primary: { backgroundColor: string };

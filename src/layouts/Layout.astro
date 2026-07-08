@@ -218,14 +218,22 @@ const isLandingPage = Astro.url.pathname === "/";
       </a>
       {
         isLandingPage && (
-          <img
-            src={getAssetUrl("/logos/logos-vit.webp")}
-            alt="VIT"
-            class="vit-logo"
-            loading="eager"
-            decoding="async"
-            fetchpriority="high"
-          />
+          <a
+            href="https://vit.ac.in/"
+            class="vit-logo-link"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="VIT (opens in a new tab)"
+          >
+            <img
+              src={getAssetUrl("/logos/logos-vit.webp")}
+              alt="VIT"
+              class="vit-logo"
+              loading="eager"
+              decoding="async"
+              fetchpriority="high"
+            />
+          </a>
         )
       }
     </div>
@@ -774,7 +782,8 @@ const isLandingPage = Astro.url.pathname === "/";
       transform 160ms ease;
   }
 
-  .acm-logo-link {
+  .acm-logo-link,
+  .vit-logo-link {
     display: inline-flex;
     line-height: 0;
     pointer-events: auto;

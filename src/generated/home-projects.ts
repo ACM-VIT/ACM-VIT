@@ -4,23 +4,33 @@ import type { HomeProjectEntry } from "../platform/schema/collections/site.ts";
 
 export const items: HomeProjectEntry[] = [
   {
-    "slug": "acmone",
+    "slug": "conclave",
     "order": 0,
-    "cassetteSrc": "/projects/items/0/cassetteSrc.webp",
-    "cassetteAlt": "ACMOne Image",
-    "description1": "ACMOne streamlines operations for ACM VIT's 100+ organizing committee members by centralizing event planning, deadline tracking, ID scanning, and team communication in one unified platform.",
-    "description2": "Built specifically for student chapter management, the system features real-time updates, an intuitive calendar interface, and integrated collaboration tools that keep all teams synchronized. This eliminates coordination bottlenecks and reduces administrative overhead, allowing the chapter to focus on delivering impactful events and initiatives. With its clean interface and robust backend architecture, ACMOne demonstrates how thoughtful system design can solve real organizational challenges at scale.",
-    "primaryBgColor": "#F95F4A",
+    "cassetteSvg": "/projects/cassettes/projects-cassettes-conclave.svg",
+    "cassetteAlt": "Conclave",
+    "description1": "Conclave is a real-time meetings platform with web and mobile clients, a custom SFU, instant breakout rooms, a shared browser, and an in-meeting apps SDK. Born out of ACM-VIT's OCS 2026 portal, every interview that cycle ran on it.",
+    "description2": "The chapter needed a meeting client that could handle hundreds of applicant interviews without leaning on Google Meet or Zoom, so the team built one from scratch. The result was good enough to extract into its own product: a Next.js web client, a React Native + Expo mobile app, and native Swift/Kotlin clients, all backed by a custom mediasoup-based SFU. Beyond video calls, Conclave supports one-click breakout rooms, a VNC-powered shared browser, and an apps runtime with real-time data sync via Yjs. The whole thing is containerised with Docker and ships under an MIT licence.",
+    "primaryBgColor": "#FF6B35",
     "primaryTextColor": "white",
     "primaryBorderColor": "#FEFCD9",
     "visitWebsiteText": "VISIT WEBSITE",
-    "visitWebsiteUrl": "https://acmone.acmvit.in",
-    "visitWebsiteBgColor": "#F95F4A",
+    "visitWebsiteUrl": "https://conclave.acmvit.in",
+    "visitWebsiteBgColor": "#FF6B35",
     "visitWebsiteTextColor": "white",
     "visitWebsiteBorderColor": "#FEFCD9",
+    "icons": [
+      {
+        "type": "github",
+        "backgroundColor": "#FF6B35",
+        "textColor": "white",
+        "borderColor": "#FEFCD9",
+        "iconColor": "#FEFCD9",
+        "url": "https://github.com/ACM-VIT/conclave"
+      }
+    ],
     "textColor": "white",
     "contentBlockBackground": "rgba(0, 0, 0, 0.15)",
-    "hoverShadow": "rgba(249, 95, 74, 0.4)"
+    "hoverShadow": "rgba(255, 107, 53, 0.4)"
   },
   {
     "slug": "examcooker",
