@@ -31,11 +31,25 @@
   gap: 1.5rem;
 }
 
-.event-hero-eyebrow {
+/* Category chips - replace the old hero eyebrow line */
+.event-hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.event-type-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.8rem;
+  border-radius: 100px;
+  border: 1px solid rgba(254, 253, 208, 0.25);
+  border-color: color-mix(in srgb, var(--event-color, #F95F4A) 45%, transparent);
+  background: rgba(254, 253, 208, 0.04);
+  background: color-mix(in srgb, var(--event-color, #F95F4A) 8%, transparent);
   font-family: 'PolySans Mono', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
   color: var(--event-color, #F95F4A);
 }
 
@@ -177,13 +191,14 @@
   margin-bottom: 3rem;
 }
 
-.event-section-eyebrow {
-  font-family: 'PolySans Mono', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  color: var(--event-color, #F95F4A);
-  margin-bottom: 0.75rem;
+/* Short accent rule - anchors section titles without an eyebrow label */
+.event-section-rule {
+  display: block;
+  width: 3.5rem;
+  height: 3px;
+  border-radius: 100px;
+  background: var(--event-color, #F95F4A);
+  margin-bottom: 1.1rem;
 }
 
 .event-section-title {
@@ -706,13 +721,13 @@ html[data-theme="light"] .event-perks-list li {
 }
 
 /* Darken light event colors for readability on white backgrounds */
-html[data-theme="light"] .event-hero-eyebrow,
+html[data-theme="light"] .event-type-chip,
 html[data-theme="light"] .event-hero-title span,
 html[data-theme="light"] .event-section-title span,
-html[data-theme="light"] .event-section-eyebrow,
 html[data-theme="light"] .event-stat-value,
 html[data-theme="light"] .event-archive-link-chip,
 html[data-theme="light"] .event-archive-year {
+  color: var(--event-color, #F95F4A); /* fallback: WebKit <16.2 lacks color-mix */
   color: color-mix(in srgb, var(--event-color, #F95F4A) 55%, #000);
 }
 

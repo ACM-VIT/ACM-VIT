@@ -63,9 +63,18 @@ const titleAccent = titleWords.length > 1 ? titleWords.slice(1).join(" ") : "";
     <section class="domain-hero">
       <div class="domain-hero-inner">
         <div class="domain-hero-text">
-          <p class="domain-hero-eyebrow" data-animate="fade-up">
-            ACM-VIT - Domains
-          </p>
+          <nav class="domain-hero-crumbs" aria-label="Breadcrumb" data-animate="fade-up">
+            <svg class="domain-hero-crumb-reel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" />
+              <circle cx="12" cy="12" r="3.4" />
+              <path d="M12 2v6.6M12 15.4V22M2 12h6.6M15.4 12H22" />
+            </svg>
+            <ol>
+              <li><a href="/">Home</a></li>
+              <li><a href="/#domains">Domains</a></li>
+              <li aria-current="page">{domainData.title}</li>
+            </ol>
+          </nav>
           <h1 class="domain-hero-title" data-animate="fade-up">
             {titleMain}
             {titleAccent && <span>{titleAccent}</span>}

@@ -159,13 +159,6 @@
   line-height: 1.5;
   color: var(--ds-ink-3);
 }
-.ds-eyebrow {
-  font-size: 12.5px;
-  font-weight: 640;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ds-accent-ink);
-}
 .ds-mono {
   font-family: var(--ds-mono);
   font-size: 0.86em;

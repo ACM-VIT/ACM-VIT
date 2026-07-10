@@ -31,13 +31,83 @@
   gap: 1.5rem;
 }
 
-.domain-hero-eyebrow {
-  font-family: 'PolySans Mono', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  color: var(--domain-color, #F95F4A);
+/* Breadcrumb trail - tape-deck style: spinning reel, play-arrow separators,
+   "now playing" current crumb. Replaces the old hero eyebrow. */
+.domain-hero-crumbs {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
   opacity: 0;
+}
+
+.domain-hero-crumb-reel {
+  width: 17px;
+  height: 17px;
+  flex: none;
+  color: var(--domain-color, #F95F4A);
+  opacity: 0.9;
+  animation: domain-crumb-reel-spin 6s linear infinite;
+}
+
+@keyframes domain-crumb-reel-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .domain-hero-crumb-reel {
+    animation: none;
+  }
+}
+
+.domain-hero-crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: 0.35rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-family: 'PolySans Mono', monospace;
+  font-size: 0.74rem;
+  letter-spacing: 0.05em;
+}
+
+.domain-hero-crumbs li {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Play-triangle separator, like a tape deck's forward control */
+.domain-hero-crumbs li + li::before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: 5px solid rgba(254, 253, 208, 0.28);
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  margin: 0 0.65rem;
+}
+
+.domain-hero-crumbs a {
+  color: rgba(254, 253, 208, 0.55);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.domain-hero-crumbs a:hover {
+  color: #FFFDD0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.domain-hero-crumbs [aria-current="page"] {
+  color: var(--domain-color, #F95F4A);
+  text-shadow: 0 0 16px color-mix(in srgb, var(--domain-color, #F95F4A) 55%, transparent);
+}
+
+/* Current crumb gets the accent separator - the "play" is lit */
+.domain-hero-crumbs li[aria-current="page"]::before {
+  border-left-color: var(--domain-color, #F95F4A);
 }
 
 .domain-hero-title {
@@ -453,6 +523,34 @@
    ═══════════════════════════════════════════════════════ */
 html[data-theme="light"] .domain-hero-title {
   color: #1a1a1a;
+}
+
+html[data-theme="light"] .domain-hero-crumbs a {
+  color: rgba(26, 26, 26, 0.55);
+}
+
+html[data-theme="light"] .domain-hero-crumbs a:hover {
+  color: #1a1a1a;
+}
+
+html[data-theme="light"] .domain-hero-crumbs li + li::before {
+  border-left-color: rgba(26, 26, 26, 0.3);
+}
+
+html[data-theme="light"] .domain-hero-crumbs [aria-current="page"] {
+  color: var(--domain-color, #F95F4A); /* fallback: WebKit <16.2 lacks color-mix */
+  color: color-mix(in srgb, var(--domain-color, #F95F4A) 60%, #1a1a1a 40%);
+  text-shadow: none;
+}
+
+html[data-theme="light"] .domain-hero-crumbs li[aria-current="page"]::before {
+  border-left-color: var(--domain-color, #F95F4A); /* fallback: WebKit <16.2 lacks color-mix */
+  border-left-color: color-mix(in srgb, var(--domain-color, #F95F4A) 60%, #1a1a1a 40%);
+}
+
+html[data-theme="light"] .domain-hero-crumb-reel {
+  color: var(--domain-color, #F95F4A); /* fallback: WebKit <16.2 lacks color-mix */
+  color: color-mix(in srgb, var(--domain-color, #F95F4A) 60%, #1a1a1a 40%);
 }
 
 html[data-theme="light"] .domain-hero-desc {

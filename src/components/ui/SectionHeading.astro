@@ -2,16 +2,14 @@
 /**
  * SectionHeading - reusable animated section title.
  * Theme: cream (#FEFCD9) text, red (#F95F4A) accent, PolySans Trial.
- * Scroll-triggered reveal: eyebrow fades in, title words rise + clip-reveal,
- * accent bar wipes in. Light-mode compatible via globals.css token overrides.
+ * Scroll-triggered reveal: title words rise + clip-reveal, accent bar
+ * wipes in. Light-mode compatible via globals.css token overrides.
  *
  * Usage:
- *   <SectionHeading eyebrow="Built by us" title="Our" accent="Projects"
+ *   <SectionHeading title="Our" accent="Projects"
  *     subtitle="Some of our popular projects" />
  */
 export interface Props {
-  /** Small uppercase kicker above the title. */
-  eyebrow?: string;
   /** Leading (non-accent) part of the title. */
   title: string;
   /** Highlighted part of the title, rendered in the accent color. */
@@ -26,7 +24,6 @@ export interface Props {
 }
 
 const {
-  eyebrow,
   title,
   accent = "",
   subtitle,
@@ -50,15 +47,6 @@ const alignClasses =
   style={`--accent: ${accentColor};`}
   data-section-heading
 >
-  {
-    eyebrow && (
-      <span class="sh-eyebrow inline-flex items-center gap-2 font-['PolySans_Trial',sans-serif] text-xs font-light uppercase tracking-[0.3em] text-[#FEFCD9]/70">
-        <span class="sh-dot inline-block h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
-        {eyebrow}
-      </span>
-    )
-  }
-
   <h2
     class="sh-title m-0 font-['PolySans_Trial',sans-serif] text-4xl font-bold uppercase leading-[0.95] tracking-[-0.03em] text-[#FEFCD9] sm:text-6xl lg:text-7xl"
   >
@@ -92,14 +80,12 @@ const alignClasses =
         if (heading.dataset.shInit) return;
         heading.dataset.shInit = "1";
 
-        const eyebrow = heading.querySelector(".sh-eyebrow");
         const words = heading.querySelectorAll(".sh-word");
         const bar = heading.querySelector(".sh-bar");
         const subtitle = heading.querySelector(".sh-subtitle");
 
         gsap.set(words, { yPercent: 110, opacity: 0 });
         gsap.set(bar, { scaleX: 0 });
-        if (eyebrow) gsap.set(eyebrow, { opacity: 0, y: 12 });
         if (subtitle) gsap.set(subtitle, { opacity: 0, y: 16 });
 
         const tl = gsap.timeline({
@@ -110,21 +96,13 @@ const alignClasses =
           },
         });
 
-        if (eyebrow)
-          tl.to(eyebrow, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" });
-
-        tl.to(
-          words,
-          {
-            yPercent: 0,
-            opacity: 1,
-            duration: 0.8,
-            ease: "power3.out",
-            stagger: 0.12,
-          },
-          eyebrow ? "-=0.2" : 0,
-        )
-          .to(bar, { scaleX: 1, duration: 0.6, ease: "power3.out" }, "-=0.4");
+        tl.to(words, {
+          yPercent: 0,
+          opacity: 1,
+          duration: 0.8,
+          ease: "power3.out",
+          stagger: 0.12,
+        }).to(bar, { scaleX: 1, duration: 0.6, ease: "power3.out" }, "-=0.4");
 
         if (subtitle)
           tl.to(
@@ -152,9 +130,6 @@ const alignClasses =
   }
 
   /* Light mode: cream text with opacity modifiers needs explicit dark color. */
-  :global(html[data-theme="light"]) .sh-eyebrow {
-    color: rgba(26, 26, 26, 0.62) !important;
-  }
   :global(html[data-theme="light"]) .sh-subtitle {
     color: rgba(26, 26, 26, 0.72) !important;
   }

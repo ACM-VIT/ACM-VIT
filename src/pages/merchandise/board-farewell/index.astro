@@ -11,7 +11,6 @@ import Footer from "../../../layouts/Footer.astro";
     <div class="bf-line bf-line--2"></div>
 
     <div class="bf-center-col">
-      <p class="bf-tag" data-bf-tag>SPECIAL EDITION</p>
       <h1 class="bf-title" data-bf-title>
         <span class="bf-tc" data-tc>B</span><span class="bf-tc" data-tc>O</span><span class="bf-tc" data-tc>A</span><span class="bf-tc" data-tc>R</span><span class="bf-tc" data-tc>D</span><span class="bf-tc" data-tc>&nbsp;</span><span class="bf-tc" data-tc>F</span><span class="bf-tc" data-tc>A</span><span class="bf-tc" data-tc>R</span><span class="bf-tc" data-tc>E</span><span class="bf-tc" data-tc>W</span><span class="bf-tc" data-tc>E</span><span class="bf-tc" data-tc>L</span><span class="bf-tc" data-tc>L</span>
       </h1>
@@ -27,20 +26,18 @@ import Footer from "../../../layouts/Footer.astro";
     </div>
 
     <div class="bf-hero-info" data-hero-info>
-      <p class="bf-hero-info__tag">A SENDOFF, NOT A CATALOG DROP</p>
       <h2 class="bf-hero-info__title">For the outgoing board.</h2>
       <p class="bf-hero-info__body">
-        A short, limited run made to mark the end of a board tenure.
-        Not on the regular catalog, not produced again. A token of the year
-        each board steered the chapter through.
+        A sendoff, not a catalog drop - a short, limited run made to mark the
+        end of a board tenure. Not on the regular catalog, not produced again.
+        A token of the year each board steered the chapter through.
       </p>
     </div>
   </section>
 
   <section class="bf-cover-section" data-bf-cover>
     <div class="bf-cover-wrap">
-      <p class="bf-cover-tag" data-cover-anim>THE COVER ART</p>
-      <h3 class="bf-cover-title" data-cover-anim>The print, up close.</h3>
+      <h3 class="bf-cover-title" data-cover-anim>The cover art, up close.</h3>
       <img
         src="/merch/board-farewell/merch-board-farewell-cover.webp"
         alt="Board Farewell Cover Art"
@@ -99,18 +96,6 @@ import Footer from "../../../layouts/Footer.astro";
     gap: 0.6rem;
     pointer-events: none;
     text-align: center;
-  }
-
-  .bf-tag {
-    font-family: "PolySans Trial", system-ui, sans-serif;
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.4em;
-    text-transform: uppercase;
-    color: #FFB800;
-    margin: 0;
-    opacity: 0;
-    transform: translateY(10px);
   }
 
   .bf-title {
@@ -184,15 +169,6 @@ import Footer from "../../../layouts/Footer.astro";
     transform: translateY(20px);
   }
 
-  .bf-hero-info__tag {
-    font-family: "PolySans Trial", system-ui, sans-serif;
-    font-size: 0.6rem;
-    font-weight: 500;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: #FFB800;
-    margin: 0 0 0.6rem;
-  }
 
   .bf-hero-info__title {
     font-family: "PolySans Trial", system-ui, sans-serif;
@@ -226,15 +202,6 @@ import Footer from "../../../layouts/Footer.astro";
     text-align: center;
   }
 
-  .bf-cover-tag {
-    font-family: "PolySans Trial", system-ui, sans-serif;
-    font-size: 0.65rem;
-    font-weight: 500;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    color: #FFB800;
-    margin: 0 0 0.8rem;
-  }
 
   .bf-cover-title {
     font-family: "PolySans Trial", system-ui, sans-serif;
@@ -323,7 +290,6 @@ import Footer from "../../../layouts/Footer.astro";
   }
 
   :global(html[data-theme="light"]) .bf-title { color: rgba(214, 152, 0, 0.18); }
-  :global(html[data-theme="light"]) .bf-tag { color: #c89000; }
   :global(html[data-theme="light"]) .bf-badge__label { color: rgba(200, 144, 0, 0.5); }
   :global(html[data-theme="light"]) .bf-badge__year { -webkit-text-stroke-color: rgba(200, 144, 0, 0.2); }
   :global(html[data-theme="light"]) .bf-hero-info__title,
@@ -341,7 +307,6 @@ import Footer from "../../../layouts/Footer.astro";
   import { ScrollTrigger } from "gsap/ScrollTrigger";
   gsap.registerPlugin(ScrollTrigger);
 
-  const tag = document.querySelector("[data-bf-tag]");
   const chars = document.querySelectorAll("[data-tc]");
   const tee = document.querySelector("[data-bf-tee]");
   const badge = document.querySelector("[data-badge]");
@@ -349,8 +314,7 @@ import Footer from "../../../layouts/Footer.astro";
 
   const tl = gsap.timeline({ defaults: { ease: "power3.out" }, delay: 0.3 });
 
-  if (tag) tl.to(tag, { opacity: 1, y: 0, duration: 0.5 });
-  tl.to(chars, { opacity: 1, y: 0, duration: 0.7, stagger: 0.04 }, "-=0.2");
+  tl.to(chars, { opacity: 1, y: 0, duration: 0.7, stagger: 0.04 });
   if (tee) tl.to(tee, { opacity: 1, y: 0, duration: 0.85, ease: "power3.out" }, "-=0.4");
   if (badge) tl.to(badge, { opacity: 1, duration: 0.45 }, "-=0.4");
   if (heroInfo) tl.to(heroInfo, { opacity: 1, y: 0, duration: 0.6 }, "-=0.3");

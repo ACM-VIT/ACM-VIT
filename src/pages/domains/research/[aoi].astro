@@ -67,9 +67,19 @@ const spotlight = spotlightByAOI[aoiData.key] ?? [];
     <section class="dsg-hero" style="min-height: 70vh;">
       <div class="dsg-hero-inner">
         <div class="dsg-hero-text">
-          <p class="dsg-hero-eyebrow" data-dsg-animate="fade-up">
-            Research - Area of Interest
-          </p>
+          <nav class="dsg-hero-crumbs" aria-label="Breadcrumb" data-dsg-animate="fade-up">
+            <svg class="dsg-hero-crumb-reel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" />
+              <circle cx="12" cy="12" r="3.4" />
+              <path d="M12 2v6.6M12 15.4V22M2 12h6.6M15.4 12H22" />
+            </svg>
+            <ol>
+              <li><a href="/">Home</a></li>
+              <li><a href="/#domains">Domains</a></li>
+              <li><a href="/domains/research">Research</a></li>
+              <li aria-current="page">{aoiData.title}</li>
+            </ol>
+          </nav>
           <h1 class="dsg-hero-title" data-dsg-animate="fade-up" style="font-size: clamp(3rem, 8vw, 7rem);">
             {aoiData.title}
           </h1>

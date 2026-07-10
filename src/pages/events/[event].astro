@@ -52,6 +52,13 @@ const titleAccent = titleWords.length > 1 ? titleWords.slice(1).join(" ") : "";
 const otherEvents = Object.values(eventDetails)
   .filter((e) => e.slug !== data.slug)
   .slice(0, 6);
+
+// The old hero eyebrow ("ACM-VIT · ACM-W · Flagship Hackathon") becomes a row
+// of category chips; the chapter name is implicit on its own site.
+const typeTags = (data.eyebrow ?? "")
+  .split("·")
+  .map((s: string) => s.trim())
+  .filter((s: string) => s && s.toUpperCase() !== "ACM-VIT");
 ---
 
 <Layout pageTitle={data.title} backHref="/#events">
@@ -64,7 +71,13 @@ const otherEvents = Object.values(eventDetails)
     <section class="event-hero">
       <div class="event-hero-inner">
         <div class="event-hero-text">
-          <p class="event-hero-eyebrow" data-animate="fade-up">{data.eyebrow}</p>
+          {typeTags.length > 0 && (
+            <div class="event-hero-tags" data-animate="fade-up">
+              {typeTags.map((tag: string) => (
+                <span class="event-type-chip">{tag}</span>
+              ))}
+            </div>
+          )}
           <h1 class="event-hero-title" data-animate="fade-up">
             {titleMain}
             {titleAccent && <><br /><span>{titleAccent}</span></>}
@@ -128,7 +141,7 @@ const otherEvents = Object.values(eventDetails)
     <!-- About -->
     <section class="event-section-narrow" id="event-about">
       <div class="event-section-header">
-        <p class="event-section-eyebrow" data-animate="fade-up">About</p>
+        <span class="event-section-rule" data-animate="fade-up" aria-hidden="true"></span>
         <h2 class="event-section-title" data-animate="fade-up">
           What is <span>{data.title}</span>?
         </h2>
@@ -144,7 +157,7 @@ const otherEvents = Object.values(eventDetails)
         <hr class="event-divider" />
         <section class="event-section-narrow" id="event-speaker">
           <div class="event-section-header">
-            <p class="event-section-eyebrow" data-animate="fade-up">Speaker</p>
+            <span class="event-section-rule" data-animate="fade-up" aria-hidden="true"></span>
             <h2 class="event-section-title" data-animate="fade-up">
               Who is <span>{data.speaker.name}</span>?
             </h2>
@@ -191,7 +204,7 @@ const otherEvents = Object.values(eventDetails)
         <hr class="event-divider" />
         <section class="event-section" id="event-archives">
           <div class="event-section-header">
-            <p class="event-section-eyebrow" data-animate="fade-up">Archives</p>
+            <span class="event-section-rule" data-animate="fade-up" aria-hidden="true"></span>
             <h2 class="event-section-title" data-animate="fade-up">
               Past <span>editions</span>
             </h2>
@@ -321,7 +334,7 @@ const otherEvents = Object.values(eventDetails)
     <!-- Other events -->
     <section class="event-section">
       <div class="event-section-header">
-        <p class="event-section-eyebrow" data-animate="fade-up">More From ACM-VIT</p>
+        <span class="event-section-rule" data-animate="fade-up" aria-hidden="true"></span>
         <h2 class="event-section-title" data-animate="fade-up">
           Explore other <span>events</span>
         </h2>

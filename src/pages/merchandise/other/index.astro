@@ -11,7 +11,6 @@ import Footer from "../../../layouts/Footer.astro";
     <div class="ot-line ot-line--2"></div>
 
     <div class="ot-center-col">
-      <p class="ot-tag" data-ot-tag>EXTRAS</p>
       <h1 class="ot-title" data-ot-title>
         <span class="ot-tc" data-tc>O</span><span class="ot-tc" data-tc>T</span><span class="ot-tc" data-tc>H</span><span class="ot-tc" data-tc>E</span><span class="ot-tc" data-tc>R</span>
       </h1>
@@ -30,11 +29,11 @@ import Footer from "../../../layouts/Footer.astro";
     </div>
 
     <div class="ot-hero-info" data-hero-info>
-      <p class="ot-hero-info__tag">EVENT TEES &amp; ONE-OFFS</p>
       <h2 class="ot-hero-info__title">Outside the yearly drops.</h2>
       <p class="ot-hero-info__body">
-        Event exclusives, collab pieces, and limited prints that did not belong
-        to a single yearly collection. A growing shelf for everything else.
+        Event tees and one-offs - exclusives, collab pieces, and limited prints
+        that did not belong to a single yearly collection. A growing shelf for
+        everything else.
       </p>
     </div>
   </section>
@@ -87,18 +86,6 @@ import Footer from "../../../layouts/Footer.astro";
     gap: 0.6rem;
     pointer-events: none;
     text-align: center;
-  }
-
-  .ot-tag {
-    font-family: "PolySans Trial", system-ui, sans-serif;
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.4em;
-    text-transform: uppercase;
-    color: #F95F4A;
-    margin: 0;
-    opacity: 0;
-    transform: translateY(10px);
   }
 
   .ot-title {
@@ -184,15 +171,6 @@ import Footer from "../../../layouts/Footer.astro";
     transform: translateY(20px);
   }
 
-  .ot-hero-info__tag {
-    font-family: "PolySans Trial", system-ui, sans-serif;
-    font-size: 0.6rem;
-    font-weight: 500;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: #F95F4A;
-    margin: 0 0 0.6rem;
-  }
 
   .ot-hero-info__title {
     font-family: "PolySans Trial", system-ui, sans-serif;
@@ -285,8 +263,6 @@ import Footer from "../../../layouts/Footer.astro";
   }
 
   :global(html[data-theme="light"]) .ot-title { color: rgba(249, 95, 74, 0.14); }
-  :global(html[data-theme="light"]) .ot-tag,
-  :global(html[data-theme="light"]) .ot-hero-info__tag { color: #d94430; }
   :global(html[data-theme="light"]) .ot-badge__label { color: rgba(217, 68, 48, 0.5); }
   :global(html[data-theme="light"]) .ot-badge__year { -webkit-text-stroke-color: rgba(217, 68, 48, 0.2); }
   :global(html[data-theme="light"]) .ot-hero-info__title { color: #1a1a1a; }
@@ -302,7 +278,6 @@ import Footer from "../../../layouts/Footer.astro";
   import { ScrollTrigger } from "gsap/ScrollTrigger";
   gsap.registerPlugin(ScrollTrigger);
 
-  const tag = document.querySelector("[data-ot-tag]");
   const chars = document.querySelectorAll("[data-tc]");
   const tees = document.querySelectorAll("[data-ot-tee]");
   const badge = document.querySelector("[data-badge]");
@@ -310,8 +285,7 @@ import Footer from "../../../layouts/Footer.astro";
 
   const tl = gsap.timeline({ defaults: { ease: "power3.out" }, delay: 0.3 });
 
-  if (tag) tl.to(tag, { opacity: 1, y: 0, duration: 0.5 });
-  tl.to(chars, { opacity: 1, y: 0, duration: 0.8, stagger: 0.08 }, "-=0.2");
+  tl.to(chars, { opacity: 1, y: 0, duration: 0.8, stagger: 0.08 });
   tees.forEach((tee, i) => {
     tl.to(tee, { opacity: 1, y: 0, duration: 0.85, ease: "power3.out" }, `-=${0.55 - i * 0.1}`);
   });

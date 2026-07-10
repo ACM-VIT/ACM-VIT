@@ -52,10 +52,6 @@ const CURRENT_BOARD_YEAR = 2026;
 
     <!-- Hero -->
     <header class="team-hero relative z-10 flex min-h-[70vh] flex-col items-center justify-center px-6 text-center">
-      <span class="hero-eyebrow mb-6 inline-flex items-center gap-2 font-['PolySans_Trial',sans-serif] text-xs font-light uppercase tracking-[0.35em] text-[#FEFCD9]/70">
-        <span class="hero-dot"></span>
-        The crew making magic
-      </span>
       <img
         src={getAssetUrl("/team/team-the-team.webp")}
         alt="The Team"
@@ -64,8 +60,8 @@ const CURRENT_BOARD_YEAR = 2026;
         decoding="async"
       />
       <p class="hero-sub mt-8 max-w-2xl font-['PolySans_Trial',sans-serif] text-base font-light leading-relaxed text-[#FEFCD9]/75 sm:text-lg">
-        Every cassette, a person. Every year, a new tape. Meet the board
-        steering ACM-VIT, year after year.
+        Every cassette, a person. Every year, a new tape. Meet the crew making
+        the magic - the boards steering ACM-VIT, year after year.
       </p>
     </header>
 
@@ -89,9 +85,9 @@ const CURRENT_BOARD_YEAR = 2026;
       faculty && (
         <section class="leader-section relative z-10 mx-auto max-w-7xl px-4 pb-8 sm:px-6">
           <SectionHeading
-            eyebrow="Guiding ACM-VIT"
             title="The"
             accent="Leader"
+            subtitle="Guiding ACM-VIT from the faculty side, year after year."
             align="left"
             accentColor="#F2C94C"
             class="mb-14 !px-0"
@@ -135,7 +131,6 @@ const CURRENT_BOARD_YEAR = 2026;
         teamYears.map((year) => (
           <section id={`year-${year}`} class="year-block scroll-mt-32" data-year-block={year}>
             <SectionHeading
-              eyebrow="ACM-VIT Board"
               title="Board of"
               accent={yearLabel(year)}
               align="left"
@@ -200,13 +195,6 @@ const CURRENT_BOARD_YEAR = 2026;
     );
   }
 
-  .hero-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 9999px;
-    background: #ff5f4a;
-    box-shadow: 0 0 12px rgba(255, 95, 74, 0.8);
-  }
   .hero-logo {
     height: auto;
     filter: drop-shadow(0 20px 60px rgba(0, 0, 0, 0.5));
@@ -289,10 +277,6 @@ const CURRENT_BOARD_YEAR = 2026;
   :global(html[data-theme="light"]) .hero-sub {
     color: rgba(26, 26, 26, 0.72);
   }
-  :global(html[data-theme="light"]) .hero-eyebrow {
-    color: rgba(26, 26, 26, 0.62);
-  }
-
   @media (prefers-reduced-motion: reduce) {
     .hero-logo {
       animation: none;

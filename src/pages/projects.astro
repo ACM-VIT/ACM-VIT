@@ -88,9 +88,8 @@ const FORKTOBER_COLOR = "#EFEFEF";
     <!-- Forktober projects -->
     <section class="proj-forktober" aria-labelledby="forktober-heading">
       <div class="proj-forktober-header">
-        <p class="proj-forktober-eyebrow">Open Source · Hacktoberfest</p>
         <h2 id="forktober-heading" class="proj-forktober-title">Projects under <span>Forktober</span></h2>
-        <p class="proj-forktober-sub">Repositories ACM-VIT opens up to student contributors every October.</p>
+        <p class="proj-forktober-sub">Open-source repositories ACM-VIT opens up to student contributors every Hacktoberfest.</p>
       </div>
 
       {forktoberYears.map((year) => (
@@ -208,14 +207,6 @@ const FORKTOBER_COLOR = "#EFEFEF";
     text-align: center;
     margin-bottom: 3rem;
   }
-  .proj-forktober-eyebrow {
-    font-family: 'PolySans Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    color: rgba(254, 252, 217, 0.55);
-    margin: 0 0 0.75rem;
-  }
   .proj-forktober-title {
     font-family: 'PolySans Trial', sans-serif;
     font-size: clamp(2rem, 4.2vw, 3rem);
@@ -297,7 +288,6 @@ const FORKTOBER_COLOR = "#EFEFEF";
 
   :global(html[data-theme="light"]) .proj-forktober-title { color: #1a1a1a; }
   :global(html[data-theme="light"]) .proj-forktober-title span { color: #555; }
-  :global(html[data-theme="light"]) .proj-forktober-eyebrow,
   :global(html[data-theme="light"]) .proj-forktober-sub { color: rgba(26, 26, 26, 0.6); }
   :global(html[data-theme="light"]) .proj-forktober-year-num { color: #1a1a1a; }
   :global(html[data-theme="light"]) .proj-forktober-year-meta { color: rgba(26, 26, 26, 0.5); }

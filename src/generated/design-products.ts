@@ -1117,7 +1117,7 @@ export const items: ProductGuide[] = [
         "role": "Labels, tags & body",
         "weights": "Median",
         "css": "'PolySans Mono DS', monospace",
-        "sample": "eyebrows, tags, and running copy - wide tracking, comfortable line-height",
+        "sample": "tags, chips, and running copy - wide tracking, comfortable line-height",
         "sampleSize": "15px",
         "sampleWeight": 500
       },

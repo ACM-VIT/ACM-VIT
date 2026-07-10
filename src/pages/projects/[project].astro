@@ -154,6 +154,13 @@ const otherLinks = data.links.filter(
   (l) => !["website", "play", "appstore", "github", "download", "docs", "demo"].includes(l.kind ?? "")
 );
 const hasTechStack = data.techStack.some((g) => g.slugs.length > 0);
+
+// The old hero eyebrow ("ACM-VIT · Mobile · Chapter Ops") becomes a row of
+// tag chips beside the status badge; the chapter name is implicit on its own site.
+const typeTags = (data.eyebrow ?? "")
+  .split("·")
+  .map((s) => s.trim())
+  .filter((s) => s && s.toUpperCase() !== "ACM-VIT");
 ---
 
 <Layout pageTitle={data.title} backHref="/projects">
@@ -176,12 +183,14 @@ const hasTechStack = data.techStack.some((g) => g.slugs.length > 0);
       <div class="proj-hero-inner relative z-10 max-w-350 mx-auto px-6 md:px-10 pt-24 md:pt-32 pb-16 md:pb-24">
         <div class="grid md:grid-cols-[1.15fr_1fr] gap-10 items-center">
           <div class="flex flex-col gap-6 md:gap-8 items-start">
-            <div class="flex items-center gap-3 flex-wrap" data-anim="up">
-              <span class="proj-eyebrow">{data.eyebrow}</span>
+            <div class="flex items-center gap-2.5 flex-wrap" data-anim="up">
               <span class="proj-status-badge" style={`--dot: ${statusInfo.dot}`}>
                 <span class="proj-status-dot"></span>
                 {statusInfo.label}
               </span>
+              {typeTags.map((tag) => (
+                <span class="proj-tag-chip">{tag}</span>
+              ))}
             </div>
 
             <h1 class="proj-hero-title max-w-2xl" data-anim="up">{data.title}</h1>
@@ -316,7 +325,7 @@ const hasTechStack = data.techStack.some((g) => g.slugs.length > 0);
     <!-- ABOUT -->
     <section class="proj-section-narrow" id="proj-about">
       <div class="proj-section-header">
-        <p class="proj-section-eyebrow" data-anim="up">About</p>
+        <span class="proj-section-rule" data-anim="up" aria-hidden="true"></span>
         <h2 class="proj-section-title" data-anim="up">
           What is <span>{data.title}</span>?
         </h2>
@@ -332,9 +341,9 @@ const hasTechStack = data.techStack.some((g) => g.slugs.length > 0);
         <hr class="proj-divider" />
         <section class="proj-section" id="proj-screens">
           <div class="proj-section-header">
-            <p class="proj-section-eyebrow" data-anim="up">Inside the app</p>
+            <span class="proj-section-rule" data-anim="up" aria-hidden="true"></span>
             <h2 class="proj-section-title" data-anim="up">
-              See the <span>screens</span>
+              Inside the app - see the <span>screens</span>
             </h2>
           </div>
 
@@ -367,9 +376,9 @@ const hasTechStack = data.techStack.some((g) => g.slugs.length > 0);
         <hr class="proj-divider" />
         <section class="proj-section" id="proj-features">
           <div class="proj-section-header">
-            <p class="proj-section-eyebrow" data-anim="up">Features</p>
+            <span class="proj-section-rule" data-anim="up" aria-hidden="true"></span>
             <h2 class="proj-section-title" data-anim="up">
-              Built for the <span>actual workflow</span>
+              Features, built for the <span>actual workflow</span>
             </h2>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -390,7 +399,7 @@ const hasTechStack = data.techStack.some((g) => g.slugs.length > 0);
         <hr class="proj-divider" />
         <section class="proj-section dsg-tools-wrap" id="proj-stack" style={`--domain-color: ${theme};`}>
           <div class="proj-section-header">
-            <p class="proj-section-eyebrow" data-anim="up">Tech Stack</p>
+            <span class="proj-section-rule" data-anim="up" aria-hidden="true"></span>
             <h2 class="proj-section-title" data-anim="up">
               What it's <span>built with</span>
             </h2>
@@ -420,7 +429,7 @@ const hasTechStack = data.techStack.some((g) => g.slugs.length > 0);
         <hr class="proj-divider" />
         <section class="proj-section" id="proj-developers">
           <div class="proj-section-header">
-            <p class="proj-section-eyebrow" data-anim="up">Developers</p>
+            <span class="proj-section-rule" data-anim="up" aria-hidden="true"></span>
             <h2 class="proj-section-title" data-anim="up">
               Who <span>built it</span>
             </h2>
@@ -463,7 +472,7 @@ const hasTechStack = data.techStack.some((g) => g.slugs.length > 0);
         <hr class="proj-divider" />
         <section class="proj-section" id="proj-designers">
           <div class="proj-section-header">
-            <p class="proj-section-eyebrow" data-anim="up">Designers</p>
+            <span class="proj-section-rule" data-anim="up" aria-hidden="true"></span>
             <h2 class="proj-section-title" data-anim="up">
               Who <span>designed it</span>
             </h2>
@@ -499,9 +508,9 @@ const hasTechStack = data.techStack.some((g) => g.slugs.length > 0);
         <hr class="proj-divider" />
         <section class="proj-section" id="proj-versions">
           <div class="proj-section-header">
-            <p class="proj-section-eyebrow" data-anim="up">Versions</p>
+            <span class="proj-section-rule" data-anim="up" aria-hidden="true"></span>
             <h2 class="proj-section-title" data-anim="up">
-              The <span>changelog</span>, sort of
+              Versions - the <span>changelog</span>, sort of
             </h2>
           </div>
           <div class="flex flex-col gap-6">
@@ -573,9 +582,9 @@ const hasTechStack = data.techStack.some((g) => g.slugs.length > 0);
         <hr class="proj-divider" />
         <section class="proj-section">
           <div class="proj-section-header">
-            <p class="proj-section-eyebrow" data-anim="up">More from ACM-VIT</p>
+            <span class="proj-section-rule" data-anim="up" aria-hidden="true"></span>
             <h2 class="proj-section-title" data-anim="up">
-              Other <span>projects</span>
+              More from ACM-VIT - other <span>projects</span>
             </h2>
           </div>
           <div class="proj-other-grid">
@@ -709,11 +718,19 @@ const hasTechStack = data.techStack.some((g) => g.slugs.length > 0);
 
   /* ───── Hero ───── */
   .proj-hero { min-height: 88vh; }
-  .proj-eyebrow {
+  /* Tag chips - replace the old hero eyebrow line */
+  .proj-tag-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-color: color-mix(in srgb, var(--proj-color) 45%, transparent);
+    border-radius: 100px;
+    background: rgba(255, 255, 255, 0.02);
+    background: color-mix(in srgb, var(--proj-color) 8%, transparent);
     font-family: 'PolySans Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
     color: var(--proj-color);
   }
   .proj-status-badge {
@@ -933,13 +950,14 @@ const hasTechStack = data.techStack.some((g) => g.slugs.length > 0);
   .proj-section { padding: 5rem 1.5rem; max-width: 1400px; margin: 0 auto; position: relative; }
   .proj-section-narrow { padding: 5rem 1.5rem; max-width: 980px; margin: 0 auto; }
   .proj-section-header { margin-bottom: 2.5rem; }
-  .proj-section-eyebrow {
-    font-family: 'PolySans Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    color: var(--proj-color);
-    margin-bottom: 0.6rem;
+  /* Short accent rule - anchors section titles without an eyebrow label */
+  .proj-section-rule {
+    display: block;
+    width: 3.5rem;
+    height: 3px;
+    border-radius: 100px;
+    background: var(--proj-color);
+    margin-bottom: 1rem;
   }
   .proj-section-title {
     font-family: 'PolySans Trial', sans-serif;
@@ -1359,12 +1377,14 @@ const hasTechStack = data.techStack.some((g) => g.slugs.length > 0);
   :global(html[data-theme="light"]) .proj-commit-cell {
     background: rgba(0,0,0,0.04);
   }
-  :global(html[data-theme="light"]) .proj-eyebrow,
-  :global(html[data-theme="light"]) .proj-section-eyebrow,
+  :global(html[data-theme="light"]) .proj-tag-chip,
   :global(html[data-theme="light"]) .proj-section-title span,
   :global(html[data-theme="light"]) .proj-stat-value,
   :global(html[data-theme="light"]) .proj-version-year {
     color: var(--proj-color-secondary, #263B33);
+  }
+  :global(html[data-theme="light"]) .proj-section-rule {
+    background: var(--proj-color-secondary, #263B33);
   }
   :global(html[data-theme="light"]) .proj-feature-card:hover {
     border-color: color-mix(in srgb, var(--proj-color-secondary, #263B33) 50%, transparent);

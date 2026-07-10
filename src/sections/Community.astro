@@ -16,11 +16,6 @@ import AnimatedButton from "../components/ui/AnimatedButton.astro";
   <div class="cl-inner">
     <!-- Left: copy -->
     <div class="cl-left">
-      <span class="cl-eyebrow">
-        <span class="cl-dot"></span>
-        ACM-VIT · Beyond the code
-      </span>
-
       <h2 class="cl-heading">
         <span class="cl-word">COMM</span><span class="cl-unity-line"><span class="cl-word accent">UNITY</span><img
             src="/community/community-pixel-heart.webp"
@@ -34,7 +29,7 @@ import AnimatedButton from "../components/ui/AnimatedButton.astro";
       <span class="cl-bar" aria-hidden="true"></span>
 
       <p class="cl-text">
-        At ACM-VIT, technology is more than just code - it's a tool to uplift,
+        At ACM-VIT, technology goes beyond the code - it's a tool to uplift,
         empower, and create meaningful change. Our community-driven initiatives
         spark curiosity, strengthen digital literacy, and bring the power of
         technology closer to those who need it most.
@@ -138,25 +133,6 @@ import AnimatedButton from "../components/ui/AnimatedButton.astro";
     min-width: 0;
   }
 
-  .cl-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-family: "PolySans Trial", sans-serif;
-    font-size: 0.75rem;
-    font-weight: 300;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: rgba(254, 252, 217, 0.7);
-  }
-  .cl-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 9999px;
-    background: #ff5f4a;
-    box-shadow: 0 0 12px rgba(255, 95, 74, 0.8);
-  }
-
   .cl-heading {
     font-family: "PolySans Trial", system-ui, sans-serif;
     font-size: clamp(2.75rem, 7.5vw, 7rem);
@@ -252,7 +228,6 @@ import AnimatedButton from "../components/ui/AnimatedButton.astro";
 
 
   /* ── Reveal initial state (set before GSAP runs) ── */
-  .cl-eyebrow,
   .cl-text,
   .cl-cta {
     opacity: 0;
@@ -315,9 +290,6 @@ import AnimatedButton from "../components/ui/AnimatedButton.astro";
   :global(html[data-theme="light"]) .cl-heading {
     color: #1a1a1a;
   }
-  :global(html[data-theme="light"]) .cl-eyebrow {
-    color: rgba(26, 26, 26, 0.62);
-  }
   :global(html[data-theme="light"]) .cl-text {
     color: rgba(26, 26, 26, 0.78);
   }
@@ -361,12 +333,13 @@ import AnimatedButton from "../components/ui/AnimatedButton.astro";
       },
     });
 
-    tl.to(q(".cl-eyebrow"), { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" })
-      .to(
-        q(".cl-word"),
-        { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", stagger: 0.12 },
-        "-=0.2",
-      )
+    tl.to(q(".cl-word"), {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      ease: "power3.out",
+      stagger: 0.12,
+    })
       .to(q(".cl-bar"), { scaleX: 1, duration: 0.6, ease: "power3.out" }, "-=0.4")
       .to(q(".cl-text"), { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, "-=0.4")
       .to(q(".cl-cta"), { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, "-=0.3")
