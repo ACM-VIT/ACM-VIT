@@ -1,4 +1,4 @@
-# Content platform
+# Maintenance Platform for the Website
 
 Git-based content platform for acmvit.in. Content lives as per-entry JSON in
 `content/`, is validated and compiled into typed modules by a content compiler,
