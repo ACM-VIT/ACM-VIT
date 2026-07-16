@@ -180,6 +180,18 @@
   let idx = 0;
   let seeking = false;
 
+  /* ─── Cross-tab sync ───
+     Playing tab = leader: broadcasts state over BroadcastChannel.
+     Other tabs (followers) mirror the UI without touching their local
+     <audio>, and route control clicks back to the leader as commands. */
+  const TAB_ID = Math.random().toString(36).slice(2);
+  const bc: BroadcastChannel | null =
+    'BroadcastChannel' in window ? new BroadcastChannel('acm-cassette-sync') : null;
+  let remote = false;                 // another tab owns playback; this tab mirrors it
+  let leaderId: string | null = null;
+  type RemoteState = { idx: number; time: number; duration: number; paused: boolean; volume: number };
+  let remoteState: RemoteState | null = null;
+
   const STATE_KEY = 'acm-cassette-player-state';
   type SavedState = { idx: number; time: number; paused: boolean; volume: number };
 
@@ -195,12 +207,11 @@
 
   const writeSavedState = () => {
     try {
-      const s: SavedState = {
-        idx,
-        time: audio.currentTime || 0,
-        paused: audio.paused,
-        volume: audio.volume,
-      };
+      // While mirroring another tab, save its track/position (paused) so this
+      // tab restores there instead of at its own stale spot.
+      const s: SavedState = remote && remoteState
+        ? { idx: remoteState.idx, time: remoteState.time, paused: true, volume: audio.volume }
+        : { idx, time: audio.currentTime || 0, paused: audio.paused, volume: audio.volume };
       sessionStorage.setItem(STATE_KEY, JSON.stringify(s));
     } catch { /* ignore quota errors */ }
   };
@@ -264,52 +275,160 @@
   window.addEventListener('beforeunload', writeSavedState);
   setInterval(() => { if (!audio.paused) writeSavedState(); }, 1000);
 
+  /* ─── Cross-tab sync: plumbing ─── */
+  const setPlayingUI = (playing: boolean) => {
+    icoPlay.style.display = playing ? 'none' : '';
+    icoPause.style.display = playing ? '' : 'none';
+    cassette.classList.toggle('cp-playing', playing);
+    eq.classList.toggle('cp-eq-active', playing);
+    miniNote.style.display = playing ? 'none' : '';
+  };
+
+  const broadcastState = () => {
+    if (!bc || remote) return;
+    bc.postMessage({
+      type: 'state', id: TAB_ID, idx,
+      time: audio.currentTime || 0,
+      duration: audio.duration || 0,
+      paused: audio.paused,
+      volume: audio.volume,
+    });
+  };
+
+  const sendCmd = (cmd: string, value?: number) => {
+    if (!bc || !leaderId) return;
+    bc.postMessage({ type: 'cmd', target: leaderId, cmd, value });
+  };
+
+  // Mirrors of the sync state also feed the MobileNavbar music panel
+  const emitPanelState = (title: string, artist: string, s: { time: number; duration: number; paused: boolean }) => {
+    window.dispatchEvent(new CustomEvent('cassette:remote-state', {
+      detail: { title, artist, time: s.time, duration: s.duration, paused: s.paused },
+    }));
+  };
+
+  function applyRemoteState(s: RemoteState) {
+    remote = true;
+    remoteState = s;
+    if (!audio.paused) audio.pause(); // yield playback; pause handler skips while remote
+    const t = PLAYLIST[((s.idx % PLAYLIST.length) + PLAYLIST.length) % PLAYLIST.length];
+    svgTitle.textContent = t.title;
+    svgArtist.textContent = t.artist;
+    timeL.textContent = fmt(s.time);
+    timeR.textContent = fmt(s.duration);
+    progBar.setAttribute('width', String(s.duration ? (s.time / s.duration) * 200 : 0));
+    volFill.style.width = `${Math.min(1, Math.max(0, s.volume)) * 100}%`;
+    setPlayingUI(!s.paused);
+    emitPanelState(t.title, t.artist, s);
+  }
+
+  // Leader tab went away: keep its track/position here, paused and ready to resume
+  function releaseRemote(s?: { idx: number; time: number }) {
+    if (!remote) return;
+    const last = s ?? remoteState;
+    remote = false;
+    leaderId = null;
+    remoteState = null;
+    if (last) loadTrack(last.idx, false, last.time);
+    setPlayingUI(false);
+    const t = PLAYLIST[idx];
+    emitPanelState(t.title, t.artist, { time: last?.time ?? 0, duration: 0, paused: true });
+  }
+
+  bc?.addEventListener('message', (e) => {
+    const msg = e.data;
+    if (!msg || msg.id === TAB_ID) return;
+    if (msg.type === 'state') {
+      // Active playback elsewhere always wins; paused updates only from the known leader
+      if (!msg.paused) { leaderId = msg.id; applyRemoteState(msg); }
+      else if (msg.id === leaderId) applyRemoteState(msg);
+    } else if (msg.type === 'hello') {
+      if (!remote && !audio.paused) broadcastState();
+    } else if (msg.type === 'bye') {
+      if (msg.id === leaderId) releaseRemote(msg);
+    } else if (msg.type === 'cmd') {
+      if (msg.target !== TAB_ID || remote) return;
+      if (msg.cmd === 'toggle') {
+        if (audio.paused) audio.play().catch(() => {});
+        else audio.pause();
+      } else if (msg.cmd === 'next') {
+        loadTrack(idx + 1, true);
+      } else if (msg.cmd === 'prev') {
+        if (audio.currentTime > 3) audio.currentTime = 0;
+        else loadTrack(idx - 1, true);
+      } else if (msg.cmd === 'seek' && typeof msg.value === 'number' && audio.duration) {
+        audio.currentTime = Math.min(1, Math.max(0, msg.value)) * audio.duration;
+        broadcastState();
+      } else if (msg.cmd === 'volume' && typeof msg.value === 'number') {
+        const v = Math.min(1, Math.max(0, msg.value));
+        audio.volume = v;
+        volFill.style.width = `${v * 100}%`;
+        broadcastState();
+      }
+    }
+  });
+
+  // Ask any already-playing tab for its state
+  bc?.postMessage({ type: 'hello', id: TAB_ID });
+
+  window.addEventListener('pagehide', () => {
+    if (bc && !remote) {
+      bc.postMessage({ type: 'bye', id: TAB_ID, idx, time: audio.currentTime || 0 });
+    }
+  });
+
   /* ─── Audio events ─── */
   audio.addEventListener('timeupdate', () => {
     if (seeking || !audio.duration) return;
     timeL.textContent = fmt(audio.currentTime);
     const pct = (audio.currentTime / audio.duration) * 200;
     progBar.setAttribute('width', String(pct));
+    broadcastState();
   });
 
   audio.addEventListener('loadedmetadata', () => {
     timeR.textContent = fmt(audio.duration);
+    broadcastState();
   });
 
   audio.addEventListener('ended', () => loadTrack(idx + 1, true));
 
   audio.addEventListener('play', () => {
-    icoPlay.style.display = 'none';
-    icoPause.style.display = '';
-    cassette.classList.add('cp-playing');
-    eq.classList.add('cp-eq-active');
-    miniNote.style.display = 'none';
+    // Playing locally makes this tab the leader
+    remote = false;
+    leaderId = null;
+    remoteState = null;
+    setPlayingUI(true);
     writeSavedState();
+    broadcastState();
   });
 
   audio.addEventListener('pause', () => {
-    icoPlay.style.display = '';
-    icoPause.style.display = 'none';
-    cassette.classList.remove('cp-playing');
-    eq.classList.remove('cp-eq-active');
-    miniNote.style.display = '';
+    if (remote) return; // paused only to yield playback to another tab
+    setPlayingUI(false);
     writeSavedState();
+    broadcastState();
   });
 
   /* ─── SVG button clicks ─── */
   playG.addEventListener('click', () => {
+    if (remote) { sendCmd('toggle'); return; }
     if (audio.paused) audio.play().catch(() => {});
     else audio.pause();
   });
   playG.style.cursor = 'pointer';
 
   $('cp-prev').addEventListener('click', () => {
+    if (remote) { sendCmd('prev'); return; }
     if (audio.currentTime > 3) { audio.currentTime = 0; return; }
     loadTrack(idx - 1, true);
   });
   $('cp-prev').style.cursor = 'pointer';
 
-  $('cp-next').addEventListener('click', () => loadTrack(idx + 1, true));
+  $('cp-next').addEventListener('click', () => {
+    if (remote) { sendCmd('next'); return; }
+    loadTrack(idx + 1, true);
+  });
   $('cp-next').style.cursor = 'pointer';
 
   /* ─── Progress bar click-to-seek ─── */
@@ -317,10 +436,16 @@
   const progFill = progBar as SVGRectElement;
 
   function seekFromEvent(e: PointerEvent) {
-    if (!audio.duration) return;
     const rect = progBg.getBoundingClientRect();
     let pct = (e.clientX - rect.left) / rect.width;
     pct = Math.min(1, Math.max(0, pct));
+    if (remote) {
+      sendCmd('seek', pct);
+      progFill.setAttribute('width', String(pct * 200));
+      if (remoteState?.duration) timeL.textContent = fmt(pct * remoteState.duration);
+      return;
+    }
+    if (!audio.duration) return;
     audio.currentTime = pct * audio.duration;
     progFill.setAttribute('width', String(pct * 200));
     timeL.textContent = fmt(audio.currentTime);
@@ -441,6 +566,7 @@
       v = Math.min(1, Math.max(0, v));
       fill.style.width = `${v * 100}%`;
       audio.volume = v;
+      if (remote) sendCmd('volume', v);
 
       if (ev.clientX < left) {
         const ov = decay(left - ev.clientX, MAX_OV);
@@ -466,8 +592,8 @@
     ) {
       const i = PLAYLIST.findIndex((t) => t.title === title);
       if (i < 0) return false;
-      // Respect a track the user already started.
-      if (opts.onlyIfPaused && !audio.paused) return false;
+      // Respect a track the user already started (here or in another tab).
+      if (opts.onlyIfPaused && (!audio.paused || (remote && remoteState && !remoteState.paused))) return false;
       if (typeof opts.volume === 'number') {
         const v = Math.min(1, Math.max(0, opts.volume));
         audio.volume = v;
@@ -486,6 +612,15 @@
         }
       }
       return true;
+    },
+    // Remote-aware controls for external UIs (MobileNavbar panel)
+    toggle() {
+      playG.dispatchEvent(new MouseEvent('click'));
+    },
+    seekFraction(pct: number) {
+      pct = Math.min(1, Math.max(0, pct));
+      if (remote) { sendCmd('seek', pct); return; }
+      if (audio.duration) audio.currentTime = pct * audio.duration;
     },
   };
 </script>

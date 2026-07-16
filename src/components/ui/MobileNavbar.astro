@@ -1329,7 +1329,24 @@ const navItems = [
       reflect();
     }
 
+    // Playback owned by another tab: CassettePlayer relays its state here
+    window.addEventListener("cassette:remote-state", (e) => {
+      const d = (e as CustomEvent).detail;
+      if (!d) return;
+      if (trackTitle) trackTitle.textContent = d.title;
+      if (trackArtist) trackArtist.textContent = d.artist;
+      if (timeCur) timeCur.textContent = fmt(d.time);
+      if (timeDur) timeDur.textContent = fmt(d.duration);
+      if (progFill) (progFill as HTMLElement).style.width = d.duration ? `${(d.time / d.duration) * 100}%` : "0%";
+      playIcon?.classList.toggle("hidden", !d.paused);
+      pauseIcon?.classList.toggle("hidden", d.paused);
+      eqWrap?.classList.toggle("is-playing", !d.paused);
+      if (noteIcon) (noteIcon as HTMLElement).style.display = d.paused ? "" : "none";
+    });
+
     playBtn?.addEventListener("click", () => {
+      const api = (window as any).acmCassette;
+      if (api?.toggle) { api.toggle(); return; }
       if (!audio) return;
       if (audio.paused) audio.play().catch(() => {});
       else audio.pause();
@@ -1343,9 +1360,11 @@ const navItems = [
       setTimeout(syncTrackText, 50);
     });
     progTrack?.addEventListener("pointerdown", (e) => {
-      if (!audio || !audio.duration) return;
       const r = (progTrack as HTMLElement).getBoundingClientRect();
       const pct = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+      const api = (window as any).acmCassette;
+      if (api?.seekFraction) { api.seekFraction(pct); return; }
+      if (!audio || !audio.duration) return;
       audio.currentTime = pct * audio.duration;
     });
 
