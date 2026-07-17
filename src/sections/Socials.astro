@@ -1255,15 +1255,20 @@ const ICON_SVGS: Record<string, string> = {
     const reelR = document.querySelector(".reel-spokes-r") as SVGGElement | null;
     const bbPlayBtn = document.querySelector('.transport-play') as HTMLElement | null;
 
-    // Sync boombox reel speed with audio play state
+    // Sync boombox reel speed with audio play state.
+    // WebKit ignores animation-duration changes on a running animation, so
+    // restart it: none -> reflow -> new duration.
+    function setReelDuration(reel: SVGGElement | null, dur: string) {
+      if (!reel) return;
+      if (reel.style.animationDuration === dur) return;
+      reel.style.animationName = "none";
+      void reel.getBoundingClientRect();
+      reel.style.animationName = "";
+      reel.style.animationDuration = dur;
+    }
     function syncReels(playing: boolean) {
-      if (playing) {
-        if (reelL) reelL.style.animationDuration = "1.5s";
-        if (reelR) reelR.style.animationDuration = "1s";
-      } else {
-        if (reelL) reelL.style.animationDuration = "40s";
-        if (reelR) reelR.style.animationDuration = "40s";
-      }
+      setReelDuration(reelL, playing ? "1.5s" : "40s");
+      setReelDuration(reelR, playing ? "1s" : "40s");
     }
 
     // Sync play button icon (swap play/pause SVG)
