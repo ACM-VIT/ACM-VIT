@@ -72,9 +72,7 @@ const { slug, title } = Astro.props;
       <div
         class="hidden playback-speed-group flex items-center gap-1 overflow-hidden origin-left"
         data-speed-group
-      >
-        <div class="dock-divider w-px h-5 mx-0.5 shrink-0 bg-white/[0.08]"></div>
-        <div
+      >        <div
           class="dock-control elastic-speed-slider"
           data-speed-slider
           role="slider"
@@ -97,9 +95,7 @@ const { slug, title } = Astro.props;
             <span class="elastic-speed-stop" data-speed-stop="7" style="left:100%"></span>
             <span class="elastic-speed-thumb" data-speed-thumb style="left:42.8571%"></span>
           </div>
-        </div>
-        <div class="dock-divider w-px h-5 mx-0.5 shrink-0 bg-white/[0.08]"></div>
-      </div>
+        </div>      </div>
 
       {/* Notes */}
       <button
@@ -115,9 +111,6 @@ const { slug, title } = Astro.props;
           <line x1="16" y1="17" x2="8" y2="17" />
         </svg>
       </button>
-
-      <div class="dock-divider w-px h-5 mx-0.5 bg-white/[0.08]"></div>
-
       {/* Theme */}
       <button
         type="button"
@@ -140,9 +133,6 @@ const { slug, title } = Astro.props;
           </svg>
         </span>
       </button>
-
-      <div class="dock-divider w-px h-5 mx-0.5 bg-white/[0.08]"></div>
-
       {/* Share */}
       <button
         type="button"

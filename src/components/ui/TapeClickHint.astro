@@ -1,0 +1,119 @@
+---
+/**
+ * TapeClickHint - a small "press play" badge that sits on a cassette so people
+ * realise the tape is actually a link. Faintly lit and breathing at rest (so it
+ * reads as interactive without a real button), then fully lit + raised when its
+ * clickable ancestor is hovered.
+ *
+ * Contract: render it INSIDE the clickable element (an <a>/<button>, or any
+ * element carrying [data-tape-hint-host]) and give that ancestor
+ * position: relative. Purely decorative - pointer-events are off so it never
+ * steals the click.
+ *
+ * `label` sets the caption (e.g. PLAY / EXPLORE / OPEN); `accent` tints the
+ * lit state.
+ */
+export interface Props {
+  label?: string;
+  accent?: string;
+}
+const { label = "PLAY", accent = "#F95F4A" } = Astro.props;
+---
+
+<span class="tape-hint" data-tape-hint style={`--hint-accent: ${accent};`}>
+  <svg class="tape-hint-play" width="9" height="10" viewBox="0 0 9 10" fill="currentColor" aria-hidden="true">
+    <path d="M0 0.5L9 5L0 9.5V0.5Z" />
+  </svg>
+  <span class="tape-hint-label">{label}</span>
+</span>
+
+<style>
+  .tape-hint {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(254, 252, 217, 0.16);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: #fefcd9;
+
+    /* Never intercept the cassette's own click / hover target. */
+    pointer-events: none;
+    opacity: 0.62;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    transition:
+      opacity 0.35s ease,
+      color 0.35s ease,
+      border-color 0.35s ease,
+      background 0.35s ease,
+      box-shadow 0.35s ease,
+      transform 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+    /* Gentle "there's something here" breathing (opacity only, so it never
+       fights the hover transform below). */
+    animation: tapeHintBreathe 2.6s ease-in-out infinite;
+  }
+
+  .tape-hint-label {
+    /* tracking pushes the text right; pull it back so the pill stays centred */
+    text-indent: 0.22em;
+  }
+
+  .tape-hint-play {
+    flex: none;
+    color: var(--hint-accent);
+    transform-origin: center;
+    animation: tapeHintPulse 2.6s ease-in-out infinite;
+  }
+
+  @keyframes tapeHintBreathe {
+    0%, 100% { opacity: 0.5; }
+    50%      { opacity: 0.78; }
+  }
+  @keyframes tapeHintPulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.18); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tape-hint { animation: none; opacity: 0.66; }
+    .tape-hint-play { animation: none; }
+  }
+</style>
+
+<!-- Lit state, driven by the hovered clickable ancestor. Global so it can reach
+     across the component boundary; scoped by the [data-tape-hint] hook. -->
+<style is:global>
+  a:hover [data-tape-hint],
+  button:hover [data-tape-hint],
+  [data-tape-hint-host]:hover [data-tape-hint] {
+    opacity: 1;
+    color: #fff;
+    border-color: var(--hint-accent);
+    background: rgba(0, 0, 0, 0.74);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
+    transform: translateX(-50%) translateY(-4px);
+    animation-play-state: paused;
+  }
+  a:hover [data-tape-hint] .tape-hint-play,
+  button:hover [data-tape-hint] .tape-hint-play,
+  [data-tape-hint-host]:hover [data-tape-hint] .tape-hint-play {
+    animation-play-state: paused;
+    transform: scale(1);
+  }
+</style>

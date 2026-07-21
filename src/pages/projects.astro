@@ -5,6 +5,7 @@ import "../styles/globals.css";
 import "../styles/projects.css";
 import { getAssetUrl } from "../utils/cdn";
 import Cassette from "../components/ui/Cassette.astro";
+import TapeClickHint from "../components/ui/TapeClickHint.astro";
 import Footer from "../layouts/Footer.astro";
 import { forktoberByYear, forktoberYears } from "../data/forktoberProjectsData";
 import { projectCassettes as gridProjects } from "../data/projectCassettes";
@@ -53,6 +54,7 @@ const FORKTOBER_COLOR = "#EFEFEF";
                   overlaySizeAxis={proj.sizeAxis}
                   offsetYPercent={proj.offsetY}
                 />
+                <TapeClickHint label="OPEN" accent={proj.color} />
               </div>
             </a>
           );
@@ -74,10 +76,12 @@ const FORKTOBER_COLOR = "#EFEFEF";
                 loading="lazy"
                 decoding="async"
               />
-              {isComingSoon && (
+              {isComingSoon ? (
                 <div class="proj-coming-soon-overlay">
                   <span class="proj-coming-soon-label">Coming Soon</span>
                 </div>
+              ) : (
+                <TapeClickHint label="OPEN" accent={proj.color} />
               )}
             </div>
           </a>
