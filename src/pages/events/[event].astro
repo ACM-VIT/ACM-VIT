@@ -61,7 +61,7 @@ const typeTags = (data.eyebrow ?? "")
   .filter((s: string) => s && s.toUpperCase() !== "ACM-VIT");
 ---
 
-<Layout pageTitle={data.title} backHref="/#events">
+<Layout pageTitle={data.title} backHref="/events">
   <script is:inline define:vars={{ themeColor, titleArt }}>
     console.log("%c" + titleArt, "color:" + themeColor + ";font-family:monospace;line-height:1;");
   </script>
@@ -364,7 +364,7 @@ const typeTags = (data.eyebrow ?? "")
 
     <!-- Back -->
     <section class="event-back-section">
-      <FillButton href="/#events" label="Back to All Events">
+      <FillButton href="/events" label="Back to All Events">
         <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
       </FillButton>
     </section>

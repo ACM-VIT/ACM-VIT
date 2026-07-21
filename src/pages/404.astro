@@ -44,11 +44,16 @@ import { getAssetUrl } from "../utils/cdn";
 
 <style>
   .nf-page {
-    min-height: 100vh;
+    /* Bleed the grid/glow up behind the fixed header so there's no seam at the
+       .content clearance (pt-28 = 7rem). margin-top pulls the box up; the extra
+       7rem of top padding + min-height keep the centered content and footer in
+       the same place. */
+    min-height: calc(100vh + 7rem);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 7rem 0 5rem;
+    padding: 14rem 0 5rem;
+    margin-top: -7rem;
   }
 
   .nf-glow {

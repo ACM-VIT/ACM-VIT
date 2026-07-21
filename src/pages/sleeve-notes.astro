@@ -363,6 +363,11 @@ const dontList = [
 <style>
   .dg-page {
     min-height: 100vh;
+    /* Bleed the grid/glow up behind the fixed header so there's no seam at the
+       .content clearance (pt-28 = 7rem). margin/padding cancel, so inner
+       content keeps its exact position. */
+    margin-top: -7rem;
+    padding-top: 7rem;
   }
 
   .dg-glow {

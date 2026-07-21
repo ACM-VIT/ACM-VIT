@@ -156,6 +156,11 @@ const CURRENT_BOARD_YEAR = 2026;
 <style>
   .team-page {
     background: #050505;
+    /* Bleed the page background + grid up behind the fixed header so there's
+       no seam at the .content clearance (pt-28 = 7rem). margin/padding cancel,
+       so inner content keeps its exact position. */
+    margin-top: -7rem;
+    padding-top: 7rem;
   }
   :global(html[data-theme="light"]) .team-page {
     background: transparent;

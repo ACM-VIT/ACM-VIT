@@ -533,6 +533,11 @@ const lightCount = countFrames("light");
             onLeave: () => hide(),
             onEnterBack: () => show(),
             onLeaveBack: () => hide(),
+            // On a fresh load the hero is already inside this zone, so no
+            // onEnter crossing fires and the bg stays hidden until the first
+            // scroll. Sync visibility to the trigger's actual active state on
+            // every refresh (incl. the initial one) so it shows from the start.
+            onRefresh: (self) => (self.isActive ? show() : hide()),
         });
 
         function show() {
