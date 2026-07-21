@@ -473,6 +473,16 @@ const navItems = [
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6" /></svg>
         </button>
       </div>
+      <!-- Colour toggle: shown only when the real dock exposes [data-cdot] (mirrors it) -->
+      <div id="mn-merch-colors" class="mn-merch-colors hidden items-center justify-center gap-3 border-t border-[#FEFCD9]/10 pt-2.5">
+        <span class="font-['PolySans_Trial'] text-[10px] uppercase tracking-[0.22em] text-[#FEFCD9]/55">Colour</span>
+        <button id="mn-merch-cdot-black" data-mn-cdot="black" aria-label="Black" class="mn-merch-cdot is-active">
+          <span class="mn-merch-cdot-fill mn-merch-cdot-fill--black"></span>
+        </button>
+        <button id="mn-merch-cdot-white" data-mn-cdot="white" aria-label="White" class="mn-merch-cdot">
+          <span class="mn-merch-cdot-fill mn-merch-cdot-fill--white"></span>
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -771,6 +781,36 @@ const navItems = [
     background: var(--dot-c, #f95f4a);
     transform: scale(1.15);
   }
+
+  /* Merch colour swatches (mirror the hidden dock's black/white [data-cdot]) */
+  .mn-merch-cdot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: none;
+    border-radius: 9999px;
+    background: transparent;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .mn-merch-cdot:active { transform: scale(0.9); }
+  .mn-merch-cdot-fill {
+    width: 18px;
+    height: 18px;
+    border-radius: 9999px;
+    transition: box-shadow 0.35s ease, transform 0.35s ease;
+  }
+  .mn-merch-cdot-fill--black { background: #1a1a1a; border: 2px solid rgba(255, 255, 255, 0.18); }
+  .mn-merch-cdot-fill--white { background: #eee; border: 2px solid rgba(255, 255, 255, 0.18); }
+  .mn-merch-cdot.is-active .mn-merch-cdot-fill {
+    box-shadow: 0 0 0 3px rgba(249, 95, 74, 0.6);
+    transform: scale(1.12);
+  }
+  .mn-merch-cdot.is-disabled { opacity: 0.2; pointer-events: none; }
 
   /* Music EQ */
   .mn-music-eq.is-playing { display: inline-flex; }
@@ -1268,6 +1308,43 @@ const navItems = [
 
       document.getElementById("mn-merch-prev")?.addEventListener("click", () => realPrev?.click());
       document.getElementById("mn-merch-next")?.addEventListener("click", () => realNext?.click());
+
+      /* Colour toggle: some collections (e.g. 2025) ship a black/white variant
+         via [data-cdot] in the real dock. Surface + mirror it here when present. */
+      const realCdots = Array.from(merchDock.querySelectorAll("[data-cdot]")) as HTMLElement[];
+      const colorRow = document.getElementById("mn-merch-colors");
+      if (realCdots.length && colorRow) {
+        colorRow.classList.remove("hidden");
+        colorRow.classList.add("flex");
+
+        const realByColor = (c: string) => realCdots.find((rc) => rc.dataset.cdot === c) || null;
+        const mirrorCdots = Array.from(
+          colorRow.querySelectorAll("[data-mn-cdot]"),
+        ) as HTMLElement[];
+
+        mirrorCdots.forEach((mc) => {
+          mc.addEventListener("click", () => {
+            if (mc.classList.contains("is-disabled")) return;
+            realByColor(mc.dataset.mnCdot || "")?.click();
+          });
+        });
+
+        function syncColors() {
+          mirrorCdots.forEach((mc) => {
+            const rc = realByColor(mc.dataset.mnCdot || "");
+            if (!rc) return;
+            mc.classList.toggle("is-active", rc.classList.contains("active"));
+            mc.classList.toggle("is-disabled", rc.classList.contains("disabled"));
+          });
+        }
+        realCdots.forEach((rc) =>
+          new MutationObserver(syncColors).observe(rc, {
+            attributes: true,
+            attributeFilter: ["class"],
+          }),
+        );
+        syncColors();
+      }
     }
 
     /* ── Music player wiring (controls existing CassettePlayer audio + state) ── */
