@@ -153,7 +153,7 @@ const groups: Group[] = [
     ],
   },
   {
-    title: "Legal",
+    title: "Help & Guidelines",
     links: [
       { label: "Code of Conduct", href: "/code-of-conduct" },
       { label: "FAQs", href: "/faqs" },
@@ -350,5 +350,30 @@ const totalPages = groups.reduce(
     .sitemap-link-arrow {
       transition: none;
     }
+  }
+
+  /* ── Light theme ── */
+  :global(html[data-theme="light"]) .sitemap-page {
+    color: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .sitemap-head {
+    border-bottom-color: rgba(26, 26, 26, 0.12);
+  }
+  :global(html[data-theme="light"]) .sitemap-title {
+    color: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .sitemap-sub {
+    color: rgba(26, 26, 26, 0.6);
+  }
+  :global(html[data-theme="light"]) .sitemap-col-title {
+    color: rgba(26, 26, 26, 0.5);
+    border-bottom-color: rgba(26, 26, 26, 0.18);
+  }
+  :global(html[data-theme="light"]) .sitemap-link {
+    color: rgba(26, 26, 26, 0.78);
+  }
+  :global(html[data-theme="light"]) .sitemap-link:hover,
+  :global(html[data-theme="light"]) .sitemap-link:focus-visible {
+    color: #000;
   }
 </style>
