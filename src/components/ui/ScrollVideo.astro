@@ -209,6 +209,21 @@ const lightCount = countFrames("light");
         const activeVideo = (): HTMLVideoElement =>
             theme === "dark" ? darkVideo : lightVideo;
 
+        // True when the active video has buffered data covering `t` seconds.
+        // False for decode errors or missing metadata (slow-net cold start),
+        // which is the signal to fall back to the canvas frame player.
+        const videoReady = (v: HTMLVideoElement, t: number): boolean => {
+            if (v.error) return false;
+            const dur = v.duration;
+            if (!dur || isNaN(dur) || dur === Infinity) return false;
+            if (v.readyState < 2 /* HAVE_CURRENT_DATA */) return false;
+            const b = v.buffered;
+            for (let i = 0; i < b.length; i++) {
+                if (t >= b.start(i) - 0.1 && t <= b.end(i) + 0.1) return true;
+            }
+            return false;
+        };
+
         // ---- shared scroll state ------------------------------------------
         let dir = 1; // 1 = down (video), -1 = up (canvas)
         let targetProgress = 0; // 0..1 from scroll
@@ -217,6 +232,7 @@ const lightCount = countFrames("light");
         let rafId = 0;
         let lastFrameAt = 0;
         let isPlaying = false;
+        let videoStalled = false; // slow net: active video not buffered at target
 
         const snapTime = 0.02; // seconds, forward settle threshold
         const smoothing = 0.09; // canvas ease time constant (s)
@@ -299,6 +315,11 @@ const lightCount = countFrames("light");
             lightVideo.classList.add("dir-hidden");
             canvas.classList.remove("dir-hidden");
         };
+        // Canvas when scrolling up OR when the down-video has stalled (slow net).
+        const applyVisibility = () => {
+            if (dir < 0 || videoStalled) showCanvas();
+            else showVideo();
+        };
 
         // ---- main loop -----------------------------------------------------
         const tick = (now: number) => {
@@ -309,13 +330,48 @@ const lightCount = countFrames("light");
             lastFrameAt = now;
 
             if (dir > 0) {
-                // SCROLL DOWN -> play the real video forward (native smooth).
+                // SCROLL DOWN -> native video when buffered, else canvas frames.
                 const v = activeVideo();
                 const dur = v.duration;
-                if (!dur || isNaN(dur) || dur === Infinity) {
+                const targetTime =
+                    dur && !isNaN(dur) ? targetProgress * dur : 0;
+
+                // Slow net: video not buffered at the target frame. Drive the
+                // eased canvas frame player (same path as scroll-up) so the bg
+                // never goes blank/black waiting on the video to load.
+                if (!videoReady(v, targetTime)) {
+                    if (!videoStalled) {
+                        videoStalled = true;
+                        if (isPlaying) {
+                            v.pause();
+                            isPlaying = false;
+                        }
+                        applyVisibility();
+                    }
+                    const diff = targetProgress - renderedProgress;
+                    if (Math.abs(diff) <= eps) {
+                        renderedProgress = targetProgress;
+                        drawAt(renderedProgress);
+                        lastFrameAt = 0;
+                        return;
+                    }
+                    const ease = 1 - Math.exp(-delta / smoothing);
+                    renderedProgress += diff * ease;
+                    drawAt(renderedProgress);
                     rafId = requestAnimationFrame(tick);
                     return;
                 }
+
+                // Video buffered again -> seat it on the canvas cursor and hand
+                // playback back to the native element.
+                if (videoStalled) {
+                    videoStalled = false;
+                    try {
+                        v.currentTime = renderedProgress * dur;
+                    } catch {}
+                    applyVisibility();
+                }
+
                 const cur = v.currentTime;
                 renderedProgress = cur / dur;
                 const diff = targetProgress * dur - cur;
@@ -375,7 +431,9 @@ const lightCount = countFrames("light");
                         v.currentTime = renderedProgress * v.duration;
                     } catch {}
                 }
-                showVideo();
+                // Show canvas instead of a blank video if it isn't buffered yet.
+                videoStalled = !videoReady(v, (v.duration || 0) * renderedProgress);
+                applyVisibility();
             } else {
                 // -> canvas: sync cursor from the video, then ease/draw.
                 darkVideo.pause();
@@ -481,6 +539,9 @@ const lightCount = countFrames("light");
             stack.classList.add("visible");
             overlay?.classList.add("visible");
             document.body.classList.add("scroll-video-active");
+            // Evaluate once on entry so a cold/unbuffered video shows the
+            // canvas fallback immediately instead of a black frame.
+            schedule();
         }
         function hide() {
             stack.classList.remove("visible");
@@ -491,8 +552,8 @@ const lightCount = countFrames("light");
             isPlaying = false;
         }
 
-        // Start in down/video mode.
-        showVideo();
+        // Start in down mode; applyVisibility picks video vs canvas by buffer state.
+        applyVisibility();
         window.requestAnimationFrame(() => ScrollTrigger.refresh());
     }
 
