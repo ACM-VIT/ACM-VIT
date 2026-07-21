@@ -1,0 +1,196 @@
+---
+// Blueprint trace loader for the /design home. Construction guides draw in
+// first, then the cassette outline + "ACM" trace via stroke-dashoffset
+// (pathLength="1", so no JS length math), a mono caption types out, and the
+// dark overlay fades to reveal the light Design Guidelines shell.
+// Plays once per session (sessionStorage) and is skipped for reduced-motion.
+---
+
+<div class="di" id="design-intro" aria-hidden="true">
+  <div class="di-stage">
+    <svg class="di-svg" viewBox="0 0 640 400" fill="none" role="img" aria-label="ACM cassette">
+      <!-- construction guides: drawn faint, first -->
+      <g class="di-guides" stroke="#faf9f7" stroke-width="1" vector-effect="non-scaling-stroke">
+        <line class="g" style="--d:.05s"  x1="120" y1="100" x2="520" y2="100" pathLength="1" />
+        <line class="g" style="--d:.12s"  x1="120" y1="300" x2="520" y2="300" pathLength="1" />
+        <line class="g" style="--d:.18s"  x1="120" y1="200" x2="520" y2="200" pathLength="1" />
+        <line class="g" style="--d:.10s"  x1="120" y1="100" x2="120" y2="300" pathLength="1" />
+        <line class="g" style="--d:.10s"  x1="520" y1="100" x2="520" y2="300" pathLength="1" />
+        <line class="g" style="--d:.22s"  x1="320" y1="70"  x2="320" y2="330" pathLength="1" />
+        <line class="g" style="--d:.26s"  x1="250" y1="118" x2="250" y2="282" pathLength="1" />
+        <line class="g" style="--d:.26s"  x1="390" y1="118" x2="390" y2="282" pathLength="1" />
+        <line class="g" style="--d:.30s"  x1="120" y1="100" x2="520" y2="300" pathLength="1" />
+        <line class="g" style="--d:.30s"  x1="520" y1="100" x2="120" y2="300" pathLength="1" />
+        <circle class="g gdot" style="--d:.15s" cx="320" cy="200" r="150" stroke-dasharray="1 5" pathLength="1" />
+      </g>
+
+      <!-- cassette outline: bold trace -->
+      <g class="di-ink" stroke="#fdfcf5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke">
+        <rect class="k" style="--d:.6s;--dur:1s"   x="120" y="100" width="400" height="200" rx="18" pathLength="1" />
+        <rect class="k" style="--d:1.05s;--dur:.7s" x="150" y="118" width="340" height="78"  rx="8"  pathLength="1" />
+        <rect class="k" style="--d:1.25s;--dur:.7s" x="180" y="210" width="280" height="72"  rx="12" pathLength="1" />
+        <circle class="k" style="--d:1.5s;--dur:.55s" cx="250" cy="246" r="28" pathLength="1" />
+        <circle class="k" style="--d:1.5s;--dur:.55s" cx="390" cy="246" r="28" pathLength="1" />
+      </g>
+
+      <!-- reel hubs + spokes: accent -->
+      <g class="di-accent" stroke="#f95f4a" stroke-width="2" stroke-linecap="round" vector-effect="non-scaling-stroke">
+        <circle class="k" style="--d:1.85s;--dur:.4s" cx="250" cy="246" r="9" pathLength="1" />
+        <circle class="k" style="--d:1.85s;--dur:.4s" cx="390" cy="246" r="9" pathLength="1" />
+        <line class="k" style="--d:2s;--dur:.3s" x1="250" y1="228" x2="250" y2="237" pathLength="1" />
+        <line class="k" style="--d:2s;--dur:.3s" x1="250" y1="255" x2="250" y2="264" pathLength="1" />
+        <line class="k" style="--d:2s;--dur:.3s" x1="232" y1="246" x2="241" y2="246" pathLength="1" />
+        <line class="k" style="--d:2s;--dur:.3s" x1="259" y1="246" x2="268" y2="246" pathLength="1" />
+        <line class="k" style="--d:2s;--dur:.3s" x1="390" y1="228" x2="390" y2="237" pathLength="1" />
+        <line class="k" style="--d:2s;--dur:.3s" x1="390" y1="255" x2="390" y2="264" pathLength="1" />
+        <line class="k" style="--d:2s;--dur:.3s" x1="372" y1="246" x2="381" y2="246" pathLength="1" />
+        <line class="k" style="--d:2s;--dur:.3s" x1="399" y1="246" x2="408" y2="246" pathLength="1" />
+      </g>
+
+      <!-- ACM: single-stroke letterforms, traced last -->
+      <g class="di-word" stroke="#fdfcf5" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke">
+        <path class="k" style="--d:2.15s;--dur:.28s" d="M230 180 L250 134" pathLength="1" />
+        <path class="k" style="--d:2.35s;--dur:.28s" d="M250 134 L270 180" pathLength="1" />
+        <path class="k" style="--d:2.5s;--dur:.2s"   d="M238 164 L262 164" pathLength="1" />
+        <path class="k" style="--d:2.6s;--dur:.42s"  d="M337.6 142.2 A23 23 0 1 0 337.6 171.8" pathLength="1" />
+        <path class="k" style="--d:2.95s;--dur:.5s"  d="M370 180 L370 134 L390 162 L410 134 L410 180" pathLength="1" />
+      </g>
+    </svg>
+
+    <p class="di-caption" id="di-caption"></p>
+  </div>
+</div>
+
+<style>
+  .di {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: grid;
+    place-items: center;
+    background: #0d0c0b;
+    animation: di-out 0.7s 3.7s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  }
+  .di-stage {
+    width: min(76vw, 620px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+  }
+  .di-svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  /* traced strokes: normalized length via pathLength="1" */
+  .di .k {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    opacity: 0;
+    animation:
+      di-draw var(--dur, 0.6s) var(--d, 0s) cubic-bezier(0.6, 0, 0.2, 1) forwards,
+      di-ink 0.01s var(--d, 0s) linear forwards;
+  }
+  .di .g {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    opacity: 0;
+    animation:
+      di-draw 0.55s var(--d, 0s) ease forwards,
+      di-fade 0.4s var(--d, 0s) ease forwards;
+  }
+  .di .gdot {
+    stroke-dasharray: 0.004 0.02;
+  }
+
+  @keyframes di-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes di-ink {
+    to {
+      opacity: 0.96;
+    }
+  }
+  @keyframes di-fade {
+    to {
+      opacity: 0.16;
+    }
+  }
+  @keyframes di-out {
+    to {
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(1.03);
+    }
+  }
+
+  .di-caption {
+    margin: 0;
+    min-height: 1.2em;
+    font-family: var(--ds-mono, "SF Mono", Menlo, monospace);
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    color: #b8b4ad;
+  }
+  .di-caption::after {
+    content: "";
+    display: inline-block;
+    width: 7px;
+    height: 1em;
+    margin-left: 2px;
+    vertical-align: -2px;
+    background: #f95f4a;
+    animation: di-blink 0.7s steps(1) infinite;
+  }
+  @keyframes di-blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .di {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const intro = document.getElementById("design-intro");
+  const cap = document.getElementById("di-caption");
+  if (!intro) {
+    // nothing to do
+  } else {
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const seen = sessionStorage.getItem("ds-intro-seen");
+
+    if (reduce || seen) {
+      intro.remove();
+    } else {
+      sessionStorage.setItem("ds-intro-seen", "1");
+      document.documentElement.style.overflow = "hidden";
+
+      // typewriter caption, synced to the trace
+      const text = "The ACM-VIT design system. Press play.";
+      let i = 0;
+      const type = () => {
+        if (cap && i <= text.length) {
+          cap.textContent = text.slice(0, i);
+          i++;
+          setTimeout(type, 42);
+        }
+      };
+      setTimeout(type, 900);
+
+      // remove after the fade-out finishes so the page underneath is interactive
+      setTimeout(() => {
+        document.documentElement.style.overflow = "";
+        intro.remove();
+      }, 4500);
+    }
+  }
+</script>
