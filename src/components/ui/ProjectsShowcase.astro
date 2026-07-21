@@ -114,6 +114,7 @@ const sectionHeightVh = Math.max(1, items.length) * 100;
                     aria-label={icon.type}
                   >
                     <img
+                      class="proj-icon-img"
                       src={getAssetUrl(`/icons/icons-${icon.type}-icon.webp`)}
                       alt={icon.type}
                       width="22"
@@ -202,6 +203,7 @@ const sectionHeightVh = Math.max(1, items.length) * 100;
                   aria-label={icon.type}
                 >
                   <img
+                    class="proj-icon-img"
                     src={getAssetUrl(`/icons/icons-${icon.type}-icon.webp`)}
                     alt={icon.type}
                     width="22"
@@ -468,6 +470,12 @@ const sectionHeightVh = Math.max(1, items.length) * 100;
   :global(html[data-theme="light"]) .proj-arrow {
     border-color: rgba(26, 26, 26, 0.4);
     color: #1a1a1a;
+  }
+  /* Icons ship cream-tinted (invert 96%) for the dark theme, which vanishes on
+     the light cream page. Force them dark in light mode - stays legible on the
+     transparent rest state and on the accent-filled hover state. */
+  :global(html[data-theme="light"]) .proj-icon-img {
+    filter: brightness(0) saturate(100%) invert(15%) !important;
   }
 </style>
 
