@@ -576,22 +576,36 @@ const isLandingPage = Astro.url.pathname === "/";
               x = rect.left + rect.width / 2;
               y = rect.top + rect.height / 2;
             }
-            const endRadius = Math.hypot(
-              Math.max(x, window.innerWidth - x),
-              Math.max(y, window.innerHeight - y)
-            );
+            // Use PERCENTAGES, not px, for the reveal origin + radius.
+            // Chrome (retina/HiDPI) resolves clip-path px on the view-transition
+            // pseudo in DEVICE pixels while getBoundingClientRect() returns CSS
+            // pixels, so px coords land at gbcr/dpr (origin shifts to ~center on
+            // dpr=2). Percentages resolve against the pseudo box and are
+            // dpr-invariant, so the reveal always starts at the bulb/button.
+            const px = (x / window.innerWidth) * 100;
+            const py = (y / window.innerHeight) * 100;
+            // 150% radius guarantees full coverage from any corner origin.
+            const endRadius = 150;
+
+            // Kill ALL transitions site-wide so Chrome's new-state snapshot
+            // captures fully-settled colors, not mid-transition values.
+            html.classList.add('is-switching-theme');
 
             const transition = document.startViewTransition(() => {
               if (isLight) { html.removeAttribute('data-theme'); localStorage.setItem('acm-theme', 'dark'); }
               else { html.setAttribute('data-theme', 'light'); localStorage.setItem('acm-theme', 'light'); }
             });
 
+            const restore = () => html.classList.remove('is-switching-theme');
+
             transition.ready.then(() => {
               document.documentElement.animate(
-                { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`] },
+                { clipPath: [`circle(0% at ${px}% ${py}%)`, `circle(${endRadius}% at ${px}% ${py}%)`] },
                 { duration: 600, easing: 'cubic-bezier(0.4, 0, 0.2, 1)', pseudoElement: '::view-transition-new(root)' }
               );
-            });
+            }).catch(restore);
+
+            transition.finished.then(restore).catch(restore);
           } else {
             if (isLight) { html.removeAttribute('data-theme'); localStorage.setItem('acm-theme', 'dark'); }
             else { html.setAttribute('data-theme', 'light'); localStorage.setItem('acm-theme', 'light'); }

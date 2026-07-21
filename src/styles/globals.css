@@ -23,6 +23,14 @@
   z-index: 9999;
 }
 
+/* Kill every CSS transition site-wide while Chrome takes the new-state snapshot.
+   Only html and body suppression isn't enough - brand-logos, bulb-handle, etc.
+   all have their own transitions that cause mid-transition colors in the capture. */
+html.is-switching-theme,
+html.is-switching-theme * {
+  transition: none !important;
+}
+
 .page-section {
     scroll-margin-top: 84px;
 }
