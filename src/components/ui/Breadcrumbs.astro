@@ -1,0 +1,139 @@
+---
+/**
+ * Breadcrumbs - tape-deck styled trail: a spinning reel, play-arrow separators
+ * and a lit "now playing" current crumb. Mirrors the bespoke breadcrumb on the
+ * domain pages (src/styles/domain.css .domain-hero-crumbs) as a reusable,
+ * theme-aware component for every page.
+ *
+ * `items`: ordered crumbs; the last one is treated as the current page (no
+ * link). `accent` tints the reel + current crumb (defaults to ACM orange).
+ */
+export interface Crumb {
+  label: string;
+  href?: string;
+}
+export interface Props {
+  items: Crumb[];
+  accent?: string;
+  class?: string;
+}
+const { items, accent = "#F95F4A", class: className } = Astro.props;
+---
+
+<nav
+  class:list={["tape-crumbs", className]}
+  aria-label="Breadcrumb"
+  style={`--crumb-accent: ${accent};`}
+>
+  <svg class="tape-crumb-reel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+    <circle cx="12" cy="12" r="10" />
+    <circle cx="12" cy="12" r="3.4" />
+    <path d="M12 2v6.6M12 15.4V22M2 12h6.6M15.4 12H22" />
+  </svg>
+  <ol>
+    {items.map((crumb, i) => {
+      const isLast = i === items.length - 1;
+      return (
+        <li aria-current={isLast ? "page" : undefined}>
+          {crumb.href && !isLast ? (
+            <a href={crumb.href}>{crumb.label}</a>
+          ) : (
+            <span>{crumb.label}</span>
+          )}
+        </li>
+      );
+    })}
+  </ol>
+</nav>
+
+<style>
+  .tape-crumbs {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .tape-crumb-reel {
+    width: 17px;
+    height: 17px;
+    flex: none;
+    color: var(--crumb-accent, #f95f4a);
+    opacity: 0.9;
+    animation: tape-crumb-reel-spin 6s linear infinite;
+  }
+
+  @keyframes tape-crumb-reel-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tape-crumb-reel { animation: none; }
+  }
+
+  .tape-crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    row-gap: 0.35rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.74rem;
+    letter-spacing: 0.05em;
+  }
+
+  .tape-crumbs li {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* Play-triangle separator, like a tape deck's forward control */
+  .tape-crumbs li + li::before {
+    content: "";
+    width: 0;
+    height: 0;
+    border-left: 5px solid rgba(254, 253, 208, 0.28);
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    margin: 0 0.65rem;
+  }
+
+  .tape-crumbs a,
+  .tape-crumbs span {
+    color: rgba(254, 253, 208, 0.55);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .tape-crumbs a:hover {
+    color: #fffdd0;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* Current crumb - lit accent + glow, "play" separator lit */
+  .tape-crumbs [aria-current="page"] span {
+    color: var(--crumb-accent, #f95f4a);
+    text-shadow: 0 0 16px color-mix(in srgb, var(--crumb-accent, #f95f4a) 55%, transparent);
+  }
+  .tape-crumbs li[aria-current="page"]::before {
+    border-left-color: var(--crumb-accent, #f95f4a);
+  }
+
+  /* ── Light mode (warm peach): cream text would vanish, use dark ink ── */
+  :global(html[data-theme="light"]) .tape-crumbs a,
+  :global(html[data-theme="light"]) .tape-crumbs span {
+    color: rgba(26, 26, 26, 0.6);
+  }
+  :global(html[data-theme="light"]) .tape-crumbs a:hover {
+    color: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .tape-crumbs li + li::before {
+    border-left-color: rgba(26, 26, 26, 0.3);
+  }
+  /* current crumb keeps its accent colour in light mode too */
+  :global(html[data-theme="light"]) .tape-crumbs [aria-current="page"] span {
+    color: var(--crumb-accent, #f95f4a);
+  }
+</style>

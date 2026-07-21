@@ -1,5 +1,6 @@
 ---
 import { getAssetUrl } from "../utils/cdn";
+import TapeClickHint from "../components/ui/TapeClickHint.astro";
 
 import { items as domainItems } from "../generated/home-domains";
 // Reconstruct the key-based object that client script expects
@@ -73,7 +74,7 @@ for (const item of domainItems) {
               loading="lazy"
               decoding="async"
             />
-            <span class="cassette-explore-label">Explore &rarr;</span>
+            <TapeClickHint label="EXPLORE" accent="#9B51E0" />
           </div>
         </div>
       </a>
@@ -93,7 +94,7 @@ for (const item of domainItems) {
               loading="lazy"
               decoding="async"
             />
-            <span class="cassette-explore-label">Explore &rarr;</span>
+            <TapeClickHint label="EXPLORE" accent="#42CD9D" />
           </div>
         </div>
       </a>
@@ -113,7 +114,7 @@ for (const item of domainItems) {
               loading="lazy"
               decoding="async"
             />
-            <span class="cassette-explore-label">Explore &rarr;</span>
+            <TapeClickHint label="EXPLORE" accent="#FF0054" />
           </div>
         </div>
       </a>
@@ -133,7 +134,7 @@ for (const item of domainItems) {
               loading="lazy"
               decoding="async"
             />
-            <span class="cassette-explore-label">Explore &rarr;</span>
+            <TapeClickHint label="EXPLORE" accent="#00A6A6" />
           </div>
         </div>
       </a>
@@ -153,7 +154,7 @@ for (const item of domainItems) {
               loading="lazy"
               decoding="async"
             />
-            <span class="cassette-explore-label">Explore &rarr;</span>
+            <TapeClickHint label="EXPLORE" accent="#3B82F6" />
           </div>
         </div>
       </a>
@@ -172,34 +173,6 @@ for (const item of domainItems) {
       .pin-container,
       .domains-grid {
         pointer-events: none;
-      }
-
-      .cassette-explore-label {
-        position: absolute;
-        bottom: 12px;
-        left: 50%;
-        transform: translateX(-50%) translateY(6px);
-        font-family: 'PolySans Mono', monospace;
-        font-size: 0.6rem;
-        letter-spacing: 0.25em;
-        text-transform: uppercase;
-        color: #fefcd9;
-        background: rgba(0,0,0,0.6);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        padding: 6px 14px;
-        border-radius: 100px;
-        border: 1px solid rgba(254,252,217,0.15);
-        white-space: nowrap;
-        z-index: 5;
-        opacity: 0;
-        pointer-events: none;
-        transition: all 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
-      }
-
-      .domain-item:hover .cassette-explore-label {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
       }
 
       .cassette-wrapper {
