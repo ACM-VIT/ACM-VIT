@@ -5,6 +5,10 @@ import CassettePlayer from "../components/ui/CassettePlayer.astro";
 import ScrollCue from "../components/ui/ScrollCue.astro";
 import Breadcrumbs from "../components/ui/Breadcrumbs.astro";
 import { getAssetUrl } from "../utils/cdn";
+// Global styles (fonts, tokens, a11y helpers) - imported at the layout level so
+// the skip link, keyboard focus ring and reduced-motion backstop apply on every
+// page, not only ones whose sections happen to import globals.css.
+import "../styles/globals.css";
 
 type Crumb = { label: string; href?: string };
 
@@ -246,6 +250,9 @@ if (showCrumbs) {
     </script>
   </head>
   <body>
+    <!-- Keyboard/screen-reader jump link: skips the fixed logos, nav and theme
+         cord and moves focus straight to the page's main content. -->
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
     <Preloader />
 
     <div
@@ -303,7 +310,7 @@ if (showCrumbs) {
 
     <div class="app-root min-h-screen flex flex-col">
       <Header pageTitle={pageTitle} backHref={backHref} />
-      <main class="content flex-1 relative pt-28">
+      <main id="main-content" tabindex="-1" class="content flex-1 relative pt-28">
         {crumbItems.length > 0 && (
           <div class="page-crumbs-bar">
             <Breadcrumbs items={crumbItems} />
