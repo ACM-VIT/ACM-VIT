@@ -270,9 +270,22 @@
     audio.volume = 0.7;
   }
 
+  // When the page is frozen for the bfcache the browser pauses our <audio> and
+  // fires a 'pause' event. `freezing` lets the pause handler ignore that so it
+  // doesn't clobber the saved "was playing" state; `wasPlayingAtHide` records
+  // the real intent captured the instant we started navigating away.
+  let freezing = false;
+  let wasPlayingAtHide = false;
+
+  const onHide = () => {
+    wasPlayingAtHide = !remote && !audio.paused;
+    freezing = true;
+    writeSavedState();
+  };
+
   // Persist state on every nav-out and periodically while playing
-  window.addEventListener('pagehide', writeSavedState);
-  window.addEventListener('beforeunload', writeSavedState);
+  window.addEventListener('pagehide', onHide);
+  window.addEventListener('beforeunload', onHide);
   setInterval(() => { if (!audio.paused) writeSavedState(); }, 1000);
 
   /* ─── Cross-tab sync: plumbing ─── */
@@ -283,6 +296,20 @@
     eq.classList.toggle('cp-eq-active', playing);
     miniNote.style.display = playing ? 'none' : '';
   };
+
+  /* Back/forward navigation restores this page from the bfcache: the init code
+     above never re-runs and the browser paused our <audio> on freeze, so music
+     dies silently. On a persisted pageshow, resume if we were playing when we
+     left (forward nav already resumes via a fresh load). The bfcache keeps the
+     element's track + position, so a bare play() picks up exactly where it was. */
+  window.addEventListener('pageshow', (e) => {
+    if (!(e as PageTransitionEvent).persisted) return;
+    freezing = false;
+    if (remote || !wasPlayingAtHide) return;
+    audio.play().catch(() => {});
+    setPlayingUI(true);
+    broadcastState();
+  });
 
   const broadcastState = () => {
     if (!bc || remote) return;
@@ -414,6 +441,7 @@
 
   audio.addEventListener('pause', () => {
     if (remote) return; // paused only to yield playback to another tab
+    if (freezing) return; // browser paused us to freeze for the bfcache, not a real pause
     setPlayingUI(false);
     writeSavedState();
     broadcastState();

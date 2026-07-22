@@ -81,6 +81,13 @@
     align-items: center;
     justify-content: center;
     gap: 0;
+    /* Let hovers fall through to the keyboard rects behind; the interactive
+       form controls below re-enable pointer events for themselves. */
+    pointer-events: none;
+  }
+
+  .grep-content :where(form, input, button, a, label) {
+    pointer-events: auto;
   }
 
   /* Desktop: lock the wordmark to viewport centre so it shares a centre with the
@@ -125,34 +132,40 @@
     justify-content: center;
   }
 
+  /* svg opacity kept at 1 so hover highlight isn't multiplied away;
+     the faint resting look is baked into the low-alpha fills below. */
   .keyboard-bg :global(svg) {
     width: 200%;
     height: auto;
     max-height: none;
-    opacity: 0.2;
+    opacity: 1;
     flex-shrink: 0;
   }
 
   .keyboard-bg :global(rect) {
-    fill: rgba(255, 255, 255, 0.3) !important;
+    fill: rgba(255, 255, 255, 0.03) !important;
     transition: fill 0.15s ease, filter 0.15s ease;
     pointer-events: auto;
     cursor: default;
   }
 
   .keyboard-bg :global(rect:hover) {
-    fill: rgba(32, 35, 254, 0.15) !important;
-    filter: drop-shadow(0 0 4px rgba(32, 35, 254, 0.06));
+    fill: rgba(32, 35, 254, 0.1) !important;
+    filter: drop-shadow(0 0 4px rgba(32, 35, 254, 0.1));
   }
 
   .keyboard-bg :global(path) {
-    fill: rgba(255, 255, 255, 0.3) !important;
+    fill: rgba(255, 255, 255, 0.03) !important;
     transition: fill 0.15s ease;
     pointer-events: none;
   }
 
-  .keyboard-bg :global(rect:hover ~ path) {
-    fill: rgba(255, 255, 255, 0.15) !important;
+  /* Keep the key label legible on the blue highlight.
+     Scope to the two paths immediately after the hovered rect (this key's
+     letter) — a `~` sibling would recolour every later key too. */
+  .keyboard-bg :global(rect:hover + path),
+  .keyboard-bg :global(rect:hover + path + path) {
+    fill: rgba(32, 35, 254, 0.5) !important;
   }
 
   /* ── Light mode ── */
@@ -183,20 +196,21 @@
   }
 
   :global(html[data-theme="light"]) .keyboard-bg :global(rect) {
-    fill: rgba(0, 0, 0, 0.06) !important;
+    fill: rgba(0, 0, 0, 0.03) !important;
   }
 
   :global(html[data-theme="light"]) .keyboard-bg :global(rect:hover) {
-    fill: rgba(249, 95, 74, 0.2) !important;
-    filter: drop-shadow(0 0 4px rgba(249, 95, 74, 0.08));
+    fill: rgba(32, 35, 254, 0.09) !important;
+    filter: drop-shadow(0 0 4px rgba(32, 35, 254, 0.1));
   }
 
   :global(html[data-theme="light"]) .keyboard-bg :global(path) {
-    fill: rgba(0, 0, 0, 0.06) !important;
+    fill: rgba(0, 0, 0, 0.03) !important;
   }
 
-  :global(html[data-theme="light"]) .keyboard-bg :global(rect:hover ~ path) {
-    fill: rgba(0, 0, 0, 0.12) !important;
+  :global(html[data-theme="light"]) .keyboard-bg :global(rect:hover + path),
+  :global(html[data-theme="light"]) .keyboard-bg :global(rect:hover + path + path) {
+    fill: rgba(32, 35, 254, 0.5) !important;
   }
 
   :global(html[data-theme="light"]) .grep-section :global(.grep-btn) {
