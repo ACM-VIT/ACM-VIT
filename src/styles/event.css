@@ -725,10 +725,31 @@ html[data-theme="light"] .event-type-chip,
 html[data-theme="light"] .event-hero-title span,
 html[data-theme="light"] .event-section-title span,
 html[data-theme="light"] .event-stat-value,
-html[data-theme="light"] .event-archive-link-chip,
+html[data-theme="light"] .event-meta-chip strong,
+html[data-theme="light"] .event-speaker-role,
 html[data-theme="light"] .event-archive-year {
   color: var(--event-color, #F95F4A); /* fallback: WebKit <16.2 lacks color-mix */
   color: color-mix(in srgb, var(--event-color, #F95F4A) 55%, #000);
+}
+
+/* Darken accent bars/rules so light event colors stay visible on white */
+html[data-theme="light"] .event-section-rule {
+  background: var(--event-color, #F95F4A); /* fallback: WebKit <16.2 lacks color-mix */
+  background: color-mix(in srgb, var(--event-color, #F95F4A) 55%, #000);
+}
+
+/* Solid dark button for readability regardless of accent lightness */
+html[data-theme="light"] .event-archive-link-chip {
+  background: #1a1a1a;
+  border-color: #1a1a1a;
+  color: var(--event-color, #F95F4A); /* fallback: WebKit <16.2 lacks color-mix */
+  color: color-mix(in srgb, var(--event-color, #F95F4A) 70%, #fff);
+}
+
+html[data-theme="light"] .event-archive-link-chip:hover {
+  background: #000;
+  border-color: #000;
+  color: #fff;
 }
 
 /* ── Archives ── */

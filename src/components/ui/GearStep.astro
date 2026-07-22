@@ -123,4 +123,8 @@ const REEL_GEAR =
   :global(html[data-theme="light"]) .reel-step[data-state="active"] .reel-label {
     color: #263b33;
   }
+  /* Base hover paints the label cream, which disappears on the light page. */
+  :global(html[data-theme="light"]) .reel-step:hover .reel-label {
+    color: rgba(38, 59, 51, 0.85);
+  }
 </style>

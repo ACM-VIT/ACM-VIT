@@ -1,5 +1,6 @@
 ---
 // Footer.astro
+import FillButton from "../components/ui/FillButton.astro";
 import { getAssetUrl, getMediaUrl } from "../utils/cdn";
 import { techAOIs } from "../data/techDomainData";
 import { designAOIs } from "../data/designDomainData";
@@ -222,8 +223,9 @@ const footerColumnsHtml = footerNav
             </a>
 
             <div class="flex flex-wrap items-center gap-3">
-              <a href="/sitemap" class="footer-sitemap-btn group">
+              <FillButton href="/sitemap" label="View sitemap" class="footer-fill">
                 <svg
+                  slot="icon"
                   width="15"
                   height="15"
                   viewBox="0 0 24 24"
@@ -239,10 +241,10 @@ const footerColumnsHtml = footerNav
                   <rect x="3" y="14" width="7" height="7" rx="1" />
                   <rect x="14" y="14" width="7" height="7" rx="1" />
                 </svg>
-                <span>View sitemap</span>
-              </a>
-              <a href="/sitemap.xml" class="footer-sitemap-btn group">
+              </FillButton>
+              <FillButton href="/sitemap.xml" label="sitemap.xml" class="footer-fill">
                 <svg
+                  slot="icon"
                   width="15"
                   height="15"
                   viewBox="0 0 24 24"
@@ -256,8 +258,7 @@ const footerColumnsHtml = footerNav
                   <polyline points="16 18 22 12 16 6" />
                   <polyline points="8 6 2 12 8 18" />
                 </svg>
-                <span>sitemap.xml</span>
-              </a>
+              </FillButton>
             </div>
           </div>
 
@@ -365,8 +366,9 @@ const footerColumnsHtml = footerNav
         </nav>
 
         <div class="flex flex-wrap items-center gap-3 self-start">
-          <a href="/sitemap" class="footer-sitemap-btn group">
+          <FillButton href="/sitemap" label="View sitemap" class="footer-fill">
             <svg
+              slot="icon"
               width="15"
               height="15"
               viewBox="0 0 24 24"
@@ -382,10 +384,10 @@ const footerColumnsHtml = footerNav
               <rect x="3" y="14" width="7" height="7" rx="1" />
               <rect x="14" y="14" width="7" height="7" rx="1" />
             </svg>
-            <span>View sitemap</span>
-          </a>
-          <a href="/sitemap.xml" class="footer-sitemap-btn group">
+          </FillButton>
+          <FillButton href="/sitemap.xml" label="sitemap.xml" class="footer-fill">
             <svg
+              slot="icon"
               width="15"
               height="15"
               viewBox="0 0 24 24"
@@ -399,8 +401,7 @@ const footerColumnsHtml = footerNav
               <polyline points="16 18 22 12 16 6" />
               <polyline points="8 6 2 12 8 18" />
             </svg>
-            <span>sitemap.xml</span>
-          </a>
+          </FillButton>
         </div>
       </div>
 
@@ -558,48 +559,24 @@ const footerColumnsHtml = footerNav
     outline: none;
   }
 
-  /* Sitemap button */
-  .footer-sitemap-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.55rem;
-    /* Equal width so both pills line up (edges + icons) whether they sit
-       side by side on large screens or stack on small ones. */
-    min-width: 10.5rem;
-    padding: 0.6rem 1.1rem;
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 9999px;
-    font-family: "PolySans Trial", sans-serif;
-    font-size: 0.82rem;
-    font-weight: 400;
-    letter-spacing: 0.01em;
-    color: rgba(255, 255, 255, 0.9);
-    text-decoration: none;
-    background: rgba(255, 255, 255, 0.02);
-    transition:
-      border-color 0.2s ease,
-      background 0.2s ease,
-      color 0.2s ease;
+  /* The footer sits on an always-black video band in BOTH themes, so pin these
+     fill buttons to one dark-surface treatment and ignore FillButton's
+     light-mode swap (which otherwise paints them #263B33 green here). Rest =
+     transparent pill with a cream label; hover = accent-orange fill that pops
+     on black, with a dark label. */
+  :global(.fill-btn.footer-fill) {
+    --fill-bg: #f95f4a !important;
+    background: transparent !important;
+    color: #fefcd9 !important;
+    border-color: rgba(254, 252, 217, 0.25) !important;
   }
-  .footer-sitemap-btn:hover,
-  .footer-sitemap-btn:focus-visible {
-    border-color: var(--color-primary-orange, #f95f4a);
-    background: rgba(249, 95, 74, 0.08);
-    color: #fff;
-    outline: none;
-  }
-  .footer-sitemap-arrow {
-    transition: transform 0.2s ease;
-  }
-  .footer-sitemap-btn:hover .footer-sitemap-arrow,
-  .footer-sitemap-btn:focus-visible .footer-sitemap-arrow {
-    transform: translateX(3px);
+  :global(.fill-btn.footer-fill:hover) {
+    color: #0d0e0d !important;
+    border-color: #f95f4a !important;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    :global(.footer-link),
-    .footer-sitemap-btn,
-    .footer-sitemap-arrow {
+    :global(.footer-link) {
       transition: none;
     }
   }

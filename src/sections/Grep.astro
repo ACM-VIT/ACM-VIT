@@ -27,13 +27,16 @@
       </p>
 
       <!-- Email signup -->
-      <form class="grep-email-form mt-8 flex flex-col sm:flex-row items-center gap-3 w-full max-w-md" id="grep-subscribe-form">
+      <form class="grep-email-form mt-8 flex flex-col sm:flex-row items-center gap-3 w-full max-w-md" id="grep-subscribe-form" novalidate>
         <input
+          id="grep-email-input"
           type="email"
           name="email"
-          required
+          inputmode="email"
+          autocomplete="email"
+          aria-describedby="grep-subscribe-status"
           placeholder="Enter your email to subscribe"
-          class="w-full flex-1 rounded-lg border border-[#2023FE]/30 bg-white/5 px-4 py-2.5 text-sm text-[#efefef] placeholder:text-[#efefef]/30 outline-none transition-colors focus:border-[#2023FE] focus:bg-white/[0.08]"
+          class="grep-email-input w-full flex-1 rounded-lg border border-[#2023FE]/30 bg-white/5 px-4 py-2.5 text-sm text-[#efefef] placeholder:text-[#efefef]/30 outline-none transition-colors focus:border-[#2023FE] focus:bg-white/[0.08]"
         />
         <button
           type="submit"
@@ -42,7 +45,7 @@
           Subscribe
         </button>
       </form>
-      <p class="grep-subscribe-status mt-2 text-xs text-[#efefef] hidden"></p>
+      <p class="grep-subscribe-status mt-2 text-xs text-[#efefef] hidden" id="grep-subscribe-status" role="status" aria-live="polite"></p>
     </div>
   </div>
 </section>
@@ -81,6 +84,13 @@
     align-items: center;
     justify-content: center;
     gap: 0;
+    /* Let hovers fall through to the keyboard rects behind; the interactive
+       form controls below re-enable pointer events for themselves. */
+    pointer-events: none;
+  }
+
+  .grep-content :where(form, input, button, a, label) {
+    pointer-events: auto;
   }
 
   /* Desktop: lock the wordmark to viewport centre so it shares a centre with the
@@ -99,6 +109,26 @@
   .grep-title {
     font-family: "ChessType", monospace;
     font-size: clamp(3.5rem, 8vw, 7rem);
+  }
+
+  /* Custom validation error state: red border + shake nudge. */
+  .grep-email-input.grep-input-error {
+    border-color: #ef4444 !important;
+    animation: grep-input-shake 0.4s ease;
+  }
+
+  @keyframes grep-input-shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .grep-email-input.grep-input-error {
+      animation: none;
+    }
   }
 
   .grep-by {
@@ -125,34 +155,40 @@
     justify-content: center;
   }
 
+  /* svg opacity kept at 1 so hover highlight isn't multiplied away;
+     the faint resting look is baked into the low-alpha fills below. */
   .keyboard-bg :global(svg) {
     width: 200%;
     height: auto;
     max-height: none;
-    opacity: 0.2;
+    opacity: 1;
     flex-shrink: 0;
   }
 
   .keyboard-bg :global(rect) {
-    fill: rgba(255, 255, 255, 0.3) !important;
+    fill: rgba(255, 255, 255, 0.03) !important;
     transition: fill 0.15s ease, filter 0.15s ease;
     pointer-events: auto;
     cursor: default;
   }
 
   .keyboard-bg :global(rect:hover) {
-    fill: rgba(32, 35, 254, 0.15) !important;
-    filter: drop-shadow(0 0 4px rgba(32, 35, 254, 0.06));
+    fill: rgba(32, 35, 254, 0.1) !important;
+    filter: drop-shadow(0 0 4px rgba(32, 35, 254, 0.1));
   }
 
   .keyboard-bg :global(path) {
-    fill: rgba(255, 255, 255, 0.3) !important;
+    fill: rgba(255, 255, 255, 0.03) !important;
     transition: fill 0.15s ease;
     pointer-events: none;
   }
 
-  .keyboard-bg :global(rect:hover ~ path) {
-    fill: rgba(255, 255, 255, 0.15) !important;
+  /* Keep the key label legible on the blue highlight.
+     Scope to the two paths immediately after the hovered rect (this key's
+     letter) — a `~` sibling would recolour every later key too. */
+  .keyboard-bg :global(rect:hover + path),
+  .keyboard-bg :global(rect:hover + path + path) {
+    fill: rgba(32, 35, 254, 0.5) !important;
   }
 
   /* ── Light mode ── */
@@ -183,20 +219,21 @@
   }
 
   :global(html[data-theme="light"]) .keyboard-bg :global(rect) {
-    fill: rgba(0, 0, 0, 0.06) !important;
+    fill: rgba(0, 0, 0, 0.03) !important;
   }
 
   :global(html[data-theme="light"]) .keyboard-bg :global(rect:hover) {
-    fill: rgba(249, 95, 74, 0.2) !important;
-    filter: drop-shadow(0 0 4px rgba(249, 95, 74, 0.08));
+    fill: rgba(32, 35, 254, 0.09) !important;
+    filter: drop-shadow(0 0 4px rgba(32, 35, 254, 0.1));
   }
 
   :global(html[data-theme="light"]) .keyboard-bg :global(path) {
-    fill: rgba(0, 0, 0, 0.06) !important;
+    fill: rgba(0, 0, 0, 0.03) !important;
   }
 
-  :global(html[data-theme="light"]) .keyboard-bg :global(rect:hover ~ path) {
-    fill: rgba(0, 0, 0, 0.12) !important;
+  :global(html[data-theme="light"]) .keyboard-bg :global(rect:hover + path),
+  :global(html[data-theme="light"]) .keyboard-bg :global(rect:hover + path + path) {
+    fill: rgba(32, 35, 254, 0.5) !important;
   }
 
   :global(html[data-theme="light"]) .grep-section :global(.grep-btn) {
@@ -226,5 +263,116 @@
     link.href =
       "https://fonts.googleapis.com/css2?family=Borel&display=swap";
     document.head.appendChild(link);
+  }
+
+  // ── Blue confetti rain from the top (no dependency) ──────────────────────
+  function blueConfetti() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const colors = ["#2023FE", "#135DE2", "#5b6bff", "#8f9bff", "#c3caff"];
+    const count = 110;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const layer = document.createElement("div");
+    layer.setAttribute("aria-hidden", "true");
+    layer.style.cssText =
+      "position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden;";
+    document.body.appendChild(layer);
+
+    for (let i = 0; i < count; i++) {
+      const p = document.createElement("div");
+      const size = 6 + Math.random() * 6;
+      const color = colors[(Math.random() * colors.length) | 0];
+      const round = Math.random() < 0.35;
+      const startX = Math.random() * vw;
+      const startY = -20 - Math.random() * vh * 0.4; // staggered above the top edge
+      p.style.cssText =
+        `position:absolute;left:${startX}px;top:${startY}px;width:${size}px;` +
+        `height:${round ? size : size * 0.5}px;background:${color};` +
+        `border-radius:${round ? "50%" : "1px"};will-change:transform,opacity;`;
+      layer.appendChild(p);
+
+      const drift = (Math.random() - 0.5) * 220; // gentle horizontal sway
+      const fall = vh + 80 - startY; // travel fully off the bottom
+      const rot = (Math.random() - 0.5) * 900;
+      const duration = 2200 + Math.random() * 1600;
+
+      p.animate(
+        [
+          { transform: "translate(0,0) rotate(0deg)", opacity: 1 },
+          { transform: `translate(${drift * 0.5}px, ${fall * 0.5}px) rotate(${rot * 0.5}deg)`, opacity: 1, offset: 0.5 },
+          { transform: `translate(${drift}px, ${fall}px) rotate(${rot}deg)`, opacity: 0.9 },
+        ],
+        { duration, easing: "cubic-bezier(0.4,0.1,0.7,1)", fill: "forwards" }
+      );
+    }
+
+    setTimeout(() => layer.remove(), 4200);
+  }
+
+  // ── Subscribe form (custom validation, no native bubble) ─────────────────
+  const subForm = document.getElementById("grep-subscribe-form") as HTMLFormElement | null;
+  if (subForm) {
+    const input = document.getElementById("grep-email-input") as HTMLInputElement | null;
+    const statusEl = document.getElementById("grep-subscribe-status") as HTMLElement | null;
+    let successTimer = 0;
+
+    // Pragmatic email check: something@something.tld, no spaces.
+    const isValidEmail = (v: string) =>
+      /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+
+    function setStatus(msg: string, color: string) {
+      if (!statusEl) return;
+      statusEl.textContent = msg;
+      statusEl.style.color = color;
+      statusEl.classList.remove("hidden");
+    }
+    function clearStatus() {
+      if (!statusEl) return;
+      statusEl.textContent = "";
+      statusEl.style.removeProperty("color");
+      statusEl.classList.add("hidden");
+    }
+    function showError(msg: string) {
+      setStatus(msg, "#ef4444"); // red
+      if (input) {
+        input.setAttribute("aria-invalid", "true");
+        input.classList.remove("grep-input-error"); // restart shake
+        void input.offsetWidth; // reflow
+        input.classList.add("grep-input-error");
+        input.focus();
+      }
+    }
+
+    // Clear the error the moment the user starts fixing it.
+    input?.addEventListener("input", () => {
+      if (input.getAttribute("aria-invalid") === "true") {
+        input.removeAttribute("aria-invalid");
+        input.classList.remove("grep-input-error");
+        clearStatus();
+      }
+    });
+
+    subForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const value = (input?.value ?? "").trim();
+
+      if (!value) {
+        showError("Enter your email to subscribe.");
+        return;
+      }
+      if (!isValidEmail(value)) {
+        showError("That doesn't look like a valid email.");
+        return;
+      }
+
+      input?.removeAttribute("aria-invalid");
+      input?.classList.remove("grep-input-error");
+      blueConfetti();
+      subForm.reset();
+      setStatus("You're in - welcome to grep.", "#16a34a"); // success green
+
+      window.clearTimeout(successTimer);
+      successTimer = window.setTimeout(clearStatus, 4000);
+    });
   }
 </script>
