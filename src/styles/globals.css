@@ -754,3 +754,98 @@ body.mobile-menu-open .theme-toggle {
   src: url("../assets/fonts/Wide/PolySansItalic-BulkyWideItalic.otf") format("opentype");
 }
 
+/* ──────────────────────────────────────────────────────────────────────────
+   Accessibility helpers (site-wide)
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* Keyboard focus ring. Only shows for keyboard/AT users (:focus-visible), so
+   pointer users never see it and no resting visuals change. Several components
+   set `outline: none`, leaving keyboard users with no visible focus - this
+   restores a consistent, high-contrast indicator everywhere. Uses the existing
+   accent token; a paired light halo keeps it visible on both dark and light
+   surfaces. */
+:focus-visible {
+  outline: 2px solid var(--color-primary-orange, #f95f4a);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+/* Some elements explicitly reset the outline; re-assert it for keyboard focus. */
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--color-primary-orange, #f95f4a);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.35);
+}
+
+/* The skip link moves focus to <main> (tabindex=-1) so AT continues from there;
+   it is a layout container, not a control, so suppress the big focus ring on it. */
+#main-content:focus,
+#main-content:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Skip-to-content link: first thing a keyboard/screen-reader user reaches, lets
+   them jump past the fixed chrome (logos, nav, theme cord) straight to <main>.
+   Off-screen until focused, then slides into the top-left corner. */
+.skip-to-content {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 100000;
+  /* Fully clears the top edge: moved up its own height plus its 10px offset, so
+     no sliver peeks below the viewport top at rest. */
+  transform: translateY(calc(-100% - 20px));
+  padding: 10px 18px;
+  border-radius: 8px;
+  background: var(--color-primary-orange, #f95f4a);
+  color: #0d0e0d;
+  font-family: "PolySans Trial", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease;
+}
+.skip-to-content:focus {
+  transform: translateY(0);
+  outline: 2px solid #0d0e0d;
+  outline-offset: 2px;
+}
+
+/* Reduced-motion safety net. Individual components already gate their GSAP work
+   on this query; this is a CSS-only backstop for decorative CSS animations and
+   transitions. Uses the canonical near-zero-duration + single-iteration pattern
+   so infinite loops resolve to a static frame (no rapid flashing) while any
+   JS listening for transitionend/animationend still fires. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Screen-reader-only utility: content read by assistive tech, hidden visually. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
