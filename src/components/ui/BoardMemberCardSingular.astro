@@ -37,11 +37,11 @@ const hasPhoto = !!imageUrl;
 ---
 
 <div
-  class="relative w-full aspect-[1.6] rounded-lg bg-white overflow-hidden flex items-end justify-center"
+  class="board-card relative w-full aspect-[1.6] rounded-lg bg-white overflow-hidden flex items-end justify-center"
 >
   <!-- Background Pattern -->
   <div
-    class="absolute inset-0 pointer-events-none opacity-50 z-0"
+    class="board-card-noise absolute inset-0 pointer-events-none opacity-50 z-0"
     style={`background-image: url('${getAssetUrl("/backgrounds/backgrounds-noise.webp")}'); background-size: cover;`}
   >
   </div>
@@ -220,4 +220,17 @@ const hasPhoto = !!imageUrl;
 
 <style>
   /* Local font-face definitions removed in favor of globals.css */
+
+  /* The card is bg-white with a dark noise texture at 50% - that grain reads
+     as a muddy grey. Fine on the dark page, ugly on the light one. In light
+     mode keep the card near-white with a whisper of grain, and add a border +
+     soft shadow so its edges still separate from the light background. */
+  :global(html[data-theme="light"]) .board-card {
+    background: #fcfcf7;
+    border: 1px solid rgba(38, 59, 51, 0.12);
+    box-shadow: 0 10px 28px rgba(38, 59, 51, 0.1);
+  }
+  :global(html[data-theme="light"]) .board-card-noise {
+    opacity: 0.1;
+  }
 </style>

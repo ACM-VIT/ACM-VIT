@@ -107,7 +107,7 @@ const CURRENT_BOARD_YEAR = 2026;
             </div>
             <div class="faculty-bio" data-reveal>
               <p class="faculty-bio-lead font-['PolySans_Trial',sans-serif] text-lg font-light leading-relaxed text-[#FEFCD9] sm:text-xl">
-                The <span class="text-[#F2C94C]">Faculty Coordinator</span> of ACM-VIT.
+                The <span class="faculty-lead-accent text-[#F2C94C]">Faculty Coordinator</span> of ACM-VIT.
               </p>
               <p class="faculty-bio-text mt-4 font-['PolySans_Trial',sans-serif] text-base font-light leading-[1.65] text-[#FEFCD9]/75">
                 Dr. Aswani Kumar Cherukuri is a Professor at the School of
@@ -263,6 +263,11 @@ const CURRENT_BOARD_YEAR = 2026;
   }
   :global(html[data-theme="light"]) .faculty-bio-lead {
     color: #1a1a1a;
+  }
+  /* Pale gold accent washes out on the light page - darken it to a readable
+     amber while keeping the gold identity. */
+  :global(html[data-theme="light"]) .faculty-lead-accent {
+    color: #9a6f00;
   }
   :global(html[data-theme="light"]) .faculty-bio-text {
     color: rgba(26, 26, 26, 0.75);
