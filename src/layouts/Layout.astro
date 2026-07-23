@@ -273,6 +273,11 @@ if (showCrumbs) {
       </a>
       {
         isLandingPage && (
+          <span class="brand-divider" aria-hidden="true" />
+        )
+      }
+      {
+        isLandingPage && (
           <a
             href="https://vit.ac.in/"
             class="vit-logo-link"
@@ -853,7 +858,8 @@ if (showCrumbs) {
     z-index: 1000;
     display: flex;
     align-items: center;
-    gap: clamp(10px, 0.9vw, 16px);
+    /* Co-brand spacing per design guide (logo <-> partner divider): ~34px each side */
+    gap: clamp(20px, 2vw, 34px);
     pointer-events: none;
     transform: scale(var(--brand-logo-scale));
     transform-origin: top left;
@@ -877,13 +883,32 @@ if (showCrumbs) {
 
   .vit-logo {
     width: auto;
-    height: 44px;
+    height: 60px;
     object-fit: contain;
+  }
+
+  /* Thin co-brand divider between the ACM-VIT mark and the VIT partner mark.
+     Design guide: 1px rule, optical height of the marks. Desktop landing only. */
+  .brand-divider {
+    flex: none;
+    width: 1px;
+    height: 64px;
+    background: rgba(255, 255, 255, 0.28);
+    pointer-events: none;
+  }
+
+  :global(html[data-theme="light"]) .brand-divider {
+    background: rgba(26, 26, 26, 0.2);
   }
 
   @media screen and (max-width: 1024px) {
     .brand-logos {
       transform: scale(0.7);
+    }
+
+    /* Below desktop the two marks split to opposite corners; drop the divider. */
+    .brand-divider {
+      display: none;
     }
   }
 

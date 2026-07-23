@@ -9,9 +9,15 @@ import { getAssetUrl } from "../utils/cdn";
 
 // ── Gallery images ─────────────────────────────────────────────────────────
 // Walk /public/gallery, keep only the webp photos inside the event subfolders.
-// Skip the two decorative top-level assets (bg text + logo).
+// Skip the decorative top-level assets (bg text, logo, hero bento + its light
+// variant) so they don't leak into the masonry as tiles.
 const GALLERY_DIR = path.join(process.cwd(), "public", "gallery");
-const SKIP = new Set(["gallery-bg-text.webp", "gallery.webp"]);
+const SKIP = new Set([
+  "gallery-bg-text.webp",
+  "gallery.webp",
+  "gallery-hero.webp",
+  "gallery-light.webp",
+]);
 
 function walk(dir: string): string[] {
   const out: string[] = [];
