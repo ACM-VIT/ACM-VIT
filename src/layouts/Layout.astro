@@ -25,7 +25,7 @@ export interface Props {
 
 const { pageTitle, backHref, scrollCue = true, crumbs } = Astro.props;
 
-const site = Astro.site ?? new URL("https://acmvit.juxtaryct.com");
+const site = Astro.site ?? new URL("https://www.acmvit.in");
 const canonicalUrl = new URL(Astro.url.pathname, site);
 const ogImageUrl = new URL("/opengraph.webp", site);
 const cdnEnv = import.meta.env.PUBLIC_CDN_URL;

@@ -331,9 +331,19 @@ const { slug, title } = Astro.props;
 
     // ── Entry animation (Flip)
     const controls = pill.querySelectorAll<HTMLElement>(".dock-control");
-    const dividers = pill.querySelectorAll<HTMLElement>(".dock-divider");
 
     const runEntryAnimation = () => {
+      // On mobile (≤1024px) the dock pill is display:none - its controls are
+      // surfaced through the MobileNavbar blog panel instead. There's nothing to
+      // reveal, so skip the Flip/width animation on the hidden, zero-size pill
+      // (it would just burn ticks and could flash). Mark the dock ready so any
+      // dependent state settles.
+      if (pill.offsetParent === null || pill.getClientRects().length === 0) {
+        root.dataset.dockState = "ready";
+        root.style.removeProperty("visibility");
+        return;
+      }
+
       root.style.visibility = "visible";
       root.dataset.dockState = "animating";
 
@@ -350,7 +360,7 @@ const { slug, title } = Astro.props;
         height: naturalHeight,
         overflow: "hidden",
       });
-      gsap.set([controls, dividers], { opacity: 0 });
+      gsap.set(controls, { opacity: 0 });
 
       const tl = gsap.timeline();
       tl.to(pill, { opacity: 1, y: -6, scale: 1.05, duration: 0.35, ease: "power2.out" })
@@ -367,7 +377,7 @@ const { slug, title } = Astro.props;
               pill.style.overflow = "";
               root.dataset.dockState = "ready";
               root.style.removeProperty("visibility");
-              gsap.to([controls, dividers], { opacity: 1, duration: 0.3, stagger: 0.025, ease: "power2.out" });
+              gsap.to(controls, { opacity: 1, duration: 0.3, stagger: 0.025, ease: "power2.out" });
             },
           });
         }, "-=0.08");

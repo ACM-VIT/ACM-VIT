@@ -77,7 +77,7 @@ const idx = flat.findIndex((i) => i.href === current);
 const prev = idx > 0 ? flat[idx - 1] : null;
 const next = idx >= 0 && idx < flat.length - 1 ? flat[idx + 1] : null;
 
-const site = Astro.site ?? new URL("https://acmvit.juxtaryct.com");
+const site = Astro.site ?? new URL("https://www.acmvit.in");
 const canonicalUrl = new URL(Astro.url.pathname, site);
 ---
 

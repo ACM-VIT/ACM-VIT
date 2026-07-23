@@ -71,7 +71,7 @@ const paths = [
 ];
 
 export const GET: APIRoute = ({ site }) => {
-  const base = (site?.href ?? "https://acmvit.juxtaryct.com/").replace(/\/$/, "");
+  const base = (site?.href ?? "https://www.acmvit.in/").replace(/\/$/, "");
   const urls = paths
     .map((p) => `  <url><loc>${base}${p}</loc></url>`)
     .join("\n");
