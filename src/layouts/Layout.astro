@@ -25,7 +25,7 @@ export interface Props {
 
 const { pageTitle, backHref, scrollCue = true, crumbs } = Astro.props;
 
-const site = Astro.site ?? new URL("https://www.acmvit.in");
+const site = Astro.site ?? new URL("https://acmvit.juxtaryct.com");
 const canonicalUrl = new URL(Astro.url.pathname, site);
 const ogImageUrl = new URL("/opengraph.webp", site);
 const cdnEnv = import.meta.env.PUBLIC_CDN_URL;
@@ -182,7 +182,7 @@ if (showCrumbs) {
     <meta property="og:image:type" content="image/webp" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="ACM-VIT cassette - because technology matters" />
+    <meta property="og:image:alt" content="ACM-VIT - because technology matters" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />

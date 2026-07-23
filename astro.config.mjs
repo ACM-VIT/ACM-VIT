@@ -7,7 +7,7 @@ import keystatic from '@keystatic/astro';
 const cdnUrl = process.env.PUBLIC_CDN_URL?.replace(/\/$/, "");
 
 export default defineConfig({
-    site: 'https://www.acmvit.in',
+    site: 'https://acmvit.juxtaryct.com',
     output: 'server',
     adapter: cloudflare(),
     integrations: [react(), keystatic()],
