@@ -44,7 +44,9 @@ const Tag = href ? "a" : "button";
     font-weight: 700;
     background: var(--proj-color, #1c1917);
     color: var(--proj-color-secondary, #fefcd9);
-    border: 1px solid var(--proj-color, rgba(254, 252, 217, 0.22));
+    /* Bare buttons (no --proj-color) sit as a #1c1917 pill on the near-black
+       #0d0e0d page, so give the fallback edge enough cream to read as a pill. */
+    border: 1px solid var(--proj-color, rgba(254, 252, 217, 0.5));
     overflow: hidden;
     cursor: pointer;
     transition: color 0.35s ease, border-color 0.35s ease, transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
@@ -76,7 +78,10 @@ const Tag = href ? "a" : "button";
 
   .fill-btn:hover {
     color: var(--proj-color, #F95F4A);
-    border-color: var(--fill-bg);
+    /* Keep a bright accent outline on hover. The fill circle expands to the dark
+       --fill-bg (#0d0e0d) which matches the page, so a dark border made the whole
+       pill dissolve into the background - the accent ring keeps it visible. */
+    border-color: var(--proj-color, #F95F4A);
     transform: translateY(-2px);
   }
 
