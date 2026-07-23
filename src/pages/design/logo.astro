@@ -120,22 +120,24 @@ const misuse = [
             <div style="padding:20px 24px 24px;">
               <h3 class="ds-h4">{l.name}</h3>
               <p class="ds-body" style="margin-top:6px">{l.desc}</p>
-              <div style="display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; align-items:center;">
-                <span class="ds-chip">Dark</span>
-                <span class="ds-dl">
-                  <a href={logos(`${l.file}-dark.svg`)} download>SVG</a>
-                  <a href={logos(`${l.file}-dark-1024.png`)} download>PNG</a>
-                  <a href={logos(`${l.file}-dark-1024.webp`)} download>WebP</a>
+              <div style="display:flex; gap:14px; margin-top:16px; flex-wrap:wrap; align-items:center;">
+                <span style="display:inline-flex; gap:10px; align-items:center;">
+                  <span class="ds-chip">Dark</span>
+                  <span class="ds-dl">
+                    <a href={logos(`${l.file}-dark.svg`)} download>SVG</a>
+                    <a href={logos(`${l.file}-dark-1024.png`)} download>PNG</a>
+                    <a href={logos(`${l.file}-dark-1024.webp`)} download>WebP</a>
+                  </span>
                 </span>
                 {!l.darkOnly && (
-                  <>
+                  <span style="display:inline-flex; gap:10px; align-items:center;">
                     <span class="ds-chip">White</span>
                     <span class="ds-dl">
                       <a href={logos(`${l.file}-white.svg`)} download>SVG</a>
                       <a href={logos(`${l.file}-white-1024.png`)} download>PNG</a>
                       <a href={logos(`${l.file}-white-1024.webp`)} download>WebP</a>
                     </span>
-                  </>
+                  </span>
                 )}
               </div>
             </div>

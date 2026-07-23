@@ -50,6 +50,42 @@ const radii = [
         ))
       }
     </div>
+
+    <div class="ds-card ds-card-tonal ds-reveal" style="margin-top:14px;">
+      <h3 class="ds-h4">Going sharp is allowed</h3>
+      <p class="ds-body" style="margin-top:6px; max-width:70ch;">
+        Rounded is the default - it echoes the diamond's soft edges. But not
+        everything has to round. A product, page, or campaign can run fully
+        square (<span class="ds-mono">0px</span> corners) when the concept calls
+        for it - technical dashboards, editorial layouts, a retro-terminal or
+        brutalist moment. The one rule is commitment: pick a single radius
+        language per product and hold it everywhere - cards, buttons, inputs,
+        media, and imagery. Never mix rounded and sharp in the same view.
+      </p>
+      <div class="ds-shape-demos">
+        <div class="ds-shape-demo">
+          <div class="ds-mock" style="--r:14px">
+            <span class="ds-mock-bar" style="--mr:4px"></span>
+            <span class="ds-mock-btn" style="--mr:999px"></span>
+          </div>
+          <span class="ds-chip ds-chip-do" style="margin-top:10px">Coherent · rounded</span>
+        </div>
+        <div class="ds-shape-demo">
+          <div class="ds-mock" style="--r:0px">
+            <span class="ds-mock-bar" style="--mr:0px"></span>
+            <span class="ds-mock-btn" style="--mr:0px"></span>
+          </div>
+          <span class="ds-chip ds-chip-do" style="margin-top:10px">Coherent · sharp</span>
+        </div>
+        <div class="ds-shape-demo">
+          <div class="ds-mock" style="--r:14px">
+            <span class="ds-mock-bar" style="--mr:4px"></span>
+            <span class="ds-mock-btn" style="--mr:0px"></span>
+          </div>
+          <span class="ds-chip ds-chip-dont" style="margin-top:10px">Mixed · avoid</span>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- 02 · Elevation -->
@@ -185,5 +221,41 @@ const radii = [
   }
   .ds-y-list li + li {
     margin-top: 6px;
+  }
+
+  .ds-shape-demos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+    margin-top: 18px;
+  }
+  .ds-shape-demo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .ds-mock {
+    width: 100%;
+    background: var(--ds-surface);
+    border: 1px solid var(--ds-line-2);
+    border-radius: var(--r);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 96px;
+    justify-content: center;
+  }
+  .ds-mock-bar {
+    height: 10px;
+    width: 62%;
+    background: var(--ds-line-2);
+    border-radius: var(--mr);
+  }
+  .ds-mock-btn {
+    height: 28px;
+    width: 92px;
+    background: var(--ds-ink);
+    border-radius: var(--mr);
   }
 </style>

@@ -1,0 +1,457 @@
+---
+export const prerender = true;
+import DesignLayout from "../../layouts/DesignLayout.astro";
+import { getAssetUrl } from "../../utils/cdn";
+
+const asset = (p: string) => getAssetUrl(`/design/logosystem/${p}`);
+
+// Every expressive / heritage variant of the ACM-VIT mark, grouped by intent.
+// ratio drives how the artwork sits on its stage; bg is either a colour or
+// "checker" (transparent artwork on the checkerboard backdrop).
+type Item = {
+  slug: string;
+  name: string;
+  desc: string;
+  cat: "heritage" | "colorway" | "seasonal" | "themed" | "merch" | "illustration";
+  ratio: "wide" | "tall" | "square";
+  bg: string;
+  // when true, also offer a download variant with the stage colour baked in
+  // (files live at `${slug}-bg.*`).
+  withBg?: boolean;
+};
+
+const items: Item[] = [
+  // 01 · Heritage lockups
+  {
+    slug: "acm-legacy-blue",
+    name: "ACM International classic",
+    desc: "The global ACM circle-in-diamond lockup in its original blue. Kept for archival and compliance references only.",
+    cat: "heritage",
+    ratio: "wide",
+    bg: "#ffffff",
+  },
+  {
+    slug: "acm-legacy-mono",
+    name: "Classic, mono",
+    desc: "Single-ink version of the international lockup for stamps, embossing, and one-colour print.",
+    cat: "heritage",
+    ratio: "wide",
+    bg: "#1c1b1a",
+  },
+  {
+    slug: "acm-legacy-vitu",
+    name: "VITU wordmark",
+    desc: "An early chapter logo from the VIT University days - the acm wordmark with the arrow and VITU letters. Archival only.",
+    cat: "heritage",
+    ratio: "wide",
+    bg: "checker",
+  },
+  {
+    slug: "acm-legacy-wordmark",
+    name: "Geometric ACM",
+    desc: "An old custom ACM logotype with geometric letterforms. Kept for the archive; not for new material.",
+    cat: "heritage",
+    ratio: "wide",
+    bg: "checker",
+  },
+  {
+    slug: "acmw-legacy-blue",
+    name: "ACM-W classic",
+    desc: "The earlier ACM-W wordmark with the chevron diamonds. Superseded by the current double-diamond mark.",
+    cat: "heritage",
+    ratio: "wide",
+    bg: "checker",
+  },
+  {
+    slug: "acmw-legacy-white",
+    name: "ACM-W classic, white",
+    desc: "White colorway of the earlier ACM-W wordmark, for dark and saturated backgrounds.",
+    cat: "heritage",
+    ratio: "wide",
+    bg: "#1c1b1a",
+  },
+
+  // 02 · Colorways & finishes
+  {
+    slug: "acm-orange-horizontal",
+    name: "Sunset horizontal",
+    desc: "The rounded diamond and horizontal lockup carried in the brand orange gradient. For event headers and warm campaign art.",
+    cat: "colorway",
+    ratio: "wide",
+    bg: "checker",
+  },
+  {
+    slug: "acm-line-mark",
+    name: "Line mark",
+    desc: "The diamond drawn as a single outline stroke. Reads well over busy photography and as a quiet watermark.",
+    cat: "colorway",
+    ratio: "square",
+    bg: "#1c1b1a",
+  },
+  {
+    slug: "acm-line-stacked",
+    name: "Line stacked",
+    desc: "Outline diamond over the stacked chapter name. A lighter alternative to the solid stacked lockup.",
+    cat: "colorway",
+    ratio: "tall",
+    bg: "checker",
+  },
+  {
+    slug: "acm-gold-outline",
+    name: "Gold keyline",
+    desc: "A thin gold keyline diamond for certificates, awards, and premium print.",
+    cat: "colorway",
+    ratio: "square",
+    bg: "#57534d",
+  },
+  {
+    slug: "acm-gloss-blue",
+    name: "Enamel gloss",
+    desc: "A glossy enamel treatment of the stacked mark. Digital stickers, badges, and playful hero moments.",
+    cat: "merch",
+    ratio: "tall",
+    bg: "#f2f0ec",
+  },
+  {
+    slug: "acm-taupe",
+    name: "Taupe tonal",
+    desc: "A muted, low-contrast colorway for warm neutral backgrounds and understated co-branding.",
+    cat: "colorway",
+    ratio: "wide",
+    bg: "#ffffff",
+  },
+  {
+    slug: "acm-photo-fill",
+    name: "Photo fill",
+    desc: "The diamond masking a photograph. Fill it with campus or event imagery for covers and title cards.",
+    cat: "colorway",
+    ratio: "square",
+    bg: "#1c1b1a",
+  },
+
+  // 03 · Seasonal & community
+  {
+    slug: "acm-pride",
+    name: "Pride",
+    desc: "The chapter mark for Pride month, set over the rainbow. Community posts through June only.",
+    cat: "seasonal",
+    ratio: "square",
+    bg: "#ffffff",
+  },
+  {
+    slug: "acmw-pride",
+    name: "ACM-W Pride",
+    desc: "The ACM-W mark for Pride month. Pairs with the primary Pride mark for women-in-computing posts.",
+    cat: "seasonal",
+    ratio: "square",
+    bg: "#ffffff",
+  },
+
+  // 04 · Themed remixes
+  {
+    slug: "acm-minecraft",
+    name: "Pixel / Minecraft",
+    desc: "A blocky, pixel-built wordmark for gaming nights, hackathons, and playful drops.",
+    cat: "themed",
+    ratio: "wide",
+    bg: "#1c1b1a",
+  },
+  {
+    slug: "acm-examcooker",
+    name: "ExamCooker dissolve",
+    desc: "The scatter-pixel treatment built for the ExamCooker launch. Reserved for ExamCooker material.",
+    cat: "themed",
+    ratio: "wide",
+    bg: "#1c1b1a",
+  },
+
+  // 05 · Pins & merch marks
+  {
+    slug: "acm-lapel-pin",
+    name: "Lapel pin",
+    desc: "Enamel-and-gold pin rendering of the diamond. Reference art for merch and physical badges.",
+    cat: "merch",
+    ratio: "square",
+    bg: "#f2f0ec",
+  },
+  {
+    slug: "acmw-lapel-pin",
+    name: "ACM-W lapel pin",
+    desc: "The ACM-W double diamond as an enamel pin. Companion to the primary pin.",
+    cat: "merch",
+    ratio: "square",
+    bg: "#f2f0ec",
+  },
+  {
+    slug: "acm-pill",
+    name: "Speaker pill",
+    desc: "Compact pill lockup for blog bylines, speaker tags, and small UI credits.",
+    cat: "merch",
+    ratio: "wide",
+    bg: "checker",
+  },
+
+  // 06 · Illustration
+  {
+    slug: "life-at-acm",
+    name: "Life at ACM",
+    desc: "The hand-drawn mascot lockup for culture posts, recaps, and behind-the-scenes stories.",
+    cat: "illustration",
+    ratio: "wide",
+    bg: "#EB5757",
+    withBg: true,
+  },
+  {
+    slug: "life-at-acm-small",
+    name: "Life at ACM, compact",
+    desc: "A tighter version of the mascot lockup with the diamond up close. For square crops, stickers, and small placements.",
+    cat: "illustration",
+    ratio: "wide",
+    bg: "#EB5757",
+    withBg: true,
+  },
+];
+
+const sizes = [512, 1024, 2048];
+
+const groups: { num: string; id: string; title: string; cat: Item["cat"]; blurb: string }[] = [
+  {
+    num: "01",
+    id: "heritage",
+    cat: "heritage",
+    title: "Heritage lockups",
+    blurb:
+      "Where we came from. The original ACM and ACM-W lockups, kept for archives, compliance, and the occasional throwback. New material should use the current marks on the Logo page.",
+  },
+  {
+    num: "02",
+    id: "colorways",
+    cat: "colorway",
+    title: "Colorways & finishes",
+    blurb:
+      "The same diamond in different skins - outline, gold keyline, enamel gloss, tonal, and photo fill. Sanctioned recolours for internal and event work.",
+  },
+  {
+    num: "03",
+    id: "seasonal",
+    cat: "seasonal",
+    title: "Seasonal & community",
+    blurb:
+      "Time-boxed marks tied to a moment. Use them only inside their window, then return to the core mark.",
+  },
+  {
+    num: "04",
+    id: "themed",
+    cat: "themed",
+    title: "Themed remixes",
+    blurb:
+      "One-off treatments built for a specific event or product. Fun by design, and not a substitute for the primary mark.",
+  },
+  {
+    num: "05",
+    id: "merch",
+    cat: "merch",
+    title: "Pins",
+    blurb:
+      "Marks drawn for physical objects and small credits - enamel pins and the compact byline pill.",
+  },
+  {
+    num: "06",
+    id: "illustration",
+    cat: "illustration",
+    title: "Illustration",
+    blurb:
+      "Logos involving illustrations, for culture and behind-the-scenes storytelling.",
+  },
+];
+
+---
+
+<DesignLayout
+  title="Logo System"
+  description="Every expressive and heritage variant of the ACM-VIT diamond - colorways, seasonal marks, themed remixes, and merch marks, each ready to download in SVG, PNG, and WebP."
+  current="/design/logosystem"
+>
+  <section class="ds-hero">
+    <div class="ds-kicker"><span class="ds-kicker-pill">Brand · Logo system</span></div>
+    <h1 class="ds-h1">One diamond, many voices.</h1>
+    <p class="ds-body-lg">
+      Around the core mark sits a family of expressive variants the design team
+      has built over the years - heritage lockups, alternate colorways, seasonal
+      marks, and themed remixes. This is the full set, named and downloadable, so
+      everyone reaches for the same file instead of rebuilding one.
+    </p>
+    <div style="display:flex; gap:12px; margin-top:26px; flex-wrap:wrap;">
+      <a href="/design/logo" class="ds-btn ds-btn-outline">Back to the core logo</a>
+      <a href="#colorways" class="ds-btn ds-btn-primary">Jump to colorways</a>
+    </div>
+  </section>
+
+  <section class="ds-section" id="rules">
+    <div class="ds-bento">
+      <div class="ds-card ds-card-tonal ds-b6 ds-reveal">
+        <span class="ds-chip ds-chip-do" style="margin-bottom:14px">Inside ACM-VIT</span>
+        <p class="ds-body">
+          These variants are for chapter members making event art, merch, and
+          seasonal posts. Pick the one that fits the moment, keep the diamond
+          intact, and download the file here rather than remaking it.
+        </p>
+      </div>
+      <div class="ds-card ds-card-tonal ds-b6 ds-reveal">
+        <span class="ds-chip ds-chip-dont" style="margin-bottom:14px">Outside ACM-VIT</span>
+        <p class="ds-body">
+          Partners, sponsors, and press should use the standard marks on the
+          <a href="/design/logo" style="color:var(--ds-accent-ink); font-weight:600;">Logo page</a>,
+          not these remixes. Need something the standard set does not cover? Email
+          <a href="mailto:outreach@acmvit.in" style="color:var(--ds-accent-ink); font-weight:600;">outreach@acmvit.in</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {
+    groups.map((g) => (
+      <section class="ds-section" id={g.id}>
+        <div class="ds-sec-head">
+          <span class="ds-sec-num">{g.num}</span>
+          <h2 class="ds-h2">{g.title}</h2>
+        </div>
+        <p class="ds-body">{g.blurb}</p>
+
+        <div class="ds-bento">
+          {items
+            .filter((i) => i.cat === g.cat)
+            .map((l) => (
+              <div class="ds-card ds-b6 ds-reveal" style="padding:0; overflow:hidden;">
+                <div
+                  class:list={["ds-specimen-stage", l.bg === "checker" && "ds-checker"]}
+                  style={`min-height:230px; ${l.bg !== "checker" ? `background:${l.bg}` : ""}`}
+                >
+                  <img
+                    class="ls-art"
+                    src={asset(`${l.slug}.svg`)}
+                    alt={l.name}
+                    loading="lazy"
+                  />
+                </div>
+                <div style="padding:20px 24px 24px;">
+                  <div style="display:flex; align-items:baseline; justify-content:space-between; gap:12px;">
+                    <h3 class="ds-h4">{l.name}</h3>
+                    <code class="ds-mono ds-small">{l.slug}</code>
+                  </div>
+                  <p class="ds-body" style="margin-top:6px">{l.desc}</p>
+                  {l.withBg && <p class="ds-dl-cap">Transparent</p>}
+                  <div class="ds-dl-rows">
+                    <div class="ds-dl-row">
+                      <span class="ds-mono ds-small">SVG</span>
+                      <span class="ds-dl">
+                        <a href={asset(`${l.slug}.svg`)} download>vector</a>
+                      </span>
+                    </div>
+                    <div class="ds-dl-row">
+                      <span class="ds-mono ds-small">PNG</span>
+                      <span class="ds-dl">
+                        {sizes.map((s) => (
+                          <a href={asset(`${l.slug}-${s}.png`)} download>{s}</a>
+                        ))}
+                      </span>
+                    </div>
+                    <div class="ds-dl-row">
+                      <span class="ds-mono ds-small">WebP</span>
+                      <span class="ds-dl">
+                        {sizes.map((s) => (
+                          <a href={asset(`${l.slug}-${s}.webp`)} download>{s}</a>
+                        ))}
+                      </span>
+                    </div>
+                  </div>
+                  {l.withBg && (
+                    <>
+                      <p class="ds-dl-cap" style="margin-top:16px">
+                        On <span class="ds-swatch" style={`background:${l.bg}`} /> {l.bg}
+                      </p>
+                      <div class="ds-dl-rows">
+                        <div class="ds-dl-row">
+                          <span class="ds-mono ds-small">SVG</span>
+                          <span class="ds-dl">
+                            <a href={asset(`${l.slug}-bg.svg`)} download>vector</a>
+                          </span>
+                        </div>
+                        <div class="ds-dl-row">
+                          <span class="ds-mono ds-small">PNG</span>
+                          <span class="ds-dl">
+                            {sizes.map((s) => (
+                              <a href={asset(`${l.slug}-bg-${s}.png`)} download>{s}</a>
+                            ))}
+                          </span>
+                        </div>
+                        <div class="ds-dl-row">
+                          <span class="ds-mono ds-small">WebP</span>
+                          <span class="ds-dl">
+                            {sizes.map((s) => (
+                              <a href={asset(`${l.slug}-bg-${s}.webp`)} download>{s}</a>
+                            ))}
+                          </span>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+            ))}
+        </div>
+      </section>
+    ))
+  }
+</DesignLayout>
+
+<style>
+  /* One uniform contain-box so every mark reads at a similar size,
+     scaling small square marks up instead of leaving them tiny. */
+  .ls-art {
+    width: 100%;
+    max-width: 440px;
+    height: 150px;
+    object-fit: contain;
+    display: block;
+  }
+  .ds-dl-cap {
+    margin: 16px 0 0;
+    font-size: 11.5px;
+    font-weight: 640;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ds-ink-3);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .ds-swatch {
+    width: 13px;
+    height: 13px;
+    border-radius: 4px;
+    border: 1px solid rgba(28, 27, 26, 0.15);
+    display: inline-block;
+  }
+  .ds-dl-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .ds-dl-cap + .ds-dl-rows {
+    margin-top: 8px;
+  }
+  .ds-dl-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .ds-dl-row > .ds-mono {
+    width: 48px;
+    flex: none;
+  }
+  .ds-sec-head .ds-h2 {
+    text-transform: none;
+  }
+</style>

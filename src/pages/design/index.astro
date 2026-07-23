@@ -13,6 +13,14 @@ const sections = [
     art: "logo",
   },
   {
+    href: "/design/logosystem",
+    title: "Logo System",
+    desc: "Heritage lockups, colorways, seasonal marks, and merch remixes - all downloadable.",
+    span: "ds-b4",
+    tone: "var(--ds-blue-tonal)",
+    art: "logosystem",
+  },
+  {
     href: "/design/color",
     title: "Color",
     desc: "Ink, cream, and the ACM orange - plus the product accents.",
@@ -98,6 +106,13 @@ const sections = [
                 loading="lazy"
                 style="width:96px;height:96px"
               />
+            )}
+            {s.art === "logosystem" && (
+              <div class="ds-art-diamonds">
+                <span style="background:#135de2" />
+                <span style="background:#f95f4a" />
+                <span style="background:#42cd9d" />
+              </div>
             )}
             {s.art === "color" && (
               <div class="ds-art-swatches">
@@ -206,6 +221,20 @@ const sections = [
     font-weight: 660;
     letter-spacing: -0.04em;
     color: #135de2;
+  }
+  .ds-art-diamonds {
+    display: flex;
+    gap: 14px;
+  }
+  .ds-art-diamonds span {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    transform: rotate(45deg);
+    box-shadow: 0 4px 12px rgba(28, 27, 26, 0.14);
+  }
+  .ds-art-diamonds span:nth-child(2) {
+    margin-top: 14px;
   }
   .ds-art-swatches {
     display: flex;
