@@ -29,49 +29,49 @@ const SUBJECTS = [
     </div>
 
     <form
-      class="flex flex-col gap-4 text-sm"
+      class="flex flex-col gap-3 text-sm"
       method="POST"
       novalidate
       id="contact-form-mobile"
     >
-      <div class="flex flex-col gap-4 sm:flex-row sm:gap-3">
+      <div class="flex flex-col gap-3 sm:flex-row sm:gap-3">
         <label
-          class="flex flex-col gap-2 text-xs font-semibold uppercase tracking-[0.35em] text-white/60"
+          class="flex flex-col gap-1.5 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-white/60"
         >
           First Name
           <input
             type="text"
             name="firstName"
             required
-            class="rounded-2xl border-2 border-dashed border-white/35 bg-transparent px-4 py-3 text-base text-white outline-none transition focus:border-[#F95F4A]"
+            class="rounded-2xl border-2 border-dashed border-white/35 bg-transparent px-4 py-2.5 text-sm font-normal tracking-normal normal-case text-white outline-none transition focus:border-[#F95F4A]"
           />
         </label>
         <label
-          class="flex flex-col gap-2 text-xs font-semibold uppercase tracking-[0.35em] text-white/60"
+          class="flex flex-col gap-1.5 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-white/60"
         >
           Last Name
           <input
             type="text"
             name="lastName"
-            class="rounded-2xl border-2 border-dashed border-white/35 bg-transparent px-4 py-3 text-base text-white outline-none transition focus:border-[#F95F4A]"
+            class="rounded-2xl border-2 border-dashed border-white/35 bg-transparent px-4 py-2.5 text-sm font-normal tracking-normal normal-case text-white outline-none transition focus:border-[#F95F4A]"
           />
         </label>
       </div>
 
       <label
-        class="flex flex-col gap-2 text-xs font-semibold uppercase tracking-[0.35em] text-white/60"
+        class="flex flex-col gap-1.5 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-white/60"
       >
         Email
         <input
           type="email"
           name="email"
           required
-          class="rounded-2xl border-2 border-dashed border-white/35 bg-transparent px-4 py-3 text-base text-white outline-none transition focus:border-[#F95F4A]"
+          class="rounded-2xl border-2 border-dashed border-white/35 bg-transparent px-4 py-2.5 text-sm font-normal tracking-normal normal-case text-white outline-none transition focus:border-[#F95F4A]"
         />
       </label>
 
       <label
-        class="flex flex-col gap-2 text-xs font-semibold uppercase tracking-[0.35em] text-white/60"
+        class="flex flex-col gap-1.5 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-white/60"
       >
         Phone
         <input
@@ -79,29 +79,29 @@ const SUBJECTS = [
           name="phone"
           inputmode="tel"
           pattern="^[0-9+()\s-]{7,}$"
-          class="rounded-2xl border-2 border-dashed border-white/35 bg-transparent px-4 py-3 text-base text-white outline-none transition focus:border-[#F95F4A]"
+          class="rounded-2xl border-2 border-dashed border-white/35 bg-transparent px-4 py-2.5 text-sm font-normal tracking-normal normal-case text-white outline-none transition focus:border-[#F95F4A]"
         />
       </label>
 
       <label
-        class="flex flex-col gap-2 text-xs font-semibold uppercase tracking-[0.35em] text-white/60"
+        class="flex flex-col gap-1.5 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-white/60"
       >
         Organization
         <input
           type="text"
           name="organization"
-          class="rounded-2xl border-2 border-dashed border-white/35 bg-transparent px-4 py-3 text-base text-white outline-none transition focus:border-[#F95F4A]"
+          class="rounded-2xl border-2 border-dashed border-white/35 bg-transparent px-4 py-2.5 text-sm font-normal tracking-normal normal-case text-white outline-none transition focus:border-[#F95F4A]"
         />
       </label>
 
       <label
-        class="flex flex-col gap-2 text-xs font-semibold uppercase tracking-[0.35em] text-white/60"
+        class="flex flex-col gap-1.5 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-white/60"
       >
         Subject
         <select
           name="subject"
           required
-          class="rounded-2xl border-2 border-dashed border-white/35 bg-transparent px-4 py-3 text-base text-white outline-none transition focus:border-[#F95F4A] appearance-none cursor-pointer"
+          class="rounded-2xl border-2 border-dashed border-white/35 bg-transparent px-4 py-2.5 text-sm font-normal tracking-normal normal-case text-white outline-none transition focus:border-[#F95F4A] appearance-none cursor-pointer"
         >
           <option value="" disabled selected class="text-black">Select...</option>
           {SUBJECTS.map((s) => <option value={s} class="text-black">{s}</option>)}
@@ -109,14 +109,14 @@ const SUBJECTS = [
       </label>
 
       <label
-        class="flex flex-col gap-2 text-xs font-semibold uppercase tracking-[0.35em] text-white/60"
+        class="flex flex-col gap-1.5 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-white/60"
       >
         Message
         <textarea
           name="message"
           rows="4"
           required
-          class="rounded-2xl border-2 border-dashed border-white/35 bg-transparent px-4 py-3 text-base text-white outline-none transition focus:border-[#F95F4A]"
+          class="rounded-2xl border-2 border-dashed border-white/35 bg-transparent px-4 py-2.5 text-sm font-normal tracking-normal normal-case text-white outline-none transition focus:border-[#F95F4A]"
         ></textarea>
       </label>
 
