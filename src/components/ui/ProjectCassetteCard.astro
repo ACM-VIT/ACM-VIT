@@ -72,13 +72,16 @@ const Tag = href ? "a" : "div";
     display: flex;
     justify-content: center;
   }
+  /* Cap to 220px to match the img cassettes on other AOIs (.dsg-event-card img).
+     Without this, a single-project row (grid auto-fit 1fr) stretches the card
+     full-width and the tape balloons - e.g. DevOps' one project. */
   .proj-cass-tape :global(.cassette-container) {
     width: 100%;
-    max-width: 100%;
+    max-width: 220px;
   }
   .proj-cass-svg {
     width: 100%;
-    max-width: 100%;
+    max-width: 220px;
     height: auto;
     border-radius: 12px;
   }
