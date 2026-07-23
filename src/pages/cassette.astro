@@ -12,6 +12,32 @@ import FillButton from "../components/ui/FillButton.astro";
 // of cassette tapes". Theme-aware (cream-on-dark by default, ink-on-paper in
 // light). Stage ids here MUST stay in order/sync with STAGE_IDS + FORM_X in the
 // client script; copy alternates side via `align`.
+
+// Elapsed years since the compact cassette (Philips, 1963). Computed fresh at
+// build, and a matching client script re-derives it at view time so a stale
+// build never shows a wrong number. Keep [data-years-from] in sync.
+const CASSETTE_BORN = 1963;
+const ONES = [
+  "zero", "one", "two", "three", "four", "five", "six", "seven", "eight",
+  "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen",
+  "sixteen", "seventeen", "eighteen", "nineteen",
+];
+const TENS = ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"];
+const numberToWords = (n: number): string => {
+  if (n < 20) return ONES[n];
+  if (n < 100) {
+    const o = n % 10;
+    return o ? `${TENS[Math.floor(n / 10)]}-${ONES[o]}` : TENS[Math.floor(n / 10)];
+  }
+  const h = Math.floor(n / 100);
+  const r = n % 100;
+  return r ? `${ONES[h]} hundred ${numberToWords(r)}` : `${ONES[h]} hundred`;
+};
+const elapsedYears = new Date().getFullYear() - CASSETTE_BORN;
+const elapsedWordLower = numberToWords(elapsedYears);
+const elapsedWord = elapsedWordLower.charAt(0).toUpperCase() + elapsedWordLower.slice(1);
+const yearsSpan = `<span class="cass-years" data-years-from="${CASSETTE_BORN}">${elapsedWord}</span>`;
+
 const chapters = [
   {
     id: "dust",
@@ -73,7 +99,7 @@ const chapters = [
     finale: true,
     align: "center",
     line: "Press play. The reels turn.",
-    body: "Two hubs turning, one ribbon crossing the gap, oxide read back into sound. Sixty years of engineering in something you hold in one hand - the compact cassette, alive.",
+    body: `Two hubs turning, one ribbon crossing the gap, oxide read back into sound. ${yearsSpan} years of engineering in something you hold in one hand - the compact cassette, alive.`,
   },
 ];
 ---
@@ -108,7 +134,7 @@ const chapters = [
               </span>
               <h2 class="cass-line">{c.line}</h2>
               <span class="cass-rule" aria-hidden="true" />
-              <p class="cass-body">{c.body}</p>
+              <p class="cass-body" set:html={c.body} />
               {c.hero && (
                 <span class="cass-cue" aria-hidden="true">
                   scroll<span class="cass-cue-arrow" />
@@ -123,9 +149,9 @@ const chapters = [
     <!-- Dark close: ACM tie-off + loop back to the builder -->
     <section class="cass-close">
       <div class="cass-close-inner">
-        <h2 class="cass-close-line">Because technology matters.</h2>
+        <h2 class="cass-close-line">Because Technology Matters.</h2>
         <p class="cass-close-body">
-          Sixty years on, we still build the machinery that remembers.
+          <span class="cass-years" data-years-from={CASSETTE_BORN}>{elapsedWord}</span> years on, we still build the machinery that remembers.
         </p>
         <FillButton href="/cassette-builder" label="Build your own cassette" />
       </div>
@@ -166,17 +192,14 @@ const chapters = [
     --line: rgba(36, 32, 27, 0.12);
   }
 
-  /* Drop the landing diamond grid; the canvas owns the backdrop. */
-  :global(.diamond-grid) {
-    display: none !important;
-  }
-
+  /* Keep the site's common diamond-grid backdrop; the canvas is transparent and
+     only paints particles over it. */
   .cass-stage {
     position: fixed;
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    background: var(--paper);
+    background: transparent;
   }
   #cass-canvas {
     display: block;
@@ -299,8 +322,8 @@ const chapters = [
   }
   .cass-body {
     font-family: "PolySans Trial", Inter, system-ui, sans-serif;
-    font-size: clamp(0.98rem, 1.15vw, 1.16rem);
-    line-height: 1.62;
+    font-size: clamp(0.95rem, 1.4vw, 1.05rem);
+    line-height: 1.7;
     color: var(--ink-soft);
     margin: 0;
     font-weight: 400;
@@ -323,7 +346,7 @@ const chapters = [
   .is-hero .cass-body,
   .is-finale .cass-body {
     max-width: 42ch;
-    font-size: clamp(1rem, 1.3vw, 1.24rem);
+    font-size: clamp(0.95rem, 1.4vw, 1.05rem);
   }
   .is-hero .cass-copy > *,
   .is-finale .cass-copy > * {
@@ -388,8 +411,8 @@ const chapters = [
   }
   .cass-close-body {
     font-family: "PolySans Trial", Inter, system-ui, sans-serif;
-    font-size: clamp(1rem, 1.3vw, 1.18rem);
-    line-height: 1.6;
+    font-size: clamp(0.95rem, 1.4vw, 1.05rem);
+    line-height: 1.7;
     color: rgba(254, 252, 217, 0.66);
     margin: 0 auto 2.6rem;
     max-width: 44ch;
@@ -935,9 +958,38 @@ const chapters = [
     let spin = 0;
     let last = performance.now();
 
+    // Pointer (device px); repulsion nudges nearby particles away.
+    let pointerX = -1e9;
+    let pointerY = -1e9;
+    let pointerOn = false;
+
+    // Music reactivity: a smoothed 0..1 "energy" derived from the shared
+    // player's public state (play/pause + volume) - no audio internals touched.
+    let musicEnergy = 0;
+
     const frame = (now: number) => {
       const dt = Math.min(50, now - last) / 1000;
       last = now;
+
+      // Music-reactive energy: pumps while a track is playing anywhere (this
+      // tab or another, via the shared player). Built from a slow dynamic swell
+      // plus a soft beat pulse, scaled by volume. Subtle by design.
+      let musicTarget = 0;
+      if (!reduced) {
+        const cass = (window as any).acmCassette;
+        if (cass && typeof cass.state === "function") {
+          try {
+            const st = cass.state();
+            if (st && !st.paused) {
+              const vol = typeof st.volume === "number" ? st.volume : 0.6;
+              const swell = 0.5 + 0.5 * Math.sin(now * 0.0011 + Math.sin(now * 0.0004) * 1.6);
+              const beat = Math.pow(Math.max(0, Math.sin(now * 0.0052)), 3);
+              musicTarget = (0.4 + 0.3 * swell + 0.35 * beat) * (0.5 + 0.5 * vol);
+            }
+          } catch {}
+        }
+      }
+      musicEnergy += (musicTarget - musicEnergy) * Math.min(1, dt * 6);
 
       const sf = Math.min(S - 1, Math.max(0, scrollT * S - 0.5));
       const a = Math.floor(sf);
@@ -968,6 +1020,21 @@ const chapters = [
       const ease = reduced ? 1 : 1 - Math.pow(0.0016, dt);
       const accentAmt = smooth(6.4, 8.2, sf);
 
+      // Cursor repulsion: particles near the pointer nudge gently away and ease
+      // back to their shape when it leaves.
+      const curOn = pointerOn && !reduced;
+      const curR = 150 * dpr;
+      const curR2 = curR * curR;
+      const curPush = 26 * dpr;
+
+      // Music dance: each particle grooves on its own phase (bob + sway) and
+      // the whole form sways side to side, so the grain looks like it's dancing
+      // rather than breathing. Amplitude rides the beat energy.
+      const danceClock = now * 0.005;
+      const danceAmp = musicEnergy * 6.5 * dpr;
+      const swayG = Math.sin(now * 0.0022) * musicEnergy * 6 * dpr;
+      const musicOn = musicEnergy > 0.001;
+
       for (let i = 0; i < N; i++) {
         const nx = sa[i * 2] + (sb[i * 2] - sa[i * 2]) * t;
         const ny = sa[i * 2 + 1] + (sb[i * 2 + 1] - sa[i * 2 + 1]) * t;
@@ -978,13 +1045,32 @@ const chapters = [
           tx += Math.cos(pa[i]) * d;
           ty += Math.sin(pa[i]) * d;
         }
+        if (curOn) {
+          const dx = tx - pointerX;
+          const dy = ty - pointerY;
+          const d2 = dx * dx + dy * dy;
+          if (d2 < curR2) {
+            const dist = Math.sqrt(d2) || 1;
+            const f = 1 - dist / curR;
+            const push = f * f * curPush;
+            tx += (dx / dist) * push;
+            ty += (dy / dist) * push;
+          }
+        }
+        if (musicOn) {
+          const ph = pa[i];
+          tx += swayG + Math.sin(danceClock + ph) * danceAmp;
+          ty += Math.sin(danceClock * 1.35 + ph * 1.7) * danceAmp * 1.2;
+        }
         px[i] += (tx - px[i]) * ease;
         py[i] += (ty - py[i]) * ease;
       }
 
-      ctx.fillStyle = bg;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Transparent canvas: clear each frame so the site's common diamond-grid
+      // background shows through behind the particles.
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       const tsh = reduced ? 0 : now * 0.001;
+      const jamp = (0.35 + musicEnergy * 1.9) * dpr; // shimmer grows with music
       for (let bk = 0; bk < 4; bk++) {
         ctx.fillStyle = inkColors[bk];
         const s = sizes[bk] * dpr;
@@ -992,8 +1078,8 @@ const chapters = [
         const list = buckets[bk];
         for (let k = 0; k < list.length; k++) {
           const i = list[k];
-          const jx = reduced ? 0 : Math.sin(tsh + i) * 0.35 * dpr;
-          const jy = reduced ? 0 : Math.cos(tsh + i * 1.3) * 0.35 * dpr;
+          const jx = reduced ? 0 : Math.sin(tsh + i) * jamp;
+          const jy = reduced ? 0 : Math.cos(tsh + i * 1.3) * jamp;
           ctx.fillRect(px[i] - half + jx, py[i] - half + jy, s, s);
         }
       }
@@ -1006,10 +1092,11 @@ const chapters = [
         }
       }
 
-      // Fade the whole particle layer out as the chapters scroll away, so it
-      // never paints over the close section or the footer below it.
+      // Fade the whole particle layer out as the chapters scroll away, so it is
+      // fully gone before the close section rises into view - no overlap, and
+      // the page scrolls normally into the close + footer after the finale.
       const crb = chaptersEl.getBoundingClientRect().bottom;
-      const gFade = smooth(vh * 0.4, vh * 0.95, crb);
+      const gFade = smooth(vh * 0.62, vh * 1.02, crb);
       if (stageEl) stageEl.style.opacity = gFade.toFixed(3);
       if (railEl) railEl.style.opacity = gFade.toFixed(3);
 
@@ -1050,6 +1137,19 @@ const chapters = [
     window.addEventListener("resize", onResize, { passive: true });
     window.addEventListener("orientationchange", onResize, { passive: true });
 
+    window.addEventListener(
+      "pointermove",
+      (e) => {
+        if (e.pointerType === "touch") return; // touch scroll, not a cursor
+        pointerX = e.clientX * dpr;
+        pointerY = e.clientY * dpr;
+        pointerOn = true;
+      },
+      { passive: true },
+    );
+    window.addEventListener("pointerleave", () => (pointerOn = false), { passive: true });
+    window.addEventListener("blur", () => (pointerOn = false), { passive: true });
+
     boot();
   }
 
@@ -1058,4 +1158,32 @@ const chapters = [
   } else {
     initCassette();
   }
+
+  // Re-derive the "N years" copy at view time so a stale build never shows the
+  // wrong number. Mirrors numberToWords() in the frontmatter.
+  const YEAR_ONES = [
+    "zero", "one", "two", "three", "four", "five", "six", "seven", "eight",
+    "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen",
+    "sixteen", "seventeen", "eighteen", "nineteen",
+  ];
+  const YEAR_TENS = ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"];
+  const yearWords = (n: number): string => {
+    if (n < 20) return YEAR_ONES[n];
+    if (n < 100) {
+      const o = n % 10;
+      return o ? `${YEAR_TENS[Math.floor(n / 10)]}-${YEAR_ONES[o]}` : YEAR_TENS[Math.floor(n / 10)];
+    }
+    const h = Math.floor(n / 100);
+    const r = n % 100;
+    return r ? `${YEAR_ONES[h]} hundred ${yearWords(r)}` : `${YEAR_ONES[h]} hundred`;
+  };
+  const nowYear = new Date().getFullYear();
+  document.querySelectorAll<HTMLElement>("[data-years-from]").forEach((el) => {
+    const from = parseInt(el.dataset.yearsFrom || "", 10);
+    const n = nowYear - from;
+    if (n > 0) {
+      const w = yearWords(n);
+      el.textContent = w.charAt(0).toUpperCase() + w.slice(1);
+    }
+  });
 </script>
