@@ -83,6 +83,7 @@
   --ds-pink-tonal: #ffe5f1;
 
   --ds-diamond: #333333;
+  --ds-diamond-fg: #ffffff;
   --ds-cream: #fefcd9;
 
   /* ---- shape ---- */
@@ -104,6 +105,7 @@
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   accent-color: var(--ds-accent);
+  color-scheme: light;
 }
 
 .ds-root ::selection {
@@ -208,6 +210,33 @@
 .ds-topbar-brand .ds-brand-sub {
   color: var(--ds-ink-3);
   font-weight: 460;
+}
+/* brand mark swaps to the white diamond in dark mode */
+.ds-topbar-brand .ds-brand-mark-light {
+  display: none;
+}
+/* theme toggle */
+.ds-topbar-toggle {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--ds-r-full);
+  border: 1px solid var(--ds-line);
+  background: var(--ds-surface);
+  color: var(--ds-ink-2);
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+.ds-topbar-toggle:hover {
+  border-color: var(--ds-line-2);
+  background: var(--ds-surface-tonal);
+  color: var(--ds-ink);
+}
+.ds-topbar-toggle .ds-icon-sun {
+  display: none;
 }
 .ds-topbar-actions {
   margin-left: auto;
@@ -731,4 +760,90 @@
     opacity: 1;
     transform: none;
   }
+}
+
+/* ============================================================
+   Dark mode — /design guidelines. Activated by data-theme="dark"
+   on <html> (set pre-paint by an inline script in DesignLayout).
+   The system is token-driven, so overriding the --ds-* palette
+   flips almost everything. A few chrome rules bake in light
+   values and get explicit dark variants below.
+
+   NOT re-themed on purpose: intentional specimens that document a
+   fixed surface - the Ink website card, the dark poster mockups,
+   the two-ink logo stages, and the palette swatches themselves.
+   ============================================================ */
+html[data-theme="dark"] .ds-root {
+  --ds-bg: #111110;
+  --ds-surface: #1a1917;
+  --ds-surface-tonal: #211f1c;
+  --ds-surface-tonal-2: #2b2823;
+  --ds-ink: #f3f1ea;
+  --ds-ink-2: #c6c1b6;
+  --ds-ink-3: #8d887e;
+  --ds-line: #2c2925;
+  --ds-line-2: #3c372f;
+
+  --ds-accent: #fb6a54;
+  --ds-accent-ink: #ff9583;
+  --ds-accent-tonal: #3a201b;
+  --ds-blue: #5fa0ff;
+  --ds-blue-tonal: #18273f;
+  --ds-green: #4fd1a0;
+  --ds-green-tonal: #123329;
+  --ds-gold: #e3ba52;
+  --ds-gold-tonal: #342b14;
+  --ds-purple: #b985ee;
+  --ds-purple-tonal: #291d3c;
+  --ds-pink: #ff5c9d;
+  --ds-pink-tonal: #3a1526;
+
+  /* schematic diamond: light fill + dark knockout, so the mark
+     stays legible when a guide diagram sits on a dark surface. */
+  --ds-diamond: #ece9e0;
+  --ds-diamond-fg: #17140f;
+
+  color-scheme: dark;
+}
+
+/* topbar glass over the dark background */
+html[data-theme="dark"] .ds-root .ds-topbar {
+  background: color-mix(in srgb, var(--ds-bg) 86%, transparent);
+  background-color: rgba(17, 17, 16, 0.9);
+}
+
+/* brand mark: hide the dark diamond, show the white one */
+html[data-theme="dark"] .ds-root .ds-brand-mark-dark {
+  display: none;
+}
+html[data-theme="dark"] .ds-root .ds-brand-mark-light {
+  display: inline-block;
+}
+
+/* toggle icon: moon -> sun */
+html[data-theme="dark"] .ds-root .ds-topbar-toggle .ds-icon-moon {
+  display: none;
+}
+html[data-theme="dark"] .ds-root .ds-topbar-toggle .ds-icon-sun {
+  display: inline-block;
+}
+
+/* primary/ink buttons invert: --ds-ink is now light, so the label
+   and hover need the dark background as their foreground. */
+html[data-theme="dark"] .ds-root .ds-btn-primary {
+  color: var(--ds-bg);
+}
+html[data-theme="dark"] .ds-root .ds-btn-primary:hover {
+  background: #ffffff;
+}
+html[data-theme="dark"] .ds-root .ds-dl a:hover {
+  color: var(--ds-bg);
+}
+
+/* Transparency checker hosts dark-ink artwork, so it must stay a light
+   panel. In dark mode its transparent squares would otherwise reveal the
+   near-black card and turn into a harsh black/white grid - give it a solid
+   light base so it reads like the light-mode checker. */
+html[data-theme="dark"] .ds-root .ds-checker {
+  background-color: #ffffff;
 }

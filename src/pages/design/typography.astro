@@ -18,6 +18,16 @@ const weights = [
   { w: 600, name: "SemiBold", use: "Headings, buttons" },
   { w: 700, name: "Bold", use: "The wordmark weight, emphasis" },
 ];
+
+// Glyph set for the interactive character map (section 05).
+const glyphs = [
+  ..."ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+  ..."ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞ",
+  ..."abcdefghijklmnopqrstuvwxyz",
+  ..."àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþß",
+  ..."0123456789",
+  ..."&@#$€.,;:!?'\"“”‘’()[]{}/\\%+-=*·•…",
+];
 ---
 
 <DesignLayout
@@ -134,6 +144,45 @@ const weights = [
       </div>
     </div>
   </section>
+
+  <!-- 05 · Character map -->
+  <section class="ds-section" id="charmap">
+    <div class="ds-sec-head"><span class="ds-sec-num">05</span><h2 class="ds-h2">Character map</h2></div>
+    <p class="ds-body">
+      The full Latin set DM Sans ships with. Click any glyph to inspect it
+      against the vertical metrics - cap height, x-height, baseline, and
+      descender - measured live from the font.
+    </p>
+
+    <div class="ty-charmap ds-reveal">
+      <div class="ty-stage">
+        <div class="ty-toggle" role="tablist" aria-label="Specimen mode">
+          <button class="ty-tog is-on" data-mode="solid" role="tab" aria-selected="true" type="button">Solid</button>
+          <button class="ty-tog" data-mode="anchors" role="tab" aria-selected="false" type="button">Anchors</button>
+        </div>
+        <svg id="ty-svg" role="img" aria-label="Glyph specimen with vertical metrics" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="ty-stage-tag">
+          <span class="ds-mono ds-small" id="ty-current">H</span>
+          <span class="ds-mono ds-small ty-stage-upm">DM Sans · 1000 UPM</span>
+        </div>
+      </div>
+      <div class="ty-grid" id="ty-grid" role="listbox" aria-label="DM Sans glyphs">
+        {
+          glyphs.map((ch) => (
+            <button
+              class:list={["ty-cell", ch === "H" && "is-active"]}
+              data-g={ch}
+              type="button"
+              role="option"
+              aria-selected={ch === "H" ? "true" : "false"}
+            >
+              {ch}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+  </section>
 </DesignLayout>
 
 <style>
@@ -147,4 +196,365 @@ const weights = [
   .ds-t-list li + li {
     margin-top: 6px;
   }
+
+  /* ---- character map (Vercel-style specimen) ---- */
+  .ty-charmap {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: 1fr;
+    border: 1px solid var(--ds-line);
+    border-radius: var(--ds-r-md);
+    overflow: hidden;
+    background: var(--ds-surface);
+  }
+  @media (min-width: 900px) {
+    .ty-charmap {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+  }
+  .ty-stage {
+    position: relative;
+    background: var(--ds-surface-tonal);
+    border-bottom: 1px solid var(--ds-line);
+    min-height: 340px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px 20px;
+  }
+  @media (min-width: 900px) {
+    .ty-stage {
+      border-bottom: none;
+      border-right: 1px solid var(--ds-line);
+      position: sticky;
+      top: 0;
+      align-self: start;
+      min-height: 520px;
+    }
+  }
+  #ty-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .ty-toggle {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: inline-flex;
+    gap: 2px;
+    padding: 3px;
+    border-radius: var(--ds-r-full);
+    background: var(--ds-surface);
+    border: 1px solid var(--ds-line);
+    z-index: 2;
+  }
+  .ty-tog {
+    border: none;
+    background: transparent;
+    color: var(--ds-ink-3);
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: var(--ds-r-full);
+    cursor: pointer;
+    transition: background 0.14s ease, color 0.14s ease;
+  }
+  .ty-tog:hover {
+    color: var(--ds-ink);
+  }
+  .ty-tog.is-on {
+    background: var(--ds-ink);
+    color: #fff;
+  }
+  .ty-stage-tag {
+    position: absolute;
+    left: 16px;
+    bottom: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    pointer-events: none;
+  }
+  .ty-stage-tag > span:first-child {
+    font-size: 15px;
+    color: var(--ds-ink);
+    font-weight: 600;
+  }
+  .ty-stage-upm {
+    color: var(--ds-ink-3) !important;
+    letter-spacing: 0.04em;
+  }
+  .ty-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+    gap: 1px;
+    background: var(--ds-line);
+    max-height: none;
+    overflow: visible;
+  }
+  @media (min-width: 900px) {
+    .ty-grid {
+      max-height: 520px;
+      overflow-y: auto;
+    }
+  }
+  .ty-cell {
+    aspect-ratio: 1 / 1;
+    border: none;
+    background: var(--ds-surface);
+    color: var(--ds-ink);
+    font-family: inherit;
+    font-size: 21px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.12s ease, color 0.12s ease;
+  }
+  .ty-cell:hover {
+    background: var(--ds-surface-tonal);
+  }
+  .ty-cell.is-active {
+    background: var(--ds-ink);
+    color: #fff;
+  }
+  :global(html[data-theme="dark"]) .ty-tog.is-on,
+  :global(html[data-theme="dark"]) .ty-cell.is-active {
+    color: var(--ds-bg);
+  }
+  .ty-cell:focus-visible {
+    outline: 2px solid var(--ds-accent);
+    outline-offset: -2px;
+    z-index: 1;
+  }
 </style>
+
+<script>
+  const svg = document.getElementById("ty-svg");
+  const grid = document.getElementById("ty-grid");
+  const current = document.getElementById("ty-current");
+
+  if (svg && grid) {
+    const NS = "http://www.w3.org/2000/svg";
+    const VBW = 660;
+    const S = 440; // glyph size in svg units (1000 UPM => 1em)
+    const INSET = 12; // keep labels/values off the edges
+    const PAD = 40; // headroom above cap / below descender
+    const GX = VBW * 0.5;
+
+    // theme-accurate colours read from the design-system tokens. The tokens
+    // live on .ds-root (the body), and are re-read on every build() so the
+    // dark-mode toggle recolours the specimen live.
+    let INK = "#1c1b1a";
+    let INK3 = "#79746e";
+    let BG = "#faf9f7";
+    let MONO = "ui-monospace, monospace";
+    function readTokens() {
+      const cs = getComputedStyle(document.body);
+      INK = cs.getPropertyValue("--ds-ink").trim() || INK;
+      INK3 = cs.getPropertyValue("--ds-ink-3").trim() || INK3;
+      BG = cs.getPropertyValue("--ds-bg").trim() || BG;
+      MONO = cs.getPropertyValue("--ds-mono").trim() || MONO;
+    }
+
+    const FS = 400;
+    const mctx = document.createElement("canvas").getContext("2d");
+    const setFont = () => {
+      if (mctx) {
+        mctx.font = `${FS}px "DM Sans", sans-serif`;
+        mctx.textBaseline = "alphabetic";
+        mctx.textAlign = "center";
+      }
+    };
+
+    let glyph = "H";
+    let mode = "solid";
+    // fallback ratios (asc/descMax bound the fixed viewBox)
+    let m = { cap: 0.71, xh: 0.52, desc: 0.22, asc: 0.99, descMax: 0.27 };
+
+    function measureFont() {
+      if (!mctx) return m;
+      setFont();
+      const cap = mctx.measureText("H").actualBoundingBoxAscent / FS;
+      const xh = mctx.measureText("x").actualBoundingBoxAscent / FS;
+      let desc = 0;
+      for (const c of "gjpqy") {
+        desc = Math.max(desc, mctx.measureText(c).actualBoundingBoxDescent / FS);
+      }
+      // tallest ink (accents / ascenders) and deepest ink across the set,
+      // so the fixed viewBox never clips any glyph
+      let asc = cap;
+      for (const c of "ÅÄÁÀÂÃÉÊÍÎÏÑÓÔÕÖÜÚÛÝbdfhklt") {
+        asc = Math.max(asc, mctx.measureText(c).actualBoundingBoxAscent / FS);
+      }
+      let descMax = desc;
+      for (const c of "gjpqyQµÇç") {
+        descMax = Math.max(descMax, mctx.measureText(c).actualBoundingBoxDescent / FS);
+      }
+      if (!cap || !xh) return m;
+      return { cap, xh, desc, asc, descMax };
+    }
+
+    // ink bounds of the current glyph, in svg units, around the (GX, baseline) origin
+    function glyphBounds(ch) {
+      if (!mctx) return { asc: m.cap * S, desc: m.desc * S, left: S * 0.3, right: S * 0.3 };
+      setFont();
+      const t = mctx.measureText(ch);
+      return {
+        asc: (t.actualBoundingBoxAscent || m.cap * FS) / FS * S,
+        desc: (t.actualBoundingBoxDescent || 0) / FS * S,
+        left: (t.actualBoundingBoxLeft || t.width / 2) / FS * S,
+        right: (t.actualBoundingBoxRight || t.width / 2) / FS * S,
+      };
+    }
+
+    function el(name, attrs, text) {
+      const n = document.createElementNS(NS, name);
+      for (const k in attrs) n.setAttribute(k, String(attrs[k]));
+      if (text != null) n.textContent = text;
+      return n;
+    }
+
+    function anchor(px, py) {
+      const sq = 11;
+      return el("rect", {
+        x: px - sq / 2,
+        y: py - sq / 2,
+        width: sq,
+        height: sq,
+        fill: "#fff",
+        stroke: INK,
+        "stroke-width": 1.6,
+      });
+    }
+
+    function build() {
+      readTokens();
+      const capPx = m.cap * S;
+      const xPx = m.xh * S;
+      const descPx = m.desc * S;
+      // work with baseline at y = 0; viewBox shifts to fit
+      const capY = -capPx;
+      const xY = -xPx;
+      const baseY = 0;
+      const descY = descPx;
+
+      // fixed viewBox (constant across glyphs) so the specimen never shifts
+      const top = -m.asc * S - PAD;
+      const bottom = m.descMax * S + PAD;
+      const VBH = bottom - top;
+      svg.setAttribute("viewBox", `0 ${top} ${VBW} ${VBH}`);
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+      // glyph (behind the guides)
+      if (mode === "solid") {
+        svg.appendChild(
+          el("text", { x: GX, y: baseY, "font-size": S, "text-anchor": "middle", fill: INK }, glyph),
+        );
+      } else {
+        svg.appendChild(
+          el(
+            "text",
+            { x: GX, y: baseY, "font-size": S, "text-anchor": "middle", fill: "none", stroke: INK, "stroke-width": 2 },
+            glyph,
+          ),
+        );
+        // approximate anchor nodes at the ink bounding box
+        const gb = glyphBounds(glyph);
+        const lx = GX - gb.left;
+        const rx = GX + gb.right;
+        const ty = -gb.asc;
+        const by = gb.desc;
+        for (const [px, py] of [
+          [lx, ty], [rx, ty], [GX, ty],
+          [lx, by], [rx, by], [GX, by],
+        ]) {
+          svg.appendChild(anchor(px, py));
+        }
+      }
+
+      const lines = [
+        { y: capY, lbl: "CAP HEIGHT", val: Math.round(m.cap * 1000) },
+        { y: xY, lbl: "X-HEIGHT", val: Math.round(m.xh * 1000) },
+        { y: baseY, lbl: "BASELINE", val: 0, strong: true },
+        { y: descY, lbl: "DESCENDER", val: -Math.round(m.desc * 1000) },
+      ];
+      const vw = 46;
+      const vx = VBW - INSET - vw;
+      for (const ln of lines) {
+        svg.appendChild(
+          el("line", {
+            x1: INSET,
+            y1: ln.y,
+            x2: VBW - INSET,
+            y2: ln.y,
+            stroke: INK3,
+            "stroke-width": 1.6,
+            "stroke-linecap": "round",
+            "stroke-dasharray": "1 6",
+            opacity: ln.strong ? 0.9 : 0.6,
+          }),
+        );
+        svg.appendChild(
+          el("text", { x: INSET, y: ln.y - 8, fill: INK3, "font-family": MONO, "font-size": 11, "letter-spacing": 0.6 }, ln.lbl),
+        );
+        svg.appendChild(el("rect", { x: vx, y: ln.y - 18, width: vw, height: 15, rx: 3, fill: INK }));
+        svg.appendChild(
+          el("text", { x: vx + vw / 2, y: ln.y - 7, "text-anchor": "middle", fill: BG, "font-family": MONO, "font-size": 11, "font-weight": 600 }, ln.val),
+        );
+      }
+    }
+
+    function setGlyph(ch, btn) {
+      if (!ch || ch === glyph) return;
+      glyph = ch;
+      if (current) current.textContent = ch;
+      grid.querySelectorAll(".ty-cell.is-active").forEach((b) => {
+        b.classList.remove("is-active");
+        b.setAttribute("aria-selected", "false");
+      });
+      if (btn) {
+        btn.classList.add("is-active");
+        btn.setAttribute("aria-selected", "true");
+      }
+      build();
+    }
+
+    // hover to preview (plus click/focus for touch + keyboard)
+    const handle = (e) => {
+      const btn = (e.target as HTMLElement).closest(".ty-cell");
+      if (btn) setGlyph(btn.getAttribute("data-g"), btn);
+    };
+    grid.addEventListener("pointerover", handle);
+    grid.addEventListener("click", handle);
+    grid.addEventListener("focusin", handle);
+
+    // solid / anchors toggle
+    const togs = Array.from(document.querySelectorAll(".ty-tog"));
+    togs.forEach((t) => {
+      t.addEventListener("click", () => {
+        mode = t.getAttribute("data-mode") || "solid";
+        togs.forEach((o) => {
+          const on = o === t;
+          o.classList.toggle("is-on", on);
+          o.setAttribute("aria-selected", on ? "true" : "false");
+        });
+        build();
+      });
+    });
+
+    const go = () => {
+      m = measureFont();
+      build();
+    };
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(go);
+    else go();
+
+    // recolour the specimen when the design guide theme is toggled
+    window.addEventListener("ds-themechange", () => build());
+  }
+</script>

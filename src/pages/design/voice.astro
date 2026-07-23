@@ -72,11 +72,11 @@ const rewrites = [
       {
         rewrites.map((r) => (
           <div class="ds-bento" style="margin-top:0">
-            <div class="ds-card ds-b6 ds-reveal" style="border-color:var(--ds-accent-tonal); background:color-mix(in srgb, var(--ds-accent-tonal) 40%, white); background-color:#fff5f3;">
+            <div class="ds-card ds-b6 ds-reveal" style="border-color:var(--ds-accent-tonal); background:var(--ds-accent-tonal);">
               <span class="ds-chip ds-chip-dont" style="margin-bottom:10px">Before</span>
               <p class="ds-body">{r.bad}</p>
             </div>
-            <div class="ds-card ds-b6 ds-reveal" style="background-color:#f2faf7;">
+            <div class="ds-card ds-b6 ds-reveal" style="border-color:var(--ds-green-tonal); background:var(--ds-green-tonal);">
               <span class="ds-chip ds-chip-do" style="margin-bottom:10px">After</span>
               <p class="ds-body">{r.good}</p>
             </div>
