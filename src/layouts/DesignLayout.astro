@@ -101,6 +101,27 @@ const canonicalUrl = new URL(Astro.url.pathname, site);
       type="font/woff2"
       crossorigin
     />
+    <script is:inline>
+      // Resolve the theme before first paint to avoid a flash. Stored
+      // choice wins; otherwise follow the OS preference.
+      (function () {
+        try {
+          var stored = localStorage.getItem("ds-theme");
+          var theme =
+            stored ||
+            (window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light");
+          document.documentElement.setAttribute("data-theme", theme);
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta)
+            meta.setAttribute(
+              "content",
+              theme === "dark" ? "#111110" : "#faf9f7",
+            );
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body class="ds-root" style="margin:0">
     <header class="ds-topbar">
@@ -110,10 +131,20 @@ const canonicalUrl = new URL(Astro.url.pathname, site);
         </svg>
       </button>
       <a href="/design" class="ds-topbar-brand">
-        <img src={getAssetUrl("/design/logos/acm-diamond-dark.svg")} alt="ACM-VIT" width="30" height="30" />
+        <img class="ds-brand-mark-dark" src={getAssetUrl("/design/logos/acm-diamond-dark.svg")} alt="ACM-VIT" width="30" height="30" />
+        <img class="ds-brand-mark-light" src={getAssetUrl("/design/logos/acm-diamond-white.svg")} alt="ACM-VIT" width="30" height="30" />
         <span>ACM-VIT <span class="ds-brand-sub">Design</span></span>
       </a>
       <div class="ds-topbar-actions">
+        <button class="ds-topbar-toggle" id="ds-theme" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <svg class="ds-icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path>
+          </svg>
+          <svg class="ds-icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4.2"></circle>
+            <path d="M12 2v2.5M12 19.5V22M4.5 4.5l1.8 1.8M17.7 17.7l1.8 1.8M2 12h2.5M19.5 12H22M4.5 19.5l1.8-1.8M17.7 6.3l1.8-1.8"></path>
+          </svg>
+        </button>
         <a class="ds-topbar-link" href="/design/resources">Download assets</a>
         <a class="ds-topbar-link" href="/" target="_blank" rel="noopener">acmvit.in ↗</a>
       </div>
@@ -187,6 +218,25 @@ const canonicalUrl = new URL(Astro.url.pathname, site);
       };
       btn?.addEventListener("click", () => toggle());
       scrim?.addEventListener("click", () => toggle(false));
+
+      // theme toggle (initial theme is set pre-paint by the inline head
+      // script; here we just flip + persist and notify JS-driven specimens)
+      const themeBtn = document.getElementById("ds-theme");
+      const themeMeta = document.querySelector('meta[name="theme-color"]');
+      themeBtn?.addEventListener("click", () => {
+        const isDark =
+          document.documentElement.getAttribute("data-theme") === "dark";
+        const next = isDark ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", next);
+        themeMeta?.setAttribute(
+          "content",
+          next === "dark" ? "#111110" : "#faf9f7",
+        );
+        try {
+          localStorage.setItem("ds-theme", next);
+        } catch (e) {}
+        window.dispatchEvent(new Event("ds-themechange"));
+      });
 
       // subtle scroll reveal
       if (matchMedia("(prefers-reduced-motion: no-preference)").matches) {

@@ -126,18 +126,18 @@ const platforms = [
     <div class="ds-bento">
       <div class="ds-card ds-card-tonal ds-b6 ds-reveal" style="display:flex; align-items:center; justify-content:center; padding:32px;">
         <svg viewBox="0 0 240 330" style="width:100%; max-width:250px" role="img" aria-label="4:5 post with left and right strips trimmed in the 3:4 grid preview">
-          <rect x="12" y="30" width="216" height="270" rx="10" fill="#ffffff" stroke="#d4cfc6" />
-          <rect x="18.75" y="30" width="202.5" height="270" fill="#ffeae5" opacity="0.55" />
-          <rect x="18.75" y="30" width="202.5" height="270" fill="none" stroke="#f95f4a" stroke-width="1.6" stroke-dasharray="7 5" />
-          <g stroke="#79746e" stroke-width="1">
+          <rect x="12" y="30" width="216" height="270" rx="10" fill="var(--ds-surface)" stroke="var(--ds-line-2)" />
+          <rect x="18.75" y="30" width="202.5" height="270" fill="var(--ds-accent-tonal)" opacity="0.55" />
+          <rect x="18.75" y="30" width="202.5" height="270" fill="none" stroke="var(--ds-accent)" stroke-width="1.6" stroke-dasharray="7 5" />
+          <g stroke="var(--ds-ink-3)" stroke-width="1">
             <line x1="15.4" y1="21" x2="15.4" y2="33" />
             <line x1="224.6" y1="21" x2="224.6" y2="33" />
           </g>
           <g font-family="DM Sans, sans-serif" font-size="11" font-weight="620">
-            <text x="120" y="17" text-anchor="middle" fill="#79746e">sides cropped in grid · ~32 px each</text>
-            <text x="120" y="172" text-anchor="middle" fill="#b3341f">3:4 safe zone · full height</text>
+            <text x="120" y="17" text-anchor="middle" fill="var(--ds-ink-3)">sides cropped in grid · ~32 px each</text>
+            <text x="120" y="172" text-anchor="middle" fill="var(--ds-accent-ink)">3:4 safe zone · full height</text>
           </g>
-          <g font-family="DM Sans, sans-serif" font-size="11.5" fill="#79746e">
+          <g font-family="DM Sans, sans-serif" font-size="11.5" fill="var(--ds-ink-3)">
             <text x="120" y="314" text-anchor="middle">4:5 canvas · 1080 × 1350</text>
             <text x="120" y="329" text-anchor="middle">grid shows the center 1015 × 1350</text>
           </g>
@@ -168,17 +168,17 @@ const platforms = [
               const y2 = 142 - (i + 1) * 94 * 0.248;
               return (
                 <g>
-                  <rect x={tx} y={30} width={100} height={125} rx={6} fill="#ffffff" stroke="#d4cfc6" />
-                  <polygon points={`${zx},${y1} ${zx + 94},${y2} ${zx + 94},${y2 + 24} ${zx},${y1 + 24}`} fill="#ffeae5" stroke="#f95f4a" stroke-width="1.4" />
-                  <rect x={zx} y={31} width={94} height={123} fill="none" stroke="#f95f4a" stroke-width="1.2" stroke-dasharray="6 4" opacity="0.65" />
+                  <rect x={tx} y={30} width={100} height={125} rx={6} fill="var(--ds-surface)" stroke="var(--ds-line-2)" />
+                  <polygon points={`${zx},${y1} ${zx + 94},${y2} ${zx + 94},${y2 + 24} ${zx},${y1 + 24}`} fill="var(--ds-accent-tonal)" stroke="var(--ds-accent)" stroke-width="1.4" />
+                  <rect x={zx} y={31} width={94} height={123} fill="none" stroke="var(--ds-accent)" stroke-width="1.2" stroke-dasharray="6 4" opacity="0.65" />
                 </g>
               );
             })
           }
-          <g font-family="DM Sans, sans-serif" font-size="11.5" fill="#79746e">
+          <g font-family="DM Sans, sans-serif" font-size="11.5" fill="var(--ds-ink-3)">
             <text x="180" y="18" text-anchor="middle">one artwork, sliced across three posts</text>
             <text x="180" y="178" text-anchor="middle">canvas 1080 × 1350 · artwork zone 1015 × 1350</text>
-            <text x="180" y="196" text-anchor="middle" fill="#b3341f">seams align at the dashed zone, not the canvas edge</text>
+            <text x="180" y="196" text-anchor="middle" fill="var(--ds-accent-ink)">seams align at the dashed zone, not the canvas edge</text>
           </g>
         </svg>
       </div>
@@ -225,14 +225,14 @@ const platforms = [
       }
       <div class="ds-card ds-card-tonal ds-reveal" style="display:flex; align-items:center; gap:28px; flex-wrap:wrap; padding:28px;">
         <svg viewBox="0 0 512 288" style="flex:1 1 300px; max-width:440px" role="img" aria-label="YouTube banner: full 2560 by 1440 canvas, desktop strip, and centered 1546 by 423 safe area">
-          <rect x="1" y="1" width="510" height="286" rx="8" fill="#ffffff" stroke="#d4cfc6" />
-          <rect x="1" y="101.7" width="510" height="84.6" fill="#efece7" />
-          <rect x="101.4" y="101.7" width="309.2" height="84.6" fill="#ffeae5" />
-          <rect x="101.4" y="101.7" width="309.2" height="84.6" fill="none" stroke="#f95f4a" stroke-width="1.6" stroke-dasharray="7 5" />
+          <rect x="1" y="1" width="510" height="286" rx="8" fill="var(--ds-surface)" stroke="var(--ds-line-2)" />
+          <rect x="1" y="101.7" width="510" height="84.6" fill="var(--ds-surface-tonal-2)" />
+          <rect x="101.4" y="101.7" width="309.2" height="84.6" fill="var(--ds-accent-tonal)" />
+          <rect x="101.4" y="101.7" width="309.2" height="84.6" fill="none" stroke="var(--ds-accent)" stroke-width="1.6" stroke-dasharray="7 5" />
           <g font-family="DM Sans, sans-serif" font-size="13" font-weight="620">
-            <text x="256" y="30" text-anchor="middle" fill="#79746e">TV · full 2560 × 1440</text>
-            <text x="52" y="149" text-anchor="middle" fill="#79746e">desktop</text>
-            <text x="256" y="149" text-anchor="middle" fill="#b3341f">safe area · 1546 × 423</text>
+            <text x="256" y="30" text-anchor="middle" fill="var(--ds-ink-3)">TV · full 2560 × 1440</text>
+            <text x="52" y="149" text-anchor="middle" fill="var(--ds-ink-3)">desktop</text>
+            <text x="256" y="149" text-anchor="middle" fill="var(--ds-accent-ink)">safe area · 1546 × 423</text>
           </g>
         </svg>
         <div style="flex:1 1 260px; min-width:240px;">
@@ -279,7 +279,7 @@ const platforms = [
         </p>
       </div>
       <div class="ds-card ds-b4 ds-reveal">
-        <div style="display:flex; gap:10px; align-items:center; justify-content:center; min-height:96px;">
+        <div class="ds-theme-trio" style="display:flex; gap:10px; align-items:center; justify-content:center; min-height:96px;">
           <span style="width:34px;height:34px;border-radius:8px;background:#1c1b1a"></span>
           <span style="width:34px;height:34px;border-radius:8px;background:#F95F4A"></span>
           <span style="width:34px;height:34px;border-radius:8px;background:#FEFCD9;border:1px solid var(--ds-line-2)"></span>
@@ -360,6 +360,14 @@ const platforms = [
     aspect-ratio: 3/4;
     border-radius: 5px;
     background: #3a3835;
+  }
+  /* neutral feed tiles need to sit above the dark card surface */
+  :global(html[data-theme="dark"]) .ds-feed-demo span {
+    background: var(--ds-surface-tonal-2);
+  }
+  /* hairline the Ink/orange/cream trio so each reads on the dark card */
+  :global(html[data-theme="dark"]) .ds-theme-trio span {
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
   }
   .ds-feed-demo .ds-feed-a {
     background: var(--ds-accent);

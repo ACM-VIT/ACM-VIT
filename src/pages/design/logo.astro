@@ -160,28 +160,28 @@ const misuse = [
       <div class="ds-card ds-card-tonal ds-b8 ds-reveal" style="display:flex; align-items:center; justify-content:center; min-height:320px;">
         <svg viewBox="0 0 380 300" style="width:100%; max-width:460px" role="img" aria-label="Clearspace diagram: 0.25x margin around the diamond">
           <!-- clearspace boundary -->
-          <rect x="90" y="50" width="200" height="200" fill="none" stroke="#f95f4a" stroke-width="1.5" stroke-dasharray="6 5" />
+          <rect x="90" y="50" width="200" height="200" fill="none" stroke="var(--ds-accent)" stroke-width="1.5" stroke-dasharray="6 5" />
           <!-- mark bounding box -->
-          <rect x="140" y="100" width="100" height="100" fill="none" stroke="#79746e" stroke-width="1" stroke-dasharray="3 4" />
+          <rect x="140" y="100" width="100" height="100" fill="none" stroke="var(--ds-ink-3)" stroke-width="1" stroke-dasharray="3 4" />
           <!-- diamond -->
           <g transform="translate(190,150)">
-            <rect x="-38" y="-38" width="76" height="76" rx="14" transform="rotate(45)" fill="#333333" />
-            <text x="0" y="6" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="26" fill="#ffffff">acm</text>
+            <rect x="-38" y="-38" width="76" height="76" rx="14" transform="rotate(45)" fill="var(--ds-diamond)" />
+            <text x="0" y="6" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="26" fill="var(--ds-diamond-fg)">acm</text>
           </g>
           <!-- measurement arrows -->
-          <g stroke="#b3341f" stroke-width="1.2">
+          <g stroke="var(--ds-accent-ink)" stroke-width="1.2">
             <line x1="90" y1="150" x2="140" y2="150" />
             <line x1="240" y1="150" x2="290" y2="150" />
             <line x1="190" y1="50" x2="190" y2="100" />
             <line x1="190" y1="200" x2="190" y2="250" />
           </g>
-          <g font-family="DM Sans, sans-serif" font-size="12.5" font-weight="620" fill="#b3341f">
+          <g font-family="DM Sans, sans-serif" font-size="12.5" font-weight="620" fill="var(--ds-accent-ink)">
             <text x="115" y="142" text-anchor="middle">0.25×</text>
             <text x="265" y="142" text-anchor="middle">0.25×</text>
             <text x="204" y="79">0.25×</text>
             <text x="204" y="229">0.25×</text>
           </g>
-          <g font-family="DM Sans, sans-serif" font-size="12" fill="#79746e">
+          <g font-family="DM Sans, sans-serif" font-size="12" fill="var(--ds-ink-3)">
             <text x="190" y="278" text-anchor="middle">1× = width of the diamond</text>
           </g>
         </svg>
@@ -216,7 +216,7 @@ const misuse = [
       {
         misuse.map((m) => (
           <div class="ds-specimen ds-b4 ds-reveal">
-            <div class="ds-specimen-stage" style="min-height:150px; background:var(--ds-surface-tonal)">
+            <div class="ds-specimen-stage ds-mis-stage" style="min-height:150px; background:var(--ds-surface-tonal)">
               {m.art === "stretch" && (
                 <img src={logos("acm-diamond-dark.svg")} alt="" style="width:130px; height:74px;" />
               )}
@@ -378,7 +378,8 @@ const misuse = [
       clearspace rule still applies on both sides of the divider.
     </p>
     <div class="ds-card ds-card-tonal ds-reveal" style="margin-top:24px; display:flex; align-items:center; justify-content:center; gap:34px; min-height:170px;">
-      <img src={logos("acm-diamond-dark.svg")} alt="ACM-VIT" style="width:72px" />
+      <img class="ds-logo-dark" src={logos("acm-diamond-dark.svg")} alt="ACM-VIT" style="width:72px" />
+      <img class="ds-logo-light" src={logos("acm-diamond-white.svg")} alt="ACM-VIT" style="width:72px" />
       <span style="width:1px; height:64px; background:var(--ds-line-2)"></span>
       <span style="font-weight:700; font-size:24px; letter-spacing:-0.02em; color:var(--ds-ink-3);">Partner</span>
     </div>
@@ -390,6 +391,21 @@ const misuse = [
     position: absolute;
     top: 12px;
     right: 12px;
+  }
+  /* misuse demos show the dark-ink mark, so their stage stays light in
+     dark mode (matches the light-mode surface-tonal). */
+  :global(html[data-theme="dark"]) .ds-mis-stage {
+    background: #f4f1ec !important;
+  }
+  /* co-branding mark swaps to the white cut on the dark tonal card */
+  .ds-logo-light {
+    display: none;
+  }
+  :global(html[data-theme="dark"]) .ds-logo-dark {
+    display: none;
+  }
+  :global(html[data-theme="dark"]) .ds-logo-light {
+    display: inline-block;
   }
   .ds-domain-row {
     display: grid;

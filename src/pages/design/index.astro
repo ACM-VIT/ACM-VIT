@@ -56,7 +56,7 @@ const sections = [
     href: "/design/social",
     title: "Social Media",
     desc: "Post sizing, grids, and platform-by-platform standards.",
-    span: "ds-b6",
+    span: "ds-b4",
     tone: "var(--ds-pink-tonal)",
     art: "social",
   },
@@ -64,7 +64,7 @@ const sections = [
     href: "/design/resources",
     title: "Resources",
     desc: "Every mark in SVG, PNG, and WebP - ready to download.",
-    span: "ds-b6",
+    span: "ds-b4",
     tone: "var(--ds-surface-tonal)",
     art: "download",
   },
@@ -100,12 +100,22 @@ const sections = [
         >
           <div class="ds-home-art" data-art={s.art}>
             {s.art === "logo" && (
-              <img
-                src={getAssetUrl("/design/logos/acm-diamond-dark.svg")}
-                alt=""
-                loading="lazy"
-                style="width:96px;height:96px"
-              />
+              <>
+                <img
+                  class="ds-logo-dark"
+                  src={getAssetUrl("/design/logos/acm-diamond-dark.svg")}
+                  alt=""
+                  loading="lazy"
+                  style="width:96px;height:96px"
+                />
+                <img
+                  class="ds-logo-light"
+                  src={getAssetUrl("/design/logos/acm-diamond-white.svg")}
+                  alt=""
+                  loading="lazy"
+                  style="width:96px;height:96px"
+                />
+              </>
             )}
             {s.art === "logosystem" && (
               <div class="ds-art-diamonds">
@@ -148,7 +158,7 @@ const sections = [
               </div>
             )}
             {s.art === "download" && (
-              <svg width="52" height="52" viewBox="0 0 52 52" fill="none" stroke="#4d4a46" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="52" height="52" viewBox="0 0 52 52" fill="none" stroke="var(--ds-ink-2)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M26 8v24m0 0 10-10M26 32 16 22" />
                 <path d="M10 40h32" />
               </svg>
@@ -215,6 +225,19 @@ const sections = [
     border-radius: var(--ds-r-md);
     background: var(--card-tone);
     margin-bottom: 18px;
+  }
+  /* the diamond mark flips to its white cut on the dark tinted tile */
+  .ds-logo-light {
+    display: none;
+  }
+  :global(html[data-theme="dark"]) .ds-logo-dark {
+    display: none;
+  }
+  :global(html[data-theme="dark"]) .ds-logo-light {
+    display: block;
+  }
+  :global(html[data-theme="dark"]) .ds-art-swatches span {
+    border-color: rgba(255, 255, 255, 0.14);
   }
   .ds-art-glyph {
     font-size: 64px;

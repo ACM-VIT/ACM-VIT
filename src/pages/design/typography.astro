@@ -322,6 +322,10 @@ const glyphs = [
     background: var(--ds-ink);
     color: #fff;
   }
+  :global(html[data-theme="dark"]) .ty-tog.is-on,
+  :global(html[data-theme="dark"]) .ty-cell.is-active {
+    color: var(--ds-bg);
+  }
   .ty-cell:focus-visible {
     outline: 2px solid var(--ds-accent);
     outline-offset: -2px;
@@ -342,12 +346,20 @@ const glyphs = [
     const PAD = 40; // headroom above cap / below descender
     const GX = VBW * 0.5;
 
-    // theme-accurate colours read from the design-system tokens
-    const cs = getComputedStyle(document.documentElement);
-    const INK = cs.getPropertyValue("--ds-ink").trim() || "#1c1b1a";
-    const INK3 = cs.getPropertyValue("--ds-ink-3").trim() || "#79746e";
-    const MONO =
-      cs.getPropertyValue("--ds-mono").trim() || "ui-monospace, monospace";
+    // theme-accurate colours read from the design-system tokens. The tokens
+    // live on .ds-root (the body), and are re-read on every build() so the
+    // dark-mode toggle recolours the specimen live.
+    let INK = "#1c1b1a";
+    let INK3 = "#79746e";
+    let BG = "#faf9f7";
+    let MONO = "ui-monospace, monospace";
+    function readTokens() {
+      const cs = getComputedStyle(document.body);
+      INK = cs.getPropertyValue("--ds-ink").trim() || INK;
+      INK3 = cs.getPropertyValue("--ds-ink-3").trim() || INK3;
+      BG = cs.getPropertyValue("--ds-bg").trim() || BG;
+      MONO = cs.getPropertyValue("--ds-mono").trim() || MONO;
+    }
 
     const FS = 400;
     const mctx = document.createElement("canvas").getContext("2d");
@@ -421,6 +433,7 @@ const glyphs = [
     }
 
     function build() {
+      readTokens();
       const capPx = m.cap * S;
       const xPx = m.xh * S;
       const descPx = m.desc * S;
@@ -491,7 +504,7 @@ const glyphs = [
         );
         svg.appendChild(el("rect", { x: vx, y: ln.y - 18, width: vw, height: 15, rx: 3, fill: INK }));
         svg.appendChild(
-          el("text", { x: vx + vw / 2, y: ln.y - 7, "text-anchor": "middle", fill: "#fff", "font-family": MONO, "font-size": 11, "font-weight": 600 }, ln.val),
+          el("text", { x: vx + vw / 2, y: ln.y - 7, "text-anchor": "middle", fill: BG, "font-family": MONO, "font-size": 11, "font-weight": 600 }, ln.val),
         );
       }
     }
@@ -540,5 +553,8 @@ const glyphs = [
     };
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(go);
     else go();
+
+    // recolour the specimen when the design guide theme is toggled
+    window.addEventListener("ds-themechange", () => build());
   }
 </script>

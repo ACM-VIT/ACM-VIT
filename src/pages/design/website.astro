@@ -53,27 +53,6 @@ const products = [
     type: "Garet Heavy / DM Sans",
   },
 ];
-
-const community = [
-  {
-    name: "z0d1ak",
-    accent: "#42CD9D",
-    tonal: "#e3f5ee",
-    desc: "The CTF team. Cosmic, darker-than-Ink surfaces, green accents, and the sanctioned display-serif exception (Cinzel).",
-  },
-  {
-    name: "ACM-W",
-    accent: "#FF007A",
-    tonal: "#ffe5f1",
-    desc: "Our community for women in computing. The double-diamond mark and pink accents - including full-page pink takeovers in GREP.",
-  },
-  {
-    name: "Cassette Builder",
-    accent: "#9B51E0",
-    tonal: "#f3eafc",
-    desc: "The mixtape toy. Playful, tactile, purple accents - the most latitude of anything we ship, inside the palette.",
-  },
-];
 ---
 
 <DesignLayout
@@ -158,31 +137,9 @@ const community = [
     </div>
   </section>
 
-  <!-- 02b · Community identities -->
-  <section class="ds-section" id="community">
-    <div class="ds-sec-head"><span class="ds-sec-num">03</span><h2 class="ds-h2">Community identities</h2></div>
-    <p class="ds-body">
-      Not products, but sub-brands with their own surface: teams, communities,
-      and toys. Same rules, smaller footprint.
-    </p>
-    <div class="ds-bento">
-      {
-        community.map((c) => (
-          <div class="ds-card ds-b4 ds-reveal" style={`border-top:4px solid ${c.accent};`}>
-            <div style="display:flex; align-items:center; gap:10px;">
-              <h3 class="ds-h4">{c.name}</h3>
-              <code class="ds-mono ds-small" style="margin-left:auto">{c.accent}</code>
-            </div>
-            <p class="ds-body" style="margin-top:10px">{c.desc}</p>
-          </div>
-        ))
-      }
-    </div>
-  </section>
-
-  <!-- 04 · What products may and may not change -->
+  <!-- 03 · What products may and may not change -->
   <section class="ds-section" id="latitude">
-    <div class="ds-sec-head"><span class="ds-sec-num">04</span><h2 class="ds-h2">Latitude</h2></div>
+    <div class="ds-sec-head"><span class="ds-sec-num">03</span><h2 class="ds-h2">Latitude</h2></div>
     <div class="ds-bento">
       <div class="ds-card ds-b6 ds-reveal">
         <span class="ds-chip ds-chip-do" style="margin-bottom:12px">Products may</span>
