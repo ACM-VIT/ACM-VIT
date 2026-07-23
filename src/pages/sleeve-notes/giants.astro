@@ -174,7 +174,7 @@ const groups: Group[] = [
 ];
 ---
 
-<Layout pageTitle="Standing on Giants" backHref="/sleeve-notes">
+<Layout pageTitle="Standing on Giants" backHref="/sleeve-notes" bleedBg>
   <main class="gt-page relative w-full overflow-hidden">
     <div class="gt-glow" aria-hidden="true"></div>
     <div class="gt-grid-bg" aria-hidden="true">
@@ -238,6 +238,11 @@ const groups: Group[] = [
 <style>
   .gt-page {
     min-height: 100vh;
+    /* Bleed the grid/glow up behind the fixed header so there's no seam at the
+       .content clearance (pt-28 = 7rem). margin/padding cancel, so inner
+       content keeps its exact position. Matches the parent /sleeve-notes page. */
+    margin-top: -7rem;
+    padding-top: 7rem;
   }
 
   .gt-glow {

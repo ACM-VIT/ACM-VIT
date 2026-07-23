@@ -21,9 +21,15 @@ export interface Props {
   scrollCue?: boolean;
   /** Custom breadcrumb trail, or false to hide it on this page. */
   crumbs?: Crumb[] | false;
+  /**
+   * Set on pages whose root element bleeds its background up behind the fixed
+   * header (via a negative top margin). Floats the crumbs out of normal flow so
+   * their ~32px height can't push the page box down and reopen the header seam.
+   */
+  bleedBg?: boolean;
 }
 
-const { pageTitle, backHref, scrollCue = true, crumbs } = Astro.props;
+const { pageTitle, backHref, scrollCue = true, crumbs, bleedBg = false } = Astro.props;
 
 const site = Astro.site ?? new URL("https://www.acmvit.in");
 const canonicalUrl = new URL(Astro.url.pathname, site);
@@ -317,7 +323,7 @@ if (showCrumbs) {
       <Header pageTitle={pageTitle} backHref={backHref} />
       <main id="main-content" tabindex="-1" class="content flex-1 relative pt-28">
         {crumbItems.length > 0 && (
-          <div class="page-crumbs-bar">
+          <div class:list={["page-crumbs-bar", bleedBg && "page-crumbs-bar--bleed"]}>
             <Breadcrumbs items={crumbItems} />
           </div>
         )}
@@ -951,6 +957,22 @@ if (showCrumbs) {
     z-index: 3;
     padding: 0.15rem clamp(1.25rem, 5vw, 4rem) 0;
     margin-bottom: 0.35rem;
+  }
+
+  /* Bleed pages: the page root pulls its background up behind the header with a
+     negative top margin sized to cancel the .content clearance (pt-28 = 7rem)
+     exactly. A crumbs bar in normal flow adds its own ~32px on top of that, so
+     the pull lands short and the grid/glow starts ~32px down - a visible seam
+     across the header. Float the crumbs in the clearance instead (same visual
+     spot) so they consume no flow height; the raised z-index keeps their links
+     above the page's own z-10 inner wrapper, which now spans up behind them. */
+  .page-crumbs-bar--bleed {
+    position: absolute;
+    top: 7rem;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    margin-bottom: 0;
   }
 
   @media (max-width: 768px) {
