@@ -645,6 +645,55 @@ const chapters = [
         seg(c, 88, 138, 88, 208, 5);
         seg(c, 352, 138, 352, 208, 5);
       },
+      // Static "frames" for spinning stages: the stage minus its reels, which
+      // are rebuilt procedurally so they turn live in the render loop.
+      reelsFrame: (c) => {
+        c.strokeStyle = "#000";
+        seg(c, 126, 208, 314, 208, 7);
+        seg(c, 88, 138, 88, 208, 5);
+        seg(c, 352, 138, 352, 208, 5);
+      },
+      tapeFrame: (c) => {
+        c.strokeStyle = "#000";
+        c.lineWidth = 13;
+        c.lineCap = "round";
+        c.beginPath();
+        c.moveTo(206, 120);
+        c.bezierCurveTo(300, 70, 360, 120, 400, 100);
+        c.bezierCurveTo(360, 150, 300, 150, 236, 176);
+        c.bezierCurveTo(320, 200, 380, 190, 410, 214);
+        c.stroke();
+      },
+      shellFrame: (c) => {
+        rrect(c, 42, 66, 356, 168, 18);
+        c.save();
+        c.globalCompositeOperation = "destination-out";
+        rrect(c, 108, 150, 224, 66, 30);
+        rrect(c, 176, 214, 26, 22, 4);
+        rrect(c, 238, 214, 26, 22, 4);
+        rrect(c, 70, 78, 30, 12, 3);
+        rrect(c, 340, 78, 30, 12, 3);
+        c.restore();
+        c.globalCompositeOperation = "source-over";
+        rrect(c, 96, 92, 248, 8, 4);
+      },
+      soundFrame: (c) => {
+        wave(c, 250, 356, 150, 30, 3, 5, true);
+        c.beginPath();
+        c.moveTo(364, 132);
+        c.lineTo(388, 112);
+        c.lineTo(388, 188);
+        c.lineTo(364, 168);
+        c.closePath();
+        c.fill();
+        c.strokeStyle = "#000";
+        for (let r = 14; r <= 30; r += 8) {
+          c.lineWidth = 3;
+          c.beginPath();
+          c.arc(392, 150, r, -0.8, 0.8);
+          c.stroke();
+        }
+      },
       shell: (c) => {
         rrect(c, 42, 66, 356, 168, 18);
         c.save();
@@ -866,11 +915,121 @@ const chapters = [
       return arr;
     };
 
+    // Any stage with reels/hubs builds them procedurally (even spokes + teeth +
+    // rim) with polar coords so they spin live, over a static "frame" of the
+    // stage's other parts. One registry entry per spinning stage index.
+    type Spin = {
+      idx: number[];
+      ang: Float32Array;
+      r: Float32Array;
+      cx: Float32Array;
+      cy: Float32Array;
+    };
+    const spinStages: Record<number, Spin> = {};
+
+    // Stages that spin: the frame shape for their non-reel parts ("" = the reel
+    // is the whole stage), the reel centres/radii, and the share of particles
+    // the reels take (the rest fill the frame).
+    const SPIN: {
+      id: string;
+      frame: string;
+      reelShare: number;
+      reels: [number, number, number][];
+    }[] = [
+      { id: "hub", frame: "", reelShare: 1, reels: [[cx, cy, 96]] },
+      { id: "tape", frame: "tapeFrame", reelShare: 0.5, reels: [[138, cy, 74]] },
+      { id: "reels", frame: "reelsFrame", reelShare: 0.88, reels: [[126, 138, 62], [314, 138, 62]] },
+      { id: "shell", frame: "shellFrame", reelShare: 0.26, reels: [[158, 183, 30], [282, 183, 30]] },
+      { id: "sound", frame: "soundFrame", reelShare: 0.34, reels: [[96, 118, 42], [200, 118, 42]] },
+    ];
+
+    const buildReelInto = (
+      spin: Spin,
+      arr: Float32Array,
+      start: number,
+      count: number,
+      cx0: number,
+      cy0: number,
+      R: number,
+    ) => {
+      const TAU = Math.PI * 2;
+      const SPOKES = 6;
+      const TEETH = 9;
+      const nSpoke = Math.round(count * 0.4);
+      const nDisc = Math.round(count * 0.24);
+      const nTeeth = Math.round(count * 0.14);
+      const nRim = count - nSpoke - nDisc - nTeeth;
+      let m = 0;
+      const put = (ang: number, r: number) => {
+        const i = start + m++;
+        spin.ang[i] = ang;
+        spin.r[i] = r;
+        spin.cx[i] = cx0;
+        spin.cy[i] = cy0;
+        spin.idx.push(i);
+        arr[i * 2] = (cx0 + Math.cos(ang) * r) / SW;
+        arr[i * 2 + 1] = (cy0 + Math.sin(ang) * r) / SH;
+      };
+      for (let k = 0; k < nSpoke; k++) {
+        put(((k % SPOKES) / SPOKES) * TAU + (Math.random() - 0.5) * 0.05, R * (0.2 + 0.76 * Math.random()));
+      }
+      for (let k = 0; k < nDisc; k++) {
+        put(Math.random() * TAU, R * 0.2 * Math.sqrt(Math.random()));
+      }
+      for (let k = 0; k < nTeeth; k++) {
+        put(((k % TEETH) / TEETH) * TAU + (Math.random() - 0.5) * 0.1, R * (0.28 + Math.random() * 0.06));
+      }
+      for (let k = 0; k < nRim; k++) {
+        put(Math.random() * TAU, R * (0.9 + 0.1 * Math.random()));
+      }
+    };
+
+    const buildSpinStage = (cfg: (typeof SPIN)[number]): { arr: Float32Array; spin: Spin } => {
+      const arr = new Float32Array(N * 2);
+      const spin: Spin = {
+        idx: [],
+        ang: new Float32Array(N),
+        r: new Float32Array(N),
+        cx: new Float32Array(N),
+        cy: new Float32Array(N),
+      };
+      const per = Math.floor((N * cfg.reelShare) / cfg.reels.length);
+      const nFrame = N - per * cfg.reels.length;
+      if (cfg.frame && nFrame > 0) {
+        const f = sampleShape(cfg.frame);
+        shuffle(f);
+        const fc = f.length / 2;
+        for (let i = 0; i < nFrame; i++) {
+          if (fc && i < fc) {
+            arr[i * 2] = f[i * 2];
+            arr[i * 2 + 1] = f[i * 2 + 1];
+          } else if (fc) {
+            const j = (Math.random() * fc) | 0;
+            arr[i * 2] = f[j * 2] + (Math.random() - 0.5) * 0.006;
+            arr[i * 2 + 1] = f[j * 2 + 1] + (Math.random() - 0.5) * 0.006;
+          }
+        }
+      }
+      let start = nFrame;
+      for (const [rx, ry, R] of cfg.reels) {
+        buildReelInto(spin, arr, start, per, rx, ry, R);
+        start += per;
+      }
+      return { arr, spin };
+    };
+
     let stages: Float32Array[] = [];
     const buildStages = () => {
-      stages = STAGE_IDS.map((id) => {
+      for (const k in spinStages) delete spinStages[+k];
+      stages = STAGE_IDS.map((id, idx) => {
         if (id === "dust") return resample(dustCloud());
         if (id === "cassette") return buildCassette();
+        const cfg = SPIN.find((s) => s.id === id);
+        if (cfg) {
+          const { arr, spin } = buildSpinStage(cfg);
+          spinStages[idx] = spin;
+          return arr;
+        }
         return resample(sampleShape(id));
       });
     };
@@ -956,6 +1115,7 @@ const chapters = [
 
     const sizes = [0.55, 0.8, 1.05, 1.35];
     let spin = 0;
+    let reelSpin = 0;
     let last = performance.now();
 
     // Pointer (device px); repulsion nudges nearby particles away.
@@ -1011,6 +1171,23 @@ const chapters = [
           const ang = hAng[i] - spin;
           cass[i * 2] = (hCx[i] + Math.cos(ang) * hR[i]) / SW;
           cass[i * 2 + 1] = (hCy[i] + Math.sin(ang) * hR[i]) / SH;
+        }
+      }
+
+      // Spin every reel/hub on whichever spinning stage is on/near screen, so
+      // the single hub, tape reel, both reels, and the shell + sound reels all
+      // visibly turn.
+      if (!reduced) reelSpin += dt * 1.6;
+      for (const key in spinStages) {
+        const si = +key;
+        if (Math.abs(sf - si) >= 1.35) continue;
+        const spin = spinStages[si];
+        const st = stages[si];
+        for (let k = 0; k < spin.idx.length; k++) {
+          const i = spin.idx[k];
+          const ang = spin.ang[i] - reelSpin;
+          st[i * 2] = (spin.cx[i] + Math.cos(ang) * spin.r[i]) / SW;
+          st[i * 2 + 1] = (spin.cy[i] + Math.sin(ang) * spin.r[i]) / SH;
         }
       }
 
