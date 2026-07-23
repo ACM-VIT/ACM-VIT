@@ -28,7 +28,7 @@ const items: Item[] = [
     desc: "The global ACM circle-in-diamond lockup in its original blue. Kept for archival and compliance references only.",
     cat: "heritage",
     ratio: "wide",
-    bg: "#ffffff",
+    bg: "checker",
   },
   {
     slug: "acm-legacy-mono",
@@ -36,7 +36,7 @@ const items: Item[] = [
     desc: "Single-ink version of the international lockup for stamps, embossing, and one-colour print.",
     cat: "heritage",
     ratio: "wide",
-    bg: "#1c1b1a",
+    bg: "checker-dark",
   },
   {
     slug: "acm-legacy-vitu",
@@ -68,7 +68,7 @@ const items: Item[] = [
     desc: "White colorway of the earlier ACM-W wordmark, for dark and saturated backgrounds.",
     cat: "heritage",
     ratio: "wide",
-    bg: "#1c1b1a",
+    bg: "checker-dark",
   },
 
   // 02 · Colorways & finishes
@@ -86,7 +86,7 @@ const items: Item[] = [
     desc: "The diamond drawn as a single outline stroke. Reads well over busy photography and as a quiet watermark.",
     cat: "colorway",
     ratio: "square",
-    bg: "#1c1b1a",
+    bg: "checker-dark",
   },
   {
     slug: "acm-line-stacked",
@@ -102,7 +102,7 @@ const items: Item[] = [
     desc: "A thin gold keyline diamond for certificates, awards, and premium print.",
     cat: "colorway",
     ratio: "square",
-    bg: "#57534d",
+    bg: "checker-dark",
   },
   {
     slug: "acm-gloss-blue",
@@ -110,7 +110,7 @@ const items: Item[] = [
     desc: "A glossy enamel treatment of the stacked mark. Digital stickers, badges, and playful hero moments.",
     cat: "merch",
     ratio: "tall",
-    bg: "#f2f0ec",
+    bg: "checker",
   },
   {
     slug: "acm-taupe",
@@ -118,7 +118,7 @@ const items: Item[] = [
     desc: "A muted, low-contrast colorway for warm neutral backgrounds and understated co-branding.",
     cat: "colorway",
     ratio: "wide",
-    bg: "#ffffff",
+    bg: "checker",
   },
   {
     slug: "acm-photo-fill",
@@ -126,7 +126,7 @@ const items: Item[] = [
     desc: "The diamond masking a photograph. Fill it with campus or event imagery for covers and title cards.",
     cat: "colorway",
     ratio: "square",
-    bg: "#1c1b1a",
+    bg: "checker",
   },
 
   // 03 · Seasonal & community
@@ -136,7 +136,7 @@ const items: Item[] = [
     desc: "The chapter mark for Pride month, set over the rainbow. Community posts through June only.",
     cat: "seasonal",
     ratio: "square",
-    bg: "#ffffff",
+    bg: "checker",
   },
   {
     slug: "acmw-pride",
@@ -144,7 +144,7 @@ const items: Item[] = [
     desc: "The ACM-W mark for Pride month. Pairs with the primary Pride mark for women-in-computing posts.",
     cat: "seasonal",
     ratio: "square",
-    bg: "#ffffff",
+    bg: "checker",
   },
 
   // 04 · Themed remixes
@@ -154,7 +154,7 @@ const items: Item[] = [
     desc: "A blocky, pixel-built wordmark for gaming nights, hackathons, and playful drops.",
     cat: "themed",
     ratio: "wide",
-    bg: "#1c1b1a",
+    bg: "checker-dark",
   },
   {
     slug: "acm-examcooker",
@@ -162,7 +162,7 @@ const items: Item[] = [
     desc: "The scatter-pixel treatment built for the ExamCooker launch. Reserved for ExamCooker material.",
     cat: "themed",
     ratio: "wide",
-    bg: "#1c1b1a",
+    bg: "checker-dark",
   },
 
   // 05 · Pins & merch marks
@@ -172,7 +172,7 @@ const items: Item[] = [
     desc: "Enamel-and-gold pin rendering of the diamond. Reference art for merch and physical badges.",
     cat: "merch",
     ratio: "square",
-    bg: "#f2f0ec",
+    bg: "checker",
   },
   {
     slug: "acmw-lapel-pin",
@@ -180,7 +180,7 @@ const items: Item[] = [
     desc: "The ACM-W double diamond as an enamel pin. Companion to the primary pin.",
     cat: "merch",
     ratio: "square",
-    bg: "#f2f0ec",
+    bg: "checker",
   },
   {
     slug: "acm-pill",
@@ -324,8 +324,12 @@ const groups: { num: string; id: string; title: string; cat: Item["cat"]; blurb:
             .map((l) => (
               <div class="ds-card ds-b6 ds-reveal" style="padding:0; overflow:hidden;">
                 <div
-                  class:list={["ds-specimen-stage", l.bg === "checker" && "ds-checker"]}
-                  style={`min-height:230px; ${l.bg !== "checker" ? `background:${l.bg}` : ""}`}
+                  class:list={[
+                    "ds-specimen-stage",
+                    l.bg === "checker" && "ds-checker",
+                    l.bg === "checker-dark" && "ds-checker-dark",
+                  ]}
+                  style={`min-height:230px; ${l.bg.startsWith("checker") ? "" : `background:${l.bg}`}`}
                 >
                   <img
                     class="ls-art"
