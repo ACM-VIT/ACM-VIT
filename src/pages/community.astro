@@ -351,39 +351,12 @@ const yearsSince = new Date().getFullYear() - 2009;
       p.style.strokeDashoffset = `${pathLength}`;
     });
 
-    // Compute snap points for each section
-    const scrollH = container.scrollHeight - window.innerHeight;
-    const snapTargets: number[] = [];
-
-    // Cassette hero
-    snapTargets.push(0);
-
-    // Each tape section
-    sections.forEach((sec) => {
-      const el = sec as HTMLElement;
-      const top = el.offsetTop;
-      snapTargets.push(Math.min(top / scrollH, 1));
-    });
-
-    // Closing
-    if (closing) {
-      snapTargets.push(Math.min((closing as HTMLElement).offsetTop / scrollH, 1));
-    }
-
-    // End
-    snapTargets.push(1);
-
-    // ScrollTrigger - scrub:3 for slow, lazy ribbon draw + snap
+    // ScrollTrigger - scrub:3 for slow, lazy ribbon draw
     const drawTrigger = ScrollTrigger.create({
       trigger: container,
       start: "top top",
       end: "bottom bottom",
       scrub: 3,
-      snap: {
-        snapTo: snapTargets,
-        duration: { min: 0.3, max: 0.6 },
-        ease: "power2.inOut",
-      },
       onUpdate: (self) => {
         const offset = pathLength * (1 - self.progress);
         [tapePath, tapeShadow, tapeShine].forEach((p) => {
