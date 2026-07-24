@@ -8,7 +8,7 @@ const { slug, title } = Astro.props;
 ---
 
 <div
-  class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9000] pointer-events-none"
+  class="fixed bottom-6 left-1/2 -translate-x-1/2 z-9000 pointer-events-none"
   data-blog-dock-root
   data-dock-state="booting"
   data-slug={slug}
@@ -18,16 +18,16 @@ const { slug, title } = Astro.props;
 
     {/* Scratchpad panel */}
     <div
-      class="hidden w-80 max-h-[340px] backdrop-blur-2xl rounded-2xl border overflow-hidden flex-col bg-[rgba(30,30,30,0.95)] border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+      class="hidden w-80 max-h-85 backdrop-blur-2xl rounded-2xl border overflow-hidden flex-col bg-[rgba(30,30,30,0.95)] border-white/8 shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
       data-scratchpad
     >
-      <div class="flex items-center justify-between px-3.5 py-2.5 border-b font-mono text-[11px] tracking-[0.1em] uppercase border-white/[0.06] text-white/50 scratchpad-header">
+      <div class="flex items-center justify-between px-3.5 py-2.5 border-b font-mono text-[11px] tracking-widest uppercase border-white/6 text-white/50 scratchpad-header">
         <span>Scratchpad</span>
         <button
           type="button"
           data-scratchpad-close
           aria-label="Close scratchpad"
-          class="p-0.5 flex items-center justify-center rounded bg-transparent border-none cursor-pointer transition-all duration-200 text-white/40 hover:text-white/80 hover:bg-white/[0.06] scratchpad-close"
+          class="p-0.5 flex items-center justify-center rounded bg-transparent border-none cursor-pointer transition-all duration-200 text-white/40 hover:text-white/80 hover:bg-white/6 scratchpad-close"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <path d="M18 6L6 18M6 6l12 12" />
@@ -38,20 +38,20 @@ const { slug, title } = Astro.props;
         <textarea
           data-scratchpad-input
           placeholder="Write a quick note..."
-          class="w-full h-[180px] px-3.5 py-3 bg-transparent border-0 font-mono text-[12px] leading-relaxed resize-none outline-none box-border border-white/[0.06] text-white/80 placeholder:text-white/20 scratchpad-input"
+          class="w-full h-45 px-3.5 py-3 bg-transparent border-0 font-mono text-[12px] leading-relaxed resize-none outline-none box-border border-white/6 text-white/80 placeholder:text-white/20 scratchpad-input"
         ></textarea>
       </div>
     </div>
 
     {/* Dock pill */}
     <div
-      class="dock-pill flex min-h-[52px] items-center gap-1 px-4 py-2 backdrop-blur-2xl rounded-full border bg-[rgba(30,30,30,0.9)] border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+      class="dock-pill flex min-h-13 items-center gap-1 px-4 py-2 backdrop-blur-2xl rounded-full border bg-[rgba(30,30,30,0.9)] border-white/8 shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
     >
       {/* Listen */}
       <button
         type="button"
         data-listen-btn
-        class="dock-btn dock-control w-9 h-9 flex items-center justify-center rounded-full border-none bg-transparent cursor-pointer transition-all duration-200 active:scale-[0.92] text-white/60 hover:text-[#FEFCD9] hover:bg-white/[0.08]"
+        class="dock-btn dock-control w-9 h-9 flex items-center justify-center rounded-full border-none bg-transparent cursor-pointer transition-all duration-200 active:scale-[0.92] text-white/60 hover:text-[#FEFCD9] hover:bg-white/8"
         title="Listen to article"
       >
         <span data-listen-icon-play>
@@ -71,7 +71,7 @@ const { slug, title } = Astro.props;
 
       {/* Speed slider group - hidden until listening starts */}
       <div
-        class="hidden playback-speed-group flex items-center gap-1 overflow-hidden origin-left"
+        class="hidden playback-speed-group items-center gap-1 overflow-hidden origin-left"
         data-speed-group
       >        <div
           class="dock-control elastic-speed-slider"
@@ -102,7 +102,7 @@ const { slug, title } = Astro.props;
       <button
         type="button"
         data-notes-btn
-        class="dock-btn dock-control w-9 h-9 flex items-center justify-center rounded-full border-none bg-transparent cursor-pointer transition-all duration-200 active:scale-[0.92] text-white/60 hover:text-[#FEFCD9] hover:bg-white/[0.08]"
+        class="dock-btn dock-control w-9 h-9 flex items-center justify-center rounded-full border-none bg-transparent cursor-pointer transition-all duration-200 active:scale-[0.92] text-white/60 hover:text-[#FEFCD9] hover:bg-white/8"
         title="Scratchpad"
       >
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -116,7 +116,7 @@ const { slug, title } = Astro.props;
       <button
         type="button"
         data-theme-btn
-        class="dock-btn dock-control w-9 h-9 flex items-center justify-center rounded-full border-none bg-transparent cursor-pointer transition-all duration-200 active:scale-[0.92] text-white/60 hover:text-[#FEFCD9] hover:bg-white/[0.08]"
+        class="dock-btn dock-control w-9 h-9 flex items-center justify-center rounded-full border-none bg-transparent cursor-pointer transition-all duration-200 active:scale-[0.92] text-white/60 hover:text-[#FEFCD9] hover:bg-white/8"
         title="Toggle theme"
       >
         <span data-theme-icon-sun>
@@ -138,7 +138,7 @@ const { slug, title } = Astro.props;
       <button
         type="button"
         data-share-btn
-        class="dock-btn dock-control w-9 h-9 flex items-center justify-center rounded-full border-none bg-transparent cursor-pointer transition-all duration-200 active:scale-[0.92] text-white/60 hover:text-[#FEFCD9] hover:bg-white/[0.08]"
+        class="dock-btn dock-control w-9 h-9 flex items-center justify-center rounded-full border-none bg-transparent cursor-pointer transition-all duration-200 active:scale-[0.92] text-white/60 hover:text-[#FEFCD9] hover:bg-white/8"
         title="Share"
       >
         <span data-share-icon-default>
@@ -481,6 +481,7 @@ const { slug, title } = Astro.props;
       if (speedVisible) return;
       speedVisible = true;
       speedGroup.classList.remove("hidden");
+      speedGroup.classList.add("flex");
       gsap.killTweensOf(speedGroup);
       gsap.fromTo(
         speedGroup,
@@ -497,6 +498,7 @@ const { slug, title } = Astro.props;
         onComplete: () => {
           speedVisible = false;
           speedGroup.classList.add("hidden");
+          speedGroup.classList.remove("flex");
           speedGroup.style.removeProperty("width");
           speedGroup.style.removeProperty("opacity");
           speedGroup.style.removeProperty("transform");

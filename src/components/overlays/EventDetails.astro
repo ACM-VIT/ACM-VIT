@@ -4,7 +4,7 @@ import { getAssetUrl } from "../../utils/cdn";
 
 <div
   id="event-modal"
-  class="fixed inset-0 z-[100] hidden items-center justify-center p-4 backdrop-blur-sm bg-black/60 transition-all duration-300 opacity-0"
+  class="fixed inset-0 z-100 hidden items-center justify-center p-4 backdrop-blur-sm bg-black/60 transition-all duration-300 opacity-0"
   role="dialog"
   aria-modal="true"
   aria-labelledby="modal-title"
@@ -37,13 +37,13 @@ import { getAssetUrl } from "../../utils/cdn";
     <div class="flex flex-col md:flex-row h-full">
       <!-- Image Side -->
       <div
-        class="w-full md:w-1/2 relative bg-black/50 min-h-[200px] md:min-h-full flex items-center justify-center p-4"
+        class="w-full md:w-1/2 relative bg-black/50 min-h-50 md:min-h-full flex items-center justify-center p-4"
       >
         <img
           id="modal-image"
           src=""
           alt="Event Image"
-          class="w-full h-auto max-h-[300px] object-contain rounded-md"
+          class="w-full h-auto max-h-75 object-contain rounded-md"
           loading="lazy"
           decoding="async"
         />
