@@ -115,6 +115,14 @@ const navItems = [
   style="bottom: calc(16px + env(safe-area-inset-bottom, 0px));"
   data-locked-label={lockedLabel ? "true" : undefined}
 >
+  {/* "Keep scrolling" hint - floats just above the pill on unusual-scroll
+      sections, mirroring the desktop dock's swell (driven by the cue:nudge
+      event). Tap to nudge a screen down. */}
+  <button id="mn-scroll-hint" class="mn-scroll-hint pointer-events-auto" type="button" aria-label="Keep scrolling">
+    <span class="mn-scroll-hint-label">Keep scrolling</span>
+    <span class="mn-scroll-hint-arrow" aria-hidden="true"></span>
+  </button>
+
   <div id="mn-pill" class="mn-pill pointer-events-auto overflow-hidden" data-state="nav">
     <!-- ── NAV state: label + buttons ── -->
     <div data-panel="nav" class="mn-panel mn-panel-nav flex items-center justify-between gap-2 px-4 py-2">
@@ -517,6 +525,76 @@ const navItems = [
     will-change: width, transform, background-color, box-shadow;
   }
 
+  /* ── "Keep scrolling" hint (floats above the pill) ── */
+  .mn-scroll-hint {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 10px);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 14px;
+    border-radius: 9999px;
+    background: #1e1e1e;
+    border: 1px solid rgba(249, 95, 74, 0.55);
+    box-shadow:
+      0 8px 22px rgba(0, 0, 0, 0.5),
+      0 0 14px rgba(249, 95, 74, 0.14);
+    cursor: pointer;
+    white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
+    /* hidden until a nudge section is active */
+    opacity: 0;
+    transform: translate(-50%, 8px);
+    pointer-events: none;
+    /* Snap easing (design-guide: docks/pills/toggles) */
+    transition:
+      opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .mn-scroll-hint.is-visible {
+    opacity: 1;
+    transform: translate(-50%, 0);
+    pointer-events: auto;
+  }
+  .mn-scroll-hint:active { transform: translate(-50%, 0) scale(0.94); }
+
+  .mn-scroll-hint-label {
+    font-family: "PolySans Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-indent: 0.2em;
+    text-transform: uppercase;
+    color: rgba(254, 252, 217, 0.9);
+  }
+  .mn-scroll-hint-arrow {
+    width: 6px;
+    height: 6px;
+    flex-shrink: 0;
+    border-right: 2px solid #f95f4a;
+    border-bottom: 2px solid #f95f4a;
+    transform: rotate(45deg);
+    animation: mnHintBob 1.4s ease-in-out infinite;
+  }
+  @keyframes mnHintBob {
+    0%, 100% { transform: rotate(45deg) translate(0, 0); opacity: 0.55; }
+    50%      { transform: rotate(45deg) translate(1.5px, 1.5px); opacity: 1; }
+  }
+  /* Sideways sections (projects swipe carousel): chevron points right, bobs
+     horizontally instead of down. */
+  .mn-scroll-hint.is-sideways .mn-scroll-hint-arrow {
+    transform: rotate(-45deg);
+    animation-name: mnHintBobX;
+  }
+  @keyframes mnHintBobX {
+    0%, 100% { transform: rotate(-45deg) translate(0, 0); opacity: 0.55; }
+    50%      { transform: rotate(-45deg) translate(1.5px, -1.5px); opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mn-scroll-hint-arrow { animation: none; opacity: 1; }
+    .mn-scroll-hint { transition: opacity 0.2s ease; }
+  }
+
   /* Collapsed (intro): pill shrinks to bare music button before Flip-expand */
   .mn-pill.is-collapsed {
     width: 44px;
@@ -914,6 +992,35 @@ const navItems = [
     }
     window.addEventListener("nav:section", (e: any) => setActiveSection(e.detail?.id));
 
+    /* ── "Keep scrolling" hint (mirrors the desktop dock's swell) ──
+       The desktop dock is display:none ≤1024px but its script still runs and
+       emits cue:nudge; we surface it as a chip above the pill. Only in nav
+       state so it doesn't collide with an open menu/music panel. */
+    const scrollHint = document.getElementById("mn-scroll-hint");
+    const scrollHintLabel = scrollHint?.querySelector(".mn-scroll-hint-label");
+    let hintActive = false;
+    let hintDir: "x" | "y" = "y";
+    function updateScrollHint() {
+      scrollHint?.classList.toggle(
+        "is-visible",
+        hintActive && pill.dataset.state === "nav"
+      );
+    }
+    window.addEventListener("cue:nudge", (e: any) => {
+      hintActive = !!e.detail?.active;
+      hintDir = e.detail?.dir === "x" ? "x" : "y";
+      if (scrollHintLabel && e.detail?.label)
+        scrollHintLabel.textContent = e.detail.label;
+      // Sideways sections (e.g. projects carousel) get a rightward arrow.
+      scrollHint?.classList.toggle("is-sideways", hintDir === "x");
+      updateScrollHint();
+    });
+    scrollHint?.addEventListener("click", () => {
+      // Sideways sections are swiped by hand; only vertical nudges auto-scroll.
+      if (hintDir === "x") return;
+      smoothScrollToY(getScroller().scrollTop + window.innerHeight * 0.82);
+    });
+
     /* ── Morph between states (Flip) ── */
     // Interrupt an in-flight morph instead of swallowing the tap - a quick
     // menu-open -> item-tap otherwise left the pill stuck on the old panel.
@@ -932,6 +1039,7 @@ const navItems = [
       curPanel.style.display = "none";
       nextPanel.style.display = "flex";
       pill.dataset.state = nextState;
+      updateScrollHint();
 
       flipAnim = Flip.from(state, {
         duration: 0.42,
