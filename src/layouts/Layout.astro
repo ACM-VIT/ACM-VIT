@@ -19,6 +19,8 @@ export interface Props {
   backHref?: string;
   /** Set false on pages that own the bottom-centre lane (desktop docks). */
   scrollCue?: boolean;
+  /** Set false to drop the top-docked "keep scrolling" bubble on this page. */
+  scrollDock?: boolean;
   /** Custom breadcrumb trail, or false to hide it on this page. */
   crumbs?: Crumb[] | false;
   /**
@@ -29,7 +31,7 @@ export interface Props {
   bleedBg?: boolean;
 }
 
-const { pageTitle, backHref, scrollCue = true, crumbs, bleedBg = false } = Astro.props;
+const { pageTitle, backHref, scrollCue = true, scrollDock = true, crumbs, bleedBg = false } = Astro.props;
 
 const site = Astro.site ?? new URL("https://www.acmvit.in");
 const canonicalUrl = new URL(Astro.url.pathname, site);
@@ -334,10 +336,13 @@ if (showCrumbs) {
     <CassettePlayer />
 
     {
-      scrollCue && !isLandingPage && !pathname.startsWith("/domains/") && (
-        <ScrollCue mode="fixed" />
-      )
+      /* Initial centre hint on every page (landing gets its own from Hero). */
+      scrollCue && !isLandingPage && <ScrollCue mode="fixed" />
     }
+
+    {/* Top-docked scroll cue on every page: relocates beside the navbar past
+        the hero, swells into "keep scrolling" on [data-scroll-nudge] sections. */}
+    {scrollDock && <ScrollCue mode="dock" />}
 
     <script>
       import { gsap } from "gsap";

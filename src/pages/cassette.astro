@@ -117,7 +117,7 @@ const chapters = [
 
     <!-- Scrollytelling chapters. One block per particle stage; copy is pinned
          and cross-faded by the engine as its stage settles. -->
-    <section id="cass-chapters" class="cass-chapters" aria-label="How a cassette is made and how it works">
+    <section id="cass-chapters" class="cass-chapters" aria-label="How a cassette is made and how it works" data-scroll-nudge>
       {
         chapters.map((c, i) => (
           <article
@@ -127,6 +127,7 @@ const chapters = [
               { "is-hero": c.hero, "is-finale": c.finale },
             ]}
             data-stage={i}
+            data-cue-anchor={c.hero ? "" : undefined}
           >
             <div class="cass-copy">
               <span class="cass-index" aria-hidden="true">

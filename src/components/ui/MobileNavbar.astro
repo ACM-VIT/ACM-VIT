@@ -90,7 +90,7 @@ const subsections: Record<string, SubItem[]> = {
 // Section labels used by the submenu header (title-case).
 const sectionTitles: Record<string, string> = {
   about: "About", domains: "Domains", events: "Events", projects: "Projects",
-  "acm-w": "ACM-W", community: "Community", blogs: "Blogs", more: "More",
+  "acm-w": "ACM-W", community: "Community", blogs: "Blogs", more: "Resources",
 };
 
 const navItems = [
@@ -105,7 +105,7 @@ const navItems = [
   { id: "partners", label: "Partners", href: "/#partners" },
   { id: "gallery", label: "Gallery", href: "/#gallery" },
   { id: "contact", label: "Contact", href: "/#contact" },
-  { id: "more", label: "More", href: "/#more" },
+  { id: "more", label: "Resources", href: "/#more" },
 ].map((item) => ({ ...item, hasSub: !!subsections[item.id] }));
 ---
 
@@ -887,7 +887,7 @@ const navItems = [
       home: "Home", about: "About", domains: "Domains", events: "Events",
       projects: "Projects", "acm-w": "ACM-W", community: "Community",
       team: "Team", blogs: "Blogs", partners: "Partners", gallery: "Gallery",
-      contact: "Contact", more: "More",
+      contact: "Contact", more: "Resources",
     };
 
     /* ── Section tracking ── */
