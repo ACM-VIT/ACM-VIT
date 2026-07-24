@@ -29,7 +29,7 @@ const { division, members } = Astro.props;
   <div class="division-grid mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
     {
       members.map((m) => (
-        <div class="card-wrap" data-reveal>
+        <div class="card-wrap mx-auto w-[90%] sm:mx-0 sm:w-full" data-reveal>
           <BoardMemberCardSingular
             title={m.title}
             fullName={m.fullName}

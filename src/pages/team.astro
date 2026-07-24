@@ -255,6 +255,13 @@ const CURRENT_BOARD_YEAR = 2026;
       gap: 1.75rem;
     }
   }
+  /* Phones: match the board cassettes at ~90% width, centered. */
+  @media (max-width: 639px) {
+    .faculty-card {
+      width: 90%;
+      margin-inline: auto;
+    }
+  }
   :global(html[data-theme="light"]) .leader-title {
     color: #1a1a1a;
   }

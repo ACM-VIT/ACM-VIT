@@ -463,9 +463,28 @@ const { target, label = "SCROLL", mode = "hero" } = Astro.props;
     // The dock is shown only once the user is past the opening view AND hasn't
     // reached the footer yet.
     let revealed = false; // scrolled past the anchor / first screen
-    let atFooter = false; // footer has entered the viewport
-    const apply = () =>
-      (dock.dataset.cueDocked = revealed && !atFooter ? "true" : "false");
+    let atFooter = false; // footer's bottom reached (page end)
+    let nudging = false; // inside a [data-scroll-nudge] section
+    let activeNudge: Element | null = null; // the active nudge section
+    const apply = () => {
+      const docked = revealed && !atFooter;
+      dock.dataset.cueDocked = docked ? "true" : "false";
+      // Mirror the "keep scrolling" state to the mobile navbar, which owns the
+      // bottom lane ≤1024px (the dock itself is display:none there). Active only
+      // when the dock would be showing AND swelled. A section can override the
+      // copy/direction via data-nudge-label / data-nudge-dir (e.g. projects,
+      // which is a sideways swipe carousel on phones).
+      window.dispatchEvent(
+        new CustomEvent("cue:nudge", {
+          detail: {
+            active: docked && nudging,
+            label:
+              activeNudge?.getAttribute("data-nudge-label") || "Keep scrolling",
+            dir: activeNudge?.getAttribute("data-nudge-dir") || "y",
+          },
+        })
+      );
+    };
 
     // Reveal: hidden while the anchor (hero / first scene) is on screen - that
     // moment belongs to the bottom-centre hint. Show once it has scrolled away.
@@ -523,7 +542,10 @@ const { target, label = "SCROLL", mode = "hero" } = Astro.props;
             if (e.isIntersecting) active.add(e.target);
             else active.delete(e.target);
           }
-          dock.classList.toggle("is-nudging", active.size > 0);
+          nudging = active.size > 0;
+          activeNudge = nudging ? active.values().next().value : null;
+          dock.classList.toggle("is-nudging", nudging);
+          apply();
         },
         { rootMargin: "-35% 0px -35% 0px", threshold: 0 }
       );

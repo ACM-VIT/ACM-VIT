@@ -46,7 +46,7 @@ const facultyCoordinator = boardMembers.find(
     <!-- Faculty Coordinator - Featured Card -->
     {
       facultyCoordinator && (
-        <div class="flex justify-center self-center w-full max-w-[250px] sm:max-w-none sm:w-[60vw] md:w-[40vw] lg:w-[23vw] mb-12">
+        <div class="flex justify-center self-center w-[90%] max-w-none sm:w-[60vw] md:w-[40vw] lg:w-[23vw] mb-12">
           <div class="transition-all duration-300 hover:scale-105 hover:shadow-2xl self-center">
             <BoardMemberCardSingular
               title={facultyCoordinator.title}
@@ -69,7 +69,7 @@ const facultyCoordinator = boardMembers.find(
     >
       {
         mainBoardMembers.map((member) => (
-          <div class="w-full max-w-[250px] sm:max-w-none sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)] transition-all duration-300 hover:scale-105 hover:shadow-2xl self-center justify-center items-center flex">
+          <div class="w-[90%] max-w-none sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)] transition-all duration-300 hover:scale-105 hover:shadow-2xl self-center justify-center items-center flex">
             <BoardMemberCardSingular
               title={member.title}
               fullName={member.fullName}
@@ -89,7 +89,7 @@ const facultyCoordinator = boardMembers.find(
       acmwBoardMembers.length > 0 && (
         <div class="w-full lg:w-[70vw] self-center flex flex-wrap justify-center gap-4 mb-12">
           {acmwBoardMembers.map((member) => (
-            <div class="w-full max-w-[250px] md:max-w-none md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)] transition-all duration-300 hover:scale-105 hover:shadow-2xl self-center justify-center items-center flex">
+            <div class="w-[90%] max-w-none md:max-w-none md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)] transition-all duration-300 hover:scale-105 hover:shadow-2xl self-center justify-center items-center flex">
               <BoardMemberCardSingular
                 title={member.title}
                 fullName={member.fullName}
