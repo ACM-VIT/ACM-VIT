@@ -61,7 +61,7 @@ if (mediaCdnEnv) {
 // URL back to its origin-local path.
 const mediaCdnBase = mediaCdnEnv ? mediaCdnEnv.replace(/\/$/, "") : "";
 
-const title = "ACM-VIT";
+const title = pageTitle ? `${pageTitle} - ACM-VIT` : "ACM-VIT";
 const description =
   "ACM-VIT is the official student chapter of the Association for Computing Machinery at VIT Vellore, focused on building impactful technology, encouraging innovation, and growing a collaborative student community.";
 const isLandingPage = Astro.url.pathname === "/";

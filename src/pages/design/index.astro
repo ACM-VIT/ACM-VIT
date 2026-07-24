@@ -1,7 +1,7 @@
 ---
 export const prerender = true;
 import DesignLayout from "../../layouts/DesignLayout.astro";
-import DesignIntro from "../../components/design/DesignIntro.astro";
+import DesignWordIntro from "../../components/design/DesignWordIntro.astro";
 import { getAssetUrl } from "../../utils/cdn";
 
 const sections = [
@@ -73,7 +73,11 @@ const sections = [
 ---
 
 <DesignLayout title="Home" current="/design">
+<<<<<<< HEAD
   <DesignIntro />
+=======
+  <DesignWordIntro />
+>>>>>>> main
   <section class="ds-hero">
     <div class="ds-kicker">
       <span class="ds-kicker-pill">Design Guidelines</span>

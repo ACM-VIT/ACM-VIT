@@ -1,0 +1,390 @@
+---
+// Word-trace intro for the /design home. Blueprint construction guides draw in
+// faint first (grid, diagonals, circle, protractor ticks, node dots), then the
+// word "Design" traces on as a stroked outline and fills. Finally the whole
+// word morphs up onto the real header brand ("ACM-VIT Design") - measured live
+// so it lands on the actual "Design" glyphs - and the overlay clears.
+//
+// pathLength="1" -> no JS length math for the trace. Plays once per session and
+// skips prefers-reduced-motion, matching the cassette blueprint loader.
+
+const polar = (cx: number, cy: number, r: number, deg: number) => {
+  const a = ((deg - 90) * Math.PI) / 180;
+  return [cx + r * Math.cos(a), cy + r * Math.sin(a)] as const;
+};
+const nn = (v: number) => Math.round(v * 100) / 100;
+
+const C = { x: 800, y: 450 };
+
+// construction guides
+const hLines = [225, 342, 450, 558, 675].map((y, i) => ({
+  x1: 0, y1: y, x2: 1600, y2: y, d: 0.05 + i * 0.03, dash: y === 342 || y === 558,
+}));
+const vLines = [360, 520, 680, 800, 920, 1080, 1240].map((x, i) => ({
+  x1: x, y1: 0, x2: x, y2: 900, d: 0.12 + i * 0.025, dash: x === 800,
+}));
+const diagSeeds = [{ a: [120, 0], b: [1480, 900] }, { a: [1480, 0], b: [120, 900] }];
+const diagLines = diagSeeds.flatMap((s, si) =>
+  [-14, 0, 14].map((off, oi) => ({
+    x1: s.a[0] + off, y1: s.a[1], x2: s.b[0] + off, y2: s.b[1],
+    d: 0.28 + si * 0.06 + oi * 0.02,
+  })),
+);
+const bigCircles = [340, 270, 190].map((r, i) => ({ r, d: 0.18 + i * 0.05 }));
+const protractor = Array.from({ length: 48 }, (_, i) => {
+  const long = i % 2 === 0;
+  const [x1, y1] = polar(C.x, C.y, 344, i * 7.5);
+  const [x2, y2] = polar(C.x, C.y, 344 + (long ? 14 : 8), i * 7.5);
+  return { x1: nn(x1), y1: nn(y1), x2: nn(x2), y2: nn(y2) };
+});
+const nodes = [
+  [360, 342], [1240, 342], [360, 558], [1240, 558],
+  [800, 342], [800, 558], [C.x, C.y], [520, 450], [1080, 450],
+].map(([cx, cy]) => ({ cx, cy }));
+---
+
+<div class="dwi" id="design-word-intro" aria-hidden="true">
+  <!-- Full-bleed construction guides -->
+  <svg class="dwi-guides" viewBox="0 0 1600 900" fill="none" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g vector-effect="non-scaling-stroke">
+      {bigCircles.map((c) => (
+        <circle class="g gdot" style={`--d:${c.d}s`} cx={C.x} cy={C.y} r={c.r} pathLength="1" />
+      ))}
+      {hLines.map((l) => (
+        <line class:list={["g", l.dash && "gdash"]} style={`--d:${l.d}s`} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} pathLength="1" />
+      ))}
+      {vLines.map((l) => (
+        <line class:list={["g", l.dash && "gdash"]} style={`--d:${l.d}s`} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} pathLength="1" />
+      ))}
+      {diagLines.map((l) => (
+        <line class="g" style={`--d:${l.d}s`} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} pathLength="1" />
+      ))}
+      {protractor.map((t, i) => (
+        <line class="g" style={`--d:${0.42 + (i % 8) * 0.01}s`} x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2} pathLength="1" />
+      ))}
+      {nodes.map((nd) => (
+        <circle class="g gnode" style="--d:.55s" cx={nd.cx} cy={nd.cy} r="3" pathLength="1" />
+      ))}
+    </g>
+  </svg>
+
+  <!-- The word - traced, then morphed onto the header brand -->
+  <div class="dwi-wordwrap" id="dwi-wordwrap">
+    <svg class="dwi-word-svg" viewBox="0 0 760 220" fill="none" aria-label="Design">
+      <!-- Base word: laid out for measuring per-glyph positions + the morph
+           reference. Kept invisible; JS builds the visible per-letter traces
+           on top so the D draws first, then each following letter. -->
+      <text class="dwi-word dwi-word-base" id="dwi-word-base" x="380" y="168" text-anchor="middle">design</text>
+      <g class="dwi-letters" id="dwi-letters"></g>
+    </svg>
+  </div>
+
+  <p class="dwi-cap" id="dwi-cap"></p>
+</div>
+
+<style>
+  .dwi {
+    position: fixed;
+    inset: 0;
+    z-index: 2147483000;
+    display: grid;
+    place-items: center;
+    background: #080807;
+    overflow: hidden;
+  }
+  /* Overlay clears (bg + guides + caption fade) once the morph is underway. */
+  .dwi.is-clearing {
+    background: transparent;
+    transition: background 0.6s ease;
+    pointer-events: none;
+  }
+  .dwi.is-clearing .dwi-guides,
+  .dwi.is-clearing .dwi-cap {
+    opacity: 0;
+    transition: opacity 0.45s ease;
+  }
+  .dwi.is-done {
+    visibility: hidden;
+  }
+
+  .dwi-guides {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .dwi-wordwrap {
+    position: relative;
+    width: min(72vw, 760px);
+    /* origin top-left: the morph maps the word's top-left corner onto the
+       header brand's, so the measured translate is exact. */
+    transform-origin: top left;
+    will-change: transform;
+  }
+  .dwi-word-svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+  .dwi-word {
+    font-family: var(--ds-font, "DM Sans", "Helvetica Neue", Arial, sans-serif);
+    font-weight: 800;
+    font-size: 196px;
+    letter-spacing: -0.03em;
+  }
+  /* Base word only measures glyph positions + anchors the morph - never seen. */
+  .dwi-word-base {
+    fill: #fbfaf3;
+    fill-opacity: 0;
+    stroke: none;
+  }
+  /* Per-letter trace styles are global (see the is:global block below): the
+     letters are created in JS via createElementNS, so they never carry Astro's
+     scope attribute and scoped rules would miss them. */
+
+  /* Fallback (no SVG text metrics): draw the whole word as one trace. */
+  .dwi-word-base.dwi-fallback {
+    fill-opacity: 0;
+    stroke: #fbfaf3;
+    stroke-width: 1.4;
+    paint-order: stroke;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation:
+      dwi-draw 1.3s 1.35s cubic-bezier(0.55, 0, 0.2, 1) forwards,
+      dwi-fill 0.5s 2.5s ease forwards;
+  }
+
+  .g {
+    stroke: #cfe0ea;
+    stroke-width: 1;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    opacity: 0;
+    animation:
+      dwi-gdraw 0.6s var(--d, 0s) ease forwards,
+      dwi-gfade 0.5s var(--d, 0s) ease forwards;
+  }
+  .gdash { stroke-dasharray: 0.02 0.012; }
+  .gdot {
+    stroke-dasharray: 0.0016 0.006;
+    animation: dwi-gfade-dot 0.6s var(--d, 0s) ease forwards;
+  }
+  .gnode {
+    stroke: none; fill: #f95f4a;
+    stroke-dasharray: none; stroke-dashoffset: 0;
+    animation: dwi-gfade-node 0.4s var(--d, 0s) ease forwards;
+  }
+
+  @keyframes dwi-draw { to { stroke-dashoffset: 0; } }
+  @keyframes dwi-fill { to { fill-opacity: 1; } }
+  @keyframes dwi-gdraw { to { stroke-dashoffset: 0; } }
+  @keyframes dwi-gfade { from { opacity: 0; } to { opacity: 0.16; } }
+  @keyframes dwi-gfade-dot { from { opacity: 0; } to { opacity: 0.24; } }
+  @keyframes dwi-gfade-node { from { opacity: 0; } to { opacity: 0.6; } }
+
+  .dwi-cap {
+    position: absolute;
+    left: 50%;
+    bottom: 8%;
+    transform: translateX(-50%);
+    margin: 0;
+    width: min(88vw, 620px);
+    text-align: center;
+    text-wrap: balance;
+    font-family: var(--ds-font, "DM Sans", sans-serif);
+    font-size: 15px;
+    font-style: italic;
+    line-height: 1.5;
+    letter-spacing: 0.01em;
+    color: #b8b4ac;
+  }
+  .dwi-cap::after {
+    content: "";
+    display: inline-block;
+    width: 2px;
+    height: 1.05em;
+    margin-left: 3px;
+    vertical-align: -2px;
+    background: #f95f4a;
+    animation: dwi-blink 0.7s steps(1) infinite;
+  }
+  @keyframes dwi-blink { 50% { opacity: 0; } }
+
+  @media (prefers-reduced-motion: reduce) { .dwi { display: none; } }
+  @media (max-width: 640px) { .dwi-cap { font-size: 12px; } }
+</style>
+
+<!-- Global: JS-built per-letter traces (no Astro scope attr on created nodes). -->
+<style is:global>
+  .dwi-letter {
+    font-family: var(--ds-font, "DM Sans", "Helvetica Neue", Arial, sans-serif);
+    font-weight: 800;
+    font-size: 196px;
+    letter-spacing: normal;
+    fill: #fbfaf3;
+    fill-opacity: 0;
+    stroke: #fbfaf3;
+    stroke-width: 1.6;
+    paint-order: stroke;
+    /* pathLength isn't honored on <text> glyph outlines, so normalise by hand:
+       one dash longer than any heavy 196px letter's perimeter draws as a single
+       continuous line (not dots), revealed by the offset. */
+    stroke-dasharray: 1500;
+    stroke-dashoffset: 1500;
+    animation:
+      dwiLetterDraw 0.62s var(--d, 0s) cubic-bezier(0.55, 0, 0.2, 1) forwards,
+      dwiLetterFill 0.4s var(--fd, 0.5s) ease forwards;
+  }
+  @keyframes dwiLetterDraw { to { stroke-dashoffset: 0; } }
+  @keyframes dwiLetterFill { to { fill-opacity: 1; } }
+</style>
+
+<script>
+  const intro = document.getElementById("design-word-intro");
+  const wrap = document.getElementById("dwi-wordwrap");
+  const cap = document.getElementById("dwi-cap");
+
+  if (intro && wrap) {
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const seen = sessionStorage.getItem("ds-word-intro-seen");
+
+    if (reduce || seen) {
+      intro.remove();
+    } else {
+      sessionStorage.setItem("ds-word-intro-seen", "1");
+      document.documentElement.style.overflow = "hidden";
+
+      // ── Build per-letter traces: D draws first, then each next letter ──
+      // Measure each glyph's position off the invisible base, then lay one
+      // stroked <text> per letter on top, staggered by index.
+      const SVGNS = "http://www.w3.org/2000/svg";
+      const base = intro.querySelector<SVGTextElement>("#dwi-word-base");
+      const lettersG = intro.querySelector<SVGGElement>("#dwi-letters");
+      // All construction guides finish drawing by ~1.2s; hold a beat, THEN the
+      // letters play. (Guides: max --d ~0.55s + 0.6s draw = ~1.15s.)
+      const START = 1.55; // s - first letter (D) begins after the guides are in
+      const STEP = 0.34; // s - gap between letters
+      const DRAW = 0.62; // s - per-letter outline draw (matches CSS)
+      let lastLetterEnd = START + DRAW; // fallback timing seed
+
+      const buildLetters = () => {
+        if (!base || !lettersG || typeof base.getStartPositionOfChar !== "function")
+          return false;
+        const word = base.textContent || "";
+        try {
+          const positions: { t: SVGTextElement; d: number }[] = [];
+          for (let k = 0; k < word.length; k++) {
+            const p = base.getStartPositionOfChar(k);
+            const t = document.createElementNS(SVGNS, "text");
+            t.setAttribute("x", String(p.x));
+            t.setAttribute("y", String(p.y));
+            t.setAttribute("text-anchor", "start");
+            t.setAttribute("class", "dwi-letter");
+            t.textContent = word[k];
+            const d = START + k * STEP;
+            t.style.setProperty("--d", d + "s");
+            lettersG.appendChild(t);
+            positions.push({ t, d });
+            lastLetterEnd = d + DRAW;
+          }
+          // Letters stay as line-art outlines through the whole trace (like the
+          // original), then all fill together once the word is fully drawn.
+          const fillAt = lastLetterEnd + 0.18;
+          positions.forEach(({ t }) => t.style.setProperty("--fd", fillAt + "s"));
+          return true;
+        } catch {
+          return false;
+        }
+      };
+
+      if (!buildLetters()) {
+        // Metrics unavailable: fall back to a single whole-word trace.
+        base?.classList.add("dwi-fallback");
+        lastLetterEnd = 2.7 + 0.5;
+      }
+
+      // Hide the header's real "Design" for the whole intro so the word isn't
+      // shown up top until the traced one flies in and becomes it. visibility
+      // (not display) keeps its layout box, so the morph can still measure it.
+      const brandSub = document.querySelector<HTMLElement>(".ds-brand-sub");
+      if (brandSub) brandSub.style.visibility = "hidden";
+
+      // Caption types while the guides + word draw. (Steve Jobs)
+      const text =
+        "Design is not just what it looks like and feels like. Design is how it works.  - Steve Jobs";
+      let i = 0;
+      const type = () => {
+        if (cap && i <= text.length) {
+          cap.textContent = text.slice(0, i);
+          i++;
+          setTimeout(type, 30);
+        }
+      };
+      setTimeout(type, 700);
+
+      // Morph the traced word onto the header's real "Design" glyphs.
+      const morph = () => {
+        // The header brand reads "ACM-VIT Design"; .ds-brand-sub wraps "Design".
+        // Measure the base word (same geometry as the assembled letters).
+        const target = document.querySelector<HTMLElement>(".ds-brand-sub");
+        const svgText = base || intro.querySelector<SVGTextElement>(".dwi-word");
+        if (!target || !svgText) {
+          finish();
+          return;
+        }
+        // Measure the on-screen glyph boxes (both live in the DOM already).
+        const from = svgText.getBoundingClientRect();
+        const to = target.getBoundingClientRect();
+        const wrapR = wrap.getBoundingClientRect();
+        if (!from.width || !to.width) {
+          finish();
+          return;
+        }
+        const scale = to.height / from.height;
+        // wrap has transform-origin at its own top-left (0 0). Solve for the
+        // translate T so the traced word's top-left lands exactly on the
+        // target's, given the scale is about the wrap origin, not the glyphs:
+        //   final = wrapTL + T + scale*(glyphTL - wrapTL)
+        const dx = to.left - wrapR.left - scale * (from.left - wrapR.left);
+        const dy = to.top - wrapR.top - scale * (from.top - wrapR.top);
+
+        const TRIP = 0.9; // s - morph travel time
+        wrap.style.transition =
+          `transform ${TRIP}s cubic-bezier(0.65, 0, 0.35, 1)`;
+        wrap.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
+        // As the word flies up, the overlay clears so the page shows through.
+        intro.classList.add("is-clearing");
+        wrap.style.opacity = "1";
+
+        // On arrival: reveal the real header "Design" and cross-dissolve the
+        // flying word out, so the traced word *becomes* the header text.
+        setTimeout(() => {
+          if (brandSub) {
+            brandSub.style.transition = "opacity 0.2s ease";
+            brandSub.style.opacity = "0";
+            brandSub.style.visibility = "";
+            requestAnimationFrame(() => (brandSub.style.opacity = "1"));
+          }
+          wrap.style.transition += ", opacity 0.2s ease";
+          wrap.style.opacity = "0";
+        }, TRIP * 1000);
+
+        setTimeout(finish, TRIP * 1000 + 320);
+      };
+
+      const finish = () => {
+        document.documentElement.style.overflow = "";
+        if (brandSub) {
+          brandSub.style.visibility = "";
+          brandSub.style.opacity = "";
+          brandSub.style.transition = "";
+        }
+        intro.classList.add("is-done");
+        intro.remove();
+      };
+
+      // Morph once the word has fully drawn as line-art AND filled in.
+      // (fill starts lastLetterEnd+0.18, 0.4s dur -> done +0.58; add a beat.)
+      setTimeout(morph, (lastLetterEnd + 0.85) * 1000);
+    }
+  }
+</script>
