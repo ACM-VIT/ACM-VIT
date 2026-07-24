@@ -102,6 +102,13 @@ const chapters = [
     body: `Two hubs turning, one ribbon crossing the gap, oxide read back into sound. ${yearsSpan} years of engineering in something you hold in one hand - the compact cassette, alive.`,
   },
 ];
+
+// Side progress rail (same component as /sleeve-notes) - short label per stage.
+const railLabel: Record<string, string> = {
+  dust: "Start", hub: "Hub", tape: "Tape", reels: "Reels", shell: "Shell",
+  inside: "Inside", head: "Head", signal: "Signal", sound: "Sound", cassette: "Play",
+};
+const railSections = chapters.map((c) => ({ id: c.id, label: railLabel[c.id] || c.id }));
 ---
 
 <Layout pageTitle="Cassette" backHref="/" scrollCue={false}>
@@ -112,8 +119,27 @@ const chapters = [
       <div class="cass-grain"></div>
     </div>
 
-    <!-- Thin scroll-progress rail -->
-    <div class="cass-rail" aria-hidden="true"><span id="cass-rail-fill"></span></div>
+    <!-- Side progress rail (shared with /sleeve-notes: ticks + glowing fill) -->
+    <nav class="dg-rail" id="dgRail" aria-label="Section progress">
+      <span class="dg-rail-line" aria-hidden="true">
+        <span class="dg-rail-prog" id="dgRailFill"></span>
+      </span>
+      <ul class="dg-rail-list">
+        {
+          railSections.map((s, i) => (
+            <li>
+              <a href={`#${s.id}`} class="dg-rail-item" data-rail={s.id} aria-label={s.label}>
+                <span class="dg-rail-tick"></span>
+                <span class="dg-rail-label">
+                  <span class="dg-rail-num">{String(i + 1).padStart(2, "0")}</span>
+                  {s.label}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
 
     <!-- Scrollytelling chapters. One block per particle stage; copy is pinned
          and cross-faded by the engine as its stage settles. -->
@@ -126,6 +152,7 @@ const chapters = [
               "align-" + (c.align || "center"),
               { "is-hero": c.hero, "is-finale": c.finale },
             ]}
+            id={c.id}
             data-stage={i}
             data-cue-anchor={c.hero ? "" : undefined}
           >
@@ -218,27 +245,139 @@ const chapters = [
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
   }
 
-  /* ── Scroll rail ── */
-  .cass-rail {
+  /* ── Side progress rail (ported from /sleeve-notes .dg-rail) ── */
+  .dg-rail {
     position: fixed;
-    right: clamp(10px, 1.6vw, 22px);
-    top: 22vh;
-    bottom: 22vh;
-    width: 2px;
-    z-index: 3;
-    background: var(--line);
-    border-radius: 2px;
-    pointer-events: none;
+    left: 22px;
+    /* start below the fixed header + breadcrumbs so the top tick hits nothing */
+    top: 132px;
+    height: calc(100vh - 160px);
+    height: calc(100dvh - 160px);
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
   }
-  #cass-rail-fill {
+  .dg-rail-line {
     position: absolute;
-    left: -1px;
-    top: 0;
-    width: 4px;
+    left: 3px;
+    top: 10px;
+    bottom: 10px;
+    width: 1px;
+    background: rgba(254, 252, 217, 0.14);
+    overflow: hidden;
+  }
+  .dg-rail-prog {
+    position: absolute;
+    inset: 0 0 auto 0;
     height: 0%;
-    border-radius: 4px;
-    background: var(--accent);
-    box-shadow: 0 0 10px rgba(249, 95, 74, 0.5);
+    width: 100%;
+    background: #f95f4a;
+    transition: height 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+  .dg-rail-list {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    gap: 2px;
+  }
+  .dg-rail-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 4px 12px 4px 10px;
+    text-decoration: none;
+    border-radius: 100px;
+  }
+  .dg-rail-label {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    white-space: nowrap;
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 0.74rem;
+    font-weight: 500;
+    color: rgba(254, 252, 217, 0.5);
+    max-width: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: max-width 0.28s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.25s ease, transform 0.25s ease, color 0.25s ease;
+  }
+  .dg-rail-num {
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.58rem;
+    color: rgba(254, 252, 217, 0.35);
+  }
+  .dg-rail-tick {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    flex: none;
+    background: rgba(254, 252, 217, 0.28);
+    transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .dg-rail:hover .dg-rail-label {
+    max-width: 160px;
+    opacity: 1;
+    transform: none;
+  }
+  .dg-rail-item:hover .dg-rail-label {
+    color: rgba(254, 252, 217, 0.85);
+  }
+  .dg-rail-item:hover .dg-rail-tick {
+    background: rgba(254, 252, 217, 0.7);
+    transform: scale(1.2);
+  }
+  .dg-rail-item.is-done .dg-rail-tick {
+    background: rgba(249, 95, 74, 0.55);
+  }
+  .dg-rail-item.is-active {
+    background: rgba(13, 14, 13, 0.82);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  }
+  .dg-rail-item.is-active .dg-rail-label {
+    max-width: 160px;
+    opacity: 1;
+    transform: none;
+    color: #fefcd9;
+  }
+  .dg-rail-item.is-active .dg-rail-num {
+    color: #f95f4a;
+  }
+  .dg-rail-item.is-active .dg-rail-tick {
+    background: #f95f4a;
+    transform: scale(1.25);
+    box-shadow: 0 0 8px rgba(249, 95, 74, 0.8);
+  }
+  :global(html[data-theme="light"]) .dg-rail-line {
+    background: rgba(26, 26, 26, 0.14);
+  }
+  :global(html[data-theme="light"]) .dg-rail-label {
+    color: rgba(26, 26, 26, 0.5);
+  }
+  :global(html[data-theme="light"]) .dg-rail-item:hover .dg-rail-label,
+  :global(html[data-theme="light"]) .dg-rail-item.is-active .dg-rail-label {
+    color: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .dg-rail-tick {
+    background: rgba(26, 26, 26, 0.28);
+  }
+  :global(html[data-theme="light"]) .dg-rail-item.is-active {
+    background: rgba(245, 237, 228, 0.95);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  }
+  /* hide the rail when there isn't room beside the centered column */
+  @media (max-width: 1200px) {
+    .dg-rail {
+      display: none;
+    }
   }
 
   /* ── Chapters ── */
@@ -442,9 +581,6 @@ const chapters = [
     .cass-rule {
       margin-left: auto;
       margin-right: auto;
-    }
-    .cass-rail {
-      display: none;
     }
   }
 
@@ -1364,4 +1500,48 @@ const chapters = [
       el.textContent = w.charAt(0).toUpperCase() + w.slice(1);
     }
   });
+</script>
+
+<script>
+  // ── Side rail scroll-spy (same behaviour as /sleeve-notes) ──
+  function initCassetteRail() {
+    const rail = document.getElementById("dgRail");
+    const fill = document.getElementById("dgRailFill");
+    if (!rail) return;
+    const items = Array.from(rail.querySelectorAll<HTMLElement>(".dg-rail-item"));
+    const sections = items
+      .map((it) => document.getElementById(it.getAttribute("data-rail") || ""))
+      .filter((el): el is HTMLElement => !!el);
+    if (!sections.length) return;
+
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const line = window.innerHeight * 0.32;
+      let active = 0;
+      sections.forEach((sec, i) => {
+        if (sec.getBoundingClientRect().top <= line) active = i;
+      });
+      items.forEach((it, i) => {
+        it.classList.toggle("is-active", i === active);
+        it.classList.toggle("is-done", i < active);
+      });
+      if (fill) fill.style.height = `${((active + 1) / items.length) * 100}%`;
+    };
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    update();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initCassetteRail);
+  } else {
+    initCassetteRail();
+  }
 </script>

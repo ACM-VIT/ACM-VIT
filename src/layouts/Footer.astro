@@ -297,24 +297,22 @@ const footerColumnsHtml = footerNav
         <div class="footer-video-tint" aria-hidden="true"></div>
         <div class="footer-video-fade" aria-hidden="true"></div>
         <canvas class="footer-rain" aria-hidden="true"></canvas>
-
-        <!-- Top invite: walk through how a cassette works -->
-        <a href="/cassette" class="footer-journey" aria-label="See the journey of a cassette">
-          <span class="footer-journey-icon" aria-hidden="true">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="5" width="20" height="14" rx="2" />
-              <circle cx="8" cy="12" r="2" />
-              <circle cx="16" cy="12" r="2" />
-              <path d="M10 12h4" />
-            </svg>
-          </span>
-          <span class="footer-journey-text">See the journey of a cassette</span>
-          <span class="footer-journey-arrow" aria-hidden="true">&rarr;</span>
-        </a>
-
         <span class="footer-wordmark">because technology matters</span>
-        <div class="footer-acm-block" aria-hidden="true">
-          <span class="footer-acm-mark">acm</span>
+        <div class="footer-acm-block">
+          <span class="footer-acm-mark" aria-hidden="true">acm</span>
+          <!-- Invite to the /cassette walkthrough, tucked under the acm mark -->
+          <a href="/cassette" class="footer-journey footer-journey--acm" aria-label="See the journey of a cassette">
+            <span class="footer-journey-icon" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="5" width="20" height="14" rx="2" />
+                <circle cx="8" cy="12" r="2" />
+                <circle cx="16" cy="12" r="2" />
+                <path d="M10 12h4" />
+              </svg>
+            </span>
+            <span class="footer-journey-text">See the journey of a cassette</span>
+            <span class="footer-journey-arrow" aria-hidden="true">&rarr;</span>
+          </a>
         </div>
 
         <!-- Copyright pinned bottom-left -->
@@ -711,6 +709,17 @@ const footerColumnsHtml = footerNav
     padding: 0.38rem 0.8rem;
     font-size: 0.7rem;
   }
+  /* Desktop: docked under the acm mark (flows in the acm block, not absolute) */
+  .footer-journey--acm {
+    position: static;
+    transform: none;
+    align-self: center;
+    margin-top: 1rem;
+    pointer-events: auto;
+  }
+  .footer-journey--acm:hover {
+    transform: translateY(-2px);
+  }
 
   /* Big 'acm' wordmark, right side of footer video */
   .footer-acm-block {
@@ -718,7 +727,10 @@ const footerColumnsHtml = footerNav
     right: 10rem;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 3;
+    /* Above the z-20 bottom overlay so the journey link under the mark is
+       clickable; the block itself is pointer-events:none, only the link is
+       auto, so it doesn't cover the overlay's own content. */
+    z-index: 25;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
