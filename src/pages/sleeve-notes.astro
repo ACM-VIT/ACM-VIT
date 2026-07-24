@@ -7,6 +7,7 @@ import SectionHeading from "../components/ui/SectionHeading.astro";
 import FillButton from "../components/ui/FillButton.astro";
 import AnimatedButton from "../components/ui/AnimatedButton.astro";
 import CassetteTile from "../components/ui/CassetteTile.astro";
+import BoardMemberCardSingular from "../components/ui/BoardMemberCardSingular.astro";
 import { getAssetUrl } from "../utils/cdn";
 
 type Swatch = { name: string; hex: string; note: string };
@@ -29,6 +30,132 @@ const baseColors: Swatch[] = [
   { name: "Charcoal (light text)", hex: "#1A1A1A", note: "Primary text on light mode." },
 ];
 
+// Domain accents - the six colors that key the domain pages, the calendar
+// cassettes, and the nav dots. Distinct from the marketing palette above.
+const domainColors: Swatch[] = [
+  { name: "Tech", hex: "#9B51E0", note: "App Dev, Web, FOSS, DevOps." },
+  { name: "Design", hex: "#FF0054", note: "UI/UX, motion, 3D." },
+  { name: "Research", hex: "#135DE2", note: "AI/ML, blockchain, quantum." },
+  { name: "Management", hex: "#00B4B4", note: "Operations & coordination." },
+  { name: "Competitive Coding", hex: "#42CD9D", note: "Codeforces, ICPC, C++." },
+  { name: "Blog / ACM orange", hex: "#F95F4A", note: "Blog posts & shared chapter surfaces." },
+];
+
+// The three PolySans cuts the site actually renders in, plus the editorial serif.
+const typeFamilies = [
+  {
+    id: "standard",
+    css: "PolySans Trial",
+    tag: "Display / Headings / UI",
+    sample: "PolySans",
+    desc: "The Standard cut. Every heading, button label, and nav item. Bold, tight tracking, uppercase for titles.",
+    files: "PolySans-Slim / Neutral / Median / Bulky .otf",
+  },
+  {
+    id: "mono",
+    css: "PolySans Mono",
+    tag: "Labels / Tags / Running copy",
+    sample: "PolySans Mono - tags, chips, code",
+    desc: "The Mono cut. Wide-tracked micro-labels, chips, timestamps, and the long-form copy inside guides like this one.",
+    files: "PolySans-*Mono.otf",
+  },
+  {
+    id: "wide",
+    css: "PolySans Wide",
+    tag: "Wide - oversized moments only",
+    sample: "WIDE LOAD",
+    desc: "The Wide cut. Reserved for a handful of oversized display beats. Never body copy - it eats horizontal space.",
+    files: "PolySans-*Wide.otf",
+  },
+  {
+    id: "serif",
+    css: "Cormorant Garamond",
+    tag: "Editorial accent - used sparingly",
+    sample: "Cormorant Garamond",
+    desc: "A high-contrast serif for one-off editorial pages (Achievements). A guest, never a default.",
+    files: "Google Fonts (OFL)",
+  },
+];
+
+// Four weights of the Standard cut - the ladder used across the chrome.
+const typeWeights = [
+  { w: 300, name: "Slim", use: "Thin display accents" },
+  { w: 400, name: "Neutral", use: "Body & default UI" },
+  { w: 500, name: "Median", use: "Nav labels, emphasis" },
+  { w: 700, name: "Bulky", use: "Headings, wordmark weight" },
+];
+
+// Glyph set for the interactive character map - the full Latin set the
+// PolySans cuts ship with, mirrored from the /design typography specimen.
+const glyphs = [
+  ..."ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+  ..."ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜÝ",
+  ..."abcdefghijklmnopqrstuvwxyz",
+  ..."àáâãäåæçèéêëìíîïñòóôõöøùúûüýÿ",
+  ..."0123456789",
+  ..."&@#$€.,;:!?'\"()[]{}/\\%+-=*·•…",
+];
+
+// ── Cassette variants (section 04) ──────────────────────────────────────────
+// Blank label templates - no artwork, just the tape in a brand color.
+const blankTapes = [
+  { src: "/cassettes/cassettes-cassette-layout-orange.webp", name: "Orange", use: "Default board / member cards" },
+  { src: "/cassettes/cassettes-cassette-layout-pink.webp", name: "Pink", use: "ACM-W members & leads" },
+  { src: "/cassettes/cassettes-cassette-layout-white.webp", name: "White", use: "Gallery fallback art" },
+];
+
+// The three "About" tapes in the About section + nav dropdown.
+const aboutTapes = [
+  { src: "/about/about-acmvit-cassette.webp", name: "ACM-VIT", use: "Chapter mission tile" },
+  { src: "/about/about-vit-cassette.webp", name: "VIT", use: "University tile" },
+  { src: "/about/about-acm-cassette.webp", name: "ACM Global", use: "Global society tile" },
+];
+
+// Bespoke artwork tapes - one drawn per item. Samples only.
+const sampleEvents = [
+  "/events/events-c2c-cassette.webp",
+  "/events/events-cryptic-hunt-cassette.webp",
+  "/events/events-inspiher-cassette.webp",
+  "/events/events-forktober-cassette.webp",
+  "/events/events-neural-hack-cassette.webp",
+];
+const sampleProjects = [
+  "/projects/cassettes/projects-cassettes-conclave.svg",
+  "/projects/cassettes/projects-cassettes-wenvy.svg",
+  "/projects/cassettes/projects-cassettes-ocs-26.webp",
+];
+const sampleMerch = [
+  "/merch/merch-cassette-2026.webp",
+  "/merch/merch-cassette-2025.webp",
+  "/merch/merch-cassette-2024.webp",
+];
+
+// Domain cassettes for the calendar legend demo (also reused in section 04).
+const calDomains = [
+  { label: "Tech", color: "#9B51E0", cassette: "/cassettes/cassettes-cassette-tech.webp" },
+  { label: "Design", color: "#FF0054", cassette: "/cassettes/cassettes-cassette-design.webp" },
+  { label: "Research", color: "#135DE2", cassette: "/cassettes/cassettes-cassette-research.webp" },
+  { label: "Management", color: "#00B4B4", cassette: "/cassettes/cassettes-cassette-management.webp" },
+  { label: "Competitive Coding", color: "#42CD9D", cassette: "/cassettes/cassettes-cassette-cc.webp" },
+];
+
+// Side progress rail - the cassette strip. Order must match section order.
+const railSections = [
+  { id: "homage", label: "Homage" },
+  { id: "giants", label: "Giants" },
+  { id: "marks", label: "Marks" },
+  { id: "color", label: "Color" },
+  { id: "cassettes", label: "Cassettes" },
+  { id: "type", label: "Type" },
+  { id: "charmap", label: "Char Map" },
+  { id: "nav", label: "Navigation" },
+  { id: "buttons", label: "Buttons" },
+  { id: "cards", label: "Components" },
+  { id: "calendar", label: "Calendar" },
+  { id: "motion", label: "Motion" },
+  { id: "voice", label: "Voice" },
+];
+
 const doList = [
   "Dry, self-aware wit - we can laugh at ourselves",
   "Cassette & mixtape metaphors where they fit naturally",
@@ -46,14 +173,31 @@ const dontList = [
 ];
 ---
 
-<Layout pageTitle="Design Guide" backHref="/" bleedBg>
+<Layout pageTitle="Sleeve Notes" backHref="/" bleedBg>
   <main class="dg-page relative w-full overflow-hidden">
     <div class="dg-glow" aria-hidden="true"></div>
-    <div class="dg-grid-bg" aria-hidden="true">
-      <span class="dg-v" style="left: 20%"></span>
-      <span class="dg-v" style="left: 50%"></span>
-      <span class="dg-v" style="left: 80%"></span>
-    </div>
+
+    <!-- Side progress rail -->
+    <nav class="dg-rail" id="dgRail" aria-label="Section progress">
+      <span class="dg-rail-line" aria-hidden="true">
+        <span class="dg-rail-prog" id="dgRailFill"></span>
+      </span>
+      <ul class="dg-rail-list">
+        {
+          railSections.map((s, i) => (
+            <li>
+              <a href={`#${s.id}`} class="dg-rail-item" data-rail={s.id} aria-label={s.label}>
+                <span class="dg-rail-tick"></span>
+                <span class="dg-rail-label">
+                  <span class="dg-rail-num">{String(i + 1).padStart(2, "0")}</span>
+                  {s.label}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
 
     <div class="dg-inner relative z-10 mx-auto w-full max-w-5xl px-5 pb-28 pt-32 sm:px-8">
       <SectionHeading
@@ -119,28 +263,54 @@ const dontList = [
         </p>
       </section>
 
+      <!-- ─────────── Standing on Giants ─────────── -->
+      <section class="dg-section" id="giants" data-reveal>
+        <header class="dg-head">
+          <span class="dg-num">02</span>
+          <h2 class="dg-title">Standing on Giants</h2>
+        </header>
+        <p class="dg-lede">
+          Look closely at the cassette on any Area of Interest page and the label art is not decoration. Each tape is
+          set against the headquarters of a company that pushed that field forward - Apple Park behind App
+          Development, the Googleplex behind Web, and so on across Tech, Design, and Research. A quiet nod to the work
+          we build on top of.
+        </p>
+        <a
+          href="/sleeve-notes/giants"
+          class="dg-system-link"
+          aria-label="See every Area of Interest cassette and the company behind it"
+        >
+          <span class="dg-system-link-text">
+            <strong>See every cassette and the giant behind it</strong>
+            A full breakdown of which headquarters hides on each Area of Interest tape, and what that company did for
+            its field.
+          </span>
+          <span class="dg-system-link-cta">Open the collection →</span>
+        </a>
+      </section>
+
       <!-- ─────────── Brand Marks ─────────── -->
       <section class="dg-section" id="marks" data-reveal>
         <header class="dg-head">
-          <span class="dg-num">02</span>
+          <span class="dg-num">03</span>
           <h2 class="dg-title">Brand Marks</h2>
         </header>
 
         <div class="dg-marks-grid">
           <div class="dg-mark-card dg-mark-dark">
-            <img src={getAssetUrl("/logos/logos-acm-topleft.webp")} alt="ACM-VIT primary logo" loading="lazy" decoding="async" />
+            <img src="/logos/logos-acm-topleft.webp" alt="ACM-VIT primary logo" loading="lazy" decoding="async" />
             <span class="dg-mark-label">Primary mark - on dark</span>
           </div>
           <div class="dg-mark-card dg-mark-light">
-            <img src={getAssetUrl("/logos/logos-acm-logo-black.webp")} alt="ACM-VIT logo, black variant" loading="lazy" decoding="async" />
+            <img src="/logos/logos-acm-logo-black.webp" alt="ACM-VIT logo, black variant" loading="lazy" decoding="async" />
             <span class="dg-mark-label">Black variant - on light / print</span>
           </div>
           <div class="dg-mark-card dg-mark-dark">
-            <img src={getAssetUrl("/logos/logos-vit.webp")} alt="VIT logo, paired mark" loading="lazy" decoding="async" />
+            <img src="/logos/logos-vit.webp" alt="VIT logo, paired mark" loading="lazy" decoding="async" />
             <span class="dg-mark-label">VIT pairing - homepage only</span>
           </div>
           <div class="dg-mark-card dg-mark-dark">
-            <img src={getAssetUrl("/logos/logos-acmw-logo.webp")} alt="ACM-W sub-brand logo" loading="lazy" decoding="async" />
+            <img src="/logos/logos-acmw-logo.webp" alt="ACM-W sub-brand logo" loading="lazy" decoding="async" />
             <span class="dg-mark-label">ACM-W - sub-brand mark</span>
           </div>
         </div>
@@ -168,7 +338,7 @@ const dontList = [
       <!-- ─────────── Color System ─────────── -->
       <section class="dg-section" id="color" data-reveal>
         <header class="dg-head">
-          <span class="dg-num">03</span>
+          <span class="dg-num">04</span>
           <h2 class="dg-title">Color System</h2>
         </header>
         <p class="dg-lede">
@@ -205,77 +375,552 @@ const dontList = [
             ))
           }
         </div>
+
+        <p class="dg-lede dg-lede-tight">
+          Domain accents - the same palette, assigned. Each domain owns one
+          fixed color that keys its page, its calendar cassette, its nav dot,
+          and the event legend. It never gets swapped or reassigned.
+        </p>
+        <div class="dg-domain-map">
+          {
+            domainColors.map((c) => (
+              <button class="dg-domain-chip" type="button" data-copy-hex={c.hex} style={`--sw: ${c.hex}`}>
+                <span class="dg-domain-dot"></span>
+                <span class="dg-domain-name">{c.name}</span>
+                <span class="dg-domain-hex">{c.hex}</span>
+              </button>
+            ))
+          }
+        </div>
+      </section>
+
+      <!-- ─────────── Cassette Variants ─────────── -->
+      <section class="dg-section" id="cassettes" data-reveal>
+        <header class="dg-head">
+          <span class="dg-num">05</span>
+          <h2 class="dg-title">Cassette Variants</h2>
+        </header>
+        <p class="dg-lede">
+          The cassette is the site's load-bearing object - the shape the whole
+          brand hangs on. Every tape shares the same silhouette (corner screws,
+          a cream sticker, twin reels) and is then restyled per context. They
+          come in two kinds: <strong>pre-drawn artwork</strong> shipped as image
+          files, and <strong>code-drawn</strong> tapes rendered live in the
+          browser. Below is every family, what it is, and where it runs.
+        </p>
+
+        <p class="dg-cass-cap">
+          Domain tapes - a fixed, pre-drawn tape per domain. The label art is
+          locked to that domain's accent and never recolored, so a domain reads
+          the same everywhere it appears.
+        </p>
+        <div class="dg-cass-grid">
+          {
+            calDomains.map((d) => (
+              <figure class="dg-cass" style={`--sw:${d.color}`}>
+                <img src={d.cassette} alt={`${d.label} cassette`} loading="lazy" decoding="async" />
+                <figcaption>{d.label}</figcaption>
+              </figure>
+            ))
+          }
+        </div>
+        <p class="dg-cass-where">Used on: domain landing pages, the calendar legend & event cassettes, and the Domains nav dropdown.</p>
+
+        <p class="dg-cass-cap">
+          Blank label templates - a plain tape in a flat brand color with an
+          empty sticker, meant as a canvas. Other components (team cards,
+          gallery art) drop content on top of these rather than drawing a tape
+          from scratch.
+        </p>
+        <div class="dg-cass-grid">
+          {
+            blankTapes.map((t) => (
+              <figure class="dg-cass">
+                <img src={t.src} alt={`${t.name} blank cassette`} loading="lazy" decoding="async" />
+                <figcaption>{t.name}</figcaption>
+                <span class="dg-cass-sub">{t.use}</span>
+              </figure>
+            ))
+          }
+        </div>
+
+        <p class="dg-cass-cap">
+          Team tapes - the board & member cards. Each is a blank template with a
+          headshot, name, and role composited on, so every person becomes their
+          own tape in the team wall.
+        </p>
+        <div class="dg-team-grid">
+          <div class="dg-team-card">
+            <BoardMemberCardSingular
+              title=""
+              fullName="Member Name"
+              position="Chairperson"
+              imageUrl=""
+            />
+          </div>
+          <div class="dg-team-card">
+            <BoardMemberCardSingular
+              title=""
+              fullName="Member Name"
+              position="ACM-W Lead"
+              imageUrl=""
+              isW={true}
+            />
+          </div>
+        </div>
+        <p class="dg-cass-where">The team page lays a headshot and name over the orange tape (pink for ACM-W), caps it with the black mark, and adds social links. No photo yet? It falls back to this name-only cut.</p>
+
+        <p class="dg-cass-cap">
+          About tapes - three purpose-drawn tapes for the "who we are" story:
+          the chapter, the university, and the global society. They only appear
+          in the About section and its nav dropdown.
+        </p>
+        <div class="dg-cass-grid">
+          {
+            aboutTapes.map((t) => (
+              <figure class="dg-cass">
+                <img src={t.src} alt={`${t.name} cassette`} loading="lazy" decoding="async" />
+                <figcaption>{t.name}</figcaption>
+                <span class="dg-cass-sub">{t.use}</span>
+              </figure>
+            ))
+          }
+        </div>
+
+        <p class="dg-cass-cap">
+          Partner tape - a single shared tape used across the Partners section.
+          It comes as a filled version and a line-only outline (its empty /
+          hover state), retinted to each partner's brand.
+        </p>
+        <div class="dg-cass-grid">
+          <figure class="dg-cass">
+            <img src="/cassettes/cassettes-partner-cassette.webp" alt="Partner cassette" loading="lazy" decoding="async" />
+            <figcaption>Partner</figcaption>
+            <span class="dg-cass-sub">Partners section & partner cards</span>
+          </figure>
+          <figure class="dg-cass">
+            <img src="/cassettes/cassettes-partner-outline.svg" alt="Partner outline cassette" loading="lazy" decoding="async" />
+            <figcaption>Partner outline</figcaption>
+            <span class="dg-cass-sub">Empty / hover state</span>
+          </figure>
+        </div>
+
+        <p class="dg-cass-cap">
+          Bespoke artwork - the biggest family. Every event, project, and merch
+          drop gets its own one-off tape, hand-designed with unique label art.
+          These carry the most personality; the rest of the system stays neutral
+          so these can shine.
+        </p>
+        <div class="dg-cass-bespoke">
+          <div class="dg-cass-bset">
+            <div class="dg-cass-brow">
+              {sampleEvents.map((s) => (
+                <img src={s} alt="Event cassette" loading="lazy" decoding="async" />
+              ))}
+            </div>
+            <span class="dg-cass-sub">Events - 30+ tapes, one per event. Event pages + Events nav & landing rail.</span>
+          </div>
+          <div class="dg-cass-bset">
+            <div class="dg-cass-brow">
+              {sampleProjects.map((s) => (
+                <img src={s} alt="Project cassette" loading="lazy" decoding="async" />
+              ))}
+            </div>
+            <span class="dg-cass-sub">Projects - one tape per project. Project pages + Projects nav.</span>
+          </div>
+          <div class="dg-cass-bset">
+            <div class="dg-cass-brow">
+              {sampleMerch.map((s) => (
+                <img src={s} alt="Merch cassette" loading="lazy" decoding="async" />
+              ))}
+            </div>
+            <span class="dg-cass-sub">Merch - one collectible tape per drop year (2023 →).</span>
+          </div>
+        </div>
+
+        <p class="dg-cass-cap">
+          Drawn & interactive - not images at all. These tapes are built in code
+          (CSS + SVG) so they can move, recolor, and respond: reels spin, labels
+          swap, and one is fully customizable.
+        </p>
+        <div class="dg-card-notes">
+          <div class="dg-motion-card">
+            <p class="dg-motion-title">Cassette Tile</p>
+            <p class="dg-motion-body">The CSS-drawn tile in the landing "More" grid and card layouts. Retints from a single <code>accent</code> prop; reels spin on hover.</p>
+          </div>
+          <div class="dg-motion-card">
+            <p class="dg-motion-title">Cassette Player</p>
+            <p class="dg-motion-body">The floating tape deck. A live SVG cassette with spinning reels, cross-tab synced over <code>BroadcastChannel</code>.</p>
+          </div>
+          <div class="dg-motion-card">
+            <p class="dg-motion-title">Cassette Builder</p>
+            <p class="dg-motion-body">The <a href="/cassette-builder">customizer</a> - a fully parametric SVG tape you recolor and label, then export.</p>
+          </div>
+          <div class="dg-motion-card">
+            <p class="dg-motion-title">Calendar modal</p>
+            <p class="dg-motion-body">Opening a calendar event flips it into a hand-drawn SVG cassette with A-SIDE label art keyed to the domain color.</p>
+          </div>
+        </div>
       </section>
 
       <!-- ─────────── Typography ─────────── -->
       <section class="dg-section" id="type" data-reveal>
         <header class="dg-head">
-          <span class="dg-num">04</span>
+          <span class="dg-num">06</span>
           <h2 class="dg-title">Typography</h2>
         </header>
+        <p class="dg-lede">
+          The site renders in <strong style="color:inherit">PolySans</strong> -
+          three cuts of one superfamily. The <em>Standard</em> cut carries every
+          heading and control, <em>Mono</em> handles labels and long copy, and
+          <em>Wide</em> shows up only for oversized display beats. Cormorant
+          Garamond is a rare editorial guest. (The <a href="/design/typography">brand
+          guidelines</a> spec DM Sans as the system face - PolySans is the
+          website's own on-screen voice.)
+        </p>
 
-        <div class="dg-type-specimen">
-          <span class="dg-type-tag">Display / Headings</span>
-          <p class="dg-type-sample dg-type-trial">PolySans</p>
-          <p class="dg-type-desc">Bold, uppercase, tight tracking. Used for every heading and button label site-wide.</p>
-        </div>
+        {
+          typeFamilies.map((f) => (
+            <div class="dg-type-specimen">
+              <span class="dg-type-tag">{f.tag}</span>
+              <p class={`dg-type-sample dg-type-${f.id}`} style={`font-family:"${f.css}", sans-serif`}>{f.sample}</p>
+              <p class="dg-type-desc">{f.desc}</p>
+              <span class="dg-type-file">{f.files}</span>
+            </div>
+          ))
+        }
 
-        <div class="dg-type-specimen">
-          <span class="dg-type-tag">Labels / Body / Mono</span>
-          <p class="dg-type-sample dg-type-mono">PolySans Mono - tags, chips, running copy</p>
-          <p class="dg-type-desc">Wide letter-spacing for labels and tags; comfortable line-height for longer body copy.</p>
-        </div>
-
-        <div class="dg-type-specimen">
-          <span class="dg-type-tag">Editorial accent - used sparingly</span>
-          <p class="dg-type-sample dg-type-serif">Cormorant Garamond</p>
-          <p class="dg-type-desc">Reserved for one-off editorial moments, like the Achievements page. Not a default.</p>
-        </div>
-      </section>
-
-      <!-- ─────────── Voice & Tone ─────────── -->
-      <section class="dg-section" id="voice" data-reveal>
-        <header class="dg-head">
-          <span class="dg-num">05</span>
-          <h2 class="dg-title">Voice &amp; Tone</h2>
-        </header>
-        <p class="dg-lede">Write like a person who's actually building this stuff, not marketing it.</p>
-
-        <div class="dg-rules dg-rules-voice">
-          <div class="dg-rule-col">
-            <p class="dg-rule-label dg-rule-good">Do</p>
-            <ul>{doList.map((d) => <li>{d}</li>)}</ul>
-          </div>
-          <div class="dg-rule-col">
-            <p class="dg-rule-label dg-rule-bad">Don't</p>
-            <ul>{dontList.map((d) => <li>{d}</li>)}</ul>
-          </div>
+        <p class="dg-lede dg-lede-tight">Weight ladder - the Standard cut.</p>
+        <div class="dg-weight-grid">
+          {
+            typeWeights.map((w) => (
+              <div class="dg-weight-card">
+                <span class="dg-weight-aa" style={`font-weight:${w.w}`}>Aa</span>
+                <span class="dg-weight-name">{w.name} · {w.w}</span>
+                <span class="dg-weight-use">{w.use}</span>
+              </div>
+            ))
+          }
         </div>
       </section>
 
-      <!-- ─────────── Components ─────────── -->
-      <section class="dg-section" id="components" data-reveal>
+      <!-- ─────────── Character Map ─────────── -->
+      <section class="dg-section" id="charmap" data-reveal>
         <header class="dg-head">
-          <span class="dg-num">06</span>
-          <h2 class="dg-title">Components</h2>
+          <span class="dg-num">07</span>
+          <h2 class="dg-title">Character Map</h2>
         </header>
+        <p class="dg-lede">
+          The full Latin set each cut ships with. Switch the family, then hover
+          any glyph to inspect it live against the vertical metrics - cap
+          height, x-height, baseline, and descender - measured straight from the
+          font file.
+        </p>
 
-        <div class="dg-component-block">
-          <span class="dg-component-label">Fill Button - primary action</span>
-          <div class="dg-component-stage">
-            <FillButton label="Explore Projects" href="/projects" />
+        <div class="dg-charmap">
+          <div class="dg-cm-stage">
+            <div class="dg-cm-fonts" role="tablist" aria-label="Typeface">
+              <button class="dg-cm-font is-on" data-font="PolySans Trial" data-lbl="PolySans Standard" role="tab" aria-selected="true" type="button">Standard</button>
+              <button class="dg-cm-font" data-font="PolySans Mono" data-lbl="PolySans Mono" role="tab" aria-selected="false" type="button">Mono</button>
+              <button class="dg-cm-font" data-font="PolySans Wide" data-lbl="PolySans Wide" role="tab" aria-selected="false" type="button">Wide</button>
+              <button class="dg-cm-font" data-font="Cormorant Garamond" data-lbl="Cormorant" role="tab" aria-selected="false" type="button">Serif</button>
+            </div>
+            <svg id="dg-cm-svg" role="img" aria-label="Glyph specimen with vertical metrics" preserveAspectRatio="xMidYMid meet"></svg>
+            <div class="dg-cm-tag">
+              <span id="dg-cm-current">H</span>
+              <span class="dg-cm-fam" id="dg-cm-fam">PolySans</span>
+            </div>
+            <div class="dg-cm-toggle" role="tablist" aria-label="Specimen mode">
+              <button class="dg-cm-tog is-on" data-mode="solid" role="tab" aria-selected="true" type="button">Solid</button>
+              <button class="dg-cm-tog" data-mode="anchors" role="tab" aria-selected="false" type="button">Outline</button>
+            </div>
+          </div>
+          <div class="dg-cm-grid" id="dg-cm-grid" role="listbox" aria-label="Glyphs">
+            {
+              glyphs.map((ch) => (
+                <button
+                  class:list={["dg-cm-cell", ch === "H" && "is-active"]}
+                  data-g={ch}
+                  type="button"
+                  role="option"
+                  aria-selected={ch === "H" ? "true" : "false"}
+                >
+                  {ch}
+                </button>
+              ))
+            }
           </div>
         </div>
+      </section>
+
+      <!-- ─────────── Navigation ─────────── -->
+      <section class="dg-section" id="nav" data-reveal>
+        <header class="dg-head">
+          <span class="dg-num">08</span>
+          <h2 class="dg-title">Navigation</h2>
+        </header>
+        <p class="dg-lede">
+          The header is a floating liquid-glass pill, not a bar. At rest it is a
+          row of labelled dots; hover or open it and the labels breathe out. The
+          active section's dot stays lit in orange the whole time. Hover the
+          demo below.
+        </p>
+
+        <div class="dg-nav-demo">
+          <div class="dg-pill" id="dg-pill">
+            {["About", "Domains", "Events", "Projects", "Team", "More"].map((l, i) => (
+              <span class:list={["dg-nav-item", i === 0 && "is-active"]}>
+                <span class="dg-nav-dot"></span>
+                <span class="dg-nav-label">{l}</span>
+              </span>
+            ))}
+          </div>
+          <span class="dg-nav-hint">hover / tap the pill</span>
+        </div>
+
+        <div class="dg-motion-grid" style="margin-top:1.6rem">
+          <div class="dg-motion-card">
+            <p class="dg-motion-title">Liquid glass</p>
+            <p class="dg-motion-body"><code>backdrop-filter: blur(32px) saturate(220%)</code> over a near-black tint, a <code>0.75</code> orange border, and a diagonal lens sheen. Fully rounded at <code>100px</code>.</p>
+          </div>
+          <div class="dg-motion-card">
+            <p class="dg-motion-title">Dot → label</p>
+            <p class="dg-motion-body">Rest = dots only. On hover the <code>gap</code> and label width expand on <code>cubic-bezier(.25,.1,.25,1)</code> over <code>~0.38s</code>. The active dot glows orange; ACM-W hovers pink.</p>
+          </div>
+          <div class="dg-motion-card">
+            <p class="dg-motion-title">GSAP + Flip intro</p>
+            <p class="dg-motion-body">On load the pill fades in from collapsed and the dots stagger open. Scroll-spy swaps the active dot to the section in view.</p>
+          </div>
+          <div class="dg-motion-card">
+            <p class="dg-motion-title">Megamenu</p>
+            <p class="dg-motion-body">Hovering a section drops a cassette-tile panel. The pill flips to <code>pill-menu-open</code> - same expanded state as hover - so it never snaps shut mid-reach.</p>
+          </div>
+          <div class="dg-motion-card">
+            <p class="dg-motion-title">Mobile</p>
+            <p class="dg-motion-body">Under <code>1024px</code> the top pill hands off to <code>MobileNavbar</code> - a bottom-anchored deck. See the deep dive below.</p>
+          </div>
+          <div class="dg-motion-card">
+            <p class="dg-motion-title">Theme ripple</p>
+            <p class="dg-motion-body">The theme toggle splits the pill and expands a clip-path circle from the button. Backdrop filters drop during the wipe so the split reads clean.</p>
+          </div>
+        </div>
+
+        <!-- Mobile navbar deep dive -->
+        <div class="dg-mn">
+          <div class="dg-mn-intro">
+            <h3 class="dg-mn-h">The mobile navbar, in full</h3>
+            <p class="dg-mn-lede">
+              On phones the floating top pill is replaced by a single
+              bottom-anchored deck - thumb-reachable, home-indicator aware, and
+              always one tap from nav, the menu, or the music. It is not a
+              separate menu screen: it is <em>one pill</em> that morphs its
+              contents between five panels with a GSAP Flip, so the shape flows
+              instead of cutting.
+            </p>
+          </div>
+
+          <!-- Interactive inert replica of the real MobileNavbar pill -->
+          <div class="dg-mnx-stage">
+            <div class="dg-mnx-pill" id="dgMnxPill" data-state="nav">
+              <!-- nav -->
+              <div class="dg-mnx-panel dg-mnx-nav" data-mnx="nav">
+                <div class="dg-mnx-left">
+                  <span class="dg-mnx-dot"></span>
+                  <span class="dg-mnx-label">HOME</span>
+                </div>
+                <div class="dg-mnx-btns">
+                  <button class="dg-mnx-btn" data-mnx-go="menu" aria-label="Open menu" type="button">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="5" r="1.6"/><circle cx="12" cy="5" r="1.6"/><circle cx="19" cy="5" r="1.6"/><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/><circle cx="5" cy="19" r="1.6"/><circle cx="12" cy="19" r="1.6"/><circle cx="19" cy="19" r="1.6"/></svg>
+                  </button>
+                  <button class="dg-mnx-btn" data-mnx-theme aria-label="Toggle theme" type="button">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>
+                  </button>
+                  <button class="dg-mnx-btn-primary" data-mnx-go="music" aria-label="Open music player" type="button">
+                    <span class="dg-mnx-eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+                    <svg class="dg-mnx-note" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- menu -->
+              <div class="dg-mnx-panel dg-mnx-menu" data-mnx="menu" hidden>
+                <div class="dg-mnx-head">
+                  <span class="dg-mnx-head-title">Menu</span>
+                  <button class="dg-mnx-close" data-mnx-go="nav" aria-label="Close" type="button">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                  </button>
+                </div>
+                {["About","Domains","Events","Projects","Community","More"].map((l) => (
+                  <span class="dg-mnx-link">
+                    <span class="dg-mnx-link-dot"></span>
+                    <span class="dg-mnx-link-t">{l}</span>
+                    <span class="dg-mnx-link-caret">›</span>
+                  </span>
+                ))}
+              </div>
+
+              <!-- music -->
+              <div class="dg-mnx-panel dg-mnx-music" data-mnx="music" hidden>
+                <div class="dg-mnx-head">
+                  <div class="dg-mnx-track">
+                    <span class="dg-mnx-track-t">Sleeve Notes</span>
+                    <span class="dg-mnx-track-a">ACM-VIT</span>
+                  </div>
+                  <button class="dg-mnx-close" data-mnx-go="nav" aria-label="Close" type="button">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                  </button>
+                </div>
+                <div class="dg-mnx-scrub">
+                  <span class="dg-mnx-time">1:12</span>
+                  <span class="dg-mnx-track-bar"><i style="width:42%"></i></span>
+                  <span class="dg-mnx-time">2:56</span>
+                </div>
+                <div class="dg-mnx-transport">
+                  <button class="dg-mnx-tbtn" aria-label="Previous" type="button">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h2v14H6zM20 5v14l-11-7z"/></svg>
+                  </button>
+                  <button class="dg-mnx-play" data-mnx-play aria-label="Play" type="button">
+                    <svg class="dg-mnx-ico-play" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    <svg class="dg-mnx-ico-pause" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" hidden><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+                  </button>
+                  <button class="dg-mnx-tbtn" aria-label="Next" type="button">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 5h2v14h-2zM4 5l11 7-11 7z"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <span class="dg-mnx-hint">tap the buttons - it morphs, nothing navigates</span>
+          </div>
+
+          <p class="dg-mn-subhead-lede">The five panels it morphs through:</p>
+          <div class="dg-mn-states">
+            <div class="dg-mn-scard">
+              <span class="dg-mn-tag">nav · default</span>
+              <div class="dg-mn-demo">
+                <span class="dg-mn-dot"></span>
+                <span class="dg-mn-lbl">HOME</span>
+                <span class="dg-mn-spacer"></span>
+                <span class="dg-mn-ico">⋯</span>
+                <span class="dg-mn-ico">☾</span>
+                <span class="dg-mn-ico is-play">♫</span>
+              </div>
+              <p class="dg-mn-body">A live section dot + label (fed by the same scroll-spy as desktop), then the menu, theme, and music buttons. On subpages the label locks to the page title. When audio plays, the music button swaps its note for an animated EQ bar.</p>
+            </div>
+            <div class="dg-mn-scard">
+              <span class="dg-mn-tag">menu</span>
+              <div class="dg-mn-demo dg-mn-demo-col">
+                <span class="dg-mn-row"><span class="dg-mn-mini"></span> About <span class="dg-mn-caret">›</span></span>
+                <span class="dg-mn-row"><span class="dg-mn-mini"></span> Domains <span class="dg-mn-caret">›</span></span>
+                <span class="dg-mn-row"><span class="dg-mn-mini"></span> Events <span class="dg-mn-caret">›</span></span>
+              </div>
+              <p class="dg-mn-body">The menu button morphs the pill up into a scrollable section list. Any section that has children shows a caret; the rest navigate straight away.</p>
+            </div>
+            <div class="dg-mn-scard">
+              <span class="dg-mn-tag">submenu</span>
+              <div class="dg-mn-demo dg-mn-demo-col">
+                <span class="dg-mn-subhead"><span class="dg-mn-avatar">D</span> Domains</span>
+                <span class="dg-mn-chips"><i>Tech</i><i>CC</i><i>Design</i><i>Research</i></span>
+              </div>
+              <p class="dg-mn-body">The caret drills into that section's children - mirroring the desktop megamenu's <code>dropdowns</code> from one shared data source. Each child gets a round avatar: a brand icon, a domain-colored fill, or a letter glyph.</p>
+            </div>
+            <div class="dg-mn-scard">
+              <span class="dg-mn-tag">music</span>
+              <div class="dg-mn-demo dg-mn-demo-col">
+                <span class="dg-mn-track">Side A - ACM-VIT</span>
+                <span class="dg-mn-prog"><i style="width:42%"></i></span>
+                <span class="dg-mn-transport">⏮ <b>⏸</b> ⏭</span>
+              </div>
+              <p class="dg-mn-body">The music button opens a full transport: track title, a scrubbable progress bar, and prev/play/next. It drives the shared <code>CassettePlayer</code> through <code>window.acmCassette</code> and stays in sync across tabs - never touching the raw audio node.</p>
+            </div>
+            <div class="dg-mn-scard">
+              <span class="dg-mn-tag">blog / merch</span>
+              <div class="dg-mn-demo">
+                <span class="dg-mn-lbl">TOOLS</span>
+                <span class="dg-mn-spacer"></span>
+                <span class="dg-mn-ico">▤</span>
+                <span class="dg-mn-ico">▦</span>
+                <span class="dg-mn-ico">✕</span>
+              </div>
+              <p class="dg-mn-body">Contextual panels. On article and merch pages the floating dock's tools surface here as extra buttons instead of a second bar - the dock proxies into this one deck.</p>
+            </div>
+          </div>
+
+          <div class="dg-mn-notes">
+            <div class="dg-mn-note">
+              <p class="dg-mn-nt">One pill, Flip morph</p>
+              <p class="dg-mn-nb">Every state swap runs <code>Flip.getState → swap panel → Flip.from</code> with a content crossfade. The container animates its own width/height, so nav → menu → music feels like one object breathing, not four screens.</p>
+            </div>
+            <div class="dg-mn-note">
+              <p class="dg-mn-nt">Solid, not glass</p>
+              <p class="dg-mn-nb">Unlike the desktop pill it is a solid <code>#1e1e1e</code> fill. Backdrop-blur over scrolling content is expensive and jittery on mobile GPUs, so the deck stays opaque and cheap.</p>
+            </div>
+            <div class="dg-mn-note">
+              <p class="dg-mn-nt">Safe-area & reach</p>
+              <p class="dg-mn-nb">Pinned to <code>bottom: calc(16px + env(safe-area-inset-bottom))</code> so it clears the iPhone home indicator and lands in the thumb zone. The root is <code>pointer-events:none</code>; only the pill catches taps.</p>
+            </div>
+            <div class="dg-mn-note">
+              <p class="dg-mn-nt">Intro grow</p>
+              <p class="dg-mn-nb">On load it starts collapsed to the bare music circle, then Flip-expands into the full nav bar - the same tape-deck-powering-on beat as the rest of the site.</p>
+            </div>
+            <div class="dg-mn-note">
+              <p class="dg-mn-nt">Deterministic smooth scroll</p>
+              <p class="dg-mn-nb">Same-page links animate <code>scrollTop</code> by hand over rAF. Mobile Safari fakes smooth <code>scrollIntoView</code> into an instant jump, so we drive the scroller (body or documentElement, detected live) ourselves.</p>
+            </div>
+            <div class="dg-mn-note">
+              <p class="dg-mn-nt">Dock proxy</p>
+              <p class="dg-mn-nb">Page-level floating docks (blog, merch) don't get their own mobile bar - they surface as extra buttons here and proxy their clicks, so there's only ever one control surface at the bottom.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─────────── Buttons & CTAs ─────────── -->
+      <section class="dg-section" id="buttons" data-reveal>
+        <header class="dg-head">
+          <span class="dg-num">09</span>
+          <h2 class="dg-title">Buttons &amp; CTAs</h2>
+        </header>
+        <p class="dg-lede">
+          Two button primitives cover the whole site. Both are snappy, never
+          bouncy - <code>power3.out</code> in, no overshoot.
+        </p>
 
         <div class="dg-component-block dg-component-block-dark">
-          <span class="dg-component-label">Animated Button - hero CTA</span>
-          <div class="dg-component-stage">
+          <span class="dg-component-label">Animated Button - primary / hero CTA</span>
+          <div class="dg-component-stage dg-stage-center dg-inert">
             <AnimatedButton text="Partner With Us" href="/#contact" />
           </div>
+          <p class="dg-component-note dg-note-inline">
+            The MacBook-Pro pill: a dark capsule with an accent circle that expands
+            rightward to reveal its label on hover. Our default call to action.
+          </p>
         </div>
 
         <div class="dg-component-block">
-          <span class="dg-component-label">Cassette Tile - landing page More section</span>
+          <span class="dg-component-label">Fill Button - secondary / inline action</span>
+          <div class="dg-component-stage dg-stage-center dg-inert">
+            <FillButton label="Explore Projects" href="/projects" />
+          </div>
+          <p class="dg-component-note dg-note-inline">
+            An outlined pill whose accent fill wipes in from the bottom on hover.
+            Driven by <code>--proj-color</code> so any surface can retint it.
+          </p>
+        </div>
+      </section>
+
+      <!-- ─────────── Cards, Tiles & Cassettes ─────────── -->
+      <section class="dg-section" id="cards" data-reveal>
+        <header class="dg-head">
+          <span class="dg-num">10</span>
+          <h2 class="dg-title">Cards &amp; Components</h2>
+        </header>
+        <p class="dg-lede">
+          Beyond the tape itself, a small kit of shared parts carries the rest of
+          the site. The Cassette Tile is the workhorse - a live demo below.
+        </p>
+
+        <div class="dg-component-block">
+          <span class="dg-component-label">Cassette Tile - landing "More" grid, event & project cards</span>
           <div class="dg-component-stage dg-component-stage-tile">
             <CassetteTile
               title="Example Tile"
@@ -287,17 +932,188 @@ const dontList = [
               <Fragment slot="icon" set:html={`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><circle cx="16" cy="12" r="2"/><path d="M10 12h4"/></svg>`} />
             </CassetteTile>
           </div>
+          <p class="dg-component-note dg-note-inline">
+            Pass an <code>accent</code> and the sticker, tag, and reel glow all
+            retint. The tag reads like a tape side - "SIDE A", a domain, a status.
+          </p>
         </div>
 
-        <p class="dg-component-note">
-          Accordions live on <a href="/faqs">the FAQs page</a> - same card language, a grid-rows collapse and a rotating play icon.
+        <div class="dg-component-block dg-component-block-dark">
+          <span class="dg-component-label">Cassette Player - the floating music deck</span>
+          <div class="dg-component-stage dg-cp-stage">
+            <div class="dg-cp">
+              <svg viewBox="0 0 280 175" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cassette music player">
+                <rect class="dg-cp-body" x="1" y="1" width="278" height="173" rx="11"/>
+                <path class="dg-cp-cover" d="M 18 10 L 22 10 L 28 16 L 252 16 L 258 10 L 262 10 Q 266 10 266 14 L 266 120 L 14 120 L 14 14 Q 14 10 18 10 Z"/>
+                <line class="dg-cp-line" x1="20" y1="22" x2="260" y2="22"/>
+                <line class="dg-cp-line" x1="20" y1="114" x2="260" y2="114"/>
+                <!-- left reel -->
+                <circle class="dg-cp-outer" cx="92" cy="58" r="24"/>
+                <circle class="dg-cp-mid" cx="92" cy="58" r="16"/>
+                <g class="dg-cp-reel">
+                  {[0,60,120,180,240,300].map((r) => (
+                    <line class="dg-cp-spoke" x1="92" y1="40" x2="92" y2="34" transform={`rotate(${r},92,58)`}/>
+                  ))}
+                </g>
+                <circle class="dg-cp-hub" cx="92" cy="58" r="5.5"/>
+                <circle class="dg-cp-tape" cx="92" cy="58" r="19"/>
+                <!-- right reel -->
+                <circle class="dg-cp-outer" cx="188" cy="58" r="24"/>
+                <circle class="dg-cp-mid" cx="188" cy="58" r="16"/>
+                <g class="dg-cp-reel">
+                  {[0,60,120,180,240,300].map((r) => (
+                    <line class="dg-cp-spoke" x1="188" y1="40" x2="188" y2="34" transform={`rotate(${r},188,58)`}/>
+                  ))}
+                </g>
+                <circle class="dg-cp-hub-accent" cx="188" cy="58" r="5.5"/>
+                <circle class="dg-cp-tape" cx="188" cy="58" r="10"/>
+                <path class="dg-cp-path" d="M 68 58 A 24 24 0 0 0 92 82 L 188 82 A 24 24 0 0 0 212 58"/>
+                <rect class="dg-cp-window" x="118" y="69" width="44" height="16" rx="3"/>
+                <circle class="dg-cp-post" cx="140" cy="58" r="2.5"/>
+                <!-- label -->
+                <rect class="dg-cp-label" x="40" y="92" width="200" height="22" rx="4"/>
+                <text class="dg-cp-title" x="140" y="100" text-anchor="middle" dominant-baseline="middle">Sleeve Notes</text>
+                <text class="dg-cp-artist" x="140" y="110" text-anchor="middle" dominant-baseline="middle">ACM-VIT</text>
+                <!-- controls -->
+                <g class="dg-cp-btn" transform="translate(75,135)">
+                  <rect x="-14" y="-10" width="28" height="20" rx="4" class="dg-cp-btn-bg"/>
+                  <path d="M-2 0l6 4V-4zM-5-4v8" class="dg-cp-btn-ico"/>
+                </g>
+                <g transform="translate(140,135)">
+                  <circle r="14" class="dg-cp-play-bg"/>
+                  <path d="M-3-5v10l8-5z" fill="#fff"/>
+                </g>
+                <g class="dg-cp-btn" transform="translate(205,135)">
+                  <rect x="-14" y="-10" width="28" height="20" rx="4" class="dg-cp-btn-bg"/>
+                  <path d="M-4-4v8l6-4zM5-4v8" class="dg-cp-btn-ico"/>
+                </g>
+                <!-- progress -->
+                <rect class="dg-cp-prog-bg" x="40" y="155" width="200" height="3" rx="1.5"/>
+                <rect class="dg-cp-prog-fill" x="40" y="155" width="82" height="3" rx="1.5"/>
+                <text class="dg-cp-time" x="40" y="165" dominant-baseline="hanging">1:12</text>
+                <text class="dg-cp-time" x="240" y="165" text-anchor="end" dominant-baseline="hanging">2:56</text>
+                <circle class="dg-cp-pin" cx="50" cy="135" r="1.5"/>
+                <circle class="dg-cp-pin" cx="230" cy="135" r="1.5"/>
+                <circle class="dg-cp-screw" cx="8" cy="8" r="2.5"/>
+                <circle class="dg-cp-screw" cx="272" cy="8" r="2.5"/>
+                <circle class="dg-cp-screw" cx="8" cy="167" r="2.5"/>
+                <circle class="dg-cp-screw" cx="272" cy="167" r="2.5"/>
+              </svg>
+            </div>
+          </div>
+          <p class="dg-component-note dg-note-inline">
+            The whole player <em>is</em> a cassette - track title on the label, transport
+            and progress printed on the body, reels that spin while a track plays. It docks
+            as a small note button, expands on tap, and stays in sync across tabs over
+            <code>BroadcastChannel</code>. Drive it through <code>window.acmCassette</code>,
+            never the raw <code>#cp-audio</code> node.
+          </p>
+        </div>
+
+        <div class="dg-component-block">
+          <span class="dg-component-label">Contributor pills - project page credits</span>
+          <div class="dg-component-stage dg-people-stage">
+            <div class="dg-people">
+              <a class="dg-person" href="https://github.com/acm-vit" target="_blank" rel="noopener">
+                <span class="dg-person-av"><img src="https://github.com/acm-vit.png?size=120" alt="" loading="lazy" decoding="async" /></span>
+                <span class="dg-person-info">
+                  <span class="dg-person-name">@acm-vit</span>
+                  <span class="dg-person-role">Lead Developer</span>
+                </span>
+                <svg class="dg-person-arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+              </a>
+              <a class="dg-person" href="#" target="_blank" rel="noopener">
+                <span class="dg-person-av dg-person-av--initial">B</span>
+                <span class="dg-person-info">
+                  <span class="dg-person-name">Bahubali</span>
+                  <span class="dg-person-role">Designer</span>
+                </span>
+                <svg class="dg-person-arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+              </a>
+              <span class="dg-mini-person">
+                <span class="dg-mini-av dg-mini-av--initial">R</span>
+                @riya
+              </span>
+            </div>
+          </div>
+          <p class="dg-component-note dg-note-inline">
+            Credit rows on project pages. Developer pills pull the avatar and display name
+            live from <code>github.com/&lt;user&gt;.png</code> + the GitHub API; designers fall
+            back to a colored initial chip. Both retint to the project accent on hover. The
+            small variant lists version contributors inline.
+          </p>
+        </div>
+
+        <div class="dg-card-notes">
+          <div class="dg-motion-card">
+            <p class="dg-motion-title">Breadcrumbs</p>
+            <p class="dg-motion-body">Subpages open with a small crumb trail keyed to the page accent. On bleed-background pages it floats out of flow via the <code>bleedBg</code> Layout flag.</p>
+          </div>
+          <div class="dg-motion-card">
+            <p class="dg-motion-title">Accordion</p>
+            <p class="dg-motion-body">Lives on <a href="/faqs">FAQs</a> - same card language, a <code>grid-rows</code> collapse and a play triangle that rotates to a pause on open.</p>
+          </div>
+          <div class="dg-motion-card">
+            <p class="dg-motion-title">Scroll cue</p>
+            <p class="dg-motion-body">A quiet "SCROLL" marker at hero feet and a tape-click hint ("PLAY") on interactive cassettes. Both fade out once the user moves.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─────────── Calendar ─────────── -->
+      <section class="dg-section" id="calendar" data-reveal>
+        <header class="dg-head">
+          <span class="dg-num">11</span>
+          <h2 class="dg-title">Calendar</h2>
+        </header>
+        <p class="dg-lede">
+          The <a href="/calendar">calendar</a> ships in two views behind a pill
+          switcher. Events are colored by domain, and opening one flips it into a
+          full cassette - the tape <em>is</em> the event card.
+        </p>
+
+        <div class="dg-cal-views">
+          <div class="dg-cal-view">
+            <div class="dg-cal-switch">
+              <span class="dg-cal-sw is-on">Agenda</span>
+              <span class="dg-cal-sw">Traditional</span>
+            </div>
+            <p class="dg-motion-title" style="margin-top:1rem">Agenda (default)</p>
+            <p class="dg-motion-body">A sidebar with a mini-month, domain filters, and an upcoming queue, next to a scrolling day-by-day timeline. The reading view - "what's next".</p>
+          </div>
+          <div class="dg-cal-view">
+            <div class="dg-cal-switch">
+              <span class="dg-cal-sw">Agenda</span>
+              <span class="dg-cal-sw is-on">Traditional</span>
+            </div>
+            <p class="dg-motion-title" style="margin-top:1rem">Traditional</p>
+            <p class="dg-motion-body">A full month / week grid with a tape-deck toolbar, Today jump, and up to three event pills per day. The planning view - "the whole month".</p>
+          </div>
+        </div>
+
+        <p class="dg-lede dg-lede-tight">Domain legend - each filter is a real cassette.</p>
+        <div class="dg-cal-legend">
+          {
+            calDomains.map((d) => (
+              <span class="dg-cal-pill" style={`border-color:${d.color}`}>
+                <img src={d.cassette} alt="" loading="lazy" decoding="async" />
+                <span style={`color:${d.color}`}>{d.label}</span>
+              </span>
+            ))
+          }
+        </div>
+        <p class="dg-component-note" style="margin-top:1.4rem">
+          Click a pill to filter; click an event to open its cassette modal - a
+          drawn tape with A-SIDE label art, the domain dot, date/time/location,
+          and a "Read Blog" link when the event maps to a post. Blog dates merge
+          in live from <code>/api/blog-dates</code>.
         </p>
       </section>
 
       <!-- ─────────── Motion ─────────── -->
       <section class="dg-section" id="motion" data-reveal>
         <header class="dg-head">
-          <span class="dg-num">07</span>
+          <span class="dg-num">12</span>
           <h2 class="dg-title">Motion</h2>
         </header>
         <div class="dg-motion-grid">
@@ -313,33 +1129,39 @@ const dontList = [
             <p class="dg-motion-title">Scroll reveals</p>
             <p class="dg-motion-body">Opacity + <code>y: 24–30px</code>, staggered lightly. Always guarded by <code>prefers-reduced-motion</code>.</p>
           </div>
+          <div class="dg-motion-card">
+            <p class="dg-motion-title">Smooth scroll</p>
+            <p class="dg-motion-body">Lenis drives the page; GSAP ScrollTrigger reads off it. The window scrolls - no inner scroller - so <code>position: sticky</code> works everywhere.</p>
+          </div>
+          <div class="dg-motion-card">
+            <p class="dg-motion-title">Reels</p>
+            <p class="dg-motion-body">Cassette reels spin while audio plays. Safari won't retime a running CSS animation, so we restart it via <code>animation-name: none</code> + reflow.</p>
+          </div>
+          <div class="dg-motion-card">
+            <p class="dg-motion-title">Restraint</p>
+            <p class="dg-motion-body">Motion earns its place or it's cut. One hero flourish per page, quiet hovers everywhere else. Never animate for the sake of it.</p>
+          </div>
         </div>
       </section>
 
-      <!-- ─────────── Standing on Giants ─────────── -->
-      <section class="dg-section" id="giants" data-reveal>
+      <!-- ─────────── Voice & Tone ─────────── -->
+      <section class="dg-section" id="voice" data-reveal>
         <header class="dg-head">
-          <span class="dg-num">08</span>
-          <h2 class="dg-title">Standing on Giants</h2>
+          <span class="dg-num">13</span>
+          <h2 class="dg-title">Voice &amp; Tone</h2>
         </header>
-        <p class="dg-lede">
-          Look closely at the cassette on any Area of Interest page and the label art is not decoration. Each tape is
-          set against the headquarters of a company that pushed that field forward - Apple Park behind App
-          Development, the Googleplex behind Web, and so on across Tech, Design, and Research. A quiet nod to the work
-          we build on top of.
-        </p>
-        <a
-          href="/sleeve-notes/giants"
-          class="dg-system-link"
-          aria-label="See every Area of Interest cassette and the company behind it"
-        >
-          <span class="dg-system-link-text">
-            <strong>See every cassette and the giant behind it</strong>
-            A full breakdown of which headquarters hides on each Area of Interest tape, and what that company did for
-            its field.
-          </span>
-          <span class="dg-system-link-cta">Open the collection →</span>
-        </a>
+        <p class="dg-lede">Write like a person who's actually building this stuff, not marketing it.</p>
+
+        <div class="dg-rules dg-rules-voice">
+          <div class="dg-rule-col">
+            <p class="dg-rule-label dg-rule-good">Do</p>
+            <ul>{doList.map((d) => <li>{d}</li>)}</ul>
+          </div>
+          <div class="dg-rule-col">
+            <p class="dg-rule-label dg-rule-bad">Don't</p>
+            <ul>{dontList.map((d) => <li>{d}</li>)}</ul>
+          </div>
+        </div>
       </section>
 
       <!-- ─────────── Assets ─────────── -->
@@ -390,23 +1212,78 @@ const dontList = [
     top: 0;
     bottom: 0;
     width: 2px;
-    background: repeating-linear-gradient(to bottom, rgba(254, 252, 217, 0.06) 0 3px, transparent 3px 18px);
+    background: repeating-linear-gradient(to bottom, rgba(153, 153, 153, 0.3) 0 3px, transparent 3px 18px);
   }
   :global(html[data-theme="light"]) .dg-v {
-    background: repeating-linear-gradient(to bottom, rgba(38, 59, 51, 0.07) 0 3px, transparent 3px 18px);
+    background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.18) 0 3px, transparent 3px 18px);
+  }
+
+  /* Content column gets dashed side rails; each section a dashed top - together
+     they form a stacked grid of boxes. Site-wide dashed #999 style, darkened. */
+  .dg-inner {
+    border-left: 1.5px dashed rgba(153, 153, 153, 0.32);
+    border-right: 1.5px dashed rgba(153, 153, 153, 0.32);
+  }
+  :global(html[data-theme="light"]) .dg-inner {
+    border-left-color: rgba(0, 0, 0, 0.2);
+    border-right-color: rgba(0, 0, 0, 0.2);
   }
 
   /* ── Section scaffold ── */
   .dg-section {
-    margin-bottom: 5rem;
+    position: relative;
+    margin-bottom: 0;
+    padding-block: clamp(3.25rem, 6vw, 5.5rem);
+  }
+  /* full-bleed dashed top divider that reaches the column's side rails */
+  .dg-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -1.25rem;
+    right: -1.25rem;
+    border-top: 1.5px dashed rgba(153, 153, 153, 0.32);
+  }
+  @media (min-width: 640px) {
+    .dg-section::before {
+      left: -2rem;
+      right: -2rem;
+    }
+  }
+  :global(html[data-theme="light"]) .dg-section::before {
+    border-top-color: rgba(0, 0, 0, 0.2);
+  }
+  .dg-section:first-of-type {
+    padding-top: 1rem;
+  }
+  .dg-section:first-of-type::before {
+    display: none;
   }
   .dg-head {
+    position: relative;
     display: flex;
     align-items: baseline;
     gap: 0.9rem;
     margin-bottom: 1.4rem;
     padding-bottom: 0.9rem;
-    border-bottom: 1px solid rgba(254, 252, 217, 0.12);
+  }
+  /* dashed underline, full-bleed to the column side rails (matches section tops) */
+  .dg-head::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: -1.25rem;
+    right: -1.25rem;
+    border-bottom: 1.5px dashed rgba(153, 153, 153, 0.32);
+  }
+  @media (min-width: 640px) {
+    .dg-head::after {
+      left: -2rem;
+      right: -2rem;
+    }
+  }
+  :global(html[data-theme="light"]) .dg-head::after {
+    border-bottom-color: rgba(0, 0, 0, 0.2);
   }
   .dg-num {
     font-family: "PolySans Mono", monospace;
@@ -425,11 +1302,11 @@ const dontList = [
   }
   .dg-lede {
     margin: 0 0 1.6rem;
-    max-width: 60ch;
+    max-width: 68ch;
     font-family: "PolySans Mono", monospace;
-    font-size: 0.82rem;
-    line-height: 1.6;
-    color: rgba(254, 252, 217, 0.65);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: rgba(254, 252, 217, 0.7);
   }
   .dg-lede-tight {
     margin-top: 2.2rem;
@@ -734,13 +1611,17 @@ const dontList = [
     display: flex;
     justify-content: flex-start;
   }
+  .dg-stage-center {
+    justify-content: center;
+  }
   .dg-component-stage-tile {
     max-width: 320px;
+    margin-inline: auto;
   }
   .dg-component-note {
     margin: 1rem 0 0;
     font-family: "PolySans Mono", monospace;
-    font-size: 0.78rem;
+    font-size: 0.86rem;
     color: rgba(254, 252, 217, 0.6);
   }
   .dg-component-note a {
@@ -758,8 +1639,31 @@ const dontList = [
   /* ── Motion ── */
   .dg-motion-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1rem;
+  }
+  /* cap all equal-card grids at 3 per row, drop to 2 then 1 on smaller screens */
+  .dg-motion-grid,
+  .dg-card-notes,
+  .dg-mn-notes,
+  .dg-mn-states {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  @media (max-width: 820px) {
+    .dg-motion-grid,
+    .dg-card-notes,
+    .dg-mn-notes,
+    .dg-mn-states {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 520px) {
+    .dg-motion-grid,
+    .dg-card-notes,
+    .dg-mn-notes,
+    .dg-mn-states {
+      grid-template-columns: 1fr;
+    }
   }
   .dg-motion-card {
     padding: 1.4rem;
@@ -777,7 +1681,7 @@ const dontList = [
   .dg-motion-body {
     margin: 0;
     font-family: "PolySans Mono", monospace;
-    font-size: 0.76rem;
+    font-size: 0.84rem;
     line-height: 1.6;
     color: rgba(254, 252, 217, 0.6);
   }
@@ -867,6 +1771,1510 @@ const dontList = [
     color: rgba(26, 26, 26, 0.65);
   }
 
+  /* ── Domain accent mapping (compact, no duplicate swatch cards) ── */
+  .dg-domain-map {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+  .dg-domain-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.5rem 0.85rem;
+    border-radius: 100px;
+    border: 1px solid rgba(254, 252, 217, 0.12);
+    background: rgba(254, 252, 217, 0.02);
+    cursor: pointer;
+    transition: border-color 0.3s ease, transform 0.3s ease;
+  }
+  .dg-domain-chip:hover {
+    border-color: color-mix(in srgb, var(--sw) 60%, transparent);
+    transform: translateY(-1px);
+  }
+  .dg-domain-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 4px;
+    background: var(--sw);
+    flex: none;
+    box-shadow: 0 0 10px color-mix(in srgb, var(--sw) 45%, transparent);
+  }
+  .dg-domain-name {
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #fefcd9;
+  }
+  .dg-domain-hex {
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.64rem;
+    color: color-mix(in srgb, var(--sw) 70%, #808080 30%);
+  }
+  .dg-domain-chip.is-copied .dg-domain-hex::after {
+    content: " · copied";
+    color: #42cd9d;
+  }
+  :global(html[data-theme="light"]) .dg-domain-chip {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(26, 26, 26, 0.1);
+  }
+  :global(html[data-theme="light"]) .dg-domain-name {
+    color: #1a1a1a;
+  }
+
+  /* ── Side progress rail (full-height scroll timeline, right edge) ── */
+  .dg-rail {
+    position: fixed;
+    left: 22px;
+    /* start below the fixed header + breadcrumbs so the top tick hits nothing */
+    top: 132px;
+    height: calc(100vh - 160px);
+    height: calc(100dvh - 160px);
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+  }
+  /* faint vertical track behind the ticks (left edge of the rail) */
+  .dg-rail-line {
+    position: absolute;
+    left: 3px;
+    top: 10px;
+    bottom: 10px;
+    width: 1px;
+    background: rgba(254, 252, 217, 0.14);
+    overflow: hidden;
+  }
+  .dg-rail-prog {
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 0%;
+    width: 100%;
+    background: #f95f4a;
+    transition: height 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+  .dg-rail-list {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    gap: 2px;
+  }
+  .dg-rail-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 4px 12px 4px 10px;
+    text-decoration: none;
+    border-radius: 100px;
+  }
+  /* label - dim by default, hidden-ish until hover/active */
+  .dg-rail-label {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    white-space: nowrap;
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 0.74rem;
+    font-weight: 500;
+    color: rgba(254, 252, 217, 0.5);
+    /* collapsed at rest so the rail is ticks-only and never overlaps content */
+    max-width: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: max-width 0.28s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.25s ease, transform 0.25s ease, color 0.25s ease;
+  }
+  .dg-rail-num {
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.58rem;
+    color: rgba(254, 252, 217, 0.35);
+  }
+  /* small tick dot sitting on the track */
+  .dg-rail-tick {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    flex: none;
+    background: rgba(254, 252, 217, 0.28);
+    transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  /* reveal all labels when hovering the rail */
+  .dg-rail:hover .dg-rail-label {
+    max-width: 160px;
+    opacity: 1;
+    transform: none;
+  }
+  .dg-rail-item:hover .dg-rail-label {
+    color: rgba(254, 252, 217, 0.85);
+  }
+  .dg-rail-item:hover .dg-rail-tick {
+    background: rgba(254, 252, 217, 0.7);
+    transform: scale(1.2);
+  }
+  /* passed */
+  .dg-rail-item.is-done .dg-rail-tick {
+    background: rgba(249, 95, 74, 0.55);
+  }
+  /* active - always pops a small tab: glowing tick + label in a pill */
+  .dg-rail-item.is-active {
+    background: rgba(13, 14, 13, 0.82);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  }
+  .dg-rail-item.is-active .dg-rail-label {
+    max-width: 160px;
+    opacity: 1;
+    transform: none;
+    color: #fefcd9;
+  }
+  .dg-rail-item.is-active .dg-rail-num {
+    color: #f95f4a;
+  }
+  .dg-rail-item.is-active .dg-rail-tick {
+    background: #f95f4a;
+    transform: scale(1.25);
+    box-shadow: 0 0 8px rgba(249, 95, 74, 0.8);
+  }
+  :global(html[data-theme="light"]) .dg-rail-line {
+    background: rgba(26, 26, 26, 0.14);
+  }
+  :global(html[data-theme="light"]) .dg-rail-label {
+    color: rgba(26, 26, 26, 0.5);
+  }
+  :global(html[data-theme="light"]) .dg-rail-item:hover .dg-rail-label,
+  :global(html[data-theme="light"]) .dg-rail-item.is-active .dg-rail-label {
+    color: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .dg-rail-tick {
+    background: rgba(26, 26, 26, 0.28);
+  }
+  :global(html[data-theme="light"]) .dg-rail:hover .dg-rail-item.is-active {
+    background: rgba(245, 237, 228, 0.85);
+  }
+  /* hide the rail when there isn't room beside the centered column */
+  @media (max-width: 1200px) {
+    .dg-rail {
+      display: none;
+    }
+  }
+
+  /* ── Cassette variant gallery ── */
+  .dg-cass-cap {
+    margin: 2rem 0 0.9rem;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    color: rgba(254, 252, 217, 0.6);
+  }
+  .dg-cass-cap:first-of-type {
+    margin-top: 0.4rem;
+  }
+  :global(html[data-theme="light"]) .dg-cass-cap {
+    color: rgba(26, 26, 26, 0.6);
+  }
+  .dg-cass-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.9rem;
+  }
+  .dg-cass {
+    margin: 0;
+    padding: 0.9rem;
+    border-radius: 14px;
+    border: 1px solid rgba(254, 252, 217, 0.1);
+    background: rgba(254, 252, 217, 0.02);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: border-color 0.3s ease, transform 0.3s ease;
+  }
+  .dg-cass:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--sw, #f95f4a) 55%, transparent);
+  }
+  .dg-cass img {
+    width: 100%;
+    max-width: 130px;
+    height: 84px;
+    object-fit: contain;
+  }
+  .dg-cass figcaption {
+    margin-top: 0.7rem;
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 0.76rem;
+    font-weight: 500;
+    color: #fefcd9;
+  }
+  .dg-cass-sub {
+    margin-top: 0.2rem;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.72rem;
+    line-height: 1.4;
+    color: rgba(254, 252, 217, 0.45);
+  }
+  :global(html[data-theme="light"]) .dg-cass {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(26, 26, 26, 0.1);
+  }
+  :global(html[data-theme="light"]) .dg-cass figcaption {
+    color: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .dg-cass-sub {
+    color: rgba(26, 26, 26, 0.5);
+  }
+  .dg-cass-where {
+    margin: 0.9rem 0 0;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.86rem;
+    line-height: 1.5;
+    color: rgba(254, 252, 217, 0.5);
+  }
+  :global(html[data-theme="light"]) .dg-cass-where {
+    color: rgba(26, 26, 26, 0.55);
+  }
+  .dg-team-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+  }
+  .dg-team-card {
+    width: 190px;
+    max-width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .dg-cass-bespoke {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+  .dg-cass-bset {
+    padding: 1rem;
+    border-radius: 14px;
+    border: 1px solid rgba(254, 252, 217, 0.1);
+    background: rgba(254, 252, 217, 0.02);
+  }
+  .dg-cass-brow {
+    display: flex;
+    gap: 0.8rem;
+    overflow-x: auto;
+    padding-bottom: 0.4rem;
+  }
+  .dg-cass-brow img {
+    height: 74px;
+    width: auto;
+    flex: none;
+    object-fit: contain;
+  }
+  .dg-cass-bset .dg-cass-sub {
+    display: block;
+    margin-top: 0.6rem;
+    font-size: 0.66rem;
+  }
+  :global(html[data-theme="light"]) .dg-cass-bset {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(26, 26, 26, 0.1);
+  }
+
+  /* ── Type family filename tag + wide/serif specimens ── */
+  .dg-type-file {
+    display: block;
+    margin-top: 0.5rem;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(254, 252, 217, 0.35);
+  }
+  :global(html[data-theme="light"]) .dg-type-file {
+    color: rgba(26, 26, 26, 0.4);
+  }
+  .dg-type-standard {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    letter-spacing: -0.02em;
+  }
+  .dg-type-mono {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+  }
+  .dg-type-wide {
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: clamp(1.4rem, 3.4vw, 2rem);
+    letter-spacing: 0.04em;
+  }
+  .dg-type-serif {
+    font-weight: 500;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+  }
+
+  /* ── Weight ladder ── */
+  .dg-weight-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+  }
+  .dg-weight-card {
+    padding: 1.2rem 1.3rem;
+    border-radius: 14px;
+    border: 1px solid rgba(254, 252, 217, 0.1);
+    background: rgba(254, 252, 217, 0.02);
+    display: flex;
+    flex-direction: column;
+  }
+  .dg-weight-aa {
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 2.6rem;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: #fefcd9;
+  }
+  .dg-weight-name {
+    margin-top: 0.7rem;
+    font-family: "PolySans Trial", sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: #fefcd9;
+  }
+  .dg-weight-use {
+    margin-top: 0.2rem;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.66rem;
+    color: rgba(254, 252, 217, 0.5);
+  }
+  :global(html[data-theme="light"]) .dg-weight-card {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(26, 26, 26, 0.1);
+  }
+  :global(html[data-theme="light"]) .dg-weight-aa,
+  :global(html[data-theme="light"]) .dg-weight-name {
+    color: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .dg-weight-use {
+    color: rgba(26, 26, 26, 0.55);
+  }
+
+  /* ── Character map (live SVG specimen) ── */
+  .dg-charmap {
+    margin-top: 1.6rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    border: 1px solid rgba(254, 252, 217, 0.12);
+    border-radius: 16px;
+    overflow: hidden;
+    background: rgba(254, 252, 217, 0.02);
+  }
+  @media (min-width: 900px) {
+    .dg-charmap {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+  }
+  .dg-cm-stage {
+    position: relative;
+    background: rgba(254, 252, 217, 0.03);
+    border-bottom: 1px solid rgba(254, 252, 217, 0.12);
+    min-height: 340px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 66px 20px 20px;
+  }
+  @media (min-width: 900px) {
+    .dg-cm-stage {
+      border-bottom: none;
+      border-right: 1px solid rgba(254, 252, 217, 0.12);
+      position: sticky;
+      top: 0;
+      align-self: start;
+      min-height: 520px;
+    }
+  }
+  #dg-cm-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .dg-cm-fonts {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: inline-flex;
+    flex-wrap: nowrap;
+    gap: 2px;
+    padding: 3px;
+    border-radius: 100px;
+    background: rgba(13, 14, 13, 0.6);
+    border: 1px solid rgba(254, 252, 217, 0.14);
+    z-index: 2;
+    white-space: nowrap;
+  }
+  .dg-cm-font {
+    border: none;
+    background: transparent;
+    color: rgba(254, 252, 217, 0.55);
+    font-family: "PolySans Mono", monospace;
+    font-size: 11.5px;
+    font-weight: 500;
+    padding: 5px 13px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: background 0.14s ease, color 0.14s ease;
+  }
+  .dg-cm-font:hover {
+    color: #fefcd9;
+  }
+  .dg-cm-font.is-on {
+    background: #f95f4a;
+    color: #0d0e0d;
+  }
+  .dg-cm-toggle {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    display: inline-flex;
+    gap: 2px;
+    padding: 3px;
+    border-radius: 100px;
+    background: rgba(13, 14, 13, 0.6);
+    border: 1px solid rgba(254, 252, 217, 0.14);
+    z-index: 2;
+  }
+  .dg-cm-tog {
+    border: none;
+    background: transparent;
+    color: rgba(254, 252, 217, 0.55);
+    font-family: "PolySans Mono", monospace;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 100px;
+    cursor: pointer;
+  }
+  .dg-cm-tog.is-on {
+    background: rgba(254, 252, 217, 0.14);
+    color: #fefcd9;
+  }
+  .dg-cm-tag {
+    position: absolute;
+    left: 16px;
+    bottom: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    pointer-events: none;
+  }
+  #dg-cm-current {
+    font-size: 15px;
+    color: #fefcd9;
+    font-weight: 600;
+  }
+  .dg-cm-fam {
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.04em;
+    color: rgba(254, 252, 217, 0.45);
+  }
+  :global(html[data-theme="light"]) #dg-cm-current {
+    color: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .dg-cm-fam {
+    color: rgba(26, 26, 26, 0.5);
+  }
+  .dg-cm-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+    gap: 1px;
+    background: rgba(254, 252, 217, 0.1);
+  }
+  @media (min-width: 900px) {
+    .dg-cm-grid {
+      max-height: 520px;
+      overflow-y: auto;
+    }
+  }
+  .dg-cm-cell {
+    aspect-ratio: 1 / 1;
+    border: none;
+    background: #0d0e0d;
+    color: #fefcd9;
+    font-family: var(--dg-cm-font, "PolySans Trial"), sans-serif;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.12s ease, color 0.12s ease;
+  }
+  .dg-cm-cell:hover {
+    background: rgba(254, 252, 217, 0.06);
+  }
+  .dg-cm-cell.is-active {
+    background: #f95f4a;
+    color: #0d0e0d;
+  }
+  .dg-cm-cell:focus-visible {
+    outline: 2px solid #f95f4a;
+    outline-offset: -2px;
+    z-index: 1;
+  }
+  :global(html[data-theme="light"]) .dg-charmap {
+    border-color: rgba(26, 26, 26, 0.12);
+    background: rgba(0, 0, 0, 0.02);
+  }
+  :global(html[data-theme="light"]) .dg-cm-stage {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(26, 26, 26, 0.12);
+  }
+  :global(html[data-theme="light"]) .dg-cm-grid {
+    background: rgba(26, 26, 26, 0.1);
+  }
+  :global(html[data-theme="light"]) .dg-cm-cell {
+    background: #f5ede4;
+    color: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .dg-cm-cell.is-active {
+    color: #f5ede4;
+  }
+  :global(html[data-theme="light"]) #dg-cm-current {
+    color: #1a1a1a;
+  }
+
+  /* ── Navigation demo pill ── */
+  .dg-nav-demo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 2.4rem 1.6rem;
+    border-radius: 16px;
+    background:
+      radial-gradient(60% 120% at 50% 0%, rgba(249, 95, 74, 0.1), transparent 70%),
+      rgba(13, 14, 13, 0.5);
+    border: 1px solid rgba(254, 252, 217, 0.08);
+    justify-content: center;
+  }
+  .dg-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    height: 44px;
+    padding: 0 16px;
+    border-radius: 100px;
+    background: rgba(6, 2, 2, 0.5);
+    border: 1px solid rgba(249, 95, 74, 0.75);
+    backdrop-filter: blur(20px) saturate(200%);
+    -webkit-backdrop-filter: blur(20px) saturate(200%);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    transition: border-color 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), padding 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+  .dg-pill:hover {
+    border-color: rgba(249, 95, 74, 1);
+    padding: 0 20px;
+  }
+  .dg-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 5px 10px;
+    border-radius: 100px;
+    transition: gap 0.38s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+  .dg-pill:hover .dg-nav-item {
+    gap: 7px;
+  }
+  .dg-nav-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(254, 252, 217, 0.5);
+    flex: none;
+    transition: background 0.35s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+  .dg-nav-item.is-active .dg-nav-dot {
+    background: #f95f4a;
+    box-shadow: 0 0 8px rgba(249, 95, 74, 0.8);
+  }
+  .dg-pill:hover .dg-nav-item:hover .dg-nav-dot {
+    background: #f95f4a;
+  }
+  .dg-nav-label {
+    max-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: #fefcd9;
+    opacity: 0;
+    transition: max-width 0.38s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.3s ease;
+  }
+  .dg-nav-item.is-active .dg-nav-label,
+  .dg-pill:hover .dg-nav-label {
+    max-width: 90px;
+    opacity: 1;
+  }
+  .dg-nav-hint {
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(254, 252, 217, 0.35);
+  }
+  :global(html[data-theme="light"]) .dg-nav-demo {
+    border-color: rgba(26, 26, 26, 0.08);
+  }
+
+  /* ── Mobile navbar deep dive ── */
+  .dg-mn {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(254, 252, 217, 0.1);
+  }
+  .dg-mn-h {
+    margin: 0;
+    font-family: "PolySans Trial", sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #fefcd9;
+  }
+  .dg-mn-lede {
+    margin: 0.6rem 0 1.6rem;
+    max-width: 62ch;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: rgba(254, 252, 217, 0.6);
+  }
+  .dg-mn-states {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .dg-mn-card {
+    padding: 1.2rem;
+    border-radius: 16px;
+    border: 1px solid rgba(254, 252, 217, 0.1);
+    background: rgba(254, 252, 217, 0.02);
+  }
+  .dg-mn-subhead-lede {
+    margin: 1.6rem 0 1rem;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.86rem;
+    letter-spacing: 0.04em;
+    color: rgba(254, 252, 217, 0.6);
+  }
+  :global(html[data-theme="light"]) .dg-mn-subhead-lede {
+    color: rgba(26, 26, 26, 0.6);
+  }
+  .dg-mn-scard {
+    padding: 1.1rem 1.2rem;
+    border-radius: 14px;
+    border: 1px solid rgba(254, 252, 217, 0.1);
+    background: rgba(254, 252, 217, 0.02);
+  }
+  :global(html[data-theme="light"]) .dg-mn-scard {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(26, 26, 26, 0.1);
+  }
+  .dg-mn-tag {
+    display: inline-block;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #f95f4a;
+    margin-bottom: 0.9rem;
+  }
+  /* mini bottom-deck mockup */
+  .dg-mn-demo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 100px;
+    background: #1e1e1e;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    margin-bottom: 0.9rem;
+    min-height: 40px;
+  }
+  .dg-mn-demo-col {
+    flex-direction: column;
+    align-items: stretch;
+    border-radius: 18px;
+    gap: 6px;
+  }
+  .dg-mn-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #f95f4a;
+    flex: none;
+  }
+  .dg-mn-lbl {
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    color: #fefcd9;
+  }
+  .dg-mn-spacer {
+    flex: 1;
+  }
+  .dg-mn-ico {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(254, 252, 217, 0.8);
+    font-size: 0.7rem;
+    flex: none;
+  }
+  .dg-mn-ico.is-play {
+    background: #f95f4a;
+    color: #0d0e0d;
+  }
+  .dg-mn-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 0.7rem;
+    color: #fefcd9;
+  }
+  .dg-mn-mini {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(249, 95, 74, 0.6);
+    flex: none;
+  }
+  .dg-mn-caret {
+    margin-left: auto;
+    color: rgba(254, 252, 217, 0.4);
+  }
+  .dg-mn-subhead {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 0.72rem;
+    color: #fefcd9;
+  }
+  .dg-mn-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #9b51e0;
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 700;
+    flex: none;
+  }
+  .dg-mn-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .dg-mn-chips i {
+    font-style: normal;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.58rem;
+    padding: 3px 8px;
+    border-radius: 100px;
+    background: rgba(255, 255, 255, 0.07);
+    color: rgba(254, 252, 217, 0.8);
+  }
+  .dg-mn-track {
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 0.66rem;
+    color: #fefcd9;
+  }
+  .dg-mn-prog {
+    display: block;
+    height: 4px;
+    border-radius: 100px;
+    background: rgba(254, 252, 217, 0.15);
+    overflow: hidden;
+  }
+  .dg-mn-prog i {
+    display: block;
+    height: 100%;
+    background: #f95f4a;
+  }
+  .dg-mn-transport {
+    text-align: center;
+    font-size: 0.72rem;
+    color: rgba(254, 252, 217, 0.7);
+    letter-spacing: 0.2em;
+  }
+  .dg-mn-transport b {
+    color: #f95f4a;
+  }
+  .dg-mn-body {
+    margin: 0;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: rgba(254, 252, 217, 0.55);
+  }
+  .dg-mn-body code,
+  .dg-mn-nb code {
+    color: #00b4d8;
+    font-size: 0.68rem;
+  }
+  .dg-mn-notes {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .dg-mn-note {
+    padding: 1.1rem 1.2rem;
+    border-radius: 14px;
+    border: 1px solid rgba(254, 252, 217, 0.08);
+    background: rgba(254, 252, 217, 0.015);
+  }
+  .dg-mn-nt {
+    margin: 0 0 0.4rem;
+    font-family: "PolySans Trial", sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    color: #fefcd9;
+  }
+  .dg-mn-nb {
+    margin: 0;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.8rem;
+    line-height: 1.55;
+    color: rgba(254, 252, 217, 0.55);
+  }
+  :global(html[data-theme="light"]) .dg-mn {
+    border-top-color: rgba(26, 26, 26, 0.1);
+  }
+  :global(html[data-theme="light"]) .dg-mn-h,
+  :global(html[data-theme="light"]) .dg-mn-nt {
+    color: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .dg-mn-card,
+  :global(html[data-theme="light"]) .dg-mn-note {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(26, 26, 26, 0.1);
+  }
+  :global(html[data-theme="light"]) .dg-mn-lede,
+  :global(html[data-theme="light"]) .dg-mn-body,
+  :global(html[data-theme="light"]) .dg-mn-nb {
+    color: rgba(26, 26, 26, 0.6);
+  }
+
+  /* ── Cassette player mock ── */
+  .dg-cp-stage {
+    justify-content: center;
+  }
+  .dg-cp {
+    width: 100%;
+    max-width: 320px;
+    padding: 16px;
+    border-radius: 18px;
+    background: linear-gradient(160deg, #201a17, #14100e);
+    border: 1px solid rgba(254, 252, 217, 0.08);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+  }
+  .dg-cp svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .dg-cp-body {
+    fill: #2a221e;
+    stroke: rgba(254, 252, 217, 0.1);
+    stroke-width: 1;
+  }
+  .dg-cp-cover {
+    fill: #1c1613;
+    stroke: rgba(254, 252, 217, 0.06);
+    stroke-width: 1;
+  }
+  .dg-cp-line {
+    stroke: rgba(254, 252, 217, 0.08);
+    stroke-width: 1;
+  }
+  .dg-cp-outer {
+    fill: #14100e;
+    stroke: rgba(254, 252, 217, 0.12);
+    stroke-width: 1;
+  }
+  .dg-cp-mid {
+    fill: #241d19;
+  }
+  .dg-cp-tape {
+    fill: rgba(254, 252, 217, 0.06);
+  }
+  .dg-cp-hub {
+    fill: #4a3f38;
+  }
+  .dg-cp-hub-accent {
+    fill: #f95f4a;
+  }
+  .dg-cp-spoke {
+    stroke: rgba(254, 252, 217, 0.3);
+    stroke-width: 2;
+  }
+  .dg-cp-reel {
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+  .dg-cp:hover .dg-cp-reel {
+    animation: dg-cp-spin 3s linear infinite;
+  }
+  @keyframes dg-cp-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dg-cp:hover .dg-cp-reel {
+      animation: none;
+    }
+  }
+  .dg-cp-path {
+    fill: none;
+    stroke: rgba(254, 252, 217, 0.25);
+    stroke-width: 1;
+  }
+  .dg-cp-window {
+    fill: rgba(0, 0, 0, 0.4);
+    stroke: rgba(254, 252, 217, 0.1);
+    stroke-width: 1;
+  }
+  .dg-cp-post {
+    fill: #4a3f38;
+  }
+  .dg-cp-label {
+    fill: #fefcd9;
+  }
+  .dg-cp-title {
+    fill: #17110f;
+    font-family: "PolySans Trial", sans-serif;
+    font-weight: 700;
+    font-size: 9px;
+  }
+  .dg-cp-artist {
+    fill: rgba(23, 17, 15, 0.6);
+    font-family: "PolySans Mono", monospace;
+    font-size: 6px;
+    letter-spacing: 0.1em;
+  }
+  .dg-cp-btn-bg {
+    fill: rgba(254, 252, 217, 0.06);
+    stroke: rgba(254, 252, 217, 0.1);
+    stroke-width: 1;
+  }
+  .dg-cp-btn-ico {
+    fill: rgba(254, 252, 217, 0.75);
+  }
+  .dg-cp-play-bg {
+    fill: #f95f4a;
+  }
+  .dg-cp-prog-bg {
+    fill: rgba(254, 252, 217, 0.12);
+  }
+  .dg-cp-prog-fill {
+    fill: #f95f4a;
+  }
+  .dg-cp-time {
+    fill: rgba(254, 252, 217, 0.4);
+    font-family: "PolySans Mono", monospace;
+    font-size: 6px;
+  }
+  .dg-cp-pin {
+    fill: rgba(254, 252, 217, 0.2);
+  }
+  .dg-cp-screw {
+    fill: rgba(254, 252, 217, 0.15);
+  }
+
+  /* ── Contributor pills ── */
+  .dg-people-stage {
+    --proj: #f95f4a;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+  }
+  .dg-people {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.85rem;
+  }
+  .dg-person {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 10px 16px 10px 10px;
+    border: 1px solid rgba(254, 252, 217, 0.1);
+    border-radius: 100px;
+    background: rgba(254, 252, 217, 0.02);
+    text-decoration: none;
+    min-width: 210px;
+    transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+  }
+  .dg-person:hover {
+    background: color-mix(in srgb, var(--proj) 12%, transparent);
+    border-color: var(--proj);
+    transform: translateY(-2px);
+  }
+  .dg-person-av {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex: none;
+    background: rgba(254, 252, 217, 0.06);
+  }
+  .dg-person-av img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .dg-person-av--initial {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--proj) 30%, transparent);
+    color: var(--proj);
+    font-family: "PolySans Trial", sans-serif;
+    font-weight: 800;
+    font-size: 1.15rem;
+  }
+  .dg-person-info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+  }
+  .dg-person-name {
+    font-family: "PolySans Trial", sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #fefcd9;
+  }
+  .dg-person-role {
+    margin-top: 0.25rem;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(254, 252, 217, 0.5);
+  }
+  .dg-person-arr {
+    margin-left: auto;
+    color: rgba(254, 252, 217, 0.4);
+  }
+  .dg-person:hover .dg-person-arr {
+    color: var(--proj);
+  }
+  .dg-mini-person {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 4px 12px 4px 4px;
+    border: 1px solid rgba(254, 252, 217, 0.1);
+    border-radius: 100px;
+    background: rgba(254, 252, 217, 0.02);
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 0.76rem;
+    color: rgba(254, 252, 217, 0.78);
+  }
+  .dg-mini-av {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    flex: none;
+  }
+  .dg-mini-av--initial {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--proj, #f95f4a) 30%, transparent);
+    color: var(--proj, #f95f4a);
+    font-weight: 700;
+    font-size: 0.7rem;
+  }
+  :global(html[data-theme="light"]) .dg-person,
+  :global(html[data-theme="light"]) .dg-mini-person {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(26, 26, 26, 0.1);
+  }
+  :global(html[data-theme="light"]) .dg-person-name {
+    color: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .dg-person-role {
+    color: rgba(26, 26, 26, 0.55);
+  }
+  :global(html[data-theme="light"]) .dg-person-arr {
+    color: rgba(26, 26, 26, 0.4);
+  }
+  :global(html[data-theme="light"]) .dg-mini-person {
+    color: rgba(26, 26, 26, 0.75);
+  }
+
+  /* ── Interactive mobile-navbar replica (dg-mnx) ── */
+  .dg-mnx-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 2.2rem 1rem;
+    border-radius: 16px;
+    background:
+      radial-gradient(70% 130% at 50% 100%, rgba(249, 95, 74, 0.08), transparent 70%),
+      rgba(13, 14, 13, 0.5);
+    border: 1px solid rgba(254, 252, 217, 0.08);
+  }
+  .dg-mnx-pill {
+    width: 320px;
+    max-width: 100%;
+    background: #1e1e1e;
+    border-radius: 28px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(249, 95, 74, 0.45);
+    overflow: hidden;
+  }
+  .dg-mnx-panel {
+    animation: dg-mnx-in 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+  .dg-mnx-panel[hidden] {
+    display: none;
+  }
+  @keyframes dg-mnx-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dg-mnx-panel {
+      animation: none;
+    }
+  }
+  /* nav */
+  .dg-mnx-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 16px;
+  }
+  .dg-mnx-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+  .dg-mnx-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #f95f4a;
+    box-shadow: 0 0 6px rgba(249, 95, 74, 0.6);
+    flex: none;
+  }
+  .dg-mnx-label {
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #fefcd9;
+  }
+  .dg-mnx-btns {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: none;
+  }
+  .dg-mnx-btn,
+  .dg-mnx-close,
+  .dg-mnx-tbtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(254, 252, 217, 0.08);
+    color: #fefcd9;
+    border: 1px solid rgba(254, 252, 217, 0.06);
+    cursor: pointer;
+    transition: background 0.18s ease, transform 0.12s ease;
+  }
+  .dg-mnx-btn:hover,
+  .dg-mnx-close:hover,
+  .dg-mnx-tbtn:hover {
+    background: rgba(254, 252, 217, 0.16);
+  }
+  .dg-mnx-btn:active,
+  .dg-mnx-close:active,
+  .dg-mnx-tbtn:active,
+  .dg-mnx-btn-primary:active,
+  .dg-mnx-play:active {
+    transform: scale(0.9);
+  }
+  .dg-mnx-btn-primary {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #f95f4a;
+    color: #fefcd9;
+    border: 1px solid rgba(254, 252, 217, 0.25);
+    box-shadow: 0 4px 12px rgba(249, 95, 74, 0.32);
+    cursor: pointer;
+    transition: transform 0.12s ease;
+  }
+  .dg-mnx-eq {
+    display: none;
+    align-items: flex-end;
+    gap: 2px;
+    height: 14px;
+  }
+  .dg-mnx-eq i {
+    width: 2px;
+    background: #fefcd9;
+    border-radius: 1px;
+    animation: dg-mnx-eq 0.9s ease-in-out infinite;
+  }
+  .dg-mnx-eq i:nth-child(1) { height: 5px; animation-delay: 0s; }
+  .dg-mnx-eq i:nth-child(2) { height: 10px; animation-delay: 0.15s; }
+  .dg-mnx-eq i:nth-child(3) { height: 14px; animation-delay: 0.3s; }
+  .dg-mnx-eq i:nth-child(4) { height: 7px; animation-delay: 0.45s; }
+  @keyframes dg-mnx-eq {
+    0%, 100% { transform: scaleY(0.4); }
+    50% { transform: scaleY(1); }
+  }
+  .dg-mnx-pill.is-playing .dg-mnx-eq { display: inline-flex; }
+  .dg-mnx-pill.is-playing .dg-mnx-note { display: none; }
+  /* menu */
+  .dg-mnx-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 12px;
+  }
+  .dg-mnx-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px 4px 8px;
+  }
+  .dg-mnx-head-title {
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(254, 252, 217, 0.6);
+  }
+  .dg-mnx-close {
+    width: 28px;
+    height: 28px;
+  }
+  .dg-mnx-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background 0.18s ease;
+  }
+  .dg-mnx-link:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .dg-mnx-link-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(249, 95, 74, 0.55);
+    flex: none;
+  }
+  .dg-mnx-link-t {
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 13px;
+    color: #fefcd9;
+  }
+  .dg-mnx-link-caret {
+    margin-left: auto;
+    color: rgba(254, 252, 217, 0.4);
+  }
+  /* music */
+  .dg-mnx-music {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+  .dg-mnx-track {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .dg-mnx-track-t {
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 13px;
+    color: #fefcd9;
+  }
+  .dg-mnx-track-a {
+    font-family: "PolySans Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(254, 252, 217, 0.55);
+  }
+  .dg-mnx-scrub {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dg-mnx-time {
+    font-family: "PolySans Mono", monospace;
+    font-size: 10px;
+    color: rgba(254, 252, 217, 0.5);
+  }
+  .dg-mnx-track-bar {
+    flex: 1;
+    height: 4px;
+    border-radius: 100px;
+    background: rgba(254, 252, 217, 0.15);
+    overflow: hidden;
+  }
+  .dg-mnx-track-bar i {
+    display: block;
+    height: 100%;
+    background: #f95f4a;
+  }
+  .dg-mnx-transport {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+  }
+  .dg-mnx-play {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #f95f4a;
+    color: #fefcd9;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.12s ease;
+  }
+  .dg-mnx-hint {
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(254, 252, 217, 0.35);
+  }
+  :global(html[data-theme="light"]) .dg-mnx-stage {
+    border-color: rgba(26, 26, 26, 0.08);
+  }
+
+  /* ── Card note grids ── */
+  .dg-card-notes {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 1.2rem;
+  }
+  .dg-note-inline {
+    margin-top: 1.1rem !important;
+  }
+
+  /* ── Calendar section ── */
+  .dg-cal-views {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .dg-cal-view {
+    padding: 1.4rem;
+    border-radius: 14px;
+    border: 1px solid rgba(254, 252, 217, 0.1);
+    background: rgba(254, 252, 217, 0.02);
+  }
+  .dg-cal-switch {
+    display: inline-flex;
+    gap: 2px;
+    padding: 3px;
+    border-radius: 100px;
+    background: rgba(13, 14, 13, 0.5);
+    border: 1px solid rgba(254, 252, 217, 0.12);
+  }
+  .dg-cal-sw {
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.06em;
+    padding: 5px 14px;
+    border-radius: 100px;
+    color: rgba(254, 252, 217, 0.5);
+  }
+  .dg-cal-sw.is-on {
+    background: #f95f4a;
+    color: #0d0e0d;
+    font-weight: 500;
+  }
+  .dg-cal-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+  .dg-cal-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.8rem 0.4rem 0.4rem;
+    border-radius: 100px;
+    border: 1px solid;
+    background: rgba(254, 252, 217, 0.03);
+  }
+  .dg-cal-pill img {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+  }
+  .dg-cal-pill span {
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.68rem;
+    font-weight: 500;
+  }
+  :global(html[data-theme="light"]) .dg-cal-view {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(26, 26, 26, 0.1);
+  }
+  @media (max-width: 640px) {
+    .dg-cal-views {
+      grid-template-columns: 1fr;
+    }
+  }
+
   [data-reveal] {
     opacity: 0;
   }
@@ -879,6 +3287,45 @@ const dontList = [
   @media (max-width: 640px) {
     .dg-rules {
       grid-template-columns: 1fr;
+    }
+  }
+
+  /* ── Global cap: never more than 3 boxes per row ── */
+  .dg-swatch-grid,
+  .dg-swatch-grid-base,
+  .dg-marks-grid,
+  .dg-weight-grid,
+  .dg-cass-grid,
+  .dg-motion-grid,
+  .dg-card-notes,
+  .dg-mn-notes,
+  .dg-mn-states {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+  @media (max-width: 820px) {
+    .dg-swatch-grid,
+    .dg-swatch-grid-base,
+    .dg-marks-grid,
+    .dg-weight-grid,
+    .dg-cass-grid,
+    .dg-motion-grid,
+    .dg-card-notes,
+    .dg-mn-notes,
+    .dg-mn-states {
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+  }
+  @media (max-width: 520px) {
+    .dg-swatch-grid,
+    .dg-swatch-grid-base,
+    .dg-marks-grid,
+    .dg-weight-grid,
+    .dg-cass-grid,
+    .dg-motion-grid,
+    .dg-card-notes,
+    .dg-mn-notes,
+    .dg-mn-states {
+      grid-template-columns: 1fr !important;
     }
   }
 </style>
@@ -932,5 +3379,286 @@ const dontList = [
     document.addEventListener("DOMContentLoaded", initDesignGuideReveal);
   } else {
     initDesignGuideReveal();
+  }
+
+  // ── Side rail scroll-spy (cassette strip progress) ──
+  function initDesignGuideRail() {
+    const rail = document.getElementById("dgRail");
+    const fill = document.getElementById("dgRailFill");
+    if (!rail) return;
+    const items = Array.from(rail.querySelectorAll(".dg-rail-item"));
+    const sections = items
+      .map((it) => document.getElementById(it.getAttribute("data-rail") || ""))
+      .filter((el) => !!el);
+    if (!sections.length) return;
+
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const line = window.innerHeight * 0.32;
+      let active = 0;
+      sections.forEach((sec, i) => {
+        if (sec.getBoundingClientRect().top <= line) active = i;
+      });
+      items.forEach((it, i) => {
+        it.classList.toggle("is-active", i === active);
+        it.classList.toggle("is-done", i < active);
+      });
+      if (fill) fill.style.height = `${((active + 1) / items.length) * 100}%`;
+    };
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    update();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initDesignGuideRail);
+  } else {
+    initDesignGuideRail();
+  }
+
+  // ── Inert mobile-navbar replica: morph panels, never navigate ──
+  function initDesignGuideMnx() {
+    const pill = document.getElementById("dgMnxPill");
+    if (!pill) return;
+    const panels = Array.from(pill.querySelectorAll(".dg-mnx-panel"));
+    const show = (state) => {
+      pill.setAttribute("data-state", state);
+      panels.forEach((p) => {
+        const on = p.getAttribute("data-mnx") === state;
+        if (on) p.removeAttribute("hidden");
+        else p.setAttribute("hidden", "");
+        // restart the entry animation
+        if (on) {
+          p.style.animation = "none";
+          void p.offsetWidth;
+          p.style.animation = "";
+        }
+      });
+    };
+    pill.addEventListener("click", (e) => {
+      const t = e.target.closest("[data-mnx-go],[data-mnx-play]");
+      if (!t) return;
+      e.preventDefault();
+      if (t.hasAttribute("data-mnx-go")) show(t.getAttribute("data-mnx-go"));
+      if (t.hasAttribute("data-mnx-play")) {
+        const playing = pill.classList.toggle("is-playing");
+        const p = t.querySelector(".dg-mnx-ico-play");
+        const q = t.querySelector(".dg-mnx-ico-pause");
+        if (p && q) {
+          p.hidden = playing;
+          q.hidden = !playing;
+        }
+      }
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initDesignGuideMnx);
+  } else {
+    initDesignGuideMnx();
+  }
+
+  // Demo buttons are for show - swallow their clicks so nothing navigates.
+  document.querySelectorAll(".dg-inert").forEach((wrap) => {
+    wrap.addEventListener("click", (e) => {
+      const hit = (e.target as HTMLElement).closest("a,button");
+      if (hit && wrap.contains(hit)) e.preventDefault();
+    });
+  });
+</script>
+
+<script>
+  // Live character-map specimen. Measures the selected PolySans / Cormorant
+  // face off a canvas, draws the glyph against cap/x-height/baseline/descender
+  // guides, and recolours when the site theme is toggled. Mirrors the
+  // /design typography specimen, retuned for the dark cassette palette.
+  const svg = document.getElementById("dg-cm-svg");
+  const grid = document.getElementById("dg-cm-grid");
+  const current = document.getElementById("dg-cm-current");
+  const famLabel = document.getElementById("dg-cm-fam");
+
+  if (svg && grid) {
+    const NS = "http://www.w3.org/2000/svg";
+    const VBW = 660;
+    const S = 440; // glyph size in svg units
+    const INSET = 12;
+    const PAD = 40;
+    const GX = VBW * 0.5;
+
+    let INK = "#fefcd9";
+    let INK3 = "rgba(254,252,217,0.5)";
+    let BG = "#0d0e0d";
+    const MONO = '"PolySans Mono", monospace';
+
+    function readTheme() {
+      const light = document.documentElement.getAttribute("data-theme") === "light";
+      INK = light ? "#1a1a1a" : "#fefcd9";
+      INK3 = light ? "rgba(26,26,26,0.5)" : "rgba(254,252,217,0.5)";
+      BG = light ? "#f5ede4" : "#0d0e0d";
+    }
+
+    let font = "PolySans Trial";
+    let glyph = "H";
+    let mode = "solid";
+    let m = { cap: 0.71, xh: 0.52, desc: 0.22, asc: 0.99, descMax: 0.27 };
+
+    const FS = 400;
+    const mctx = document.createElement("canvas").getContext("2d");
+    const setFont = () => {
+      if (mctx) {
+        mctx.font = `${FS}px "${font}", sans-serif`;
+        mctx.textBaseline = "alphabetic";
+        mctx.textAlign = "center";
+      }
+    };
+
+    function measureFont() {
+      if (!mctx) return m;
+      setFont();
+      const cap = mctx.measureText("H").actualBoundingBoxAscent / FS;
+      const xh = mctx.measureText("x").actualBoundingBoxAscent / FS;
+      let desc = 0;
+      for (const c of "gjpqy") desc = Math.max(desc, mctx.measureText(c).actualBoundingBoxDescent / FS);
+      let asc = cap;
+      for (const c of "ÅÄÁÀÂÃÉÊÍÎÏÑÓÔÕÖÜÚÛÝbdfhklt") asc = Math.max(asc, mctx.measureText(c).actualBoundingBoxAscent / FS);
+      let descMax = desc;
+      for (const c of "gjpqyQÇç") descMax = Math.max(descMax, mctx.measureText(c).actualBoundingBoxDescent / FS);
+      if (!cap || !xh) return m;
+      return { cap, xh, desc, asc, descMax };
+    }
+
+    function glyphBounds(ch) {
+      if (!mctx) return { asc: m.cap * S, desc: m.desc * S, left: S * 0.3, right: S * 0.3 };
+      setFont();
+      const t = mctx.measureText(ch);
+      return {
+        asc: ((t.actualBoundingBoxAscent || m.cap * FS) / FS) * S,
+        desc: ((t.actualBoundingBoxDescent || 0) / FS) * S,
+        left: ((t.actualBoundingBoxLeft || t.width / 2) / FS) * S,
+        right: ((t.actualBoundingBoxRight || t.width / 2) / FS) * S,
+      };
+    }
+
+    function el(name, attrs, text) {
+      const n = document.createElementNS(NS, name);
+      for (const k in attrs) n.setAttribute(k, String(attrs[k]));
+      if (text != null) n.textContent = text;
+      return n;
+    }
+
+    function anchor(px, py) {
+      const sq = 11;
+      return el("rect", { x: px - sq / 2, y: py - sq / 2, width: sq, height: sq, fill: BG, stroke: INK, "stroke-width": 1.6 });
+    }
+
+    function build() {
+      readTheme();
+      const capPx = m.cap * S;
+      const xPx = m.xh * S;
+      const descPx = m.desc * S;
+      const capY = -capPx, xY = -xPx, baseY = 0, descY = descPx;
+
+      const top = -m.asc * S - PAD;
+      const bottom = m.descMax * S + PAD;
+      svg.setAttribute("viewBox", `0 ${top} ${VBW} ${bottom - top}`);
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+      if (mode === "solid") {
+        svg.appendChild(el("text", { x: GX, y: baseY, "font-size": S, "font-family": `"${font}", sans-serif`, "text-anchor": "middle", fill: INK }, glyph));
+      } else {
+        svg.appendChild(el("text", { x: GX, y: baseY, "font-size": S, "font-family": `"${font}", sans-serif`, "text-anchor": "middle", fill: "none", stroke: INK, "stroke-width": 2 }, glyph));
+        const gb = glyphBounds(glyph);
+        const lx = GX - gb.left, rx = GX + gb.right, ty = -gb.asc, by = gb.desc;
+        for (const [px, py] of [[lx, ty], [rx, ty], [GX, ty], [lx, by], [rx, by], [GX, by]]) svg.appendChild(anchor(px, py));
+      }
+
+      const lines = [
+        { y: capY, lbl: "CAP HEIGHT", val: Math.round(m.cap * 1000) },
+        { y: xY, lbl: "X-HEIGHT", val: Math.round(m.xh * 1000) },
+        { y: baseY, lbl: "BASELINE", val: 0, strong: true },
+        { y: descY, lbl: "DESCENDER", val: -Math.round(m.desc * 1000) },
+      ];
+      const vw = 46, vx = VBW - INSET - vw;
+      for (const ln of lines) {
+        svg.appendChild(el("line", { x1: INSET, y1: ln.y, x2: VBW - INSET, y2: ln.y, stroke: INK3, "stroke-width": 1.6, "stroke-linecap": "round", "stroke-dasharray": "1 6", opacity: ln.strong ? 0.9 : 0.6 }));
+        svg.appendChild(el("text", { x: INSET, y: ln.y - 8, fill: INK3, "font-family": MONO, "font-size": 11, "letter-spacing": 0.6 }, ln.lbl));
+        svg.appendChild(el("rect", { x: vx, y: ln.y - 18, width: vw, height: 15, rx: 3, fill: INK }));
+        svg.appendChild(el("text", { x: vx + vw / 2, y: ln.y - 7, "text-anchor": "middle", fill: BG, "font-family": MONO, "font-size": 11, "font-weight": 600 }, ln.val));
+      }
+    }
+
+    function setGlyph(ch, btn) {
+      if (!ch || ch === glyph) return;
+      glyph = ch;
+      if (current) current.textContent = ch;
+      grid.querySelectorAll(".dg-cm-cell.is-active").forEach((b) => {
+        b.classList.remove("is-active");
+        b.setAttribute("aria-selected", "false");
+      });
+      if (btn) {
+        btn.classList.add("is-active");
+        btn.setAttribute("aria-selected", "true");
+      }
+      build();
+    }
+
+    const handle = (e) => {
+      const btn = (e.target as HTMLElement).closest(".dg-cm-cell");
+      if (btn) setGlyph(btn.getAttribute("data-g"), btn);
+    };
+    grid.addEventListener("pointerover", handle);
+    grid.addEventListener("click", handle);
+    grid.addEventListener("focusin", handle);
+
+    // family switch
+    const fonts = Array.from(document.querySelectorAll(".dg-cm-font"));
+    fonts.forEach((f) => {
+      f.addEventListener("click", () => {
+        font = f.getAttribute("data-font") || "PolySans Trial";
+        grid.style.setProperty("--dg-cm-font", `"${font}"`);
+        if (famLabel) famLabel.textContent = f.getAttribute("data-lbl") || font;
+        fonts.forEach((o) => {
+          const on = o === f;
+          o.classList.toggle("is-on", on);
+          o.setAttribute("aria-selected", on ? "true" : "false");
+        });
+        m = measureFont();
+        build();
+      });
+    });
+
+    // solid / outline toggle
+    const togs = Array.from(document.querySelectorAll(".dg-cm-tog"));
+    togs.forEach((t) => {
+      t.addEventListener("click", () => {
+        mode = t.getAttribute("data-mode") || "solid";
+        togs.forEach((o) => {
+          const on = o === t;
+          o.classList.toggle("is-on", on);
+          o.setAttribute("aria-selected", on ? "true" : "false");
+        });
+        build();
+      });
+    });
+
+    const go = () => {
+      m = measureFont();
+      build();
+    };
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(go);
+    else go();
+
+    // recolour when the site theme is toggled
+    new MutationObserver(() => build()).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
   }
 </script>
