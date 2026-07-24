@@ -269,6 +269,23 @@
   .ds-topbar-link:last-child {
     display: inline-block;
   }
+  /* Narrow bar: hamburger + brand + toggle + acmvit.in overflow a phone.
+     Tighten the frame and drop the "Design" subtext so it all fits. */
+  .ds-topbar {
+    padding: 0 14px;
+    gap: 8px;
+  }
+  .ds-topbar-brand {
+    font-size: 15px;
+    min-width: 0;
+  }
+  .ds-topbar-brand span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .ds-topbar-brand .ds-brand-sub {
+    display: none;
+  }
 }
 
 /* ---- left rail ---- */

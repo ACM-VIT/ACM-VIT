@@ -254,7 +254,8 @@ export const items: Aoi[] = [
       },
       {
         "title": "Cryptic Hunt Game",
-        "desc": "Map-based puzzle game guiding Cryptic Hunt participants through campus at night."
+        "desc": "Map-based puzzle game guiding Cryptic Hunt participants through campus at night.",
+        "cassette": "/events/events-cryptic-hunt-cassette.svg"
       }
     ],
     "events": [
