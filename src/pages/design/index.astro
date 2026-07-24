@@ -49,7 +49,7 @@ const sections = [
     href: "/design/motion",
     title: "Motion",
     desc: "Easing, durations, and how ACM interfaces move.",
-    span: "ds-b4",
+    span: "ds-b8",
     tone: "var(--ds-green-tonal)",
     art: "motion",
   },
@@ -69,15 +69,19 @@ const sections = [
     tone: "var(--ds-surface-tonal)",
     art: "download",
   },
+  {
+    href: "/design/otherresources",
+    title: "Other Resources",
+    desc: "Event, product, and enamel-pin logos - all downloadable.",
+    span: "ds-b8",
+    tone: "var(--ds-green-tonal)",
+    art: "otherresources",
+  },
 ];
 ---
 
 <DesignLayout title="Home" current="/design">
-<<<<<<< HEAD
-  <DesignIntro />
-=======
   <DesignWordIntro />
->>>>>>> main
   <section class="ds-hero">
     <div class="ds-kicker">
       <span class="ds-kicker-pill">Design Guidelines</span>
@@ -168,6 +172,13 @@ const sections = [
                 <path d="M26 8v24m0 0 10-10M26 32 16 22" />
                 <path d="M10 40h32" />
               </svg>
+            )}
+            {s.art === "otherresources" && (
+              <div class="ds-art-stack">
+                <span style="background:#f95f4a" />
+                <span style="background:#135de2" />
+                <span style="background:#1f9d76" />
+              </div>
             )}
           </div>
           <h3 class="ds-h3">{s.title}</h3>
@@ -306,5 +317,24 @@ const sections = [
   }
   .ds-art-posts span:nth-child(3) {
     opacity: 0.9;
+  }
+  /* three overlapping cards - the "other logos" pile */
+  .ds-art-stack {
+    display: flex;
+  }
+  .ds-art-stack span {
+    width: 40px;
+    height: 52px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(28, 27, 26, 0.16);
+    border: 2px solid var(--ds-surface, #fff);
+  }
+  .ds-art-stack span:nth-child(2) {
+    margin-left: -14px;
+    margin-top: 8px;
+  }
+  .ds-art-stack span:nth-child(3) {
+    margin-left: -14px;
+    margin-top: 16px;
   }
 </style>
