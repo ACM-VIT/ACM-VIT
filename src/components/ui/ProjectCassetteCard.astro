@@ -36,7 +36,7 @@ const Tag = href ? "a" : "div";
         <img
           src={getAssetUrl(proj.cassetteSvg)}
           alt={title}
-          class="proj-cass-svg"
+          class="proj-cass-svg proj-cass-shell"
           loading="lazy"
           decoding="async"
         />
@@ -77,13 +77,26 @@ const Tag = href ? "a" : "div";
      full-width and the tape balloons - e.g. DevOps' one project. */
   .proj-cass-tape :global(.cassette-container) {
     width: 100%;
-    max-width: 220px;
+    /* !important: Cassette.astro sets an inline max-width:640px that would
+       otherwise win over this cap and balloon the overlay tape (CLI-RPG). */
+    max-width: 220px !important;
   }
   .proj-cass-svg {
     width: 100%;
     max-width: 220px;
     height: auto;
     border-radius: 12px;
+  }
+  /* svg-kind cassettes are white-stroke art on a transparent canvas (e.g.
+     tagred) - give them the same dark shell as the <Cassette> component so
+     they read on the light AOI page and match the others' size. */
+  .proj-cass-shell {
+    border-radius: 3.99% / 6.52%;
+  }
+  /* dark page bg already reads behind the white-stroke art - only paint the
+     shell in light mode. */
+  :global(html[data-theme="light"]) .proj-cass-shell {
+    background: #1a1a1a;
   }
   .proj-cass-card:hover .proj-cass-tape :global(.cassette-container),
   .proj-cass-card:hover .proj-cass-svg {

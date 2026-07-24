@@ -361,9 +361,9 @@ const platforms = [
     border-radius: 5px;
     background: #3a3835;
   }
-  /* neutral feed tiles need to sit above the dark card surface */
+  /* keep the light-mode tile palette in dark mode too */
   :global(html[data-theme="dark"]) .ds-feed-demo span {
-    background: var(--ds-surface-tonal-2);
+    background: #3a3835;
   }
   /* hairline the Ink/orange/cream trio so each reads on the dark card */
   :global(html[data-theme="dark"]) .ds-theme-trio span {
