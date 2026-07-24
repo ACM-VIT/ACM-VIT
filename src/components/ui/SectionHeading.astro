@@ -20,6 +20,8 @@ export interface Props {
   align?: "left" | "center";
   /** Accent color override. */
   accentColor?: string;
+  /** Drop the space between title and accent - for mid-word two-tone splits. */
+  joinAccent?: boolean;
   class?: string;
 }
 
@@ -29,6 +31,7 @@ const {
   subtitle,
   align = "center",
   accentColor = "#F95F4A",
+  joinAccent = false,
   class: className = "",
 } = Astro.props;
 
@@ -50,8 +53,14 @@ const alignClasses =
   <h2
     class="sh-title m-0 font-['PolySans_Trial',sans-serif] text-4xl font-bold uppercase leading-[0.95] tracking-[-0.03em] text-[#FEFCD9] sm:text-6xl lg:text-7xl"
   >
-    {title && <span class="sh-word inline-block">{title} </span>}
-    {accent && <span class="sh-word inline-block text-[var(--accent)]">{accent}</span>}
+    {joinAccent ? (
+      <span class="sh-word inline-block">{title}<span class="text-[var(--accent)]">{accent}</span></span>
+    ) : (
+      <Fragment>
+        {title && <span class="sh-word inline-block">{title} </span>}
+        {accent && <span class="sh-word inline-block text-[var(--accent)]">{accent}</span>}
+      </Fragment>
+    )}
   </h2>
 
   <span

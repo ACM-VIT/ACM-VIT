@@ -899,7 +899,7 @@ const dontList = [
         <div class="dg-component-block">
           <span class="dg-component-label">Fill Button - secondary / inline action</span>
           <div class="dg-component-stage dg-stage-center dg-inert">
-            <FillButton label="Explore Projects" href="/projects" />
+            <FillButton label="Explore Projects" href="/projects" class="dg-demo-fill" />
           </div>
           <p class="dg-component-note dg-note-inline">
             An outlined pill whose accent fill wipes in from the bottom on hover.
@@ -1614,6 +1614,13 @@ const dontList = [
   .dg-stage-center {
     justify-content: center;
   }
+  /* give the demo FillButton a real accent so it reads as a solid orange pill
+     and the hover fill stays legible (unset, it dissolves into the dark page) */
+  .dg-component-stage :global(.dg-demo-fill) {
+    --proj-color: #f95f4a;
+    --proj-color-secondary: #0d0e0d;
+    --fill-bg: #0d0e0d;
+  }
   .dg-component-stage-tile {
     max-width: 320px;
     margin-inline: auto;
@@ -1954,8 +1961,9 @@ const dontList = [
   :global(html[data-theme="light"]) .dg-rail-tick {
     background: rgba(26, 26, 26, 0.28);
   }
-  :global(html[data-theme="light"]) .dg-rail:hover .dg-rail-item.is-active {
-    background: rgba(245, 237, 228, 0.85);
+  :global(html[data-theme="light"]) .dg-rail-item.is-active {
+    background: rgba(245, 237, 228, 0.95);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
   }
   /* hide the rail when there isn't room beside the centered column */
   @media (max-width: 1200px) {
