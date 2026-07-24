@@ -617,9 +617,11 @@ const railSections = chapters.map((c) => ({ id: c.id, label: railLabel[c.id] || 
   function initCassette() {
     const canvas = document.getElementById("cass-canvas") as HTMLCanvasElement | null;
     const chaptersEl = document.getElementById("cass-chapters");
-    const railFill = document.getElementById("cass-rail-fill");
+    const railFill = document.getElementById("dgRailFill");
+    const railItems = Array.from(
+      document.querySelectorAll<HTMLElement>(".dg-rail-item"),
+    );
     const stageEl = document.querySelector<HTMLElement>(".cass-stage");
-    const railEl = document.querySelector<HTMLElement>(".cass-rail");
     if (!canvas || !chaptersEl) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -1237,6 +1239,16 @@ const railSections = chapters.map((c) => ({ id: c.id, label: railLabel[c.id] || 
       onUpdate: (self) => {
         scrollT = self.progress;
         if (railFill) railFill.style.height = (self.progress * 100).toFixed(2) + "%";
+        // Mark the rail from the SAME stage the copy shows (sf = round of the
+        // fractional stage), so the active tick never leads the visible section.
+        if (railItems.length) {
+          const sf = Math.min(S - 1, Math.max(0, self.progress * S - 0.5));
+          const active = Math.round(sf);
+          for (let i = 0; i < railItems.length; i++) {
+            railItems[i].classList.toggle("is-active", i === active);
+            railItems[i].classList.toggle("is-done", i < active);
+          }
+        }
       },
     });
 
@@ -1412,7 +1424,6 @@ const railSections = chapters.map((c) => ({ id: c.id, label: railLabel[c.id] || 
       const crb = chaptersEl.getBoundingClientRect().bottom;
       const gFade = smooth(vh * 0.62, vh * 1.02, crb);
       if (stageEl) stageEl.style.opacity = gFade.toFixed(3);
-      if (railEl) railEl.style.opacity = gFade.toFixed(3);
 
       for (let i = 0; i < copies.length; i++) {
         const vis = (1 - smooth(0.16, 0.72, Math.abs(sf - i))) * gFade;
@@ -1500,48 +1511,4 @@ const railSections = chapters.map((c) => ({ id: c.id, label: railLabel[c.id] || 
       el.textContent = w.charAt(0).toUpperCase() + w.slice(1);
     }
   });
-</script>
-
-<script>
-  // ── Side rail scroll-spy (same behaviour as /sleeve-notes) ──
-  function initCassetteRail() {
-    const rail = document.getElementById("dgRail");
-    const fill = document.getElementById("dgRailFill");
-    if (!rail) return;
-    const items = Array.from(rail.querySelectorAll<HTMLElement>(".dg-rail-item"));
-    const sections = items
-      .map((it) => document.getElementById(it.getAttribute("data-rail") || ""))
-      .filter((el): el is HTMLElement => !!el);
-    if (!sections.length) return;
-
-    let ticking = false;
-    const update = () => {
-      ticking = false;
-      const line = window.innerHeight * 0.32;
-      let active = 0;
-      sections.forEach((sec, i) => {
-        if (sec.getBoundingClientRect().top <= line) active = i;
-      });
-      items.forEach((it, i) => {
-        it.classList.toggle("is-active", i === active);
-        it.classList.toggle("is-done", i < active);
-      });
-      if (fill) fill.style.height = `${((active + 1) / items.length) * 100}%`;
-    };
-
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(update);
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
-    update();
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initCassetteRail);
-  } else {
-    initCassetteRail();
-  }
 </script>
