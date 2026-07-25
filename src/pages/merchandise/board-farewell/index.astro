@@ -1,4 +1,5 @@
 ---
+import { getAssetUrl } from "../../../utils/cdn";
 export const prerender = true;
 import Layout from "../../../layouts/Layout.astro";
 import "../../../styles/globals.css";
@@ -17,7 +18,7 @@ import Footer from "../../../layouts/Footer.astro";
     </div>
 
     <div class="bf-tee" data-bf-tee>
-      <img src="/merch/board-farewell/merch-board-farewell-tee.webp" alt="Board Farewell Tee" loading="eager" />
+      <img src={getAssetUrl("/merch/board-farewell/merch-board-farewell-tee.webp")} alt="Board Farewell Tee" loading="eager" />
     </div>
 
     <div class="bf-badge" data-badge>
@@ -39,7 +40,7 @@ import Footer from "../../../layouts/Footer.astro";
     <div class="bf-cover-wrap">
       <h3 class="bf-cover-title" data-cover-anim>The cover art, up close.</h3>
       <img
-        src="/merch/board-farewell/merch-board-farewell-cover.webp"
+        src={getAssetUrl("/merch/board-farewell/merch-board-farewell-cover.webp")}
         alt="Board Farewell Cover Art"
         class="bf-cover-img"
         loading="lazy"
@@ -53,7 +54,7 @@ import Footer from "../../../layouts/Footer.astro";
       <p class="bf-end__text" data-end-anim>you have reached the end of the rack</p>
       <p class="bf-end__sub" data-end-anim>no more hangers, just vibes from here</p>
       <img
-        src="/merch/merch-lineup.webp"
+        src={getAssetUrl("/merch/merch-lineup.webp")}
         alt="ACM-VIT merchandise lineup"
         class="bf-end__img"
         loading="lazy"

@@ -1,0 +1,351 @@
+---
+export const prerender = false; // needs the signed-in identity
+
+import "../../styles/globals.css";
+import manifest from "../../generated/manifest.json";
+import { getCmsUser } from "../../platform/access/session";
+import { resolvePermissions } from "../../platform/access/permissions";
+import { requireCmsAuth } from "../../platform/access/guard";
+
+const gate = requireCmsAuth(Astro);
+if (gate) return gate;
+
+const user = await getCmsUser(Astro.cookies);
+const perms = resolvePermissions(user.username);
+
+const camel = (k: string) => k.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+const counts = (manifest as any).content as Record<string, { count: number }>;
+const countOf = (kebab: string) => counts[kebab]?.count;
+
+type Item = { kebab: string; label: string; kind: "collection" | "singleton" };
+const col = (kebab: string, label: string): Item => ({ kebab, label, kind: "collection" });
+const one = (kebab: string, label: string): Item => ({ kebab, label, kind: "singleton" });
+
+type Section = { id: string; title: string; icon: string; blurb: string; items: Item[] };
+
+// Ordered by editorial frequency - what editors touch most sits at the top.
+const sections: Section[] = [
+  { id: "events", title: "Events", icon: "calendar", blurb: "Event pages, the calendar and the homepage events band", items: [
+    col("events", "Events"), col("calendar-events", "Calendar events"), one("events-section", "Homepage events band"), one("event-links", "Events link map"),
+  ]},
+  { id: "projects", title: "Projects", icon: "cube", blurb: "Project detail pages, the grid and Forktober", items: [
+    col("project-details", "Projects"), col("project-cassettes", "Projects grid"), col("home-projects", "Homepage showcase"),
+    col("forktober-projects", "Forktober projects"), col("forktober-meta", "Forktober repos"),
+  ]},
+  { id: "people", title: "People", icon: "users", blurb: "Board, past teams, speakers and partners", items: [
+    col("board-members", "Board · current"), col("team-years", "Historical boards"), col("speakers", "Speakers"), col("partners", "Partners"),
+  ]},
+  { id: "homepage", title: "Homepage & site", icon: "home", blurb: "The landing page and global settings", items: [
+    col("home-domains", "Domain cards"), one("site-config", "Site config"), one("faqs-page", "FAQs"), one("achievements-page", "Achievements page"), col("achievements", "Achievements"),
+  ]},
+  { id: "domains", title: "Domains & AOIs", icon: "layers", blurb: "The five domains and their areas of interest", items: [
+    one("domain-tech", "Tech"), one("domain-design", "Design"), one("domain-research", "Research"), one("domain-management", "Management"), one("domain-cc", "Competitive Coding"),
+    col("aois-tech", "AOIs · Tech"), col("aois-design", "AOIs · Design"), col("aois-research", "AOIs · Research"),
+  ]},
+  { id: "tools", title: "Tools", icon: "wrench", blurb: "The tech-stack chips shown per domain", items: [
+    col("tools-tech", "Tech"), col("tools-design", "Design"), col("tools-research", "Research"), col("tools-management", "Management"), col("tools-cc", "Competitive Coding"),
+  ]},
+  { id: "pages", title: "Pages & content", icon: "file", blurb: "Standalone pages, guides and links", items: [
+    col("pages", "Pages"), col("design-products", "Design guides"), col("blog-refs", "Blog links"),
+  ]},
+  { id: "system", title: "System", icon: "sliders", blurb: "Redirects and one-off surfaces", items: [
+    one("redirects", "Redirects"), one("z0d1ak", "z0d1ak CTF"),
+  ]},
+];
+
+const ICONS: Record<string, string> = {
+  grid: '<path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/>',
+  calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+  cube: '<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/>',
+  users: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+  home: '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>',
+  layers: '<path d="M12 2 2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>',
+  wrench: '<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.1 2.1-2.8-2.8z"/>',
+  file: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>',
+  sliders: '<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>',
+  shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  book: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20V2H6.5A2.5 2.5 0 0 0 4 4.5z"/>',
+  logout: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>',
+  external: '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/>',
+};
+const icon = (name: string) =>
+  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICONS[name] ?? ICONS.grid}</svg>`;
+
+const href = (it: Item) =>
+  it.kind === "collection" ? `/keystatic/collection/${camel(it.kebab)}` : `/keystatic/singleton/${camel(it.kebab)}`;
+const newHref = (it: Item) => `/keystatic/collection/${camel(it.kebab)}/create`;
+const canEdit = (it: Item) => perms.canEdit(camel(it.kebab));
+
+const totalEntries = Object.values(counts).reduce((n, c) => n + (c?.count ?? 0), 0);
+const firstName = (user.username || "there").split(/[^a-zA-Z0-9]/)[0];
+
+const ghOwner = import.meta.env.KEYSTATIC_GITHUB_REPO_OWNER || "ACM-VIT";
+const ghName = import.meta.env.KEYSTATIC_GITHUB_REPO_NAME || "ACM-VIT";
+const repoUrl = `https://github.com/${ghOwner}/${ghName}`;
+
+// Quick actions = create shortcuts for the collections this user can edit.
+const quickCreate = sections
+  .flatMap((s) => s.items)
+  .filter((it) => it.kind === "collection" && canEdit(it))
+  .slice(0, 4);
+
+const noAccess = !perms.role;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Dashboard · ACM-VIT Content Studio</title>
+    <link rel="icon" href="/favicon.ico" />
+  </head>
+  <body>
+    <div class="app">
+      <!-- ══ Sidebar ══ -->
+      <aside class="side">
+        <a class="side-brand" href="/cms">
+          <img src="/logos/logos-acm-logo-black.webp" alt="" width="28" height="28" />
+          <span>ACM<b>·</b>VIT <em>Studio</em></span>
+        </a>
+
+        <nav class="side-nav">
+          <a class="side-link is-active" href="#top"><i set:html={icon("grid")}></i>Overview</a>
+          <p class="side-heading">Content</p>
+          {sections.map((s) => (
+            <a class="side-link" href={`#${s.id}`}><i set:html={icon(s.icon)}></i>{s.title}</a>
+          ))}
+          {perms.canManageAccess && (
+            <>
+              <p class="side-heading">Admin</p>
+              <a class="side-link is-admin" href="/keystatic/singleton/accessControl"><i set:html={icon("shield")}></i>Access &amp; Roles</a>
+            </>
+          )}
+        </nav>
+
+        <div class="side-foot">
+          <a class="side-link" href="/cms/guide"><i set:html={icon("book")}></i>Editor guide</a>
+          <a class="side-link" href="/keystatic"><i set:html={icon("external")}></i>Open Keystatic</a>
+          <a class="side-link" href="/"><i set:html={icon("logout")}></i>Back to site</a>
+        </div>
+      </aside>
+
+      <!-- ══ Main ══ -->
+      <main class="main" id="top">
+        <!-- Topbar -->
+        <header class="topbar">
+          <div>
+            <h1>Overview</h1>
+            <p class="topbar-sub">Welcome back, {firstName}. Manage everything on the site from here.</p>
+          </div>
+          <div class="userbox">
+            <span class="user-role" data-role={perms.role?.id}>{perms.role?.label || "No access"}</span>
+            <span class="user-name">@{user.username || "guest"}</span>
+          </div>
+        </header>
+
+        {noAccess ? (
+          <section class="noaccess">
+            <div set:html={icon("shield")}></div>
+            <h2>You're signed in, but not on the access list yet.</h2>
+            <p>Ask a chapter admin to add <strong>@{user.username}</strong> in Access &amp; Roles. Until then there's nothing to edit here.</p>
+            <a href="/">Back to the website</a>
+          </section>
+        ) : (
+          <>
+            <!-- Stat row -->
+            <section class="stats">
+              <div class="stat"><span class="stat-num">{totalEntries}</span><span class="stat-lbl">Content entries</span></div>
+              <div class="stat"><span class="stat-num">24</span><span class="stat-lbl">Collections</span></div>
+              <div class="stat"><span class="stat-num">13</span><span class="stat-lbl">Singletons</span></div>
+              <div class="stat"><span class="stat-num">{perms.canEditAll ? "All" : perms.editableCollections.length}</span><span class="stat-lbl">You can edit</span></div>
+            </section>
+
+            <!-- Workspace: content (left) + rail (right) -->
+            <div class="work">
+              <div class="work-content">
+                {sections.map((s) => (
+                  <section class="grp" id={s.id}>
+                    <div class="grp-head">
+                      <span class="grp-icon" set:html={icon(s.icon)}></span>
+                      <div><h2>{s.title}</h2><span>{s.blurb}</span></div>
+                    </div>
+                    <div class="cards">
+                      {s.items.map((it) => {
+                        const editable = canEdit(it);
+                        const c = it.kind === "collection" ? countOf(it.kebab) : undefined;
+                        return (
+                          <div class={`card${editable ? "" : " is-locked"}`}>
+                            <a class="card-main" href={href(it)}>
+                              <span class="card-title">{it.label}</span>
+                              <span class="card-meta">
+                                {it.kind === "collection" ? `${c ?? 0} ${c === 1 ? "entry" : "entries"}` : "Single page"}
+                                {!editable && <span class="card-lock">· view only</span>}
+                              </span>
+                            </a>
+                            {it.kind === "collection" && editable && (
+                              <a class="card-new" href={newHref(it)} title={`New ${it.label}`}>+</a>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </section>
+                ))}
+              </div>
+
+              <!-- Right rail -->
+              <aside class="rail">
+                <div class="rail-card">
+                  <h3>Your access</h3>
+                  <p class="rail-role" data-role={perms.role?.id}>{perms.role?.label}</p>
+                  <p class="rail-desc">{perms.role?.description}</p>
+                  <ul class="rail-perms">
+                    <li data-ok={perms.canEditAll || perms.editableCollections.length > 0}>{perms.canEditAll ? "Edit all content" : perms.editableCollections.length ? `Edit ${perms.editableCollections.length} sections` : "Read-only"}</li>
+                    <li data-ok={perms.canPublish}>{perms.canPublish ? "Publish live" : "Changes go for review"}</li>
+                    <li data-ok={perms.canManageAccess}>{perms.canManageAccess ? "Manage roles & members" : "No access management"}</li>
+                  </ul>
+                </div>
+
+                <div class="rail-card">
+                  <h3>Publishing</h3>
+                  <p class="rail-desc">
+                    {perms.canPublish
+                      ? "Save commits to a studio/* branch and opens a pull request you can merge - live on the next build."
+                      : "Save opens a pull request on a studio/* branch. A publisher reviews and merges it before it goes live."}
+                  </p>
+                  <div class="rail-links">
+                    <a href={`${repoUrl}/pulls?q=is%3Apr+is%3Aopen+head%3Astudio%2F`} target="_blank" rel="noopener">Open pull requests</a>
+                    <a href={`${repoUrl}/branches/all?query=studio%2F`} target="_blank" rel="noopener">Draft branches</a>
+                  </div>
+                </div>
+
+                {quickCreate.length > 0 && (
+                  <div class="rail-card">
+                    <h3>Quick actions</h3>
+                    <div class="rail-quick">
+                      {quickCreate.map((it) => (
+                        <a href={newHref(it)}>+ New {it.label.replace(/s$/, "").toLowerCase()}</a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </aside>
+            </div>
+          </>
+        )}
+      </main>
+    </div>
+
+    <style is:global>
+      :root { --p: #f7f1e8; --surface: #fffdf9; --ink: #2a2620; --muted: #8a8171; --line: rgba(120,90,60,.16); --orange: #f95f4a; --pink: #ff007a; }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body { margin: 0; background: var(--p); color: var(--ink); font-family: "PolySans Trial", Inter, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+      a { color: inherit; text-decoration: none; }
+
+      .app { display: grid; grid-template-columns: 16rem 1fr; min-height: 100vh; }
+
+      /* ── Sidebar ── */
+      .side { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column;
+        background: #efe7d9; border-right: 1px solid var(--line); padding: 1.1rem .8rem; }
+      .side-brand { display: flex; align-items: center; gap: .55rem; padding: .3rem .5rem 1rem; font-weight: 600; }
+      .side-brand img { border-radius: 6px; }
+      .side-brand b { color: var(--orange); font-weight: 700; }
+      .side-brand em { font-style: normal; color: var(--muted); font-weight: 400; }
+      .side-nav { display: flex; flex-direction: column; gap: 1px; overflow-y: auto; flex: 1; }
+      .side-heading { font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: #a99e88; margin: 1rem .6rem .35rem; }
+      .side-link { display: flex; align-items: center; gap: .6rem; padding: .5rem .6rem; border-radius: 9px; color: #5b5445; font-size: .92rem; transition: background .15s, color .15s; }
+      .side-link i { display: grid; place-items: center; width: 18px; height: 18px; color: var(--muted); flex: none; }
+      .side-link i svg { width: 18px; height: 18px; }
+      .side-link:hover { background: rgba(249,95,74,.1); color: var(--orange); }
+      .side-link:hover i { color: var(--orange); }
+      .side-link.is-active { background: var(--orange); color: #fff; }
+      .side-link.is-active i { color: #fff; }
+      .side-link.is-admin { color: #b5502f; }
+      .side-foot { border-top: 1px solid var(--line); padding-top: .6rem; margin-top: .4rem; display: flex; flex-direction: column; gap: 1px; }
+
+      /* ── Main ── */
+      .main { padding: clamp(1.4rem, 3vw, 2.4rem) clamp(1.2rem, 3.5vw, 3rem); max-width: 82rem; }
+      .topbar { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 1.6rem; }
+      .topbar h1 { font-size: 1.9rem; letter-spacing: -.03em; margin: 0; }
+      .topbar-sub { margin: .3rem 0 0; color: #5b5445; font-size: .96rem; }
+      .userbox { display: flex; flex-direction: column; align-items: flex-end; gap: .25rem; }
+      .user-role { font-size: .8rem; font-weight: 600; color: #fff; background: var(--orange); padding: .15rem .6rem; border-radius: 999px; }
+      .user-role[data-role="viewer"], .user-role[data-role="contributor"] { background: var(--muted); }
+      .user-name { font-size: .82rem; color: var(--muted); }
+
+      /* ── Stats ── */
+      .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.8rem; }
+      .stat { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 1rem 1.2rem; display: flex; flex-direction: column; gap: .15rem; }
+      .stat-num { font-size: 1.8rem; font-weight: 700; letter-spacing: -.03em; }
+      .stat-lbl { font-size: .8rem; color: var(--muted); }
+
+      /* ── Workspace ── */
+      .work { display: grid; grid-template-columns: 1fr 19rem; gap: 1.6rem; align-items: start; }
+      .work-content { display: flex; flex-direction: column; gap: 1.8rem; min-width: 0; }
+
+      .grp { scroll-margin-top: 1rem; }
+      .grp-head { display: flex; align-items: center; gap: .7rem; margin-bottom: .8rem; }
+      .grp-icon { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 9px; background: rgba(249,95,74,.12); color: var(--orange); flex: none; }
+      .grp-icon svg { width: 19px; height: 19px; }
+      .grp-head h2 { font-size: 1.12rem; margin: 0; letter-spacing: -.01em; }
+      .grp-head span { font-size: .83rem; color: var(--muted); }
+      .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: .7rem; }
+      .card { display: flex; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; transition: border-color .16s, box-shadow .16s, transform .16s; }
+      .card:hover { border-color: #e6c9b8; box-shadow: 0 8px 20px -16px rgba(120,60,30,.45); transform: translateY(-1px); }
+      .card.is-locked { opacity: .6; }
+      .card.is-locked:hover { transform: none; box-shadow: none; border-color: var(--line); }
+      .card-main { flex: 1; padding: .8rem .9rem; display: flex; flex-direction: column; gap: .2rem; min-width: 0; }
+      .card-title { font-weight: 500; font-size: .95rem; }
+      .card-meta { font-size: .78rem; color: var(--muted); }
+      .card-lock { color: #b98a4a; }
+      .card-new { width: 40px; display: grid; place-items: center; font-size: 1.3rem; color: #fff; background: var(--orange); transition: background .16s; }
+      .card-new:hover { background: #ec4f38; }
+
+      /* ── Right rail ── */
+      .rail { display: flex; flex-direction: column; gap: 1rem; position: sticky; top: 1rem; }
+      .rail-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 1.1rem 1.2rem; }
+      .rail-card h3 { margin: 0 0 .6rem; font-size: .95rem; }
+      .rail-role { display: inline-block; font-size: .82rem; font-weight: 600; color: #fff; background: var(--orange); padding: .12rem .55rem; border-radius: 999px; margin: 0 0 .5rem; }
+      .rail-role[data-role="viewer"], .rail-role[data-role="contributor"] { background: var(--muted); }
+      .rail-desc { margin: 0; font-size: .86rem; line-height: 1.55; color: #5b5445; }
+      .rail-perms { list-style: none; margin: .7rem 0 0; padding: 0; display: flex; flex-direction: column; gap: .4rem; }
+      .rail-perms li { font-size: .85rem; padding-left: 1.4rem; position: relative; color: #5b5445; }
+      .rail-perms li::before { content: "✕"; position: absolute; left: 0; color: #c0b6a4; font-size: .8rem; }
+      .rail-perms li[data-ok="true"]::before { content: "✓"; color: var(--orange); font-weight: 700; }
+      .rail-links { display: flex; flex-direction: column; gap: .4rem; margin-top: .7rem; }
+      .rail-links a { font-size: .86rem; color: var(--orange); font-weight: 500; }
+      .rail-quick { display: flex; flex-direction: column; gap: .5rem; }
+      .rail-quick a { font-size: .88rem; padding: .5rem .7rem; border: 1px solid var(--line); border-radius: 9px; transition: border-color .15s, color .15s; }
+      .rail-quick a:hover { border-color: var(--orange); color: var(--orange); }
+
+      /* ── No access ── */
+      .noaccess { max-width: 32rem; margin: 3rem auto; text-align: center; }
+      .noaccess > div { width: 54px; height: 54px; margin: 0 auto 1rem; color: var(--orange); }
+      .noaccess > div svg { width: 54px; height: 54px; }
+      .noaccess h2 { font-size: 1.3rem; letter-spacing: -.02em; }
+      .noaccess p { color: #5b5445; line-height: 1.6; }
+      .noaccess a { color: var(--orange); font-weight: 500; }
+
+      @media (max-width: 1080px) { .work { grid-template-columns: 1fr; } .rail { flex-direction: row; flex-wrap: wrap; position: static; } .rail-card { flex: 1 1 240px; } }
+      @media (max-width: 820px) { .app { grid-template-columns: 1fr; } .side { position: static; height: auto; flex-direction: row; flex-wrap: wrap; align-items: center; } .side-nav { flex-direction: row; flex-wrap: wrap; } .side-heading { display: none; } .side-foot { border: none; flex-direction: row; } .stats { grid-template-columns: 1fr 1fr; } }
+    </style>
+
+    <script>
+      // Sidebar active-state follows the scrolled-to section (scrollspy).
+      const links = [...document.querySelectorAll<HTMLAnchorElement>(".side-link[href^='#']")];
+      const byId = new Map(links.map((l) => [l.getAttribute("href")!.slice(1), l]));
+      const spy = new IntersectionObserver((entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            links.forEach((l) => l.classList.remove("is-active"));
+            (byId.get(e.target.id) || byId.get("top"))?.classList.add("is-active");
+          }
+        }
+      }, { rootMargin: "-20% 0px -70% 0px" });
+      document.querySelectorAll(".grp, #top").forEach((el) => spy.observe(el));
+    </script>
+  </body>
+</html>

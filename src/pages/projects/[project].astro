@@ -105,22 +105,22 @@ const slugDecorations: Record<string, {
   storeGoogleBadge?: string;
 }> = {
   unipool: {
-    motorcycle: "/projects/unipool/projects-unipool-beep-motorcycle.webp",
-    parking: "/projects/unipool/projects-unipool-beep-parking.webp",
-    bigLogo: "/projects/unipool/projects-unipool-logo.webp",
-    storeAppleBadge: "/projects/unipool/projects-unipool-app-store-badge.svg",
-    storeGoogleBadge: "/projects/unipool/projects-unipool-google-play-badge.webp",
+    motorcycle: getAssetUrl("/projects/unipool/projects-unipool-beep-motorcycle.webp"),
+    parking: getAssetUrl("/projects/unipool/projects-unipool-beep-parking.webp"),
+    bigLogo: getAssetUrl("/projects/unipool/projects-unipool-logo.webp"),
+    storeAppleBadge: getAssetUrl("/projects/unipool/projects-unipool-app-store-badge.svg"),
+    storeGoogleBadge: getAssetUrl("/projects/unipool/projects-unipool-google-play-badge.webp"),
   },
   examcooker: {
-    storeAppleBadge: "/projects/examcooker/projects-examcooker-app-store-badge.svg",
-    storeGoogleBadge: "/projects/examcooker/projects-examcooker-google-play-badge.webp",
+    storeAppleBadge: getAssetUrl("/projects/examcooker/projects-examcooker-app-store-badge.svg"),
+    storeGoogleBadge: getAssetUrl("/projects/examcooker/projects-examcooker-google-play-badge.webp"),
   },
   acmone: {
-    bigLogo: "/projects/acmone/projects-acmone-logo.webp",
-    storeGoogleBadge: "/projects/unipool/projects-unipool-google-play-badge.webp",
+    bigLogo: getAssetUrl("/projects/acmone/projects-acmone-logo.webp"),
+    storeGoogleBadge: getAssetUrl("/projects/unipool/projects-unipool-google-play-badge.webp"),
   },
   wenvy: {
-    bigLogo: "/projects/wenvy/projects-wenvy-koi.svg",
+    bigLogo: getAssetUrl("/projects/wenvy/projects-wenvy-koi.svg"),
   },
 };
 const deco = slugDecorations[data.slug] ?? {};

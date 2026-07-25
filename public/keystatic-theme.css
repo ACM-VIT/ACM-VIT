@@ -1,0 +1,125 @@
+/*
+ * Themes the Keystatic admin (/keystatic) to match the website + the /cms login:
+ * warm paper surfaces, ACM orange accent, PolySans. Injected into the admin HTML
+ * by src/middleware.ts (plain static CSS served from /keystatic-theme.css).
+ *
+ * KeyStar UI exposes its palette as --kui-* custom properties on <html>:
+ *   typography on .kui-theme, colour on .kui-scheme--light | dark | auto.
+ * We override them there with !important (KeyStar's own are non-important).
+ *
+ * We deliberately push the SAME warm-light values onto all three scheme classes
+ * (and the auto+dark media case) so the studio is always in the light paper
+ * theme the chapter picked - never the default neutral white or a dark mode.
+ */
+
+@font-face {
+  font-family: "PolySans Trial"; font-weight: 400; font-style: normal; font-display: swap;
+  src: url("/fonts/keystatic/PolySans-Neutral.otf") format("opentype");
+}
+@font-face {
+  font-family: "PolySans Trial"; font-weight: 500; font-style: normal; font-display: swap;
+  src: url("/fonts/keystatic/PolySans-Median.otf") format("opentype");
+}
+@font-face {
+  font-family: "PolySans Trial"; font-weight: 700; font-style: normal; font-display: swap;
+  src: url("/fonts/keystatic/PolySans-Bulky.otf") format("opentype");
+}
+
+/* Typography token lives on .kui-theme */
+.kui-theme {
+  --kui-typography-font-family-base:
+    "PolySans Trial", Inter, system-ui, -apple-system, sans-serif !important;
+}
+
+/* ----------------------------------------------------------------------------
+   Warm-light palette. Applied to every scheme so the studio is always paper.
+---------------------------------------------------------------------------- */
+.kui-scheme--light,
+.kui-scheme--auto,
+.kui-scheme--dark {
+  /* Neutral ramp: pure grey -> warm sand (drives surfaces, borders, muted text) */
+  --kui-color-scale-slate1: #faf6ef !important;
+  --kui-color-scale-slate2: #f5efe4 !important;
+  --kui-color-scale-slate3: #efe7d8 !important;
+  --kui-color-scale-slate4: #e9e0cf !important;
+  --kui-color-scale-slate5: #e1d6c2 !important;
+  --kui-color-scale-slate6: #d7cab2 !important;
+  --kui-color-scale-slate7: #c8b89b !important;
+  --kui-color-scale-slate8: #b3a082 !important;
+  --kui-color-scale-slate9: #8f7e66 !important;
+  --kui-color-scale-slate10: #726350 !important;
+  --kui-color-scale-slate11: #574d3f !important;
+  --kui-color-scale-slate12: #2a2620 !important;
+
+  /* App chrome */
+  --kui-color-background-canvas: #f7f1e8 !important;   /* page / sidebar - paper */
+  --kui-color-background-surface: #fffdf9 !important;  /* cards / fields - near white */
+
+  /* Text - force warm dark on every scheme (keeps dark-mode readable on paper) */
+  --kui-color-foreground-neutral: #2a2620 !important;
+  --kui-color-foreground-neutral-emphasis: #17150f !important;
+  --kui-color-foreground-neutral-secondary: #6a6153 !important;
+  --kui-color-foreground-neutral-tertiary: #928873 !important;
+
+  /* Accent hue = the indigo scale (solid buttons, active states, links) -> orange */
+  --kui-color-scale-indigo1: #fff8f6 !important;
+  --kui-color-scale-indigo2: #fff1ec !important;
+  --kui-color-scale-indigo3: #ffe6df !important;
+  --kui-color-scale-indigo4: #ffd8cd !important;
+  --kui-color-scale-indigo5: #ffc8ba !important;
+  --kui-color-scale-indigo6: #ffb4a2 !important;
+  --kui-color-scale-indigo7: #fb9c88 !important;
+  --kui-color-scale-indigo8: #f77e67 !important;
+  --kui-color-scale-indigo9: #f95f4a !important;   /* solid accent / primary button */
+  --kui-color-scale-indigo10: #ec4f38 !important;  /* hover */
+  --kui-color-scale-indigo11: #d33f22 !important;  /* accent text (AA on paper) */
+  --kui-color-scale-indigo12: #4d1509 !important;
+
+  /* Accent + focus aliases */
+  --kui-color-background-accent: #ffece7 !important;
+  --kui-color-background-accent-emphasis: #f95f4a !important;
+  --kui-color-border-accent: #f95f4a !important;
+  --kui-color-foreground-accent: #d33f22 !important;
+  --kui-color-alias-focus-ring: #f95f4a !important;
+  --kui-color-alias-border-focused: #f95f4a !important;
+  --kui-color-alias-background-focused: rgba(249, 95, 74, 0.12) !important;
+  --kui-color-alias-foreground-focused: #d33f22 !important;
+}
+
+/* auto scheme when the OS prefers dark: re-assert the same warm-light palette */
+@media (prefers-color-scheme: dark) {
+  .kui-scheme--auto {
+    --kui-color-scale-slate1: #faf6ef !important;
+    --kui-color-scale-slate2: #f5efe4 !important;
+    --kui-color-scale-slate3: #efe7d8 !important;
+    --kui-color-scale-slate4: #e9e0cf !important;
+    --kui-color-scale-slate5: #e1d6c2 !important;
+    --kui-color-scale-slate6: #d7cab2 !important;
+    --kui-color-scale-slate7: #c8b89b !important;
+    --kui-color-scale-slate8: #b3a082 !important;
+    --kui-color-scale-slate9: #8f7e66 !important;
+    --kui-color-scale-slate10: #726350 !important;
+    --kui-color-scale-slate11: #574d3f !important;
+    --kui-color-scale-slate12: #2a2620 !important;
+
+    --kui-color-background-canvas: #f7f1e8 !important;
+    --kui-color-background-surface: #fffdf9 !important;
+
+    --kui-color-foreground-neutral: #2a2620 !important;
+    --kui-color-foreground-neutral-emphasis: #17150f !important;
+    --kui-color-foreground-neutral-secondary: #6a6153 !important;
+    --kui-color-foreground-neutral-tertiary: #928873 !important;
+
+    --kui-color-scale-indigo9: #f95f4a !important;
+    --kui-color-scale-indigo10: #ec4f38 !important;
+    --kui-color-scale-indigo11: #d33f22 !important;
+    --kui-color-background-accent: #ffece7 !important;
+    --kui-color-background-accent-emphasis: #f95f4a !important;
+    --kui-color-border-accent: #f95f4a !important;
+    --kui-color-foreground-accent: #d33f22 !important;
+    --kui-color-alias-focus-ring: #f95f4a !important;
+    --kui-color-alias-border-focused: #f95f4a !important;
+    --kui-color-alias-background-focused: rgba(249, 95, 74, 0.12) !important;
+    --kui-color-alias-foreground-focused: #d33f22 !important;
+  }
+}

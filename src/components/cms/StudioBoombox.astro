@@ -1,0 +1,205 @@
+---
+// Self-contained boombox for the Content Studio login art. A clean homage to
+// the site's signature boombox (src/sections/Socials.astro) - speakers, a
+// cassette deck with spinning reels, tuner + EQ - rendered in the site theme
+// colours. Standalone (own scoped CSS) so it doesn't drag in the scroll-scene
+// entanglement of the original.
+---
+
+<div class="sb-stage" aria-hidden="true">
+  <div class="sb-glow"></div>
+  <div class="sb-boombox">
+    <!-- handle -->
+    <div class="sb-handle"><span></span></div>
+
+    <!-- tuner strip -->
+    <div class="sb-tuner">
+      <div class="sb-marks"></div>
+      <div class="sb-needle"></div>
+      <div class="sb-marquee"><span>NOW PLAYING - ACM·VIT CONTENT STUDIO - BUILD THE FUTURE - </span></div>
+    </div>
+
+    <!-- EQ -->
+    <div class="sb-eq">
+      {Array.from({ length: 16 }).map((_, i) => (
+        <i class:list={["sb-eqbar", i % 4 === 0 ? "is-accent" : ""]} style={`--i:${i}`}></i>
+      ))}
+    </div>
+
+    <!-- main: speaker · deck · speaker -->
+    <div class="sb-main">
+      <div class="sb-speaker">
+        <div class="sb-cone"><span></span></div>
+      </div>
+
+      <div class="sb-deck">
+        <svg class="sb-cassette" viewBox="0 0 280 150" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="276" height="146" rx="12" class="sb-c-body" />
+          <rect x="14" y="14" width="252" height="72" rx="6" class="sb-c-label" />
+          <!-- left reel -->
+          <g class="sb-reel sb-reel-l" style="transform-origin:96px 50px">
+            <circle cx="96" cy="50" r="26" class="sb-reel-ring" />
+            <circle cx="96" cy="50" r="20" class="sb-reel-tape" />
+            <circle cx="96" cy="50" r="6" class="sb-reel-hub" />
+            {Array.from({ length: 6 }).map((_, i) => (
+              <line x1="96" y1="32" x2="96" y2="26" class="sb-spoke" transform={`rotate(${i * 60} 96 50)`} />
+            ))}
+          </g>
+          <!-- right reel -->
+          <g class="sb-reel sb-reel-r" style="transform-origin:184px 50px">
+            <circle cx="184" cy="50" r="26" class="sb-reel-ring" />
+            <circle cx="184" cy="50" r="12" class="sb-reel-tape" />
+            <circle cx="184" cy="50" r="6" class="sb-reel-hub is-accent" />
+            {Array.from({ length: 6 }).map((_, i) => (
+              <line x1="184" y1="32" x2="184" y2="26" class="sb-spoke" transform={`rotate(${i * 60} 184 50)`} />
+            ))}
+          </g>
+          <path d="M70 50 A26 26 0 0 0 96 76 L184 76 A26 26 0 0 0 210 50" class="sb-tape-path" />
+          <text x="140" y="112" text-anchor="middle" class="sb-c-text">ACM·VIT</text>
+          <text x="140" y="130" text-anchor="middle" class="sb-c-sub">SIDE A - STUDIO MIX</text>
+        </svg>
+        <div class="sb-buttons">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <i class:list={["sb-btn", i === 2 ? "is-play" : ""]}></i>
+          ))}
+        </div>
+      </div>
+
+      <div class="sb-speaker">
+        <div class="sb-cone"><span></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .sb-stage {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background:
+      radial-gradient(120% 90% at 50% 12%, #2a2530, #141018 70%);
+  }
+  .sb-glow {
+    position: absolute;
+    width: 70%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(249, 95, 74, 0.4), rgba(255, 0, 122, 0.12) 45%, transparent 70%);
+    filter: blur(30px);
+    animation: sb-pulse 5s ease-in-out infinite;
+  }
+  @keyframes sb-pulse { 0%,100%{opacity:.55;transform:scale(.95)} 50%{opacity:.85;transform:scale(1.05)} }
+
+  .sb-boombox {
+    position: relative;
+    width: min(84%, 30rem);
+    padding: 1.1rem 1.1rem 1.3rem;
+    border-radius: 22px;
+    background: linear-gradient(180deg, #35303a, #211d27);
+    box-shadow:
+      0 40px 90px -30px rgba(0, 0, 0, 0.8),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      inset 0 -3px 10px rgba(0, 0, 0, 0.5);
+    border: 1px solid #17141c;
+  }
+
+  /* handle */
+  .sb-handle { display: flex; justify-content: center; margin-bottom: .7rem; }
+  .sb-handle span {
+    width: 46%; height: 12px; border-radius: 12px 12px 0 0;
+    border: 2px solid #4a4552; border-bottom: none; background: #2b2732;
+  }
+
+  /* tuner */
+  .sb-tuner {
+    position: relative; height: 30px; border-radius: 7px; overflow: hidden;
+    background: linear-gradient(180deg, #0f0c14, #1c1822);
+    border: 1px solid #0a0810; margin-bottom: .7rem;
+  }
+  .sb-marks {
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(90deg, rgba(249,95,74,.5) 0 1px, transparent 1px 14px);
+    opacity: .5;
+  }
+  .sb-needle {
+    position: absolute; top: 3px; bottom: 3px; left: 30%; width: 2px;
+    background: #ff007a; box-shadow: 0 0 8px #ff007a; animation: sb-sweep 6s ease-in-out infinite;
+  }
+  @keyframes sb-sweep { 0%,100%{left:18%} 50%{left:78%} }
+  .sb-marquee {
+    position: absolute; inset: 0; display: flex; align-items: center;
+    white-space: nowrap; -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  }
+  .sb-marquee span {
+    font: 600 10px/1 "PolySans Trial", monospace; letter-spacing: .18em; color: #f4a08c;
+    padding-left: 100%; animation: sb-scroll 14s linear infinite;
+  }
+  @keyframes sb-scroll { to { transform: translateX(-100%); } }
+
+  /* EQ */
+  .sb-eq { display: flex; gap: 5px; align-items: flex-end; height: 26px; margin-bottom: .9rem; padding: 0 .2rem; }
+  .sb-eqbar {
+    flex: 1; border-radius: 3px; background: #59515f; transform-origin: bottom;
+    animation: sb-bounce 1.1s ease-in-out infinite; animation-delay: calc(var(--i) * -0.12s);
+  }
+  .sb-eqbar.is-accent { background: linear-gradient(#ff007a, #f95f4a); }
+  @keyframes sb-bounce { 0%,100%{height:22%} 50%{height:95%} }
+
+  /* main */
+  .sb-main { display: grid; grid-template-columns: 1fr 1.5fr 1fr; gap: .8rem; align-items: center; }
+
+  .sb-speaker {
+    aspect-ratio: 1; border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, #3d3844, #1a171f);
+    border: 2px solid #14111a; display: grid; place-items: center;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,.6);
+  }
+  .sb-cone {
+    width: 70%; aspect-ratio: 1; border-radius: 50%;
+    background:
+      radial-gradient(circle, transparent 30%, rgba(249,95,74,.12) 31% 33%, transparent 34%),
+      radial-gradient(circle, #2a2631, #16131b);
+    border: 1px solid #0f0d14; display: grid; place-items: center;
+    animation: sb-thump 1.1s ease-in-out infinite;
+  }
+  .sb-cone span {
+    width: 34%; aspect-ratio: 1; border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, #f95f4a, #c73a26);
+    box-shadow: 0 0 12px rgba(249,95,74,.5);
+  }
+  @keyframes sb-thump { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
+
+  /* deck / cassette */
+  .sb-deck {
+    background: linear-gradient(180deg, #14111a, #0d0b12);
+    border-radius: 12px; padding: .7rem; border: 1px solid #0a0810;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,.6);
+  }
+  .sb-cassette { width: 100%; display: block; }
+  .sb-c-body { fill: #2a2631; stroke: #0f0d14; }
+  .sb-c-label { fill: #f5ede1; }
+  .sb-reel-ring { fill: #100e16; stroke: #3a3542; stroke-width: 1.5; }
+  .sb-reel-tape { fill: #6a6250; }
+  .sb-reel-hub { fill: #cfc6b4; }
+  .sb-reel-hub.is-accent { fill: #f95f4a; }
+  .sb-spoke { stroke: #b9b0a0; stroke-width: 3; stroke-linecap: round; }
+  .sb-reel-l { animation: sb-spin 3s linear infinite; }
+  .sb-reel-r { animation: sb-spin 4.6s linear infinite; }
+  @keyframes sb-spin { to { transform: rotate(360deg); } }
+  .sb-tape-path { fill: none; stroke: #4a4436; stroke-width: 3; }
+  .sb-c-text { fill: #2a2620; font: 700 20px "PolySans Trial", sans-serif; letter-spacing: -.02em; }
+  .sb-c-sub { fill: #8a8171; font: 600 9px "PolySans Trial", sans-serif; letter-spacing: .16em; }
+
+  .sb-buttons { display: flex; gap: 6px; justify-content: center; margin-top: .7rem; }
+  .sb-btn { width: 22px; height: 10px; border-radius: 3px; background: #3a3542; border: 1px solid #14111a; }
+  .sb-btn.is-play { background: linear-gradient(#f95f4a, #d33f22); box-shadow: 0 0 8px rgba(249,95,74,.6); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sb-glow, .sb-needle, .sb-eqbar, .sb-cone, .sb-reel-l, .sb-reel-r, .sb-marquee span { animation: none; }
+    .sb-eqbar { height: 55%; }
+  }
+</style>

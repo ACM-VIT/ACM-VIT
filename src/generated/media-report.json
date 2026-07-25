@@ -1,6 +1,6 @@
 {
-  "files": 2890,
-  "bytesTotal": 474903074,
+  "files": 2894,
+  "bytesTotal": 474936993,
   "contentReferenced": 678,
   "missing": [],
   "orphanCandidates": [
@@ -10,7 +10,11 @@
     "/domains/web/domains-web-typescript.webp",
     "/events/c2c/sponsors/events-c2c-sponsors-framer.svg",
     "/events/events-rc.webp",
+    "/fonts/keystatic/PolySans-Bulky.otf",
+    "/fonts/keystatic/PolySans-Median.otf",
+    "/fonts/keystatic/PolySans-Neutral.otf",
     "/icons/icons-redis.webp",
+    "/keystatic-theme.css",
     "/projects/projects-acmone.svg",
     "/team/team-full-core.webp",
     "/ui/ui-bloglayout.webp"

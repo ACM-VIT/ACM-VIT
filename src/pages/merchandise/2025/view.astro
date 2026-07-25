@@ -1,4 +1,5 @@
 ---
+import { getAssetUrl } from "../../../utils/cdn";
 export const prerender = true;
 import Layout from "../../../layouts/Layout.astro";
 import "../../../styles/globals.css";
@@ -44,24 +45,24 @@ const items = [
           <div class="vw-duo">
             <div class="vw-duo__side">
               {item.isHoodie ? (
-                <img class="vw-pimg" data-pv="black-front" src="/merch/2025/hoodie/merch-2025-hoodie-front.webp" alt="Hoodie Front" loading="lazy" />
+                <img class="vw-pimg" data-pv="black-front" src={getAssetUrl("/merch/2025/hoodie/merch-2025-hoodie-front.webp")} alt="Hoodie Front" loading="lazy" />
               ) : (
                 <>
-                  <img class="vw-pimg" data-pv="black-front" src={`/merch/2025/black-front/merch-2025-black-front-${item.slug}.webp`} alt={`${item.name} Black Front`} loading={i === 0 ? "eager" : "lazy"} />
+                  <img class="vw-pimg" data-pv="black-front" src={getAssetUrl(`/merch/2025/black-front/merch-2025-black-front-${item.slug}.webp`)} alt={`${item.name} Black Front`} loading={i === 0 ? "eager" : "lazy"} />
                   {item.hasWhite && (
-                    <img class="vw-pimg" data-pv="white-front" src={`/merch/2025/white-front/merch-2025-white-front-${item.slug}.webp`} alt={`${item.name} White Front`} loading="lazy" />
+                    <img class="vw-pimg" data-pv="white-front" src={getAssetUrl(`/merch/2025/white-front/merch-2025-white-front-${item.slug}.webp`)} alt={`${item.name} White Front`} loading="lazy" />
                   )}
                 </>
               )}
             </div>
             <div class="vw-duo__side">
               {item.isHoodie ? (
-                <img class="vw-pimg" data-pv="black-back" src="/merch/2025/hoodie/merch-2025-hoodie-back.webp" alt="Hoodie Back" loading="lazy" />
+                <img class="vw-pimg" data-pv="black-back" src={getAssetUrl("/merch/2025/hoodie/merch-2025-hoodie-back.webp")} alt="Hoodie Back" loading="lazy" />
               ) : (
                 <>
-                  <img class="vw-pimg" data-pv="black-back" src={`/merch/2025/black-back/merch-2025-black-back-${item.slug}.webp`} alt={`${item.name} Black Back`} loading="lazy" />
+                  <img class="vw-pimg" data-pv="black-back" src={getAssetUrl(`/merch/2025/black-back/merch-2025-black-back-${item.slug}.webp`)} alt={`${item.name} Black Back`} loading="lazy" />
                   {item.hasWhite && (
-                    <img class="vw-pimg" data-pv="white-back" src={`/merch/2025/white-back/merch-2025-white-back-${item.slug}.webp`} alt={`${item.name} White Back`} loading="lazy" />
+                    <img class="vw-pimg" data-pv="white-back" src={getAssetUrl(`/merch/2025/white-back/merch-2025-white-back-${item.slug}.webp`)} alt={`${item.name} White Back`} loading="lazy" />
                   )}
                 </>
               )}
@@ -117,7 +118,7 @@ const items = [
       <p class="m25-end__text" data-end-anim>you have reached the end of the rack</p>
       <p class="m25-end__sub" data-end-anim>no more hangers, just vibes from here</p>
       <img
-        src="/merch/merch-lineup.webp"
+        src={getAssetUrl("/merch/merch-lineup.webp")}
         alt="ACM-VIT merchandise lineup"
         class="m25-end__img"
         loading="lazy"

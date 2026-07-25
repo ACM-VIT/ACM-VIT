@@ -1,0 +1,201 @@
+---
+export const prerender = false; // forward already-signed-in editors to the dashboard
+import "../../styles/globals.css";
+import StudioBoombox from "../../components/cms/StudioBoombox.astro";
+import { isAuthenticated } from "../../platform/access/session";
+
+// The one public CMS page - the branded login gateway. Everything else under
+// /cms (dashboard, guide) requires auth. If already signed in, skip straight to
+// the dashboard.
+if (isAuthenticated(Astro.cookies)) {
+  return Astro.redirect("/cms/dashboard", 302);
+}
+
+const logo = "/logos/logos-acm-logo-black.webp";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>ACM-VIT · Content Studio</title>
+    <link rel="icon" href="/favicon.ico" />
+  </head>
+  <body>
+    <main class="cms-login">
+      <!-- ── Left: identity + entry ── -->
+      <section class="cms-panel">
+        <div class="cms-panel-inner">
+          <a class="cms-brand" href="/">
+            <img src={logo} alt="ACM-VIT" width="40" height="40" />
+            <span>ACM<span class="dot">·</span>VIT <em>Content Studio</em></span>
+          </a>
+
+          <h1 class="cms-title">Editor Login</h1>
+
+          <p class="cms-lede">
+            The single source of truth for everything on the site - events, projects,
+            domains, the team, merch and more. Edit content here and it ships to
+            <a href="https://acmvit.juxtaryct.com">acmvit.juxtaryct.com</a> on the next build.
+          </p>
+          <p class="cms-note">Sign in with the chapter GitHub account to continue.</p>
+
+          <div class="cms-actions">
+            <a class="cms-btn" href="/keystatic">
+              <span class="cms-btn-face">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor"
+                  ><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.333-1.755-1.333-1.755-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.108-.775.42-1.305.763-1.605-2.665-.303-5.467-1.332-5.467-5.93 0-1.31.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23a11.5 11.5 0 013.003-.404c1.02.005 2.047.138 3.006.404 2.29-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.61-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.604-.015 2.898-.015 3.293 0 .322.216.696.825.578C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                Sign in with GitHub
+              </span>
+              <span class="cms-btn-bg" aria-hidden="true"></span>
+            </a>
+          </div>
+
+          <a class="cms-back" href="/">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"
+              ><path d="M19 12H5M11 6l-6 6 6 6" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Back to the website
+          </a>
+        </div>
+      </section>
+
+      <!-- ── Right: boombox ── -->
+      <section class="cms-art">
+        <StudioBoombox />
+      </section>
+    </main>
+
+    <style is:global>
+      :root { --cms-paper: #f7f1e8; --cms-ink: #17161c; --cms-orange: #f95f4a; --cms-pink: #ff007a; }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; height: 100%; }
+      body {
+        font-family: "PolySans Trial", Inter, system-ui, sans-serif;
+        background: var(--cms-ink);
+        color: #1a1a1a;
+        -webkit-font-smoothing: antialiased;
+      }
+      .cms-login {
+        display: grid;
+        grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+        min-height: 100vh;
+        min-height: 100dvh;
+      }
+
+      /* ── Left panel ── */
+      .cms-panel {
+        background: var(--cms-paper);
+        display: flex;
+        align-items: center;
+        padding: clamp(2rem, 6vw, 6rem);
+        position: relative;
+      }
+      .cms-panel::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(120% 80% at 0% 0%, rgba(249, 95, 74, 0.06), transparent 60%),
+          radial-gradient(100% 90% at 100% 100%, rgba(255, 0, 122, 0.05), transparent 55%);
+        pointer-events: none;
+      }
+      .cms-panel-inner { position: relative; width: 100%; max-width: 30rem; }
+
+      .cms-brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.7rem;
+        text-decoration: none;
+        color: #1a1a1a;
+        font-weight: 500;
+        letter-spacing: -0.01em;
+        margin-bottom: clamp(2rem, 8vh, 4.5rem);
+      }
+      .cms-brand img { display: block; border-radius: 9px; }
+      .cms-brand .dot { color: var(--cms-orange); padding: 0 0.1em; }
+      .cms-brand em { font-style: normal; color: #8a8577; font-weight: 400; }
+
+      .cms-title {
+        font-size: clamp(2.1rem, 4vw, 3rem);
+        line-height: 1.02;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        margin: 0 0 1.1rem;
+      }
+      .cms-lede {
+        font-size: 1.02rem;
+        line-height: 1.65;
+        color: #4b4740;
+        margin: 0 0 0.6rem;
+      }
+      .cms-lede a { color: var(--cms-orange); text-decoration: none; font-weight: 500; }
+      .cms-lede a:hover { text-decoration: underline; }
+      .cms-note { font-size: 0.92rem; color: #857f72; margin: 0 0 2rem; }
+
+      .cms-actions { display: flex; flex-direction: column; gap: 1.1rem; align-items: flex-start; }
+
+      /* Apple-style pill: dark face, accent circle wipe on hover */
+      .cms-btn {
+        position: relative;
+        display: inline-flex;
+        isolation: isolate;
+        border-radius: 999px;
+        text-decoration: none;
+        overflow: hidden;
+        box-shadow: 0 10px 30px -12px rgba(249, 95, 74, 0.5);
+      }
+      .cms-btn-face {
+        position: relative;
+        z-index: 2;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.95rem 1.7rem;
+        color: #fff;
+        font-weight: 500;
+        font-size: 1rem;
+        letter-spacing: -0.01em;
+      }
+      .cms-btn-bg { position: absolute; inset: 0; z-index: 1; background: #1a1a1a; }
+      .cms-btn-bg::before {
+        content: "";
+        position: absolute;
+        left: 1.5rem;
+        top: 50%;
+        width: 2.2rem;
+        height: 2.2rem;
+        translate: -50% -50%;
+        border-radius: 999px;
+        background: linear-gradient(120deg, var(--cms-orange), var(--cms-pink));
+        transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .cms-btn:hover .cms-btn-bg::before { transform: scale(22); }
+
+      .cms-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        margin-top: clamp(2rem, 8vh, 4rem);
+        font-size: 0.9rem;
+        color: #857f72;
+        text-decoration: none;
+        transition: gap 0.2s, color 0.2s;
+      }
+      .cms-back:hover { color: #1a1a1a; gap: 0.6rem; }
+
+      /* ── Right panel: boombox ── */
+      .cms-art { position: relative; overflow: hidden; background: var(--cms-ink); }
+
+      /* ── Responsive: stack, art becomes a top band ── */
+      @media (max-width: 860px) {
+        .cms-login { grid-template-columns: 1fr; }
+        .cms-art { order: -1; min-height: 40vh; }
+        .cms-panel { padding: 2.5rem 1.75rem 3.5rem; }
+        .cms-brand { margin-bottom: 2rem; }
+      }
+    </style>
+  </body>
+</html>

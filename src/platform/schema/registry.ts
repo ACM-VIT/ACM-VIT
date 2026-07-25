@@ -13,6 +13,8 @@ import {
 import { productGuideSchema } from "./collections/design-products.ts";
 import { domainPageSchema, achievementsPageSchema, eventLinksSchema, redirectsSchema } from "./singletons/pages.ts";
 import { z0d1akSchema } from "./singletons/z0d1ak.ts";
+import { faqsPageSchema } from "./singletons/faqs.ts";
+import { accessControlSchema } from "./singletons/access-control.ts";
 import { pageSchema } from "./collections/pages.ts";
 import {
   boardMemberSchema,
@@ -345,6 +347,20 @@ export const registry: ContentDef[] = [
     schema: z0d1akSchema,
     typeName: "Z0d1akData",
     typeImport: "../platform/schema/singletons/z0d1ak.ts",
+  }),
+  defineSingleton({
+    name: "faqs-page",
+    label: "FAQs page",
+    schema: faqsPageSchema,
+    typeName: "FaqsPage",
+    typeImport: "../platform/schema/singletons/faqs.ts",
+  }),
+  defineSingleton({
+    name: "access-control",
+    label: "Access & Roles (IAM)",
+    schema: accessControlSchema,
+    typeName: "AccessControl",
+    typeImport: "../platform/schema/singletons/access-control.ts",
   }),
 ];
 

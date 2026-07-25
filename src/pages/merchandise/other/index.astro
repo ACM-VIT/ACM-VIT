@@ -1,4 +1,5 @@
 ---
+import { getAssetUrl } from "../../../utils/cdn";
 export const prerender = true;
 import Layout from "../../../layouts/Layout.astro";
 import "../../../styles/globals.css";
@@ -17,10 +18,10 @@ import Footer from "../../../layouts/Footer.astro";
     </div>
 
     <div class="ot-tee ot-tee--label" data-ot-tee>
-      <img src="/merch/other/merch-other-label-tee.webp" alt="Folded Tee with Label" loading="eager" />
+      <img src={getAssetUrl("/merch/other/merch-other-label-tee.webp")} alt="Folded Tee with Label" loading="eager" />
     </div>
     <div class="ot-tee ot-tee--plain" data-ot-tee>
-      <img src="/merch/other/merch-other-tee-plain.webp" alt="Plain ACM Tee" loading="eager" />
+      <img src={getAssetUrl("/merch/other/merch-other-tee-plain.webp")} alt="Plain ACM Tee" loading="eager" />
     </div>
 
     <div class="ot-badge" data-badge>
@@ -43,7 +44,7 @@ import Footer from "../../../layouts/Footer.astro";
       <p class="ot-end__text" data-end-anim>you have reached the end of the rack</p>
       <p class="ot-end__sub" data-end-anim>no more hangers, just vibes from here</p>
       <img
-        src="/merch/merch-lineup.webp"
+        src={getAssetUrl("/merch/merch-lineup.webp")}
         alt="ACM-VIT merchandise lineup"
         class="ot-end__img"
         loading="lazy"

@@ -1,4 +1,5 @@
 ---
+import { getAssetUrl } from "../../../utils/cdn";
 export const prerender = true;
 import Layout from "../../../layouts/Layout.astro";
 import "../../../styles/globals.css";
@@ -25,13 +26,13 @@ import AnimatedButton from "../../../components/ui/AnimatedButton.astro";
 
     <!-- Floating tees -->
     <div class="m25-htee m25-htee--1" data-htee>
-      <img src="/merch/2025/black-front/merch-2025-black-front-board.webp" alt="Board T-shirt" loading="eager" />
+      <img src={getAssetUrl("/merch/2025/black-front/merch-2025-black-front-board.webp")} alt="Board T-shirt" loading="eager" />
     </div>
     <div class="m25-htee m25-htee--2" data-htee>
-      <img src="/merch/2025/hoodie/merch-2025-hoodie-back.webp" alt="Hoodie" loading="eager" />
+      <img src={getAssetUrl("/merch/2025/hoodie/merch-2025-hoodie-back.webp")} alt="Hoodie" loading="eager" />
     </div>
     <div class="m25-htee m25-htee--3" data-htee>
-      <img src="/merch/2025/black-back/merch-2025-black-back-design.webp" alt="Design T-shirt Back" loading="lazy" />
+      <img src={getAssetUrl("/merch/2025/black-back/merch-2025-black-back-design.webp")} alt="Design T-shirt Back" loading="lazy" />
     </div>
 
     <!-- Badge -->
@@ -57,7 +58,7 @@ import AnimatedButton from "../../../components/ui/AnimatedButton.astro";
       <p class="m25-end__text" data-end-anim>you have reached the end of the rack</p>
       <p class="m25-end__sub" data-end-anim>no more hangers, just vibes from here</p>
       <img
-        src="/merch/merch-lineup.webp"
+        src={getAssetUrl("/merch/merch-lineup.webp")}
         alt="ACM-VIT merchandise lineup"
         class="m25-end__img"
         loading="lazy"

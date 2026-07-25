@@ -13,6 +13,7 @@ import { readdirSync, readFileSync, writeFileSync, mkdirSync, existsSync } from 
 import { createHash } from "node:crypto";
 import { join } from "node:path";
 import { registry } from "../schema/registry.ts";
+import { generateCodeowners } from "../access/codeowners.ts";
 import {
   COLLECTIONS_DIR,
   SINGLETONS_DIR,
@@ -273,6 +274,16 @@ if (errors.length === 0) {
       join(root, "public", "_redirects"),
       "# GENERATED from content/singletons/redirects.json - do not edit.\n" + lines.join("\n") + "\n"
     );
+  }
+
+  // .github/CODEOWNERS is derived from the access-control singleton so the IAM
+  // the chapter edits in the CMS becomes the rule GitHub enforces on PRs. See
+  // src/platform/access/codeowners.ts and ACCESS.md.
+  const accessControl = compiledSingletons.get("access-control");
+  if (accessControl) {
+    const dir = join(root, ".github");
+    if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+    writeFileSync(join(dir, "CODEOWNERS"), generateCodeowners(accessControl, registry));
   }
 
   writeFileSync(

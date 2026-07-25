@@ -1,0 +1,403 @@
+---
+export const prerender = false; // gated behind login
+import "../../styles/globals.css";
+import { requireCmsAuth } from "../../platform/access/guard";
+
+const gate = requireCmsAuth(Astro);
+if (gate) return gate;
+
+// Editor-facing manual for the content platform. Written for non-coders who
+// edit through /keystatic; the deep technical reference stays in PLATFORM.md.
+const sections = [
+  { id: "what", label: "What this is" },
+  { id: "login", label: "Getting in" },
+  { id: "model", label: "How content is organised" },
+  { id: "edit", label: "Editing, step by step" },
+  { id: "recipes", label: "Common jobs" },
+  { id: "publish", label: "Publishing & going live" },
+  { id: "rules", label: "Rules & gotchas" },
+  { id: "dev", label: "For developers" },
+];
+
+const collections = [
+  ["Pages", "Free-form pages that ship at /p/<slug>"],
+  ["Events", "Event detail pages + the homepage events section"],
+  ["Projects", "Project detail pages and the homepage showcase"],
+  ["Domains & AOIs", "The five domains and their areas of interest"],
+  ["Tools", "The tech-stack chips shown per domain"],
+  ["People", "Current board, historical boards, speakers, partners"],
+  ["FAQs", "The categorised questions on /faqs"],
+  ["Site config & redirects", "Global settings and URL redirects"],
+];
+
+const recipes = [
+  {
+    t: "Add an event",
+    s: [
+      "Open Events → New entry.",
+      "Fill title, date, description, cover image.",
+      "Save. It appears at /events/<slug> and in the events section.",
+    ],
+  },
+  {
+    t: "Add a board member",
+    s: [
+      "Open People → Board · current year → New entry.",
+      "Add name, role, photo (uploads into /board) and socials.",
+      "Order controls where they sit on the team page.",
+    ],
+  },
+  {
+    t: "Update a domain page",
+    s: [
+      "Open Domains & AOIs → the domain singleton.",
+      "Edit the hero copy, stats and description.",
+      "Tools and AOIs are separate collections linked by slug.",
+    ],
+  },
+  {
+    t: "Redirect an old URL",
+    s: [
+      "Open Site config & redirects → Redirects.",
+      "Add from, to and 301 (permanent) or 302 (temporary).",
+      "The redirect is emitted on the next build - old links never 404.",
+    ],
+  },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Editor Guide · ACM-VIT Content Studio</title>
+    <link rel="icon" href="/favicon.ico" />
+  </head>
+  <body>
+    <div class="guide">
+      <!-- ── Sidebar nav ── -->
+      <aside class="guide-nav">
+        <a class="guide-brand" href="/cms">
+          <img src="/logos/logos-acm-logo-black.webp" alt="" width="30" height="30" />
+          <span>Content Studio</span>
+        </a>
+        <nav>
+          {sections.map((s) => (
+            <a href={`#${s.id}`}>{s.label}</a>
+          ))}
+        </nav>
+        <a class="guide-enter" href="/keystatic">Open the CMS →</a>
+      </aside>
+
+      <!-- ── Content ── -->
+      <main class="guide-main">
+        <header class="guide-hero">
+          <span class="guide-kicker">Editor Guide</span>
+          <h1>How to run the site without touching code</h1>
+          <p>
+            Everything you see on acmvit is content in one place. You edit it in a
+            visual admin, hit save, and it ships on the next deploy. No pull requests,
+            no broken pages - the platform refuses to build bad content.
+          </p>
+        </header>
+
+        <section id="what">
+          <h2>What this is</h2>
+          <p>
+            The site runs on a <strong>git-based content platform</strong>. Every event,
+            project, board member, domain and FAQ lives as structured data, edited through
+            the Keystatic admin at <code>/keystatic</code>. The forms you fill in are
+            generated from the same schemas the site is built on, so what you can enter is
+            always exactly what the site expects.
+          </p>
+          <div class="guide-flow">
+            <span>You edit in <code>/keystatic</code></span>
+            <i>→</i>
+            <span>Saved as content</span>
+            <i>→</i>
+            <span>Validated on build</span>
+            <i>→</i>
+            <span>Live on the site</span>
+          </div>
+        </section>
+
+        <section id="login">
+          <h2>Getting in</h2>
+          <ol>
+            <li>Go to <a href="/cms">the Content Studio</a> and choose <strong>Enter the CMS</strong>.</li>
+            <li>In production you sign in with the chapter <strong>GitHub</strong> account - access is whoever has rights to the content repo.</li>
+            <li>Running locally there is no login; the admin opens straight away.</li>
+          </ol>
+        </section>
+
+        <section id="model">
+          <h2>How content is organised</h2>
+          <p>Two shapes, and that is the whole mental model:</p>
+          <div class="guide-cards">
+            <div class="guide-card">
+              <h3>Collections</h3>
+              <p>Many entries of the same kind - events, projects, board members. You add, edit and remove entries.</p>
+            </div>
+            <div class="guide-card">
+              <h3>Singletons</h3>
+              <p>One-off pages and settings - a domain page, the homepage sections, site config. You edit the one that exists.</p>
+            </div>
+          </div>
+          <table class="guide-table">
+            <thead><tr><th>Where</th><th>What it controls</th></tr></thead>
+            <tbody>
+              {collections.map(([w, d]) => (
+                <tr><td>{w}</td><td>{d}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+
+        <section id="edit">
+          <h2>Editing, step by step</h2>
+          <ol>
+            <li>Open a collection or singleton from the sidebar.</li>
+            <li>For a collection, pick an entry or hit <strong>New entry</strong>.</li>
+            <li>Fill the fields. Required ones are marked; images upload straight into the right public folder.</li>
+            <li>Press <strong>Save</strong>. Your change is committed to content.</li>
+            <li>It goes live on the next deploy (see below).</li>
+          </ol>
+          <p class="guide-callout">
+            Draft, publish-from and publish-until fields let you stage content ahead of
+            time - a future publish date keeps an entry hidden until then, automatically.
+          </p>
+        </section>
+
+        <section id="recipes">
+          <h2>Common jobs</h2>
+          <div class="guide-recipes">
+            {recipes.map((r) => (
+              <div class="guide-recipe">
+                <h3>{r.t}</h3>
+                <ol>{r.s.map((step) => <li>{step}</li>)}</ol>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section id="publish">
+          <h2>Publishing & going live</h2>
+          <p>
+            Saving stores your change. It appears on <a href="https://acmvit.juxtaryct.com">the live site</a>
+            after the next build + deploy, which validates and compiles all content first.
+            If a deploy is running on every push, saving is all you do; otherwise a maintainer
+            runs the deploy (see the deployment guide).
+          </p>
+        </section>
+
+        <section id="rules">
+          <h2>Rules & gotchas</h2>
+          <ul class="guide-rules">
+            <li><strong>The one rule:</strong> content changes happen in <code>/keystatic</code>, never by hand-editing generated files.</li>
+            <li><strong>Broken links can't ship.</strong> If an entry points at something that doesn't exist, the build fails with a clear message instead of shipping a dead page.</li>
+            <li><strong>Slugs are forever-ish.</strong> Change a slug and the old URL breaks - add a redirect at the same time.</li>
+            <li><strong>Images:</strong> upload through the form; they land in the correct <code>public/</code> folder automatically. Heavy media is served from the CDN.</li>
+            <li><strong>Drafts stay hidden</strong> until published - safe to prepare content early.</li>
+          </ul>
+        </section>
+
+        <section id="dev">
+          <h2>For developers</h2>
+          <p>The schema registry is the single source of truth; the admin, types and validation all follow from it.</p>
+          <ul class="guide-code">
+            <li><code>npm run content:compile</code> - validate + regenerate <code>src/generated/*</code></li>
+            <li><code>npm run dev</code> - runs the compile, serves the site + <code>/keystatic</code></li>
+            <li>Add a collection in <code>src/platform/schema/registry.ts</code> - the admin UI follows.</li>
+            <li>Full reference: <code>PLATFORM.md</code>; deploying: <code>DEPLOYMENT.md</code>.</li>
+          </ul>
+        </section>
+
+        <footer class="guide-footer">
+          <a href="/keystatic" class="guide-enter">Open the CMS →</a>
+          <a href="/cms">← Back to Content Studio</a>
+        </footer>
+      </main>
+    </div>
+
+    <style is:global>
+      :root { --g-paper: #f7f1e8; --g-orange: #f95f4a; --g-pink: #ff007a; --g-ink: #1f1c17; }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        font-family: "PolySans Trial", Inter, system-ui, sans-serif;
+        background: var(--g-paper);
+        color: #2a2620;
+        -webkit-font-smoothing: antialiased;
+      }
+      .guide { display: grid; grid-template-columns: 15.5rem 1fr; max-width: 78rem; margin: 0 auto; }
+
+      /* Sidebar */
+      .guide-nav {
+        position: sticky;
+        top: 0;
+        align-self: start;
+        height: 100vh;
+        height: 100dvh;
+        padding: 2rem 1.5rem;
+        border-right: 1px solid rgba(120, 90, 60, 0.14);
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+      }
+      .guide-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        text-decoration: none;
+        color: #1a1a1a;
+        font-weight: 600;
+        margin-bottom: 1.8rem;
+      }
+      .guide-brand img { border-radius: 7px; }
+      .guide-nav nav { display: flex; flex-direction: column; }
+      .guide-nav nav a {
+        padding: 0.5rem 0.7rem;
+        border-radius: 8px;
+        color: #6a6357;
+        text-decoration: none;
+        font-size: 0.92rem;
+        transition: background 0.15s, color 0.15s;
+      }
+      .guide-nav nav a:hover { background: rgba(249, 95, 74, 0.09); color: var(--g-orange); }
+      .guide-enter {
+        margin-top: 1.4rem;
+        display: inline-block;
+        padding: 0.6rem 1rem;
+        background: #1a1a1a;
+        color: #fff;
+        border-radius: 999px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        text-align: center;
+        transition: background 0.2s;
+      }
+      .guide-enter:hover { background: var(--g-orange); }
+
+      /* Content */
+      .guide-main { padding: clamp(2rem, 5vw, 4.5rem) clamp(1.5rem, 5vw, 4rem); max-width: 52rem; }
+      .guide-kicker {
+        font-size: 0.72rem;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: var(--g-orange);
+        font-weight: 500;
+      }
+      .guide-hero h1 {
+        font-size: clamp(2rem, 4.5vw, 3.1rem);
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+        margin: 0.6rem 0 1rem;
+      }
+      .guide-hero p { font-size: 1.1rem; line-height: 1.6; color: #55503f; margin: 0 0 1rem; }
+
+      .guide-main section { padding: 2.4rem 0; border-top: 1px solid rgba(120, 90, 60, 0.14); }
+      .guide-main h2 { font-size: 1.5rem; letter-spacing: -0.02em; margin: 0 0 1rem; }
+      .guide-main h3 { font-size: 1.05rem; margin: 0 0 0.5rem; }
+      .guide-main p { line-height: 1.65; color: #423d33; }
+      .guide-main a { color: var(--g-orange); text-decoration: none; font-weight: 500; }
+      .guide-main a:hover { text-decoration: underline; }
+      .guide-main code {
+        font-family: ui-monospace, "SF Mono", Menlo, monospace;
+        font-size: 0.85em;
+        background: rgba(120, 90, 60, 0.1);
+        padding: 0.12em 0.42em;
+        border-radius: 5px;
+        color: #7a4a30;
+      }
+      .guide-main ol, .guide-main ul { line-height: 1.7; color: #423d33; padding-left: 1.2rem; }
+      .guide-main li { margin: 0.3rem 0; }
+
+      .guide-flow {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.6rem;
+        margin-top: 1.4rem;
+        font-size: 0.86rem;
+      }
+      .guide-flow span {
+        background: #fff;
+        border: 1px solid rgba(120, 90, 60, 0.18);
+        padding: 0.5rem 0.85rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 14px -10px rgba(0, 0, 0, 0.3);
+      }
+      .guide-flow i { color: var(--g-orange); font-style: normal; font-weight: 700; }
+
+      .guide-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.2rem 0; }
+      .guide-card {
+        background: #fff;
+        border: 1px solid rgba(120, 90, 60, 0.16);
+        border-radius: 14px;
+        padding: 1.2rem 1.3rem;
+      }
+      .guide-card p { margin: 0; font-size: 0.95rem; color: #55503f; }
+
+      .guide-table { width: 100%; border-collapse: collapse; margin-top: 0.6rem; font-size: 0.94rem; }
+      .guide-table th {
+        text-align: left;
+        font-size: 0.72rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #8a8172;
+        padding: 0.5rem 0.6rem;
+      }
+      .guide-table td { padding: 0.55rem 0.6rem; border-top: 1px solid rgba(120, 90, 60, 0.14); vertical-align: top; }
+      .guide-table td:first-child { font-weight: 500; white-space: nowrap; }
+
+      .guide-callout {
+        margin-top: 1rem;
+        padding: 1rem 1.2rem;
+        background: rgba(249, 95, 74, 0.07);
+        border-left: 3px solid var(--g-orange);
+        border-radius: 0 10px 10px 0;
+      }
+
+      .guide-recipes { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+      .guide-recipe {
+        background: #fff;
+        border: 1px solid rgba(120, 90, 60, 0.16);
+        border-radius: 14px;
+        padding: 1.2rem 1.3rem;
+      }
+      .guide-recipe ol { margin: 0; padding-left: 1.1rem; font-size: 0.92rem; }
+
+      .guide-rules li { margin: 0.55rem 0; }
+      .guide-code { list-style: none; padding: 0; }
+      .guide-code li { margin: 0.5rem 0; }
+
+      .guide-footer {
+        display: flex;
+        align-items: center;
+        gap: 1.4rem;
+        padding: 2.4rem 0 4rem;
+        border-top: 1px solid rgba(120, 90, 60, 0.14);
+      }
+      .guide-footer a:last-child { color: #6a6357; font-weight: 400; }
+
+      @media (max-width: 820px) {
+        .guide { grid-template-columns: 1fr; }
+        .guide-nav {
+          position: static;
+          height: auto;
+          flex-direction: row;
+          flex-wrap: wrap;
+          align-items: center;
+          border-right: none;
+          border-bottom: 1px solid rgba(120, 90, 60, 0.14);
+        }
+        .guide-nav nav { flex-direction: row; flex-wrap: wrap; }
+        .guide-brand { margin-bottom: 0; margin-right: auto; }
+        .guide-cards, .guide-recipes { grid-template-columns: 1fr; }
+      }
+    </style>
+  </body>
+</html>

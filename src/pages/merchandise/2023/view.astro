@@ -1,4 +1,5 @@
 ---
+import { getAssetUrl } from "../../../utils/cdn";
 export const prerender = true;
 import Layout from "../../../layouts/Layout.astro";
 import "../../../styles/globals.css";
@@ -31,7 +32,7 @@ const items = [
       <!-- Common front stays mounted -->
       <div class="vw-front-host">
         <img
-          src="/merch/2023/merch-2023-front.webp"
+          src={getAssetUrl("/merch/2023/merch-2023-front.webp")}
           alt="Common Front"
           class="vw-front-img"
           loading="eager"
@@ -47,7 +48,7 @@ const items = [
           >
             <img
               class="vw-back-img"
-              src={`/merch/2023/merch-2023-${item.slug}.webp`}
+              src={getAssetUrl(`/merch/2023/merch-2023-${item.slug}.webp`)}
               alt={`${item.name} Back`}
               loading={i === 0 ? "eager" : "lazy"}
             />
@@ -89,7 +90,7 @@ const items = [
       <p class="m23-end__text" data-end-anim>you have reached the end of the rack</p>
       <p class="m23-end__sub" data-end-anim>no more hangers, just vibes from here</p>
       <img
-        src="/merch/merch-lineup.webp"
+        src={getAssetUrl("/merch/merch-lineup.webp")}
         alt="ACM-VIT merchandise lineup"
         class="m23-end__img"
         loading="lazy"

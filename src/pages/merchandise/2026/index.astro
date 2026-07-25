@@ -1,4 +1,5 @@
 ---
+import { getAssetUrl } from "../../../utils/cdn";
 export const prerender = true;
 import Layout from "../../../layouts/Layout.astro";
 import "../../../styles/globals.css";
@@ -23,13 +24,13 @@ import AnimatedButton from "../../../components/ui/AnimatedButton.astro";
     </div>
 
     <div class="m26-htee m26-htee--1" data-htee>
-      <img src="/merch/2026/merch-2026-board.webp" alt="Board Tee" loading="eager" />
+      <img src={getAssetUrl("/merch/2026/merch-2026-board.webp")} alt="Board Tee" loading="eager" />
     </div>
     <div class="m26-htee m26-htee--2" data-htee>
-      <img src="/merch/2026/merch-2026-tech.webp" alt="Tech Tee" loading="eager" />
+      <img src={getAssetUrl("/merch/2026/merch-2026-tech.webp")} alt="Tech Tee" loading="eager" />
     </div>
     <div class="m26-htee m26-htee--3" data-htee>
-      <img src="/merch/2026/merch-2026-design.webp" alt="Design Tee" loading="lazy" />
+      <img src={getAssetUrl("/merch/2026/merch-2026-design.webp")} alt="Design Tee" loading="lazy" />
     </div>
 
     <div class="m26-badge" data-badge>
@@ -52,7 +53,7 @@ import AnimatedButton from "../../../components/ui/AnimatedButton.astro";
       <p class="m26-end__text" data-end-anim>you have reached the end of the rack</p>
       <p class="m26-end__sub" data-end-anim>no more hangers, just vibes from here</p>
       <img
-        src="/merch/merch-lineup.webp"
+        src={getAssetUrl("/merch/merch-lineup.webp")}
         alt="ACM-VIT merchandise lineup"
         class="m26-end__img"
         loading="lazy"

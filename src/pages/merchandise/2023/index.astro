@@ -1,4 +1,5 @@
 ---
+import { getAssetUrl } from "../../../utils/cdn";
 export const prerender = true;
 import Layout from "../../../layouts/Layout.astro";
 import "../../../styles/globals.css";
@@ -23,13 +24,13 @@ import AnimatedButton from "../../../components/ui/AnimatedButton.astro";
     </div>
 
     <div class="m23-htee m23-htee--1" data-htee>
-      <img src="/merch/2023/merch-2023-front.webp" alt="Common Front" loading="eager" />
+      <img src={getAssetUrl("/merch/2023/merch-2023-front.webp")} alt="Common Front" loading="eager" />
     </div>
     <div class="m23-htee m23-htee--2" data-htee>
-      <img src="/merch/2023/merch-2023-web.webp" alt="Web Back" loading="eager" />
+      <img src={getAssetUrl("/merch/2023/merch-2023-web.webp")} alt="Web Back" loading="eager" />
     </div>
     <div class="m23-htee m23-htee--3" data-htee>
-      <img src="/merch/2023/merch-2023-design.webp" alt="Design Back" loading="lazy" />
+      <img src={getAssetUrl("/merch/2023/merch-2023-design.webp")} alt="Design Back" loading="lazy" />
     </div>
 
     <div class="m23-badge" data-badge>
@@ -52,7 +53,7 @@ import AnimatedButton from "../../../components/ui/AnimatedButton.astro";
       <p class="m23-end__text" data-end-anim>you have reached the end of the rack</p>
       <p class="m23-end__sub" data-end-anim>no more hangers, just vibes from here</p>
       <img
-        src="/merch/merch-lineup.webp"
+        src={getAssetUrl("/merch/merch-lineup.webp")}
         alt="ACM-VIT merchandise lineup"
         class="m23-end__img"
         loading="lazy"

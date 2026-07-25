@@ -1,4 +1,5 @@
 ---
+import { getAssetUrl } from "../../../utils/cdn";
 export const prerender = true;
 import Layout from "../../../layouts/Layout.astro";
 import "../../../styles/globals.css";
@@ -37,7 +38,7 @@ const items = [
           <div class="vw-solo">
             <img
               class="vw-pimg"
-              src={`/merch/2026/merch-2026-${item.slug}.webp`}
+              src={getAssetUrl(`/merch/2026/merch-2026-${item.slug}.webp`)}
               alt={`${item.name} Tee`}
               loading={i === 0 ? "eager" : "lazy"}
             />
@@ -79,7 +80,7 @@ const items = [
       <p class="m26-end__text" data-end-anim>you have reached the end of the rack</p>
       <p class="m26-end__sub" data-end-anim>no more hangers, just vibes from here</p>
       <img
-        src="/merch/merch-lineup.webp"
+        src={getAssetUrl("/merch/merch-lineup.webp")}
         alt="ACM-VIT merchandise lineup"
         class="m26-end__img"
         loading="lazy"
