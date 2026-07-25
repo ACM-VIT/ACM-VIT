@@ -54,7 +54,7 @@ GitHub username to a role. `defaultRole` covers signed-in users not listed
 
 ## 4. One-time GitHub setup (required to enforce)
 
-Do this once on the content repo (`ACM-VIT/ACM-VIT`):
+Do this once on the content repo (`JuxtaRYCT/ACM-VIT`):
 
 0. **Set up login (GitHub App + env).** Local dev needs nothing — Keystatic runs
    in local storage with no login and the Studio treats you as owner. Production

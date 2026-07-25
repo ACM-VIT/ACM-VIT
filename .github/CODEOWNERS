@@ -5,46 +5,46 @@
 # a listed owner must approve a PR touching these paths before it can merge.
 
 # Fallback - any content change needs a publisher's approval
-content/ @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
+content/ @JuxtaRYCT
 
 # Per-section publishers
-content/collections/pages/ @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/collections/events/ @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/collections/project-details/ @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/collections/forktober-projects/ @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/collections/forktober-meta/ @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/collections/project-cassettes/ @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/collections/team-years/ @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/collections/calendar-events/ @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/collections/achievements/ @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/collections/design-products/ @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/collections/board-members/ @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/collections/partners/ @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/collections/home-domains/ @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/collections/home-projects/ @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/collections/blog-refs/ @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/collections/speakers/ @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/collections/tools-tech/ @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/collections/tools-design/ @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/collections/tools-research/ @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/collections/tools-management/ @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/collections/tools-cc/ @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/collections/aois-tech/ @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/collections/aois-design/ @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/collections/aois-research/ @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/singletons/domain-tech.json @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/singletons/domain-design.json @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/singletons/domain-research.json @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/singletons/domain-management.json @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/singletons/domain-cc.json @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/singletons/events-section.json @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/singletons/redirects.json @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/singletons/site-config.json @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/singletons/achievements-page.json @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/singletons/event-links.json @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/singletons/z0d1ak.json @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
-content/singletons/faqs-page.json @REPLACE_WITH_OWNER_GITHUB_LOGIN @REPLACE_WITH_EDITOR_GITHUB_LOGIN
+content/collections/pages/ @JuxtaRYCT
+content/collections/events/ @JuxtaRYCT
+content/collections/project-details/ @JuxtaRYCT
+content/collections/forktober-projects/ @JuxtaRYCT
+content/collections/forktober-meta/ @JuxtaRYCT
+content/collections/project-cassettes/ @JuxtaRYCT
+content/collections/team-years/ @JuxtaRYCT
+content/collections/calendar-events/ @JuxtaRYCT
+content/collections/achievements/ @JuxtaRYCT
+content/collections/design-products/ @JuxtaRYCT
+content/collections/board-members/ @JuxtaRYCT
+content/collections/partners/ @JuxtaRYCT
+content/collections/home-domains/ @JuxtaRYCT
+content/collections/home-projects/ @JuxtaRYCT
+content/collections/blog-refs/ @JuxtaRYCT
+content/collections/speakers/ @JuxtaRYCT
+content/collections/tools-tech/ @JuxtaRYCT
+content/collections/tools-design/ @JuxtaRYCT
+content/collections/tools-research/ @JuxtaRYCT
+content/collections/tools-management/ @JuxtaRYCT
+content/collections/tools-cc/ @JuxtaRYCT
+content/collections/aois-tech/ @JuxtaRYCT
+content/collections/aois-design/ @JuxtaRYCT
+content/collections/aois-research/ @JuxtaRYCT
+content/singletons/domain-tech.json @JuxtaRYCT
+content/singletons/domain-design.json @JuxtaRYCT
+content/singletons/domain-research.json @JuxtaRYCT
+content/singletons/domain-management.json @JuxtaRYCT
+content/singletons/domain-cc.json @JuxtaRYCT
+content/singletons/events-section.json @JuxtaRYCT
+content/singletons/redirects.json @JuxtaRYCT
+content/singletons/site-config.json @JuxtaRYCT
+content/singletons/achievements-page.json @JuxtaRYCT
+content/singletons/event-links.json @JuxtaRYCT
+content/singletons/z0d1ak.json @JuxtaRYCT
+content/singletons/faqs-page.json @JuxtaRYCT
 
 # The IAM config - only super-admins (canManageAccess) may approve changes
-content/singletons/access-control.json @REPLACE_WITH_OWNER_GITHUB_LOGIN
-.github/CODEOWNERS @REPLACE_WITH_OWNER_GITHUB_LOGIN
+content/singletons/access-control.json @JuxtaRYCT
+.github/CODEOWNERS @JuxtaRYCT

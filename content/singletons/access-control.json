@@ -40,14 +40,9 @@
   ],
   "members": [
     {
-      "githubUsername": "REPLACE_WITH_OWNER_GITHUB_LOGIN",
-      "name": "Chapter Lead (example - edit me)",
+      "githubUsername": "JuxtaRYCT",
+      "name": "Yash Raj Singh",
       "role": "owner"
-    },
-    {
-      "githubUsername": "REPLACE_WITH_EDITOR_GITHUB_LOGIN",
-      "name": "Content Editor (example - edit me)",
-      "role": "editor"
     }
   ]
 }

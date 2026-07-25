@@ -11,6 +11,12 @@ import keystatic from '@keystatic/astro';
 // build. Opt in only after the bundles are being uploaded to that host.
 const assetsPrefix = process.env.PUBLIC_ASSETS_PREFIX?.replace(/\/$/, "");
 
+// The Keystatic GitHub App slug is public (used client-side to build the App's
+// install URL), so a committed default is fine and keeps prod builds working
+// without a build-env var. Override via PUBLIC_KEYSTATIC_GITHUB_APP_SLUG if the
+// App changes.
+process.env.PUBLIC_KEYSTATIC_GITHUB_APP_SLUG ||= 'acm-vit-website-content-platform-2';
+
 export default defineConfig({
     site: process.env.PUBLIC_SITE_URL || 'https://www.acmvit.in',
     output: 'server',

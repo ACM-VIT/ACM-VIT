@@ -17,8 +17,8 @@
     "binding": "ASSETS"
   },
   "vars": {
-    "KEYSTATIC_GITHUB_REPO_OWNER": "ACM-VIT",
-    "KEYSTATIC_GITHUB_REPO_NAME": "ACM-VIT"
+    "KEYSTATIC_GITHUB_REPO_OWNER": "JuxtaRYCT",
+    "KEYSTATIC_GITHUB_REPO_NAME": "ACM-VIT-website-yash"
   },
   "observability": {
     "enabled": false,
