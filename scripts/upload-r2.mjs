@@ -6,20 +6,19 @@ import dotenv from "dotenv";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 
-// Load environment variables
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const R2_ENDPOINT = process.env.R2_ENDPOINT;
-const R2_ACCESS_KEY_ID = process.env.R2_ACCESS_KEY_ID || process.env.R2_TOKEN; // Fallback to TOKEN if ID not explicit
+const R2_ACCESS_KEY_ID = process.env.R2_ACCESS_KEY_ID || process.env.R2_TOKEN;
 const R2_SECRET_ACCESS_KEY = process.env.R2_SECRET_ACCESS_KEY;
-const R2_BUCKET_NAME = process.env.R2_BUCKET_NAME || "the-everything-assistant";
+const R2_BUCKET_NAME = process.env.R2_ASSETS_BUCKET_NAME || process.env.R2_BUCKET_NAME;
 
-if (!R2_ENDPOINT || !R2_ACCESS_KEY_ID || !R2_SECRET_ACCESS_KEY) {
-  console.error("❌ Missing R2 credentials in environment variables.");
-  console.error("Required: R2_ENDPOINT, R2_ACCESS_KEY_ID (or R2_TOKEN used as ID), R2_SECRET_ACCESS_KEY");
+if (!R2_ENDPOINT || !R2_ACCESS_KEY_ID || !R2_SECRET_ACCESS_KEY || !R2_BUCKET_NAME) {
+  console.error("❌ Missing R2 credentials.");
+  console.error("Required: R2_ENDPOINT, R2_ACCESS_KEY_ID (or R2_TOKEN), R2_SECRET_ACCESS_KEY, R2_ASSETS_BUCKET_NAME (or R2_BUCKET_NAME)");
   process.exit(1);
 }
 
@@ -32,85 +31,88 @@ const s3Client = new S3Client({
   },
 });
 
-const DIST_DIR = join(__dirname, "..", "dist", "client");
+// Static assets live in public/. Object keys mirror the runtime paths that
+// getAssetUrl() builds (e.g. "/logos/x.webp" -> key "logos/x.webp"), so the
+// bucket is served at PUBLIC_CDN_URL with no path rewriting. The whole public/
+// tree is mirrored; audio/videos/board/team already pushed by the media and
+// image uploaders are skipped by the size check below (idempotent).
+const PUBLIC_DIR = join(__dirname, "..", "public");
+const LONG_CACHE_CONTROL = "public, max-age=31556926, immutable";
+const SKIP_FILES = new Set([".DS_Store"]);
 
 async function getFiles(dir) {
   const dirents = await readdir(dir, { withFileTypes: true });
   const files = await Promise.all(
     dirents.map((dirent) => {
+      if (SKIP_FILES.has(dirent.name)) return [];
       const res = join(dir, dirent.name);
-      return dirent.isDirectory() ? getFiles(res) : res;
+      return dirent.isDirectory() ? getFiles(res) : [res];
     })
   );
-  return Array.isArray(files) ? files.flat() : [files];
+  return files.flat();
 }
 
 async function uploadFile(filePath) {
   const fileContent = await readFile(filePath);
-  const relativePath = relative(DIST_DIR, filePath).split(sep).join("/");
+  const key = relative(PUBLIC_DIR, filePath).split(sep).join("/");
   const contentType = mime.lookup(filePath) || "application/octet-stream";
 
-  // Check if file exists and matches size
   try {
-    const headCommand = new HeadObjectCommand({
-      Bucket: R2_BUCKET_NAME,
-      Key: relativePath,
-    });
-    const { ContentLength } = await s3Client.send(headCommand);
-
+    const { ContentLength } = await s3Client.send(
+      new HeadObjectCommand({ Bucket: R2_BUCKET_NAME, Key: key })
+    );
     if (ContentLength === fileContent.length) {
-      console.log(`⏭️  Skipping ${relativePath} (already exists)`);
+      console.log(`⏭️  Skipping ${key} (already up to date)`);
       return;
     }
   } catch (error) {
-    // Ignore 404 Not Found, proceed to upload
-    if (error.name !== 'NotFound' && error.$metadata?.httpStatusCode !== 404) {
-       // Optional: log other errors or just proceed
+    if (error.name !== "NotFound" && error.$metadata?.httpStatusCode !== 404) {
+      // fall through and attempt upload
     }
   }
 
-  console.log(`Uploading ${relativePath} (${contentType})...`);
-
+  console.log(`⬆️  Uploading ${key} (${contentType})...`);
   try {
-    const command = new PutObjectCommand({
-      Bucket: R2_BUCKET_NAME,
-      Key: relativePath,
-      Body: fileContent,
-      ContentType: contentType,
-      // Bundled assets are content-hashed, so they can be cached forever.
-      CacheControl: "public, max-age=31556926, immutable",
-    });
-
-    await s3Client.send(command);
-    console.log(`✅ Uploaded: ${relativePath}`);
+    await s3Client.send(
+      new PutObjectCommand({
+        Bucket: R2_BUCKET_NAME,
+        Key: key,
+        Body: fileContent,
+        ContentType: contentType,
+        CacheControl: LONG_CACHE_CONTROL,
+      })
+    );
+    console.log(`✅ Uploaded: ${key}`);
   } catch (err) {
-    console.error(`❌ Failed to upload ${relativePath}:`, err);
+    console.error(`❌ Failed to upload ${key}:`, err.message);
+    process.exitCode = 1;
   }
 }
 
 async function main() {
-  console.log("🚀 Starting R2 Upload...");
-  console.log(`Target Bucket: ${R2_BUCKET_NAME}`);
-  console.log(`Source Directory: ${DIST_DIR}`);
+  console.log("🚀 Uploading static assets to R2...");
+  console.log(`Target bucket: ${R2_BUCKET_NAME}`);
 
   try {
-    await stat(DIST_DIR);
-  } catch (e) {
-    console.error(`❌ Dist directory not found at ${DIST_DIR}. Did you run 'npm run build'?`);
+    await stat(PUBLIC_DIR);
+  } catch {
+    console.error(`❌ public/ not found at ${PUBLIC_DIR}`);
     process.exit(1);
   }
 
-  const files = await getFiles(DIST_DIR);
-  console.log(`Found ${files.length} files to upload.`);
+  const files = await getFiles(PUBLIC_DIR);
+  console.log(`Found ${files.length} files under public/.`);
 
-  // Upload in parallel chunks to avoid overwhelming but speed up
-  const CHUNK_SIZE = 5;
+  const CHUNK_SIZE = 8;
   for (let i = 0; i < files.length; i += CHUNK_SIZE) {
-    const chunk = files.slice(i, i + CHUNK_SIZE);
-    await Promise.all(chunk.map(uploadFile));
+    await Promise.all(files.slice(i, i + CHUNK_SIZE).map(uploadFile));
+    console.log(`… ${Math.min(i + CHUNK_SIZE, files.length)}/${files.length}`);
   }
 
-  console.log("✨ All files uploaded successfully!");
+  console.log("✨ Static asset upload complete.");
 }
 
-main().catch(console.error);
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

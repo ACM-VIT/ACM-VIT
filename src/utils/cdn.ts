@@ -1,10 +1,25 @@
+// Only these public/ folders are served from PUBLIC_CDN_URL. Everything else
+// stays on the origin Worker even when the CDN var is set. Scope: heavy assets
+// (scroll frame sequences, gallery), the /design section, and merch.
+const CDN_ASSET_PREFIXES = [
+  "/design/",
+  "/design-guide/",
+  "/gallery/",
+  "/projects/",
+  "/aois/",
+  "/merch/",
+  "/contact-scroll-frames/",
+  "/scroll-video-frames/",
+];
+
 export function getAssetUrl(path: string | null | undefined): string {
   if (typeof path !== "string" || path.length === 0) {
     return "";
   }
 
   const cdnUrl = import.meta.env.PUBLIC_CDN_URL;
-  if (cdnUrl && path.startsWith("/")) {
+  const onCdn = CDN_ASSET_PREFIXES.some((prefix) => path.startsWith(prefix));
+  if (cdnUrl && onCdn) {
     const cleanCdnUrl = cdnUrl.replace(/\/$/, "");
     return `${cleanCdnUrl}${path}`;
   }
