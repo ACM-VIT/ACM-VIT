@@ -131,7 +131,7 @@ const railSections = chapters.map((c) => ({ id: c.id, label: railLabel[c.id] || 
               <a href={`#${s.id}`} class="dg-rail-item" data-rail={s.id} aria-label={s.label}>
                 <span class="dg-rail-tick"></span>
                 <span class="dg-rail-label">
-                  <span class="dg-rail-num">{String(i + 1).padStart(2, "0")}</span>
+                  <span class="dg-rail-num">{String(i).padStart(2, "0")}</span>
                   {s.label}
                 </span>
               </a>

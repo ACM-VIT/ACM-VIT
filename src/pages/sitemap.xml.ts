@@ -30,6 +30,7 @@ const staticPaths = [
   "/merchandise/board-farewell",
   "/merchandise/other",
   "/cassette-builder",
+  "/cassette",
   "/community",
   "/team",
   "/partners",
@@ -45,6 +46,7 @@ const staticPaths = [
   "/domains/research",
   "/design",
   "/design/logo",
+  "/design/logosystem",
   "/design/color",
   "/design/typography",
   "/design/grid",
@@ -56,6 +58,7 @@ const staticPaths = [
   "/design/website",
   "/design/footers",
   "/design/resources",
+  "/design/otherresources",
   "/sleeve-notes",
   "/sleeve-notes/giants",
 ];
@@ -70,10 +73,21 @@ const paths = [
   ...productGuides.map((p) => `/design/products/${p.slug}`),
 ];
 
+// Sitemap spec: all tag values must be entity-escaped. Slugs are data-driven
+// (events/projects/products from the CMS), so a stray & or ' would otherwise
+// produce malformed XML.
+const xmlEscape = (s: string) =>
+  s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+
 export const GET: APIRoute = ({ site }) => {
   const base = (site?.href ?? "https://www.acmvit.in/").replace(/\/$/, "");
   const urls = paths
-    .map((p) => `  <url><loc>${base}${p}</loc></url>`)
+    .map((p) => `  <url><loc>${xmlEscape(base + p)}</loc></url>`)
     .join("\n");
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
   return new Response(xml, {
