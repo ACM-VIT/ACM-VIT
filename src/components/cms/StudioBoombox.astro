@@ -157,12 +157,12 @@
     display: flex;
     align-items: stretch;
     justify-content: center;
-    padding: clamp(1rem, 2.5vw, 2rem);
+    padding: 0;
     background: radial-gradient(120% 90% at 50% 15%, #2a2530, #141018 72%);
   }
 
-  /* Fill the full height of the login art panel. */
-  .boombox { width: 100%; max-width: 44rem; height: 100%; position: relative; display: flex; flex-direction: column; }
+  /* Fill the entire login art panel edge to edge. */
+  .boombox { width: 100%; max-width: none; height: 100%; position: relative; display: flex; flex-direction: column; }
 
   /* ── Handle ── */
   .boombox-handle { display: flex; align-items: flex-end; justify-content: center; height: 44px; padding: 0 18%; position: relative; z-index: 2; }
@@ -182,9 +182,9 @@
   .boombox-body {
     position: relative;
     background: linear-gradient(180deg, #ff7a66 0%, #fb6b53 15%, #F95F4A 50%, #e8513d 85%, #d4452f 100%);
-    border: 2.5px solid rgba(255,255,255,0.12); border-radius: 18px;
-    box-shadow: inset 0 2px 0 rgba(255,255,255,0.06), inset 0 -3px 8px rgba(0,0,0,0.4), 0 30px 80px rgba(0,0,0,0.6), 0 10px 30px rgba(0,0,0,0.4);
-    padding: 16px 20px 20px; display: flex; flex-direction: column; gap: 12px; overflow: hidden;
+    border: none; border-radius: 0;
+    box-shadow: inset 0 2px 0 rgba(255,255,255,0.06), inset 0 -3px 8px rgba(0,0,0,0.4);
+    padding: 24px clamp(20px, 5vw, 64px) 28px; display: flex; flex-direction: column; gap: clamp(12px, 2.5vh, 28px); overflow: hidden;
     flex: 1; min-height: 0;
   }
   .boombox-body::before {

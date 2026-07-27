@@ -5,10 +5,12 @@ import StudioBoombox from "../../components/cms/StudioBoombox.astro";
 import { isAuthenticated } from "../../platform/access/session";
 
 // The one public CMS page - the branded login gateway. Everything else under
-// /cms (dashboard, guide) requires auth. If already signed in, skip straight to
-// the dashboard.
+// /cms (dashboard, guide) requires auth. If already signed in: first-timers go
+// through the welcome tour (/cms/guide); once it's been seen/skipped (cookie
+// cms_tour_done) they land straight on the dashboard.
 if (isAuthenticated(Astro.cookies)) {
-  return Astro.redirect("/cms/dashboard", 302);
+  const tourDone = Astro.cookies.get("cms_tour_done")?.value;
+  return Astro.redirect(tourDone ? "/cms/dashboard" : "/cms/guide", 302);
 }
 
 const logo = "/logos/logos-acm-logo-black.webp";
