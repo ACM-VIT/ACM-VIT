@@ -411,6 +411,14 @@ const SUBJECTS = [
   const statusEl = form?.querySelector(".contact-status") as HTMLElement;
 
   if (form) {
+    // Ctrl/Cmd + Enter submits from any field (incl. textarea newlines)
+    form.addEventListener("keydown", (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+        e.preventDefault();
+        form.requestSubmit();
+      }
+    });
+
     // ---- Custom validation (no native bubble) ----
     const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
     const isValidPhone = (v: string) => /^[+\d][\d\s\-()]{6,}$/.test(v);

@@ -138,6 +138,14 @@ const SUBJECTS = [
     "contact-form-mobile"
   ) as HTMLFormElement;
   if (form) {
+    // Ctrl/Cmd + Enter submits from any field (incl. textarea newlines)
+    form.addEventListener("keydown", (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+        e.preventDefault();
+        form.requestSubmit();
+      }
+    });
+
     const statusEl = document.getElementById(
       "contact-status-mobile"
     ) as HTMLElement | null;
