@@ -146,7 +146,7 @@ const dropdowns: Record<string, DropdownItem[]> = {
           </a>
           <a href="/#more" class="nav-item" data-section="more" style="--dot-i:11">
             <span class="nav-dot"></span>
-            <span class="nav-label">Resources</span>
+            <span class="nav-label">More</span>
           </a>
         </div>
 
@@ -756,6 +756,14 @@ const dropdowns: Record<string, DropdownItem[]> = {
 
   .megamenu-panel[data-panel="acm-w"] .megamenu-tile:hover .tile-img {
     filter: saturate(1.1) drop-shadow(0 4px 12px rgba(255, 0, 122, 0.12));
+  }
+
+  /* Light mode: nav pill is solid dark, matching the megamenu bento (#1e1e1e)
+     instead of the translucent glass that let the paper bg bleed through. */
+  :global(html[data-theme="light"]) .header-pill {
+    --glass-bg: #1e1e1e;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 
   /* ── Subpage Dynamic Island ── */

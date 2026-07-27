@@ -261,6 +261,19 @@ const dontList = [
           before any of this was easy, and a reminder of what we are here for. Honour the inventions that got us this
           far, then go build the ones that come next.
         </p>
+
+        <a class="dg-homage-cta" href="/cassette" data-reveal>
+          <svg class="dg-homage-cta-tape" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="5" width="20" height="14" rx="2" />
+            <circle cx="8" cy="12" r="2" />
+            <circle cx="16" cy="12" r="2" />
+            <path d="M10 12h4M7 19l1.5-3h7L17 19" />
+          </svg>
+          <span>See the journey of a cassette</span>
+          <svg class="dg-homage-cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+        </a>
       </section>
 
       <!-- ─────────── Standing on Giants ─────────── -->
@@ -1725,6 +1738,48 @@ const dontList = [
     margin-top: 0.4rem;
   }
   :global(html[data-theme="light"]) .dg-homage-lead {
+    color: #1a1a1a;
+  }
+
+  /* CTA: jump to the cassette-journey page. */
+  .dg-homage-cta {
+    margin-top: 2.4rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1.6rem;
+    border: 1px solid rgba(249, 95, 74, 0.55);
+    border-radius: 999px;
+    background: rgba(249, 95, 74, 0.06);
+    color: #fefcd9;
+    font-family: "PolySans Trial", sans-serif;
+    font-weight: 600;
+    font-size: clamp(1rem, 1.6vw, 1.2rem);
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+  }
+  .dg-homage-cta:hover {
+    background: rgba(249, 95, 74, 0.14);
+    border-color: rgba(249, 95, 74, 0.9);
+    transform: translateY(-2px);
+  }
+  .dg-homage-cta-tape {
+    width: 26px;
+    height: 26px;
+    color: #f95f4a;
+    flex: none;
+  }
+  .dg-homage-cta-arrow {
+    width: 20px;
+    height: 20px;
+    flex: none;
+    transition: transform 0.25s ease;
+  }
+  .dg-homage-cta:hover .dg-homage-cta-arrow {
+    transform: translateX(4px);
+  }
+  :global(html[data-theme="light"]) .dg-homage-cta {
     color: #1a1a1a;
   }
 

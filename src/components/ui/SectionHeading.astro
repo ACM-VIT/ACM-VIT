@@ -57,7 +57,7 @@ const alignClasses =
       <span class="sh-word inline-block">{title}<span class="text-[var(--accent)]">{accent}</span></span>
     ) : (
       <Fragment>
-        {title && <span class="sh-word inline-block">{title} </span>}
+        {title && <span class="sh-word mr-[0.28em] inline-block">{title}</span>}
         {accent && <span class="sh-word inline-block text-[var(--accent)]">{accent}</span>}
       </Fragment>
     )}
@@ -135,7 +135,11 @@ const alignClasses =
   /* Clip the rising words so they reveal from behind the baseline. */
   .sh-title {
     overflow: hidden;
-    padding-bottom: 0.08em;
+    /* Horizontal breathing room so bold edge glyphs (leading M, trailing S)
+       aren't clipped by overflow:hidden. Negative margin cancels it for layout
+       so alignment with the accent bar is unchanged. */
+    padding: 0 0.14em 0.08em;
+    margin-inline: -0.14em;
   }
 
   /* Light mode: cream text with opacity modifiers needs explicit dark color. */
