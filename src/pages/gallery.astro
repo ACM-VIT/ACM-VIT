@@ -61,18 +61,36 @@ const cassetteArt: Record<string, string> = {
   Code2Create: "/events/events-c2c-cassette.webp",
   "Cryptic Hunt": "/events/events-cryptic-hunt-cassette.webp",
   "Hack Story": "/cassettes/cassettes-cassette-layout-orange.webp",
+  KSL: "/events/events-kickstart-learn-cassette.webp",
+  Casa: "/events/events-casa-cassette.webp",
+  SDG: "/events/events-sdg-cassette.webp",
+  Nightslips: "/cassettes/cassettes-cassette-layout-pink.webp",
+  "Random Fun": "/cassettes/cassettes-cassette-layout-orange.webp",
+  "Codex Cryptum": "/events/events-codex-cryptum-cassette.svg",
+  "Life at ACM BTS": "/events/events-lifeatacm-cassette.svg",
+  "Be the Builder": "/events/events-bethebuilder-cassette.webp",
 };
 const FALLBACK_ART = "/cassettes/cassettes-cassette-layout-white.webp";
 
+// Events added to every year group.
+const EVERY_YEAR = ["Nightslips", "Random Fun", "KSL", "Casa", "SDG", "Life at ACM BTS", "Codex Cryptum"];
+
 type YearGroup = { year: string; events: { title: string; event: string }[] };
 const galleryYears: YearGroup[] = [
-  { year: "2026", events: [{ title: "Reverse Coding 2026", event: "Reverse Coding" }] },
+  {
+    year: "2026",
+    events: [
+      { title: "Reverse Coding 2026", event: "Reverse Coding" },
+      { title: "Be the Builder 2026", event: "Be the Builder" },
+    ],
+  },
   {
     year: "2025",
     events: [
       { title: "Reverse Coding 2025", event: "Reverse Coding" },
       { title: "Code2Create 2025", event: "Code2Create" },
       { title: "Cryptic Hunt 2025", event: "Cryptic Hunt" },
+      { title: "Be the Builder 2025", event: "Be the Builder" },
     ],
   },
   {
@@ -80,6 +98,7 @@ const galleryYears: YearGroup[] = [
     events: [
       { title: "Reverse Coding 2024", event: "Reverse Coding" },
       { title: "Cryptic Hunt 2024", event: "Cryptic Hunt" },
+      { title: "Be the Builder 2024", event: "Be the Builder" },
     ],
   },
   {
@@ -93,15 +112,22 @@ const galleryYears: YearGroup[] = [
 
 const yearSections = galleryYears
   .filter((g) => g.events.length > 0)
-  .map((g) => ({
-    year: g.year,
-    cassettes: g.events.map((e) => ({
-      title: e.title,
-      src: getAssetUrl(cassetteArt[e.event] ?? FALLBACK_ART),
-      // TODO: replace with real Google Photos album links per event.
-      href: "https://photos.google.com/share/dummy-album",
-    })),
-  }));
+  .map((g) => {
+    // Every year also gets the recurring cassettes, titled with its year.
+    const events = [
+      ...g.events,
+      ...EVERY_YEAR.map((event) => ({ title: `${event} ${g.year}`, event })),
+    ];
+    return {
+      year: g.year,
+      cassettes: events.map((e) => ({
+        title: e.title,
+        src: getAssetUrl(cassetteArt[e.event] ?? FALLBACK_ART),
+        // TODO: replace with real Google Photos album links per event.
+        href: "https://photos.google.com/share/dummy-album",
+      })),
+    };
+  });
 ---
 
 <Layout pageTitle="Gallery" backHref="/">
