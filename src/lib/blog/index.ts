@@ -3,23 +3,34 @@ import { getHashnodePosts, getHashnodeContent } from './hashnode';
 import { getMediumPosts, getMediumContent } from './medium';
 import { processContent } from './content';
 
+// Build-time memo: Header + MobileNavbar both request the latest posts on every
+// page, on top of the blog pages themselves. Cache the first fetch so a full
+// build hits Hashnode/Medium once instead of per-page.
+let allPostsPromise: Promise<BlogPost[]> | null = null;
+
 /** Fetch all blog posts from both sources, sorted by date (newest first). */
 export async function getAllPosts(): Promise<BlogPost[]> {
-  const [hashnode, medium] = await Promise.all([
-    getHashnodePosts().catch(() => [] as BlogPost[]),
-    getMediumPosts().catch(() => [] as BlogPost[]),
-  ]);
+  if (allPostsPromise) return allPostsPromise;
 
-  const all = [...hashnode, ...medium];
+  allPostsPromise = (async () => {
+    const [hashnode, medium] = await Promise.all([
+      getHashnodePosts().catch(() => [] as BlogPost[]),
+      getMediumPosts().catch(() => [] as BlogPost[]),
+    ]);
 
-  // Sort by published date, newest first
-  all.sort((a, b) => {
-    const da = new Date(a.publishedAt).getTime();
-    const db = new Date(b.publishedAt).getTime();
-    return db - da;
-  });
+    const all = [...hashnode, ...medium];
 
-  return all;
+    // Sort by published date, newest first
+    all.sort((a, b) => {
+      const da = new Date(a.publishedAt).getTime();
+      const db = new Date(b.publishedAt).getTime();
+      return db - da;
+    });
+
+    return all;
+  })();
+
+  return allPostsPromise;
 }
 
 /** Fetch a single blog post with full content. */

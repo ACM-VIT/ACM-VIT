@@ -171,7 +171,7 @@ const yearSections = galleryYears
       </h2>
       {
         yearSections.map((group) => (
-          <div class="gp-year">
+          <div class="gp-year" id={`gallery-year-${group.year}`} style="scroll-margin-top: 7rem">
             <h3 class="gp-year-label">{group.year}</h3>
             <div class="gp-cassette-grid">
               {group.cassettes.map((c) => (

@@ -1033,7 +1033,7 @@ export const items: ProductGuide[] = [
       },
       {
         "label": "Motion",
-        "value": "GSAP + Lenis · power3.out"
+        "value": "GSAP · power3.out"
       },
       {
         "label": "Layout",

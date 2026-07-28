@@ -6,6 +6,8 @@
 // Solid #1e1e1e fill. GSAP morph between states.
 
 import { getAssetUrl } from "../../utils/cdn";
+import { teamYears, yearLabel } from "../../data/teamData";
+import { getAllPosts } from "../../lib/blog";
 
 export interface Props {
   /** Static label for subpages (e.g. "Z0D1AK"). Falls back to live section in nav state. */
@@ -15,6 +17,10 @@ export interface Props {
 const { pageTitle } = Astro.props;
 const initialLabel = pageTitle || "Home";
 const lockedLabel = !!pageTitle;
+
+// Dynamic submenu data (mirrors Header.astro).
+const boardYears = teamYears.slice(0, 5);
+const latestPosts = (await getAllPosts().catch(() => [])).slice(0, 6);
 
 // Subsections mirror the desktop megamenu (Header.astro `dropdowns`).
 // Sections listed here show a caret and open a submenu on tap.
@@ -69,11 +75,32 @@ const subsections: Record<string, SubItem[]> = {
     { title: "Code of Conduct", desc: "ACM ethical principles & values", href: "/community#community-conduct" },
     { title: "ACM-W", desc: "Inclusion & women in tech", href: "/community#acm-w" },
   ],
+  team: [
+    { title: "Full Team", desc: "Meet everyone, year by year", href: "/team" },
+    ...boardYears.map((year) => ({
+      title: `${year} Board`,
+      desc: `The ${yearLabel(year)} board`,
+      href: `/team#year-${year}`,
+      icon: getAssetUrl(`/cassettes/cassettes-team-${year}.svg`),
+    })),
+  ],
   blogs: [
     { title: "All Blogs", desc: "Browse every article we've published", href: "/blogs" },
-    { title: "Hashnode", desc: "Our latest technical deep-dives", href: "/blogs#all-blogs" },
-    { title: "Medium", desc: "Earlier publications & tutorials", href: "/blogs#all-blogs" },
+    ...latestPosts.map((post) => ({
+      title: post.title,
+      desc: `${post.source === "hashnode" ? "Hashnode" : "Medium"} · ${post.readingTime} min read`,
+      href: `/blogs/${post.source}/${post.slug}`,
+      icon: post.coverImage || undefined,
+    })),
   ],
+  gallery: [
+    { title: "All Photos", desc: "Browse the full gallery", href: "/gallery" },
+    { title: "2026", desc: "This year's events & candids", href: "/gallery#gallery-year-2026", icon: getAssetUrl("/cassettes/cassettes-year-2026.svg") },
+    { title: "2025", desc: "Events, boards & late nights", href: "/gallery#gallery-year-2025", icon: getAssetUrl("/cassettes/cassettes-year-2025.svg") },
+    { title: "2024", desc: "Events, boards & late nights", href: "/gallery#gallery-year-2024", icon: getAssetUrl("/cassettes/cassettes-year-2024.svg") },
+    { title: "2023", desc: "Events, boards & late nights", href: "/gallery#gallery-year-2023", icon: getAssetUrl("/cassettes/cassettes-year-2023.svg") },
+  ],
+
   more: [
     { title: "FAQs", desc: "Everything you wanted to know, answered", href: "/faqs" },
     { title: "Design Guide", desc: "Brand marks, colors, type & the rules we bend", href: "/design" },
@@ -90,7 +117,8 @@ const subsections: Record<string, SubItem[]> = {
 // Section labels used by the submenu header (title-case).
 const sectionTitles: Record<string, string> = {
   about: "About", domains: "Domains", events: "Events", projects: "Projects",
-  "acm-w": "ACM-W", community: "Community", blogs: "Blogs", more: "More",
+  "acm-w": "ACM-W", community: "Community", team: "Team", blogs: "Blogs",
+  gallery: "Gallery", more: "More",
 };
 
 const navItems = [

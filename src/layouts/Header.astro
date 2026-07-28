@@ -2,6 +2,14 @@
 // Header.astro
 import { getAssetUrl } from "../utils/cdn";
 import MobileNavbar from "../components/ui/MobileNavbar.astro";
+import { teamYears, yearLabel } from "../data/teamData";
+import { getAllPosts } from "../lib/blog";
+
+// ── Dynamic dropdown data ───────────────────────────────────────────────────
+// Team: boards for the last 5 years, each linking to its block on /team.
+const boardYears = teamYears.slice(0, 5);
+// Blogs: the 6 latest posts across Hashnode + Medium (memoised at build time).
+const latestPosts = (await getAllPosts().catch(() => [])).slice(0, 6);
 
 export interface Props {
   /** When set, replaces the dot nav with a compact subpage pill (page title + back button). */
@@ -66,10 +74,30 @@ const dropdowns: Record<string, DropdownItem[]> = {
     { title: "Initiatives", desc: "Programs & activities", href: "/#acm-w-content", img: "/acmw/acmw-acmwmotto.webp" },
     { title: "Showcase", desc: "Highlights of our work", href: "/#acm-w-bento", img: "/acmw/acmw-bento.webp" },
   ],
+  team: [
+    ...boardYears.map((year) => ({
+      title: `${year} Board`,
+      desc: `The ${yearLabel(year)} board`,
+      href: `/team#year-${year}`,
+      img: `/cassettes/cassettes-team-${year}.svg`,
+    })),
+    { title: "Full Team", desc: "Meet everyone, year by year", href: "/team", img: "", all: true },
+  ],
   blogs: [
-    { title: "All Blogs", desc: "Browse every article we've published", href: "/blogs", img: "/blogs/blogs-placeholder.webp" },
-    { title: "Hashnode", desc: "Our latest technical deep-dives", href: "/blogs#all-blogs", img: "/logos/logos-acm-topleft.webp" },
-    { title: "Medium", desc: "Earlier publications & tutorials", href: "/blogs#all-blogs", img: "/logos/logos-acm-topleft.webp" },
+    ...latestPosts.map((post) => ({
+      title: post.title,
+      desc: `${post.source === "hashnode" ? "Hashnode" : "Medium"} · ${post.readingTime} min read`,
+      href: `/blogs/${post.source}/${post.slug}`,
+      img: post.coverImage || "/blogs/blogs-placeholder.webp",
+    })),
+    { title: "All Blogs", desc: "Browse every article we've published", href: "/blogs", img: "", all: true },
+  ],
+  gallery: [
+    { title: "2026", desc: "This year's events & candids", href: "/gallery#gallery-year-2026", img: "/cassettes/cassettes-year-2026.svg" },
+    { title: "2025", desc: "Events, boards & late nights", href: "/gallery#gallery-year-2025", img: "/cassettes/cassettes-year-2025.svg" },
+    { title: "2024", desc: "Events, boards & late nights", href: "/gallery#gallery-year-2024", img: "/cassettes/cassettes-year-2024.svg" },
+    { title: "2023", desc: "Events, boards & late nights", href: "/gallery#gallery-year-2023", img: "/cassettes/cassettes-year-2023.svg" },
+    { title: "All Photos", desc: "Browse the full gallery", href: "/gallery", img: "", all: true },
   ],
   more: [
     { title: "FAQs", desc: "Everything you wanted to know, answered", href: "/faqs", img: "/icons/icons-faq.svg" },
@@ -526,6 +554,7 @@ const dropdowns: Record<string, DropdownItem[]> = {
   .megamenu-panel[data-panel="community"] .megamenu-grid,
   .megamenu-panel[data-panel="domains"] .megamenu-grid,
   .megamenu-panel[data-panel="events"] .megamenu-grid,
+  .megamenu-panel[data-panel="team"] .megamenu-grid,
   .megamenu-panel[data-panel="more"] .megamenu-grid {
     grid-template-columns: repeat(6, 1fr);
   }
@@ -533,6 +562,7 @@ const dropdowns: Record<string, DropdownItem[]> = {
   .megamenu-panel[data-panel="community"] .megamenu-tile,
   .megamenu-panel[data-panel="domains"] .megamenu-tile,
   .megamenu-panel[data-panel="events"] .megamenu-tile,
+  .megamenu-panel[data-panel="team"] .megamenu-tile,
   .megamenu-panel[data-panel="more"] .megamenu-tile {
     grid-column: span 2;
   }
@@ -542,8 +572,15 @@ const dropdowns: Record<string, DropdownItem[]> = {
   .megamenu-panel[data-panel="domains"] .megamenu-tile:nth-child(4),
   .megamenu-panel[data-panel="domains"] .megamenu-tile:nth-child(5),
   .megamenu-panel[data-panel="events"] .megamenu-tile:nth-child(4),
-  .megamenu-panel[data-panel="events"] .megamenu-tile:nth-child(5) {
+  .megamenu-panel[data-panel="events"] .megamenu-tile:nth-child(5),
+  .megamenu-panel[data-panel="team"] .megamenu-tile:nth-child(4),
+  .megamenu-panel[data-panel="team"] .megamenu-tile:nth-child(5) {
     grid-column: span 3;
+  }
+
+  /* Gallery: 4 year cassettes in a clean 2×2 */
+  .megamenu-panel[data-panel="gallery"] .megamenu-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   /* More panel: 9 items - clean 3×3 (every tile spans 2 in the 6-col grid). */
@@ -1137,7 +1174,7 @@ const dropdowns: Record<string, DropdownItem[]> = {
     // ── Megamenu interaction ──
     const megamenu = document.getElementById("navMegamenu");
     const megamenuPanels = megamenu ? megamenu.querySelectorAll(".megamenu-panel") : [];
-    const sectionsWithDropdowns = ["about", "community", "domains", "events", "projects", "acm-w", "more"];
+    const sectionsWithDropdowns = ["about", "community", "domains", "events", "projects", "team", "blogs", "acm-w", "gallery", "more"];
     let megamenuTimer = null;
     let currentPanel = null;
 

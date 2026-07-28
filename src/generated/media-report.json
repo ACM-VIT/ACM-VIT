@@ -1,9 +1,15 @@
 {
-  "files": 2895,
-  "bytesTotal": 476649789,
+  "files": 2908,
+  "bytesTotal": 481277785,
   "contentReferenced": 678,
   "missing": [],
   "orphanCandidates": [
+    "/cassettes/cassettes-team-2022.svg",
+    "/cassettes/cassettes-team-2023.svg",
+    "/cassettes/cassettes-team-2024.svg",
+    "/cassettes/cassettes-team-2025.svg",
+    "/cassettes/cassettes-team-2026.svg",
+    "/cassettes/cassettes-year-2022.svg",
     "/design-guide/design-guide-hero.png",
     "/design-guide/design-guide-hero.webp",
     "/domains/research/domains-research-solidity.svg",
