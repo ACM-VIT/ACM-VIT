@@ -72,6 +72,14 @@ const cassetteArt: Record<string, string> = {
 };
 const FALLBACK_ART = "/cassettes/cassettes-cassette-layout-white.webp";
 
+// Real Google Photos album links per cassette title. Anything not listed here
+// falls back to the shared gallery placeholder below.
+const albumLinks: Record<string, string> = {
+  "Reverse Coding 2026":
+    "https://photos.google.com/share/AF1QipORSjd32KaeGWjGqykJw6ae6e0UKyvip2s66hupApfU97o0EojsP-XU28obaDIYwg?key=YnVxMUNnZ2w2cTQ3bF9GbmNFczUwOG5EYWEyYzdR",
+};
+const FALLBACK_ALBUM = "https://photos.google.com/share/dummy-album";
+
 // Events added to every year group.
 const EVERY_YEAR = ["Nightslips", "Random Fun", "KSL", "Casa", "SDG", "Life at ACM BTS", "Codex Cryptum"];
 
@@ -123,8 +131,7 @@ const yearSections = galleryYears
       cassettes: events.map((e) => ({
         title: e.title,
         src: getAssetUrl(cassetteArt[e.event] ?? FALLBACK_ART),
-        // TODO: replace with real Google Photos album links per event.
-        href: "https://photos.google.com/share/dummy-album",
+        href: albumLinks[e.title] ?? FALLBACK_ALBUM,
       })),
     };
   });
