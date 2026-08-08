@@ -5,7 +5,7 @@ import { getAssetUrl } from "../../utils/cdn";
 
 const igSizes = [
   { name: "Portrait post", px: "1080 × 1350", ratio: "4:5", w: 4, h: 5, note: "The default for feed posts. The grid trims the sides to 3:4 - keep key content inside the middle 1015 px." },
-  { name: "Grid-native post", px: "1080 × 1440", ratio: "3:4", w: 3, h: 4, note: "Matches the profile grid exactly - zero cropping. Use for grid-critical series." },
+  { name: "Grid-native post", px: "1015 × 1350", ratio: "3:4", w: 3, h: 4, note: "Matches the profile grid exactly - zero cropping. Use for grid-critical series." },
   { name: "Square post", px: "1080 × 1080", ratio: "1:1", w: 1, h: 1, note: "Legacy format. Fine in feed, but the grid crops its sides hard. Avoid for new templates." },
   { name: "Story / Reel", px: "1080 × 1920", ratio: "9:16", w: 9, h: 16, note: "Full-bleed vertical. Keep text out of the top and bottom 250px - UI overlaps it." },
   { name: "Landscape post", px: "1080 × 566", ratio: "1.91:1", w: 191, h: 100, note: "Weakest format - short in feed, brutal 3:4 grid crop. Only for cross-posted wide media." },
@@ -17,7 +17,7 @@ const platforms = [
     handle: "@acmvit",
     items: [
       ["Feed post (recommended)", "1080 × 1350", "4:5"],
-      ["Grid-native post", "1080 × 1440", "3:4"],
+      ["Grid-native post", "1015 × 1350", "3:4"],
       ["Story / Reel", "1080 × 1920", "9:16"],
       ["Landscape post", "1080 × 566", "1.91:1, avoid - weakest grid presence"],
       ["Grid-connected series", "1015 × 1350", "artwork zone, centered on the 1080 × 1350 canvas"],
@@ -364,6 +364,14 @@ const platforms = [
   /* keep the light-mode tile palette in dark mode too */
   :global(html[data-theme="dark"]) .ds-feed-demo span {
     background: #3a3835;
+  }
+  /* re-assert accent tiles - the span rule above outranks the class selectors */
+  :global(html[data-theme="dark"]) .ds-feed-demo .ds-feed-a {
+    background: #f95f4a;
+  }
+  :global(html[data-theme="dark"]) .ds-feed-demo .ds-feed-x {
+    background: #f95f4a;
+    outline-color: #b3341f;
   }
   /* hairline the Ink/orange/cream trio so each reads on the dark card */
   :global(html[data-theme="dark"]) .ds-theme-trio span {
