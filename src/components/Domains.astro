@@ -60,11 +60,11 @@ for (const item of domainItems) {
       class="domains-grid relative flex h-screen w-screen items-center justify-center overflow-visible p-5 origin-center will-change-transform [transform-style:preserve-3d] backface-hidden"
     >
       <div
-        class="domain-item absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+        class="domain-item absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
         data-domain="tech"
       >
         <div
-          class="domain-frame m-2.5 p-2.5 will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden"
+          class="domain-frame m-2.5 p-2.5 will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden cursor-pointer pointer-events-auto"
         >
           <div class="cassette-wrapper">
             <img
@@ -78,11 +78,11 @@ for (const item of domainItems) {
         </div>
       </div>
       <div
-        class="domain-item absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+        class="domain-item absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
         data-domain="cc"
       >
         <div
-          class="domain-frame m-2.5 p-2.5 will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden"
+          class="domain-frame m-2.5 p-2.5 will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden cursor-pointer pointer-events-auto"
         >
           <div class="cassette-wrapper">
             <img
@@ -96,11 +96,11 @@ for (const item of domainItems) {
         </div>
       </div>
       <div
-        class="domain-item absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+        class="domain-item absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
         data-domain="design"
       >
         <div
-          class="domain-frame m-2.5 p-2.5 will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden"
+          class="domain-frame m-2.5 p-2.5 will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden cursor-pointer pointer-events-auto"
         >
           <div class="cassette-wrapper">
             <img
@@ -114,11 +114,11 @@ for (const item of domainItems) {
         </div>
       </div>
       <div
-        class="domain-item absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+        class="domain-item absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
         data-domain="management"
       >
         <div
-          class="domain-frame m-2.5 p-2.5 will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden"
+          class="domain-frame m-2.5 p-2.5 will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden cursor-pointer pointer-events-auto"
         >
           <div class="cassette-wrapper">
             <img
@@ -132,11 +132,11 @@ for (const item of domainItems) {
         </div>
       </div>
       <div
-        class="domain-item absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+        class="domain-item absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
         data-domain="research"
       >
         <div
-          class="domain-frame m-2.5 p-2.5 will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden"
+          class="domain-frame m-2.5 p-2.5 will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden cursor-pointer pointer-events-auto"
         >
           <div class="cassette-wrapper">
             <img
@@ -273,6 +273,43 @@ for (const item of domainItems) {
         // Debounced initialization
         let initialized = false;
         let mainTl: gsap.core.Timeline | null = null;
+        const domainsSectionKey = "domains-section-instance-" + Math.random();
+
+        function cleanupAnimation() {
+          // Close any open domain screen without animation
+          const domainScreen = document.getElementById("domain-screen");
+          if (domainScreen) {
+            domainScreen.remove();
+          }
+          
+          // Kill all GSAP timelines and ScrollTriggers
+          if (mainTl) {
+            if (mainTl.scrollTrigger) {
+              mainTl.scrollTrigger.kill();
+            }
+            mainTl.kill();
+            mainTl = null;
+          }
+          
+          // Kill any remaining ScrollTriggers tied to this component
+          const triggers = ScrollTrigger.getAll();
+          triggers.forEach(trigger => {
+            const target = trigger.trigger;
+            if (target && target.classList && target.classList.contains("domains-section")) {
+              trigger.kill();
+            }
+          });
+          
+          // Restore overflow and header visibility
+          document.body.style.overflow = "";
+          const header = document.querySelector("header");
+          if (header) {
+            (header as HTMLElement).style.transform = "";
+            (header as HTMLElement).style.opacity = "";
+          }
+          
+          initialized = false;
+        }
 
         function initAnimation() {
           if (initialized) return;
@@ -362,22 +399,12 @@ for (const item of domainItems) {
           if (!items.length || !frames.length || !grid || !subtitle || !bgLayer)
             return;
 
-          const setDomainInteractivity = (isInteractive: boolean) => {
-            items.forEach((item) => {
-              (item as HTMLElement).style.pointerEvents = isInteractive
-                ? "auto"
-                : "none";
-            });
-          };
-
           const isDomainsSectionInView = () => {
             const section = document.querySelector(".domains-section");
             if (!(section instanceof HTMLElement)) return false;
             const rect = section.getBoundingClientRect();
             return rect.bottom > 0 && rect.top < window.innerHeight;
           };
-
-          setDomainInteractivity(false);
 
           // Set initial state
           gsap.set(frames, {
@@ -407,25 +434,16 @@ for (const item of domainItems) {
               invalidateOnRefresh: true,
               markers: false,
               onRefreshInit: refreshLayout,
-              onRefresh: (self) => {
-                setDomainInteractivity(
-                  self.isActive && isDomainsSectionInView(),
-                );
-              },
               onEnter: () => {
-                setDomainInteractivity(true);
                 gsap.to(bgLayer, { opacity: 1, duration: 0.5, delay: 0.5 });
               },
               onLeave: () => {
-                setDomainInteractivity(false);
                 gsap.to(bgLayer, { opacity: 0, duration: 0.5, delay: 0.5 });
               },
               onEnterBack: () => {
-                setDomainInteractivity(true);
                 gsap.to(bgLayer, { opacity: 1, duration: 0.5 });
               },
               onLeaveBack: () => {
-                setDomainInteractivity(false);
                 gsap.to(bgLayer, { opacity: 0, duration: 0.5 });
               },
             },
@@ -529,17 +547,31 @@ for (const item of domainItems) {
             });
 
             // Add click event handler for domain screen
-            item.addEventListener("click", (event) => {
+            // item.addEventListener("click", (event) => {
+            //   event.stopPropagation();
+            //   if (!isDomainsSectionInView()) return;
+            //   if (document.getElementById("domain-screen")) return;
+
+            //   const domain = item.getAttribute("data-domain");
+            //   if (domain) {
+            //     showDomainScreen(domain);
+            //   }
+            // });
+          });
+
+          frames.forEach((frame) => {
+            frame.addEventListener("click", (event) => {
               event.stopPropagation();
               if (!isDomainsSectionInView()) return;
               if (document.getElementById("domain-screen")) return;
 
-              const domain = item.getAttribute("data-domain");
+              const domain = frame.parentElement?.getAttribute("data-domain");
               if (domain) {
                 showDomainScreen(domain);
               }
             });
           });
+          
         }
 
         // Function to show domain screen
@@ -902,11 +934,34 @@ for (const item of domainItems) {
           }
         };
 
+        // Initialize on page load
         if (document.readyState === "loading") {
           document.addEventListener("DOMContentLoaded", initAnimation);
         } else {
           initAnimation();
         }
+
+        // Listen for when this variant is mounted (both initial and remounts)
+        window.addEventListener("app:variants-mounted", (e: any) => {
+          // If desktop variant was just mounted, (re)initialize
+          if (e.detail?.variant === "desktop") {
+            // Reset initialized flag to allow reinitialization
+            initialized = false;
+            // Use setTimeout to ensure DOM is ready
+            setTimeout(() => {
+              initAnimation();
+            }, 50);
+          }
+          // If we're switching away from desktop (to mobile), cleanup
+          if (e.detail?.variant === "mobile") {
+            cleanupAnimation();
+          }
+        });
+
+        // Cleanup when page unloads
+        window.addEventListener("beforeunload", () => {
+          cleanupAnimation();
+        });
       }
     </script>
   </div>
