@@ -2,6 +2,13 @@
 import Cassette from "./Cassette.astro";
 import { getAssetUrl } from "../utils/cdn";
 
+/**
+ * ProjectScreen - scroll-driven, single-place project walkthrough.
+ * The inner panel stays fixed (CSS sticky) while scrolling advances through
+ * projects one after another; the left text and right cassette cross-fade per
+ * project. GSAP ScrollTrigger drives the index (no pin, so scroll can never
+ * trap). The dotted grid frames the text and doubles as a progress indicator.
+ */
 export interface Props {
   projects: Array<{
     cassette: {
@@ -45,80 +52,91 @@ export interface Props {
 }
 
 const { projects = [] } = Astro.props;
+
+// Cassette needs a SOLID accent (a gradient breaks SVG gradient stops).
+// Fall back to the first hex found inside any gradient string.
+const toSolid = (c: string) => {
+  if (!c) return "#F95F4A";
+  if (/gradient/i.test(c)) {
+    const hex = c.match(/#[0-9a-fA-F]{3,8}/);
+    return hex ? hex[0] : "#F95F4A";
+  }
+  return c;
+};
+
+const items = projects.map((p) => ({
+  ...p,
+  name: (p.cassette.alt || "").replace(/\s*image$/i, "").trim() || "Project",
+  accent: toSolid(p.buttons.primary.backgroundColor),
+}));
+
+// One viewport of scroll per project.
+const sectionHeightVh = Math.max(1, items.length) * 100;
 ---
 
-<div class="projects-container flex flex-col">
-  {
-    projects.map((projectData) => (
-      <section
-        class="hero p-[clamp(24px,4vw,48px)] text-white h-[calc(100vh-112px)] w-full"
-        style={{
-          "--textColor": projectData.colors.textColor,
-          "--hoverShadow": projectData.colors.hoverShadow,
-        }}
-      >
-        <div class="parent grid grid-cols-9 grid-rows-5 gap-0 h-full w-full">
-          <div class="div1 col-start-1 col-end-6 row-start-1 row-end-6 flex items-center justify-center">
-            <Cassette
-              overlaySrc={getAssetUrl(projectData.cassette.src)}
-              alt={projectData.cassette.alt}
-              color={projectData.buttons.primary.backgroundColor}
-            />
-          </div>
+<section
+  class="proj-showcase relative w-full"
+  data-proj-showcase
+  style={`height: ${sectionHeightVh}vh;`}
+>
+  <div class="proj-sticky sticky top-0 h-screen w-full overflow-hidden">
+    <!-- Dotted grid: frames the copy block and tracks section progress -->
+    <div class="proj-grid-bg pointer-events-none absolute inset-0 z-0" aria-hidden="true">
+      <span class="grid-v" style="left: var(--gx1)"></span>
+      <span class="grid-v" style="left: var(--gx2)"></span>
+      <span class="grid-v" style="left: var(--gx3)"></span>
+      <span class="grid-v" style="left: var(--gx4)"></span>
+      <span class="grid-h" style="top: var(--gy1)"></span>
+      <span class="grid-h" style="top: var(--gy2)"></span>
+    </div>
 
-          <div class="div2 col-start-6 col-end-10 row-start-1 row-end-6 border-l-2 border-r-2 border-dashed border-[#999999]/50">
-            <!-- borders only -->
-          </div>
-          <div class="div3 col-start-1 col-end-10 row-start-3 row-end-4 border-t-2 border-b-2 border-dashed border-[#999999]/50" style="mask-image: linear-gradient(to right, transparent 45%, black 55%); -webkit-mask-image: linear-gradient(to right, transparent 45%, black 55%);">
-            <!-- borders only -->
-          </div>
+    <!-- Left: stacked text panels, boxed inside the dotted lines -->
+    <div class="proj-text-zone">
+      {
+        items.map((it, i) => (
+          <article
+            class:list={["text-panel", { "is-active": i === 0 }]}
+            data-text-panel
+            data-index={i}
+            style={`--proj-color: ${it.accent}; --hoverShadow: ${it.colors.hoverShadow};`}
+          >
+            <h3 class="panel-title">{it.name}</h3>
 
-          <div class="div4 col-start-6 col-end-10 row-start-1 row-end-3">
-            <div class="content-section text-[var(--textColor)] flex flex-col gap-5 justify-center px-5 h-full">
-              <div class="content-block border-none p-2.5 relative my-1">
-                <p class="description font-['PolySans_Trial'] text-base leading-[1.4] m-0 uppercase text-[var(--textColor)] font-light break-words">
-                  {projectData.textContent.blocks[0]}
-                </p>
-              </div>
-            </div>
-          </div>
+            <p class="panel-desc">{it.textContent.blocks[0]}</p>
 
-          <div class="div5 col-start-6 col-end-10 row-start-3 row-end-4 flex items-center justify-center relative z-20">
-            <div class="action-buttons flex gap-10 items-center justify-center m-0">
-
+            <div class="panel-actions">
               <a
-                href={projectData.buttons.visitWebsite.url || "#"}
+                href={it.buttons.visitWebsite.url || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="btn primary px-[18px] py-[10px] border rounded-[25px] font-['PolySans_Trial'] text-xs font-light uppercase cursor-pointer transition-all duration-300 break-words hover:-translate-y-[3px] hover:shadow-[0_8px_20px_var(--hoverShadow)] no-underline flex items-center justify-center"
+                class="panel-btn"
                 style={`
-            background: ${projectData.buttons.visitWebsite.backgroundColor};
-            color: ${projectData.buttons.visitWebsite.textColor};
-            border-color: ${projectData.buttons.visitWebsite.borderColor};
-            ${projectData.buttons.visitWebsite.borderRadius ? `border-radius: ${projectData.buttons.visitWebsite.borderRadius};` : ""}
-          `}
+                  background: ${it.buttons.visitWebsite.backgroundColor};
+                  color: ${it.buttons.visitWebsite.textColor};
+                  border-color: ${it.buttons.visitWebsite.borderColor};
+                  ${it.buttons.visitWebsite.borderRadius ? `border-radius: ${it.buttons.visitWebsite.borderRadius};` : ""}
+                `}
               >
-                {projectData.buttons.visitWebsite.text}
+                {it.buttons.visitWebsite.text}
               </a>
 
-              {projectData.buttons.icons.map((icon) => (
+              {it.buttons.icons.map((icon) => (
                 <a
                   href={icon.url || "#"}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="gh-btn icon-btn w-11 h-11 rounded-full flex items-center justify-center p-0 border font-['PolySans_Trial'] text-xs font-light uppercase cursor-pointer transition-all duration-300 break-words hover:-translate-y-[3px] hover:shadow-[0_8px_20px_var(--hoverShadow)]"
+                  class="panel-icon-btn"
                   style={`
-              background: ${icon.backgroundColor};
-              color: ${icon.textColor};
-              border-color: ${icon.borderColor};
-              ${icon.borderRadius ? `border-radius: ${icon.borderRadius};` : "border-radius: 50%;"}
-            `}
+                    background: ${icon.backgroundColor};
+                    border-color: ${icon.borderColor};
+                    ${icon.borderRadius ? `border-radius: ${icon.borderRadius};` : "border-radius: 50%;"}
+                  `}
                   aria-label={icon.type}
                 >
                   <img
                     src={getAssetUrl(`/${icon.type}-icon.webp`)}
                     alt={icon.type}
-                    width="24"
+                    width="22"
                     style={`filter: brightness(0) saturate(100%) invert(${icon.iconColor === "#FEFCD9" ? "96%" : "0%"});`}
                     loading="lazy"
                     decoding="async"
@@ -126,118 +144,361 @@ const { projects = [] } = Astro.props;
                 </a>
               ))}
             </div>
-          </div>
+          </article>
+        ))
+      }
+    </div>
 
-          <div class="div6 col-start-6 col-end-10 row-start-4 row-end-6">
-            <div class="content-section text-[var(--textColor)] flex flex-col gap-5 justify-center px-5 h-full">
-              <div class="content-block border-none p-2.5 relative my-1">
-                <p class="description font-['PolySans_Trial'] text-base leading-[1.4] m-0 uppercase text-[var(--textColor)] font-light break-words">
-                  {projectData.textContent.blocks[1]}
-                </p>
-              </div>
-            </div>
+    <!-- Right: stacked cassettes -->
+    <div class="proj-visual-zone">
+      {
+        items.map((it, i) => (
+          <div
+            class:list={["cassette-slide", { "is-active": i === 0 }]}
+            data-cassette-slide
+            data-index={i}
+          >
+            <Cassette
+              overlaySrc={it.cassette.src ? getAssetUrl(it.cassette.src) : undefined}
+              alt={it.cassette.alt}
+              color={it.accent}
+            />
           </div>
-        </div>
-      </section>
-    ))
-  }
-</div>
+        ))
+      }
+    </div>
+  </div>
+</section>
 
 <style>
-  @media (min-width: 769px) and (max-width: 1099px) {
-    .projects-container .parent {
-      grid-template-columns: repeat(10, minmax(0, 1fr));
-    }
+  /* Dotted grid lines. Their positions define the content boxes below, so the
+     copy always sits inside the frame. */
+  .proj-sticky {
+    --gx1: 5%;
+    --gx2: 52%;
+    --gx3: 74%;
+    --gx4: 93%;
+    --gy1: 16%;
+    --gy2: 84%;
+  }
 
-    .projects-container .div1 {
-      grid-column: 1 / 5;
-      justify-content: flex-end;
-    }
+  /* Base dots stay faint; a masked "fill" layer of stronger dots is revealed up
+     to --prog (set from scroll progress), so the grid darkens as the section
+     advances and recedes on the way back. */
+  .proj-grid-bg {
+    --prog: 0%;
+    --dot-base: rgba(254, 252, 217, 0.12);
+    --dot-fill: rgba(254, 252, 217, 0.55);
+  }
+  .grid-v {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: repeating-linear-gradient(
+      to bottom,
+      var(--dot-base) 0 3px,
+      transparent 3px 17px
+    );
+  }
+  .grid-v::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      var(--dot-fill) 0 3px,
+      transparent 3px 17px
+    );
+    -webkit-mask: linear-gradient(
+      to bottom,
+      #000 0 var(--prog),
+      transparent var(--prog)
+    );
+    mask: linear-gradient(
+      to bottom,
+      #000 0 var(--prog),
+      transparent var(--prog)
+    );
+  }
+  .grid-h {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: repeating-linear-gradient(
+      to right,
+      var(--dot-base) 0 3px,
+      transparent 3px 17px
+    );
+  }
+  .grid-h::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      to right,
+      var(--dot-fill) 0 3px,
+      transparent 3px 17px
+    );
+    -webkit-mask: linear-gradient(
+      to right,
+      #000 0 var(--prog),
+      transparent var(--prog)
+    );
+    mask: linear-gradient(
+      to right,
+      #000 0 var(--prog),
+      transparent var(--prog)
+    );
+  }
 
-    .projects-container .div1 > div {
-      transform: scale(0.7);
-      transform-origin: center right;
-    }
+  /* Copy box: bounded by the left/centre verticals and both horizontals. */
+  .proj-text-zone {
+    position: absolute;
+    z-index: 10;
+    left: var(--gx1);
+    right: calc(100% - var(--gx2));
+    top: var(--gy1);
+    bottom: calc(100% - var(--gy2));
+    padding: clamp(16px, 2.4vh, 34px) clamp(20px, 2.6vw, 48px);
+  }
 
-    .projects-container .div2,
-    .projects-container .div4,
-    .projects-container .div5,
-    .projects-container .div6 {
-      grid-column: 5 / 11;
-    }
+  /* Cassette box: right of the centre vertical, same horizontal band. */
+  .proj-visual-zone {
+    position: absolute;
+    z-index: 10;
+    left: var(--gx2);
+    right: 3%;
+    top: var(--gy1);
+    bottom: calc(100% - var(--gy2));
+    padding: 0 clamp(16px, 2vw, 40px);
+  }
 
-    .projects-container .div3 {
-      grid-column: 1 / 11;
-      mask-image: linear-gradient(to right, transparent 39.5%, black 40%) !important;
-      -webkit-mask-image: linear-gradient(to right, transparent 39.5%, black 40%) !important;
-    }
+  .text-panel {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: inherit;
+    opacity: 0;
+    transform: translateY(28px);
+    pointer-events: none;
+    transition:
+      opacity 0.5s ease,
+      transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+  .text-panel.is-active {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
 
-    .projects-container .content-section {
-      padding-left: 0.5rem;
-      padding-right: 0.5rem;
-    }
+  .panel-title {
+    margin: 0;
+    font-family: "PolySans Trial", sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    font-size: clamp(1.9rem, 3.2vw, 3.2rem);
+    color: #fefcd9;
+  }
 
-    .projects-container .content-block {
-      padding: 0.225rem;
-    }
+  .panel-desc {
+    margin: clamp(0.8rem, 1.6vh, 1.4rem) 0 0;
+    max-width: 34rem;
+    font-family: "PolySans Trial", sans-serif;
+    font-weight: 300;
+    font-size: clamp(0.9rem, 1.02vw, 1.1rem);
+    line-height: 1.55;
+    color: rgba(254, 252, 217, 0.8);
+  }
 
-    .projects-container .description {
-      font-size: 0.8rem;
-      line-height: 1.3;
-    }
+  .panel-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: clamp(1rem, 1.6vw, 1.9rem);
+    margin-top: clamp(1rem, 2.2vh, 1.9rem);
+  }
 
-    .projects-container .btn,
-    .projects-container .gh-btn {
-      font-size: 0.6rem;
-    }
+  .panel-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px 20px;
+    border: 1px solid;
+    border-radius: 25px;
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .panel-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px var(--hoverShadow);
+  }
 
-    .projects-container .action-buttons {
-      gap: 0.7rem;
+  .panel-icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .panel-icon-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px var(--hoverShadow);
+  }
+
+  .cassette-slide {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    opacity: 0;
+    transform: rotate(-7deg) scale(0.82);
+    transition:
+      opacity 0.6s ease,
+      transform 0.7s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+  .cassette-slide.is-active {
+    opacity: 1;
+    transform: none;
+  }
+  .cassette-slide.is-prev {
+    opacity: 0;
+    transform: rotate(7deg) scale(0.82);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .text-panel,
+    .cassette-slide {
+      transition: opacity 0.3s ease;
+      transform: none !important;
     }
   }
 
-  @media (max-height: 760px) {
-    .projects-container .parent {
-      grid-template-rows:
-        minmax(0, 1.05fr)
-        minmax(0, 0.9fr)
-        minmax(64px, 0.55fr)
-        minmax(0, 1.3fr)
-        minmax(0, 1.2fr);
+  /* Narrow viewports fall back to a stacked, natural-height layout so the tall
+     scroll-scrub height can never trap the page. */
+  @media (max-width: 768px) {
+    .proj-showcase {
+      height: auto !important;
     }
-
-    .projects-container .content-section {
-      gap: 0.75rem;
-    }
-
-    .projects-container .description {
-      font-size: 0.9rem;
-      line-height: 1.3;
-    }
-  }
-
-  @media (max-height: 560px) {
-    .projects-container .hero {
+    .proj-sticky {
+      position: static;
       height: auto;
-      min-height: 520px;
+      padding: 3rem 1.25rem;
     }
-
-    .projects-container .parent {
-      grid-template-rows:
-        minmax(0, 1fr)
-        minmax(0, 0.8fr)
-        minmax(72px, 0.8fr)
-        minmax(0, 1.6fr)
-        minmax(0, 1.4fr);
+    .proj-grid-bg {
+      display: none;
     }
-
-    .projects-container .description {
-      font-size: 0.85rem;
-      line-height: 1.25;
+    .proj-text-zone,
+    .proj-visual-zone {
+      position: static;
+      padding: 0;
     }
-
-    .projects-container .action-buttons {
-      gap: 1.5rem;
+    .proj-visual-zone {
+      margin-top: 2rem;
+    }
+    .text-panel,
+    .cassette-slide {
+      position: static;
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
+    }
+    .cassette-slide + .cassette-slide,
+    .text-panel + .text-panel {
+      margin-top: 3rem;
     }
   }
 </style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  let mounted: HTMLElement | null = null;
+  let cleanup: (() => void) | null = null;
+
+  function initProjectScreen() {
+    const section = document.querySelector<HTMLElement>("[data-proj-showcase]");
+
+    // The desktop variant was swapped out (or never mounted): drop the old
+    // ScrollTrigger so it can't run against a detached node.
+    if (mounted && mounted !== section) {
+      cleanup?.();
+      cleanup = null;
+      mounted = null;
+    }
+    if (!section || section.dataset.psInit === "1") return;
+    section.dataset.psInit = "1";
+    mounted = section;
+
+    const textPanels = Array.from(
+      section.querySelectorAll<HTMLElement>("[data-text-panel]"),
+    );
+    const cassettes = Array.from(
+      section.querySelectorAll<HTMLElement>("[data-cassette-slide]"),
+    );
+    const gridBg = section.querySelector<HTMLElement>(".proj-grid-bg");
+    const n = textPanels.length;
+    if (n === 0) return;
+
+    let active = -1;
+    const setActive = (idx: number) => {
+      if (idx === active) return;
+      active = idx;
+      textPanels.forEach((p, i) => p.classList.toggle("is-active", i === idx));
+      cassettes.forEach((c, i) => {
+        c.classList.toggle("is-active", i === idx);
+        c.classList.toggle("is-prev", i < idx);
+      });
+    };
+
+    setActive(0);
+
+    // ScrollTrigger reads progress over the tall section; the inner panel is
+    // held in place with CSS sticky (no GSAP pin -> never traps the scroll).
+    const st = ScrollTrigger.create({
+      trigger: section,
+      start: "top top",
+      end: "bottom bottom",
+      invalidateOnRefresh: true,
+      onUpdate: (self) => {
+        const idx = Math.min(
+          n - 1,
+          Math.max(0, Math.round(self.progress * (n - 1))),
+        );
+        setActive(idx);
+        // Drive the dotted grid as a section scroll indicator.
+        if (gridBg)
+          gridBg.style.setProperty(
+            "--prog",
+            `${(self.progress * 100).toFixed(2)}%`,
+          );
+      },
+    });
+
+    cleanup = () => st.kill();
+    requestAnimationFrame(() => ScrollTrigger.refresh());
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initProjectScreen);
+  } else {
+    initProjectScreen();
+  }
+  // The section is cloned into the DOM by the responsive variant host.
+  window.addEventListener("variants-mounted", () => initProjectScreen());
+</script>
