@@ -46,166 +46,293 @@ export interface Props {
 }
 
 const { projects = [] } = Astro.props;
+
+const toSolid = (c: string) => {
+  if (!c) return "#F95F4A";
+  if (/gradient/i.test(c)) {
+    const hex = c.match(/#[0-9a-fA-F]{3,8}/);
+    return hex ? hex[0] : "#F95F4A";
+  }
+  return c;
+};
+
+const items = projects.map((p) => ({
+  ...p,
+  name: (p.cassette.alt || "").replace(/\s*image$/i, "").trim() || "Project",
+  accent: toSolid(p.buttons.primary.backgroundColor),
+}));
 ---
 
-<div class="projects-container flex flex-col">
-  {
-    projects.map((projectData) => (
-      <section
-        class="hero px-4 text-white w-full"
-        style={{
-          "--textColor": projectData.colors.textColor,
-          "--hoverShadow": projectData.colors.hoverShadow,
-        }}
-      >
-        <div class="mobile-layout flex flex-col w-full">
-          {/* Top Text Block with border */}
-          <div class="moving-border-box-b p-6">
-            <div class="content-section text-[var(--textColor)]">
-              <p class="description font-['PolySans_Trial'] text-[11px] sm:text-xs leading-[1.55] m-0 uppercase text-[var(--textColor)] font-light break-words">
-                {projectData.textContent.blocks[0]}
-              </p>
-            </div>
-          </div>
+<section class="proj-mobile" data-proj-mobile>
+  <div class="proj-carousel" data-proj-carousel>
+    {
+      items.map((it, i) => (
+        <article
+          class="proj-slide"
+          data-proj-slide
+          data-index={i}
+          style={`--proj-color: ${it.accent}; --hoverShadow: ${it.colors.hoverShadow}; --textColor: ${it.colors.textColor};`}
+        >
+          <h3 class="slide-title">{it.name}</h3>
 
-          {/* Cassette in middle with border */}
-          <div class="moving-border-box-b py-8 flex items-center justify-center">
-            <div class="w-[60%]">
-              {projectData.cassette.svg ? (
-                <img
-                  class="w-full h-auto block"
-                  src={getAssetUrl(projectData.cassette.svg)}
-                  alt={projectData.cassette.alt}
-                  loading="lazy"
-                  decoding="async"
-                />
-              ) : (
-                <Cassette
-                  overlaySrc={getAssetUrl(projectData.cassette.src)}
-                  alt={projectData.cassette.alt}
-                  color={projectData.buttons.primary.backgroundColor}
-                  overlaySizePercent={10}
-                />
-              )}
-            </div>
-          </div>
+          <p class="slide-desc">{it.textContent.blocks[0]}</p>
 
-          {/* Bottom Text Block with border */}
-          {projectData.textContent.blocks[1] && (
-            <div class="moving-border-box-b p-6">
-              <div class="content-section text-[var(--textColor)]">
-                <p class="description font-['PolySans_Trial'] text-[11px] sm:text-xs leading-[1.55] m-0 uppercase text-[var(--textColor)] font-light break-words">
-                  {projectData.textContent.blocks[1]}
-                </p>
-              </div>
-            </div>
-          )}
+          <div class="slide-actions">
+            <a
+              href={it.buttons.visitWebsite.url || "#"}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="slide-btn"
+              style={`
+                background: ${it.buttons.visitWebsite.backgroundColor};
+                color: ${it.buttons.visitWebsite.textColor};
+                border-color: ${it.buttons.visitWebsite.borderColor};
+                ${it.buttons.visitWebsite.borderRadius ? `border-radius: ${it.buttons.visitWebsite.borderRadius};` : ""}
+              `}
+            >
+              {it.buttons.visitWebsite.text}
+            </a>
 
-          {/* Action Buttons at bottom with border */}
-          <div class="moving-border-box pt-6 px-6 pb-20 flex flex-row gap-3 items-center justify-center relative z-20">
-            {projectData.buttons.icons.length > 0 && (
+            {it.buttons.icons.map((icon) => (
               <a
-                href={projectData.buttons.icons[0].url || "#"}
+                href={icon.url || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="gh-btn icon-btn w-10 h-10 rounded-full flex items-center justify-center p-0 border font-['PolySans_Trial'] text-xs font-light uppercase cursor-pointer transition-all duration-300 shrink-0"
+                class="slide-icon-btn"
                 style={`
-                  background: ${projectData.buttons.icons[0].backgroundColor};
-                  color: ${projectData.buttons.icons[0].textColor};
-                  border-color: ${projectData.buttons.icons[0].borderColor};
+                  background: ${icon.backgroundColor};
+                  border-color: ${icon.borderColor};
+                  ${icon.borderRadius ? `border-radius: ${icon.borderRadius};` : "border-radius: 50%;"}
                 `}
-                aria-label={projectData.buttons.icons[0].type}
+                aria-label={icon.type}
               >
                 <img
-                  src={getAssetUrl(
-                    `/${projectData.buttons.icons[0].type}-icon.webp`
-                  )}
-                  alt={projectData.buttons.icons[0].type}
+                  src={getAssetUrl(`/${icon.type}-icon.webp`)}
+                  alt={icon.type}
                   width="20"
-                  style={`filter: brightness(0) saturate(100%) invert(${projectData.buttons.icons[0].iconColor === "#FEFCD9" ? "96%" : "0%"});`}
+                  style={`filter: brightness(0) saturate(100%) invert(${icon.iconColor === "#FEFCD9" ? "96%" : "0%"});`}
                   loading="lazy"
                   decoding="async"
                 />
               </a>
-            )}
-
-            <a
-              href={projectData.buttons.visitWebsite.url || "#"}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn primary flex-1 px-3 py-2 border rounded-[25px] font-['PolySans_Trial'] text-[10px] sm:text-xs font-light uppercase cursor-pointer transition-all duration-300 whitespace-nowrap flex items-center justify-center no-underline"
-              style={`
-                background: ${projectData.buttons.visitWebsite.backgroundColor};
-                color: ${projectData.buttons.visitWebsite.textColor};
-                border-color: ${projectData.buttons.visitWebsite.borderColor};
-              `}
-            >
-              {projectData.buttons.visitWebsite.text}
-            </a>
+            ))}
           </div>
-        </div>
-      </section>
-    ))
-  }
-</div>
+
+          <div class="slide-cassette">
+            {it.cassette.svg ? (
+              <img
+                class="slide-cassette-art"
+                src={getAssetUrl(it.cassette.svg)}
+                alt={it.cassette.alt}
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <Cassette
+                overlaySrc={it.cassette.src ? getAssetUrl(it.cassette.src) : undefined}
+                alt={it.cassette.alt}
+                color={it.accent}
+              />
+            )}
+          </div>
+        </article>
+      ))
+    }
+  </div>
+
+  <div class="proj-controls">
+    <button
+      type="button"
+      class="proj-arrow"
+      data-proj-prev
+      aria-label="Previous project"
+    >
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
+    </button>
+
+    <div class="proj-dots" data-proj-dots>
+      {
+        items.map((it, i) => (
+          <button
+            type="button"
+            class="proj-dot"
+            data-proj-dot
+            data-index={i}
+            style={`--proj-color: ${it.accent};`}
+            aria-label={`Go to project ${i + 1}`}
+          />
+        ))
+      }
+    </div>
+
+    <button
+      type="button"
+      class="proj-arrow"
+      data-proj-next
+      aria-label="Next project"
+    >
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg>
+    </button>
+  </div>
+</section>
 
 <style>
-  .moving-border-box-b {
-    background-image:
-      linear-gradient(to bottom, rgba(153, 153, 153, 0.5) 50%, transparent 50%),
-      linear-gradient(to bottom, rgba(153, 153, 153, 0.5) 50%, transparent 50%),
-      linear-gradient(to right, rgba(153, 153, 153, 0.5) 50%, transparent 50%);
-    background-size:
-      2px 12px,
-      2px 12px,
-      12px 2px;
-    background-position:
-      0 0,
-      100% 0,
-      0 100%;
-    background-repeat: repeat-y, repeat-y, repeat-x;
-    animation: move-borders-b 1s linear infinite;
+  .proj-mobile {
+    width: 100%;
+    padding: 1.5rem 0 2.5rem;
+    color: #fefcd9;
   }
 
-  .moving-border-box {
-    background-image:
-      linear-gradient(to bottom, rgba(153, 153, 153, 0.5) 50%, transparent 50%),
-      linear-gradient(to bottom, rgba(153, 153, 153, 0.5) 50%, transparent 50%);
-    background-size:
-      2px 12px,
-      2px 12px;
-    background-position:
-      0 0,
-      100% 0;
-    background-repeat: repeat-y, repeat-y;
-    animation: move-borders 1s linear infinite;
+  .proj-carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .proj-carousel::-webkit-scrollbar {
+    display: none;
   }
 
-  @keyframes move-borders-b {
-    0% {
-      background-position:
-        0 0,
-        100% 0,
-        0 100%;
-    }
-    100% {
-      background-position:
-        0 12px,
-        100% 12px,
-        12px 100%;
-    }
+  .proj-slide {
+    flex: 0 0 100%;
+    width: 100%;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    display: flex;
+    flex-direction: column;
+    padding: 0 1.25rem;
   }
 
-  @keyframes move-borders {
-    0% {
-      background-position:
-        0 0,
-        100% 0;
-    }
-    100% {
-      background-position:
-        0 12px,
-        100% 12px;
+  .slide-title {
+    margin: 0;
+    font-family: "PolySans Trial", sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    font-size: clamp(1.75rem, 8vw, 2.5rem);
+    color: #fefcd9;
+    text-align: center;
+  }
+
+  .slide-desc {
+    margin: 1rem 0 0;
+    font-family: "PolySans Trial", sans-serif;
+    font-weight: 300;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: rgba(254, 252, 217, 0.8);
+  }
+
+  .slide-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .slide-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px 20px;
+    border: 1px solid;
+    border-radius: 25px;
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .slide-btn:active {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px var(--hoverShadow);
+  }
+
+  .slide-icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .slide-icon-btn:active {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px var(--hoverShadow);
+  }
+
+  .slide-cassette {
+    margin: 2rem auto 0;
+    width: 100%;
+    max-width: 22rem;
+  }
+  .slide-cassette-art {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .proj-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    margin-top: 2.25rem;
+  }
+
+  .proj-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(254, 252, 217, 0.4);
+    background: transparent;
+    color: #fefcd9;
+    cursor: pointer;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+  }
+  .proj-arrow:active {
+    background: rgba(254, 252, 217, 0.1);
+  }
+  .proj-arrow:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .proj-dots {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .proj-dot {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: 0;
+    border-radius: 9999px;
+    background: rgba(254, 252, 217, 0.3);
+    cursor: pointer;
+    transition: width 0.3s ease, background-color 0.3s ease;
+  }
+  .proj-dot[data-active="true"] {
+    width: 22px;
+    background: var(--proj-color, #f95f4a);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .proj-carousel {
+      scroll-behavior: auto;
     }
   }
 
@@ -245,3 +372,113 @@ const { projects = [] } = Astro.props;
     font-display: swap;
   }
 </style>
+
+<script>
+  let mounted: HTMLElement | null = null;
+  let cleanup: (() => void) | null = null;
+
+  function initProjectsMobile() {
+    const section = document.querySelector<HTMLElement>("[data-proj-mobile]");
+
+    if (mounted && mounted !== section) {
+      cleanup?.();
+      cleanup = null;
+      mounted = null;
+    }
+    if (!section || section.dataset.pmInit === "1") return;
+
+    const carousel = section.querySelector<HTMLElement>("[data-proj-carousel]");
+    const slides = Array.from(
+      section.querySelectorAll<HTMLElement>("[data-proj-slide]"),
+    );
+    if (!carousel || slides.length === 0) return;
+
+    section.dataset.pmInit = "1";
+    mounted = section;
+
+    const dots = Array.from(
+      section.querySelectorAll<HTMLButtonElement>("[data-proj-dot]"),
+    );
+    const prevBtn = section.querySelector<HTMLButtonElement>("[data-proj-prev]");
+    const nextBtn = section.querySelector<HTMLButtonElement>("[data-proj-next]");
+
+    const base = () => slides[0]?.offsetLeft ?? 0;
+
+    const currentIndex = () => {
+      const target = carousel.scrollLeft + carousel.clientWidth / 2;
+      let best = 0;
+      let bestDist = Infinity;
+      slides.forEach((s, i) => {
+        const center = s.offsetLeft - base() + s.offsetWidth / 2;
+        const d = Math.abs(center - target);
+        if (d < bestDist) {
+          bestDist = d;
+          best = i;
+        }
+      });
+      return best;
+    };
+
+    const syncControls = () => {
+      const idx = currentIndex();
+      dots.forEach((dot, i) => {
+        dot.dataset.active = i === idx ? "true" : "false";
+      });
+      if (prevBtn) prevBtn.disabled = idx <= 0;
+      if (nextBtn) nextBtn.disabled = idx >= slides.length - 1;
+    };
+
+    const goTo = (i: number) => {
+      const clamped = Math.max(0, Math.min(slides.length - 1, i));
+      carousel.scrollTo({
+        left: slides[clamped].offsetLeft - base(),
+        behavior: "smooth",
+      });
+    };
+
+    const onScroll = () => syncControls();
+
+    const onPrev = () => goTo(currentIndex() - 1);
+    const onNext = () => goTo(currentIndex() + 1);
+    const onKeydown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        onPrev();
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        onNext();
+      }
+    };
+    const dotHandlers = dots.map((dot, i) => {
+      const handler = () => goTo(i);
+      dot.addEventListener("click", handler);
+      return { dot, handler };
+    });
+
+    carousel.addEventListener("scroll", onScroll, { passive: true });
+    prevBtn?.addEventListener("click", onPrev);
+    nextBtn?.addEventListener("click", onNext);
+    section.addEventListener("keydown", onKeydown);
+    window.addEventListener("resize", syncControls, { passive: true });
+
+    syncControls();
+
+    cleanup = () => {
+      carousel.removeEventListener("scroll", onScroll);
+      prevBtn?.removeEventListener("click", onPrev);
+      nextBtn?.removeEventListener("click", onNext);
+      section.removeEventListener("keydown", onKeydown);
+      window.removeEventListener("resize", syncControls);
+      dotHandlers.forEach(({ dot, handler }) =>
+        dot.removeEventListener("click", handler),
+      );
+    };
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initProjectsMobile);
+  } else {
+    initProjectsMobile();
+  }
+  window.addEventListener("variants-mounted", () => initProjectsMobile());
+</script>
