@@ -5,7 +5,8 @@ import { getAssetUrl } from "../utils/cdn";
 export interface Props {
   projects: Array<{
     cassette: {
-      src: string;
+      src?: string | null;
+      svg?: string | null;
       alt: string;
     };
     textContent: {
@@ -70,23 +71,35 @@ const { projects = [] } = Astro.props;
           {/* Cassette in middle with border */}
           <div class="moving-border-box-b py-8 flex items-center justify-center">
             <div class="w-[60%]">
-              <Cassette
-                overlaySrc={getAssetUrl(projectData.cassette.src)}
-                alt={projectData.cassette.alt}
-                color={projectData.buttons.primary.backgroundColor}
-                overlaySizePercent={10}
-              />
+              {projectData.cassette.svg ? (
+                <img
+                  class="w-full h-auto block"
+                  src={getAssetUrl(projectData.cassette.svg)}
+                  alt={projectData.cassette.alt}
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : (
+                <Cassette
+                  overlaySrc={getAssetUrl(projectData.cassette.src)}
+                  alt={projectData.cassette.alt}
+                  color={projectData.buttons.primary.backgroundColor}
+                  overlaySizePercent={10}
+                />
+              )}
             </div>
           </div>
 
           {/* Bottom Text Block with border */}
-          <div class="moving-border-box-b p-6">
-            <div class="content-section text-[var(--textColor)]">
-              <p class="description font-['PolySans_Trial'] text-[11px] sm:text-xs leading-[1.55] m-0 uppercase text-[var(--textColor)] font-light break-words">
-                {projectData.textContent.blocks[1]}
-              </p>
+          {projectData.textContent.blocks[1] && (
+            <div class="moving-border-box-b p-6">
+              <div class="content-section text-[var(--textColor)]">
+                <p class="description font-['PolySans_Trial'] text-[11px] sm:text-xs leading-[1.55] m-0 uppercase text-[var(--textColor)] font-light break-words">
+                  {projectData.textContent.blocks[1]}
+                </p>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Action Buttons at bottom with border */}
           <div class="moving-border-box pt-6 px-6 pb-20 flex flex-row gap-3 items-center justify-center relative z-20">

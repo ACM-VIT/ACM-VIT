@@ -2,17 +2,11 @@
 import Cassette from "./Cassette.astro";
 import { getAssetUrl } from "../utils/cdn";
 
-/**
- * ProjectScreen - scroll-driven, single-place project walkthrough.
- * The inner panel stays fixed (CSS sticky) while scrolling advances through
- * projects one after another; the left text and right cassette cross-fade per
- * project. GSAP ScrollTrigger drives the index (no pin, so scroll can never
- * trap). The dotted grid frames the text and doubles as a progress indicator.
- */
 export interface Props {
   projects: Array<{
     cassette: {
-      src: string;
+      src?: string | null;
+      svg?: string | null;
       alt: string;
     };
     textContent: {
@@ -53,8 +47,6 @@ export interface Props {
 
 const { projects = [] } = Astro.props;
 
-// Cassette needs a SOLID accent (a gradient breaks SVG gradient stops).
-// Fall back to the first hex found inside any gradient string.
 const toSolid = (c: string) => {
   if (!c) return "#F95F4A";
   if (/gradient/i.test(c)) {
@@ -70,7 +62,6 @@ const items = projects.map((p) => ({
   accent: toSolid(p.buttons.primary.backgroundColor),
 }));
 
-// One viewport of scroll per project.
 const sectionHeightVh = Math.max(1, items.length) * 100;
 ---
 
@@ -80,17 +71,14 @@ const sectionHeightVh = Math.max(1, items.length) * 100;
   style={`height: ${sectionHeightVh}vh;`}
 >
   <div class="proj-sticky sticky top-0 h-screen w-full overflow-hidden">
-    <!-- Dotted grid: frames the copy block and tracks section progress -->
     <div class="proj-grid-bg pointer-events-none absolute inset-0 z-0" aria-hidden="true">
       <span class="grid-v" style="left: var(--gx1)"></span>
-      <span class="grid-v" style="left: var(--gx2)"></span>
-      <span class="grid-v" style="left: var(--gx3)"></span>
-      <span class="grid-v" style="left: var(--gx4)"></span>
+      <span class="grid-v" style="right: var(--cass-line-left)"></span>
+      <span class="grid-v" style="right: var(--cass-line-right)"></span>
       <span class="grid-h" style="top: var(--gy1)"></span>
       <span class="grid-h" style="top: var(--gy2)"></span>
     </div>
 
-    <!-- Left: stacked text panels, boxed inside the dotted lines -->
     <div class="proj-text-zone">
       {
         items.map((it, i) => (
@@ -149,7 +137,6 @@ const sectionHeightVh = Math.max(1, items.length) * 100;
       }
     </div>
 
-    <!-- Right: stacked cassettes -->
     <div class="proj-visual-zone">
       {
         items.map((it, i) => (
@@ -158,11 +145,21 @@ const sectionHeightVh = Math.max(1, items.length) * 100;
             data-cassette-slide
             data-index={i}
           >
-            <Cassette
-              overlaySrc={it.cassette.src ? getAssetUrl(it.cassette.src) : undefined}
-              alt={it.cassette.alt}
-              color={it.accent}
-            />
+            {it.cassette.svg ? (
+              <img
+                class="proj-cassette-art"
+                src={getAssetUrl(it.cassette.svg)}
+                alt={it.cassette.alt}
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <Cassette
+                overlaySrc={it.cassette.src ? getAssetUrl(it.cassette.src) : undefined}
+                alt={it.cassette.alt}
+                color={it.accent}
+              />
+            )}
           </div>
         ))
       }
@@ -171,20 +168,19 @@ const sectionHeightVh = Math.max(1, items.length) * 100;
 </section>
 
 <style>
-  /* Dotted grid lines. Their positions define the content boxes below, so the
-     copy always sits inside the frame. */
   .proj-sticky {
     --gx1: 5%;
-    --gx2: 52%;
-    --gx3: 74%;
-    --gx4: 93%;
     --gy1: 16%;
     --gy2: 84%;
+
+    --cass-right: clamp(28px, 4.5vw, 84px);
+    --cass-w: clamp(280px, min(40vw, 105vh), 560px);
+    --cass-gap: clamp(14px, 1.8vw, 34px);
+
+    --cass-line-right: calc(var(--cass-right) - var(--cass-gap));
+    --cass-line-left: calc(var(--cass-right) + var(--cass-w) + var(--cass-gap));
   }
 
-  /* Base dots stay faint; a masked "fill" layer of stronger dots is revealed up
-     to --prog (set from scroll progress), so the grid darkens as the section
-     advances and recedes on the way back. */
   .proj-grid-bg {
     --prog: 0%;
     --dot-base: rgba(254, 252, 217, 0.12);
@@ -253,26 +249,29 @@ const sectionHeightVh = Math.max(1, items.length) * 100;
     );
   }
 
-  /* Copy box: bounded by the left/centre verticals and both horizontals. */
   .proj-text-zone {
     position: absolute;
     z-index: 10;
     left: var(--gx1);
-    right: calc(100% - var(--gx2));
+    right: calc(var(--cass-line-left) + clamp(16px, 1.6vw, 30px));
     top: var(--gy1);
     bottom: calc(100% - var(--gy2));
     padding: clamp(16px, 2.4vh, 34px) clamp(20px, 2.6vw, 48px);
   }
 
-  /* Cassette box: right of the centre vertical, same horizontal band. */
   .proj-visual-zone {
     position: absolute;
     z-index: 10;
-    left: var(--gx2);
-    right: 3%;
+    right: var(--cass-right);
+    width: var(--cass-w);
     top: var(--gy1);
     bottom: calc(100% - var(--gy2));
-    padding: 0 clamp(16px, 2vw, 40px);
+  }
+
+  .proj-cassette-art {
+    width: 100%;
+    height: auto;
+    display: block;
   }
 
   .text-panel {
@@ -386,8 +385,6 @@ const sectionHeightVh = Math.max(1, items.length) * 100;
     }
   }
 
-  /* Narrow viewports fall back to a stacked, natural-height layout so the tall
-     scroll-scrub height can never trap the page. */
   @media (max-width: 768px) {
     .proj-showcase {
       height: auto !important;
@@ -434,8 +431,6 @@ const sectionHeightVh = Math.max(1, items.length) * 100;
   function initProjectScreen() {
     const section = document.querySelector<HTMLElement>("[data-proj-showcase]");
 
-    // The desktop variant was swapped out (or never mounted): drop the old
-    // ScrollTrigger so it can't run against a detached node.
     if (mounted && mounted !== section) {
       cleanup?.();
       cleanup = null;
@@ -468,8 +463,6 @@ const sectionHeightVh = Math.max(1, items.length) * 100;
 
     setActive(0);
 
-    // ScrollTrigger reads progress over the tall section; the inner panel is
-    // held in place with CSS sticky (no GSAP pin -> never traps the scroll).
     const st = ScrollTrigger.create({
       trigger: section,
       start: "top top",
@@ -481,7 +474,6 @@ const sectionHeightVh = Math.max(1, items.length) * 100;
           Math.max(0, Math.round(self.progress * (n - 1))),
         );
         setActive(idx);
-        // Drive the dotted grid as a section scroll indicator.
         if (gridBg)
           gridBg.style.setProperty(
             "--prog",
@@ -499,6 +491,5 @@ const sectionHeightVh = Math.max(1, items.length) * 100;
   } else {
     initProjectScreen();
   }
-  // The section is cloned into the DOM by the responsive variant host.
   window.addEventListener("variants-mounted", () => initProjectScreen());
 </script>
