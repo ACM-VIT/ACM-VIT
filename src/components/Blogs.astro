@@ -169,7 +169,7 @@ const rowBottom = blogs.slice(mid);
   </div>
 
   <div class="blogs-marquee w-full flex flex-col gap-5 md:gap-6" data-blogs-marquee>
-    <div class="marquee-viewport" data-marquee-viewport data-speed="62">
+    <div class="marquee-viewport" data-marquee-viewport data-speed="65.1">
       <div class="marquee-row">
         {rowTop.map((blog) => <BlogsCard {...blog} />)}
         {rowTop.map((blog) => <BlogsCard {...blog} clone />)}
@@ -181,7 +181,7 @@ const rowBottom = blogs.slice(mid);
         <div
           class="marquee-viewport"
           data-marquee-viewport
-          data-speed="48"
+          data-speed="50.4"
           data-direction="reverse"
         >
           <div class="marquee-row">
@@ -313,17 +313,35 @@ const rowBottom = blogs.slice(mid);
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
-    const lanes = viewports.map((viewport) => ({
+    const RESUME_DELAY = 2200;
+
+    type Lane = {
+      viewport: HTMLElement;
+      speed: number;
+      direction: number;
+      position: number;
+      auto: boolean;
+      hovering: boolean;
+      resumeTimer: number;
+      idleTimer: number;
+    };
+
+    const lanes: Lane[] = viewports.map((viewport) => ({
       viewport,
       speed: Number(viewport.dataset.speed ?? 55),
       direction: viewport.dataset.direction === "reverse" ? -1 : 1,
       position: 0,
+      auto: !reduceMotion,
+      hovering: false,
+      resumeTimer: 0,
+      idleTimer: 0,
     }));
 
     const halfWidth = (viewport: HTMLElement) => viewport.scrollWidth / 2;
 
     const prime = () => {
       lanes.forEach((lane) => {
+        if (!lane.auto) return;
         const half = halfWidth(lane.viewport);
         if (half <= 0) return;
         lane.position = lane.direction < 0 ? half : 0;
@@ -333,8 +351,6 @@ const rowBottom = blogs.slice(mid);
 
     prime();
 
-    let autoScrolling = !reduceMotion;
-    let hovering = false;
     let onScreen = true;
     let frameId = 0;
     let lastFrame = 0;
@@ -343,8 +359,9 @@ const rowBottom = blogs.slice(mid);
       const delta = lastFrame ? Math.min(time - lastFrame, 64) : 16;
       lastFrame = time;
 
-      if (autoScrolling && !hovering && onScreen && !document.hidden) {
+      if (onScreen && !document.hidden) {
         for (const lane of lanes) {
+          if (!lane.auto || lane.hovering) continue;
           const half = halfWidth(lane.viewport);
           if (half <= 0) continue;
           lane.position += (lane.speed * lane.direction * delta) / 1000;
@@ -357,35 +374,48 @@ const rowBottom = blogs.slice(mid);
       frameId = requestAnimationFrame(step);
     };
 
-    const stopAutoScroll = () => {
-      if (!autoScrolling) return;
-      autoScrolling = false;
-      if (frameId) cancelAnimationFrame(frameId);
-      frameId = 0;
+    const scheduleResume = (lane: Lane) => {
+      if (reduceMotion) return;
+      window.clearTimeout(lane.resumeTimer);
+      lane.resumeTimer = window.setTimeout(() => {
+        if (lane.hovering) {
+          scheduleResume(lane);
+          return;
+        }
+        lane.position = lane.viewport.scrollLeft;
+        lane.auto = true;
+      }, RESUME_DELAY);
     };
 
-    const wrapWhenIdle = (viewport: HTMLElement) => {
-      const half = halfWidth(viewport);
+    const takeOver = (lane: Lane) => {
+      lane.auto = false;
+      scheduleResume(lane);
+    };
+
+    const wrapWhenIdle = (lane: Lane) => {
+      const half = halfWidth(lane.viewport);
       if (half <= 0) return;
-      if (viewport.scrollLeft >= half) viewport.scrollLeft -= half;
-      else if (viewport.scrollLeft <= 0) viewport.scrollLeft += half;
+      if (lane.viewport.scrollLeft >= half) lane.viewport.scrollLeft -= half;
+      else if (lane.viewport.scrollLeft <= 0) lane.viewport.scrollLeft += half;
+      lane.position = lane.viewport.scrollLeft;
     };
 
-    let dragLane: HTMLElement | null = null;
+    let dragLane: Lane | null = null;
     let dragStartX = 0;
     let dragStartScroll = 0;
     let dragged = false;
     let suppressClick = false;
 
-    viewports.forEach((viewport) => {
-      let idleTimer = 0;
+    lanes.forEach((lane) => {
+      const viewport = lane.viewport;
 
       viewport.addEventListener(
         "scroll",
         () => {
-          if (autoScrolling) return;
-          window.clearTimeout(idleTimer);
-          idleTimer = window.setTimeout(() => wrapWhenIdle(viewport), 180);
+          if (lane.auto) return;
+          window.clearTimeout(lane.idleTimer);
+          lane.idleTimer = window.setTimeout(() => wrapWhenIdle(lane), 180);
+          scheduleResume(lane);
         },
         { passive: true }
       );
@@ -394,7 +424,7 @@ const rowBottom = blogs.slice(mid);
         "wheel",
         (event) => {
           if (Math.abs(event.deltaX) > Math.abs(event.deltaY) || event.shiftKey)
-            stopAutoScroll();
+            takeOver(lane);
         },
         { passive: true }
       );
@@ -420,14 +450,14 @@ const rowBottom = blogs.slice(mid);
           if (!touch) return;
           const deltaX = Math.abs(touch.clientX - touchStartX);
           const deltaY = Math.abs(touch.clientY - touchStartY);
-          if (deltaX > deltaY && deltaX > 6) stopAutoScroll();
+          if (deltaX > deltaY && deltaX > 6) takeOver(lane);
         },
         { passive: true }
       );
 
       viewport.addEventListener("pointerdown", (event) => {
         if (event.pointerType !== "mouse" || event.button !== 0) return;
-        dragLane = viewport;
+        dragLane = lane;
         dragStartX = event.clientX;
         dragStartScroll = viewport.scrollLeft;
         dragged = false;
@@ -442,6 +472,14 @@ const rowBottom = blogs.slice(mid);
         },
         true
       );
+
+      viewport.addEventListener("mouseenter", () => {
+        lane.hovering = true;
+      });
+
+      viewport.addEventListener("mouseleave", () => {
+        lane.hovering = false;
+      });
     });
 
     window.addEventListener("pointermove", (event) => {
@@ -450,21 +488,21 @@ const rowBottom = blogs.slice(mid);
       if (!dragged) {
         if (Math.abs(offset) < 8) return;
         dragged = true;
-        stopAutoScroll();
-        dragLane.classList.add("is-dragging");
+        takeOver(dragLane);
+        dragLane.viewport.classList.add("is-dragging");
       }
-      dragLane.scrollLeft = dragStartScroll - offset;
+      dragLane.viewport.scrollLeft = dragStartScroll - offset;
     });
 
     const endDrag = () => {
       if (!dragLane) return;
-      const lane = dragLane;
-      lane.classList.remove("is-dragging");
+      dragLane.viewport.classList.remove("is-dragging");
       if (dragged) {
         suppressClick = true;
         window.setTimeout(() => {
           suppressClick = false;
         }, 60);
+        scheduleResume(dragLane);
       }
       dragLane = null;
       dragged = false;
@@ -473,16 +511,7 @@ const rowBottom = blogs.slice(mid);
     window.addEventListener("pointerup", endDrag);
     window.addEventListener("pointercancel", endDrag);
 
-    marquee.addEventListener("mouseenter", () => {
-      hovering = true;
-    });
-    marquee.addEventListener("mouseleave", () => {
-      hovering = false;
-    });
-
-    window.addEventListener("load", () => {
-      if (autoScrolling) prime();
-    });
+    window.addEventListener("load", prime);
 
     window.addEventListener("resize", () => {
       lanes.forEach((lane) => {
@@ -495,7 +524,7 @@ const rowBottom = blogs.slice(mid);
       const observer = new IntersectionObserver(
         (entries) => {
           onScreen = entries.some((entry) => entry.isIntersecting);
-          if (onScreen && !primedOnScreen && autoScrolling) {
+          if (onScreen && !primedOnScreen) {
             primedOnScreen = true;
             prime();
           }
