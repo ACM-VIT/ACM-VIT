@@ -1,0 +1,287 @@
+---
+import SectionHeading from "./SectionHeading.astro";
+import TeamDivision from "./TeamDivision.astro";
+import BoardMemberCardSingular from "./BoardMemberCardSingular.astro";
+import { reader } from "../utils/reader";
+import { getAssetUrl } from "../utils/cdn";
+import {
+  CURRENT_BOARD_YEAR,
+  historicalBoards,
+  teamYears,
+  yearLabel,
+  type TeamMember,
+} from "../data/teamData";
+
+const boardData = await reader.singletons.board.read();
+const boardMembers = boardData?.items ?? [];
+
+const toMember = (member: (typeof boardMembers)[number]): TeamMember => ({
+  title: member.title ?? "",
+  fullName: member.fullName ?? "",
+  position: member.position ?? "",
+  imageUrl: member.imageUrl ?? "",
+  linkedinUrl: member.linkedinUrl ?? undefined,
+  githubUrl: member.githubUrl ?? undefined,
+  googleScholarUrl: member.googleScholarUrl ?? undefined,
+  isW: member.isW ?? false,
+});
+
+const facultyCoordinator = boardMembers.find(
+  (member) => member.position === "Faculty Coordinator"
+);
+const faculty = facultyCoordinator ? toMember(facultyCoordinator) : null;
+const currentBoard = boardMembers
+  .filter((member) => member.position !== "Faculty Coordinator")
+  .map(toMember);
+
+const membersForYear = (year: number): TeamMember[] =>
+  year === CURRENT_BOARD_YEAR && currentBoard.length > 0
+    ? currentBoard
+    : (historicalBoards[year] ?? []);
+---
+
+<main class="team-page relative w-full overflow-hidden">
+  <div class="team-glow" aria-hidden="true"></div>
+
+  <header
+    class="team-hero relative z-10 flex min-h-[60vh] flex-col items-center justify-center px-6 text-center"
+  >
+    <img
+      src={getAssetUrl("/the_team.webp")}
+      alt="The Team"
+      class="hero-logo w-[80vw] max-w-3xl"
+      loading="eager"
+      decoding="async"
+      data-preloader-ignore
+    />
+    <p
+      class="mt-8 max-w-2xl font-['PolySans_Trial',sans-serif] text-sm font-light leading-relaxed text-[#FEFCD9]/75 sm:text-lg"
+    >
+      Every cassette, a person. Every year, a new tape. Meet the crew making the
+      magic — the boards steering ACM-VIT, year after year.
+    </p>
+    <a
+      href="/#team"
+      class="mt-8 inline-block rounded-full border-2 border-primary-orange px-5 py-2 font-['PolySans_Trial',sans-serif] text-xs uppercase tracking-wider text-white transition-transform duration-300 hover:scale-105 sm:text-sm"
+    >
+      Back to home
+    </a>
+  </header>
+
+  <nav
+    class="year-nav sticky top-24 z-30 mx-auto mb-12 flex w-fit max-w-[92vw] items-center gap-1 overflow-x-auto rounded-full border border-[#FEFCD9]/15 bg-black/40 p-1.5 backdrop-blur-md"
+  >
+    {
+      teamYears.map((year) => (
+        <a
+          href={`#year-${year}`}
+          class="year-tab whitespace-nowrap rounded-full px-4 py-2 font-['PolySans_Trial',sans-serif] text-xs font-medium uppercase tracking-wider text-[#FEFCD9]/65 transition-colors duration-300 sm:text-sm"
+          data-year-tab={year}
+        >
+          {year}
+        </a>
+      ))
+    }
+  </nav>
+
+  {
+    faculty && (
+      <section class="relative z-10 mx-auto max-w-7xl px-4 pb-8 sm:px-6">
+        <SectionHeading
+          title="The"
+          accent="Leader"
+          subtitle="Guiding ACM-VIT from the faculty side, year after year."
+          align="left"
+          accentColor="#F2C94C"
+          class="mb-14"
+        />
+        <div class="faculty-feature">
+          <div class="faculty-card" data-reveal>
+            <BoardMemberCardSingular
+              title={faculty.title ?? ""}
+              fullName={faculty.fullName}
+              position={faculty.position}
+              imageUrl={getAssetUrl(faculty.imageUrl)}
+              linkedinUrl={faculty.linkedinUrl}
+              githubUrl={faculty.githubUrl}
+              googleScholarUrl={faculty.googleScholarUrl}
+              isW={faculty.isW}
+            />
+          </div>
+          <div class="faculty-bio" data-reveal>
+            <p class="font-['PolySans_Trial',sans-serif] text-lg font-light leading-relaxed text-[#FEFCD9] sm:text-xl">
+              The <span class="text-[#F2C94C]">Faculty Coordinator</span> of
+              ACM-VIT.
+            </p>
+            <p class="mt-4 font-['PolySans_Trial',sans-serif] text-sm font-light leading-[1.65] text-[#FEFCD9]/75 sm:text-base">
+              Dr. Aswani Kumar Cherukuri is a Professor at the School of
+              Information Technology and Engineering, Vellore Institute of
+              Technology, with research spanning machine learning, formal
+              concept analysis, information security, and quantum computing, and
+              150+ refereed publications. As ACM-VIT's faculty coordinator, he
+              guides the students of the chapter, mentoring them to push
+              boundaries and take ACM-VIT forward in new directions.
+            </p>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <div class="relative z-10 mx-auto max-w-7xl px-4 pb-24 sm:px-6">
+    {
+      teamYears.map((year) => (
+        <section
+          id={`year-${year}`}
+          class="year-block scroll-mt-32"
+          data-year-block={year}
+        >
+          <SectionHeading
+            title="Board of"
+            accent={yearLabel(year)}
+            align="left"
+            class="mb-14"
+          />
+          <TeamDivision label="Board" members={membersForYear(year)} />
+        </section>
+      ))
+    }
+  </div>
+</main>
+
+<style>
+  .team-glow {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        45% 35% at 50% 12%,
+        rgba(249, 95, 74, 0.22),
+        transparent 70%
+      ),
+      radial-gradient(
+        40% 40% at 85% 60%,
+        rgba(255, 0, 122, 0.1),
+        transparent 70%
+      );
+  }
+
+  .hero-logo {
+    height: auto;
+    filter: drop-shadow(0 20px 60px rgba(0, 0, 0, 0.5));
+    animation: heroFloat 6s ease-in-out infinite;
+  }
+  @keyframes heroFloat {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .year-tab.is-active {
+    color: #0d0e0d;
+    background: #ff5f4a;
+  }
+
+  .faculty-feature {
+    display: grid;
+    grid-template-columns: minmax(0, 460px) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(2rem, 4vw, 4rem);
+  }
+  .faculty-card {
+    width: 100%;
+    max-width: 460px;
+    transition: transform 0.3s ease;
+  }
+  .faculty-card:hover {
+    transform: translateY(-6px) scale(1.02);
+  }
+  .faculty-bio {
+    max-width: 56ch;
+  }
+  @media (max-width: 860px) {
+    .faculty-feature {
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+    }
+  }
+
+  .year-block {
+    padding-block: clamp(2.5rem, 6vw, 4.5rem);
+    border-top: 1px dashed rgba(254, 252, 217, 0.12);
+  }
+  .year-block:first-child {
+    border-top: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-logo {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function initTeamPage() {
+    const page = document.querySelector<HTMLElement>(".team-page");
+    if (!page || page.dataset.teamInit) return;
+    page.dataset.teamInit = "1";
+
+    const cards = gsap.utils.toArray<HTMLElement>("[data-reveal]");
+    gsap.set(cards, { opacity: 0, y: 30 });
+    ScrollTrigger.batch(cards, {
+      start: "top 92%",
+      onEnter: (batch) =>
+        gsap.to(batch, {
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          ease: "power2.out",
+          stagger: 0.06,
+          overwrite: true,
+        }),
+    });
+
+    const tabs = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-year-tab]")
+    );
+    const blocks = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-year-block]")
+    );
+    const setActive = (year: string) => {
+      tabs.forEach((tab) =>
+        tab.classList.toggle("is-active", tab.dataset.yearTab === year)
+      );
+    };
+    blocks.forEach((block) => {
+      ScrollTrigger.create({
+        trigger: block,
+        start: "top 40%",
+        end: "bottom 40%",
+        onToggle: (self) => {
+          if (self.isActive) setActive(block.dataset.yearBlock || "");
+        },
+      });
+    });
+    if (blocks[0]) setActive(blocks[0].dataset.yearBlock || "");
+
+    requestAnimationFrame(() => ScrollTrigger.refresh());
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initTeamPage);
+  } else {
+    initTeamPage();
+  }
+</script>
