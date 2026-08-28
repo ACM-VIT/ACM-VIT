@@ -317,6 +317,10 @@ const rowBottom = blogs.slice(mid);
 
     type Lane = {
       viewport: HTMLElement;
+      row: HTMLElement;
+      template: HTMLElement[];
+      copies: number;
+      cycleWidth: number;
       speed: number;
       direction: number;
       position: number;
@@ -326,25 +330,71 @@ const rowBottom = blogs.slice(mid);
       idleTimer: number;
     };
 
-    const lanes: Lane[] = viewports.map((viewport) => ({
-      viewport,
-      speed: Number(viewport.dataset.speed ?? 55),
-      direction: viewport.dataset.direction === "reverse" ? -1 : 1,
-      position: 0,
-      auto: !reduceMotion,
-      hovering: false,
-      resumeTimer: 0,
-      idleTimer: 0,
-    }));
+    const lanes: Lane[] = viewports
+      .map((viewport) => {
+        const row = viewport.querySelector<HTMLElement>(".marquee-row");
+        if (!row) return null;
+        const template = Array.from(row.children).filter(
+          (card): card is HTMLElement =>
+            card instanceof HTMLElement && !card.classList.contains("is-clone")
+        );
+        if (template.length === 0) return null;
+        return {
+          viewport,
+          row,
+          template: template.map((card) => card.cloneNode(true) as HTMLElement),
+          copies: 1,
+          cycleWidth: 0,
+          speed: Number(viewport.dataset.speed ?? 55),
+          direction: viewport.dataset.direction === "reverse" ? -1 : 1,
+          position: 0,
+          auto: !reduceMotion,
+          hovering: false,
+          resumeTimer: 0,
+          idleTimer: 0,
+        };
+      })
+      .filter((lane): lane is Lane => lane !== null);
+
+    if (lanes.length === 0) return;
 
     const halfWidth = (viewport: HTMLElement) => viewport.scrollWidth / 2;
 
+    const render = (lane: Lane, copies: number) => {
+      const fragment = document.createDocumentFragment();
+      for (let set = 0; set < copies * 2; set += 1) {
+        lane.template.forEach((card) => {
+          const node = card.cloneNode(true) as HTMLElement;
+          if (set > 0) {
+            node.classList.add("is-clone");
+            node.setAttribute("aria-hidden", "true");
+            node.setAttribute("tabindex", "-1");
+          }
+          fragment.appendChild(node);
+        });
+      }
+      lane.row.replaceChildren(fragment);
+      lane.copies = copies;
+    };
+
+    const fitToViewport = (lane: Lane) => {
+      const viewportWidth = lane.viewport.clientWidth;
+      if (viewportWidth <= 0) return;
+
+      let copies = lane.copies;
+      while (halfWidth(lane.viewport) <= viewportWidth && copies < 64) {
+        copies += 1;
+        render(lane, copies);
+      }
+      lane.cycleWidth = halfWidth(lane.viewport);
+    };
+
     const prime = () => {
       lanes.forEach((lane) => {
+        fitToViewport(lane);
         if (!lane.auto) return;
-        const half = halfWidth(lane.viewport);
-        if (half <= 0) return;
-        lane.position = lane.direction < 0 ? half : 0;
+        if (lane.cycleWidth <= lane.viewport.clientWidth) return;
+        lane.position = lane.direction < 0 ? lane.cycleWidth : 0;
         lane.viewport.scrollLeft = lane.position;
       });
     };
@@ -362,11 +412,11 @@ const rowBottom = blogs.slice(mid);
       if (onScreen && !document.hidden) {
         for (const lane of lanes) {
           if (!lane.auto || lane.hovering) continue;
-          const half = halfWidth(lane.viewport);
-          if (half <= 0) continue;
+          const cycleWidth = lane.cycleWidth;
+          if (cycleWidth <= lane.viewport.clientWidth) continue;
           lane.position += (lane.speed * lane.direction * delta) / 1000;
-          if (lane.position >= half) lane.position -= half;
-          if (lane.position < 0) lane.position += half;
+          if (lane.position >= cycleWidth) lane.position -= cycleWidth;
+          if (lane.position < 0) lane.position += cycleWidth;
           lane.viewport.scrollLeft = lane.position;
         }
       }
@@ -393,10 +443,12 @@ const rowBottom = blogs.slice(mid);
     };
 
     const wrapWhenIdle = (lane: Lane) => {
-      const half = halfWidth(lane.viewport);
-      if (half <= 0) return;
-      if (lane.viewport.scrollLeft >= half) lane.viewport.scrollLeft -= half;
-      else if (lane.viewport.scrollLeft <= 0) lane.viewport.scrollLeft += half;
+      const cycleWidth = lane.cycleWidth;
+      if (cycleWidth <= 0) return;
+      if (lane.viewport.scrollLeft >= cycleWidth)
+        lane.viewport.scrollLeft -= cycleWidth;
+      else if (lane.viewport.scrollLeft <= 0)
+        lane.viewport.scrollLeft += cycleWidth;
       lane.position = lane.viewport.scrollLeft;
     };
 
@@ -515,7 +567,15 @@ const rowBottom = blogs.slice(mid);
 
     window.addEventListener("resize", () => {
       lanes.forEach((lane) => {
-        lane.position = lane.viewport.scrollLeft;
+        const before = lane.copies;
+        fitToViewport(lane);
+        lane.position =
+          lane.copies === before
+            ? lane.viewport.scrollLeft
+            : lane.direction < 0
+              ? lane.cycleWidth
+              : 0;
+        lane.viewport.scrollLeft = lane.position;
       });
     });
 
