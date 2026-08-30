@@ -7,11 +7,11 @@
       "faqs": [
         {
           "q": "What even is ACM-VIT?",
-          "a": "We're the VIT Vellore student chapter of ACM — the Association for Computing Machinery, the world's largest computing society. Founded in 2009, we're the campus's excuse to build things, break things, and occasionally fix them before a deadline."
+          "a": "We're the VIT Vellore student chapter of ACM - the Association for Computing Machinery, the world's largest computing society. Founded in 2009, we're the campus's excuse to build things, break things, and occasionally fix them before a deadline."
         },
         {
           "q": "What's the difference between ACM and ACM-VIT?",
-          "a": "ACM is the global parent organisation — research journals, the Turing Award, very serious people in blazers. ACM-VIT is the local chapter that turns all that prestige into hackathons, workshops, and a group chat that never sleeps."
+          "a": "ACM is the global parent organisation - research journals, the Turing Award, very serious people in blazers. ACM-VIT is the local chapter that turns all that prestige into hackathons, workshops, and a group chat that never sleeps."
         },
         {
           "q": "Do I need to already know how to code?",
@@ -20,6 +20,10 @@
         {
           "q": "Is ACM-VIT only for Computer Science students?",
           "a": "Not even close. We have Design, Management and Research folks who've never opened a terminal in their life. If you can bring a skill, we can find a use for it."
+        },
+        {
+          "q": "Do I have to be a VIT Vellore student?",
+          "a": "To be a chapter member, yes - we're the VIT Vellore chapter, and the work happens on campus. Our events are a different story: plenty are open campus-wide, and a few go well beyond VIT."
         }
       ]
     },
@@ -30,19 +34,27 @@
       "faqs": [
         {
           "q": "How do I join ACM-VIT?",
-          "a": "We run a recruitment cycle at the start of each semester — a form, a couple of rounds, mild nerves. Keep an eye on our Instagram or drop a note through our contact form and we'll point you to the open cycle."
+          "a": "We run one recruitment cycle a year - a form, a couple of rounds, mild nerves. Keep an eye on our Instagram or drop a note through our contact form and we'll point you to the open cycle."
+        },
+        {
+          "q": "What is ACM-W, and how do I join it?",
+          "a": "ACM-W is our sister chapter, started by ACM-VIT to back women in STEM and registered as a chapter under ACM International in its own right. There's no separate application: join ACM-VIT and you're in, because the same members run both chapters."
         },
         {
           "q": "Is there a membership fee?",
           "a": "Nope. Your only real cost is time, sleep, and possibly a bit of your GPA during exam season."
         },
         {
-          "q": "I'm a first-year — can I still apply?",
+          "q": "Does joining make me a member of ACM International?",
+          "a": "Not automatically. We're an officially recognised ACM student chapter, but individual ACM International membership is a separate paid signup on acm.org, with the Digital Library and global perks attached. Chapter membership gets you the people and the projects; the acm.org card is yours to pick up if you want it."
+        },
+        {
+          "q": "I'm a first-year - can I still apply?",
           "a": "First years are exactly who we're looking for. Most of our current leads started as clueless freshers who happened to show up on time once."
         },
         {
           "q": "Recruitment is closed. Can I still get involved?",
-          "a": "Yes. Attend our open events and workshops, contribute to our projects on GitHub, or just show up to what's public. Doors reopen every semester — you won't miss the next one if you're already around."
+          "a": "Yes. Attend our open events and workshops, contribute to our projects on GitHub, or just show up to what's public. Doors reopen once a year - you won't miss the next cycle if you're already around."
         }
       ]
     },
@@ -53,15 +65,15 @@
       "faqs": [
         {
           "q": "What are ACM-VIT's domains?",
-          "a": "Five of them: Technical, Competitive Coding, Design, Management, and Research. Each runs its own projects and events — you can browse what they're building right now."
+          "a": "Five of them: Technical, Competitive Coding, Design, Management, and Research. Each runs its own projects and events - you can browse what they're building right now."
         },
         {
           "q": "Can I be part of multiple domains?",
-          "a": "You pick one core domain at recruitment, but cross-domain collaboration happens constantly in practice — most of our better projects are the result of two domains arguing productively."
+          "a": "You pick one core domain at recruitment, but cross-domain collaboration happens constantly in practice - most of our better projects are the result of two domains arguing productively."
         },
         {
           "q": "What does the Design domain actually do?",
-          "a": "Everything you're looking at right now, including these cassette illustrations — plus posters, brand systems, and the occasional 3am Figma disagreement."
+          "a": "Everything you're looking at right now, including these cassette illustrations - plus posters, brand systems, and the occasional 3am Figma disagreement."
         }
       ]
     },
@@ -80,7 +92,7 @@
         },
         {
           "q": "How do I find out what's coming up?",
-          "a": "Our calendar page has the full schedule — or follow us on Instagram, which you're probably already refreshing anyway."
+          "a": "Our calendar page has the full schedule - or follow us on Instagram, which you're probably already refreshing anyway."
         }
       ]
     },
@@ -100,6 +112,11 @@
         {
           "q": "Does ACM-VIT actually ship real software, or is this all workshops?",
           "a": "Both. We've contributed to SGLang's documentation, won hackathons on- and off-campus, and shipped more side projects than fit on one page. The receipts are all there."
+        },
+        {
+          "q": "What's Forktober?",
+          "a": "Our open source month. A pile of ACM-VIT repositories, issues sized for first-time contributors, and maintainers who actually read your pull request. Membership not required - anyone can pick up an issue.",
+          "link": { "href": "/events/forktober", "text": "See the Forktober projects" }
         }
       ]
     },
@@ -110,15 +127,25 @@
       "faqs": [
         {
           "q": "What's GREP?",
-          "a": "Our bi-annual technical newsletter. Yes, named after the command — we thought it was clever too, and we stand by it."
+          "a": "Our bi-annual technical newsletter. Yes, named after the command - we thought it was clever too, and we stand by it."
         },
         {
           "q": "Is there merch?",
           "a": "There is, but it's a members-only wardrobe. Join the chapter and it's yours to earn; until then, you just get to admire ours."
         },
         {
+          "q": "Can I write for the blog?",
+          "a": "Members write most of it, on whatever they've been nerding out about that month. If you're outside the chapter and have something worth reading, pitch it through our contact form.",
+          "link": { "href": "/blogs", "text": "Read what's up there now" }
+        },
+        {
+          "q": "Something went wrong at an event. Who do I tell?",
+          "a": "Tell us. We have a code of conduct and it isn't decoration - reports go through the contact form and reach the board directly, and we'd rather hear about it late than never.",
+          "link": { "href": "/code-of-conduct", "text": "Read the code of conduct" }
+        },
+        {
           "q": "Who do I talk to about partnerships or sponsorships?",
-          "a": "Send a message through our contact form and we'll get back to you — usually faster than your professor replies to email."
+          "a": "Send a message through our contact form and we'll get back to you - usually faster than your professor replies to email."
         },
         {
           "q": "Why is everything on this site designed like a cassette tape?",
