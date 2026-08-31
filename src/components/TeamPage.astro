@@ -70,7 +70,7 @@ const membersForYear = (year: number): TeamMember[] =>
             making the magic — the boards steering ACM-VIT, year after year.
         </p>
         <nav
-            class="year-nav mt-12 flex w-fit max-w-[92vw] items-center gap-1 overflow-x-auto rounded-full border border-[#FEFCD9]/15 bg-black/40 p-1.5 backdrop-blur-md"
+            class="year-nav mt-[calc(3rem+7svh)] flex w-fit max-w-[92vw] items-center gap-1 overflow-x-auto rounded-full border border-[#FEFCD9]/15 bg-black/40 p-1.5 backdrop-blur-md"
         >
             {
                 teamYears.map((year) => (
@@ -87,7 +87,7 @@ const membersForYear = (year: number): TeamMember[] =>
 
         <a
             href="/#team"
-            class="mt-10 inline-block rounded-full border-2 border-primary-orange px-5 py-2 font-['PolySans_Trial',sans-serif] text-xs uppercase tracking-wider text-white transition-transform duration-300 hover:scale-105 sm:text-sm"
+            class="mt-[calc(1.5rem+5svh)] inline-block rounded-full border-2 border-primary-orange px-5 py-2 font-['PolySans_Trial',sans-serif] text-xs uppercase tracking-wider text-white transition-transform duration-300 hover:scale-105 sm:text-sm"
         >
             Back to home
         </a>
@@ -189,8 +189,8 @@ const membersForYear = (year: number): TeamMember[] =>
         position: absolute;
         top: 0;
         left: 50%;
-        transform: translate(-50%, -42%);
-        width: min(1440px, 117vw);
+        transform: translate(-50%, -45.4%);
+        width: 140vw;
         max-width: none;
         height: auto;
         z-index: 0;
@@ -199,13 +199,13 @@ const membersForYear = (year: number): TeamMember[] =>
         mix-blend-mode: screen;
         opacity: 0.8;
         -webkit-mask-image: radial-gradient(
-            ellipse 28% 50% at 50% 50%,
+            ellipse 25% 50% at 50% 50%,
             black 0%,
             black 20%,
             transparent 100%
         );
         mask-image: radial-gradient(
-            ellipse 28% 50% at 50% 50%,
+            ellipse 25% 50% at 50% 50%,
             black 0%,
             black 20%,
             transparent 100%
@@ -216,13 +216,6 @@ const membersForYear = (year: number): TeamMember[] =>
         mask-position: center;
         -webkit-mask-size: 100% 100%;
         mask-size: 100% 100%;
-    }
-
-    @media (max-width: 640px) {
-        .team-tubelight {
-            width: 81vw;
-            transform: translate(-50%, -40%);
-        }
     }
 
     .hero-logo {
@@ -240,6 +233,14 @@ const membersForYear = (year: number): TeamMember[] =>
         50% {
             transform: translateY(-10px);
         }
+    }
+
+    .year-nav {
+        scrollbar-width: none;
+    }
+
+    .year-nav::-webkit-scrollbar {
+        display: none;
     }
 
     .year-tab.is-active {
