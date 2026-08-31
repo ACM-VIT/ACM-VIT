@@ -40,7 +40,7 @@ const membersForYear = (year: number): TeamMember[] =>
         : (historicalBoards[year] ?? []);
 ---
 
-<main class="team-page relative w-full overflow-hidden">
+<div class="team-page relative w-full overflow-hidden">
     <div class="team-glow" aria-hidden="true"></div>
     <img
         src={getAssetUrl("/orange_tubelight.webp")}
@@ -64,7 +64,7 @@ const membersForYear = (year: number): TeamMember[] =>
             data-preloader-ignore
         />
         <p
-            class="mt-6 max-w-2xl font-['PolySans_Trial',sans-serif] text-sm font-light leading-relaxed text-white sm:text-lg"
+            class="hero-sub mt-6 max-w-2xl font-['PolySans_Trial',sans-serif] text-sm font-light leading-relaxed text-white sm:text-lg"
         >
             Every cassette, a person. Every year, a new tape. Meet the crew
             making the magic — the boards steering ACM-VIT, year after year.
@@ -124,7 +124,6 @@ const membersForYear = (year: number): TeamMember[] =>
                     </a>
                 ))}
             </div>
-        </div>
         </div>
 
         <a
@@ -206,7 +205,7 @@ const membersForYear = (year: number): TeamMember[] =>
             ))
         }
     </div>
-</main>
+</div>
 
 <style>
     .team-glow {
@@ -260,10 +259,26 @@ const membersForYear = (year: number): TeamMember[] =>
         mask-size: 100% 100%;
     }
 
+    /* A 20% wash of the wordmark's orange-to-cream gradient. Guarded so the
+       text stays plain white where background-clip: text is unsupported,
+       rather than going transparent. */
+    @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+        .hero-sub {
+            background-image: linear-gradient(
+                to right,
+                #f8e4e1,
+                #f8f6f1
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+    }
+
     .hero-logo {
         height: auto;
-        filter: brightness(0) invert(1)
-            drop-shadow(0 20px 60px rgba(0, 0, 0, 0.5));
+        /* No colour filter - the asset carries the orange-to-cream gradient. */
+        filter: drop-shadow(0 20px 60px rgba(0, 0, 0, 0.5));
         animation: heroFloat 6s ease-in-out infinite;
     }
 
