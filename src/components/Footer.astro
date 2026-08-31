@@ -4,6 +4,9 @@ import { getAssetUrl } from "../utils/cdn";
 
 const footerBackgroundSrc = getAssetUrl("/footer/footer-background.webp");
 const footerForegroundSrc = getAssetUrl("/footer/footer-foreground-new.png");
+
+const isLandingPage = (Astro.url.pathname.replace(/\/+$/, "") || "/") === "/";
+const anchor = (id: string) => (isLandingPage ? `#${id}` : `/#${id}`);
 ---
 
 <div data-variant-host>
@@ -83,7 +86,7 @@ const footerForegroundSrc = getAssetUrl("/footer/footer-foreground-new.png");
                 class="self-stretch flex flex-col justify-start items-start gap-2"
               >
                 <a
-                  href="#about"
+                  href={anchor("about")}
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
                   ACM-VIT
@@ -120,31 +123,31 @@ const footerForegroundSrc = getAssetUrl("/footer/footer-foreground-new.png");
                 class="self-stretch flex flex-col justify-start items-start gap-2"
               >
                 <a
-                  href="#domains"
+                  href={anchor("domains")}
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
                   tech
                 </a>
                 <a
-                  href="#domains"
+                  href={anchor("domains")}
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
                   competitive coding
                 </a>
                 <a
-                  href="#domains"
+                  href={anchor("domains")}
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
                   design
                 </a>
                 <a
-                  href="#domains"
+                  href={anchor("domains")}
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
                   management
                 </a>
                 <a
-                  href="#domains"
+                  href={anchor("domains")}
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
                   research
@@ -165,49 +168,49 @@ const footerForegroundSrc = getAssetUrl("/footer/footer-foreground-new.png");
                 class="self-stretch flex flex-col justify-start items-start gap-2"
               >
                 <a
-                  href="#events"
+                  href={anchor("events")}
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
                   Code2CREATE
                 </a>
                 <a
-                  href="#events"
+                  href={anchor("events")}
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
                   CRYPTIC HUNT
                 </a>
                 <a
-                  href="#events"
+                  href={anchor("events")}
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
                   REVERSE CODING
                 </a>
                 <a
-                  href="#events"
+                  href={anchor("events")}
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
                   CODEX CRYPTUM
                 </a>
                 <a
-                  href="#events"
+                  href={anchor("events")}
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
                   FORKTOBER
                 </a>
                 <a
-                  href="#events"
+                  href={anchor("events")}
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
                   THE TINY HACK
                 </a>
                 <a
-                  href="#events"
+                  href={anchor("events")}
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
                   APPTITUDE
                 </a>
                 <a
-                  href="#events"
+                  href={anchor("events")}
                   class="self-stretch text-[#f95f4a] text-base font-light font-['PolySans_Trial'] uppercase hover:text-red-400 transition-colors"
                 >
                   MORE
@@ -228,43 +231,43 @@ const footerForegroundSrc = getAssetUrl("/footer/footer-foreground-new.png");
                 class="self-stretch h-44 flex flex-col justify-start items-start gap-2"
               >
                 <a
-                  href="#projects"
+                  href={anchor("projects")}
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
                   ACMONE
                 </a>
                 <a
-                  href="#projects"
+                  href={anchor("projects")}
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
                   CLI-RPG
                 </a>
                 <a
-                  href="#projects"
+                  href={anchor("projects")}
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
                   EXAMCOOKER
                 </a>
                 <a
-                  href="#projects"
+                  href={anchor("projects")}
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
                   CLITOP
                 </a>
                 <a
-                  href="#projects"
+                  href={anchor("projects")}
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
                   LOCALHOST
                 </a>
                 <a
-                  href="#projects"
+                  href={anchor("projects")}
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
                   OS
                 </a>
                 <a
-                  href="#projects"
+                  href={anchor("projects")}
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
                   UNIPOOL
@@ -285,13 +288,13 @@ const footerForegroundSrc = getAssetUrl("/footer/footer-foreground-new.png");
                 class="self-stretch flex flex-col justify-start items-start gap-2"
               >
                 <a
-                  href="#acm-w"
+                  href={anchor("acm-w")}
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
                   about w
                 </a>
                 <a
-                  href="#acm-w"
+                  href={anchor("acm-w")}
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
                   events
@@ -312,31 +315,31 @@ const footerForegroundSrc = getAssetUrl("/footer/footer-foreground-new.png");
                 class="self-stretch flex flex-col justify-start items-start gap-2"
               >
                 <a
-                  href="#team"
+                  href={anchor("team")}
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
                   team
                 </a>
                 <a
-                  href="#blogs"
+                  href={anchor("blogs")}
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
                   blogs
                 </a>
                 <a
-                  href="#partners"
+                  href={anchor("partners")}
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
                   partners
                 </a>
                 <a
-                  href="#gallery"
+                  href={anchor("gallery")}
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
                   gallery
                 </a>
                 <a
-                  href="#contact"
+                  href={anchor("contact")}
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
                   contact us
@@ -523,7 +526,7 @@ const footerForegroundSrc = getAssetUrl("/footer/footer-foreground-new.png");
             </div>
             <div class="flex flex-col justify-start items-start gap-1">
               <a
-                href="#about"
+                href={anchor("about")}
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >ACM-VIT</a
               >
@@ -555,27 +558,27 @@ const footerForegroundSrc = getAssetUrl("/footer/footer-foreground-new.png");
             </div>
             <div class="flex flex-col justify-start items-start gap-1">
               <a
-                href="#domains"
+                href={anchor("domains")}
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >tech</a
               >
               <a
-                href="#domains"
+                href={anchor("domains")}
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >competitive coding</a
               >
               <a
-                href="#domains"
+                href={anchor("domains")}
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >design</a
               >
               <a
-                href="#domains"
+                href={anchor("domains")}
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >management</a
               >
               <a
-                href="#domains"
+                href={anchor("domains")}
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >research</a
               >
@@ -593,42 +596,42 @@ const footerForegroundSrc = getAssetUrl("/footer/footer-foreground-new.png");
             </div>
             <div class="flex flex-col justify-start items-start gap-1">
               <a
-                href="#events"
+                href={anchor("events")}
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >Code2CREATE</a
               >
               <a
-                href="#events"
+                href={anchor("events")}
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >CRYPTIC HUNT</a
               >
               <a
-                href="#events"
+                href={anchor("events")}
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >REVERSE CODING</a
               >
               <a
-                href="#events"
+                href={anchor("events")}
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >CODEX CRYPTUM</a
               >
               <a
-                href="#events"
+                href={anchor("events")}
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >FORKTOBER</a
               >
               <a
-                href="#events"
+                href={anchor("events")}
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >THE TINY HACK</a
               >
               <a
-                href="#events"
+                href={anchor("events")}
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >APPTITUDE</a
               >
               <a
-                href="#events"
+                href={anchor("events")}
                 class="text-[#f95f4a] text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-red-400 transition-colors"
                 >MORE</a
               >
@@ -646,37 +649,37 @@ const footerForegroundSrc = getAssetUrl("/footer/footer-foreground-new.png");
             </div>
             <div class="flex flex-col justify-start items-start gap-1">
               <a
-                href="#projects"
+                href={anchor("projects")}
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >ACMONE</a
               >
               <a
-                href="#projects"
+                href={anchor("projects")}
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >CLI-RPG</a
               >
               <a
-                href="#projects"
+                href={anchor("projects")}
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >EXAMCOOKER</a
               >
               <a
-                href="#projects"
+                href={anchor("projects")}
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >CLITOP</a
               >
               <a
-                href="#projects"
+                href={anchor("projects")}
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >LOCALHOST</a
               >
               <a
-                href="#projects"
+                href={anchor("projects")}
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >OS</a
               >
               <a
-                href="#projects"
+                href={anchor("projects")}
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >UNIPOOL</a
               >
@@ -694,12 +697,12 @@ const footerForegroundSrc = getAssetUrl("/footer/footer-foreground-new.png");
             </div>
             <div class="flex flex-col justify-start items-start gap-1">
               <a
-                href="#acm-w"
+                href={anchor("acm-w")}
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >about w</a
               >
               <a
-                href="#acm-w"
+                href={anchor("acm-w")}
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >events</a
               >
@@ -717,27 +720,27 @@ const footerForegroundSrc = getAssetUrl("/footer/footer-foreground-new.png");
             </div>
             <div class="flex flex-col justify-start items-start gap-1">
               <a
-                href="#team"
+                href={anchor("team")}
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >team</a
               >
               <a
-                href="#blogs"
+                href={anchor("blogs")}
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >blogs</a
               >
               <a
-                href="#partners"
+                href={anchor("partners")}
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >partners</a
               >
               <a
-                href="#gallery"
+                href={anchor("gallery")}
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >gallery</a
               >
               <a
-                href="#contact"
+                href={anchor("contact")}
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >contact us</a
               >
