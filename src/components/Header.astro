@@ -832,7 +832,6 @@
     const redirectLegacyFragment = () => {
       const id = window.location.hash.slice(1);
       if (!id || onCommunityPage()) return;
-      if (document.getElementById(id)) return;
       if (!communityFragments.includes(id)) return;
       window.location.replace(resolveMissingSection(id));
     };
