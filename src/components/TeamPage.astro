@@ -55,14 +55,13 @@ const membersForYear = (year: number): TeamMember[] =>
     <header
         class="team-hero relative z-10 flex min-h-[calc(100svh-7rem)] flex-col items-center justify-start px-6 pt-[15svh] pb-16 text-center"
     >
-        <img
-            src={getAssetUrl("/the_team.webp")}
-            alt="The Team"
+        <div
             class="hero-logo w-[80vw] max-w-3xl"
-            loading="eager"
-            decoding="async"
-            data-preloader-ignore
-        />
+            role="img"
+            aria-label="The Team"
+            style={`--wordmark: url('${getAssetUrl("/the_team.webp")}'); --grain: url('${getAssetUrl("/wordmark_grain.webp")}')`}
+        >
+        </div>
         <p
             class="hero-sub mt-6 max-w-2xl font-['PolySans_Trial',sans-serif] text-sm font-light leading-relaxed text-white sm:text-lg"
         >
@@ -108,21 +107,27 @@ const membersForYear = (year: number): TeamMember[] =>
                         d="M6 6l12 12M18 6L6 18"
                         stroke="currentColor"
                         stroke-width="2"
-                        stroke-linecap="round"
-                    />
+                        stroke-linecap="round"></path>
                 </svg>
             </button>
 
-            <div class="year-wheel" id="year-wheel" aria-hidden="true" data-wheel>
-                {teamYears.map((year) => (
-                    <a
-                        href={`#year-${year}`}
-                        class="year-wheel-item"
-                        data-wheel-year={year}
-                    >
-                        {year}
-                    </a>
-                ))}
+            <div
+                class="year-wheel"
+                id="year-wheel"
+                aria-hidden="true"
+                data-wheel
+            >
+                {
+                    teamYears.map((year) => (
+                        <a
+                            href={`#year-${year}`}
+                            class="year-wheel-item"
+                            data-wheel-year={year}
+                        >
+                            {year}
+                        </a>
+                    ))
+                }
             </div>
         </div>
 
@@ -264,21 +269,39 @@ const membersForYear = (year: number): TeamMember[] =>
        rather than going transparent. */
     @supports ((-webkit-background-clip: text) or (background-clip: text)) {
         .hero-sub {
-            background-image: linear-gradient(
-                to right,
-                #f8e4e1,
-                #f8f6f1
-            );
+            background-image: linear-gradient(to right, #f8e4e1, #f8f6f1);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
     }
 
+    /* Same orange-to-cream ramp the asset carries, but running top-to-bottom
+       so the warm end sits under the tubelight. The asset's own gradient is
+       baked left-to-right, so the wordmark masks a CSS gradient instead.
+       Aspect ratio matches the source (1688x220). */
     .hero-logo {
-        height: auto;
-        /* No colour filter - the asset carries the orange-to-cream gradient. */
-        filter: drop-shadow(0 20px 60px rgba(0, 0, 0, 0.5));
+        aspect-ratio: 1688 / 220;
+        /* Grain tile over the ramp, overlay-blended: the source art had noise
+           baked into its pixels (sd ~12%), which the mask discards because it
+           only reads alpha. The tile is mid-grey at a matching sd, so overlay
+           modulates the ramp without shifting its average colour. */
+        background-image:
+            var(--grain), linear-gradient(to bottom, #e89174 0%, #e8cfbe 100%);
+        background-size:
+            256px 256px,
+            100% 100%;
+        background-repeat: repeat, no-repeat;
+        background-blend-mode: overlay;
+        -webkit-mask-image: var(--wordmark);
+        mask-image: var(--wordmark);
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        filter: saturate(1.5) drop-shadow(0 20px 60px rgba(0, 0, 0, 0.5));
         animation: heroFloat 6s ease-in-out infinite;
     }
 
@@ -593,9 +616,10 @@ const membersForYear = (year: number): TeamMember[] =>
             wheel.classList.toggle("is-open", open);
             wheel.setAttribute("aria-hidden", open ? "false" : "true");
             trigger.setAttribute("aria-expanded", open ? "true" : "false");
-            dial
-                ?.closest(".team-hero")
-                ?.classList.toggle("is-wheel-open", open);
+            dial?.closest(".team-hero")?.classList.toggle(
+                "is-wheel-open",
+                open,
+            );
         };
 
         const setActive = (year: string) => {
@@ -617,10 +641,7 @@ const membersForYear = (year: number): TeamMember[] =>
             });
             // No backdrop element, so close on any click outside the dial.
             document.addEventListener("click", (event) => {
-                if (
-                    isWheelOpen() &&
-                    !dial?.contains(event.target as Node)
-                ) {
+                if (isWheelOpen() && !dial?.contains(event.target as Node)) {
                     setWheelOpen(false);
                 }
             });
