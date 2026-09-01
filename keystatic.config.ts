@@ -78,6 +78,7 @@ export default config({
         items: fields.array(
           fields.object({
             cassetteSrc: fields.image({ label: 'Cassette Image', directory: 'public/projects', publicPath: '/projects/' }),
+            cassetteSvg: fields.image({ label: 'Standalone Cassette Art (SVG)', directory: 'public/projects/cassettes', publicPath: '/projects/cassettes/', description: 'Full cassette artwork. When set, it replaces the drawn cassette + overlay image.' }),
             cassetteAlt: fields.text({ label: 'Cassette Alt Text', validation: { isRequired: true, length: { min: 1 } } }),
             description1: fields.text({ label: 'Description Block 1', multiline: true, validation: { isRequired: true, length: { min: 1 } } }),
             description2: fields.text({ label: 'Description Block 2', multiline: true }),

@@ -19,6 +19,32 @@
       "hoverShadow": "rgba(249, 95, 74, 0.4)"
     },
     {
+      "cassetteSvg": "/projects/cassettes/projects-cassettes-conclave.svg",
+      "cassetteAlt": "Conclave Image",
+      "description1": "Conclave is a real-time meetings platform with web and mobile clients, a custom SFU, instant breakout rooms, a shared browser, and an in-meeting apps SDK. Born out of ACM-VIT's OCS 2026 portal, every interview that cycle ran on it.",
+      "primaryBgColor": "#FF6B35",
+      "primaryTextColor": "white",
+      "primaryBorderColor": "#FEFCD9",
+      "visitWebsiteText": "VISIT WEBSITE",
+      "visitWebsiteUrl": "https://conclave.acmvit.in",
+      "visitWebsiteBgColor": "#FF6B35",
+      "visitWebsiteTextColor": "white",
+      "visitWebsiteBorderColor": "#FEFCD9",
+      "icons": [
+        {
+          "type": "github",
+          "backgroundColor": "#FF6B35",
+          "textColor": "white",
+          "borderColor": "#FEFCD9",
+          "iconColor": "#FEFCD9",
+          "url": "https://github.com/ACM-VIT/conclave"
+        }
+      ],
+      "textColor": "white",
+      "contentBlockBackground": "rgba(0, 0, 0, 0.15)",
+      "hoverShadow": "rgba(255, 107, 53, 0.4)"
+    },
+    {
       "cassetteSrc": "/projects/items/1/cassetteSrc.webp",
       "cassetteAlt": "ExamCooker Image",
       "description1": "ExamCooker simplifies exam preparation for VIT students by centralizing notes, past papers, and community discussions in one comprehensive platform. Built to perform when the pressure's on, it features an intuitive interface, fast search, and seamless resource sharing that helps students find what they need quickly.",
