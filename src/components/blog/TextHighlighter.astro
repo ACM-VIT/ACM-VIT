@@ -1,0 +1,383 @@
+---
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+---
+
+<div data-text-highlighter data-slug={slug}></div>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-text-highlighter]");
+  if (root) {
+    const slug = root.dataset.slug || "";
+    const storageKey = `acm-blog-${slug}`;
+    const content = document.querySelector<HTMLElement>(".blog-content");
+    let isPointerSelecting = false;
+    let selectionPopupRaf = 0;
+
+    const HIGHLIGHT_COLORS = [
+      { name: "Orange", value: "#F95F4A" },
+      { name: "Purple", value: "#9B51E0" },
+      { name: "Green", value: "#B4E35B" },
+      { name: "Pink", value: "#FF7777" },
+      { name: "Dark green", value: "#008080" },
+      { name: "Blue", value: "#9AF3FF" },
+    ] as const;
+    const DEFAULT_COLOR = HIGHLIGHT_COLORS[0].value;
+
+    interface HighlightEntry { id?: string; text: string; color?: string; }
+
+    function createId(): string {
+      return crypto.randomUUID?.() || `highlight-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    }
+
+    function applyHighlightStyle(mark: HTMLElement, color: string = DEFAULT_COLOR, id?: string): void {
+      mark.className = "blog-highlight";
+      mark.style.setProperty("--blog-highlight-color", color);
+      if (id) mark.dataset.highlightId = id;
+    }
+
+    function unwrapHighlight(mark: HTMLElement): void {
+      const parent = mark.parentNode;
+      if (!parent) return;
+      while (mark.firstChild) parent.insertBefore(mark.firstChild, mark);
+      parent.removeChild(mark);
+      parent.normalize();
+    }
+
+    function highlightRange(range: Range, color: string = DEFAULT_COLOR, id?: string): void {
+      const container = range.commonAncestorContainer;
+      const rootEl = container.nodeType === Node.TEXT_NODE ? container.parentElement! : (container as HTMLElement);
+      const walker = document.createTreeWalker(rootEl, NodeFilter.SHOW_TEXT);
+      const textNodes: Text[] = [];
+      let node: Node | null;
+      while ((node = walker.nextNode())) {
+        if (range.intersectsNode(node)) textNodes.push(node as Text);
+      }
+      for (const textNode of textNodes) {
+        const nodeRange = document.createRange();
+        if (textNode === range.startContainer) {
+          nodeRange.setStart(textNode, range.startOffset);
+          nodeRange.setEnd(textNode, textNode.length);
+        } else if (textNode === range.endContainer) {
+          nodeRange.setStart(textNode, 0);
+          nodeRange.setEnd(textNode, range.endOffset);
+        } else {
+          nodeRange.selectNodeContents(textNode);
+        }
+        const selected = nodeRange.toString();
+        if (!selected.trim()) continue;
+        try {
+          const mark = document.createElement("mark");
+          applyHighlightStyle(mark, color, id);
+          nodeRange.surroundContents(mark);
+        } catch {}
+      }
+    }
+
+    // ── Restore saved highlights
+    function restore() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
+        const highlights: HighlightEntry[] = saved.highlights || [];
+        if (highlights.length === 0) return;
+        if (!content) return;
+
+        const walker = document.createTreeWalker(content, NodeFilter.SHOW_TEXT);
+        const textNodes: Text[] = [];
+        let node: Node | null;
+        while ((node = walker.nextNode())) textNodes.push(node as Text);
+
+        for (const h of highlights) {
+          for (const textNode of textNodes) {
+            const idx = textNode.textContent?.indexOf(h.text) ?? -1;
+            if (idx === -1) continue;
+            if (textNode.parentElement?.closest(".blog-highlight")) continue;
+            try {
+              const range = document.createRange();
+              range.setStart(textNode, idx);
+              range.setEnd(textNode, idx + h.text.length);
+              const mark = document.createElement("mark");
+              applyHighlightStyle(mark, h.color, h.id);
+              range.surroundContents(mark);
+            } catch {}
+            break;
+          }
+        }
+      } catch {}
+    }
+    function isPreloaderActive(): boolean {
+      const preloader = document.getElementById("preloader");
+      if (!preloader) return false;
+      const styles = window.getComputedStyle(preloader);
+      return styles.display !== "none" && styles.visibility !== "hidden" && styles.opacity !== "0";
+    }
+
+    function runAfterPreloader(callback: () => void) {
+      if (!isPreloaderActive()) {
+        callback();
+        return;
+      }
+      window.addEventListener("preloader:done", callback, { once: true });
+    }
+
+    runAfterPreloader(() => {
+      requestAnimationFrame(restore);
+    });
+
+    // ── State
+    let currentRange: Range | null = null;
+    let hoveredHighlight: HTMLElement | null = null;
+    let popup: HTMLDivElement | null = null;
+    let removePopup: HTMLDivElement | null = null;
+    let removeHideTimeout: number | null = null;
+
+    function clearRemoveHideTimeout() {
+      if (removeHideTimeout !== null) {
+        window.clearTimeout(removeHideTimeout);
+        removeHideTimeout = null;
+      }
+    }
+
+    function destroyPopup() {
+      popup?.remove();
+      popup = null;
+      currentRange = null;
+    }
+
+    function destroyRemovePopup() {
+      clearRemoveHideTimeout();
+      removePopup?.remove();
+      removePopup = null;
+      hoveredHighlight = null;
+    }
+
+    function scheduleRemoveHide() {
+      if (removeHideTimeout !== null) return;
+      removeHideTimeout = window.setTimeout(() => {
+        removeHideTimeout = null;
+        destroyRemovePopup();
+      }, 220);
+    }
+
+    function buildHighlightPopup(x: number, y: number) {
+      destroyPopup();
+      const el = document.createElement("div");
+      el.className = "blog-highlight-popup";
+      el.style.position = "fixed";
+      el.style.left = `${x}px`;
+      el.style.top = `${y}px`;
+      el.style.transform = "translate(-50%, -100%)";
+      el.style.zIndex = "9100";
+      el.style.animation = "highlight-popup-in 0.15s ease-out";
+
+      // Prevent the popup itself from stealing focus / clearing the text selection.
+      // Without this, clicking a swatch fires selectionchange → destroyPopup before
+      // the click handler can run, so nothing gets highlighted.
+      el.addEventListener("mousedown", (e) => e.preventDefault());
+      el.addEventListener("pointerdown", (e) => e.preventDefault());
+
+      const action = document.createElement("button");
+      action.type = "button";
+      action.className = "blog-highlight-action";
+      action.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Highlight`;
+      action.addEventListener("click", () => doHighlight(DEFAULT_COLOR));
+      el.appendChild(action);
+
+      const swatches = document.createElement("div");
+      swatches.className = "blog-highlight-swatches";
+      swatches.setAttribute("aria-label", "Highlight color");
+      for (const color of HIGHLIGHT_COLORS) {
+        const sw = document.createElement("button");
+        sw.type = "button";
+        sw.className = "blog-highlight-swatch";
+        sw.style.backgroundColor = color.value;
+        sw.setAttribute("aria-label", `${color.name} highlight`);
+        sw.title = color.name;
+        sw.addEventListener("click", () => doHighlight(color.value));
+        swatches.appendChild(sw);
+      }
+      el.appendChild(swatches);
+
+      document.body.appendChild(el);
+      popup = el;
+    }
+
+    function buildRemovePopup(x: number, y: number, mark: HTMLElement) {
+      destroyRemovePopup();
+      hoveredHighlight = mark;
+      const el = document.createElement("div");
+      el.className = "blog-highlight-remove-popup";
+      el.style.position = "fixed";
+      el.style.left = `${x}px`;
+      el.style.top = `${y}px`;
+      el.style.transform = "translate(-50%, -100%)";
+      el.style.zIndex = "9100";
+      el.style.animation = "highlight-popup-in 0.12s ease-out";
+
+      el.addEventListener("pointerenter", clearRemoveHideTimeout);
+      el.addEventListener("pointerleave", scheduleRemoveHide);
+
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "blog-highlight-remove-action";
+      btn.textContent = "Remove highlight";
+      btn.addEventListener("click", removeHighlight);
+      el.appendChild(btn);
+
+      document.body.appendChild(el);
+      removePopup = el;
+    }
+
+    function isRangeInsideContent(range: Range): boolean {
+      return !!content && content.contains(range.commonAncestorContainer);
+    }
+
+    function scheduleSelectionPopupUpdate() {
+      if (selectionPopupRaf) window.cancelAnimationFrame(selectionPopupRaf);
+      selectionPopupRaf = window.requestAnimationFrame(() => {
+        selectionPopupRaf = 0;
+        updateSelectionPopup();
+      });
+    }
+
+    function updateSelectionPopup() {
+      if (!content) return;
+      const selection = window.getSelection();
+      if (!selection || selection.rangeCount === 0 || selection.isCollapsed) {
+        destroyPopup();
+        return;
+      }
+
+      const range = selection.getRangeAt(0);
+      const text = selection.toString().trim();
+      if (!text || !isRangeInsideContent(range)) {
+        destroyPopup();
+        return;
+      }
+
+      const rect = range.getBoundingClientRect();
+      if (!rect.width && !rect.height) return;
+      buildHighlightPopup(rect.left + rect.width / 2, rect.top - 8);
+      // Must assign AFTER buildHighlightPopup - it calls destroyPopup which nulls currentRange.
+      currentRange = range.cloneRange();
+    }
+
+    function doHighlight(color: string = DEFAULT_COLOR) {
+      const range = currentRange;
+      if (!range) return;
+      const text = range.toString().trim();
+      if (!text) return;
+      const id = createId();
+
+      if (range.startContainer === range.endContainer && range.startContainer.nodeType === Node.TEXT_NODE) {
+        try {
+          const mark = document.createElement("mark");
+          applyHighlightStyle(mark, color, id);
+          range.surroundContents(mark);
+        } catch {
+          highlightRange(range, color, id);
+        }
+      } else {
+        highlightRange(range, color, id);
+      }
+
+      try {
+        const saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
+        const highlights: HighlightEntry[] = saved.highlights || [];
+        highlights.push({ id, text, color });
+        saved.highlights = highlights;
+        localStorage.setItem(storageKey, JSON.stringify(saved));
+      } catch {}
+
+      window.getSelection()?.removeAllRanges();
+      destroyPopup();
+    }
+
+    function removeHighlight() {
+      const mark = hoveredHighlight;
+      if (!mark) return;
+      const id = mark.dataset.highlightId;
+      const text = mark.textContent?.trim() || "";
+      const marks = id
+        ? Array.from(document.querySelectorAll<HTMLElement>("mark.blog-highlight"))
+            .filter((h) => h.dataset.highlightId === id)
+        : [mark];
+      marks.forEach(unwrapHighlight);
+
+      try {
+        const saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
+        const highlights: HighlightEntry[] = saved.highlights || [];
+        let removed = false;
+        saved.highlights = highlights.filter((h) => {
+          if (id && h.id === id) return false;
+          if (!id && !removed && h.text === text) { removed = true; return false; }
+          return true;
+        });
+        localStorage.setItem(storageKey, JSON.stringify(saved));
+      } catch {}
+
+      destroyRemovePopup();
+    }
+
+    // ── Listeners
+    if (content) {
+      content.addEventListener("pointerdown", () => {
+        isPointerSelecting = true;
+      });
+
+      const finishPointerSelection = () => {
+        isPointerSelecting = false;
+        scheduleSelectionPopupUpdate();
+      };
+
+      content.addEventListener("mouseup", finishPointerSelection);
+      content.addEventListener("touchend", finishPointerSelection, { passive: true });
+      content.addEventListener("keyup", scheduleSelectionPopupUpdate);
+
+      content.addEventListener("pointerover", (event) => {
+        const target = event.target as Element | null;
+        const mark = target?.closest("mark.blog-highlight") as HTMLElement | null;
+        if (!mark || !content.contains(mark)) return;
+        const rect = mark.getBoundingClientRect();
+        clearRemoveHideTimeout();
+        buildRemovePopup(rect.left + rect.width / 2, rect.top - 4, mark);
+      });
+    }
+
+    document.addEventListener("selectionchange", () => {
+      const text = window.getSelection()?.toString().trim();
+      if (!text) {
+        destroyPopup();
+        return;
+      }
+      if (!isPointerSelecting) scheduleSelectionPopupUpdate();
+    });
+
+    document.addEventListener("mousedown", (e) => {
+      if (popup && !popup.contains(e.target as Node)) destroyPopup();
+    });
+
+    document.addEventListener("pointerup", () => {
+      if (!isPointerSelecting) return;
+      isPointerSelecting = false;
+      scheduleSelectionPopupUpdate();
+    });
+
+    document.addEventListener("pointercancel", () => {
+      isPointerSelecting = false;
+    });
+
+    document.addEventListener("pointermove", (e) => {
+      const target = e.target as Node | null;
+      if (!target || !removePopup) return;
+      if (hoveredHighlight?.contains(target) || removePopup.contains(target)) {
+        clearRemoveHideTimeout();
+        return;
+      }
+      scheduleRemoveHide();
+    });
+  }
+</script>

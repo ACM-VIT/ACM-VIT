@@ -1,0 +1,55 @@
+{
+  "slug": "ocs-23",
+  "title": "OCS '23",
+  "tagline": "Recruitment, in the terminal.",
+  "eyebrow": "ACM-VIT · 2023 · Organising Committee Selections",
+  "themeColor": "#41E22E",
+  "themeColorSecondary": "#0A2A0A",
+  "shortDescription": "Organising Committee Selections portal for ACM-VIT, 2023. A terminal-themed website - the whole recruitment flow dressed up as a command line interface.",
+  "longDescription": [
+    "OCS '23 was ACM-VIT's recruitment portal for the 2023 organising committee. The whole site was built around a terminal aesthetic - typed prompts, monospace UI, command-line flow.",
+    "It's the second in the chapter's run of themed OCS sites, following the 2022 RPG portal."
+  ],
+  "status": "archived",
+  "statusNote": "Recruitment cycle closed",
+  "cassetteSvg": "/projects/cassettes/projects-cassettes-ocs-23.svg",
+  "gallery": [
+    {
+      "src": "/projects/ocs-23/projects-ocs-23-frame-10.webp",
+      "alt": "OCS '23 terminal interface"
+    },
+    {
+      "src": "/projects/ocs-23/projects-ocs-23-frame-11.webp",
+      "alt": "OCS '23 terminal interface"
+    },
+    {
+      "src": "/projects/ocs-23/projects-ocs-23-frame-12.webp",
+      "alt": "OCS '23 terminal interface"
+    }
+  ],
+  "galleryLayout": "landscape",
+  "stats": [
+    {
+      "value": "2023",
+      "label": "Year"
+    },
+    {
+      "value": "Web",
+      "label": "Platform"
+    },
+    {
+      "value": "Terminal",
+      "label": "Theme"
+    }
+  ],
+  "features": [
+    {
+      "title": "Terminal UI",
+      "description": "Whole site styled as a command-line interface."
+    }
+  ],
+  "techStack": [],
+  "links": [],
+  "commitGraphSeed": 233,
+  "order": 70
+}

@@ -1,0 +1,128 @@
+---
+interface Props {
+  href?: string;
+  label: string;
+  external?: boolean;
+  class?: string;
+  type?: "button" | "submit" | "reset";
+  style?: string;
+}
+
+const { href, label, external = false, class: className = "", type, style } = Astro.props;
+const Tag = href ? "a" : "button";
+---
+
+<Tag
+  href={href}
+  type={href ? undefined : type || "button"}
+  class:list={["fill-btn", className]}
+  style={style}
+  {...href && external ? { target: "_blank", rel: "noopener noreferrer" } : {}}
+  data-fill-btn
+>
+  <span class="fill-btn__bg" aria-hidden="true" />
+  <span class="fill-btn__content">
+    <slot name="icon" />
+    <span class="fill-btn__label">{label}</span>
+  </span>
+</Tag>
+
+<style>
+  .fill-btn {
+    --fill-bg: #0d0e0d;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 12px 22px;
+    border-radius: 100px;
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: 700;
+    background: var(--proj-color, #1c1917);
+    color: var(--proj-color-secondary, #fefcd9);
+    /* Bare buttons (no --proj-color) sit as a #1c1917 pill on the near-black
+       #0d0e0d page, so give the fallback edge enough cream to read as a pill. */
+    border: 1px solid var(--proj-color, rgba(254, 252, 217, 0.5));
+    overflow: hidden;
+    cursor: pointer;
+    transition: color 0.35s ease, border-color 0.35s ease, transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+
+  .fill-btn__bg {
+    position: absolute;
+    width: 320%;
+    aspect-ratio: 1;
+    left: var(--mx, 50%);
+    top: var(--my, 50%);
+    translate: -50% -50%;
+    background: var(--fill-bg);
+    border-radius: 50%;
+    scale: 0;
+    transition: scale 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .fill-btn:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+
+  .fill-btn:hover:not(:disabled) .fill-btn__bg {
+    scale: 1;
+  }
+
+  .fill-btn:hover {
+    color: var(--proj-color, #F95F4A);
+    /* Keep a bright accent outline on hover. The fill circle expands to the dark
+       --fill-bg (#0d0e0d) which matches the page, so a dark border made the whole
+       pill dissolve into the background - the accent ring keeps it visible. */
+    border-color: var(--proj-color, #F95F4A);
+    transform: translateY(-2px);
+  }
+
+  .fill-btn__content {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    pointer-events: none;
+  }
+
+  /* ── Light theme ── */
+  :global(html[data-theme="light"]) .fill-btn {
+    --fill-bg: #f5f1e3;
+    background: var(--proj-color-secondary, #263B33);
+    color: #ffffff;
+    border-color: var(--proj-color-secondary, #263B33);
+  }
+  :global(html[data-theme="light"]) .fill-btn:hover {
+    color: var(--proj-color-secondary, #263B33);
+    border-color: rgba(0,0,0,0.12);
+  }
+</style>
+
+<script>
+  function initFillButtons() {
+    document.querySelectorAll<HTMLElement>("[data-fill-btn]").forEach((btn) => {
+      if (btn.dataset.fillInit) return;
+      btn.dataset.fillInit = "1";
+      btn.addEventListener("mousemove", (e) => {
+        const rect = btn.getBoundingClientRect();
+        btn.style.setProperty("--mx", `${e.clientX - rect.left}px`);
+        btn.style.setProperty("--my", `${e.clientY - rect.top}px`);
+      });
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initFillButtons);
+  } else {
+    initFillButtons();
+  }
+</script>

@@ -1,0 +1,53 @@
+---
+---
+
+<a href="/grep" class="grep-side-tab" aria-label="Check out GREP newsletter">
+  <span class="grep-side-tab-text">check out grep</span>
+</a>
+
+<style>
+  @font-face {
+    font-family: "ChessType";
+    src: url("/fonts/fonts-chesstype.ttf") format("truetype");
+    font-display: swap;
+  }
+
+  .grep-side-tab {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%) translateX(calc(100% - 40px));
+    z-index: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    padding: 20px 10px;
+    background: #2023FE;
+    color: white;
+    text-decoration: none;
+    border-radius: 12px 0 0 12px;
+    cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.33, 1, 0.68, 1),
+                box-shadow 0.3s ease;
+  }
+
+  .grep-side-tab:hover {
+    transform: translateY(-50%) translateX(0);
+    box-shadow: -4px 0 24px rgba(32, 35, 254, 0.3);
+  }
+
+  .grep-side-tab-text {
+    font-family: "ChessType", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    white-space: nowrap;
+  }
+
+  /* Light mode */
+  :global(html[data-theme="light"]) .grep-side-tab {
+    background: #2023FE;
+    color: white;
+  }
+</style>

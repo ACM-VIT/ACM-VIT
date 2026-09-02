@@ -1,0 +1,315 @@
+---
+import { getAssetUrl } from "../../../utils/cdn";
+export const prerender = true;
+import Layout from "../../../layouts/Layout.astro";
+import "../../../styles/globals.css";
+import Footer from "../../../layouts/Footer.astro";
+---
+
+<Layout pageTitle="Other Merchandise" backHref="/merchandise">
+  <section class="ot-hero" data-ot-hero>
+    <div class="ot-line ot-line--1"></div>
+    <div class="ot-line ot-line--2"></div>
+
+    <div class="ot-center-col">
+      <h1 class="ot-title" data-ot-title>
+        <span class="ot-tc" data-tc>O</span><span class="ot-tc" data-tc>T</span><span class="ot-tc" data-tc>H</span><span class="ot-tc" data-tc>E</span><span class="ot-tc" data-tc>R</span>
+      </h1>
+    </div>
+
+    <div class="ot-tee ot-tee--label" data-ot-tee>
+      <img src={getAssetUrl("/merch/other/merch-other-label-tee.webp")} alt="Folded Tee with Label" loading="eager" />
+    </div>
+    <div class="ot-tee ot-tee--plain" data-ot-tee>
+      <img src={getAssetUrl("/merch/other/merch-other-tee-plain.webp")} alt="Plain ACM Tee" loading="eager" />
+    </div>
+
+    <div class="ot-badge" data-badge>
+      <span class="ot-badge__label">MISC</span>
+      <span class="ot-badge__year">++</span>
+    </div>
+
+    <div class="ot-hero-info" data-hero-info>
+      <h2 class="ot-hero-info__title">Outside the yearly drops.</h2>
+      <p class="ot-hero-info__body">
+        Event tees and one-offs - exclusives, collab pieces, and limited prints
+        that did not belong to a single yearly collection. A growing shelf for
+        everything else.
+      </p>
+    </div>
+  </section>
+
+  <section class="ot-end" data-ot-end>
+    <div class="ot-end__inner">
+      <p class="ot-end__text" data-end-anim>you have reached the end of the rack</p>
+      <p class="ot-end__sub" data-end-anim>no more hangers, just vibes from here</p>
+      <img
+        src={getAssetUrl("/merch/merch-lineup.webp")}
+        alt="ACM-VIT merchandise lineup"
+        class="ot-end__img"
+        loading="lazy"
+        data-end-anim
+      />
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style>
+  .ot-hero {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100svh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ot-line {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(249, 95, 74, 0.14) 30%, rgba(249, 95, 74, 0.14) 70%, transparent 100%);
+  }
+  .ot-line--1 { top: 18%; }
+  .ot-line--2 { bottom: 22%; }
+
+  .ot-center-col {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    pointer-events: none;
+    text-align: center;
+  }
+
+  .ot-title {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-weight: 800;
+    font-size: clamp(5rem, 18vw, 18rem);
+    line-height: 0.88;
+    letter-spacing: -0.04em;
+    color: rgba(249, 95, 74, 0.18);
+    margin: 0;
+    display: flex;
+    white-space: nowrap;
+  }
+
+  .ot-tc { display: inline-block; opacity: 0; transform: translateY(70px); }
+
+  .ot-tee {
+    position: absolute;
+    z-index: 2;
+    opacity: 0;
+  }
+
+  .ot-tee img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.5));
+  }
+
+  .ot-tee--label {
+    right: 6%;
+    bottom: 8%;
+    width: clamp(160px, 22vw, 320px);
+    aspect-ratio: 0.85;
+    transform: translateY(40px) rotate(-4deg);
+  }
+
+  .ot-tee--plain {
+    right: 28%;
+    bottom: 12%;
+    width: clamp(180px, 26vw, 380px);
+    aspect-ratio: 1.1;
+    transform: translateY(40px) rotate(3deg);
+  }
+
+  .ot-badge {
+    position: absolute;
+    top: 50%;
+    right: 28px;
+    transform: translateY(-50%);
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    opacity: 0;
+  }
+
+  .ot-badge__label {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-size: 0.55rem;
+    font-weight: 500;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: rgba(249, 95, 74, 0.5);
+  }
+
+  .ot-badge__year {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(249, 95, 74, 0.25);
+  }
+
+  .ot-hero-info {
+    position: absolute;
+    left: clamp(1.5rem, 4vw, 3.5rem);
+    bottom: clamp(3rem, 8vh, 6rem);
+    z-index: 5;
+    max-width: 440px;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+
+  .ot-hero-info__title {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.4rem, 2.5vw, 2rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: #FEFCD9;
+    margin: 0 0 0.6rem;
+  }
+
+  .ot-hero-info__body {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-size: 0.8rem;
+    font-weight: 400;
+    line-height: 1.65;
+    color: rgba(254, 252, 217, 0.72);
+    margin: 0;
+    max-width: 380px;
+  }
+
+  /* End */
+  .ot-end { position: relative; padding: 5rem 1.5rem 2rem; overflow: hidden; }
+  .ot-end__inner { max-width: 56rem; margin: 0 auto; display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .ot-end__text {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.5rem, 4vw, 2.8rem);
+    letter-spacing: -0.02em;
+    color: rgba(254, 252, 217, 0.32);
+    text-transform: lowercase;
+    margin: 0;
+  }
+  .ot-end__sub {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: rgba(254, 252, 217, 0.22);
+    margin: 0.25rem 0 0;
+  }
+  .ot-end__img {
+    width: 100%;
+    max-width: 48rem;
+    height: auto;
+    object-fit: contain;
+    margin-top: 2rem;
+    mix-blend-mode: lighten;
+    filter: drop-shadow(0 16px 40px rgba(0, 0, 0, 0.3));
+  }
+
+  @media (max-width: 768px) {
+    .ot-title { font-size: clamp(4rem, 22vw, 7rem); }
+    .ot-tee--label { right: -4%; width: 42vw; bottom: 4%; }
+    .ot-tee--plain { right: 36%; width: 46vw; bottom: 6%; }
+    .ot-badge { display: none; }
+    .ot-hero-info { max-width: 55%; bottom: calc(80px + env(safe-area-inset-bottom, 0px)); }
+    .ot-hero-info__body { font-size: 0.72rem; max-width: 100%; }
+  }
+
+  /* Phones: stack the hero vertically so the tee and info never overlap */
+  @media (max-width: 480px) {
+    .ot-hero {
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 0;
+      padding: 5.5rem 1.25rem calc(104px + env(safe-area-inset-bottom, 0px));
+    }
+    .ot-line--2 { display: none; }
+    .ot-title { font-size: 26vw; }
+    .ot-center-col { order: 1; }
+    .ot-tee--plain { display: none; }
+    .ot-tee--label {
+      order: 2;
+      position: relative;
+      right: auto;
+      bottom: auto;
+      width: 60vw;
+      max-width: 240px;
+      margin: 1.25rem auto 0;
+      transform: rotate(-4deg);
+    }
+    .ot-hero-info {
+      order: 3;
+      position: relative;
+      left: auto;
+      bottom: auto;
+      max-width: 100%;
+      margin-top: 1.75rem;
+    }
+  }
+
+  :global(html[data-theme="light"]) .ot-title { color: rgba(249, 95, 74, 0.14); }
+  :global(html[data-theme="light"]) .ot-badge__label { color: rgba(217, 68, 48, 0.5); }
+  :global(html[data-theme="light"]) .ot-badge__year { -webkit-text-stroke-color: rgba(217, 68, 48, 0.2); }
+  :global(html[data-theme="light"]) .ot-hero-info__title { color: #1a1a1a; }
+  :global(html[data-theme="light"]) .ot-hero-info__body { color: rgba(30, 20, 10, 0.72); }
+  :global(html[data-theme="light"]) .ot-tee img { filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.15)); }
+  :global(html[data-theme="light"]) .ot-end__text { color: rgba(30, 20, 10, 0.3); }
+  :global(html[data-theme="light"]) .ot-end__sub { color: rgba(30, 20, 10, 0.22); }
+  :global(html[data-theme="light"]) .ot-end__img { mix-blend-mode: multiply; filter: drop-shadow(0 16px 40px rgba(0, 0, 0, 0.08)); }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  const chars = document.querySelectorAll("[data-tc]");
+  const tees = document.querySelectorAll("[data-ot-tee]");
+  const badge = document.querySelector("[data-badge]");
+  const heroInfo = document.querySelector("[data-hero-info]");
+
+  const tl = gsap.timeline({ defaults: { ease: "power3.out" }, delay: 0.3 });
+
+  tl.to(chars, { opacity: 1, y: 0, duration: 0.8, stagger: 0.08 });
+  tees.forEach((tee, i) => {
+    tl.to(tee, { opacity: 1, y: 0, duration: 0.85, ease: "power3.out" }, `-=${0.55 - i * 0.1}`);
+  });
+  if (badge) tl.to(badge, { opacity: 1, duration: 0.45 }, "-=0.4");
+  if (heroInfo) tl.to(heroInfo, { opacity: 1, y: 0, duration: 0.6 }, "-=0.3");
+
+  tees.forEach((tee, i) => {
+    gsap.to(tee, {
+      y: `+=${8 + i * 3}`,
+      duration: 3.2 + i * 0.5,
+      ease: "sine.inOut",
+      repeat: -1,
+      yoyo: true,
+      delay: i * 0.4,
+    });
+  });
+
+  const endAnims = document.querySelectorAll("[data-end-anim]");
+  gsap.fromTo(endAnims,
+    { opacity: 0, y: 30 },
+    {
+      opacity: 1, y: 0, duration: 0.7, stagger: 0.12, ease: "power3.out",
+      scrollTrigger: { trigger: ".ot-end", start: "top 85%", once: true },
+    }
+  );
+</script>

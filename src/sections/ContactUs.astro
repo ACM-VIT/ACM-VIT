@@ -1,0 +1,530 @@
+---
+import FillButton from "../components/ui/FillButton.astro";
+
+const SUBJECTS = [
+  "General Inquiry",
+  "Collaboration",
+  "Sponsorship",
+  "Join ACM",
+  "Event Info",
+  "Feedback",
+  "Other",
+];
+---
+
+<section class="laptop-section relative w-full h-[200vh]" style="clip-path: inset(0);">
+  <div
+    class="sticky top-0 left-0 w-full h-screen flex items-center justify-center overflow-hidden"
+  >
+    <canvas
+      id="laptop-canvas"
+      class="w-[80%] h-[80%] object-contain brightness-125"></canvas>
+    <div
+      class="contact-heading absolute top-48 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-10 opacity-0 pointer-events-none"
+    >
+      <div
+        class="justify-start text-white text-5xl font-semibold font-['PolySans_Trial'] uppercase"
+      >
+        Contact <span class="text-[#F95F4A]">us</span>!
+      </div>
+    </div>
+
+    <!-- Contact Form Overlay -->
+    <div
+      class="contact-form-overlay absolute top-[14%] left-[14%] w-[72%] h-[62%] z-20 opacity-0 pointer-events-none flex items-center justify-center overflow-hidden"
+    >
+      <form
+        id="contact-form-desktop"
+        novalidate
+        class="mx-auto flex w-full max-w-md flex-col justify-center gap-3 px-8 py-5 text-stone-900"
+      >
+        <div class="mb-1 text-center">
+          <div class="font-['PolySans_Trial'] text-xl font-bold tracking-tight text-stone-900 sm:text-2xl">
+            Say Hello!
+          </div>
+          <p class="mt-0.5 text-[10px] font-medium tracking-normal text-stone-500 sm:text-xs">
+            We'd love to hear from you
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <label class="flex flex-col gap-1">
+            <span class="contact-label">First name</span>
+            <input type="text" name="firstName" required class="contact-input" />
+          </label>
+          <label class="flex flex-col gap-1">
+            <span class="contact-label">Last name</span>
+            <input type="text" name="lastName" class="contact-input" />
+          </label>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <label class="flex flex-col gap-1">
+            <span class="contact-label">Email</span>
+            <input type="email" name="email" required class="contact-input" />
+          </label>
+          <label class="flex flex-col gap-1">
+            <span class="contact-label">Phone</span>
+            <input type="tel" name="phone" inputmode="tel" class="contact-input" />
+          </label>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <label class="flex flex-col gap-1">
+            <span class="contact-label">Organization</span>
+
+            <input type="text" name="organization" class="contact-input" />
+          </label>
+          <label class="flex flex-col gap-1">
+            <span class="contact-label">Subject</span>
+            <select name="subject" required class="contact-input appearance-none cursor-pointer">
+              <option value="" disabled selected>Select...</option>
+              {SUBJECTS.map((s) => <option value={s}>{s}</option>)}
+            </select>
+          </label>
+        </div>
+
+        <label class="flex flex-col gap-1">
+          <span class="contact-label">Message</span>
+          <textarea name="message" rows="2" required class="contact-input resize-none"></textarea>
+        </label>
+
+        <div class="mt-2 flex flex-col items-center gap-2">
+          <FillButton type="submit" label="Submit" class="contact-submit" />
+          <p class="contact-status hidden text-center text-xs"></p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: #78716c; /* stone-500 */
+  }
+
+  .contact-input {
+    width: 100%;
+    border-radius: 0.75rem;
+    border: 1.5px dashed rgba(28, 25, 23, 0.3);
+    background: rgba(255, 255, 255, 0.5);
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: #1c1917;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .contact-input:focus {
+    border-color: #f95f4a;
+    background: rgba(255, 255, 255, 0.7);
+  }
+
+  .contact-input::placeholder {
+    color: #a8a29e;
+  }
+
+  /* Custom validation error state: red border + shake nudge. */
+  .contact-input.contact-input-error {
+    border-color: #ef4444;
+    border-style: solid;
+    background: rgba(239, 68, 68, 0.06);
+    animation: contact-input-shake 0.4s ease;
+  }
+
+  @keyframes contact-input-shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-5px); }
+    40% { transform: translateX(5px); }
+    60% { transform: translateX(-3px); }
+    80% { transform: translateX(3px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .contact-input.contact-input-error {
+      animation: none;
+    }
+  }
+
+  /* Filled submit button (FillButton component): orange pill in both themes,
+     fills with #1e1e1e on hover with orange text. !important beats the
+     component's Astro-scoped (higher specificity) theme rules. */
+  :global(.contact-submit),
+  :global(html[data-theme="light"] .contact-submit) {
+    --fill-bg: #1e1e1e !important;
+    background: #f95f4a !important;
+    color: #1e1e1e !important;
+    border-color: #f95f4a !important;
+  }
+  :global(.contact-submit .fill-btn__label) {
+    color: #1e1e1e !important;
+  }
+  :global(.contact-submit:hover:not(:disabled)),
+  :global(html[data-theme="light"] .contact-submit:hover:not(:disabled)) {
+    color: #f95f4a !important;
+    border-color: #1e1e1e !important;
+  }
+  :global(.contact-submit:hover:not(:disabled) .fill-btn__label) {
+    color: #f95f4a !important;
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  import { getAssetUrl } from "../utils/cdn";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const canvas = document.querySelector("#laptop-canvas") as HTMLCanvasElement;
+  const context = canvas?.getContext("2d", { alpha: true });
+  const section = document.querySelector(".laptop-section");
+
+  // ---------------------------------------------------------------------------
+  // Sample every 5th original frame → ~26 images instead of 125.
+  // ---------------------------------------------------------------------------
+  const TOTAL_FRAMES = 125;
+  const STEP = 5;
+  const keyframes: number[] = [];
+  for (let i = 0; i < TOTAL_FRAMES; i += STEP) keyframes.push(i);
+  if (keyframes[keyframes.length - 1] !== TOTAL_FRAMES - 1)
+    keyframes.push(TOTAL_FRAMES - 1);
+  const frameCount = keyframes.length;
+
+  const frameCache = new Map<number, HTMLImageElement>();
+  const pendingFrames = new Set<number>();
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  const laptop = { frame: 0 };
+
+  const frameUrl = (keyIdx: number) => {
+    const clamped = Math.max(0, Math.min(frameCount - 1, keyIdx));
+    const actual = keyframes[clamped];
+    return getAssetUrl(
+      `/contact-scroll-frames/frame_${(actual + 1).toString().padStart(4, "0")}.webp`
+    );
+  };
+
+  const clampFrame = (index: number) =>
+    Math.max(0, Math.min(frameCount - 1, Math.round(index)));
+
+  const narrowQuery = "(max-width: 1024px)";
+
+  const resizeCanvas = () => {
+    if (!canvas || !context) return;
+    const rect = canvas.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    const maxDpr = window.matchMedia(narrowQuery).matches ? 1.25 : 1.5;
+    const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
+    const w = Math.round(rect.width * dpr);
+    const h = Math.round(rect.height * dpr);
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w;
+      canvas.height = h;
+    }
+  };
+
+  const loadFrame = async (keyIdx: number): Promise<HTMLImageElement | null> => {
+    const idx = clampFrame(keyIdx);
+    if (frameCache.has(idx)) return frameCache.get(idx)!;
+    if (pendingFrames.has(idx)) return null;
+    pendingFrames.add(idx);
+
+    const img = new Image();
+    img.decoding = "async";
+
+    const load = (url: string) => {
+      img.src = url;
+      if (typeof img.decode === "function") return img.decode();
+      return new Promise<void>((r) => {
+        if (img.complete) return r();
+        img.onload = () => r();
+        img.onerror = () => r();
+      });
+    };
+
+    try {
+      await load(frameUrl(idx));
+    } catch {
+      // failsafe: fall back to the original .png frame if webp fails
+      try {
+        await load(frameUrl(idx).replace(/\.webp$/, ".png"));
+      } catch {
+        /* decode can reject */
+      }
+    }
+
+    pendingFrames.delete(idx);
+    frameCache.set(idx, img);
+    return img;
+  };
+
+  const preloadAll = () =>
+    Promise.all(keyframes.map((_, i) => loadFrame(i)));
+
+  let lastRenderedFrame = -1;
+  let lastCanvasW = 0;
+  let lastCanvasH = 0;
+
+  const render = () => {
+    if (!context || !canvas) return;
+    const frame = clampFrame(laptop.frame);
+    const img = frameCache.get(frame);
+    if (!img) {
+      void loadFrame(frame).then((loaded) => {
+        if (loaded && frame === clampFrame(laptop.frame)) render();
+      });
+      return;
+    }
+
+    if (
+      frame === lastRenderedFrame &&
+      canvas.width === lastCanvasW &&
+      canvas.height === lastCanvasH
+    )
+      return;
+
+    lastRenderedFrame = frame;
+    lastCanvasW = canvas.width;
+    lastCanvasH = canvas.height;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(img, 0, 0, canvas.width, canvas.height);
+  };
+
+  const initSequence = async () => {
+    if (!canvas || !context) return;
+    resizeCanvas();
+    await loadFrame(0);
+    render();
+    void preloadAll();
+
+    if (prefersReducedMotion) {
+      const formOverlay = document.querySelector(
+        ".contact-form-overlay"
+      ) as HTMLElement | null;
+      if (formOverlay) {
+        formOverlay.style.opacity = "1";
+        formOverlay.style.pointerEvents = "auto";
+      }
+      const heading = document.querySelector(
+        ".contact-heading"
+      ) as HTMLElement | null;
+      if (heading) {
+        heading.style.opacity = "0";
+        heading.style.transform = "translateY(-50px)";
+      }
+      return;
+    }
+
+    // Fade heading in when section enters viewport
+    ScrollTrigger.create({
+      trigger: ".laptop-section",
+      start: "top 80%",
+      once: true,
+      onEnter: () => {
+        gsap.to(".contact-heading", {
+          opacity: 1,
+          duration: 0.5,
+          ease: "power2.out",
+        });
+      },
+    });
+
+    let opened = false;
+
+    ScrollTrigger.create({
+      trigger: ".laptop-section",
+      start: "10% top",
+      once: true,
+      onEnter: () => {
+        if (opened) return;
+        opened = true;
+
+        const tl = gsap.timeline();
+        tl.to(laptop, {
+            frame: frameCount - 1,
+            snap: "frame",
+            duration: 1.4,
+            ease: "power3.inOut",
+            onUpdate: render,
+          })
+          .to(
+            ".contact-heading",
+            {
+              opacity: 0,
+              y: -40,
+              duration: 0.4,
+              ease: "power2.in",
+            },
+            0.15
+          )
+          .to(
+            ".contact-form-overlay",
+            {
+              opacity: 1,
+              pointerEvents: "auto",
+              duration: 0.5,
+              ease: "power2.out",
+            },
+            0.7
+          );
+      },
+    });
+  };
+
+  let started = false;
+  const startWhenVisible = () => {
+    if (started) return;
+    started = true;
+    initSequence();
+  };
+
+  if (section && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          startWhenVisible();
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    observer.observe(section);
+  } else {
+    startWhenVisible();
+  }
+
+  window.addEventListener("resize", () => {
+    resizeCanvas();
+    lastRenderedFrame = -1;
+    render();
+  });
+
+  // ---- Form handling --------------------------------------------------------
+  const form = document.getElementById("contact-form-desktop") as HTMLFormElement;
+  const statusEl = form?.querySelector(".contact-status") as HTMLElement;
+
+  if (form) {
+    // Ctrl/Cmd + Enter submits from any field (incl. textarea newlines)
+    form.addEventListener("keydown", (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+        e.preventDefault();
+        form.requestSubmit();
+      }
+    });
+
+    // ---- Custom validation (no native bubble) ----
+    const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+    const isValidPhone = (v: string) => /^[+\d][\d\s\-()]{6,}$/.test(v);
+
+    const fieldOf = (name: string) =>
+      form.querySelector(`[name="${name}"]`) as
+        | HTMLInputElement
+        | HTMLSelectElement
+        | HTMLTextAreaElement
+        | null;
+
+    const markError = (el: Element | null) => {
+      if (!el) return;
+      el.classList.remove("contact-input-error"); // restart shake
+      void (el as HTMLElement).offsetWidth; // reflow
+      el.classList.add("contact-input-error");
+      el.setAttribute("aria-invalid", "true");
+    };
+    const clearError = (el: Element | null) => {
+      el?.classList.remove("contact-input-error");
+      el?.removeAttribute("aria-invalid");
+    };
+
+    // Clear a field's error as soon as the user edits it.
+    form.querySelectorAll(".contact-input").forEach((el) => {
+      el.addEventListener("input", () => clearError(el));
+      el.addEventListener("change", () => clearError(el));
+    });
+
+    function validate(): { ok: boolean; message: string; first: Element | null } {
+      const checks: { name: string; test: (v: string) => boolean }[] = [
+        { name: "firstName", test: (v) => v.trim().length > 0 },
+        { name: "email", test: (v) => isValidEmail(v.trim()) },
+        { name: "subject", test: (v) => v.trim().length > 0 },
+        { name: "message", test: (v) => v.trim().length > 0 },
+        // phone is optional, but must look like a phone if filled
+        { name: "phone", test: (v) => v.trim() === "" || isValidPhone(v.trim()) },
+      ];
+
+      let first: Element | null = null;
+      let emailBad = false;
+      let phoneBad = false;
+      for (const c of checks) {
+        const el = fieldOf(c.name);
+        const val = el ? String((el as HTMLInputElement).value) : "";
+        if (!c.test(val)) {
+          markError(el);
+          if (!first) first = el;
+          if (c.name === "email" && val.trim()) emailBad = true;
+          if (c.name === "phone") phoneBad = true;
+        } else {
+          clearError(el);
+        }
+      }
+
+      if (!first) return { ok: true, message: "", first: null };
+      let message = "Please fill in the required fields.";
+      if (phoneBad && !emailBad && first === fieldOf("phone"))
+        message = "That doesn't look like a valid phone number.";
+      else if (emailBad) message = "That doesn't look like a valid email.";
+      return { ok: false, message, first };
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const result = validate();
+      if (!result.ok) {
+        statusEl.textContent = result.message;
+        statusEl.className = "contact-status text-center text-xs text-red-600";
+        (result.first as HTMLElement | null)?.focus();
+        return;
+      }
+
+      const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+      const btnLabel = btn.querySelector(".fill-btn__label") as HTMLElement;
+      const original = btnLabel.textContent!;
+
+      btn.disabled = true;
+      btnLabel.textContent = "Sending...";
+
+      const data = Object.fromEntries(new FormData(form).entries());
+
+      try {
+        const res = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+
+        if (!res.ok) throw new Error("Request failed");
+
+        form.reset();
+        statusEl.textContent = "Thanks! We'll get back to you.";
+        statusEl.className = "contact-status text-center text-xs text-emerald-700";
+      } catch {
+        statusEl.textContent = "Something went wrong. Please try again.";
+        statusEl.className = "contact-status text-center text-xs text-red-600";
+      } finally {
+        btn.disabled = false;
+        btnLabel.textContent = original;
+        setTimeout(() => {
+          statusEl.textContent = "";
+          statusEl.className = "contact-status hidden text-center text-xs";
+        }, 3500);
+      }
+    });
+  }
+</script>

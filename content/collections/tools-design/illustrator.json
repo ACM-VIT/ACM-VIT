@@ -1,0 +1,7 @@
+{
+  "name": "Illustrator",
+  "slug": "illustrator",
+  "svgFile": "/domains/design/tools/design-tool-illustrator.svg",
+  "colorHex": "#FF9A00",
+  "order": 20
+}

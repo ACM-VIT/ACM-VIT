@@ -1,0 +1,11 @@
+{
+  "slug": "sticky-links",
+  "title": "Sticky Links",
+  "repo": "sticky-links",
+  "years": [
+    2021,
+    2022
+  ],
+  "description": "Bookmark important links with categories to read them later on the go!",
+  "order": 100
+}

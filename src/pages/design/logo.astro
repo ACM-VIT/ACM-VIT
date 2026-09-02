@@ -1,0 +1,457 @@
+---
+export const prerender = true;
+import DesignLayout from "../../layouts/DesignLayout.astro";
+import { getAssetUrl } from "../../utils/cdn";
+
+const logos = (p: string) => getAssetUrl(`/design/logos/${p}`);
+
+const lockups = [
+  {
+    name: "Horizontal lockup",
+    file: "acm-horizontal",
+    desc: "Diamond plus the full chapter name in DM Sans. The default lockup for headers, banners, certificates, and anything wide.",
+    stage: "dark",
+    ratio: "wide",
+  },
+  {
+    name: "Stacked lockup",
+    file: "acm-stacked",
+    desc: "Diamond above the chapter name. Use when the space is square or vertical: posters, story frames, splash screens.",
+    stage: "dark",
+    ratio: "tall",
+  },
+  {
+    name: "Diamond mark",
+    file: "acm-diamond",
+    desc: "The mark on its own. Use only when ACM-VIT is already established in context: favicons, avatars, watermarks, badges.",
+    stage: "dark",
+    ratio: "square",
+  },
+  {
+    name: "ACM-W mark",
+    file: "acmw",
+    desc: "The double diamond for ACM-W, our community for women in computing. Follows the same rules as the primary mark.",
+    stage: "dark",
+    ratio: "wide",
+  },
+];
+
+const domainMarks = [
+  { name: "Design", file: "acm-diamond-design", hex: "#FF0054" },
+  { name: "Tech", file: "acm-diamond-tech", hex: "#9B51E0" },
+  { name: "Competitive Coding", file: "acm-diamond-cc", hex: "#42CD9D" },
+  { name: "Research", file: "acm-diamond-research", hex: "#135DE2" },
+  { name: "Management", file: "acm-diamond-management", hex: "#008080" },
+];
+
+const misuse = [
+  { label: "Don't stretch or squash", art: "stretch" },
+  { label: "Don't rotate the mark", art: "rotate" },
+  { label: "Don't recolor outside the palette", art: "recolor" },
+  { label: "Don't add strokes or effects", art: "effects" },
+  { label: "Don't place on low-contrast backgrounds", art: "contrast" },
+  { label: "Don't rearrange or retype the lockup", art: "rearrange" },
+];
+---
+
+<DesignLayout
+  title="Logo"
+  description="The ACM-VIT diamond, lockups, clearspace, minimum sizes, and misuse rules."
+  current="/design/logo"
+>
+  <section class="ds-hero">
+    <div class="ds-kicker"><span class="ds-kicker-pill">Brand · Logo</span></div>
+    <h1 class="ds-h1">The diamond is the brand.</h1>
+    <p class="ds-body-lg">
+      The ACM-VIT mark is the rotated square of the global ACM identity with
+      the lowercase "acm" wordmark set in it. It is deliberate, geometric, and
+      quiet - treat it with space and consistency.
+    </p>
+  </section>
+
+  <!-- 01 · The mark -->
+  <section class="ds-section" id="mark">
+    <div class="ds-sec-head"><span class="ds-sec-num">01</span><h2 class="ds-h2">The mark</h2></div>
+    <p class="ds-body">
+      One diamond, two inks. The mark ships in off-black <span class="ds-mono">#333333</span>
+      and white - nothing in between. Color belongs to the surface behind it,
+      not to the mark itself.
+    </p>
+
+    <div class="ds-bento">
+      <div class="ds-specimen ds-b6 ds-reveal">
+        <div class="ds-specimen-stage" style="background:#ffffff">
+          <img src={logos("acm-diamond-dark.svg")} alt="ACM diamond mark, dark on white" style="width:132px" />
+        </div>
+        <div class="ds-specimen-note">
+          Dark mark <span class="ds-mono">#333333</span> on light surfaces.
+        </div>
+      </div>
+      <div class="ds-specimen ds-b6 ds-reveal">
+        <div class="ds-specimen-stage" style="background:#1c1b1a">
+          <img src={logos("acm-stacked-white.svg")} alt="ACM stacked lockup, white on dark" style="width:150px" />
+        </div>
+        <div class="ds-specimen-note">
+          White mark on dark or saturated surfaces.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 · Lockups -->
+  <section class="ds-section" id="lockups">
+    <div class="ds-sec-head"><span class="ds-sec-num">02</span><h2 class="ds-h2">Lockups</h2></div>
+    <p class="ds-body">
+      Every official arrangement of the mark and the chapter name. Download
+      each in SVG for print and product work, PNG or WebP for slides and web.
+    </p>
+
+    <div class="ds-bento">
+      {
+        lockups.map((l) => (
+          <div class="ds-card ds-b6 ds-reveal" style="padding:0; overflow:hidden;">
+            <div class="ds-specimen-stage ds-checker" style="min-height:230px">
+              <img
+                src={logos(`${l.file}-dark.svg`)}
+                alt={l.name}
+                style={`max-width:${l.ratio === "wide" ? "78%" : "46%"}; max-height:170px;`}
+              />
+            </div>
+            <div style="padding:20px 24px 24px;">
+              <h3 class="ds-h4">{l.name}</h3>
+              <p class="ds-body" style="margin-top:6px">{l.desc}</p>
+              <div style="display:flex; gap:14px; margin-top:16px; flex-wrap:wrap; align-items:center;">
+                <span style="display:inline-flex; gap:10px; align-items:center;">
+                  <span class="ds-chip">Dark</span>
+                  <span class="ds-dl">
+                    <a href={logos(`${l.file}-dark.svg`)} download>SVG</a>
+                    <a href={logos(`${l.file}-dark-1024.png`)} download>PNG</a>
+                    <a href={logos(`${l.file}-dark-1024.webp`)} download>WebP</a>
+                  </span>
+                </span>
+                {!l.darkOnly && (
+                  <span style="display:inline-flex; gap:10px; align-items:center;">
+                    <span class="ds-chip">White</span>
+                    <span class="ds-dl">
+                      <a href={logos(`${l.file}-white.svg`)} download>SVG</a>
+                      <a href={logos(`${l.file}-white-1024.png`)} download>PNG</a>
+                      <a href={logos(`${l.file}-white-1024.webp`)} download>WebP</a>
+                    </span>
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 03 · Clearspace -->
+  <section class="ds-section" id="clearspace">
+    <div class="ds-sec-head"><span class="ds-sec-num">03</span><h2 class="ds-h2">Clearspace & minimum size</h2></div>
+    <p class="ds-body">
+      Keep a margin of at least one quarter of the diamond's width
+      (<span class="ds-mono">0.25×</span>) clear on every side. Nothing enters
+      that zone - no text, no photos, no other marks.
+    </p>
+
+    <div class="ds-bento">
+      <div class="ds-card ds-card-tonal ds-b8 ds-reveal" style="display:flex; align-items:center; justify-content:center; min-height:320px;">
+        <svg viewBox="0 0 380 300" style="width:100%; max-width:460px" role="img" aria-label="Clearspace diagram: 0.25x margin around the diamond">
+          <!-- clearspace boundary -->
+          <rect x="90" y="50" width="200" height="200" fill="none" stroke="var(--ds-accent)" stroke-width="1.5" stroke-dasharray="6 5" />
+          <!-- mark bounding box -->
+          <rect x="140" y="100" width="100" height="100" fill="none" stroke="var(--ds-ink-3)" stroke-width="1" stroke-dasharray="3 4" />
+          <!-- diamond -->
+          <g transform="translate(190,150)">
+            <rect x="-38" y="-38" width="76" height="76" rx="14" transform="rotate(45)" fill="var(--ds-diamond)" />
+            <text x="0" y="6" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="26" fill="var(--ds-diamond-fg)">acm</text>
+          </g>
+          <!-- measurement arrows -->
+          <g stroke="var(--ds-accent-ink)" stroke-width="1.2">
+            <line x1="90" y1="150" x2="140" y2="150" />
+            <line x1="240" y1="150" x2="290" y2="150" />
+            <line x1="190" y1="50" x2="190" y2="100" />
+            <line x1="190" y1="200" x2="190" y2="250" />
+          </g>
+          <g font-family="DM Sans, sans-serif" font-size="12.5" font-weight="620" fill="var(--ds-accent-ink)">
+            <text x="115" y="142" text-anchor="middle">0.25×</text>
+            <text x="265" y="142" text-anchor="middle">0.25×</text>
+            <text x="204" y="79">0.25×</text>
+            <text x="204" y="229">0.25×</text>
+          </g>
+          <g font-family="DM Sans, sans-serif" font-size="12" fill="var(--ds-ink-3)">
+            <text x="190" y="278" text-anchor="middle">1× = width of the diamond</text>
+          </g>
+        </svg>
+      </div>
+      <div class="ds-card ds-b4 ds-reveal">
+        <h3 class="ds-h4">Minimum sizes</h3>
+        <table class="ds-table">
+          <tbody>
+            <tr><td>Diamond, screen</td><td>24 px</td></tr>
+            <tr><td>Diamond, print</td><td>8 mm</td></tr>
+            <tr><td>Horizontal lockup, screen</td><td>140 px wide</td></tr>
+            <tr><td>Stacked lockup, screen</td><td>96 px wide</td></tr>
+          </tbody>
+        </table>
+        <p class="ds-small" style="margin-top:14px">
+          Below these sizes the wordmark inside the diamond stops being
+          legible - switch to a larger size or drop to the bare diamond.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 · Misuse -->
+  <section class="ds-section" id="misuse">
+    <div class="ds-sec-head"><span class="ds-sec-num">04</span><h2 class="ds-h2">What not to do</h2></div>
+    <p class="ds-body">
+      The fastest way to weaken a mark is to bend it a little, everywhere.
+      None of these, ever:
+    </p>
+
+    <div class="ds-bento">
+      {
+        misuse.map((m) => (
+          <div class="ds-specimen ds-b4 ds-reveal">
+            <div class="ds-specimen-stage ds-mis-stage" style="min-height:150px; background:var(--ds-surface-tonal)">
+              {m.art === "stretch" && (
+                <img src={logos("acm-diamond-dark.svg")} alt="" style="width:130px; height:74px;" />
+              )}
+              {m.art === "rotate" && (
+                <img src={logos("acm-diamond-dark.svg")} alt="" style="width:86px; transform:rotate(23deg)" />
+              )}
+              {m.art === "recolor" && (
+                <div style="width:86px; height:86px; border-radius:18px; transform:rotate(45deg); background:linear-gradient(135deg,#ff007a,#135de2); display:flex; align-items:center; justify-content:center;">
+                  <span style="transform:rotate(-45deg); color:#fff; font-weight:700; font-size:22px;">acm</span>
+                </div>
+              )}
+              {m.art === "effects" && (
+                <img src={logos("acm-diamond-dark.svg")} alt="" style="width:86px; filter:drop-shadow(4px 6px 2px rgba(249,95,74,.8))" />
+              )}
+              {m.art === "contrast" && (
+                <div style="background:#4d4a46; padding:18px; border-radius:12px;">
+                  <img src={logos("acm-diamond-dark.svg")} alt="" style="width:64px; display:block;" />
+                </div>
+              )}
+              {m.art === "rearrange" && (
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <span style="font-weight:700; font-size:19px; color:#1c1b1a;">ACM VIT™</span>
+                  <img src={logos("acm-diamond-dark.svg")} alt="" style="width:44px;" />
+                </div>
+              )}
+              <span class="ds-x" aria-hidden="true">
+                <svg width="26" height="26" viewBox="0 0 26 26"><circle cx="13" cy="13" r="12" fill="#b3341f"/><path d="M8.5 8.5l9 9M17.5 8.5l-9 9" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>
+              </span>
+            </div>
+            <div class="ds-specimen-note">{m.label}</div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 05 · Domain colorways -->
+  <section class="ds-section" id="domains">
+    <div class="ds-sec-head"><span class="ds-sec-num">05</span><h2 class="ds-h2">Domain colorways</h2></div>
+    <p class="ds-body">
+      Inside the chapter, each domain may carry the diamond in its own accent -
+      the one sanctioned recolor in the system. These live on domain pages,
+      domain cassettes, and internal material only; public chapter material
+      stays with the two inks.
+    </p>
+    <div class="ds-card ds-reveal ds-domain-row" style="margin-top:24px;">
+      {
+        domainMarks.map((d) => (
+          <div class="ds-domain-cell">
+            <img src={logos(`${d.file}.svg`)} alt={`ACM diamond in ${d.name} ${d.hex}`} loading="lazy" />
+            <span class="ds-h4" style="margin-top:14px">{d.name}</span>
+            <code class="ds-mono ds-small">{d.hex}</code>
+          </div>
+        ))
+      }
+    </div>
+    <div class="ds-card ds-reveal ds-domain-lockups" style="margin-top:14px;">
+      {
+        domainMarks.map((d) => (
+          <div class="ds-domain-lockup-cell">
+            <img src={logos(`acm-horizontal-${d.file.replace("acm-diamond-", "")}.svg`)} alt={`ACM-VIT horizontal lockup in ${d.name} ${d.hex}`} loading="lazy" />
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 06 · ACM International compliance -->
+  <section class="ds-section" id="compliance">
+    <div class="ds-sec-head"><span class="ds-sec-num">06</span><h2 class="ds-h2">ACM International compliance</h2></div>
+    <p class="ds-body">
+      We are a chartered student chapter of the Association for Computing
+      Machinery, so ACM's global chapter policies sit above everything on this
+      page.
+    </p>
+    <div class="ds-bento">
+      <div class="ds-card ds-b6 ds-reveal">
+        <h3 class="ds-h4">The official name</h3>
+        <p class="ds-body" style="margin-top:6px">
+          ACM's naming convention puts the school name first, then "ACM" or
+          "ACM-W", then "Student Chapter". Ours:
+        </p>
+        <ul class="ds-l-list" style="margin-top:10px">
+          <li><strong>Vellore Institute of Technology ACM Student Chapter</strong></li>
+          <li><strong>Vellore Institute of Technology ACM-W Student Chapter</strong></li>
+        </ul>
+        <p class="ds-body" style="margin-top:10px">
+          That name appears in our lockups as "Association for Computing
+          Machinery / VIT Student Chapter". "ACM-VIT" is our short brand name,
+          always with the hyphen - but formal and legal contexts use the full
+          convention above, never just "ACM" or "ACM-W".
+        </p>
+      </div>
+      <div class="ds-card ds-b6 ds-reveal">
+        <h3 class="ds-h4">The chapter logo rule</h3>
+        <p class="ds-body" style="margin-top:6px">
+          ACM provides a standard chapter logo and explicitly allows chapters
+          to edit it or create an entirely new one - our diamond is that
+          sanctioned custom logo. The one hard requirement in the policy: the
+          words identifying the chapter must remain legible. Our lockups carry
+          "Association for Computing Machinery / VIT Student Chapter" for
+          exactly that reason - do not strip that text from official material.
+        </p>
+      </div>
+      <div class="ds-card ds-b6 ds-reveal">
+        <h3 class="ds-h4">Speaking for ACM</h3>
+        <p class="ds-body" style="margin-top:6px">
+          The chapter represents itself, not ACM globally. Do not present
+          chapter opinions, events, or partnerships as ACM International's,
+          and do not use the global ACM logo in place of chapter marks.
+        </p>
+      </div>
+      <div class="ds-card ds-b6 ds-reveal">
+        <h3 class="ds-h4">Reference</h3>
+        <p class="ds-body" style="margin-top:6px">
+          Full policy text and the official chapter logo matrix live with ACM:
+        </p>
+        <ul class="ds-l-list" style="margin-top:10px">
+          <li><a href="https://www.acm.org/chapters/chapter-policies" target="_blank" rel="noopener">acm.org/chapters/chapter-policies ↗</a></li>
+          <li><a href="https://identitystandards.acm.org/" target="_blank" rel="noopener">identitystandards.acm.org ↗</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 · Internal remixes -->
+  <section class="ds-section" id="remixes">
+    <div class="ds-sec-head"><span class="ds-sec-num">07</span><h2 class="ds-h2">Internal remixes vs. external use</h2></div>
+    <div class="ds-bento">
+      <div class="ds-card ds-card-tonal ds-b6 ds-reveal">
+        <span class="ds-chip ds-chip-do" style="margin-bottom:14px">Inside ACM-VIT</span>
+        <p class="ds-body">
+          Like any student chapter that likes to experiment, we occasionally
+          remix the mark for events, merch drops, and seasonal identities -
+          new logomarks, textures, one-off colorways. That is deliberate play
+          by the design team, done against this system, reviewed before it
+          ships.
+        </p>
+      </div>
+      <div class="ds-card ds-card-tonal ds-b6 ds-reveal">
+        <span class="ds-chip ds-chip-dont" style="margin-bottom:14px">Outside ACM-VIT</span>
+        <p class="ds-body">
+          Partners, sponsors, press, and collaborators should always use the
+          standard marks on this page, unmodified. If you need something the
+          standard set does not cover, ask us -
+          <a href="mailto:outreach@acmvit.in" style="color:var(--ds-accent-ink); font-weight:600;">outreach@acmvit.in</a>
+          - rather than adapting the files yourself.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 · Partner placement -->
+  <section class="ds-section" id="cobranding">
+    <div class="ds-sec-head"><span class="ds-sec-num">08</span><h2 class="ds-h2">Placing our mark next to others</h2></div>
+    <p class="ds-body">
+      In co-branded material, separate marks with a thin divider and match
+      visual weight - equal optical height, not equal pixel height. The
+      clearspace rule still applies on both sides of the divider.
+    </p>
+    <div class="ds-card ds-card-tonal ds-reveal" style="margin-top:24px; display:flex; align-items:center; justify-content:center; gap:34px; min-height:170px;">
+      <img class="ds-logo-dark" src={logos("acm-diamond-dark.svg")} alt="ACM-VIT" style="width:72px" />
+      <img class="ds-logo-light" src={logos("acm-diamond-white.svg")} alt="ACM-VIT" style="width:72px" />
+      <span style="width:1px; height:64px; background:var(--ds-line-2)"></span>
+      <span style="font-weight:700; font-size:24px; letter-spacing:-0.02em; color:var(--ds-ink-3);">Partner</span>
+    </div>
+  </section>
+</DesignLayout>
+
+<style>
+  .ds-x {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+  }
+  /* misuse demos show the dark-ink mark, so their stage stays light in
+     dark mode (matches the light-mode surface-tonal). */
+  :global(html[data-theme="dark"]) .ds-mis-stage {
+    background: #f4f1ec !important;
+  }
+  /* co-branding mark swaps to the white cut on the dark tonal card */
+  .ds-logo-light {
+    display: none;
+  }
+  :global(html[data-theme="dark"]) .ds-logo-dark {
+    display: none;
+  }
+  :global(html[data-theme="dark"]) .ds-logo-light {
+    display: inline-block;
+  }
+  .ds-domain-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 20px;
+    text-align: center;
+  }
+  .ds-domain-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .ds-domain-cell img {
+    width: 92px;
+    height: 92px;
+  }
+  .ds-domain-cell .ds-h4 {
+    font-size: 14px;
+  }
+  .ds-domain-lockups {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 26px 20px;
+    align-items: center;
+  }
+  .ds-domain-lockup-cell {
+    display: flex;
+    justify-content: center;
+  }
+  .ds-domain-lockup-cell img {
+    width: 100%;
+    max-width: 230px;
+  }
+  .ds-l-list {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--ds-ink-2);
+    font-size: 14.5px;
+    line-height: 1.8;
+  }
+  .ds-l-list a {
+    color: var(--ds-accent-ink);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .ds-l-list a:hover {
+    text-decoration: underline;
+  }
+</style>

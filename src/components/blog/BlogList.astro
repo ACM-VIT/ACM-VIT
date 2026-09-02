@@ -1,0 +1,165 @@
+---
+import type { BlogPost } from '../../lib/blog/types';
+
+interface Props {
+  posts: BlogPost[];
+}
+
+const { posts } = Astro.props;
+
+// Base classes shared by all filter buttons
+const btnBase = [
+  'px-4 py-1.5 rounded-full font-mono text-[11px] tracking-[0.08em] uppercase cursor-pointer',
+  'border transition-all duration-200',
+  'hover:border-[#F95F4A]/30 hover:text-white/80',
+].join(' ');
+
+// Inactive state classes (removed when active)
+const btnInactive = 'border-white/10 bg-transparent text-white/50';
+
+// Active state classes (added by JS)
+const btnActive = 'bg-[#F95F4A] border-[#F95F4A] text-white';
+---
+
+<section id="all-blogs">
+  {/* Header */}
+  <div class="flex items-center justify-between mb-8">
+    <h2 class="text-2xl sm:text-3xl font-['PolySans_Trial'] font-medium text-[#FEFCD9]">
+      All Articles
+    </h2>
+    <span class="text-sm font-mono text-gray-500">{posts.length} posts</span>
+  </div>
+
+  {/* Filter buttons */}
+  <div class="flex flex-wrap gap-2 mb-8" id="blog-filters">
+    <button class={`${btnBase} ${btnActive}`} data-filter="all">All</button>
+    <button class={`${btnBase} ${btnInactive}`} data-filter="hashnode">Hashnode</button>
+    <button class={`${btnBase} ${btnInactive}`} data-filter="medium">Medium</button>
+  </div>
+
+  {/* Search */}
+  <div class="relative mb-10">
+    <input
+      type="text"
+      id="blog-search"
+      placeholder="Search articles..."
+      class="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-3 text-sm text-[#FEFCD9] placeholder-gray-500 font-mono outline-none focus:border-[#F95F4A]/50 focus:ring-1 focus:ring-[#F95F4A]/20 transition-all duration-200"
+    />
+    <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" />
+    </svg>
+  </div>
+
+  {/* Posts list */}
+  <div class="flex flex-col gap-0.5" id="blog-grid">
+    {posts.map((post) => {
+      const formattedDate = new Date(post.publishedAt).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      });
+      const internalUrl = `/blogs/${post.source}/${post.slug}`;
+
+      return (
+        <a
+          href={internalUrl}
+          class="group grid grid-cols-[1fr] sm:grid-cols-[80px_1fr_auto] gap-3 sm:gap-4 items-start sm:items-center p-3 sm:p-4 rounded-xl no-underline transition-all duration-200 border border-transparent hover:bg-white/[0.04] hover:border-white/[0.06]"
+          data-source={post.source}
+          data-title={post.title.toLowerCase()}
+          data-tags={post.tags.join(',').toLowerCase()}
+        >
+          {/* Thumbnail */}
+          <div class="hidden sm:block w-[80px] h-[54px] rounded-lg overflow-hidden flex-shrink-0">
+            {post.coverImage ? (
+              <img
+                src={post.coverImage}
+                alt={post.title}
+                class="w-full h-full object-cover"
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <div class="w-full h-full bg-[#F95F4A]/[0.08] flex items-center justify-center text-[#F95F4A]/30">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+              </div>
+            )}
+          </div>
+
+          {/* Text content */}
+          <div>
+            <h3 class="text-base font-['PolySans_Trial'] font-medium text-[#FEFCD9] group-hover:text-[#F95F4A] transition-colors duration-200 leading-snug line-clamp-2">
+              {post.title}
+            </h3>
+            <p class="mt-1.5 text-sm text-gray-400 line-clamp-2 leading-relaxed">
+              {post.brief}
+            </p>
+            <div class="mt-2 flex items-center gap-2 text-xs text-gray-500 font-mono">
+              <time datetime={post.publishedAt}>{formattedDate}</time>
+              <span class="w-1 h-1 rounded-full bg-gray-600" />
+              <span>{post.readingTime} min</span>
+              {post.author && post.author !== 'ACM-VIT' && (
+                <>
+                  <span class="w-1 h-1 rounded-full bg-gray-600" />
+                  <span>{post.author}</span>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Arrow */}
+          <div class="text-white/15 transition-all duration-200 group-hover:text-[#F95F4A] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 flex-shrink-0 hidden sm:block">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M7 17L17 7M17 7H7M17 7v10" />
+            </svg>
+          </div>
+        </a>
+      );
+    })}
+  </div>
+</section>
+
+<script>
+  const INACTIVE = ['border-white/10', 'bg-transparent', 'text-white/50'];
+  const ACTIVE   = ['bg-[#F95F4A]', 'border-[#F95F4A]', 'text-white'];
+
+  const filterBtns  = document.querySelectorAll<HTMLButtonElement>('#blog-filters button');
+  const items       = document.querySelectorAll<HTMLElement>('#blog-grid a');
+  const searchInput = document.getElementById('blog-search') as HTMLInputElement | null;
+
+  let activeFilter = 'all';
+  let searchQuery  = '';
+
+  function applyFilters() {
+    items.forEach((item) => {
+      const source = item.dataset.source ?? '';
+      const title  = item.dataset.title  ?? '';
+      const tags   = item.dataset.tags   ?? '';
+      const matchesFilter = activeFilter === 'all' || source === activeFilter;
+      const matchesSearch = !searchQuery || title.includes(searchQuery) || tags.includes(searchQuery);
+      item.style.display = matchesFilter && matchesSearch ? '' : 'none';
+    });
+  }
+
+  filterBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      // Reset all buttons to inactive Tailwind classes
+      filterBtns.forEach((b) => {
+        b.classList.remove(...ACTIVE);
+        b.classList.add(...INACTIVE);
+      });
+      // Set clicked button to active Tailwind classes
+      btn.classList.remove(...INACTIVE);
+      btn.classList.add(...ACTIVE);
+
+      activeFilter = btn.dataset.filter ?? 'all';
+      applyFilters();
+    });
+  });
+
+  searchInput?.addEventListener('input', (e) => {
+    searchQuery = (e.target as HTMLInputElement).value.toLowerCase().trim();
+    applyFilters();
+  });
+</script>

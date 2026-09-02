@@ -1,0 +1,1087 @@
+---
+// Pure Astro - no React, no hydration
+---
+
+<audio id="cp-audio" preload="metadata"></audio>
+
+<!-- Minimized button -->
+<button id="cp-toggle" class="cp-mini" aria-label="Open music player">
+  <div class="cp-eq" id="cp-eq">
+    <span class="cp-eq-bar"></span>
+    <span class="cp-eq-bar"></span>
+    <span class="cp-eq-bar"></span>
+    <span class="cp-eq-bar"></span>
+  </div>
+  <svg class="cp-mini-note" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+  </svg>
+</button>
+
+<!-- Expanded player -->
+<div id="cp-player" class="cp-player">
+  <!-- Iridescent top rim - light refraction at the glass edge -->
+  <div class="cp-refract-rim" aria-hidden="true"></div>
+
+  <!-- Minimize chevron -->
+  <button id="cp-minimize" class="cp-min-btn" aria-label="Minimize">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+  </button>
+
+  <!-- Cassette SVG - track info + controls live INSIDE -->
+  <div class="cp-cassette" id="cp-cassette">
+    <svg viewBox="0 0 280 175" xmlns="http://www.w3.org/2000/svg">
+      <!-- Body -->
+      <rect class="cp-c-body" x="1" y="1" width="278" height="173" rx="11"/>
+
+      <!-- Cover -->
+      <path class="cp-c-cover" d="M 18 10 L 22 10 L 28 16 L 252 16 L 258 10 L 262 10 Q 266 10 266 14 L 266 120 L 14 120 L 14 14 Q 14 10 18 10 Z"/>
+      <line class="cp-c-line" x1="20" y1="22" x2="260" y2="22"/>
+      <line class="cp-c-line" x1="20" y1="114" x2="260" y2="114"/>
+
+      <!-- Left reel -->
+      <circle class="cp-c-outer" cx="92" cy="58" r="24"/>
+      <circle class="cp-c-mid" cx="92" cy="58" r="16"/>
+      <circle class="cp-c-hub" cx="92" cy="58" r="5.5"/>
+      <g class="cp-spokes cp-spokes-l">
+        <line x1="92" y1="40" x2="92" y2="34" transform="rotate(0,92,58)"/>
+        <line x1="92" y1="40" x2="92" y2="34" transform="rotate(60,92,58)"/>
+        <line x1="92" y1="40" x2="92" y2="34" transform="rotate(120,92,58)"/>
+        <line x1="92" y1="40" x2="92" y2="34" transform="rotate(180,92,58)"/>
+        <line x1="92" y1="40" x2="92" y2="34" transform="rotate(240,92,58)"/>
+        <line x1="92" y1="40" x2="92" y2="34" transform="rotate(300,92,58)"/>
+      </g>
+      <circle class="cp-c-tape-l" cx="92" cy="58" r="19"/>
+
+      <!-- Right reel -->
+      <circle class="cp-c-outer" cx="188" cy="58" r="24"/>
+      <circle class="cp-c-mid" cx="188" cy="58" r="16"/>
+      <circle class="cp-c-hub-accent" cx="188" cy="58" r="5.5"/>
+      <g class="cp-spokes cp-spokes-r">
+        <line x1="188" y1="40" x2="188" y2="34" transform="rotate(0,188,58)"/>
+        <line x1="188" y1="40" x2="188" y2="34" transform="rotate(60,188,58)"/>
+        <line x1="188" y1="40" x2="188" y2="34" transform="rotate(120,188,58)"/>
+        <line x1="188" y1="40" x2="188" y2="34" transform="rotate(180,188,58)"/>
+        <line x1="188" y1="40" x2="188" y2="34" transform="rotate(240,188,58)"/>
+        <line x1="188" y1="40" x2="188" y2="34" transform="rotate(300,188,58)"/>
+      </g>
+      <circle class="cp-c-tape-r" cx="188" cy="58" r="10"/>
+
+      <!-- Tape path -->
+      <path class="cp-c-path" d="M 68 58 A 24 24 0 0 0 92 82 L 188 82 A 24 24 0 0 0 212 58"/>
+
+      <!-- Tape window -->
+      <rect class="cp-c-window" x="118" y="69" width="44" height="16" rx="3"/>
+
+      <!-- Center post -->
+      <circle class="cp-c-post" cx="140" cy="58" r="2.5"/>
+
+      <!-- ─── TRACK INFO on the label area ─── -->
+      <rect class="cp-c-label-bg" x="40" y="92" width="200" height="22" rx="4"/>
+      <text class="cp-c-title" id="cp-svg-title" x="140" y="100" text-anchor="middle" dominant-baseline="middle">&mdash;</text>
+      <text class="cp-c-artist-txt" id="cp-svg-artist" x="140" y="110" text-anchor="middle" dominant-baseline="middle">&mdash;</text>
+
+      <!-- ─── CONTROLS inside the cassette body ─── -->
+      <!-- Prev -->
+      <g class="cp-svg-btn" id="cp-prev" transform="translate(75,135)">
+        <rect x="-14" y="-10" width="28" height="20" rx="4" class="cp-svg-btn-bg"/>
+        <path d="M-2 0l6 4V-4zM-5-4v8" fill="currentColor" stroke="none" class="cp-svg-btn-icon"/>
+      </g>
+      <!-- Play/Pause -->
+      <g class="cp-svg-btn cp-svg-play" id="cp-play-g" transform="translate(140,135)">
+        <circle r="14" class="cp-svg-play-bg"/>
+        <path class="cp-ico-play" d="M-3-5v10l8-5z" fill="#fff" stroke="none"/>
+        <g class="cp-ico-pause" style="display:none">
+          <rect x="-4" y="-4.5" width="3" height="9" rx="0.5" fill="#fff"/>
+          <rect x="1" y="-4.5" width="3" height="9" rx="0.5" fill="#fff"/>
+        </g>
+      </g>
+      <!-- Next -->
+      <g class="cp-svg-btn" id="cp-next" transform="translate(205,135)">
+        <rect x="-14" y="-10" width="28" height="20" rx="4" class="cp-svg-btn-bg"/>
+        <path d="M-4-4v8l6-4zM5-4v8" fill="currentColor" stroke="none" class="cp-svg-btn-icon"/>
+      </g>
+
+      <!-- ─── PROGRESS BAR inside cassette ─── -->
+      <rect class="cp-c-prog-bg" x="40" y="155" width="200" height="3" rx="1.5"/>
+      <rect class="cp-c-prog-fill" id="cp-prog" x="40" y="155" width="0" height="3" rx="1.5"/>
+
+      <!-- Time labels -->
+      <text class="cp-c-time" id="cp-time-l" x="40" y="165" dominant-baseline="hanging">0:00</text>
+      <text class="cp-c-time" id="cp-time-r" x="240" y="165" text-anchor="end" dominant-baseline="hanging">0:00</text>
+
+      <!-- Pin holes -->
+      <circle class="cp-c-pin" cx="50" cy="135" r="1.5"/>
+      <circle class="cp-c-pin" cx="230" cy="135" r="1.5"/>
+
+      <!-- Corner screws -->
+      <circle class="cp-c-screw" cx="8" cy="8" r="2.5"/>
+      <circle class="cp-c-screw" cx="272" cy="8" r="2.5"/>
+      <circle class="cp-c-screw" cx="8" cy="167" r="2.5"/>
+      <circle class="cp-c-screw" cx="272" cy="167" r="2.5"/>
+    </svg>
+  </div>
+
+  <!-- Volume row (below cassette) -->
+  <div class="cp-vol-row">
+    <span class="cp-vol-icon">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/></svg>
+    </span>
+    <div class="cp-slider-area" id="cp-vol-area">
+      <div class="cp-slider-wrap">
+        <div class="cp-slider-track"><div class="cp-slider-fill" id="cp-vol-fill" style="width:70%"></div></div>
+      </div>
+    </div>
+    <span class="cp-vol-icon">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/></svg>
+    </span>
+  </div>
+</div>
+
+<script>
+  import { gsap } from 'gsap';
+  import { getMediaUrl } from '../../utils/cdn';
+
+  const PLAYLIST = [
+    { title: "Experience", artist: "Ludovico Einaudi", src: "/audio/audio-experience-ludovico-einaudi.mp3" },
+    { title: "Code Monkey", artist: "Jonathan Coulton", src: "/audio/audio-code-monkey.mp3" },
+    { title: "Daydreamer", artist: "AURORA", src: "/audio/audio-daydreamer-aurora.mp3" },
+    { title: "All The Things", artist: "Dual Core", src: "/audio/audio-all-the-things-dual-core.mp3" },
+    { title: "Find the Longest Path", artist: "Daniel Barrett", src: "/audio/audio-find-the-longest-path.mp3" },
+    { title: "GTA San Andreas Theme", artist: "Michael Hunter", src: "/audio/audio-gta-san-andreas-theme.mp3" },
+    { title: "Hello World", artist: "Louie Zong", src: "/audio/audio-hello-world-louie-zong.mp3" },
+    { title: "Here Comes Another Bubble", artist: "The Richter Scales", src: "/audio/audio-here-comes-another-bubble-richter-scales.mp3" },
+    { title: "Another Brick in the Wall", artist: "Pink Floyd", src: "/audio/audio-another-brick-in-the-wall-pink-floyd.mp3" },
+    { title: "Digital Witness", artist: "St. Vincent", src: "/audio/audio-digital-witness-st-vincent.mp3" },
+    { title: "Stretch Your Face", artist: "Tobacco", src: "/audio/audio-stretch-your-face-tobacco.mp3" },
+    { title: "That's The Way It Is", artist: "Daniel Lanois", src: "/audio/audio-thats-the-way-it-is-daniel-lanois.mp3" },
+    { title: "Big Bang Theory Theme", artist: "Barenaked Ladies", src: "/audio/audio-big-bang-theory-theme-barenaked-ladies.mp3" },
+    { title: "The Relevant Sound", artist: "Vaibhav Bundhoo", src: "/audio/audio-the-relevant-sound-vaibhav-bundhoo.mp3" },
+    { title: "The Gentleman", artist: "Simran Hora", src: "/audio/audio-the-gentleman-simran-hora.mp3" },
+    { title: "Still Alive", artist: "OverTheGun", src: "/audio/audio-still-alive-overthegun.mp3" },
+    { title: "I Believe", artist: "Dan Romer", src: "/audio/audio-i-believe-dan-romer.mp3" },
+    { title: "Bad Reputation", artist: "Joan Jett & The Blackhearts", src: "/audio/audio-bad-reputation-joan-jett.mp3" },
+    { title: "Impostor Syndrome", artist: "Sidney Gish", src: "/audio/audio-impostor-syndrome-sidney-gish.mp3" },
+    { title: "Only Time", artist: "Enya", src: "/audio/audio-only-time-enya.mp3" },
+  ];
+
+  const $ = (id: string) => document.getElementById(id)!;
+
+  const audio    = $('cp-audio') as HTMLAudioElement;
+  const mini     = $('cp-toggle');
+  const player   = $('cp-player');
+  const cassette = $('cp-cassette');
+  const eq       = $('cp-eq');
+  const svgTitle = $('cp-svg-title');
+  const svgArtist = $('cp-svg-artist');
+  const timeL    = $('cp-time-l');
+  const timeR    = $('cp-time-r');
+  const progBar  = $('cp-prog');
+  const playG    = $('cp-play-g');
+  const icoPlay  = playG.querySelector('.cp-ico-play') as SVGElement;
+  const icoPause = playG.querySelector('.cp-ico-pause') as SVGElement;
+  const volFill  = $('cp-vol-fill');
+  const volArea  = $('cp-vol-area');
+  const miniNote = mini.querySelector('.cp-mini-note') as SVGElement;
+
+  let idx = 0;
+  let seeking = false;
+
+  /* ─── Cross-tab sync ───
+     Playing tab = leader: broadcasts state over BroadcastChannel.
+     Other tabs (followers) mirror the UI without touching their local
+     <audio>, and route control clicks back to the leader as commands. */
+  const TAB_ID = Math.random().toString(36).slice(2);
+  const bc: BroadcastChannel | null =
+    'BroadcastChannel' in window ? new BroadcastChannel('acm-cassette-sync') : null;
+  let remote = false;                 // another tab owns playback; this tab mirrors it
+  let leaderId: string | null = null;
+  type RemoteState = { idx: number; time: number; duration: number; paused: boolean; volume: number; rate: number };
+  let remoteState: RemoteState | null = null;
+
+  const STATE_KEY = 'acm-cassette-player-state';
+  type SavedState = { idx: number; time: number; paused: boolean; volume: number };
+
+  const readSavedState = (): SavedState | null => {
+    try {
+      const raw = sessionStorage.getItem(STATE_KEY);
+      if (!raw) return null;
+      const s = JSON.parse(raw);
+      if (typeof s?.idx !== 'number' || typeof s?.time !== 'number') return null;
+      return s;
+    } catch { return null; }
+  };
+
+  const writeSavedState = () => {
+    try {
+      // While mirroring another tab, save its track/position (paused) so this
+      // tab restores there instead of at its own stale spot.
+      const s: SavedState = remote && remoteState
+        ? { idx: remoteState.idx, time: remoteState.time, paused: true, volume: audio.volume }
+        : { idx, time: audio.currentTime || 0, paused: audio.paused, volume: audio.volume };
+      sessionStorage.setItem(STATE_KEY, JSON.stringify(s));
+    } catch { /* ignore quota errors */ }
+  };
+
+  const fmt = (s: number) => {
+    if (!isFinite(s) || s < 0) return '0:00';
+    return `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+  };
+
+  // Failsafe: if the CDN copy 404s / fails, fall back to the origin-local mp3
+  // for the current track and reload once. Re-armed per loadTrack.
+  let mediaFellBack = false;
+  audio.addEventListener('error', () => {
+    if (mediaFellBack) return;
+    const local = PLAYLIST[idx]?.src;
+    if (!local || audio.src.endsWith(local)) return;
+    mediaFellBack = true;
+    const wasPlaying = !audio.paused && !audio.ended;
+    const at = audio.currentTime || 0;
+    audio.src = local;
+    audio.load();
+    if (at > 0) audio.addEventListener('loadedmetadata', () => {
+      try { audio.currentTime = at; } catch { /* ignore */ }
+    }, { once: true });
+    if (wasPlaying) audio.play().catch(() => {});
+  });
+
+  function loadTrack(i: number, autoplay = false, startTime = 0) {
+    idx = ((i % PLAYLIST.length) + PLAYLIST.length) % PLAYLIST.length;
+    const t = PLAYLIST[idx];
+    mediaFellBack = false;
+    audio.src = getMediaUrl(t.src);
+    audio.load();
+    svgTitle.textContent = t.title;
+    svgArtist.textContent = t.artist;
+    timeL.textContent = fmt(startTime);
+    timeR.textContent = '0:00';
+    progBar.setAttribute('width', '0');
+    if (startTime > 0) {
+      const applyStart = () => {
+        try { audio.currentTime = startTime; } catch { /* ignore */ }
+      };
+      if (audio.readyState >= 1) applyStart();
+      else audio.addEventListener('loadedmetadata', applyStart, { once: true });
+    }
+    if (autoplay) audio.play().catch(() => {});
+  }
+
+  const saved = readSavedState();
+  if (saved) {
+    audio.volume = Math.min(1, Math.max(0, saved.volume));
+    volFill.style.width = `${audio.volume * 100}%`;
+    loadTrack(saved.idx, !saved.paused, saved.time);
+  } else {
+    loadTrack(0);
+    audio.volume = 0.7;
+  }
+
+  // When the page is frozen for the bfcache the browser pauses our <audio> and
+  // fires a 'pause' event. `freezing` lets the pause handler ignore that so it
+  // doesn't clobber the saved "was playing" state; `wasPlayingAtHide` records
+  // the real intent captured the instant we started navigating away.
+  let freezing = false;
+  let wasPlayingAtHide = false;
+
+  const onHide = () => {
+    wasPlayingAtHide = !remote && !audio.paused;
+    freezing = true;
+    writeSavedState();
+  };
+
+  // Persist state on every nav-out and periodically while playing
+  window.addEventListener('pagehide', onHide);
+  window.addEventListener('beforeunload', onHide);
+  setInterval(() => { if (!audio.paused) writeSavedState(); }, 1000);
+
+  /* ─── Cross-tab sync: plumbing ─── */
+  const setPlayingUI = (playing: boolean) => {
+    icoPlay.style.display = playing ? 'none' : '';
+    icoPause.style.display = playing ? '' : 'none';
+    cassette.classList.toggle('cp-playing', playing);
+    eq.classList.toggle('cp-eq-active', playing);
+    miniNote.style.display = playing ? 'none' : '';
+  };
+
+  /* Back/forward navigation restores this page from the bfcache: the init code
+     above never re-runs and the browser paused our <audio> on freeze, so music
+     dies silently. On a persisted pageshow, resume if we were playing when we
+     left (forward nav already resumes via a fresh load). The bfcache keeps the
+     element's track + position, so a bare play() picks up exactly where it was. */
+  window.addEventListener('pageshow', (e) => {
+    if (!(e as PageTransitionEvent).persisted) return;
+    freezing = false;
+    if (remote || !wasPlayingAtHide) return;
+    audio.play().catch(() => {});
+    setPlayingUI(true);
+    broadcastState();
+  });
+
+  const broadcastState = () => {
+    if (!bc || remote) return;
+    bc.postMessage({
+      type: 'state', id: TAB_ID, idx,
+      time: audio.currentTime || 0,
+      duration: audio.duration || 0,
+      paused: audio.paused,
+      volume: audio.volume,
+      rate: audio.playbackRate,
+    });
+  };
+
+  const sendCmd = (cmd: string, value?: number) => {
+    if (!bc || !leaderId) return;
+    bc.postMessage({ type: 'cmd', target: leaderId, cmd, value });
+  };
+
+  // Mirrors of the sync state also feed the MobileNavbar music panel
+  const emitPanelState = (title: string, artist: string, s: { time: number; duration: number; paused: boolean }) => {
+    window.dispatchEvent(new CustomEvent('cassette:remote-state', {
+      detail: { title, artist, time: s.time, duration: s.duration, paused: s.paused },
+    }));
+  };
+
+  function applyRemoteState(s: RemoteState) {
+    remote = true;
+    remoteState = s;
+    if (!audio.paused) audio.pause(); // yield playback; pause handler skips while remote
+    const t = PLAYLIST[((s.idx % PLAYLIST.length) + PLAYLIST.length) % PLAYLIST.length];
+    svgTitle.textContent = t.title;
+    svgArtist.textContent = t.artist;
+    timeL.textContent = fmt(s.time);
+    timeR.textContent = fmt(s.duration);
+    progBar.setAttribute('width', String(s.duration ? (s.time / s.duration) * 200 : 0));
+    audio.volume = Math.min(1, Math.max(0, s.volume)); // keep local knobs/sliders consistent
+    volFill.style.width = `${audio.volume * 100}%`;
+    setPlayingUI(!s.paused);
+    emitPanelState(t.title, t.artist, s);
+  }
+
+  // Leader tab went away: keep its track/position here, paused and ready to resume
+  function releaseRemote(s?: { idx: number; time: number }) {
+    if (!remote) return;
+    const last = s ?? remoteState;
+    remote = false;
+    leaderId = null;
+    remoteState = null;
+    if (last) loadTrack(last.idx, false, last.time);
+    setPlayingUI(false);
+    const t = PLAYLIST[idx];
+    emitPanelState(t.title, t.artist, { time: last?.time ?? 0, duration: 0, paused: true });
+  }
+
+  bc?.addEventListener('message', (e) => {
+    const msg = e.data;
+    if (!msg || msg.id === TAB_ID) return;
+    if (msg.type === 'state') {
+      // Active playback elsewhere always wins; paused updates only from the known leader
+      if (!msg.paused) { leaderId = msg.id; applyRemoteState(msg); }
+      else if (msg.id === leaderId) applyRemoteState(msg);
+    } else if (msg.type === 'hello') {
+      if (!remote && !audio.paused) broadcastState();
+    } else if (msg.type === 'bye') {
+      if (msg.id === leaderId) releaseRemote(msg);
+    } else if (msg.type === 'cmd') {
+      if (msg.target !== TAB_ID || remote) return;
+      if (msg.cmd === 'toggle') {
+        if (audio.paused) audio.play().catch(() => {});
+        else audio.pause();
+      } else if (msg.cmd === 'next') {
+        loadTrack(idx + 1, true);
+      } else if (msg.cmd === 'prev') {
+        if (audio.currentTime > 3) audio.currentTime = 0;
+        else loadTrack(idx - 1, true);
+      } else if (msg.cmd === 'seek' && typeof msg.value === 'number' && audio.duration) {
+        audio.currentTime = Math.min(1, Math.max(0, msg.value)) * audio.duration;
+        broadcastState();
+      } else if (msg.cmd === 'volume' && typeof msg.value === 'number') {
+        const v = Math.min(1, Math.max(0, msg.value));
+        audio.volume = v;
+        volFill.style.width = `${v * 100}%`;
+        broadcastState();
+      } else if (msg.cmd === 'stop') {
+        audio.pause();
+        audio.currentTime = 0;
+        broadcastState();
+      } else if (msg.cmd === 'rate' && typeof msg.value === 'number') {
+        audio.playbackRate = msg.value;
+        broadcastState();
+      }
+    }
+  });
+
+  // Ask any already-playing tab for its state
+  bc?.postMessage({ type: 'hello', id: TAB_ID });
+
+  window.addEventListener('pagehide', () => {
+    if (bc && !remote) {
+      bc.postMessage({ type: 'bye', id: TAB_ID, idx, time: audio.currentTime || 0 });
+    }
+  });
+
+  /* ─── Audio events ─── */
+  audio.addEventListener('timeupdate', () => {
+    if (seeking || !audio.duration) return;
+    timeL.textContent = fmt(audio.currentTime);
+    const pct = (audio.currentTime / audio.duration) * 200;
+    progBar.setAttribute('width', String(pct));
+    broadcastState();
+  });
+
+  audio.addEventListener('loadedmetadata', () => {
+    timeR.textContent = fmt(audio.duration);
+    broadcastState();
+  });
+
+  audio.addEventListener('ended', () => loadTrack(idx + 1, true));
+
+  audio.addEventListener('play', () => {
+    // Playing locally makes this tab the leader
+    remote = false;
+    leaderId = null;
+    remoteState = null;
+    setPlayingUI(true);
+    writeSavedState();
+    broadcastState();
+  });
+
+  audio.addEventListener('pause', () => {
+    if (remote) return; // paused only to yield playback to another tab
+    if (freezing) return; // browser paused us to freeze for the bfcache, not a real pause
+    setPlayingUI(false);
+    writeSavedState();
+    broadcastState();
+  });
+
+  /* ─── SVG button clicks ─── */
+  playG.addEventListener('click', () => {
+    if (remote) { sendCmd('toggle'); return; }
+    if (audio.paused) audio.play().catch(() => {});
+    else audio.pause();
+  });
+  playG.style.cursor = 'pointer';
+
+  $('cp-prev').addEventListener('click', () => {
+    if (remote) { sendCmd('prev'); return; }
+    if (audio.currentTime > 3) { audio.currentTime = 0; return; }
+    loadTrack(idx - 1, true);
+  });
+  $('cp-prev').style.cursor = 'pointer';
+
+  $('cp-next').addEventListener('click', () => {
+    if (remote) { sendCmd('next'); return; }
+    loadTrack(idx + 1, true);
+  });
+  $('cp-next').style.cursor = 'pointer';
+
+  /* ─── Progress bar click-to-seek ─── */
+  const progBg = document.querySelector('.cp-c-prog-bg') as SVGRectElement;
+  const progFill = progBar as SVGRectElement;
+
+  function seekFromEvent(e: PointerEvent) {
+    const rect = progBg.getBoundingClientRect();
+    let pct = (e.clientX - rect.left) / rect.width;
+    pct = Math.min(1, Math.max(0, pct));
+    if (remote) {
+      sendCmd('seek', pct);
+      progFill.setAttribute('width', String(pct * 200));
+      if (remoteState?.duration) timeL.textContent = fmt(pct * remoteState.duration);
+      return;
+    }
+    if (!audio.duration) return;
+    audio.currentTime = pct * audio.duration;
+    progFill.setAttribute('width', String(pct * 200));
+    timeL.textContent = fmt(audio.currentTime);
+  }
+
+  let progDragging = false;
+  progBg.style.cursor = 'pointer';
+  progFill.style.cursor = 'pointer';
+
+  const progHitArea = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  progHitArea.setAttribute('x', '40');
+  progHitArea.setAttribute('y', '150');
+  progHitArea.setAttribute('width', '200');
+  progHitArea.setAttribute('height', '13');
+  progHitArea.setAttribute('fill', 'transparent');
+  progHitArea.style.cursor = 'pointer';
+  progBg.parentElement!.appendChild(progHitArea);
+
+  progHitArea.addEventListener('pointerdown', (e) => {
+    progDragging = true;
+    seeking = true;
+    progHitArea.setPointerCapture(e.pointerId);
+    seekFromEvent(e);
+  });
+
+  progHitArea.addEventListener('pointermove', (e) => {
+    if (progDragging) seekFromEvent(e);
+  });
+
+  const progUp = () => {
+    progDragging = false;
+    seeking = false;
+  };
+  progHitArea.addEventListener('pointerup', progUp);
+  progHitArea.addEventListener('pointercancel', progUp);
+
+  /* ─── Morph expand / collapse ─── */
+  let morphTween: gsap.core.Tween | null = null;
+  let closeTimer: ReturnType<typeof setTimeout> | null = null;
+
+  function getClosedClip() {
+    const w = mini.offsetWidth || 52;
+    const ph = player.offsetHeight;
+    const pw = player.offsetWidth;
+    const br = Math.round(parseFloat(getComputedStyle(mini).borderRadius)) || 14;
+    return `inset(${ph - w}px 0px 0px ${pw - w}px round ${br}px)`;
+  }
+
+  // Open: GSAP power3.out expand from button corner
+  mini.addEventListener('click', () => {
+    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+    if (morphTween) morphTween.kill();
+    mini.classList.add('cp-hidden');
+    player.style.opacity = '1';
+    player.style.pointerEvents = 'auto';
+    player.style.transition = 'none';
+    morphTween = gsap.fromTo(player,
+      { clipPath: getClosedClip() },
+      { clipPath: 'inset(0px 0px 0px 0px round 18px)', duration: 0.5, ease: 'power3.out',
+        onComplete: () => { player.style.transition = ''; } }
+    );
+  });
+
+  // Close: CSS transition, button appears immediately, opacity clears after
+  $('cp-minimize').addEventListener('click', () => {
+    if (morphTween) morphTween.kill();
+    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+    mini.classList.remove('cp-hidden');
+    player.style.pointerEvents = 'none';
+    player.style.opacity = '1';
+    player.style.transition = 'clip-path 0.35s cubic-bezier(0.4,0,0.6,1)';
+    requestAnimationFrame(() => { player.style.clipPath = getClosedClip(); });
+    closeTimer = setTimeout(() => {
+      player.style.opacity = '0';
+      player.style.transition = '';
+      closeTimer = null;
+    }, 390);
+  });
+
+  /* ─── Elastic volume slider ─── */
+  const MAX_OV = 50;
+  const decay = (v: number, mx: number) => {
+    if (mx === 0) return 0;
+    const e = v / mx;
+    return (2 * (1 / (1 + Math.exp(-e)) - 0.5)) * mx;
+  };
+
+  (() => {
+    const area = volArea;
+    const fill = volFill;
+    const wrap = area.querySelector('.cp-slider-wrap') as HTMLElement;
+    let dragging = false;
+
+    area.addEventListener('pointerdown', (ev) => {
+      dragging = true;
+      area.setPointerCapture(ev.pointerId);
+      area.classList.add('cp-dragging');
+      wrap.style.transition = 'height 0.15s ease';
+      tick(ev);
+    });
+
+    area.addEventListener('pointermove', (ev) => { if (dragging) tick(ev); });
+
+    const up = () => {
+      if (!dragging) return;
+      dragging = false;
+      area.classList.remove('cp-dragging');
+      wrap.style.transition = 'all 0.5s cubic-bezier(0.34,1.56,0.64,1)';
+      wrap.style.transform = '';
+    };
+    area.addEventListener('pointerup', up);
+    area.addEventListener('pointercancel', up);
+    area.addEventListener('lostpointercapture', up);
+
+    function tick(ev: PointerEvent) {
+      const { left, right, width } = area.getBoundingClientRect();
+      let v = (ev.clientX - left) / width;
+      v = Math.min(1, Math.max(0, v));
+      fill.style.width = `${v * 100}%`;
+      audio.volume = v;
+      if (remote) sendCmd('volume', v);
+
+      if (ev.clientX < left) {
+        const ov = decay(left - ev.clientX, MAX_OV);
+        wrap.style.transform = `scaleX(${1 + ov / width}) scaleY(${1 - ov * 0.004})`;
+        wrap.style.transformOrigin = 'right center';
+      } else if (ev.clientX > right) {
+        const ov = decay(ev.clientX - right, MAX_OV);
+        wrap.style.transform = `scaleX(${1 + ov / width}) scaleY(${1 - ov * 0.004})`;
+        wrap.style.transformOrigin = 'left center';
+      } else {
+        wrap.style.transform = '';
+      }
+    }
+  })();
+
+  /* ─── Public hook: lets page-level easter eggs drive the player ───
+     e.g. window.acmCassette.playByTitle("GTA San Andreas Theme",
+            { volume: 0.18, expand: true, onlyIfPaused: true }) */
+  (window as any).acmCassette = {
+    playByTitle(
+      title: string,
+      opts: { volume?: number; expand?: boolean; onlyIfPaused?: boolean } = {}
+    ) {
+      const i = PLAYLIST.findIndex((t) => t.title === title);
+      if (i < 0) return false;
+      // Respect a track the user already started (here or in another tab).
+      if (opts.onlyIfPaused && (!audio.paused || (remote && remoteState && !remoteState.paused))) return false;
+      if (typeof opts.volume === 'number') {
+        const v = Math.min(1, Math.max(0, opts.volume));
+        audio.volume = v;
+        volFill.style.width = `${v * 100}%`;
+      }
+      loadTrack(i, true);
+      if (opts.expand) {
+        // ≤1024px the desktop widget is display:none and the MobileNavbar music
+        // panel is the UI (it controls this same #cp-audio) - open that instead.
+        const mobileUI = window.matchMedia('(max-width: 1024px)').matches;
+        if (mobileUI) {
+          document.getElementById('mn-music-btn')?.dispatchEvent(new MouseEvent('click'));
+        } else if (!mini.classList.contains('cp-hidden')) {
+          // mini carries .cp-hidden only while the player is already open.
+          mini.click();
+        }
+      }
+      return true;
+    },
+    // Remote-aware controls for external UIs (MobileNavbar panel, boombox)
+    toggle() {
+      playG.dispatchEvent(new MouseEvent('click'));
+    },
+    seekFraction(pct: number) {
+      pct = Math.min(1, Math.max(0, pct));
+      if (remote) { sendCmd('seek', pct); return; }
+      if (audio.duration) audio.currentTime = pct * audio.duration;
+    },
+    setVolume(v: number) {
+      v = Math.min(1, Math.max(0, v));
+      audio.volume = v;
+      volFill.style.width = `${v * 100}%`;
+      if (remote) sendCmd('volume', v);
+    },
+    setRate(r: number) {
+      if (remote) { sendCmd('rate', r); return; }
+      audio.playbackRate = r;
+    },
+    stop() {
+      if (remote) { sendCmd('stop'); return; }
+      audio.pause();
+      audio.currentTime = 0;
+    },
+    state(): RemoteState & { remote: boolean } {
+      if (remote && remoteState) return { ...remoteState, remote: true };
+      return {
+        idx,
+        time: audio.currentTime || 0,
+        duration: audio.duration || 0,
+        paused: audio.paused,
+        volume: audio.volume,
+        rate: audio.playbackRate,
+        remote: false,
+      };
+    },
+  };
+</script>
+
+<style>
+  /* ── Mini button ── */
+  .cp-mini {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    /* Glassmorphic */
+    background: linear-gradient(
+      145deg,
+      rgba(255,255,255,0.12) 0%,
+      rgba(8,8,14,0.52) 55%,
+      rgba(6,6,10,0.48) 100%
+    );
+    border: 1px solid rgba(255,255,255,0.18);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.22),
+      inset 0 -1px 0 rgba(0,0,0,0.3),
+      0 4px 24px rgba(0,0,0,0.45),
+      0 1px 6px rgba(0,0,0,0.3);
+    cursor: pointer;
+    z-index: 990;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,253,208,0.5);
+    /* Morph: fade + scale on hide/show */
+    opacity: 1;
+    transform: scale(1);
+    transition:
+      opacity 0.18s ease,
+      transform 0.18s cubic-bezier(0.16,1,0.3,1);
+  }
+  .cp-mini:hover { transform: scale(1.08); }
+  .cp-mini.cp-hidden {
+    opacity: 0;
+    transform: scale(0.85);
+    pointer-events: none;
+  }
+
+  :global(html[data-theme="light"]) .cp-mini {
+    background: linear-gradient(
+      145deg,
+      rgba(255,255,255,0.7) 0%,
+      rgba(240,235,225,0.55) 100%
+    );
+    border-color: rgba(0,0,0,0.1);
+    color: rgba(26,26,26,0.6);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.9),
+      0 4px 24px rgba(0,0,0,0.12);
+  }
+
+  /* ── Equalizer bars ── */
+  .cp-eq {
+    display: none;
+    align-items: flex-end;
+    gap: 3px;
+    height: 20px;
+  }
+  .cp-eq-bar {
+    width: 3px;
+    border-radius: 1.5px;
+    background: #F95F4A;
+  }
+  .cp-eq-bar:nth-child(1) { height: 8px; }
+  .cp-eq-bar:nth-child(2) { height: 14px; }
+  .cp-eq-bar:nth-child(3) { height: 18px; }
+  .cp-eq-bar:nth-child(4) { height: 10px; }
+
+  .cp-eq.cp-eq-active { display: flex; }
+  .cp-eq.cp-eq-active ~ .cp-mini-note { display: none; }
+  .cp-eq.cp-eq-active .cp-eq-bar:nth-child(1) { animation: eqBar1 0.65s ease-in-out infinite; }
+  .cp-eq.cp-eq-active .cp-eq-bar:nth-child(2) { animation: eqBar2 0.78s ease-in-out infinite; }
+  .cp-eq.cp-eq-active .cp-eq-bar:nth-child(3) { animation: eqBar3 0.55s ease-in-out infinite; }
+  .cp-eq.cp-eq-active .cp-eq-bar:nth-child(4) { animation: eqBar4 0.72s ease-in-out infinite; }
+
+  @keyframes eqBar1 {
+    0%, 100% { height: 6px; } 25% { height: 18px; } 50% { height: 10px; } 75% { height: 20px; }
+  }
+  @keyframes eqBar2 {
+    0%, 100% { height: 16px; } 30% { height: 4px; } 60% { height: 14px; } 80% { height: 8px; }
+  }
+  @keyframes eqBar3 {
+    0%, 100% { height: 10px; } 20% { height: 20px; } 45% { height: 4px; } 70% { height: 16px; }
+  }
+  @keyframes eqBar4 {
+    0%, 100% { height: 14px; } 35% { height: 6px; } 55% { height: 18px; } 85% { height: 4px; }
+  }
+
+  /* ── Expanded player ── */
+  .cp-player {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 340px;
+    max-width: calc(100vw - 48px);
+    border-radius: 18px;
+    /* Glassmorphic background */
+    background: linear-gradient(
+      150deg,
+      rgba(255,255,255,0.09) 0%,
+      rgba(10,10,16,0.52) 28%,
+      rgba(8,8,13,0.48) 70%,
+      rgba(12,10,18,0.52) 100%
+    );
+    border: 1px solid rgba(255,255,255,0.16);
+    backdrop-filter: blur(48px) saturate(200%) brightness(0.92);
+    -webkit-backdrop-filter: blur(48px) saturate(200%) brightness(0.92);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.25),
+      inset 0 -1px 0 rgba(0,0,0,0.2),
+      inset 1px 0 0 rgba(255,255,255,0.06),
+      inset -1px 0 0 rgba(255,255,255,0.04),
+      0 20px 60px rgba(0,0,0,0.6),
+      0 4px 20px rgba(0,0,0,0.4),
+      0 0 0 0.5px rgba(255,255,255,0.06);
+    z-index: 990;
+    overflow: hidden;
+    padding: 12px 14px 14px;
+    /* ── Morph: clip-path from button corner, anchored bottom-right ── */
+    clip-path: inset(calc(100% - 52px) 0 0 calc(100% - 52px) round 14px);
+    opacity: 0;
+    pointer-events: none;
+    /* GSAP manages clip-path, opacity, pointer-events */
+  }
+
+  /* ── Light refraction layers ── */
+
+  /* Diagonal top-left highlight - light hitting the glass face */
+  .cp-player::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(
+      130deg,
+      rgba(255,255,255,0.18) 0%,
+      rgba(255,255,255,0.07) 18%,
+      transparent 42%,
+      transparent 80%,
+      rgba(255,255,255,0.03) 100%
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Moving sheen sweep - periodic light refraction */
+  .cp-player::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -130%;
+    width: 55%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255,255,255,0.03) 30%,
+      rgba(255,255,255,0.09) 50%,
+      rgba(255,255,255,0.03) 70%,
+      transparent 100%
+    );
+    transform: skewX(-12deg);
+    pointer-events: none;
+    z-index: 0;
+    animation: cpGlassSweep 7s ease-in-out 1.5s infinite;
+  }
+
+  @keyframes cpGlassSweep {
+    0%   { left: -130%; opacity: 0; }
+    8%   { opacity: 1; }
+    45%  { left: 160%; opacity: 1; }
+    46%  { opacity: 0; }
+    100% { left: 160%; opacity: 0; }
+  }
+
+  /* Iridescent top edge - color-shifted light at the rim */
+  .cp-player .cp-refract-rim {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(160,210,255,0.35) 20%,
+      rgba(220,180,255,0.45) 40%,
+      rgba(255,255,255,0.55) 50%,
+      rgba(255,200,140,0.35) 65%,
+      rgba(160,230,200,0.3) 80%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: cpIridescent 5s linear infinite;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  @keyframes cpIridescent {
+    0%   { background-position: 0% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  :global(html[data-theme="light"]) .cp-player {
+    background: linear-gradient(
+      150deg,
+      rgba(255,255,255,0.72) 0%,
+      rgba(240,236,228,0.58) 50%,
+      rgba(235,230,220,0.55) 100%
+    );
+    border-color: rgba(0,0,0,0.08);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.95),
+      0 20px 60px rgba(0,0,0,0.18),
+      0 4px 16px rgba(0,0,0,0.1);
+  }
+  :global(html[data-theme="light"]) .cp-player::before {
+    background: linear-gradient(
+      130deg,
+      rgba(255,255,255,0.6) 0%,
+      rgba(255,255,255,0.2) 20%,
+      transparent 45%
+    );
+  }
+
+  .cp-min-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    cursor: pointer;
+    padding: 4px;
+    color: rgba(255,253,208,0.7);
+    display: flex;
+    z-index: 2;
+    border-radius: 50%;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: background 0.15s ease;
+  }
+  .cp-min-btn:hover { background: rgba(255,255,255,0.12); color: rgba(255,253,208,0.95); }
+  :global(html[data-theme="light"]) .cp-min-btn {
+    background: rgba(0,0,0,0.06);
+    border-color: rgba(0,0,0,0.1);
+    color: rgba(26,26,26,0.7);
+  }
+  :global(html[data-theme="light"]) .cp-min-btn:hover {
+    background: rgba(0,0,0,0.1);
+    color: rgba(26,26,26,0.9);
+  }
+
+  /* ── Cassette SVG ── */
+  .cp-cassette { display: flex; justify-content: center; position: relative; z-index: 1; }
+  .cp-cassette svg { width: 100%; }
+
+  .cp-c-body { fill: #1a1a22; stroke: rgba(255,255,255,0.18); stroke-width: 1.5; }
+  .cp-c-cover { fill: #111118; stroke: rgba(255,255,255,0.14); stroke-width: 0.75; }
+  .cp-c-line { stroke: rgba(255,255,255,0.1); stroke-width: 0.5; }
+  .cp-c-outer { fill: none; stroke: rgba(255,255,255,0.35); stroke-width: 1.2; }
+  .cp-c-mid { fill: none; stroke: rgba(255,255,255,0.2); stroke-width: 0.8; }
+  .cp-c-hub { fill: none; stroke: rgba(255,255,255,0.5); stroke-width: 1.5; }
+  .cp-c-hub-accent { fill: none; stroke: #F95F4A; stroke-width: 1.5; }
+  .cp-c-tape-l { fill: none; stroke: rgba(255,255,255,0.12); stroke-width: 7; }
+  .cp-c-tape-r { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 3; }
+  .cp-c-path { fill: none; stroke: rgba(255,255,255,0.18); stroke-width: 0.8; }
+  .cp-c-window { fill: rgba(0,0,0,0.5); stroke: rgba(255,255,255,0.18); stroke-width: 0.6; }
+  .cp-c-post { fill: rgba(255,255,255,0.3); }
+  .cp-c-pin { fill: rgba(255,255,255,0.15); }
+  .cp-c-screw { fill: #F95F4A; opacity: 0.6; }
+
+  .cp-spokes line {
+    stroke: rgba(255,255,255,0.25);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+  }
+  .cp-spokes-l { transform-origin: 92px 58px; }
+  .cp-spokes-r { transform-origin: 188px 58px; }
+  .cp-playing .cp-spokes-l { animation: cpSpin 2s linear infinite; }
+  .cp-playing .cp-spokes-r { animation: cpSpin 1.4s linear infinite; }
+  @keyframes cpSpin { to { transform: rotate(-360deg); } }
+
+  /* Track info on cassette label */
+  .cp-c-label-bg { fill: rgba(255,255,255,0.04); stroke: rgba(255,255,255,0.08); stroke-width: 0.5; }
+  .cp-c-title {
+    font-family: 'PolySans Trial', sans-serif;
+    font-size: 9px;
+    font-weight: 500;
+    fill: #FFFDD0;
+  }
+  .cp-c-artist-txt {
+    font-family: 'PolySans Mono', monospace;
+    font-size: 6.5px;
+    fill: rgba(255,253,208,0.55);
+    letter-spacing: 0.08em;
+  }
+
+  /* SVG buttons */
+  .cp-svg-btn-bg { fill: rgba(255,255,255,0.06); }
+  .cp-svg-btn-icon { fill: rgba(255,253,208,0.5); }
+  .cp-svg-btn:hover .cp-svg-btn-bg { fill: rgba(255,255,255,0.12); }
+  .cp-svg-btn:hover .cp-svg-btn-icon { fill: rgba(255,253,208,0.8); }
+
+  .cp-svg-play-bg { fill: #F95F4A; }
+  .cp-svg-play:hover .cp-svg-play-bg { fill: #e8513d; }
+
+  /* Progress bar */
+  .cp-c-prog-bg { fill: rgba(255,255,255,0.08); }
+  .cp-c-prog-fill { fill: #F95F4A; }
+  .cp-c-time {
+    font-family: 'PolySans Mono', monospace;
+    font-size: 5px;
+    fill: rgba(255,253,208,0.35);
+  }
+
+  /* Light mode cassette overrides */
+  :global(html[data-theme="light"]) .cp-c-body { fill: #e8e0d0; stroke: rgba(0,0,0,0.12); }
+  :global(html[data-theme="light"]) .cp-c-cover { fill: #2a2420; }
+  :global(html[data-theme="light"]) .cp-c-label-bg { fill: rgba(255,255,255,0.06); stroke: rgba(255,255,255,0.1); }
+  :global(html[data-theme="light"]) .cp-c-title { fill: rgba(255,253,208,0.9); }
+  :global(html[data-theme="light"]) .cp-c-artist-txt { fill: rgba(255,253,208,0.45); }
+  :global(html[data-theme="light"]) .cp-svg-btn-bg { fill: rgba(0,0,0,0.08); }
+  :global(html[data-theme="light"]) .cp-svg-btn-icon { fill: rgba(26,26,26,0.65); }
+  :global(html[data-theme="light"]) .cp-c-prog-bg { fill: rgba(0,0,0,0.08); }
+  :global(html[data-theme="light"]) .cp-c-time { fill: rgba(26,26,26,0.5); }
+  :global(html[data-theme="light"]) .cp-c-pin { fill: rgba(0,0,0,0.1); }
+  :global(html[data-theme="light"]) .cp-c-window { fill: rgba(0,0,0,0.12); }
+
+  /* ── Volume slider ── */
+  .cp-vol-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 6px 4px 0;
+    position: relative;
+    z-index: 1;
+  }
+  .cp-vol-icon {
+    display: flex;
+    flex-shrink: 0;
+    color: rgba(255,253,208,0.4);
+    opacity: 0.6;
+  }
+  :global(html[data-theme="light"]) .cp-vol-icon { color: rgba(26,26,26,0.4); }
+
+  .cp-slider-area {
+    position: relative;
+    flex: 1;
+    cursor: grab;
+    padding: 0.6rem 0;
+    touch-action: none;
+    user-select: none;
+  }
+  .cp-slider-area:active,
+  .cp-slider-area.cp-dragging { cursor: grabbing; }
+
+  .cp-slider-wrap {
+    transition: all 0.5s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .cp-slider-track {
+    height: 4px;
+    border-radius: 9999px;
+    overflow: hidden;
+    background: rgba(128,128,128,0.25);
+    transition: height 0.15s ease;
+  }
+  .cp-slider-area:hover .cp-slider-track,
+  .cp-slider-area.cp-dragging .cp-slider-track {
+    height: 8px;
+  }
+  .cp-slider-fill {
+    height: 100%;
+    width: 0%;
+    background: #F95F4A;
+    border-radius: 9999px;
+  }
+
+  /* ── Responsive ── */
+  /* Mobile: MobileNavbar morphs into player; keep audio element only, hide UI */
+  @media (max-width: 1024px) {
+    .cp-mini,
+    .cp-player { display: none !important; }
+  }
+</style>

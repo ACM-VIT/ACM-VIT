@@ -1,0 +1,20 @@
+---
+export const prerender = true;
+import Layout from "../layouts/Layout.astro";
+import "../styles/globals.css";
+import CodeOfConduct from "../sections/CodeOfConduct.astro";
+import Footer from "../layouts/Footer.astro";
+---
+
+<Layout pageTitle="Code of Conduct" backHref="/">
+  <section class="coc-page">
+    <CodeOfConduct />
+  </section>
+  <Footer />
+</Layout>
+
+<style>
+  .coc-page {
+    padding-top: 6rem;
+  }
+</style>

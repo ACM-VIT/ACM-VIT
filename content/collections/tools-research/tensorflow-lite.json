@@ -1,0 +1,7 @@
+{
+  "name": "TensorFlow Lite",
+  "slug": "tensorflow-lite",
+  "svgFile": "/domains/research/tools/research-tool-tensorflow-lite.svg",
+  "colorHex": "#FF6F00",
+  "order": 300
+}

@@ -1,0 +1,81 @@
+{
+  "slug": "algos-for-all-amigos",
+  "title": "Algos for all Amigos",
+  "tagline": "This repository consists an implementation of the Algorithms encountered in Computer Science, Physics and Mathematics.",
+  "eyebrow": "ACM-VIT · Forktober 2021 · Open Source",
+  "themeColor": "#EFEFEF",
+  "themeColorSecondary": "#1a1a1a",
+  "shortDescription": "This repository consists an implementation of the Algorithms encountered in Computer Science, Physics and Mathematics.",
+  "longDescription": [
+    "This repository consists an implementation of the Algorithms encountered in Computer Science, Physics and Mathematics.",
+    "Algos for all Amigos was part of ACM-VIT's Forktober open-source drive in 2021, opening up to student contributors during Hacktoberfest.",
+    "The repository is archived. It remains on GitHub as a record of the Forktober edition that ran it, but is no longer accepting new contributions.",
+    "Across its lifetime, the project drew 7 contributors, 11 pull requests and 31 commits."
+  ],
+  "status": "archived",
+  "statusNote": "Forktober 2021 · Archived",
+  "cassetteSvg": "/events/events-forktober-cassette.svg",
+  "stats": [
+    {
+      "value": "7",
+      "label": "Contributors"
+    },
+    {
+      "value": "11",
+      "label": "Pull requests"
+    },
+    {
+      "value": "31",
+      "label": "Commits"
+    },
+    {
+      "value": "9",
+      "label": "Stars"
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Stack",
+      "slugs": [
+        "cplusplus",
+        "python"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "Chasmiccoder"
+    },
+    {
+      "github": "nilupulmanodya"
+    },
+    {
+      "github": "Karun842002"
+    },
+    {
+      "github": "Devansh-ops"
+    },
+    {
+      "github": "Anshika0924"
+    },
+    {
+      "github": "Prasang023"
+    }
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/ACM-VIT/Algos-for-all-Amigos",
+      "kind": "github"
+    }
+  ],
+  "commitGraphSeed": 949,
+  "order": 320
+}

@@ -1,0 +1,364 @@
+---
+export const prerender = true;
+
+import Layout from "../../layouts/Layout.astro";
+import Footer from "../../layouts/Footer.astro";
+import "../../styles/globals.css";
+import "../../styles/design-domain.css";
+import { getAssetUrl } from "../../utils/cdn";
+import ToolCard from "../../components/ToolCard.astro";
+import FillButton from "../../components/ui/FillButton.astro";
+import {
+  DESIGN_THEME_COLOR,
+  designTools,
+  designAOIs,
+  designHero,
+  designDescription,
+  designStats,
+  designFooterMessage,
+} from "../../data/designDomainData";
+
+const designEventsCustom = [
+  {
+    slug: "reverse-coding",
+    title: "Reverse Coding",
+    cassette: "/events/events-reverse-coding-cassette.svg",
+    desc: "Every year, Reverse Coding has a new theme related to art and pop culture - all designed by the design domain.",
+  },
+  {
+    slug: "cryptic-hunt",
+    title: "Cryptic Hunt",
+    cassette: "/events/events-cryptic-hunt-cassette.svg",
+    desc: "One of India's largest scavenger hunts, built around our signature owls. Every year the owl theme changes - and the design domain brings it to life.",
+  },
+  {
+    slug: "code2create",
+    title: "Code2Create",
+    cassette: "/events/events-c2c-cassette.webp",
+    desc: "ACM-VIT's flagship hackathon. Every piece of design work for C2C is crafted entirely by ACM members.",
+  },
+  {
+    slug: null,
+    title: "Every Event",
+    cassette: "/cassettes/cassettes-cassette-design.svg",
+    desc: "The design domain works on the designs for every ACM-VIT event. Check out more of our work on ACM-VIT's Instagram.",
+  },
+];
+
+const pyramidSizes = [3, 5, 8, 11];
+const pyramidRows: (typeof designTools)[] = [];
+let offset = 0;
+for (const size of pyramidSizes) {
+  pyramidRows.push(designTools.slice(offset, offset + size));
+  offset += size;
+}
+---
+
+<Layout pageTitle="Design" backHref="/#domains">
+  <div style={`--domain-color: ${DESIGN_THEME_COLOR};`}>
+
+    <!-- Hero: illustration on top, then title, desc, stats -->
+    <section class="dsg-hero">
+      <div class="dsg-hero-centered">
+        <img
+          src={getAssetUrl("/aois/design/cassettes/aois-design-cassettes-design-illustration.webp")}
+          alt="Design Illustration"
+          class="dsg-hero-illustration"
+          data-dsg-animate="fade-up"
+          loading="eager"
+          decoding="async"
+        />
+        <nav class="dsg-hero-crumbs" aria-label="Breadcrumb" data-dsg-animate="fade-up">
+          <svg class="dsg-hero-crumb-reel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <circle cx="12" cy="12" r="3.4" />
+            <path d="M12 2v6.6M12 15.4V22M2 12h6.6M15.4 12H22" />
+          </svg>
+          <ol>
+            <li><a href="/">Home</a></li>
+            <li><a href="/#domains">Domains</a></li>
+            <li aria-current="page">Design</li>
+          </ol>
+        </nav>
+        <h1 class="dsg-hero-title" data-dsg-animate="fade-up">
+          DESIGN
+        </h1>
+        <p class="dsg-hero-desc" data-dsg-animate="fade-up">
+          {designHero}
+        </p>
+        <div data-dsg-animate="fade-up">
+          <a href="#design-aois" class="dsg-hero-cta">
+            Explore AOIs
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="dsg-stats">
+      {designStats.map((stat) => (
+        <div class="dsg-stat" data-dsg-animate="fade-up">
+          <div class="dsg-stat-value">{stat.value}</div>
+          <div class="dsg-stat-label">{stat.label}</div>
+        </div>
+      ))}
+    </section>
+
+    <!-- Description -->
+    <section class="dsg-about">
+      <div class="dsg-about-inner">
+        <h2 class="dsg-about-heading" data-dsg-animate="fade-up">
+          What we <span>do</span>
+        </h2>
+        <div class="dsg-about-body" data-dsg-animate="fade-up">
+          {designDescription.map((p) => <p>{p}</p>)}
+        </div>
+      </div>
+    </section>
+
+    <!-- Design Guide CTA -->
+    <section class="dsg-guide">
+      <a href="/design" class="dsg-guide-card" data-dsg-animate="fade-up">
+        <div class="dsg-guide-mark" aria-hidden="true">
+          <img
+            src={getAssetUrl("/design/logos/acm-diamond-design.svg")}
+            alt=""
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <div class="dsg-guide-body">
+          <h2>The ACM Design Guide</h2>
+          <p>
+            The single source of truth for how ACM-VIT looks and moves - the mark,
+            the palette, typography, grids, and motion. Written and kept sharp by
+            this domain.
+          </p>
+          <ul class="dsg-guide-chips">
+            <li>Logo</li>
+            <li>Color</li>
+            <li>Typography</li>
+            <li>Grid</li>
+            <li>Motion</li>
+            <li>Social</li>
+          </ul>
+        </div>
+        <span class="dsg-guide-cta">
+          Read the guide
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </a>
+    </section>
+
+    <hr class="dsg-divider" />
+
+    <!-- Tools Grid -->
+    <section class="dsg-tools">
+      <div class="dsg-tools-header">
+        <p class="dsg-tools-label" data-dsg-animate="fade-up">Our Arsenal</p>
+        <h2 class="dsg-tools-title" data-dsg-animate="fade-up">Tools We Use</h2>
+      </div>
+      <div class="dsg-tools-pyramid">
+        {pyramidRows.map((row, rowIdx) => (
+          <div class="dsg-tools-pyramid-row">
+            {row.map((tool, i) => {
+              const globalIdx = [0, 3, 8, 16][rowIdx] + i;
+              return <ToolCard tool={tool} index={globalIdx} />;
+            })}
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <hr class="dsg-divider" />
+
+    <!-- AOI Showcase -->
+    <section class="dsg-aoi" id="design-aois">
+      <div class="dsg-aoi-header">
+        <p class="dsg-aoi-label" data-dsg-animate="fade-up">Explore</p>
+        <h2 class="dsg-aoi-title" data-dsg-animate="fade-up">Areas of Interest</h2>
+      </div>
+      <div class="dsg-aoi-list">
+        {designAOIs.map((aoi) => (
+          <a
+            href={`/domains/design/${aoi.key}`}
+            class="dsg-aoi-item"
+            data-dsg-animate="fade-up"
+          >
+            <div class="dsg-aoi-img-wrap">
+              <img
+                src={getAssetUrl(aoi.cassetteSrc)}
+                alt={aoi.title}
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div class="dsg-aoi-info">
+              <h3>{aoi.title}</h3>
+              <p>{aoi.shortDescription}</p>
+              <span class="dsg-aoi-link-text">Learn more</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <hr class="dsg-divider" />
+
+    <!-- Design Events -->
+    <section class="dsg-events">
+      <div class="dsg-events-header">
+        <p class="dsg-events-label" data-dsg-animate="fade-up">Events</p>
+        <h2 class="dsg-events-title" data-dsg-animate="fade-up">Design in Action</h2>
+      </div>
+      <div class="dsg-events-row">
+        {designEventsCustom.map((event) => (
+          event.slug ? (
+            <a href={`/events/${event.slug}`} class="dsg-event-card" data-dsg-animate="fade-up">
+              <img
+                src={getAssetUrl(event.cassette)}
+                alt={event.title}
+                loading="lazy"
+                decoding="async"
+              />
+              <h4>{event.title}</h4>
+              <p>{event.desc}</p>
+            </a>
+          ) : (
+            <a href="https://www.instagram.com/acmvit/" target="_blank" rel="noopener noreferrer" class="dsg-event-card" data-dsg-animate="fade-up">
+              <img
+                src={getAssetUrl(event.cassette)}
+                alt={event.title}
+                loading="lazy"
+                decoding="async"
+              />
+              <h4>
+                {event.title}
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; margin-left:0.35em; vertical-align:middle;"><path d="M7 17L17 7M9 7h8v8"/></svg>
+              </h4>
+              <p>{event.desc}</p>
+            </a>
+          )
+        ))}
+      </div>
+    </section>
+
+    <!-- Footer with cassette fan -->
+    <section class="dsg-footer-section">
+      <div class="dsg-cassette-fan" data-dsg-fan>
+        {designAOIs.map((aoi, i) => (
+          <div class="dsg-fan-card" style={`--fan-index: ${i}`} data-fan-card>
+            <img
+              src={getAssetUrl(aoi.cassetteSrc)}
+              alt={aoi.title}
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        ))}
+      </div>
+      <p class="dsg-footer-msg">{designFooterMessage}</p>
+      <FillButton href="/" label="Back to Home" style={`--proj-color: ${DESIGN_THEME_COLOR}; --proj-color-secondary: #0d0e0d;`}>
+        <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </FillButton>
+    </section>
+  </div>
+
+  <Footer />
+</Layout>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Entry timeline - paused until preloader finishes
+  const entry = gsap.timeline({ defaults: { ease: "power3.out" }, paused: true });
+
+  // Hero centered elements fadeUp
+  const heroEls = document.querySelectorAll('.dsg-hero-centered [data-dsg-animate="fade-up"]');
+  entry.fromTo(heroEls,
+    { opacity: 0, y: 30 },
+    { opacity: 1, y: 0, duration: 0.6, stagger: 0.12 }
+  );
+
+  // Play after preloader
+  window.addEventListener("preloader:done", () => entry.play(), { once: true });
+
+  // Footer cassette fan - scroll triggered
+  const fanCards = document.querySelectorAll("[data-fan-card]");
+  const fanSection = document.querySelector(".dsg-cassette-fan");
+
+  if (fanSection && fanCards.length > 0) {
+    // 5 cards fanned: far-left, left, center, right, far-right
+    const fanAngles = [-30, -15, 0, 15, 30];
+    const fanOffsetsX = [-280, -140, 0, 140, 280];
+    const fanOffsetsY = [40, 10, -10, 10, 40];
+
+    fanCards.forEach((card) => {
+      gsap.set(card, { opacity: 0, rotation: 0, x: 0, y: 40, scale: 0.5 });
+    });
+
+    const fanTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: fanSection,
+        start: "top 80%",
+        once: true,
+      },
+    });
+
+    // Fan cards spread out with stagger
+    fanCards.forEach((card, i) => {
+      fanTl.to(card, {
+        opacity: 1,
+        rotation: fanAngles[i] ?? 0,
+        x: fanOffsetsX[i] ?? 0,
+        y: fanOffsetsY[i] ?? 0,
+        scale: 1,
+        duration: 0.6,
+        ease: "back.out(1.2)",
+      }, i === 0 ? "+=0" : "-=0.45");
+    });
+  }
+
+  // Scroll-triggered animations for sections below hero
+  const scrollEls = document.querySelectorAll(
+    '.dsg-about [data-dsg-animate], .dsg-guide [data-dsg-animate], .dsg-tools [data-dsg-animate], .dsg-aoi [data-dsg-animate], .dsg-events [data-dsg-animate], .dsg-stats [data-dsg-animate], .dsg-footer-section [data-dsg-animate]'
+  );
+  scrollEls.forEach((el) => {
+    gsap.fromTo(el,
+      { opacity: 0, y: 24 },
+      {
+        opacity: 1, y: 0, duration: 0.6, ease: "power2.out",
+        delay: parseFloat((el as HTMLElement).style.getPropertyValue('--card-delay') || '0'),
+        scrollTrigger: {
+          trigger: el,
+          start: "top 88%",
+          once: true,
+        },
+      }
+    );
+  });
+
+  // AOI card hover tilt
+  document.querySelectorAll('.dsg-aoi-item').forEach((card) => {
+    card.addEventListener('mousemove', (e: Event) => {
+      const me = e as MouseEvent;
+      const rect = (card as HTMLElement).getBoundingClientRect();
+      const x = (me.clientX - rect.left) / rect.width;
+      const y = (me.clientY - rect.top) / rect.height;
+      const rotateX = (0.5 - y) * 6;
+      const rotateY = (x - 0.5) * 6;
+      (card as HTMLElement).style.transform =
+        `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      (card as HTMLElement).style.transform = '';
+    });
+  });
+</script>

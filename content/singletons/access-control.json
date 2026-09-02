@@ -1,0 +1,48 @@
+{
+  "defaultRole": "viewer",
+  "roles": [
+    {
+      "id": "owner",
+      "label": "Owner",
+      "description": "Full control: edit everything, publish, and manage roles + members.",
+      "canEditAll": true,
+      "canEditCollections": [],
+      "canPublish": true,
+      "canManageAccess": true
+    },
+    {
+      "id": "editor",
+      "label": "Editor",
+      "description": "Edit and publish all content. Cannot manage roles.",
+      "canEditAll": true,
+      "canEditCollections": [],
+      "canPublish": true,
+      "canManageAccess": false
+    },
+    {
+      "id": "contributor",
+      "label": "Contributor",
+      "description": "Edit a limited set of collections. Changes are proposed for review, not published directly.",
+      "canEditAll": false,
+      "canEditCollections": ["events", "calendarEvents", "blogRefs", "achievements"],
+      "canPublish": false,
+      "canManageAccess": false
+    },
+    {
+      "id": "viewer",
+      "label": "Viewer",
+      "description": "Read-only. Can browse the Studio but not change anything.",
+      "canEditAll": false,
+      "canEditCollections": [],
+      "canPublish": false,
+      "canManageAccess": false
+    }
+  ],
+  "members": [
+    {
+      "githubUsername": "JuxtaRYCT",
+      "name": "Yash Raj Singh",
+      "role": "owner"
+    }
+  ]
+}

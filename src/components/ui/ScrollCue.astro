@@ -1,0 +1,574 @@
+---
+/**
+ * ScrollCue - a "there's more below" nudge styled as a strip of magnetic tape
+ * feeding downward through a spool window. A playhead dot runs the track, a
+ * chevron pulses down, and a PolySans-Mono label reads "SCROLL".
+ *
+ * Three modes:
+ *  - "hero"  (default): absolutely pinned to the bottom of a full-height first
+ *    section. Visible while the hero is on screen (reuses body.hero-in-view,
+ *    which Hero.astro toggles) and the page is near the top. Used on the home
+ *    hero.
+ *  - "fixed": viewport-fixed at bottom-centre, for any ordinary scrolling page.
+ *    Visible only near the top AND when the page actually has room to scroll.
+ *    Rendered globally from Layout.astro on subpages.
+ *  - "dock": once the user scrolls past the hero, the cue relocates to the top
+ *    of the screen, docked beside the navbar as a small glass bubble styled to
+ *    match the header pill. On pages/sections where the scroll pattern is
+ *    unusual (parallax, scrollytelling, pinned scenes) - marked with
+ *    `[data-scroll-nudge]` - the bubble expands into a "KEEP SCROLLING" pill so
+ *    users know to keep going. Reveal is gated by a `[data-cue-anchor]` element
+ *    (falls back to `.hero-section`): hidden while the anchor is on screen, the
+ *    bottom-centre hero cue owns that moment.
+ *
+ * hero/fixed fade out the moment the user scrolls; dock persists at the top.
+ * All modes are desktop-only (the mobile bottom navbar owns that lane
+ * ≤1024px), respect prefers-reduced-motion, and scroll to `target` / the next
+ * nudge section / one viewport down on click / Enter.
+ */
+export interface Props {
+  target?: string;
+  label?: string;
+  mode?: "hero" | "fixed" | "dock";
+}
+const { target, label = "SCROLL", mode = "hero" } = Astro.props;
+---
+
+{mode === "dock" ? (
+  <button
+    class="scroll-cue scroll-dock"
+    type="button"
+    data-scroll-cue
+    data-cue-mode="dock"
+    data-scroll-target={target}
+    aria-label="Keep scrolling"
+  >
+    {/* Label unfurls to the left; the port stays pinned at the right edge so
+        the resting circle doesn't jump when it expands. */}
+    <span class="dock-label">Keep scrolling</span>
+    {/* Compact cassette port - a playhead dot runs a short tape, chevron feel */}
+    <span class="dock-icon" aria-hidden="true">
+      <span class="dock-tape"></span>
+      <span class="dock-playhead"></span>
+    </span>
+  </button>
+) : (
+  <button
+    class:list={["scroll-cue", { "is-fixed": mode === "fixed" }]}
+    type="button"
+    data-scroll-cue
+    data-cue-mode={mode}
+    data-scroll-target={target}
+    aria-label={`${label} to continue`}
+  >
+    <span class="cue-label">{label}</span>
+
+    <span class="cue-spool" aria-hidden="true">
+      <span class="cue-tape"></span>
+      <span class="cue-playhead"></span>
+    </span>
+  </button>
+)}
+
+<style>
+  .scroll-cue {
+    /* hero mode: sits at the bottom-centre of the hero section (legends hug the
+       corners, so the middle lane is clear). */
+    position: absolute;
+    bottom: clamp(1.25rem, 3.5vh, 2.25rem);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 40;
+
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.55rem;
+
+    padding: 0.4rem 0.6rem;
+    margin: 0;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    color: #fefcd9;
+    -webkit-tap-highlight-color: transparent;
+
+    opacity: 0;
+    transform: translate(-50%, 8px);
+    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+  }
+
+  /* fixed mode: pinned to the viewport for ordinary subpages. */
+  .scroll-cue.is-fixed {
+    position: fixed;
+  }
+
+  /* Shown state - driven by [data-cue-visible] from the script. */
+  .scroll-cue[data-cue-visible="true"] {
+    opacity: 1;
+    transform: translate(-50%, 0);
+    pointer-events: auto;
+  }
+
+  .cue-label {
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.34em;
+    /* optical: the tracking pushes the block right, nudge it back */
+    text-indent: 0.34em;
+    text-transform: uppercase;
+    color: rgba(254, 252, 217, 0.72);
+    transition: color 0.3s ease;
+  }
+
+  /* Spool window - the little cassette port the tape runs through. */
+  .cue-spool {
+    position: relative;
+    width: 26px;
+    height: 42px;
+    border-radius: 999px;
+    border: 1.5px solid rgba(254, 252, 217, 0.4);
+    overflow: hidden;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  /* Faint tape line the playhead rides. */
+  .cue-tape {
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    left: 50%;
+    width: 2px;
+    transform: translateX(-50%);
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(254, 252, 217, 0.28) 0 3px,
+      transparent 3px 7px
+    );
+  }
+
+  .cue-playhead {
+    position: absolute;
+    top: 7px;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    margin-left: -2.5px;
+    border-radius: 50%;
+    background: #f95f4a;
+    box-shadow: 0 0 8px rgba(249, 95, 74, 0.75);
+    animation: cuePlayhead 1.9s cubic-bezier(0.6, 0, 0.4, 1) infinite;
+  }
+
+  @keyframes cuePlayhead {
+    0%   { transform: translateY(0);    opacity: 0; }
+    18%  { opacity: 1; }
+    72%  { opacity: 1; }
+    100% { transform: translateY(23px); opacity: 0; }
+  }
+
+  /* Hover / focus - light the whole cue with the accent. */
+  .scroll-cue:hover .cue-label,
+  .scroll-cue:focus-visible .cue-label {
+    color: #f95f4a;
+  }
+  .scroll-cue:hover .cue-spool,
+  .scroll-cue:focus-visible .cue-spool {
+    border-color: rgba(249, 95, 74, 0.7);
+    box-shadow: 0 0 18px rgba(249, 95, 74, 0.25);
+  }
+  .scroll-cue:focus-visible {
+    outline: none;
+  }
+
+  /* ══ Dock mode ═══════════════════════════════════════════════════════════
+     Once past the hero, the cue lives up top beside the navbar as a small
+     glass bubble matched to the header pill, expanding into a "keep scrolling"
+     pill on unusual-scroll sections. Animation tokens from /design/motion:
+     Standard-out (0.22,1,0.36,1) for reveal, Snap (0.34,1.56,0.64,1) for the
+     pill expand, gentle(450)/base(250) durations. */
+  .scroll-dock {
+    /* header lane: top-5 (20px) + header py-2 (8px) puts the 44px pill at 28px.
+       Both corners are taken - .brand-logos owns top-left, the theme bulb owns
+       top-right (right:32px) - so bed in just left of the bulb and grow the
+       "keep scrolling" pill leftward (right edge pinned) toward the navbar. */
+    position: fixed;
+    top: 1.75rem;
+    right: 84px;
+    left: auto;
+    bottom: auto;
+    z-index: 45;
+
+    flex-direction: row;
+    gap: 0;
+    height: 44px;
+    min-width: 44px;
+    padding: 0;
+    border-radius: 100px;
+    /* collapsed: icon centered in the 44px circle. expanded: right edge is
+       pinned (position:fixed right), so the box grows leftward as the label
+       unfurls - the port stays hard against the right side. */
+    justify-content: center;
+
+    /* glass, ported from .header-pill tokens */
+    background: rgba(6, 2, 2, 0.22);
+    backdrop-filter: blur(32px) saturate(220%);
+    -webkit-backdrop-filter: blur(32px) saturate(220%);
+    border: 1px solid rgba(249, 95, 74, 0.75);
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.5),
+      0 0 18px rgba(249, 95, 74, 0.1),
+      0 0 6px rgba(249, 95, 74, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    color: #fefcd9;
+    overflow: hidden;
+
+    /* Scale in lockstep with the navbar (shrinks from its top edge via
+       --nav-bar-scale) so the two share a top edge - and therefore the same
+       vertical centre and height - at every width. Origin top-right keeps the
+       right anchor + top edge fixed while it scales. */
+    transform-origin: top right;
+
+    /* hidden until scrolled past the anchor: drop down into the header band */
+    opacity: 0;
+    transform: translateY(-8px) scale(var(--nav-bar-scale, 1));
+    pointer-events: none;
+    transition:
+      opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      padding 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+      gap 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+      box-shadow 0.3s ease,
+      border-color 0.3s ease;
+  }
+
+  /* Revealed - docked at the top. Exit (back to hidden) is quicker per the
+     motion guide, so the reveal transition above stays the enter timing and we
+     don't shorten it on the way out here. */
+  .scroll-dock[data-cue-docked="true"] {
+    opacity: 1;
+    transform: translateY(0) scale(var(--nav-bar-scale, 1));
+    pointer-events: auto;
+  }
+
+  /* Expanded into the "keep scrolling" pill on unusual-scroll sections */
+  .scroll-dock.is-nudging {
+    padding: 0 12px 0 16px;
+    gap: 8px;
+    border-color: rgba(249, 95, 74, 1);
+    box-shadow:
+      0 12px 40px rgba(0, 0, 0, 0.55),
+      0 0 24px rgba(249, 95, 74, 0.18),
+      0 0 8px rgba(249, 95, 74, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+
+  /* Compact cassette port - playhead runs a short tape line */
+  .dock-icon {
+    position: relative;
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+  .dock-tape {
+    position: absolute;
+    top: 3px;
+    bottom: 3px;
+    left: 50%;
+    width: 2px;
+    transform: translateX(-50%);
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(254, 252, 217, 0.32) 0 3px,
+      transparent 3px 7px
+    );
+  }
+  .dock-playhead {
+    position: absolute;
+    top: 3px;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    margin-left: -2.5px;
+    border-radius: 50%;
+    background: #f95f4a;
+    box-shadow: 0 0 8px rgba(249, 95, 74, 0.75);
+    animation: dockPlayhead 1.9s cubic-bezier(0.6, 0, 0.4, 1) infinite;
+  }
+  @keyframes dockPlayhead {
+    0%   { transform: translateY(0);    opacity: 0; }
+    18%  { opacity: 1; }
+    72%  { opacity: 1; }
+    100% { transform: translateY(13px); opacity: 0; }
+  }
+
+  .dock-label {
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.24em;
+    text-indent: 0.24em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: rgba(254, 252, 217, 0.9);
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition:
+      max-width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+      opacity 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .scroll-dock.is-nudging .dock-label {
+    max-width: 140px;
+    opacity: 1;
+  }
+
+  /* Hover / focus - light with the accent, matching the pill's hover feel */
+  .scroll-dock:hover,
+  .scroll-dock:focus-visible {
+    border-color: rgba(249, 95, 74, 1);
+    box-shadow:
+      0 12px 40px rgba(0, 0, 0, 0.55),
+      0 0 24px rgba(249, 95, 74, 0.16),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+  .scroll-dock:hover .dock-label,
+  .scroll-dock:focus-visible .dock-label {
+    color: #f95f4a;
+  }
+  .scroll-dock:focus-visible {
+    outline: none;
+  }
+
+  /* Dock light mode - dark fill to sit against a light page, like subpage pill */
+  :global(html[data-theme="light"]) .scroll-dock {
+    background: rgba(20, 20, 24, 0.85);
+    border-color: rgba(249, 95, 74, 0.6);
+    color: #fefcd9;
+  }
+  :global(html[data-theme="light"]) .scroll-dock .dock-label {
+    color: rgba(254, 252, 217, 0.9);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dock-playhead {
+      animation: none;
+      top: 50%;
+      margin-top: -2.5px;
+      opacity: 1;
+    }
+    .scroll-dock,
+    .scroll-dock .dock-label {
+      transition: opacity 0.2s ease;
+    }
+  }
+
+  /* ── Light mode ── */
+  :global(html[data-theme="light"]) .scroll-cue {
+    color: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .cue-label {
+    color: rgba(26, 26, 26, 0.6);
+  }
+  :global(html[data-theme="light"]) .cue-spool {
+    border-color: rgba(26, 26, 26, 0.32);
+  }
+  :global(html[data-theme="light"]) .cue-tape {
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(26, 26, 26, 0.24) 0 3px,
+      transparent 3px 7px
+    );
+  }
+
+  /* ── Reduced motion - hold everything still, keep it legible ── */
+  @media (prefers-reduced-motion: reduce) {
+    .cue-playhead {
+      animation: none;
+      top: 50%;
+      margin-top: -2.5px;
+      opacity: 1;
+    }
+    .scroll-cue {
+      transition: opacity 0.3s ease;
+    }
+  }
+
+  /* Desktop only. ≤1024px the mobile bottom navbar (and page docks) own the
+     bottom-centre lane, and touch scrolling needs no nudge. */
+  @media (max-width: 1024px) {
+    .scroll-cue { display: none !important; }
+  }
+
+  /* Very short landscape screens: the first view is cramped, don't crowd it. */
+  @media (max-height: 520px) {
+    .scroll-cue { display: none !important; }
+  }
+</style>
+
+<script>
+  // The component script is bundled once but the cue can render several times
+  // per page (hero cue + dock), so wire up every instance, branching on mode.
+
+  // ── hero / fixed: a near-top nudge that steps aside once the user scrolls ──
+  function initTopCue(cue: HTMLButtonElement) {
+    const mode = cue.dataset.cueMode === "fixed" ? "fixed" : "hero";
+    const HIDE_AFTER = 40; // px
+    const SCROLL_ROOM = 300; // px of real scroll before "fixed" mode bothers
+
+    let hasScroll = false;
+    const measure = () => {
+      hasScroll =
+        document.documentElement.scrollHeight - window.innerHeight > SCROLL_ROOM;
+    };
+
+    const update = () => {
+      const nearTop = window.scrollY < HIDE_AFTER;
+      const ok =
+        mode === "fixed"
+          ? nearTop && hasScroll
+          : nearTop && document.body.classList.contains("hero-in-view");
+      cue.dataset.cueVisible = ok ? "true" : "false";
+    };
+
+    measure();
+    cue.dataset.cueVisible =
+      window.scrollY < HIDE_AFTER && (mode !== "fixed" || hasScroll)
+        ? "true"
+        : "false";
+
+    const remeasure = () => {
+      measure();
+      update();
+    };
+
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", remeasure, { passive: true });
+    window.addEventListener("load", remeasure);
+    window.addEventListener("variants-mounted", remeasure);
+    setTimeout(remeasure, 300);
+    setTimeout(remeasure, 1200);
+
+    cue.addEventListener("click", () => {
+      const sel = cue.dataset.scrollTarget;
+      const dest = sel ? document.querySelector(sel) : null;
+      if (dest) dest.scrollIntoView({ behavior: "smooth", block: "start" });
+      else window.scrollBy({ top: window.innerHeight * 0.9, behavior: "smooth" });
+    });
+  }
+
+  // ── dock: relocates to the top beside the navbar once past the hero, and
+  //    swells into a "keep scrolling" pill inside unusual-scroll sections ──
+  function initDock(dock: HTMLButtonElement) {
+    // The dock is shown only once the user is past the opening view AND hasn't
+    // reached the footer yet.
+    let revealed = false; // scrolled past the anchor / first screen
+    let atFooter = false; // footer's bottom reached (page end)
+    let nudging = false; // inside a [data-scroll-nudge] section
+    let activeNudge: Element | null = null; // the active nudge section
+    const apply = () => {
+      const docked = revealed && !atFooter;
+      dock.dataset.cueDocked = docked ? "true" : "false";
+      // Mirror the "keep scrolling" state to the mobile navbar, which owns the
+      // bottom lane ≤1024px (the dock itself is display:none there). Active only
+      // when the dock would be showing AND swelled. A section can override the
+      // copy/direction via data-nudge-label / data-nudge-dir (e.g. projects,
+      // which is a sideways swipe carousel on phones).
+      window.dispatchEvent(
+        new CustomEvent("cue:nudge", {
+          detail: {
+            active: docked && nudging,
+            label:
+              activeNudge?.getAttribute("data-nudge-label") || "Keep scrolling",
+            dir: activeNudge?.getAttribute("data-nudge-dir") || "y",
+          },
+        })
+      );
+    };
+
+    // Reveal: hidden while the anchor (hero / first scene) is on screen - that
+    // moment belongs to the bottom-centre hint. Show once it has scrolled away.
+    // IntersectionObserver so it works whether the window or <body> scrolls.
+    const anchor =
+      document.querySelector("[data-cue-anchor]") ||
+      document.querySelector(".hero-section");
+
+    if (anchor) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) revealed = e.intersectionRatio < 0.15;
+          apply();
+        },
+        { threshold: [0, 0.15, 0.5, 1] }
+      );
+      io.observe(anchor);
+    } else {
+      // No anchor on the page - reveal after a screen of scroll.
+      const onScroll = () => {
+        revealed = (window.scrollY || 0) > window.innerHeight * 0.6;
+        apply();
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+    }
+
+    // Footer: retire the dock once the footer's BOTTOM hits the viewport - i.e.
+    // the page is scrolled to its very end, nothing left to scroll toward.
+    // The footer is cloned in from a `[data-variant]` <template> on
+    // `variants-mounted`, so it isn't in the DOM at init - re-query lazily each
+    // check. getBoundingClientRect is scroller-agnostic (<body> scroller ok).
+    const checkFooter = () => {
+      const footer =
+        document.querySelector("#footer") || document.querySelector("footer");
+      if (!footer) return;
+      atFooter = footer.getBoundingClientRect().bottom <= window.innerHeight + 1;
+      apply();
+    };
+    window.addEventListener("scroll", checkFooter, { passive: true });
+    window.addEventListener("resize", checkFooter, { passive: true });
+    window.addEventListener("variants-mounted", checkFooter);
+    checkFooter();
+
+    // Expand: any [data-scroll-nudge] section sitting in the middle band of the
+    // viewport means the user is in a confusing-scroll zone.
+    const nudges = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-scroll-nudge]")
+    );
+    if (nudges.length) {
+      const active = new Set<Element>();
+      const io2 = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) active.add(e.target);
+            else active.delete(e.target);
+          }
+          nudging = active.size > 0;
+          activeNudge = nudging ? active.values().next().value : null;
+          dock.classList.toggle("is-nudging", nudging);
+          apply();
+        },
+        { rootMargin: "-35% 0px -35% 0px", threshold: 0 }
+      );
+      nudges.forEach((n) => io2.observe(n));
+    }
+
+    // Click: keep going - one viewport down (or the explicit target when set
+    // and we're not mid-nudge).
+    dock.addEventListener("click", () => {
+      const sel = dock.dataset.scrollTarget;
+      const dest =
+        sel && !dock.classList.contains("is-nudging")
+          ? document.querySelector(sel)
+          : null;
+      if (dest) dest.scrollIntoView({ behavior: "smooth", block: "start" });
+      else window.scrollBy({ top: window.innerHeight * 0.9, behavior: "smooth" });
+    });
+  }
+
+  document
+    .querySelectorAll<HTMLButtonElement>("[data-scroll-cue]")
+    .forEach((cue) => {
+      if (cue.dataset.cueMode === "dock") initDock(cue);
+      else initTopCue(cue);
+    });
+</script>

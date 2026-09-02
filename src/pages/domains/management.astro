@@ -1,0 +1,191 @@
+---
+export const prerender = true;
+
+import Layout from "../../layouts/Layout.astro";
+import Footer from "../../layouts/Footer.astro";
+import "../../styles/globals.css";
+import "../../styles/design-domain.css";
+import { getAssetUrl } from "../../utils/cdn";
+import ToolCard from "../../components/ToolCard.astro";
+import FillButton from "../../components/ui/FillButton.astro";
+import {
+  MANAGEMENT_THEME_COLOR,
+  mgmtTools,
+  mgmtHero,
+  mgmtDescription,
+  mgmtStats,
+  mgmtEvents,
+  mgmtFooterMessage,
+} from "../../data/managementDomainData";
+
+const pyramidSizes = [4, 7, 6, 7];
+const pyramidRows: (typeof mgmtTools)[] = [];
+let offset = 0;
+for (const size of pyramidSizes) {
+  pyramidRows.push(mgmtTools.slice(offset, offset + size));
+  offset += size;
+}
+---
+
+<Layout pageTitle="Management" backHref="/#domains">
+  <div style={`--domain-color: ${MANAGEMENT_THEME_COLOR};`}>
+
+    <section class="dsg-hero">
+      <div class="dsg-hero-centered">
+        <img
+          src={getAssetUrl("/aois/management/cassettes/aois-management-cassettes-management-illustration.webp")}
+          alt="Management Illustration"
+          class="dsg-hero-illustration"
+          data-dsg-animate="fade-up"
+          loading="eager"
+          decoding="async"
+        />
+        <nav class="dsg-hero-crumbs" aria-label="Breadcrumb" data-dsg-animate="fade-up">
+          <svg class="dsg-hero-crumb-reel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <circle cx="12" cy="12" r="3.4" />
+            <path d="M12 2v6.6M12 15.4V22M2 12h6.6M15.4 12H22" />
+          </svg>
+          <ol>
+            <li><a href="/">Home</a></li>
+            <li><a href="/#domains">Domains</a></li>
+            <li aria-current="page">Management</li>
+          </ol>
+        </nav>
+        <h1 class="dsg-hero-title" data-dsg-animate="fade-up">
+          MANAGEMENT
+        </h1>
+        <p class="dsg-hero-desc" data-dsg-animate="fade-up">
+          {mgmtHero}
+        </p>
+        <div data-dsg-animate="fade-up">
+          <a href="#mgmt-events" class="dsg-hero-cta">
+            See Our Work
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    {mgmtStats.length > 0 && (
+      <section class="dsg-stats">
+        {mgmtStats.map((stat) => (
+          <div class="dsg-stat" data-dsg-animate="fade-up">
+            <div class="dsg-stat-value">{stat.value}</div>
+            <div class="dsg-stat-label">{stat.label}</div>
+          </div>
+        ))}
+      </section>
+    )}
+
+    <section class="dsg-about">
+      <div class="dsg-about-inner">
+        <h2 class="dsg-about-heading" data-dsg-animate="fade-up">
+          What we <span>do</span>
+        </h2>
+        <div class="dsg-about-body" data-dsg-animate="fade-up">
+          {mgmtDescription.map((p) => <p>{p}</p>)}
+        </div>
+      </div>
+    </section>
+
+    <hr class="dsg-divider" />
+
+    <section class="dsg-tools">
+      <div class="dsg-tools-header">
+        <p class="dsg-tools-label" data-dsg-animate="fade-up">Our Arsenal</p>
+        <h2 class="dsg-tools-title" data-dsg-animate="fade-up">Tools We Use</h2>
+      </div>
+      <div class="dsg-tools-pyramid">
+        {pyramidRows.map((row, rowIdx) => {
+          const startIdx = pyramidSizes.slice(0, rowIdx).reduce((a, b) => a + b, 0);
+          return (
+            <div class="dsg-tools-pyramid-row">
+              {row.map((tool, i) => (
+                <ToolCard tool={tool} index={startIdx + i} />
+              ))}
+            </div>
+          );
+        })}
+      </div>
+    </section>
+
+    <hr class="dsg-divider" />
+
+    <section class="dsg-events" id="mgmt-events">
+      <div class="dsg-events-header">
+        <p class="dsg-events-label" data-dsg-animate="fade-up">Events</p>
+        <h2 class="dsg-events-title" data-dsg-animate="fade-up">Management in Action</h2>
+      </div>
+      <div class="dsg-events-row">
+        {mgmtEvents.map((event) => {
+          const isExternal = event.external && event.href;
+          if (event.slug) {
+            return (
+              <a href={`/events/${event.slug}`} class="dsg-event-card" data-dsg-animate="fade-up">
+                <img src={getAssetUrl(event.cassette)} alt={event.title} loading="lazy" decoding="async" />
+                <h4>{event.title}</h4>
+                <p>{event.desc}</p>
+              </a>
+            );
+          }
+          if (isExternal) {
+            return (
+              <a href={event.href} target="_blank" rel="noopener noreferrer" class="dsg-event-card" data-dsg-animate="fade-up">
+                <img src={getAssetUrl(event.cassette)} alt={event.title} loading="lazy" decoding="async" />
+                <h4>{event.title}</h4>
+                <p>{event.desc}</p>
+              </a>
+            );
+          }
+          return (
+            <div class="dsg-event-card" data-dsg-animate="fade-up">
+              <img src={getAssetUrl(event.cassette)} alt={event.title} loading="lazy" decoding="async" />
+              <h4>{event.title}</h4>
+              <p>{event.desc}</p>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+
+    <section class="dsg-footer-section">
+      <p class="dsg-footer-msg">{mgmtFooterMessage}</p>
+      <FillButton href="/" label="Back to Home" style={`--proj-color: ${MANAGEMENT_THEME_COLOR}; --proj-color-secondary: #0d0e0d;`}>
+        <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </FillButton>
+    </section>
+  </div>
+
+  <Footer />
+</Layout>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  const entry = gsap.timeline({ defaults: { ease: "power3.out" }, paused: true });
+  const heroEls = document.querySelectorAll('.dsg-hero-centered [data-dsg-animate="fade-up"]');
+  entry.fromTo(heroEls,
+    { opacity: 0, y: 30 },
+    { opacity: 1, y: 0, duration: 0.6, stagger: 0.12 }
+  );
+  window.addEventListener("preloader:done", () => entry.play(), { once: true });
+
+  const scrollEls = document.querySelectorAll(
+    '.dsg-about [data-dsg-animate], .dsg-tools [data-dsg-animate], .dsg-events [data-dsg-animate], .dsg-stats [data-dsg-animate], .dsg-footer-section [data-dsg-animate]'
+  );
+  scrollEls.forEach((el) => {
+    gsap.fromTo(el,
+      { opacity: 0, y: 24 },
+      {
+        opacity: 1, y: 0, duration: 0.6, ease: "power2.out",
+        delay: parseFloat((el as HTMLElement).style.getPropertyValue('--card-delay') || '0'),
+        scrollTrigger: { trigger: el, start: "top 88%", once: true },
+      }
+    );
+  });
+</script>

@@ -1,0 +1,444 @@
+---
+export const prerender = true;
+import Layout from "../layouts/Layout.astro";
+import "../styles/globals.css";
+import Footer from "../layouts/Footer.astro";
+import { techAOIs } from "../data/techDomainData";
+import { designAOIs } from "../data/designDomainData";
+import { researchAOIs } from "../data/researchDomainData";
+import { productGuides } from "../data/designProductsData";
+import { eventDetails, eventSlugs } from "../data/eventDetailsData";
+import { projectDetails, projectSlugs } from "../data/projectDetailsData";
+
+type Link = { label: string; href: string; external?: boolean };
+type Group = { title: string; links: Link[] };
+
+const aoiLinks = (
+  aois: { key: string; title: string }[],
+  base: string
+): Link[] => aois.map((a) => ({ label: a.title, href: `${base}/${a.key}` }));
+
+const groups: Group[] = [
+  {
+    title: "Main",
+    links: [
+      { label: "Home", href: "/" },
+      { label: "About", href: "/#about" },
+      { label: "Domains", href: "/#domains" },
+      { label: "Events", href: "/#events" },
+      { label: "Projects", href: "/#projects" },
+      { label: "ACM-W", href: "/#acm-w" },
+      { label: "Community", href: "/#community" },
+      { label: "Gallery", href: "/#gallery" },
+      { label: "Partners", href: "/#partners" },
+      { label: "Contact", href: "/#contact" },
+    ],
+  },
+  {
+    title: "Domains",
+    links: [
+      { label: "Tech", href: "/domains/tech" },
+      { label: "Competitive Coding", href: "/domains/cc" },
+      { label: "Design", href: "/domains/design" },
+      { label: "Management", href: "/domains/management" },
+      { label: "Research", href: "/domains/research" },
+    ],
+  },
+  { title: "Tech AOIs", links: aoiLinks(techAOIs, "/domains/tech") },
+  { title: "Design AOIs", links: aoiLinks(designAOIs, "/domains/design") },
+  { title: "Research AOIs", links: aoiLinks(researchAOIs, "/domains/research") },
+  {
+    title: "Events",
+    // Data-driven: every /events/<slug> route, so this never drifts from data.
+    links: [
+      { label: "All Events", href: "/events" },
+      ...eventSlugs.map((slug) => ({
+        label: eventDetails[slug].title,
+        href: `/events/${slug}`,
+      })),
+    ],
+  },
+  {
+    title: "Projects",
+    // Data-driven: every /projects/<slug> route, so this never drifts from data.
+    links: [
+      { label: "All Projects", href: "/projects" },
+      ...projectSlugs.map((slug) => ({
+        label: projectDetails[slug].title,
+        href: `/projects/${slug}`,
+      })),
+    ],
+  },
+  {
+    title: "Merchandise",
+    links: [
+      { label: "Merch Store", href: "/merchandise" },
+      { label: "2026 Collection", href: "/merchandise/2026" },
+      { label: "2026 Collection - View", href: "/merchandise/2026/view" },
+      { label: "2025 Collection", href: "/merchandise/2025" },
+      { label: "2025 Collection - View", href: "/merchandise/2025/view" },
+      { label: "2024 Collection", href: "/merchandise/2024" },
+      { label: "2024 Collection - View", href: "/merchandise/2024/view" },
+      { label: "2023 Collection", href: "/merchandise/2023" },
+      { label: "2023 Collection - View", href: "/merchandise/2023/view" },
+      { label: "Board Farewell", href: "/merchandise/board-farewell" },
+      { label: "Other Merchandise", href: "/merchandise/other" },
+    ],
+  },
+  {
+    title: "Resources",
+    links: [
+      { label: "Blogs", href: "/blogs" },
+      { label: "GREP Newsletter", href: "/grep" },
+      { label: "Gallery", href: "/gallery" },
+      { label: "Achievements", href: "/achievements" },
+      { label: "Cassette Builder", href: "/cassette-builder" },
+      { label: "Cassette Journey", href: "/cassette" },
+      { label: "Design Guidelines", href: "/design" },
+      { label: "Sleeve Notes", href: "/sleeve-notes" },
+      { label: "Calendar", href: "/calendar" },
+    ],
+  },
+  {
+    title: "Design Guide",
+    links: [
+      { label: "Overview", href: "/design" },
+      { label: "Logo", href: "/design/logo" },
+      { label: "Logo System", href: "/design/logosystem" },
+      { label: "Color", href: "/design/color" },
+      { label: "Typography", href: "/design/typography" },
+      { label: "Grid & Layout", href: "/design/grid" },
+      { label: "Spacing", href: "/design/spacing" },
+      { label: "Motion", href: "/design/motion" },
+      { label: "Styles", href: "/design/styles" },
+      { label: "Social Media", href: "/design/social" },
+      { label: "Voice & Tone", href: "/design/voice" },
+      { label: "Website", href: "/design/website" },
+      { label: "Footers", href: "/design/footers" },
+      { label: "Resources", href: "/design/resources" },
+      { label: "Other Resources", href: "/design/otherresources" },
+    ],
+  },
+  {
+    title: "Sleeve Notes",
+    links: [
+      { label: "Website Design Guide", href: "/sleeve-notes" },
+      { label: "Standing on Giants", href: "/sleeve-notes/giants" },
+    ],
+  },
+  {
+    title: "Product Design Guides",
+    links: productGuides.map((p) => ({
+      label: p.name,
+      href: `/design/products/${p.slug}`,
+    })),
+  },
+  {
+    title: "Community",
+    links: [
+      { label: "Community Hub", href: "/community" },
+      { label: "Outreach", href: "/community#community-outreach" },
+      { label: "SDG Initiative", href: "/community#community-sdg" },
+      { label: "Fresher Initiative", href: "/community#community-ksl" },
+      { label: "Bootcamps", href: "/community#community-bootcamp" },
+      { label: "Open Source", href: "/community#community-opensource" },
+      { label: "ACM-W", href: "/community#acm-w" },
+      { label: "International Award", href: "/community#community-award" },
+    ],
+  },
+  {
+    title: "Community & Teams",
+    links: [
+      { label: "Team", href: "/team" },
+      { label: "Partners", href: "/partners" },
+      { label: "z0d1ak (CTF Team)", href: "/z0d1ak" },
+    ],
+  },
+  {
+    title: "Help & Guidelines",
+    links: [
+      { label: "Code of Conduct", href: "/code-of-conduct" },
+      { label: "FAQs", href: "/faqs" },
+    ],
+  },
+  {
+    // Mirrors the socials boombox (Socials.astro). All external, so these are
+    // not counted in the page total (see totalPages below).
+    title: "Social (not counted in total pages)",
+    links: [
+      { label: "Email", href: "mailto:hello@acmvit.in", external: true },
+      { label: "GitHub", href: "https://github.com/ACM-VIT", external: true },
+      { label: "YouTube", href: "https://www.youtube.com/@acm_vit", external: true },
+      { label: "X (Twitter)", href: "https://x.com/acm_vit", external: true },
+      { label: "Instagram (@acmvit)", href: "https://www.instagram.com/acmvit", external: true },
+      { label: "Instagram (@acmwvit)", href: "https://www.instagram.com/acmwvit", external: true },
+      { label: "Instagram (@lifeatacm)", href: "https://www.instagram.com/lifeatacm", external: true },
+      { label: "Instagram (@c2c.acmvit)", href: "https://www.instagram.com/c2c.acmvit", external: true },
+      { label: "LinkedIn", href: "https://www.linkedin.com/company/acmvit", external: true },
+      { label: "Blog (Hashnode)", href: "https://blog.acmvit.in", external: true },
+      { label: "Facebook", href: "https://www.facebook.com/acmvitvellore", external: true },
+      { label: "Spotify", href: "https://open.spotify.com/playlist/3KpxwfwW6Bc0pfWAvk6ulo?si=ERGOf5IHQ4erG9xXPxqjHQ", external: true },
+    ],
+  },
+];
+
+const totalPages = groups.reduce(
+  (n, g) => n + g.links.filter((l) => !l.external).length,
+  0
+);
+---
+
+<Layout pageTitle="Sitemap" backHref="/">
+  <main class="sitemap-page">
+    <header class="sitemap-head">
+      <svg
+        class="sitemap-icon"
+        width="48"
+        height="48"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <rect x="16" y="16" width="6" height="6" rx="1" />
+        <rect x="2" y="16" width="6" height="6" rx="1" />
+        <rect x="9" y="2" width="6" height="6" rx="1" />
+        <path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3" />
+        <path d="M12 12V8" />
+      </svg>
+      <h1 class="sitemap-title">sitemap</h1>
+      <p class="sitemap-sub">
+        Every page across the ACM-VIT universe, in one place - {totalPages} destinations.
+      </p>
+    </header>
+
+    <div class="sitemap-grid">
+      {
+        groups.map((group) => {
+          // Long groups (e.g. Projects, Events) span the full width and flow
+          // their links into multiple columns instead of one tall list.
+          const wide = group.links.length > 14;
+          return (
+          <section
+            class={`sitemap-col${wide ? " sitemap-col--wide" : ""}`}
+            aria-labelledby={`grp-${group.title}`}
+          >
+            <h2 class="sitemap-col-title" id={`grp-${group.title}`}>
+              {group.title}
+            </h2>
+            <ul class={`sitemap-links${wide ? " sitemap-links--multicol" : ""}`}>
+              {group.links.map((link) => (
+                <li>
+                  <a
+                    href={link.href}
+                    class="sitemap-link"
+                    {...(link.external
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : {})}
+                  >
+                    <span>{link.label}</span>
+                    <svg
+                      class="sitemap-link-arrow"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <line x1="7" y1="17" x2="17" y2="7" />
+                      <polyline points="7 7 17 7 17 17" />
+                    </svg>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+          );
+        })
+      }
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .sitemap-page {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 7rem 1.5rem 5rem;
+    color: #fff;
+  }
+
+  .sitemap-head {
+    padding-bottom: 3rem;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .sitemap-icon {
+    display: block;
+    color: var(--color-primary-orange, #f95f4a);
+    margin-bottom: 1.5rem;
+  }
+
+  .sitemap-title {
+    font-family: "PolySans Bulky Wide", sans-serif;
+    font-weight: 700;
+    text-transform: lowercase;
+    font-size: clamp(2.75rem, 8vw, 5.5rem);
+    line-height: 0.9;
+    letter-spacing: -0.01em;
+    margin: 0;
+    color: #fefcd9;
+  }
+
+  .sitemap-sub {
+    font-family: "PolySans Trial", sans-serif;
+    font-weight: 300;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 1.25rem 0 0;
+    max-width: 42ch;
+  }
+
+  .sitemap-grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 2.5rem 2rem;
+  }
+
+  @media (min-width: 480px) {
+    .sitemap-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 768px) {
+    .sitemap-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1024px) {
+    .sitemap-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .sitemap-col-title {
+    font-family: "PolySans Trial", sans-serif;
+    font-weight: 500;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+    margin: 0 0 1.25rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.14);
+  }
+
+  .sitemap-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  /* Long groups: full-width cell + links flowed into multiple columns. */
+  .sitemap-col--wide {
+    grid-column: 1 / -1;
+  }
+  .sitemap-links--multicol {
+    display: block;
+    columns: 2;
+    column-gap: 2rem;
+  }
+  @media (min-width: 768px) {
+    .sitemap-links--multicol {
+      columns: 3;
+    }
+  }
+  @media (min-width: 1024px) {
+    .sitemap-links--multicol {
+      columns: 4;
+    }
+  }
+  .sitemap-links--multicol li {
+    break-inside: avoid;
+  }
+
+  .sitemap-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: "PolySans Trial", sans-serif;
+    font-weight: 400;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.82);
+    text-decoration: none;
+    padding: 0.3rem 0;
+    transition:
+      color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .sitemap-link-arrow {
+    opacity: 0;
+    transform: translate(-3px, 3px);
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+    color: var(--color-primary-orange, #f95f4a);
+  }
+
+  .sitemap-link:hover,
+  .sitemap-link:focus-visible {
+    color: #fff;
+    outline: none;
+  }
+
+  .sitemap-link:hover .sitemap-link-arrow,
+  .sitemap-link:focus-visible .sitemap-link-arrow {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sitemap-link,
+    .sitemap-link-arrow {
+      transition: none;
+    }
+  }
+
+  /* ── Light theme ── */
+  :global(html[data-theme="light"]) .sitemap-page {
+    color: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .sitemap-head {
+    border-bottom-color: rgba(26, 26, 26, 0.12);
+  }
+  :global(html[data-theme="light"]) .sitemap-title {
+    color: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .sitemap-sub {
+    color: rgba(26, 26, 26, 0.6);
+  }
+  :global(html[data-theme="light"]) .sitemap-col-title {
+    color: rgba(26, 26, 26, 0.5);
+    border-bottom-color: rgba(26, 26, 26, 0.18);
+  }
+  :global(html[data-theme="light"]) .sitemap-link {
+    color: rgba(26, 26, 26, 0.78);
+  }
+  :global(html[data-theme="light"]) .sitemap-link:hover,
+  :global(html[data-theme="light"]) .sitemap-link:focus-visible {
+    color: #000;
+  }
+</style>

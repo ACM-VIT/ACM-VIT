@@ -1,0 +1,91 @@
+---
+// ACM-W Bento grid (links to the blog). Restored showcase; anchor target for
+// the header "Showcase" nav item (#acm-w-bento).
+import { getAssetUrl } from "../utils/cdn";
+---
+
+<section
+  id="acm-w-bento"
+  class="w-full flex flex-col justify-center items-center px-8 md:px-16 pt-16 pb-10 md:py-10 min-h-[55vh] md:min-h-[60vh]"
+>
+  <a
+    href="https://blog.acmvit.in"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="relative w-full max-w-[210px] sm:max-w-[266px] md:max-w-[640px] lg:max-w-[1000px] block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-pink/60 rounded-md"
+  >
+    <!-- Mobile -->
+    <img
+      src={getAssetUrl("/acmw/acmw-bento-phone.webp")}
+      alt="ACM-W bento (mobile)"
+      class="block md:hidden w-full h-auto select-none"
+      loading="lazy"
+      decoding="async"
+    />
+
+    <!-- Laptop -->
+    <img
+      src={getAssetUrl("/acmw/acmw-bento.webp")}
+      alt="ACM-W bento"
+      class="hidden md:block w-full h-auto select-none"
+      loading="lazy"
+      decoding="async"
+    />
+
+    <span
+      class="absolute top-3 right-3 inline-flex h-7 w-7 items-center justify-center rounded-full border border-white/25 bg-black/40 text-white/90 backdrop-blur-sm"
+      aria-hidden="true"
+    >
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+    </span>
+  </a>
+
+  <!-- Tubelight under the bento -->
+  <div
+    class="relative flex items-center justify-center mt-[-150px] max-[480px]:mt-[-10px]"
+  >
+    <img
+      id="acmw-bento-grid-tubelight"
+      src={getAssetUrl("/effects/effects-white-tubelight.webp")}
+      alt="Decorative tubelight"
+      loading="lazy"
+      decoding="async"
+      class="w-[85vw] max-w-[1440px] opacity-0 select-none z-[-100] rotate-180
+             [mask-image:radial-gradient(circle,black_20%,transparent_75%)]
+             [mask-repeat:no-repeat] [mask-position:center] [mask-size:contain]
+             max-[480px]:w-[98vw] max-[480px]:max-w-none"
+    />
+  </div>
+</section>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const light = document.getElementById("acmw-bento-grid-tubelight");
+    if (!light) return;
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: light,
+        start: "top 80%",
+        end: "top 55%",
+        scrub: false,
+        once: true,
+      },
+    });
+
+    tl.to(light, { opacity: 0, duration: 0.3 })
+      .to(light, { opacity: 0.35, duration: 0.09 })
+      .to(light, { opacity: 0, duration: 0.08 })
+      .to(light, { opacity: 0.55, duration: 0.12 })
+      .to(light, { opacity: 0.12, duration: 0.08 })
+      .to(light, { opacity: 0.65, duration: 0.14 })
+      .to(light, { opacity: 0.2, duration: 0.1 })
+      .to(light, { opacity: 0.75, duration: 0.16 })
+      .to(light, { opacity: 0.3, duration: 0.09 })
+      .to(light, { opacity: 1, duration: 0.5, ease: "power2.out" });
+  });
+</script>

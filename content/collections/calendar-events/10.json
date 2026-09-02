@@ -1,0 +1,12 @@
+{
+  "slug": "10",
+  "order": 90,
+  "id": "10",
+  "title": "Forktober Prep",
+  "date": "2026-07-22",
+  "startTime": "16:00",
+  "endTime": "17:00",
+  "domain": "tech",
+  "description": "Planning session for Forktober - ACM-VIT's open source contribution drive.",
+  "location": "SJT Seminar Hall, VIT Vellore"
+}

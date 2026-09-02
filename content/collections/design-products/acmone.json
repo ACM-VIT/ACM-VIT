@@ -1,0 +1,194 @@
+{
+  "slug": "acmone",
+  "name": "ACMOne",
+  "tagline": "All of ACM, in one.",
+  "category": "Mobile · Chapter Ops",
+  "story": [
+    "ACMOne is the app ACM-VIT built to run ACM-VIT: announcements, a shared events calendar, meeting agendas and minutes, task ownership, and an ID scanner that turns On Duty and Night Slip paperwork into a tap. Its audience is the 100+ member organising committee - it is the family's one internal product.",
+    "Being internal bought it the most relaxed identity in the family: a deep ink-plum base carrying a pastel trio of periwinkle, mint, and dusty rose. Nothing else ACM-VIT ships looks like it, and since its users chose to be there, nothing has to convert them."
+  ],
+  "accent": "#7F8CC0",
+  "accentTonal": "#eceef7",
+  "hero": {
+    "bg": "#1C1C23",
+    "fg": "#FEFDF8",
+    "sub": "#DBB8BF"
+  },
+  "logo": {
+    "src": "/projects/acmone/projects-acmone-logo.webp",
+    "width": 110
+  },
+  "facts": [
+    {
+      "label": "Platform",
+      "value": "Android (internal)"
+    },
+    {
+      "label": "Audience",
+      "value": "100+ committee members"
+    },
+    {
+      "label": "Stack",
+      "value": "React Native · Expo · FastAPI"
+    },
+    {
+      "label": "First shipped",
+      "value": "2024"
+    }
+  ],
+  "logos": [
+    {
+      "label": "App icon - the 1",
+      "src": "/projects/acmone/projects-acmone-logo.webp",
+      "width": 96,
+      "bg": "#FEFDF8",
+      "fg": "#1C1C23"
+    },
+    {
+      "label": "Stacked lockup",
+      "text": {
+        "content": "ACM ONE",
+        "css": "'Garet', 'DM Sans', sans-serif",
+        "size": "34px",
+        "weight": 800
+      },
+      "bg": "#7F8CC0",
+      "fg": "#1C1C23"
+    }
+  ],
+  "logoNote": "The icon is the lockup's party trick: A-C-M stacked and stretched until the whole arrangement reads as a giant numeral 1. Porcelain on ink, always - the pastels tint the UI, never the mark. If the 1 stops reading, the icon is being used too small.",
+  "palette": [
+    {
+      "name": "One Ink",
+      "hex": "#1C1C23",
+      "on": "#FEFDF8",
+      "use": "Base surface. A plum-leaning near-black that warms the pastels sitting on it."
+    },
+    {
+      "name": "Porcelain",
+      "hex": "#FEFDF8",
+      "on": "#1C1C23",
+      "use": "Text on ink, and the light surface for content-dense views."
+    },
+    {
+      "name": "Periwinkle",
+      "hex": "#7F8CC0",
+      "on": "#1C1C23",
+      "use": "Primary pastel - headers, active tabs, the calendar."
+    },
+    {
+      "name": "Mint",
+      "hex": "#B6DAD0",
+      "on": "#1C1C23",
+      "use": "Success, attendance, and the scanner's confirm states."
+    },
+    {
+      "name": "Dusty rose",
+      "hex": "#DBB8BF",
+      "on": "#1C1C23",
+      "use": "Highlights, meeting cards, and the cover's signature tint."
+    },
+    {
+      "name": "Blush",
+      "hex": "#ECDCDF",
+      "on": "#1C1C23",
+      "use": "Tonal fill behind rose elements - the soft step between rose and porcelain."
+    }
+  ],
+  "paletteNote": "Three pastels share the stage evenly - none of them is 'the' brand color, which keeps a dense ops tool feeling light. The site's project card paints ACMOne chapter-orange; inside the product, that orange never appears.",
+  "type": [
+    {
+      "family": "Garet Heavy",
+      "role": "Display & splash",
+      "weights": "Heavy",
+      "note": "Licensed geometric face - the stacked ACM/ONE splash. Specimen approximate.",
+      "css": "'Garet', 'DM Sans', sans-serif",
+      "sample": "ACM ONE",
+      "sampleSize": "44px",
+      "sampleWeight": 800,
+      "approximate": true
+    },
+    {
+      "family": "DM Sans",
+      "role": "UI & body",
+      "weights": "400 / 500 / 700",
+      "note": "The chapter's own typeface, carried into the internal tool.",
+      "css": "'DM Sans', sans-serif",
+      "sample": "Meetings, tasks, OD scans, and everything the committee runs on.",
+      "sampleSize": "17px",
+      "sampleWeight": 500
+    }
+  ],
+  "typeNote": "Garet Heavy exists for exactly one gesture - the stacked ACM / ONE lockup. Everything functional is DM Sans, the same face as the chapter site, so internal tools still feel like home.",
+  "icons": {
+    "images": [
+      {
+        "src": "/projects/acmone/projects-acmone-logo.webp",
+        "alt": "ACMOne app icon",
+        "label": "app icon",
+        "bg": "#1C1C23"
+      }
+    ],
+    "bullets": [
+      "Rounded line icons in porcelain on ink - quiet enough for a 20-times-a-day tool.",
+      "Function-coded tints: periwinkle for planning, mint for confirmations, rose for meetings.",
+      "The scanner viewfinder - mint corners on ink - is the app's most recognizable icon moment.",
+      "Google sign-in keeps its own colors; nothing else on screen gets to be that loud."
+    ]
+  },
+  "personality": {
+    "do": [
+      "Utilitarian first: this is a tool people open twenty times a day.",
+      "Pastels code function - periwinkle plans, mint confirms, rose highlights.",
+      "Playful in the gaps: splash screens and empty states can grin.",
+      "Respect the density - lists, calendars, and scanners want clarity over air."
+    ],
+    "dont": [
+      "No chapter orange inside the app - ACMOne's warmth comes from its pastels.",
+      "Don't promote it like a public product; it ships to a closed committee.",
+      "Don't let any single pastel take over - the trio shares the stage.",
+      "No dark-pattern urgency on tasks; the users are volunteers, not metrics."
+    ]
+  },
+  "motifs": [
+    {
+      "title": "The stacked lockup",
+      "desc": "ACM over ONE in Garet Heavy, repeated as a pattern on the splash - the app's one big brand gesture."
+    },
+    {
+      "title": "Pastel blocking",
+      "desc": "Whole sections tint by function: periwinkle calendar, mint attendance, rose meetings."
+    },
+    {
+      "title": "The scanner frame",
+      "desc": "The ID-scan viewfinder - mint corners on ink - is the most-used screen and the de facto icon of the app."
+    }
+  ],
+  "shots": [
+    {
+      "src": "/projects/acmone/projects-acmone-screen-1.webp",
+      "alt": "ACMOne home screen"
+    },
+    {
+      "src": "/projects/acmone/projects-acmone-screen-2.webp",
+      "alt": "ACMOne events view"
+    },
+    {
+      "src": "/projects/acmone/projects-acmone-screen-3.webp",
+      "alt": "ACMOne ID scanning flow"
+    }
+  ],
+  "links": [
+    {
+      "label": "acmone.acmvit.in",
+      "href": "https://acmone.acmvit.in",
+      "kind": "website"
+    },
+    {
+      "label": "Google Play",
+      "href": "https://play.google.com/store/apps/details?id=com.acmvit.acmone&hl=en_IN",
+      "kind": "play"
+    }
+  ],
+  "order": 40
+}

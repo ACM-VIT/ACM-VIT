@@ -1,0 +1,159 @@
+---
+export const prerender = true;
+import DesignLayout from "../../layouts/DesignLayout.astro";
+
+const steps = [
+  { token: "space-1", px: 4, use: "Icon-to-label gaps, hairline padding" },
+  { token: "space-2", px: 8, use: "Chip padding, tight stacks" },
+  { token: "space-3", px: 12, use: "Inside small components" },
+  { token: "space-4", px: 16, use: "Default component padding" },
+  { token: "space-5", px: 20, use: "Card padding (compact)" },
+  { token: "space-6", px: 24, use: "Card padding (default), gutters" },
+  { token: "space-8", px: 32, use: "Between related blocks" },
+  { token: "space-10", px: 40, use: "Between distinct blocks" },
+  { token: "space-12", px: 48, use: "Small section breaks" },
+  { token: "space-16", px: 64, use: "Section padding, mobile" },
+  { token: "space-24", px: 96, use: "Section padding, desktop" },
+  { token: "space-32", px: 128, use: "Hero breathing room" },
+];
+---
+
+<DesignLayout
+  title="Spacing"
+  description="The 4pt spacing system that gives ACM-VIT layouts their rhythm."
+  current="/design/spacing"
+>
+  <section class="ds-hero">
+    <div class="ds-kicker"><span class="ds-kicker-pill">Foundations · Spacing</span></div>
+    <h1 class="ds-h1">Everything is a multiple of four.</h1>
+    <p class="ds-body-lg">
+      Margins, padding, gaps, icon sizes, line heights - every measurement in
+      the system is a multiple of 4px. One rule, and alignment mostly takes
+      care of itself.
+    </p>
+  </section>
+
+  <!-- 01 · Scale -->
+  <section class="ds-section" id="scale">
+    <div class="ds-sec-head"><span class="ds-sec-num">01</span><h2 class="ds-h2">The scale</h2></div>
+    <p class="ds-body">
+      Twelve stops cover interface work. The scale doubles as it grows -
+      spacing between sections should feel an order louder than spacing
+      inside a card.
+    </p>
+    <div class="ds-card ds-reveal" style="margin-top:24px;">
+      {
+        steps.map((s) => (
+          <div class="ds-space-row">
+            <span class="ds-mono ds-space-token">{s.token}</span>
+            <span class="ds-mono ds-space-px">{s.px}</span>
+            <span class="ds-space-bar" style={`width:${Math.min(s.px * 2.2, 300)}px`} />
+            <span class="ds-space-use">{s.use}</span>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 02 · Anatomy -->
+  <section class="ds-section" id="anatomy">
+    <div class="ds-sec-head"><span class="ds-sec-num">02</span><h2 class="ds-h2">Spacing in context</h2></div>
+    <p class="ds-body">A card, annotated. The measurements are the system:</p>
+    <div class="ds-card ds-card-tonal ds-reveal" style="margin-top:24px; display:flex; justify-content:center; padding:clamp(20px,4vw,48px);">
+      <svg viewBox="0 0 520 320" style="width:100%; max-width:560px" role="img" aria-label="Annotated card showing 24px padding, 8px title gap, 16px body gap, 24px button gap">
+        <rect x="60" y="20" width="400" height="280" rx="20" fill="var(--ds-surface)" stroke="var(--ds-line-2)" />
+        <rect x="84" y="44" width="352" height="120" rx="12" fill="var(--ds-accent-tonal)" />
+        <rect x="84" y="172" width="220" height="18" rx="5" fill="var(--ds-ink)" />
+        <rect x="84" y="206" width="330" height="9" rx="4.5" fill="var(--ds-line-2)" />
+        <rect x="84" y="222" width="290" height="9" rx="4.5" fill="var(--ds-line-2)" />
+        <rect x="84" y="255" width="110" height="26" rx="13" fill="var(--ds-accent)" />
+        <!-- annotations -->
+        <g font-family="DM Sans, sans-serif" font-size="11.5" font-weight="640" fill="var(--ds-accent-ink)">
+          <line x1="60" y1="32" x2="84" y2="32" stroke="var(--ds-accent-ink)" stroke-width="1" />
+          <text x="90" y="35">24</text>
+          <line x1="446" y1="164" x2="446" y2="172" stroke="var(--ds-accent-ink)" stroke-width="1" />
+          <text x="452" y="172">8</text>
+          <line x1="446" y1="190" x2="446" y2="206" stroke="var(--ds-accent-ink)" stroke-width="1" />
+          <text x="452" y="202">16</text>
+          <line x1="446" y1="231" x2="446" y2="255" stroke="var(--ds-accent-ink)" stroke-width="1" />
+          <text x="452" y="247">24</text>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- 03 · Rules -->
+  <section class="ds-section" id="rules">
+    <div class="ds-sec-head"><span class="ds-sec-num">03</span><h2 class="ds-h2">Rules of thumb</h2></div>
+    <div class="ds-bento">
+      <div class="ds-card ds-b6 ds-reveal">
+        <span class="ds-chip ds-chip-do" style="margin-bottom:12px">Do</span>
+        <ul class="ds-s-list">
+          <li>Snap everything to the scale - if a value isn't on it, round to the nearest stop.</li>
+          <li>Space between groups &gt; space within groups. Proximity is hierarchy.</li>
+          <li>Let white space do the separating before you reach for a divider.</li>
+          <li>Optical exceptions are allowed at icon scale (±1 to 2px) - alignment beats arithmetic.</li>
+        </ul>
+      </div>
+      <div class="ds-card ds-b6 ds-reveal">
+        <span class="ds-chip ds-chip-dont" style="margin-bottom:12px">Don't</span>
+        <ul class="ds-s-list">
+          <li>No magic numbers: 13px, 27px, 35px do not exist here.</li>
+          <li>Don't equalize all gaps - uniform spacing flattens hierarchy.</li>
+          <li>Don't crowd the mark; its clearspace outranks the spacing scale.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</DesignLayout>
+
+<style>
+  .ds-space-row {
+    display: grid;
+    grid-template-columns: 92px 40px minmax(60px, 320px) 1fr;
+    gap: 16px;
+    align-items: center;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--ds-line);
+  }
+  .ds-space-row:last-child {
+    border-bottom: none;
+  }
+  .ds-space-token {
+    font-size: 12px;
+    color: var(--ds-ink-3);
+  }
+  .ds-space-px {
+    font-size: 13px;
+    font-weight: 640;
+    color: var(--ds-ink);
+  }
+  .ds-space-bar {
+    height: 18px;
+    border-radius: 5px;
+    background: linear-gradient(90deg, var(--ds-accent), #fca08f);
+    display: block;
+  }
+  .ds-space-use {
+    font-size: 13.5px;
+    color: var(--ds-ink-2);
+  }
+  @media (max-width: 640px) {
+    .ds-space-row {
+      grid-template-columns: 80px 36px 1fr;
+    }
+    .ds-space-use {
+      display: none;
+    }
+  }
+  .ds-s-list {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--ds-ink-2);
+    font-size: 14.5px;
+    line-height: 1.7;
+  }
+  .ds-s-list li + li {
+    margin-top: 6px;
+  }
+</style>

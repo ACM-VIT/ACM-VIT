@@ -1,0 +1,11 @@
+{
+  "slug": "certify",
+  "title": "Certify",
+  "repo": "certify",
+  "years": [
+    2021,
+    2022
+  ],
+  "description": "A mass certificate generator with a given design",
+  "order": 120
+}

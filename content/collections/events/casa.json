@@ -1,0 +1,43 @@
+{
+  "slug": "casa",
+  "title": "CASA",
+  "tagline": "Campaign Against Substance Abuse.",
+  "eyebrow": "ACM-VIT · Student Well-being",
+  "themeKey": "brand",
+  "hideCtaBanner": true,
+  "cassetteSvg": "/events/events-casa-cassette.webp",
+  "shortDescription": "CASA (Campaign Against Substance Abuse) is an annual event conducted by ACM-VIT under VIT's larger CASA initiative, bringing highly trained counsellors to speak to students about the dangers and consequences of substance abuse.",
+  "longDescription": [
+    "CASA - Campaign Against Substance Abuse - is an annual awareness event conducted by ACM-VIT as part of VIT's larger university-wide CASA initiative. Every year, highly trained counsellors visit campus and engage with students through expert-led sessions focused on the dangers, consequences, and realities of substance abuse.",
+    "The programme goes beyond simple awareness talks. Sessions include interactive discussions on mental health and well-being, peer support network development, and candid conversations with professional counsellors who help students understand the impact of substance abuse on academic performance, relationships, and long-term health.",
+    "ACM-VIT's involvement in CASA reflects the chapter's commitment to student well-being beyond technology. The goal is to create a healthier, more informed, and more supportive student community at VIT - because building great things starts with taking care of the people who build them."
+  ],
+  "format": "Awareness session · Expert-led counselling talks",
+  "duration": "1 day",
+  "mode": "Offline",
+  "audience": "All VIT students",
+  "team": "Individual",
+  "organizedBy": "ACM-VIT · Under VIT CASA Initiative",
+  "recurrence": "Annual",
+  "registrationUrl": "https://acmvit.in",
+  "primaryCtaLabel": "Learn More",
+  "stats": [],
+  "tracks": [],
+  "schedule": [],
+  "prizes": [],
+  "highlights": [],
+  "perks": [
+    "Expert-led awareness sessions",
+    "Interactions with trained counsellors",
+    "Educational discussions on mental health and well-being",
+    "Peer support network development"
+  ],
+  "faq": [],
+  "socials": [
+    {
+      "label": "Instagram · @acmvit",
+      "href": "https://instagram.com/acmvit"
+    }
+  ],
+  "order": 120
+}

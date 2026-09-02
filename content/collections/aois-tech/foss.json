@@ -1,0 +1,47 @@
+{
+  "slug": "foss",
+  "order": 20,
+  "key": "foss",
+  "title": "FOSS",
+  "shortDescription": "Pushing the chapter to adopt, contribute to and maintain free and open source software, with members landing GSoC, GSoD and MLH fellowships.",
+  "longDescription": [
+    "The FOSS AOI promotes adoption, usage and maintenance of free and open source software across the whole chapter, not just our own members. Over the years, several members have landed GSoC, GSoD and MLH Fellowships off contributions made here.",
+    "Recently, ACM-VIT members have contributed to the sglang repository, with others making meaningful contributions to repos from LLVM, OpenAI and more.",
+    "Every Hacktoberfest, FOSS runs Forktober, our open source festival, packed with curated repositories, sessions and workshops to help students land their first open source contribution."
+  ],
+  "cassetteSrc": "/aois/tech/cassettes/aois-tech-cassettes-foss.webp",
+  "tools": [
+    "gitlab",
+    "github",
+    "git",
+    "ubuntu",
+    "arch-linux",
+    "debian",
+    "fedora",
+    "gnu",
+    "gcc",
+    "cmake",
+    "bazel",
+    "meson",
+    "nix",
+    "homebrew",
+    "podman",
+    "openapi",
+    "apache",
+    "neovim",
+    "vim",
+    "blender",
+    "krita",
+    "gimp",
+    "libreoffice",
+    "linux"
+  ],
+  "events": [
+    {
+      "title": "Forktober",
+      "cassette": "/events/events-forktober-cassette.svg",
+      "desc": "ACM-VIT's open source festival run every Hacktoberfest. Curated repositories, sessions and workshops to land first contributions.",
+      "slug": "forktober"
+    }
+  ]
+}

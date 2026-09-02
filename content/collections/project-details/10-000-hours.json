@@ -1,0 +1,80 @@
+{
+  "slug": "10-000-hours",
+  "title": "10,000 Hours",
+  "tagline": "A flutter application to track the number of hours you devoted a particular skill. Helps you track your process in a neat and organised way",
+  "eyebrow": "ACM-VIT · Forktober 2022 · Open Source",
+  "themeColor": "#EFEFEF",
+  "themeColorSecondary": "#1a1a1a",
+  "shortDescription": "A flutter application to track the number of hours you devoted a particular skill. Helps you track your process in a neat and organised way",
+  "longDescription": [
+    "A flutter application to track the number of hours you devoted a particular skill. Helps you track your process in a neat and organised way",
+    "10,000 Hours was part of ACM-VIT's Forktober open-source drive in 2022, opening up to student contributors during Hacktoberfest.",
+    "The repository is archived. It remains on GitHub as a record of the Forktober edition that ran it, but is no longer accepting new contributions.",
+    "Across its lifetime, the project drew 14 contributors, 22 pull requests and 71 commits."
+  ],
+  "status": "archived",
+  "statusNote": "Forktober 2022 · Archived",
+  "cassetteSvg": "/events/events-forktober-cassette.svg",
+  "stats": [
+    {
+      "value": "14",
+      "label": "Contributors"
+    },
+    {
+      "value": "22",
+      "label": "Pull requests"
+    },
+    {
+      "value": "71",
+      "label": "Commits"
+    },
+    {
+      "value": "5",
+      "label": "Stars"
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Stack",
+      "slugs": [
+        "flutter"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "Him-anshuSharma"
+    },
+    {
+      "github": "Shubhi-Paul"
+    },
+    {
+      "github": "Arsh-78"
+    },
+    {
+      "github": "AryanKhubchandani"
+    },
+    {
+      "github": "FaizFk"
+    },
+    {
+      "github": "ersascape"
+    }
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/ACM-VIT/10-000-Hours",
+      "kind": "github"
+    }
+  ],
+  "commitGraphSeed": 892,
+  "order": 230
+}

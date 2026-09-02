@@ -1,0 +1,15 @@
+{
+  "slug": "testing",
+  "order": 70,
+  "cassetteAlt": "testing",
+  "description1": "Pls work or I will kms",
+  "primaryBgColor": "#ffffff",
+  "primaryTextColor": "white",
+  "primaryBorderColor": "#FEFCD9",
+  "visitWebsiteText": "VISIT WEBSITE",
+  "visitWebsiteTextColor": "white",
+  "visitWebsiteBorderColor": "#FEFCD9",
+  "icons": [],
+  "textColor": "white",
+  "contentBlockBackground": "rgba(0, 0, 0, 0.15)"
+}

@@ -1,0 +1,10 @@
+{
+  "slug": "ride-safe",
+  "title": "Ride-Safe",
+  "repo": "Ride-Safe",
+  "years": [
+    2023
+  ],
+  "description": "A travel companion app to make your travel safer through driver feedbacks and live tracking functionality",
+  "order": 40
+}

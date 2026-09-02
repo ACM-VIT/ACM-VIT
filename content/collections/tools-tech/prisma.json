@@ -1,0 +1,8 @@
+{
+  "name": "Prisma",
+  "slug": "prisma",
+  "svgFile": "/domains/tech/tools/tech-tool-prisma.svg",
+  "colorHex": "#2D3748",
+  "monochrome": true,
+  "order": 90
+}

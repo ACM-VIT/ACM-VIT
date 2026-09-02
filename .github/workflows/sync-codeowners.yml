@@ -1,0 +1,41 @@
+name: Sync CODEOWNERS from IAM
+
+# The Content Studio commits access-control.json when an admin edits Access &
+# Roles. This regenerates .github/CODEOWNERS from it and commits the result, so
+# the IAM the chapter edits in the CMS is always the rule GitHub enforces on PRs.
+# See ACCESS.md.
+
+on:
+  push:
+    paths:
+      - "content/singletons/access-control.json"
+      - "src/platform/access/codeowners.ts"
+      - "src/platform/schema/registry.ts"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Regenerate content artifacts (incl. CODEOWNERS)
+        run: npm run content:compile
+      - name: Commit CODEOWNERS if it changed
+        run: |
+          if ! git diff --quiet -- .github/CODEOWNERS; then
+            git config user.name  "acm-content-bot"
+            git config user.email "actions@users.noreply.github.com"
+            git add .github/CODEOWNERS
+            git commit -m "chore(iam): sync CODEOWNERS from access-control"
+            git push
+          else
+            echo "CODEOWNERS already up to date."
+          fi

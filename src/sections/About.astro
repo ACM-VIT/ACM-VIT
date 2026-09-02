@@ -1,0 +1,291 @@
+---
+import { getAssetUrl } from "../utils/cdn";
+---
+
+<!-- About Sections-->
+<div class="about-container w-screen overflow-hidden">
+  <!-- About Section 1: -->
+  <section
+    id="about-acmvit"
+    data-section="about-acmvit"
+    class="about-section section-1 video-bg-section w-screen h-screen relative bg-center bg-cover bg-no-repeat"
+  >
+    <div
+      class="cassette-container cassette-left svg-container svg-left relative w-[500px] h-[500px] ml-[-50px] mb-[-600px] md:h-[400px] md:w-[400px] lg:h-[500px] lg:w-[500px]"
+    >
+      <img
+        src={getAssetUrl("/about/about-acmvit-cassette.webp")}
+        alt="Cassette 1"
+        class="cassette-svg w-full h-auto origin-bottom-left rotate-21"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+    <div
+      class="text-container text-right absolute top-1/2 -translate-y-1/2 text-white p-8 left-[45vw] w-[50vw] max-w-[800px]"
+    >
+      <div
+        class="text-lg leading-[1.55] max-w-[700px] flex flex-col gap-6"
+      >
+        <p>
+          As the official student chapter of the Association for Computing
+          Machinery at VIT Vellore, we’ve been pushing boundaries and
+          challenging conventions since 2009. From research and development to
+          open-source contributions and unorthodox events, we turn ideas into
+          real-world impact.
+        </p>
+        <p>
+          We don’t just write code - we ask questions, build with purpose, and
+          learn together. With a culture built on trust and innovation, we’re
+          here to build tools, solve problems, and grow as a community - because
+          technology, at its best, brings people together.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section 2:-->
+  <section
+    id="about-vit"
+    data-section="about-vit"
+    class="about-section section-2 video-bg-section w-screen h-screen relative bg-center bg-cover bg-no-repeat"
+  >
+    <div
+      class="text-container text-left absolute top-1/2 -translate-y-1/2 text-white p-8 left-[10vw] w-[55vw] max-w-[800px]"
+    >
+      <div
+        class="text-lg leading-[1.55] max-w-[700px] flex flex-col gap-6"
+      >
+        <p>
+          Founded in 1984, VIT Vellore is one of India’s top engineering
+          institutions, renowned for academic excellence, global outlook, and a
+          strong emphasis on research and innovation. With students from across
+          India and around the world, VIT offers a diverse and inclusive
+          learning environment.
+        </p>
+        <p>
+          The university provides world-class infrastructure, experienced
+          faculty, and a wide range of industry-connected programs designed to
+          prepare students for professional success. From pioneering research to
+          impactful engineering projects, VIT empowers students to make
+          meaningful contributions across every field.
+        </p>
+      </div>
+    </div>
+    <div
+      class="cassette-container cassette-right svg-container svg-right w-[500px] h-[500px] absolute right-0 top-1/2 -translate-y-1/2 mr-[-100px] md:h-[400px] md:w-[400px] lg:h-[500px] lg:w-[500px]"
+    >
+      <img
+        src={getAssetUrl("/about/about-vit-cassette.webp")}
+        alt="Cassette 2"
+        class="cassette-svg w-full h-auto origin-bottom-right rotate-[-15deg]"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  </section>
+
+  <!-- About Section 3:-->
+  <section
+    id="about-acm"
+    data-section="about-acm"
+    class="about-section section-3 video-bg-section w-screen h-screen relative bg-center bg-cover bg-no-repeat"
+  >
+    <div
+      class="cassette-container cassette-left cassette-left-two svg-container svg-left-two relative w-[500px] h-[500px] ml-[-50px] mb-[200px] md:h-[400px] md:w-[400px] lg:h-[500px] lg:w-[500px]"
+    >
+      <img
+        src={getAssetUrl("/about/about-acm-cassette.webp")}
+        alt="Cassette 3"
+        class="cassette-svg w-full h-auto origin-bottom-left rotate-11"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+    <div
+      class="text-container text-right absolute top-1/2 -translate-y-1/2 text-white p-8 left-[45vw] w-[50vw] max-w-[800px]"
+    >
+      <div
+        class="text-lg leading-[1.55] max-w-[700px] flex flex-col gap-6"
+      >
+        <p>
+          The Association for Computing Machinery (ACM) is the world’s largest
+          educational and scientific computing society. Since its inception in
+          1947, ACM has united educators, researchers, and professionals to
+          advance computing as a science and a profession.
+        </p>
+        <p>
+          It promotes the highest standards of technical excellence, fosters
+          lifelong learning, and supports career development through a global
+          network of conferences, publications, and professional communities.
+          With a strong commitment to innovation and leadership, ACM continues
+          to shape the future of computing worldwide.
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<style>
+  @media (max-height: 720px) {
+    .about-container .text-container {
+      padding: 1.25rem;
+    }
+
+    .about-container .text-container > div {
+      font-size: 1.15rem;
+      line-height: 1.45;
+      gap: 1rem;
+    }
+
+    .about-container .cassette-container {
+      width: 420px;
+      height: 420px;
+    }
+
+    .about-container .section-1 .cassette-container {
+      margin-left: -20px;
+      margin-bottom: -420px;
+    }
+
+    .about-container .section-2 .cassette-container {
+      margin-right: -60px;
+    }
+
+    .about-container .section-3 .cassette-container {
+      margin-left: -20px;
+      margin-bottom: 100px;
+    }
+  }
+
+  @media (max-height: 600px) {
+    .about-container .text-container {
+      top: 56%;
+      padding: 1rem;
+    }
+
+    .about-container .text-container > div {
+      font-size: 1rem;
+      line-height: 1.4;
+      gap: 0.75rem;
+    }
+
+    .about-container .cassette-container {
+      width: 360px;
+      height: 360px;
+    }
+
+    .about-container .section-1 .cassette-container {
+      margin-bottom: -320px;
+    }
+
+    .about-container .section-2 .cassette-container {
+      top: 55%;
+      margin-right: -40px;
+    }
+
+    .about-container .section-3 .cassette-container {
+      margin-bottom: 40px;
+    }
+  }
+
+  /* ── Tablet tier (768–1024): narrow the text columns so they never collide
+     with the side cassettes, and pull the cassettes in a touch. Widths are
+     applied independent of height; the font bump keeps enough height. ── */
+  @media (min-width: 769px) and (max-width: 1024px) {
+    #about-acmvit .text-container,
+    #about-vit .text-container,
+    #about-acm .text-container {
+      width: 44vw;
+    }
+    .about-container .cassette-container {
+      width: 380px;
+      height: 380px;
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) and (min-height: 601px) {
+    #about-acmvit .text-container > div,
+    #about-vit .text-container > div,
+    #about-acm .text-container > div {
+      font-size: 1.12rem;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function initAnimations() {
+    const lazySections = document.querySelectorAll(".js-lazy-bg");
+    const loadBg = (section: Element) => {
+      if (!(section instanceof HTMLElement)) return;
+      const bg = section.dataset.bg;
+      if (!bg) return;
+      section.style.backgroundImage = `url(${bg})`;
+      section.removeAttribute("data-bg");
+    };
+
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              loadBg(entry.target);
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { rootMargin: "200px 0px", threshold: 0.01 },
+      );
+      lazySections.forEach((section) => observer.observe(section));
+    } else {
+      lazySections.forEach(loadBg);
+    }
+
+    const sections = document.querySelectorAll(".about-section");
+
+    sections.forEach((section) => {
+      const cassette = section.querySelector(".cassette-svg");
+      const isLeft =
+        section.querySelector(".cassette-left") ||
+        section.querySelector(".cassette-left-two") ||
+        section.querySelector(".svg-left") ||
+        section.querySelector(".svg-left-two") ||
+        section.querySelector(".webp-left") ||
+        section.querySelector(".webp-left-two");
+      const isRight =
+        section.querySelector(".cassette-right") ||
+        section.querySelector(".svg-right") ||
+        section.querySelector(".webp-right");
+
+      if (cassette && (isLeft || isRight)) {
+        const xStart = isLeft ? -300 : 300;
+
+        //tilt animation
+        gsap.from(cassette, {
+          x: xStart,
+          rotation: 45, //45 degrees
+          duration: 1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: section,
+            start: "top 80%",
+            end: "center center",
+            scrub: 1,
+            toggleActions: "play none none reverse",
+          },
+        });
+      }
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initAnimations);
+  } else {
+    initAnimations();
+  }
+</script>

@@ -1,0 +1,13 @@
+{
+  "slug": "ocs",
+  "order": 70,
+  "kind": "overlay",
+  "name": "OCS",
+  "color": "#8710DB",
+  "image": "/projects/items/5/cassetteSrc.webp",
+  "alt": "OCS Website",
+  "url": "/projects/ocs-25",
+  "sizePercent": 100,
+  "sizeAxis": "width",
+  "offsetY": 0
+}

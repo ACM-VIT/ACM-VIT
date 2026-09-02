@@ -1,0 +1,68 @@
+{
+  "slug": "qchat",
+  "title": "QChat",
+  "tagline": "Mobile chat application with end-to-end encryption using Quantum Key Distribution (QKD)",
+  "eyebrow": "ACM-VIT · Forktober 2022 · Open Source",
+  "themeColor": "#EFEFEF",
+  "themeColorSecondary": "#1a1a1a",
+  "shortDescription": "Mobile chat application with end-to-end encryption using Quantum Key Distribution (QKD)",
+  "longDescription": [
+    "Mobile chat application with end-to-end encryption using Quantum Key Distribution (QKD)",
+    "QChat was part of ACM-VIT's Forktober open-source drive in 2022, opening up to student contributors during Hacktoberfest.",
+    "The repository is archived. It remains on GitHub as a record of the Forktober edition that ran it, but is no longer accepting new contributions.",
+    "Across its lifetime, the project drew 2 contributors, 0 pull requests and 10 commits."
+  ],
+  "status": "archived",
+  "statusNote": "Forktober 2022 · Archived",
+  "cassetteSvg": "/events/events-forktober-cassette.svg",
+  "stats": [
+    {
+      "value": "2",
+      "label": "Contributors"
+    },
+    {
+      "value": "0",
+      "label": "Pull requests"
+    },
+    {
+      "value": "10",
+      "label": "Commits"
+    },
+    {
+      "value": "1",
+      "label": "Forks"
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Stack",
+      "slugs": [
+        "python"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "Mayan-Ryan"
+    },
+    {
+      "github": "AryanKhubchandani"
+    }
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/ACM-VIT/QChat",
+      "kind": "github"
+    }
+  ],
+  "commitGraphSeed": 529,
+  "order": 310
+}

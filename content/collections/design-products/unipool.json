@@ -1,0 +1,226 @@
+{
+  "slug": "unipool",
+  "name": "UniPool",
+  "tagline": "Carpool with your campus.",
+  "category": "Mobile · Carpool",
+  "story": [
+    "UniPool matches students headed the same way - to class, the airport, or home - so they can share the trip and split the cost. UniPool 2 is a ground-up redesign of the 2024 original, shipping on both Android and iOS with in-app chat, live maps, and a notification pipeline that keeps both sides of a ride in sync.",
+    "The identity is built on one pairing: a deep forest green that carries every surface and headline, and a lime that means exactly one thing - go. Warm cream keeps the app feeling like a campus noticeboard, not a cab aggregator."
+  ],
+  "accent": "#B5D750",
+  "accentTonal": "#f2f8da",
+  "hero": {
+    "bg": "#263B33",
+    "fg": "#FFFDF4",
+    "sub": "#B5D750"
+  },
+  "logo": {
+    "src": "/projects/unipool/projects-unipool-logo.webp",
+    "width": 96
+  },
+  "facts": [
+    {
+      "label": "Platforms",
+      "value": "iOS · Android · Web"
+    },
+    {
+      "label": "Current release",
+      "value": "UniPool 2 (2025)"
+    },
+    {
+      "label": "First shipped",
+      "value": "2024"
+    },
+    {
+      "label": "Stack",
+      "value": "React Native · Expo · Go"
+    }
+  ],
+  "logos": [
+    {
+      "label": "Primary lockup",
+      "src": "/design/products/unipool-lockup.png",
+      "width": 170,
+      "bg": "#B5D750",
+      "fg": "#263B33"
+    },
+    {
+      "label": "App icon - wordmark on lime",
+      "src": "/projects/unipool/projects-unipool-logo.webp",
+      "width": 92,
+      "bg": "#FFFDF4",
+      "fg": "#263B33"
+    }
+  ],
+  "logoNote": "The wordmark is the mark: the double-o of Pool becomes the wheels of a monoline vehicle rolling over it. Because it reads at any size, the app icon is simply the stacked wordmark on lime. Forest on lime or cream only - never on photography, never recolored.",
+  "palette": [
+    {
+      "name": "Forest",
+      "hex": "#263B33",
+      "on": "#FFFDF4",
+      "use": "Primary surface, headlines, and body text. Carries the brand more than the lime does."
+    },
+    {
+      "name": "Lime",
+      "hex": "#B5D750",
+      "on": "#263B33",
+      "use": "One job: action. CTAs, active states, the route line. Never body text."
+    },
+    {
+      "name": "Cream",
+      "hex": "#FFFDF4",
+      "on": "#263B33",
+      "use": "Paper. Default light background across app and website."
+    },
+    {
+      "name": "Warm cream",
+      "hex": "#FBF7E9",
+      "on": "#263B33",
+      "use": "Tonal step for cards and alternate sections on cream."
+    }
+  ],
+  "paletteNote": "Forest on cream and cream on forest both pass contrast comfortably; lime does not carry text on either. Lime is a shape and a highlight, never a paragraph.",
+  "type": [
+    {
+      "family": "Trap",
+      "role": "Display",
+      "weights": "700",
+      "note": "Licensed face, not bundled here - specimen is approximate.",
+      "css": "'Trap', 'DM Sans', sans-serif",
+      "sample": "Going my way?",
+      "sampleSize": "44px",
+      "sampleWeight": 800,
+      "approximate": true
+    },
+    {
+      "family": "Nunito Sans",
+      "role": "UI & body",
+      "weights": "300 / 400 / 600 / 700",
+      "css": "'Nunito Sans', sans-serif",
+      "sample": "Find a verified ride to class, the airport, or home. Share the trip, split the cost.",
+      "sampleSize": "17px",
+      "sampleWeight": 400
+    },
+    {
+      "family": "JetBrains Mono",
+      "role": "Numbers & fare math",
+      "weights": "400 / 600",
+      "css": "'JetBrains Mono', monospace",
+      "sample": "₹140 → split 4 ways → ₹35",
+      "sampleSize": "15px",
+      "sampleWeight": 400
+    }
+  ],
+  "typeNote": "Trap does the shouting on hero surfaces and store creatives; Nunito Sans does everything else. The rounded warmth of both keeps a logistics app from feeling like logistics.",
+  "icons": {
+    "images": [
+      {
+        "src": "/design/products/unipool-icon-home.svg",
+        "alt": "Home doodle icon",
+        "label": "home"
+      },
+      {
+        "src": "/design/products/unipool-icon-search.svg",
+        "alt": "Search doodle icon",
+        "label": "search"
+      },
+      {
+        "src": "/design/products/unipool-icon-map.svg",
+        "alt": "Map doodle icon",
+        "label": "map"
+      },
+      {
+        "src": "/design/products/unipool-icon-location-pin.svg",
+        "alt": "Location pin doodle icon",
+        "label": "location-pin"
+      },
+      {
+        "src": "/design/products/unipool-icon-message.svg",
+        "alt": "Message doodle icon",
+        "label": "message"
+      },
+      {
+        "src": "/design/products/unipool-icon-bell.svg",
+        "alt": "Bell doodle icon",
+        "label": "bell"
+      },
+      {
+        "src": "/design/products/unipool-icon-user.svg",
+        "alt": "User doodle icon",
+        "label": "user"
+      },
+      {
+        "src": "/design/products/unipool-icon-car.svg",
+        "alt": "Car doodle icon",
+        "label": "car"
+      }
+    ],
+    "bullets": [
+      "Hand-drawn doodle line icons - wobbly on purpose, like a route sketched on a napkin.",
+      "Single-weight ink strokes; no fills at rest. Active states may fill with lime.",
+      "Drawn from a curated in-app library organized by category - interface, arrows, objects, hands.",
+      "Never mix a geometric icon set into the same screen; the wobble is the system."
+    ]
+  },
+  "personality": {
+    "do": [
+      "Friendly and practical - the tone of a classmate offering a seat.",
+      "Lime means go: reserve it for the action the screen wants taken.",
+      "Route lines, pickup pins, and the scooter illustrations carry the journey motif.",
+      "Rounded geometry throughout - buttons, cards, map pins."
+    ],
+    "dont": [
+      "No cab-aggregator urgency: no surge language, no countdown pressure.",
+      "No lime body text on cream - it fails contrast and reads as neon soup.",
+      "Don't put forest and black side by side; forest is the black.",
+      "Don't restyle the wordmark's pool ripple."
+    ]
+  },
+  "motifs": [
+    {
+      "title": "The route line",
+      "desc": "A rounded path stroke in lime connecting two pins - the closest thing UniPool has to a graphic signature."
+    },
+    {
+      "title": "Beep",
+      "desc": "The scooter illustration set used on empty states and the website. Keep it monoline, keep it forest."
+    },
+    {
+      "title": "Fare split",
+      "desc": "Money UI leans on mono digits and division - the product's whole pitch in one number."
+    }
+  ],
+  "shots": [
+    {
+      "src": "/projects/unipool/projects-unipool-shot-home.webp",
+      "alt": "UniPool home feed"
+    },
+    {
+      "src": "/projects/unipool/projects-unipool-shot-search.webp",
+      "alt": "UniPool ride search"
+    },
+    {
+      "src": "/projects/unipool/projects-unipool-shot-pay.webp",
+      "alt": "UniPool fare split"
+    }
+  ],
+  "links": [
+    {
+      "label": "unipool.acmvit.in",
+      "href": "https://unipool.acmvit.in",
+      "kind": "website"
+    },
+    {
+      "label": "Google Play",
+      "href": "https://play.google.com/store/apps/details?id=com.carpoolitapp&hl=en",
+      "kind": "play"
+    },
+    {
+      "label": "App Store",
+      "href": "https://apps.apple.com/in/app/unipool/id6756426249",
+      "kind": "appstore"
+    }
+  ],
+  "googleFonts": "https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap",
+  "order": 0
+}

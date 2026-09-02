@@ -1,0 +1,8 @@
+{
+  "name": "HackerRank",
+  "slug": "hackerrank",
+  "svgFile": "/domains/cc/tools/cc-tool-hackerrank.svg",
+  "colorHex": "#00EA64",
+  "monochrome": true,
+  "order": 20
+}

@@ -1,0 +1,73 @@
+{
+  "slug": "codart",
+  "title": "Codart",
+  "tagline": "Code meets darts. Aim well, code better.",
+  "eyebrow": "ACM-VIT · Competitive Coding + Darts",
+  "themeKey": "cc",
+  "themeColor": "#F06465",
+  "hideCtaBanner": true,
+  "cassetteSvg": "/events/events-codart-cassette.svg",
+  "shortDescription": "Codart is a standout ACM-VIT event combining competitive programming with dart throwing. You don't just need accuracy with your coding skills - you need aiming skills too.",
+  "longDescription": [
+    "Codart is one of ACM-VIT's most popular events - a perfect amalgamation of coding and fun. As the name suggests, there's a twist: you don't need accuracy just with your coding skills but even your aiming skills.",
+    "The event consisted of two rounds. The first was an online round on HackerEarth, featuring multiple levels like Rush Hour, Volatile Round, and Slip N Tweet. The second round was offline - and that's where the fun began. Participants threw darts, and the better the aim, the easier the coding question they received.",
+    "When the dart was thrown, the problem would pop up on the coder's screen through a custom portal created especially for Codart. It was then up to the coder to skillfully hustle through the problem, and the one with the most problems solved won.",
+    "Codart started with 120 participants in 2016 and grew massively, breaking VIT's records by 2018 with over 200 teams. It singlehandedly transformed codathons forever. Last conducted in 2019."
+  ],
+  "format": "Hybrid · Online coding round + offline dart-throwing finale",
+  "duration": "Multi-round",
+  "mode": "Hybrid",
+  "audience": "All undergraduate students",
+  "team": "Individual",
+  "organizedBy": "ACM-VIT · Competitive Coding Domain",
+  "firstHeld": "2016",
+  "recurrence": "Last conducted in 2019",
+  "registrationUrl": "https://acmvit.in/events",
+  "primaryCtaLabel": "Learn More",
+  "stats": [
+    {
+      "value": "200+",
+      "label": "Teams (2018)"
+    },
+    {
+      "value": "120",
+      "label": "Participants (2016)"
+    }
+  ],
+  "tracks": [],
+  "schedule": [
+    {
+      "time": "Round 1",
+      "title": "Online Round on HackerEarth",
+      "description": "Multiple levels: Rush Hour, Volatile Round, Slip N Tweet."
+    },
+    {
+      "time": "Round 2",
+      "title": "Offline Finale",
+      "description": "Three dart throws decide the difficulty of your coding challenge."
+    }
+  ],
+  "prizes": [],
+  "highlights": [],
+  "perks": [
+    "Custom portal built for the dart-to-code experience",
+    "Unique format combining physical skill with coding"
+  ],
+  "faq": [
+    {
+      "q": "How do darts affect the coding challenge?",
+      "a": "The better your aim, the easier the problem. Your dart throw determines the difficulty of the question that appears on screen."
+    },
+    {
+      "q": "What platform was the online round on?",
+      "a": "HackerEarth."
+    }
+  ],
+  "socials": [
+    {
+      "label": "Instagram · @acmvit",
+      "href": "https://instagram.com/acmvit"
+    }
+  ],
+  "order": 20
+}

@@ -1,0 +1,608 @@
+---
+import { getAssetUrl } from "../utils/cdn";
+export const prerender = true;
+import Layout from "../layouts/Layout.astro";
+import "../styles/globals.css";
+import Footer from "../layouts/Footer.astro";
+import AnimatedButton from "../components/ui/AnimatedButton.astro";
+
+const collections = [
+  {
+    year: "2026",
+    label: "LATEST",
+    title: "2026 Collection",
+    desc: "The current line. Six domain tees built around the Atlas system.",
+    cassette: getAssetUrl("/merch/merch-cassette-2026.webp"),
+    href: "/merchandise/2026",
+    accent: "#F95F4A",
+  },
+  {
+    year: "2025",
+    label: "RECENT",
+    title: "2025 Collection",
+    desc: "Seven domain tees with a Wayfarer back illustration, plus a Senior Core hoodie.",
+    cassette: getAssetUrl("/merch/merch-cassette-2025.webp"),
+    href: "/merchandise/2025",
+    accent: "#2023FE",
+  },
+  {
+    year: "2024",
+    label: "ARCHIVE",
+    title: "2024 Collection",
+    desc: "One tee per domain, each with its own graphic identity.",
+    cassette: getAssetUrl("/merch/merch-cassette-2024.webp"),
+    href: "/merchandise/2024",
+    accent: "#00C9A7",
+  },
+  {
+    year: "2023",
+    label: "ARCHIVE",
+    title: "2023 Collection",
+    desc: "Shared front across the lineup, domain identity printed on the back.",
+    cassette: getAssetUrl("/merch/merch-cassette-2023.webp"),
+    href: "/merchandise/2023",
+    accent: "#FF6B9D",
+  },
+  {
+    year: "BF",
+    label: "LIMITED",
+    title: "Board Farewell",
+    desc: "A short run to mark the end of a board tenure. Not on the regular catalog.",
+    cassette: getAssetUrl("/merch/merch-cassette-more.webp"),
+    href: "/merchandise/board-farewell",
+    accent: "#FFB800",
+  },
+  {
+    year: "++",
+    label: "MISC",
+    title: "Other Merchandise",
+    desc: "Event tees, collab pieces and one-off prints outside the yearly drops.",
+    cassette: getAssetUrl("/merch/merch-cassette-more.webp"),
+    href: "/merchandise/other",
+    accent: "#F95F4A",
+  },
+];
+---
+
+<Layout pageTitle="Merchandise" backHref="/">
+  <!-- ═══ HERO ═══ -->
+  <section class="merch-hero relative w-full min-h-screen overflow-hidden flex flex-col justify-center">
+    <div class="merch-bg-accent absolute top-0 right-0 w-[55%] h-full z-0"></div>
+    <div class="merch-stripe absolute top-[12%] left-0 w-full h-[3px] z-[1]"></div>
+    <div class="merch-stripe absolute bottom-[18%] left-0 w-full h-[2px] z-[1]"></div>
+
+    <div class="merch-title-wrap relative z-[2] pointer-events-none select-none pt-24 sm:pt-28">
+      <h1 class="merch-title" data-merch-title>
+        <span class="merch-char" data-merch-char>M</span>
+        <span class="merch-char" data-merch-char>E</span>
+        <span class="merch-char" data-merch-char>R</span>
+        <span class="merch-char" data-merch-char>C</span>
+        <span class="merch-char" data-merch-char>H</span>
+        <span class="merch-dot" data-merch-char>.</span>
+      </h1>
+    </div>
+
+    <div class="merch-model absolute z-[3]" data-merch-model>
+      <img src={getAssetUrl("/merch/merch-mannequin.webp")} alt="ACM-VIT Merchandise Model" class="merch-model-img" loading="eager" />
+    </div>
+
+    <div class="merch-edition absolute z-[4]" data-merch-edition>
+      <span class="merch-edition-num">2009</span>
+    </div>
+
+    <div class="merch-side-text absolute right-6 top-1/2 -translate-y-1/2 z-[4] hidden lg:block" data-merch-side>
+      <span>ACM-VIT</span>
+      <span>MERCHANDISE</span>
+      <span>COLLECTION</span>
+      <span>2025</span>
+    </div>
+
+    <div class="merch-bottom relative z-[5] w-full px-6 sm:px-12 lg:px-20 pb-12 sm:pb-16 mt-8">
+      <div class="max-w-2xl">
+        <p class="merch-tag" data-merch-tag>EVERY YEAR, A NEW LINE</p>
+        <p class="merch-desc" data-merch-desc>
+          ACM-VIT puts out a new merchandise collection for its members each year.
+          Every collection has its own visual direction, typography and palette,
+          built around the chapter and the year it represents.
+        </p>
+        <p class="merch-desc mt-3" data-merch-desc>
+          This archive holds every drop in one place - current line,
+          past years, board farewell editions, and the one-offs in between.
+        </p>
+        <div class="mt-8" data-merch-btn>
+          <AnimatedButton text="Explore Collections" href="#collections" iconBg="#F95F4A" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ COLLECTIONS ═══ -->
+  <section id="collections" class="collections-section relative px-6 sm:px-12 lg:px-20 pt-24 sm:pt-32 pb-24">
+    <div class="max-w-7xl">
+      <div class="mb-10">
+        <h2 class="coll-heading" data-coll-anim>
+          The full <span class="text-[#F95F4A]">archive.</span>
+        </h2>
+        <p class="coll-subtitle" data-coll-anim>
+          All collections in one place - every yearly drop, plus the limited
+          and one-off pieces.
+        </p>
+      </div>
+
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
+        {collections.map((c, i) => (
+          <a
+            href={c.href}
+            class="coll-card group relative overflow-hidden rounded-2xl border border-white/[0.06] transition-all duration-500 hover:border-white/[0.12]"
+            data-coll-card
+            style={`--card-accent: ${c.accent}`}
+          >
+            <div class="absolute top-0 left-0 w-1 h-full rounded-l-2xl" style={`background: ${c.accent}`} />
+
+            <div class="coll-card-inner relative flex flex-col items-center gap-4 p-5 sm:p-6 text-center">
+              <div class="coll-cassette relative flex-shrink-0">
+                <img
+                  src={c.cassette}
+                  alt={`${c.title} cassette`}
+                  class="w-24 h-24 sm:w-28 sm:h-28 object-contain transition-transform duration-500 group-hover:scale-105 group-hover:rotate-3"
+                  loading="lazy"
+                />
+              </div>
+
+              <div class="flex-1">
+                <div class="flex items-center gap-2 justify-center mb-1.5">
+                  <span class="coll-year">{c.year}</span>
+                  <span class="coll-label" style={`color: ${c.accent}`}>{c.label}</span>
+                </div>
+                <h3 class="coll-title">{c.title}</h3>
+                <p class="coll-desc">{c.desc}</p>
+              </div>
+            </div>
+
+            <div class="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" style={`background: radial-gradient(ellipse at 30% 50%, ${c.accent}08 0%, transparent 70%)`} />
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ END SECTION ═══ -->
+  <section class="merch-end relative w-full overflow-hidden px-6 sm:px-12 lg:px-20 pt-16 pb-8" data-merch-lineup>
+    <div class="max-w-5xl mx-auto flex flex-col items-center text-center">
+      <p class="merch-end-text" data-merch-end-text>you have reached the end of the rack</p>
+      <p class="merch-end-sub">no more hangers, just vibes from here</p>
+      <img
+        src={getAssetUrl("/merch/merch-lineup.webp")}
+        alt="ACM-VIT merchandise lineup"
+        class="merch-lineup-img w-full max-w-4xl h-auto object-contain mt-8"
+        loading="lazy"
+      />
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style>
+  /* ══════════ HERO ══════════ */
+  .merch-hero { background: transparent; }
+
+  .merch-bg-accent {
+    background: linear-gradient(135deg, rgba(249, 95, 74, 0.06) 0%, rgba(249, 95, 74, 0.02) 100%);
+    clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
+  }
+
+  .merch-stripe {
+    background: linear-gradient(90deg, transparent 0%, rgba(249, 95, 74, 0.15) 30%, rgba(249, 95, 74, 0.15) 70%, transparent 100%);
+  }
+
+  .merch-title {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(6rem, 15vw, 14rem);
+    line-height: 0.85;
+    letter-spacing: -0.04em;
+    color: #FEFCD9;
+    margin: 0;
+    padding-left: 5vw;
+    display: flex;
+    align-items: baseline;
+  }
+
+  .merch-char {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(60px);
+  }
+
+  .merch-dot {
+    display: inline-block;
+    color: #F95F4A;
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  .merch-model {
+    right: 8%;
+    bottom: 0;
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  .merch-model-img {
+    height: 85vh;
+    width: auto;
+    max-width: none;
+    object-fit: contain;
+    filter: drop-shadow(0 20px 60px rgba(0, 0, 0, 0.4));
+  }
+
+  .merch-edition {
+    left: 5vw;
+    bottom: 28%;
+    opacity: 0;
+  }
+
+  .merch-edition-num {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(4rem, 10vw, 8rem);
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 2px rgba(249, 95, 74, 0.3);
+    letter-spacing: -0.02em;
+  }
+
+  .merch-side-text {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    display: flex;
+    gap: 1.5rem;
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(254, 252, 217, 0.5);
+    opacity: 0;
+  }
+
+  .merch-tag {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #F95F4A;
+    margin-bottom: 1rem;
+  }
+
+  .merch-desc {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-size: 0.95rem;
+    font-weight: 400;
+    line-height: 1.7;
+    color: rgba(254, 252, 217, 0.72);
+    max-width: 520px;
+  }
+
+  /* ══════════ COLLECTIONS ══════════ */
+  .coll-heading {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(3rem, 8vw, 6rem);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    color: #FEFCD9;
+    margin: 0 0 1.5rem;
+  }
+
+  .coll-subtitle {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.7;
+    color: rgba(254, 252, 217, 0.7);
+    max-width: 480px;
+  }
+
+.coll-card {
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(8px);
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .coll-card:hover {
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+  }
+
+  .coll-year {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.8rem;
+    line-height: 1;
+    color: #FEFCD9;
+    letter-spacing: -0.02em;
+  }
+
+  .coll-label {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .coll-title {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-weight: 500;
+    font-size: 1.15rem;
+    color: rgba(254, 252, 217, 0.85);
+    margin-bottom: 0.4rem;
+  }
+
+  .coll-desc {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-size: 0.82rem;
+    font-weight: 400;
+    line-height: 1.6;
+    color: rgba(254, 252, 217, 0.72);
+  }
+
+  .coll-arrow {
+    color: rgba(254, 252, 217, 0.72);
+  }
+
+  .coll-card:hover .coll-arrow {
+    color: rgba(254, 252, 217, 0.8);
+  }
+
+  .coll-cassette img {
+    filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.3));
+  }
+
+  /* ══════════ END SECTION ══════════ */
+  .merch-end-text {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    letter-spacing: -0.02em;
+    color: rgba(254, 252, 217, 0.32);
+    text-transform: lowercase;
+  }
+
+  .merch-end-sub {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: rgba(254, 252, 217, 0.22);
+    margin-top: 0.25rem;
+  }
+
+  :global(html[data-theme="light"]) .merch-end-sub {
+    color: rgba(0, 0, 0, 0.22);
+  }
+
+  .merch-lineup-img {
+    mix-blend-mode: lighten;
+    filter: drop-shadow(0 16px 40px rgba(0, 0, 0, 0.3));
+  }
+
+  :global(html[data-theme="light"]) .merch-end-text {
+    color: rgba(0, 0, 0, 0.3);
+  }
+
+  :global(html[data-theme="light"]) .merch-lineup-img {
+    mix-blend-mode: multiply;
+    filter: drop-shadow(0 16px 40px rgba(0, 0, 0, 0.1));
+  }
+
+  /* ══════════ RESPONSIVE ══════════ */
+  @media (max-width: 1024px) {
+    .merch-model { right: 2%; }
+    .merch-model-img { height: 60vh; }
+    .merch-title { font-size: clamp(4rem, 12vw, 8rem); }
+    .merch-edition-num { font-size: clamp(3rem, 8vw, 5rem); }
+  }
+
+  @media (max-width: 768px) {
+    .merch-hero {
+      min-height: 100svh;
+      justify-content: flex-start;
+    }
+    .merch-title-wrap { padding-top: 5rem; }
+    .merch-title {
+      font-size: clamp(3.5rem, 14vw, 5rem);
+      padding-left: 6vw;
+    }
+    .merch-bg-accent {
+      width: 55%;
+      height: 65%;
+      top: auto;
+      bottom: 0;
+      clip-path: polygon(20% 0, 100% 0, 100% 100%, 0% 100%);
+    }
+    .merch-model {
+      right: -8%;
+      bottom: 5%;
+      top: auto;
+    }
+    .merch-model-img { height: 58vh; }
+    .merch-edition {
+      bottom: auto;
+      top: 6rem;
+      left: auto;
+      right: 5vw;
+    }
+    .merch-edition-num { font-size: clamp(2rem, 6vw, 3rem); }
+    .merch-bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      z-index: 5;
+      padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+      margin-top: 0;
+    }
+    .merch-desc {
+      font-size: 0.8rem;
+      max-width: 55%;
+    }
+    .merch-stripe { display: none; }
+  }
+
+  @media (max-width: 480px) {
+    .merch-title { font-size: clamp(2.8rem, 16vw, 4rem); }
+    .merch-model-img { height: 50vh; }
+    .merch-desc {
+      max-width: 50%;
+      font-size: 0.75rem;
+    }
+  }
+
+  /* ══════════ LIGHT MODE ══════════ */
+  :global(html[data-theme="light"]) .merch-title,
+  :global(html[data-theme="light"]) .coll-heading {
+    color: #1a1a1a;
+  }
+
+  :global(html[data-theme="light"]) .merch-dot { color: #F95F4A; }
+
+  :global(html[data-theme="light"]) .merch-bg-accent {
+    background: linear-gradient(135deg, rgba(249, 95, 74, 0.08) 0%, rgba(249, 95, 74, 0.03) 100%);
+  }
+
+  :global(html[data-theme="light"]) .merch-stripe {
+    background: linear-gradient(90deg, transparent 0%, rgba(249, 95, 74, 0.12) 30%, rgba(249, 95, 74, 0.12) 70%, transparent 100%);
+  }
+
+  :global(html[data-theme="light"]) .merch-desc,
+  :global(html[data-theme="light"]) .coll-subtitle {
+    color: rgba(0, 0, 0, 0.66);
+  }
+
+  :global(html[data-theme="light"]) .merch-edition-num {
+    -webkit-text-stroke-color: rgba(249, 95, 74, 0.2);
+  }
+
+  :global(html[data-theme="light"]) .merch-side-text {
+    color: rgba(0, 0, 0, 0.42);
+  }
+
+  :global(html[data-theme="light"]) .merch-model-img {
+    filter: drop-shadow(0 20px 60px rgba(0, 0, 0, 0.15));
+  }
+
+  :global(html[data-theme="light"]) .coll-card {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.06);
+  }
+
+  :global(html[data-theme="light"]) .coll-card:hover {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+  }
+
+  :global(html[data-theme="light"]) .coll-year {
+    color: #1a1a1a;
+  }
+
+  :global(html[data-theme="light"]) .coll-title {
+    color: rgba(0, 0, 0, 0.8);
+  }
+
+  :global(html[data-theme="light"]) .coll-desc {
+    color: rgba(0, 0, 0, 0.62);
+  }
+
+  :global(html[data-theme="light"]) .coll-arrow {
+    color: rgba(0, 0, 0, 0.3);
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+
+  :global(html[data-theme="light"]) .coll-card:hover .coll-arrow {
+    color: rgba(0, 0, 0, 0.7);
+    border-color: rgba(0, 0, 0, 0.2);
+  }
+
+  :global(html[data-theme="light"]) .coll-cassette img {
+    filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.12));
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // ── Hero animation ──
+  const chars = document.querySelectorAll("[data-merch-char]");
+  const model = document.querySelector("[data-merch-model]");
+  const edition = document.querySelector("[data-merch-edition]");
+  const sideText = document.querySelector("[data-merch-side]");
+  const tag = document.querySelector("[data-merch-tag]");
+  const descs = document.querySelectorAll("[data-merch-desc]");
+  const btn = document.querySelector("[data-merch-btn]");
+
+  const tl = gsap.timeline({ defaults: { ease: "power3.out" }, delay: 0.3 });
+
+  tl.to(chars, { opacity: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.08 });
+
+  if (model) {
+    tl.to(model, { opacity: 1, y: 0, duration: 1, ease: "power3.out" }, "-=0.5");
+  }
+  if (edition) {
+    tl.to(edition, { opacity: 1, duration: 0.6 }, "-=0.7");
+  }
+  if (sideText) {
+    tl.to(sideText, { opacity: 1, duration: 0.5 }, "-=0.5");
+  }
+  if (tag) {
+    tl.fromTo(tag, { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.5 }, "-=0.3");
+  }
+  if (descs.length) {
+    tl.fromTo(descs, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.15 }, "-=0.3");
+  }
+  if (btn) {
+    tl.fromTo(btn, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4 }, "-=0.2");
+  }
+
+  // ── Collections animation ──
+  const collAnims = document.querySelectorAll("[data-coll-anim]");
+  gsap.fromTo(collAnims,
+    { opacity: 0, y: 30 },
+    {
+      opacity: 1, y: 0, duration: 0.7, stagger: 0.12, ease: "power3.out",
+      scrollTrigger: { trigger: ".collections-section", start: "top 80%", once: true },
+    }
+  );
+
+  // Lineup image
+  const lineup = document.querySelector("[data-merch-lineup]");
+  if (lineup) {
+    gsap.fromTo(lineup,
+      { opacity: 0, y: 50 },
+      {
+        opacity: 1, y: 0, duration: 0.8, ease: "power3.out",
+        scrollTrigger: { trigger: lineup, start: "top 85%", once: true },
+      }
+    );
+  }
+
+  const cards = document.querySelectorAll("[data-coll-card]");
+  cards.forEach((card, i) => {
+    gsap.fromTo(card,
+      { opacity: 0, y: 40 },
+      {
+        opacity: 1, y: 0, duration: 0.6, ease: "power3.out",
+        scrollTrigger: { trigger: card, start: "top 85%", once: true },
+        delay: (i % 2) * 0.1,
+      }
+    );
+  });
+</script>

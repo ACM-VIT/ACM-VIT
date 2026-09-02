@@ -1,0 +1,53 @@
+{
+  "slug": "dr-federica-sarro",
+  "title": "Search-Based Software Engineering",
+  "tagline": "Intelligent optimisation for modern software systems with Dr. Federica Sarro.",
+  "eyebrow": "ACM-VIT · Distinguished Speaker Session · November 2025",
+  "themeKey": "research",
+  "themeColor": "#F3ED99",
+  "hideCtaBanner": true,
+  "cassetteSvg": "/events/events-federica-sarro-cassette.webp",
+  "shortDescription": "ACM-VIT hosted an insightful session with Dr. Federica Sarro, Professor of Software Engineering at University College London, exploring search-based software engineering for modern software systems.",
+  "longDescription": [
+    "ACM-VIT hosted an insightful session with Dr. Federica Sarro, Professor of Software Engineering at University College London. The talk, titled 'Search-Based Software Engineering', explored key areas such as software optimisation, predictive analytics, and empirical software engineering, with a focused discussion on search-based software engineering for modern software systems.",
+    "Dr. Sarro shared how intelligent optimisation and data-driven techniques are transforming the way complex software challenges are addressed in practice. The session provided attendees with valuable perspectives on improving software quality, efficiency, and decision-making, and concluded with an engaging interaction that encouraged deeper understanding of emerging trends in software engineering."
+  ],
+  "format": "Speaker Session · Distinguished Speaker Programme",
+  "duration": "1 session",
+  "mode": "Online",
+  "audience": "All students",
+  "team": "Individual",
+  "organizedBy": "ACM-VIT",
+  "recurrence": "One-time session",
+  "registrationUrl": "https://www.youtube.com/watch?v=f9hT679ABb8",
+  "primaryCtaLabel": "Watch Recording",
+  "speaker": {
+    "name": "Dr. Federica Sarro",
+    "role": "Professor of Software Engineering",
+    "institution": "University College London (UCL)",
+    "image": "/community/community-federica-sarro.webp",
+    "bio": [
+      "Federica Sarro is Professor of Software Engineering at University College London (UCL), where she heads the Software Systems Engineering group and leads the SOLAR (Software Analysis and Learning) research group. Her research focuses on search-based software engineering, software effort estimation, and app store analysis.",
+      "She has served as Chair of the IEEE Technical Council on Software Engineering (TCSE) since January 2025. Her work applies intelligent optimisation and machine learning techniques to solve complex software engineering problems, and has been widely recognised through publications in top venues and best paper awards."
+    ],
+    "profileUrl": "https://profiles.ucl.ac.uk/38657-federica-sarro"
+  },
+  "stats": [],
+  "tracks": [],
+  "schedule": [],
+  "prizes": [],
+  "highlights": [],
+  "perks": [],
+  "faq": [],
+  "socials": [
+    {
+      "label": "Recording · YouTube",
+      "href": "https://www.youtube.com/watch?v=f9hT679ABb8"
+    },
+    {
+      "label": "Instagram · @acmvit",
+      "href": "https://instagram.com/acmvit"
+    }
+  ],
+  "order": 150
+}

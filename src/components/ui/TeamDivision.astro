@@ -1,0 +1,82 @@
+---
+import BoardMemberCardSingular from "./BoardMemberCardSingular.astro";
+import type { TeamDivisionDef, TeamMember } from "../../data/teamData";
+
+/**
+ * TeamDivision - the Board for a given year: an accent heading + a
+ * responsive grid of cassette member cards.
+ */
+export interface Props {
+  division: TeamDivisionDef;
+  members: TeamMember[];
+}
+
+const { division, members } = Astro.props;
+---
+
+<div class="team-division" style={`--div-accent: ${division.accent};`}>
+  <div class="division-head flex items-center gap-3">
+    <span class="division-dot"></span>
+    <h4 class="division-title font-['PolySans_Trial',sans-serif] text-lg font-semibold uppercase tracking-wide text-[#FEFCD9] sm:text-xl">
+      {division.label}
+    </h4>
+    <span class="division-line"></span>
+    <span class="division-count font-['PolySans_Trial',sans-serif] text-xs font-light tracking-widest text-[#FEFCD9]/55">
+      {String(members.length).padStart(2, "0")}
+    </span>
+  </div>
+
+  <div class="division-grid mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      members.map((m) => (
+        <div class="card-wrap mx-auto w-[90%] sm:mx-0 sm:w-full" data-reveal>
+          <BoardMemberCardSingular
+            title={m.title}
+            fullName={m.fullName}
+            position={m.position}
+            imageUrl={m.imageUrl}
+            linkedinUrl={m.linkedinUrl}
+            githubUrl={m.githubUrl}
+            googleScholarUrl={m.googleScholarUrl}
+            isW={m.isW}
+          />
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .team-division {
+    margin-bottom: clamp(3rem, 6vw, 5rem);
+  }
+  .division-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 9999px;
+    background: var(--div-accent);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--div-accent) 70%, transparent);
+    flex-shrink: 0;
+  }
+  .division-line {
+    flex: 1;
+    height: 0;
+    border-top: 1px dashed rgba(254, 252, 217, 0.18);
+  }
+  .card-wrap {
+    transition: transform 0.3s ease;
+  }
+  .card-wrap:hover {
+    transform: translateY(-6px) scale(1.02);
+  }
+
+  :global(html[data-theme="light"]) .division-title {
+    color: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .division-line {
+    border-top-color: rgba(26, 26, 26, 0.18);
+  }
+  :global(html[data-theme="light"]) .division-count {
+    color: rgba(26, 26, 26, 0.5);
+  }
+</style>

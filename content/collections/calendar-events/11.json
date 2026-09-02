@@ -1,0 +1,12 @@
+{
+  "slug": "11",
+  "order": 100,
+  "id": "11",
+  "title": "CodArt",
+  "date": "2026-07-25",
+  "startTime": "15:00",
+  "endTime": "18:00",
+  "domain": "design",
+  "description": "Creative coding competition - blend algorithms and art using p5.js and generative techniques.",
+  "location": "Anna Auditorium, VIT Vellore"
+}

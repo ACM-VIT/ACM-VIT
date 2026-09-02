@@ -1,0 +1,560 @@
+---
+export const prerender = true;
+import DesignLayout from "../../layouts/DesignLayout.astro";
+
+const scale = [
+  { name: "Display", px: "64 / 68", weight: "640", track: "-3%", use: "Hero statements, one per page", cls: "ds-display", sample: "Diamond" },
+  { name: "Heading 1", px: "48 / 52", weight: "620", track: "-2.5%", use: "Page titles", cls: "ds-h1", sample: "We build in public" },
+  { name: "Heading 2", px: "32 / 36", weight: "600", track: "-2%", use: "Section titles", cls: "ds-h2", sample: "Research, build, ship" },
+  { name: "Heading 3", px: "24 / 28", weight: "600", track: "-1.2%", use: "Card titles, sub-sections", cls: "ds-h3", sample: "Open source at heart" },
+  { name: "Body large", px: "18 / 28", weight: "400", track: "0", use: "Lead paragraphs", cls: "ds-body-lg", sample: "The chapter turns twenty this year, and the mixtape keeps rolling." },
+  { name: "Body", px: "16 / 26", weight: "400", track: "0", use: "Default running text", cls: "ds-body", sample: "ACM-VIT is the official student chapter of the Association for Computing Machinery at VIT Vellore." },
+  { name: "Caption", px: "13 / 20", weight: "400", track: "0", use: "Metadata, footnotes", cls: "ds-small", sample: "Photographed at Anna Auditorium, Riviera 2025." },
+];
+
+const weights = [
+  { w: 400, name: "Regular", use: "Body text" },
+  { w: 500, name: "Medium", use: "UI labels, nav" },
+  { w: 600, name: "SemiBold", use: "Headings, buttons" },
+  { w: 700, name: "Bold", use: "The wordmark weight, emphasis" },
+];
+
+// Glyph set for the interactive character map (section 05).
+const glyphs = [
+  ..."ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+  ..."ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞ",
+  ..."abcdefghijklmnopqrstuvwxyz",
+  ..."àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþß",
+  ..."0123456789",
+  ..."&@#$€.,;:!?'\"“”‘’()[]{}/\\%+-=*·•…",
+];
+---
+
+<DesignLayout
+  title="Typography"
+  description="DM Sans is the official ACM-VIT typeface. Scale, weights, and typesetting rules."
+  current="/design/typography"
+>
+  <section class="ds-hero">
+    <div class="ds-kicker"><span class="ds-kicker-pill">Brand · Typography</span></div>
+    <h1 class="ds-h1">One typeface: DM Sans.</h1>
+    <p class="ds-body-lg">
+      DM Sans is the ACM-VIT typeface - it is the letterform inside the
+      diamond and the voice of everything we publish. A low-contrast geometric
+      sans, warm without being soft. Use it everywhere; you rarely need a
+      second family.
+    </p>
+  </section>
+
+  <!-- 01 · Specimen -->
+  <section class="ds-section" id="specimen">
+    <div class="ds-sec-head"><span class="ds-sec-num">01</span><h2 class="ds-h2">The typeface</h2></div>
+    <div class="ds-card ds-card-tonal ds-reveal" style="margin-top:24px; padding:clamp(28px,4vw,52px);">
+      <p style="font-size:clamp(40px,7.5vw,84px); font-weight:640; letter-spacing:-0.035em; line-height:1.02;">
+        AaBbCcDdEe<br />1234567890
+      </p>
+      <p class="ds-body" style="margin-top:22px; max-width:60ch;">
+        DM Sans, designed by Colophon Foundry and Jonny Pinhorn, published by
+        Google Fonts under the Open Font License. Free for print, web, and
+        product use - no licensing questions, ever.
+      </p>
+      <div style="display:flex; gap:12px; margin-top:20px; flex-wrap:wrap;">
+        <a class="ds-btn ds-btn-outline ds-btn-sm" href="https://fonts.google.com/specimen/DM+Sans" target="_blank" rel="noopener">Get DM Sans ↗</a>
+        <span class="ds-chip">Variable · weight 100 to 1000</span>
+        <span class="ds-chip">Optical sizing 9 to 40</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 · Scale -->
+  <section class="ds-section" id="scale">
+    <div class="ds-sec-head"><span class="ds-sec-num">02</span><h2 class="ds-h2">Type scale</h2></div>
+    <p class="ds-body">
+      Sizes and line heights sit on the 4pt rhythm. Values are desktop
+      reference sizes; they scale down fluidly on smaller screens.
+    </p>
+    <div class="ds-card ds-reveal" style="margin-top:24px; padding:0; overflow-x:auto;">
+      <table class="ds-table" style="margin-top:0">
+        <thead>
+          <tr><th style="width:36%">Sample</th><th>Style</th><th>Size / Line</th><th>Weight</th><th>Tracking</th><th>Use</th></tr>
+        </thead>
+        <tbody>
+          {
+            scale.map((s) => (
+              <tr>
+                <td style="overflow:hidden">
+                  <span class={s.cls} style="color:var(--ds-ink); white-space:nowrap; display:block; overflow:hidden; text-overflow:ellipsis;">{s.sample}</span>
+                </td>
+                <td>{s.name}</td>
+                <td class="ds-mono">{s.px}</td>
+                <td class="ds-mono">{s.weight}</td>
+                <td class="ds-mono">{s.track}</td>
+                <td>{s.use}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 03 · Weights -->
+  <section class="ds-section" id="weights">
+    <div class="ds-sec-head"><span class="ds-sec-num">03</span><h2 class="ds-h2">Weights</h2></div>
+    <p class="ds-body">
+      The variable font covers 100 to 1000; we use four stops. Headline
+      weights lean slightly heavier than default to match the wordmark.
+    </p>
+    <div class="ds-bento">
+      {
+        weights.map((w) => (
+          <div class="ds-card ds-b3 ds-reveal">
+            <span style={`font-size:44px; font-weight:${w.w}; letter-spacing:-0.02em; display:block; line-height:1.1;`}>Aa</span>
+            <h3 class="ds-h4" style="margin-top:12px">{w.name} · {w.w}</h3>
+            <p class="ds-small" style="margin-top:4px">{w.use}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 04 · Rules -->
+  <section class="ds-section" id="rules">
+    <div class="ds-sec-head"><span class="ds-sec-num">04</span><h2 class="ds-h2">Typesetting rules</h2></div>
+    <div class="ds-bento">
+      <div class="ds-card ds-b6 ds-reveal">
+        <span class="ds-chip ds-chip-do" style="margin-bottom:12px">Do</span>
+        <ul class="ds-t-list">
+          <li>Tighten tracking as size grows: <span class="ds-mono">-2%</span> to <span class="ds-mono">-3%</span> on display sizes.</li>
+          <li>Sentence case for headings and buttons.</li>
+          <li>Keep line length between 45 and 75 characters.</li>
+          <li>Use real quotes and plain dashes - like this.</li>
+          <li>Tabular figures for tables and countdowns.</li>
+        </ul>
+      </div>
+      <div class="ds-card ds-b6 ds-reveal">
+        <span class="ds-chip ds-chip-dont" style="margin-bottom:12px">Don't</span>
+        <ul class="ds-t-list">
+          <li>No faux bold or faux italic - the variable font has real ones.</li>
+          <li>No all-caps body text; caps are for small labels only.</li>
+          <li>No stretched or condensed type, ever.</li>
+          <li>No second typeface without a product-level reason (z0d1ak's display serif is the sanctioned exception).</li>
+          <li>No em dashes - a spaced plain dash is the house style.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 · Character map -->
+  <section class="ds-section" id="charmap">
+    <div class="ds-sec-head"><span class="ds-sec-num">05</span><h2 class="ds-h2">Character map</h2></div>
+    <p class="ds-body">
+      The full Latin set DM Sans ships with. Click any glyph to inspect it
+      against the vertical metrics - cap height, x-height, baseline, and
+      descender - measured live from the font.
+    </p>
+
+    <div class="ty-charmap ds-reveal">
+      <div class="ty-stage">
+        <div class="ty-toggle" role="tablist" aria-label="Specimen mode">
+          <button class="ty-tog is-on" data-mode="solid" role="tab" aria-selected="true" type="button">Solid</button>
+          <button class="ty-tog" data-mode="anchors" role="tab" aria-selected="false" type="button">Anchors</button>
+        </div>
+        <svg id="ty-svg" role="img" aria-label="Glyph specimen with vertical metrics" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="ty-stage-tag">
+          <span class="ds-mono ds-small" id="ty-current">H</span>
+          <span class="ds-mono ds-small ty-stage-upm">DM Sans · 1000 UPM</span>
+        </div>
+      </div>
+      <div class="ty-grid" id="ty-grid" role="listbox" aria-label="DM Sans glyphs">
+        {
+          glyphs.map((ch) => (
+            <button
+              class:list={["ty-cell", ch === "H" && "is-active"]}
+              data-g={ch}
+              type="button"
+              role="option"
+              aria-selected={ch === "H" ? "true" : "false"}
+            >
+              {ch}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</DesignLayout>
+
+<style>
+  .ds-t-list {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--ds-ink-2);
+    font-size: 14.5px;
+    line-height: 1.7;
+  }
+  .ds-t-list li + li {
+    margin-top: 6px;
+  }
+
+  /* ---- character map (Vercel-style specimen) ---- */
+  .ty-charmap {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: 1fr;
+    border: 1px solid var(--ds-line);
+    border-radius: var(--ds-r-md);
+    overflow: hidden;
+    background: var(--ds-surface);
+  }
+  @media (min-width: 900px) {
+    .ty-charmap {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+  }
+  .ty-stage {
+    position: relative;
+    background: var(--ds-surface-tonal);
+    border-bottom: 1px solid var(--ds-line);
+    min-height: 340px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px 20px;
+  }
+  @media (min-width: 900px) {
+    .ty-stage {
+      border-bottom: none;
+      border-right: 1px solid var(--ds-line);
+      position: sticky;
+      top: 0;
+      align-self: start;
+      min-height: 520px;
+    }
+  }
+  #ty-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .ty-toggle {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: inline-flex;
+    gap: 2px;
+    padding: 3px;
+    border-radius: var(--ds-r-full);
+    background: var(--ds-surface);
+    border: 1px solid var(--ds-line);
+    z-index: 2;
+  }
+  .ty-tog {
+    border: none;
+    background: transparent;
+    color: var(--ds-ink-3);
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: var(--ds-r-full);
+    cursor: pointer;
+    transition: background 0.14s ease, color 0.14s ease;
+  }
+  .ty-tog:hover {
+    color: var(--ds-ink);
+  }
+  .ty-tog.is-on {
+    background: var(--ds-ink);
+    color: #fff;
+  }
+  .ty-stage-tag {
+    position: absolute;
+    left: 16px;
+    bottom: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    pointer-events: none;
+  }
+  .ty-stage-tag > span:first-child {
+    font-size: 15px;
+    color: var(--ds-ink);
+    font-weight: 600;
+  }
+  .ty-stage-upm {
+    color: var(--ds-ink-3) !important;
+    letter-spacing: 0.04em;
+  }
+  .ty-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+    gap: 1px;
+    background: var(--ds-line);
+    max-height: none;
+    overflow: visible;
+  }
+  @media (min-width: 900px) {
+    .ty-grid {
+      max-height: 520px;
+      overflow-y: auto;
+    }
+  }
+  .ty-cell {
+    aspect-ratio: 1 / 1;
+    border: none;
+    background: var(--ds-surface);
+    color: var(--ds-ink);
+    font-family: inherit;
+    font-size: 21px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.12s ease, color 0.12s ease;
+  }
+  .ty-cell:hover {
+    background: var(--ds-surface-tonal);
+  }
+  .ty-cell.is-active {
+    background: var(--ds-ink);
+    color: #fff;
+  }
+  :global(html[data-theme="dark"]) .ty-tog.is-on,
+  :global(html[data-theme="dark"]) .ty-cell.is-active {
+    color: var(--ds-bg);
+  }
+  .ty-cell:focus-visible {
+    outline: 2px solid var(--ds-accent);
+    outline-offset: -2px;
+    z-index: 1;
+  }
+</style>
+
+<script>
+  const svg = document.getElementById("ty-svg");
+  const grid = document.getElementById("ty-grid");
+  const current = document.getElementById("ty-current");
+
+  if (svg && grid) {
+    const NS = "http://www.w3.org/2000/svg";
+    const VBW = 660;
+    const S = 440; // glyph size in svg units (1000 UPM => 1em)
+    const INSET = 12; // keep labels/values off the edges
+    const PAD = 40; // headroom above cap / below descender
+    const GX = VBW * 0.5;
+
+    // theme-accurate colours read from the design-system tokens. The tokens
+    // live on .ds-root (the body), and are re-read on every build() so the
+    // dark-mode toggle recolours the specimen live.
+    let INK = "#1c1b1a";
+    let INK3 = "#79746e";
+    let BG = "#faf9f7";
+    let MONO = "ui-monospace, monospace";
+    function readTokens() {
+      const cs = getComputedStyle(document.body);
+      INK = cs.getPropertyValue("--ds-ink").trim() || INK;
+      INK3 = cs.getPropertyValue("--ds-ink-3").trim() || INK3;
+      BG = cs.getPropertyValue("--ds-bg").trim() || BG;
+      MONO = cs.getPropertyValue("--ds-mono").trim() || MONO;
+    }
+
+    const FS = 400;
+    const mctx = document.createElement("canvas").getContext("2d");
+    const setFont = () => {
+      if (mctx) {
+        mctx.font = `${FS}px "DM Sans", sans-serif`;
+        mctx.textBaseline = "alphabetic";
+        mctx.textAlign = "center";
+      }
+    };
+
+    let glyph = "H";
+    let mode = "solid";
+    // fallback ratios (asc/descMax bound the fixed viewBox)
+    let m = { cap: 0.71, xh: 0.52, desc: 0.22, asc: 0.99, descMax: 0.27 };
+
+    function measureFont() {
+      if (!mctx) return m;
+      setFont();
+      const cap = mctx.measureText("H").actualBoundingBoxAscent / FS;
+      const xh = mctx.measureText("x").actualBoundingBoxAscent / FS;
+      let desc = 0;
+      for (const c of "gjpqy") {
+        desc = Math.max(desc, mctx.measureText(c).actualBoundingBoxDescent / FS);
+      }
+      // tallest ink (accents / ascenders) and deepest ink across the set,
+      // so the fixed viewBox never clips any glyph
+      let asc = cap;
+      for (const c of "ÅÄÁÀÂÃÉÊÍÎÏÑÓÔÕÖÜÚÛÝbdfhklt") {
+        asc = Math.max(asc, mctx.measureText(c).actualBoundingBoxAscent / FS);
+      }
+      let descMax = desc;
+      for (const c of "gjpqyQµÇç") {
+        descMax = Math.max(descMax, mctx.measureText(c).actualBoundingBoxDescent / FS);
+      }
+      if (!cap || !xh) return m;
+      return { cap, xh, desc, asc, descMax };
+    }
+
+    // ink bounds of the current glyph, in svg units, around the (GX, baseline) origin
+    function glyphBounds(ch) {
+      if (!mctx) return { asc: m.cap * S, desc: m.desc * S, left: S * 0.3, right: S * 0.3 };
+      setFont();
+      const t = mctx.measureText(ch);
+      return {
+        asc: (t.actualBoundingBoxAscent || m.cap * FS) / FS * S,
+        desc: (t.actualBoundingBoxDescent || 0) / FS * S,
+        left: (t.actualBoundingBoxLeft || t.width / 2) / FS * S,
+        right: (t.actualBoundingBoxRight || t.width / 2) / FS * S,
+      };
+    }
+
+    function el(name, attrs, text) {
+      const n = document.createElementNS(NS, name);
+      for (const k in attrs) n.setAttribute(k, String(attrs[k]));
+      if (text != null) n.textContent = text;
+      return n;
+    }
+
+    function anchor(px, py) {
+      const sq = 11;
+      return el("rect", {
+        x: px - sq / 2,
+        y: py - sq / 2,
+        width: sq,
+        height: sq,
+        fill: "#fff",
+        stroke: INK,
+        "stroke-width": 1.6,
+      });
+    }
+
+    function build() {
+      readTokens();
+      const capPx = m.cap * S;
+      const xPx = m.xh * S;
+      const descPx = m.desc * S;
+      // work with baseline at y = 0; viewBox shifts to fit
+      const capY = -capPx;
+      const xY = -xPx;
+      const baseY = 0;
+      const descY = descPx;
+
+      // fixed viewBox (constant across glyphs) so the specimen never shifts
+      const top = -m.asc * S - PAD;
+      const bottom = m.descMax * S + PAD;
+      const VBH = bottom - top;
+      svg.setAttribute("viewBox", `0 ${top} ${VBW} ${VBH}`);
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+      // glyph (behind the guides)
+      if (mode === "solid") {
+        svg.appendChild(
+          el("text", { x: GX, y: baseY, "font-size": S, "text-anchor": "middle", fill: INK }, glyph),
+        );
+      } else {
+        svg.appendChild(
+          el(
+            "text",
+            { x: GX, y: baseY, "font-size": S, "text-anchor": "middle", fill: "none", stroke: INK, "stroke-width": 2 },
+            glyph,
+          ),
+        );
+        // approximate anchor nodes at the ink bounding box
+        const gb = glyphBounds(glyph);
+        const lx = GX - gb.left;
+        const rx = GX + gb.right;
+        const ty = -gb.asc;
+        const by = gb.desc;
+        for (const [px, py] of [
+          [lx, ty], [rx, ty], [GX, ty],
+          [lx, by], [rx, by], [GX, by],
+        ]) {
+          svg.appendChild(anchor(px, py));
+        }
+      }
+
+      const lines = [
+        { y: capY, lbl: "CAP HEIGHT", val: Math.round(m.cap * 1000) },
+        { y: xY, lbl: "X-HEIGHT", val: Math.round(m.xh * 1000) },
+        { y: baseY, lbl: "BASELINE", val: 0, strong: true },
+        { y: descY, lbl: "DESCENDER", val: -Math.round(m.desc * 1000) },
+      ];
+      const vw = 46;
+      const vx = VBW - INSET - vw;
+      for (const ln of lines) {
+        svg.appendChild(
+          el("line", {
+            x1: INSET,
+            y1: ln.y,
+            x2: VBW - INSET,
+            y2: ln.y,
+            stroke: INK3,
+            "stroke-width": 1.6,
+            "stroke-linecap": "round",
+            "stroke-dasharray": "1 6",
+            opacity: ln.strong ? 0.9 : 0.6,
+          }),
+        );
+        svg.appendChild(
+          el("text", { x: INSET, y: ln.y - 8, fill: INK3, "font-family": MONO, "font-size": 11, "letter-spacing": 0.6 }, ln.lbl),
+        );
+        svg.appendChild(el("rect", { x: vx, y: ln.y - 18, width: vw, height: 15, rx: 3, fill: INK }));
+        svg.appendChild(
+          el("text", { x: vx + vw / 2, y: ln.y - 7, "text-anchor": "middle", fill: BG, "font-family": MONO, "font-size": 11, "font-weight": 600 }, ln.val),
+        );
+      }
+    }
+
+    function setGlyph(ch, btn) {
+      if (!ch || ch === glyph) return;
+      glyph = ch;
+      if (current) current.textContent = ch;
+      grid.querySelectorAll(".ty-cell.is-active").forEach((b) => {
+        b.classList.remove("is-active");
+        b.setAttribute("aria-selected", "false");
+      });
+      if (btn) {
+        btn.classList.add("is-active");
+        btn.setAttribute("aria-selected", "true");
+      }
+      build();
+    }
+
+    // hover to preview (plus click/focus for touch + keyboard)
+    const handle = (e) => {
+      const btn = (e.target as HTMLElement).closest(".ty-cell");
+      if (btn) setGlyph(btn.getAttribute("data-g"), btn);
+    };
+    grid.addEventListener("pointerover", handle);
+    grid.addEventListener("click", handle);
+    grid.addEventListener("focusin", handle);
+
+    // solid / anchors toggle
+    const togs = Array.from(document.querySelectorAll(".ty-tog"));
+    togs.forEach((t) => {
+      t.addEventListener("click", () => {
+        mode = t.getAttribute("data-mode") || "solid";
+        togs.forEach((o) => {
+          const on = o === t;
+          o.classList.toggle("is-on", on);
+          o.setAttribute("aria-selected", on ? "true" : "false");
+        });
+        build();
+      });
+    });
+
+    const go = () => {
+      m = measureFont();
+      build();
+    };
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(go);
+    else go();
+
+    // recolour the specimen when the design guide theme is toggled
+    window.addEventListener("ds-themechange", () => build());
+  }
+</script>

@@ -1,0 +1,18 @@
+{
+  "slug": "quantum",
+  "order": 40,
+  "key": "quantum",
+  "title": "Quantum Computing",
+  "shortDescription": "Quantum algorithms, circuit design, and the rapidly evolving stack behind near-term quantum hardware.",
+  "longDescription": [
+    "The Quantum AOI explores quantum algorithms, error correction, and variational methods through hands-on circuit experiments and paper deep-dives.",
+    "Members build projects using real quantum simulators and cloud hardware, bridging theoretical physics with practical engineering."
+  ],
+  "cassetteSrc": "/aois/research/cassettes/aois-research-cassettes-quantum.webp",
+  "tools": [
+    "qiskit",
+    "pennylane",
+    "python",
+    "numpy"
+  ]
+}

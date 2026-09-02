@@ -1,0 +1,933 @@
+---
+import { getAssetUrl } from "../utils/cdn";
+import TapeClickHint from "../components/ui/TapeClickHint.astro";
+
+import { items as domainItems } from "../generated/home-domains";
+// Reconstruct the key-based object that client script expects
+const domainConfigs: Record<string, any> = {};
+for (const item of domainItems) {
+  domainConfigs[item.key] = {
+    title: item.title,
+    description: item.description,
+    themeColor: item.themeColor,
+    cassetteSvg: item.cassetteSvg,
+    buttonText: item.buttonText || "",
+    techIcons: item.techIcons ?? [],
+    aois: item.aois ?? [],
+  };
+}
+---
+
+<script
+  is:inline
+  type="application/json"
+  id="domains-data"
+  set:html={JSON.stringify(domainConfigs)}
+/>
+
+<section class="domains-section relative h-[300vh] motion-reduce:h-screen">
+  <!-- Fixed Background Layer -->
+  <div class="fixed inset-0 z-0 pointer-events-none opacity-0 domain-bg-layer">
+    <img
+      src={getAssetUrl("/backgrounds/backgrounds-glow-ball-red.svg")}
+      alt=""
+      class="w-full h-full object-cover scale-125"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+
+  <div
+      class="pin-container sticky top-0 flex h-screen items-center justify-center overflow-visible will-change-transform transform-gpu motion-reduce:static z-10"
+  >
+    <p
+      class="section-subtitle absolute top-[15%] pt-2 md:pt-4 md:top-[15%] left-1/2 z-10 max-w-[95%] md:max-w-[900px] -translate-x-1/2 px-6 md:px-8 text-center font-['PolySans_Trial',sans-serif] text-[4px] md:text-[15px] lg:text-[18px] font-normal leading-[1.6] md:leading-[1.4] text-[#fefcd9] will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden"
+    >
+      <span class="whitespace-nowrap">
+        Each domain at ACM-VIT is more than a skillset, it's a mindset.
+      </span><br class="hidden md:inline" />
+      <span class="whitespace-nowrap">
+        We build, break, design, analyze, and communicate, not in silos, but in
+        sync.
+      </span><br class="hidden md:inline" />
+      <span class="whitespace-nowrap">
+        Because true innovation happens where disciplines intersect.
+      </span><br class="hidden md:inline" />
+    </p>
+
+    <div
+      class="domains-grid relative flex h-screen w-screen items-center justify-center overflow-visible p-5 origin-center will-change-transform [transform-style:preserve-3d] backface-hidden"
+    >
+      <a
+        href="/domains/tech"
+        class="domain-item absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+        data-domain="tech"
+      >
+        <div
+          class="domain-frame m-2.5 p-2.5 will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden"
+        >
+          <div class="cassette-wrapper">
+            <img
+              src={getAssetUrl("/cassettes/cassettes-cassette-tech.svg")}
+              alt="Tech Development"
+              class="cassette-img block h-auto w-[160px] md:w-[250px] lg:w-[300px] origin-center transform-gpu drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] will-change-transform [image-rendering:optimizeQuality] backface-hidden"
+              loading="lazy"
+              decoding="async"
+            />
+            <TapeClickHint label="EXPLORE" accent="#9B51E0" />
+          </div>
+        </div>
+      </a>
+      <a
+        href="/domains/cc"
+        class="domain-item absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+        data-domain="cc"
+      >
+        <div
+          class="domain-frame m-2.5 p-2.5 will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden"
+        >
+          <div class="cassette-wrapper">
+            <img
+              src={getAssetUrl("/cassettes/cassettes-cassette-cc.svg")}
+              alt="Competitive Coding"
+              class="cassette-img block h-auto w-[160px] md:w-[250px] lg:w-[300px] origin-center transform-gpu drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] will-change-transform [image-rendering:optimizeQuality] backface-hidden"
+              loading="lazy"
+              decoding="async"
+            />
+            <TapeClickHint label="EXPLORE" accent="#42CD9D" />
+          </div>
+        </div>
+      </a>
+      <a
+        href="/domains/design"
+        class="domain-item absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+        data-domain="design"
+      >
+        <div
+          class="domain-frame m-2.5 p-2.5 will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden"
+        >
+          <div class="cassette-wrapper">
+            <img
+              src={getAssetUrl("/cassettes/cassettes-cassette-design.svg")}
+              alt="Design"
+              class="cassette-img block h-auto w-[160px] md:w-[250px] lg:w-[300px] origin-center transform-gpu drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] will-change-transform [image-rendering:optimizeQuality] backface-hidden"
+              loading="lazy"
+              decoding="async"
+            />
+            <TapeClickHint label="EXPLORE" accent="#FF0054" />
+          </div>
+        </div>
+      </a>
+      <a
+        href="/domains/management"
+        class="domain-item absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+        data-domain="management"
+      >
+        <div
+          class="domain-frame m-2.5 p-2.5 will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden"
+        >
+          <div class="cassette-wrapper">
+            <img
+              src={getAssetUrl("/cassettes/cassettes-cassette-management.svg")}
+              alt="Management"
+              class="cassette-img block h-auto w-[160px] md:w-[250px] lg:w-[300px] origin-center transform-gpu drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] will-change-transform [image-rendering:optimizeQuality] backface-hidden"
+              loading="lazy"
+              decoding="async"
+            />
+            <TapeClickHint label="EXPLORE" accent="#00A6A6" />
+          </div>
+        </div>
+      </a>
+      <a
+        href="/domains/research"
+        class="domain-item absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+        data-domain="research"
+      >
+        <div
+          class="domain-frame m-2.5 p-2.5 will-change-[transform,opacity] [transform-style:preserve-3d] backface-hidden"
+        >
+          <div class="cassette-wrapper">
+            <img
+              src={getAssetUrl("/cassettes/cassettes-cassette-research.svg")}
+              alt="Research"
+              class="cassette-img block h-auto w-[160px] md:w-[250px] lg:w-[300px] origin-center transform-gpu drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] will-change-transform [image-rendering:optimizeQuality] backface-hidden"
+              loading="lazy"
+              decoding="async"
+            />
+            <TapeClickHint label="EXPLORE" accent="#3B82F6" />
+          </div>
+        </div>
+      </a>
+    </div>
+    <style>
+      .domain-item {
+        text-decoration: none;
+        cursor: pointer;
+        /* Anchor box stays stacked at center; GSAP only moves the inner
+           frame. Disable hit-testing here so overlapping centered anchors
+           don't steal hover/click from neighbouring cassettes. Hit-testing
+           lives on .cassette-wrapper, which tracks the painted position. */
+        pointer-events: none;
+      }
+
+      .pin-container,
+      .domains-grid {
+        pointer-events: none;
+      }
+
+      .cassette-wrapper {
+        position: relative;
+        padding: 2px;
+        border-radius: 12px;
+        background: transparent;
+        overflow: hidden;
+        /* Real hit area for hover/click. Toggled on by JS when the section
+           is in view (see setDomainInteractivity). */
+        pointer-events: none;
+        /* box-shadow removed as per request */
+      }
+
+      .cassette-wrapper::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: conic-gradient(
+          transparent,
+          transparent,
+          transparent,
+          transparent,
+          #fefcd9
+        );
+        animation: rotate 3s linear infinite;
+        z-index: 0;
+      }
+
+      .cassette-wrapper::after {
+        content: "";
+        position: absolute;
+        inset: 2px;
+        background: #050505;
+        border-radius: 10px;
+        z-index: 0;
+      }
+
+      .cassette-img {
+        position: relative;
+        z-index: 1;
+        border-radius: 10px;
+      }
+
+      @media (max-height: 740px) and (min-width: 1024px) {
+        .section-subtitle {
+          top: 16%;
+          padding-top: 0;
+          font-size: 1rem;
+          line-height: 1.35;
+          max-width: min(820px, 88vw);
+        }
+
+        .section-subtitle span:nth-of-type(3) {
+          display: none;
+        }
+
+        .section-subtitle br:nth-of-type(3) {
+          display: none;
+        }
+
+        .cassette-img {
+          width: clamp(200px, 18vw, 260px);
+        }
+      }
+
+      @media (max-height: 600px) {
+        .section-subtitle {
+          top: 15%;
+          font-size: 0.95rem;
+          line-height: 1.3;
+          max-width: min(880px, 92vw);
+        }
+
+        .section-subtitle span:nth-of-type(3) {
+          display: none;
+        }
+
+        .section-subtitle br:nth-of-type(2),
+        .section-subtitle br:nth-of-type(3) {
+          display: none;
+        }
+
+        .cassette-img {
+          width: clamp(180px, 22vw, 240px);
+        }
+      }
+
+      @media (max-height: 600px) {
+        .domains-grid {
+          padding-top: 4vh;
+        }
+      }
+      @keyframes rotate {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(-360deg);
+        }
+      }
+    </style>
+
+    <script>
+      import { gsap } from "gsap";
+      import { ScrollTrigger } from "gsap/ScrollTrigger";
+      import { getAssetUrl } from "../utils/cdn";
+
+      const domainConfigs = JSON.parse(
+        document.getElementById("domains-data")!.textContent!,
+      ) as Record<string, any>;
+
+      if (typeof gsap !== "undefined") {
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Optimized GSAP config
+        gsap.config({
+          force3D: true,
+          nullTargetWarn: false,
+        });
+
+        // Debounced initialization
+        let initialized = false;
+        let mainTl: gsap.core.Timeline | null = null;
+
+        function initAnimation() {
+          if (initialized) return;
+          initialized = true;
+
+          const getLayout = () => {
+            const vw = window.innerWidth;
+            const scale = Math.min(Math.max(vw / 1440, 0.5), 1.2);
+            const cassetteScale = vw <= 1300 ? 0.9 : 1;
+            const compactPositionScale = scale * (vw <= 1300 ? 0.7 : 1);
+            const exitPositionScale = scale * (vw <= 1300 ? 1.35 : 1);
+            const compactCardWidth =
+              (vw >= 1024 ? 300 : vw >= 768 ? 250 : 160) * cassetteScale;
+            const previousCompactSpacing =
+              vw < 768
+                ? 250 * cassetteScale +
+                  (360 - 250 * cassetteScale) * 0.5
+                : compactCardWidth + (360 - compactCardWidth) * 0.5;
+            const compactGapSpacing =
+              vw < 768
+                ? compactCardWidth +
+                  (previousCompactSpacing - compactCardWidth) * 0.6
+                : previousCompactSpacing;
+            const compactGridPos =
+              vw <= 1300
+                ? [
+                    { x: -compactGapSpacing, y: -90 },
+                    { x: 0, y: -90 },
+                    { x: compactGapSpacing, y: -90 },
+                    { x: -compactGapSpacing * 0.5, y: 165 },
+                    { x: compactGapSpacing * 0.5, y: 165 },
+                  ]
+                : null;
+
+            return {
+              cassetteScale,
+              gridPos: [
+                {
+                  x: compactGridPos?.[0].x ?? -500 * scale,
+                  y: compactGridPos?.[0].y ?? -70 * scale,
+                }, // Tech
+                {
+                  x: compactGridPos?.[1].x ?? 0,
+                  y: compactGridPos?.[1].y ?? -70 * scale,
+                }, // CC
+                {
+                  x: compactGridPos?.[2].x ?? 500 * scale,
+                  y: compactGridPos?.[2].y ?? -70 * scale,
+                }, // Design
+                {
+                  x: compactGridPos?.[3].x ?? -300 * scale,
+                  y: compactGridPos?.[3].y ?? 200 * scale,
+                }, // Management
+                {
+                  x: compactGridPos?.[4].x ?? 300 * scale,
+                  y: compactGridPos?.[4].y ?? 200 * scale,
+                }, // Research
+              ],
+              linePos: [
+                { x: -480 * compactPositionScale, y: 0 }, // Tech
+                { x: -240 * compactPositionScale, y: 0 }, // CC
+                { x: 0, y: 0 }, // Design
+                { x: 240 * compactPositionScale, y: 0 }, // Management
+                { x: 480 * compactPositionScale, y: 0 }, // Research
+              ],
+              zoomPos: [
+                { x: -900 * exitPositionScale, y: 0 }, // Tech : move left
+                { x: -620 * exitPositionScale, y: 0 }, // CC : move left
+                { x: -360 * exitPositionScale, y: 0 }, // Design : move left
+                { x: 360 * exitPositionScale, y: 0 }, // Management : move right
+                { x: 620 * exitPositionScale, y: 0 }, // Research : move right
+              ],
+            };
+          };
+
+          const items = document.querySelectorAll(".domain-item");
+          const frames = document.querySelectorAll(".domain-frame");
+          const grid = document.querySelector(".domains-grid");
+          const subtitle = document.querySelector(".section-subtitle");
+          const bgLayer = document.querySelector(".domain-bg-layer");
+
+          if (!items.length || !frames.length || !grid || !subtitle || !bgLayer)
+            return;
+
+          const wrappers = document.querySelectorAll(".cassette-wrapper");
+          const setDomainInteractivity = (isInteractive: boolean) => {
+            wrappers.forEach((wrapper) => {
+              (wrapper as HTMLElement).style.pointerEvents = isInteractive
+                ? "auto"
+                : "none";
+            });
+          };
+
+          const isDomainsSectionInView = () => {
+            const section = document.querySelector(".domains-section");
+            if (!(section instanceof HTMLElement)) return false;
+            const rect = section.getBoundingClientRect();
+            return rect.bottom > 0 && rect.top < window.innerHeight;
+          };
+
+          setDomainInteractivity(false);
+
+          // Set initial state
+          gsap.set(frames, {
+            x: 0,
+            y: 0,
+            scale: () => 0.6 * getLayout().cassetteScale,
+            opacity: 0,
+            force3D: true,
+          });
+
+          // initial state for subtitle (text)
+          gsap.set(subtitle, {
+            opacity: 0,
+            y: 20,
+            scale: 0.9,
+            force3D: true,
+          });
+
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: ".domains-section",
+              start: "-300px top",
+              end: "bottom bottom",
+              scrub: 1.2,
+              pin: "true",
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+              markers: false,
+              onRefresh: (self) => {
+                setDomainInteractivity(
+                  self.isActive && isDomainsSectionInView(),
+                );
+              },
+              onEnter: () => {
+                setDomainInteractivity(true);
+                gsap.to(bgLayer, { opacity: 1, duration: 0.5, delay: 0.5 });
+              },
+              onLeave: () => {
+                setDomainInteractivity(false);
+                gsap.to(bgLayer, { opacity: 0, duration: 0.5, delay: 0.5 });
+              },
+              onEnterBack: () => {
+                setDomainInteractivity(true);
+                gsap.to(bgLayer, { opacity: 1, duration: 0.5 });
+              },
+              onLeaveBack: () => {
+                setDomainInteractivity(false);
+                gsap.to(bgLayer, { opacity: 0, duration: 0.5 });
+              },
+            },
+          });
+
+          mainTl = tl;
+
+          // Phase 1: Appear and form grid
+          tl.to(subtitle, {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 2,
+            ease: "power2.out",
+          })
+            .to(
+              frames,
+              {
+                opacity: 1,
+                scale: () => getLayout().cassetteScale,
+                duration: 2,
+                ease: "power2.out",
+                stagger: 0.1,
+              },
+              "<+=0.2",
+            )
+            .to(
+              frames,
+              {
+                x: (i) => getLayout().gridPos[i].x,
+                y: (i) => getLayout().gridPos[i].y,
+                duration: 3,
+                ease: "power2.inOut",
+              },
+              "-=1",
+            );
+
+          // Phase 2: Form horizontal line
+          tl.to(frames, {
+            x: (i) => getLayout().linePos[i].x,
+            y: (i) => getLayout().linePos[i].y,
+            scale: () => 0.7 * getLayout().cassetteScale,
+            duration: 3,
+            ease: "power1.inOut",
+            stagger: 0,
+          }).to(
+            subtitle,
+            {
+              opacity: 0,
+              y: -30,
+              duration: 2,
+              ease: "power2.out",
+            },
+            "<",
+          );
+
+          // Phase 3: Simplified zoom effect
+          tl.to(grid, {
+            scale: 10,
+            duration: 5,
+            ease: "power1.inOut",
+          }).to(
+            frames,
+            {
+              x: (i) => getLayout().zoomPos[i].x,
+              y: (i) => getLayout().zoomPos[i].y,
+              opacity: 100,
+              scale: () => 0.5 * getLayout().cassetteScale,
+              duration: 2,
+              ease: "power2.in",
+              stagger: 0.0,
+            },
+            "<+=0.5",
+          );
+
+          // Simplified hover effects
+          items.forEach((item, index) => {
+            const img = item.querySelector(".cassette-img");
+            if (!img) return;
+
+            let hoverTween: gsap.core.Tween | null = null;
+
+            item.addEventListener("mouseenter", () => {
+              if (hoverTween) hoverTween.kill();
+              hoverTween = gsap.to(img, {
+                scale: 1.03,
+                duration: 0.2,
+                ease: "power2.out",
+                transformOrigin: "center center",
+              });
+            });
+
+            item.addEventListener("mouseleave", () => {
+              if (hoverTween) hoverTween.kill();
+              hoverTween = gsap.to(img, {
+                scale: 1,
+                duration: 0.2,
+                ease: "power2.out",
+                transformOrigin: "center center",
+              });
+            });
+
+            // Navigate to domain page on click
+            item.addEventListener("click", (event) => {
+              if (!isDomainsSectionInView()) {
+                event.preventDefault();
+                return;
+              }
+              // Let the <a> tag navigate naturally
+            });
+          });
+        }
+
+        // Function to show domain screen
+        function showDomainScreen(domain: string) {
+          if (mainTl && mainTl.scrollTrigger) {
+            mainTl.scrollTrigger.disable(false);
+          }
+          document.body.style.overflow = "hidden";
+
+          // Hide all cassettes and subtitle with animation
+          const frames = document.querySelectorAll(".domain-frame");
+          const subtitle = document.querySelector(".section-subtitle");
+          const bgLayer = document.querySelector(".domain-bg-layer");
+
+          // Create a smooth transition timeline
+          const tl = gsap.timeline();
+
+          // Fade out background and elements simultaneously
+          if (bgLayer) {
+            tl.to(
+              bgLayer,
+              {
+                opacity: 0,
+                duration: 0.4,
+                ease: "power2.inOut",
+              },
+              0,
+            );
+          }
+
+          tl.to(
+            frames,
+            {
+              opacity: 0,
+              scale: 0.8,
+              duration: 0.4,
+              ease: "power2.inOut",
+              stagger: 0.02,
+            },
+            0,
+          ).to(
+            subtitle,
+            {
+              opacity: 0,
+              y: -30,
+              duration: 0.3,
+              ease: "power2.inOut",
+            },
+            0.05,
+          );
+
+          setTimeout(() => {
+            createDomainScreen(domain);
+            // Hide header
+            const header = document.querySelector("header");
+            if (header) {
+              gsap.to(header, {
+                y: -100,
+                opacity: 0,
+                duration: 0.3,
+                ease: "power2.inOut",
+              });
+            }
+          }, 200);
+        }
+
+        // Function to create domain screen component
+        function createDomainScreen(domain: string) {
+          // Import domain configs from external file
+          const config = domainConfigs[domain as keyof typeof domainConfigs];
+          if (!config) return;
+
+          // Create domain screen HTML using DomainProjectScreen component structure
+          const domainScreenHTML = createDomainScreenContent(config);
+
+          // Insert the domain screen
+          const domainScreenDiv = document.createElement("div");
+          domainScreenDiv.id = "domain-screen";
+          domainScreenDiv.className = "fixed inset-0 z-50 overflow-y-auto";
+          domainScreenDiv.style.scrollbarWidth = "none"; // Firefox
+          (domainScreenDiv.style as any).msOverflowStyle = "none"; // IE/Edge
+          domainScreenDiv.innerHTML = domainScreenHTML;
+
+          // Add webkit scrollbar hiding
+          const style = document.createElement("style");
+          style.textContent = `
+                #domain-screen::-webkit-scrollbar {
+                    display: none;
+                }
+                @keyframes logo-loop {
+                    0% { transform: translateX(var(--loop-offset, -50%)); }
+                    100% { transform: translateX(0); }
+                }
+                .animate-logo-loop {
+                    animation: logo-loop 20s linear infinite;
+                }
+                .hover-pause:hover {
+                    animation-play-state: paused;
+                }
+                .fade-mask {
+                    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+                    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+                }
+            `;
+          document.head.appendChild(style);
+
+          document.body.appendChild(domainScreenDiv);
+
+          // Smooth entrance animation with better timing
+          gsap.fromTo(
+            domainScreenDiv,
+            {
+              opacity: 0,
+              y: 30,
+              scale: 0.95,
+            },
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 0.4,
+              ease: "power2.out",
+              delay: 0.1,
+            },
+          );
+        }
+
+        // Function to create domain screen content
+        function createDomainScreenContent(config: any) {
+          // Simple theme colors
+          const themeColors = {
+            tech: "#9B51E0",
+            cc: "#42CD9D",
+            design: "#FF0054",
+            research: "#135DE2",
+            management: "#008080",
+            competitive: "#42CD9D",
+          };
+
+          const themeHex =
+            themeColors[config.themeColor as keyof typeof themeColors] ||
+            themeColors.tech;
+
+          return `
+                <div class="min-h-screen text-white">
+                    <!-- Hero Section with Theme Header -->
+                    <div class="pt-20 pb-8 px-8">
+                        <!-- Main Title Card -->
+                        <div class="mx-auto max-w-6xl mb-8 relative flex justify-center">
+                            <div class="inline-flex justify-start items-center gap-2">
+                                <div 
+                                    class="w-auto min-w-[12rem] h-12 px-5 flex items-center rounded-[41px] outline outline-1 outline-offset-[-1px] outline-[#FEFCD9]"
+                                    style="background-color: ${themeHex}"
+                                >
+                                    <div class="text-white text-base font-light font-['PolySans_Trial'] uppercase tracking-wider whitespace-nowrap">
+                                        DOMAINS : ${config.title}
+                                    </div>
+                                </div>
+                                
+                                <!-- Original Back Button (Inline) -->
+                                <button
+                                    onclick="hideDomainScreen()"
+                                    aria-label="Back to domains"
+                                    class="relative w-12 h-12 flex items-center justify-center hover:opacity-80 transition-opacity rounded-full"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" fill="none" class="absolute">
+                                        <circle cx="25" cy="25" r="24.5" stroke="#FEFCD9"/>
+                                    </svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="relative z-10">
+                                        <path d="M3 19V5" stroke="#FEFCD9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M13 6L7 12L13 18" stroke="#FEFCD9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M7 12H21" stroke="#FEFCD9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Tech Stack Icons -->
+                        ${
+                          config.techIcons.length > 0
+                            ? (() => {
+                                // Dynamic duplication to ensure continuous loop filling at least ~3000px
+                                const minItems = 30;
+                                const count = config.techIcons.length;
+                                const sets = Math.max(
+                                  3,
+                                  Math.ceil(minItems / count),
+                                );
+                                const loopOffset = -100 / sets;
+
+                                const oneSetHTML = `
+                                    <div class="flex gap-16 pr-16 items-center">
+                                        ${config.techIcons
+                                          .map(
+                                            (icon: any) => `
+                                            <div class="flex items-center justify-center hover:scale-110 transition-transform duration-300 min-w-[3rem]">
+                                                <img 
+                                                    src="${getAssetUrl(icon.src)}" 
+                                                    alt="${icon.alt}" 
+                                                    class="w-12 h-12 md:w-16 md:h-16 grayscale hover:grayscale-0 transition-all duration-300 opacity-70 hover:opacity-100" 
+                                                    loading="lazy"
+                                                    decoding="async"
+                                                />
+                                            </div>
+                                        `,
+                                          )
+                                          .join("")}
+                                    </div>
+                                `;
+
+                                return `
+                                    <div class="w-full overflow-hidden mb-12 relative fade-mask">
+                                        <div class="flex w-max animate-logo-loop hover-pause" style="--loop-offset: ${loopOffset}%;">
+                                            ${new Array(sets).fill(oneSetHTML).join("")}
+                                        </div>
+                                    </div>
+                                `;
+                              })()
+                            : ""
+                        }
+
+                        <!-- Description -->
+                        <div class="max-w-4xl mx-auto text-center mb-12">
+                            <p class="text-[#FEFCD9] text-lg leading-relaxed">
+                                ${config.description}
+                            </p>
+                        </div>
+
+                        <!-- Projects Button -->
+                        ${
+                          config.buttonText
+                            ? `
+                        <div class="flex justify-center mb-12">
+                            <button 
+                                class="flex justify-center items-center px-6 py-3 h-[50px] rounded-[41px] border border-[#FEFCD9] font-medium hover:shadow-lg transition-shadow whitespace-nowrap ${
+                                  config.themeColor === "competitive" ||
+                                  config.themeColor === "research" ||
+                                  config.themeColor === "tech"
+                                    ? "text-black"
+                                    : "text-white"
+                                }"
+                                style="background-color: ${themeHex}"
+                            >
+                                ${config.buttonText}
+                            </button>
+                        </div>
+                        `
+                            : ""
+                        }
+
+                        <!-- AOIs or Cassettes -->
+                        ${
+                          config.aois && config.aois.length > 0
+                            ? `
+                            <div class="flex justify-center items-center gap-8 mb-12 flex-wrap px-8">
+                                ${config.aois
+                                  .map(
+                                    (aoi: any) => `
+                                    <div class="flex flex-col items-center justify-center gap-2 hover:scale-105 transition-transform duration-300">
+                                        <img 
+                                            src="${getAssetUrl(aoi.src)}" 
+                                            alt="${aoi.alt}" 
+                                            class="w-32 h-32 md:w-48 md:h-48 object-contain" 
+                                            loading="lazy"
+                                            decoding="async"
+                                        />
+                                        <span class="text-[#FEFCD9] text-sm md:text-base font-medium tracking-wide">${aoi.alt}</span>
+                                    </div>
+                                `,
+                                  )
+                                  .join("")}
+                            </div>
+                        `
+                            : ""
+                        }
+                    </div>
+                </div>
+            `;
+        }
+
+        // Global function to hide domain screen
+        (window as any).hideDomainScreen = function () {
+          const domainScreen = document.getElementById("domain-screen");
+          const frames = document.querySelectorAll(".domain-frame");
+          const subtitle = document.querySelector(".section-subtitle");
+          const bgLayer = document.querySelector(".domain-bg-layer");
+
+          if (domainScreen) {
+            // Create smooth exit timeline
+            const exitTl = gsap.timeline({
+              onComplete: () => {
+                domainScreen.remove();
+
+                if (mainTl && mainTl.scrollTrigger) {
+                  mainTl.scrollTrigger.enable();
+                }
+                document.body.style.overflow = "";
+
+                // Create smooth entrance timeline for original elements
+                const entranceTl = gsap.timeline();
+
+                // Restore the glow ball background first
+                if (bgLayer) {
+                  entranceTl.to(
+                    bgLayer,
+                    {
+                      opacity: 1,
+                      duration: 0.3,
+                      ease: "power2.out",
+                    },
+                    0,
+                  );
+                }
+
+                // Then bring back cassettes and subtitle with stagger
+                entranceTl
+                  .to(
+                    frames,
+                    {
+                      opacity: 1,
+                      scale: 1,
+                      duration: 0.4,
+                      ease: "power2.out",
+                      stagger: 0.04,
+                    },
+                    0.1,
+                  )
+                  .to(
+                    subtitle,
+                    {
+                      opacity: 1,
+                      y: 0,
+                      duration: 0.3,
+                      ease: "power2.out",
+                    },
+                    0.15,
+                  );
+              },
+            });
+
+            // Smooth exit animation
+            exitTl.to(domainScreen, {
+              opacity: 0,
+              y: -20,
+              scale: 0.98,
+              duration: 0.3,
+              ease: "power2.inOut",
+              onStart: () => {
+                // Restore header
+                const header = document.querySelector("header");
+                if (header) {
+                  gsap.to(header, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.3,
+                    ease: "power2.out",
+                  });
+                }
+              },
+            });
+          }
+        };
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", initAnimation);
+        } else {
+          initAnimation();
+        }
+      }
+    </script>
+  </div>
+</section>

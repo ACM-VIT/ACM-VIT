@@ -1,0 +1,12 @@
+{
+  "slug": "6",
+  "order": 50,
+  "id": "6",
+  "title": "Summer Bootcamp",
+  "date": "2026-07-03",
+  "startTime": "10:00",
+  "endTime": "13:00",
+  "domain": "tech",
+  "description": "Week 1 continued: Building your first full-stack application with authentication.",
+  "location": "GDN 128, VIT Vellore"
+}

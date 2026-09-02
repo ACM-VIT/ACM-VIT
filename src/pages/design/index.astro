@@ -1,0 +1,340 @@
+---
+export const prerender = true;
+import DesignLayout from "../../layouts/DesignLayout.astro";
+import DesignWordIntro from "../../components/design/DesignWordIntro.astro";
+import { getAssetUrl } from "../../utils/cdn";
+
+const sections = [
+  {
+    href: "/design/logo",
+    title: "Logo",
+    desc: "The diamond mark, lockups, clearspace, and how not to bend them.",
+    span: "ds-b8",
+    tone: "var(--ds-accent-tonal)",
+    art: "logo",
+  },
+  {
+    href: "/design/logosystem",
+    title: "Logo System",
+    desc: "Heritage lockups, colorways, seasonal marks, and merch remixes - all downloadable.",
+    span: "ds-b4",
+    tone: "var(--ds-blue-tonal)",
+    art: "logosystem",
+  },
+  {
+    href: "/design/color",
+    title: "Color",
+    desc: "Ink, cream, and the ACM orange - plus the product accents.",
+    span: "ds-b4",
+    tone: "var(--ds-gold-tonal)",
+    art: "color",
+  },
+  {
+    href: "/design/typography",
+    title: "Typography",
+    desc: "DM Sans, the official typeface. Scale, weights, and usage.",
+    span: "ds-b4",
+    tone: "var(--ds-blue-tonal)",
+    art: "type",
+  },
+  {
+    href: "/design/grid",
+    title: "Grid & Layout",
+    desc: "Layout grids, breakpoints, and the container system.",
+    span: "ds-b4",
+    tone: "var(--ds-purple-tonal)",
+    art: "grid",
+  },
+  {
+    href: "/design/motion",
+    title: "Motion",
+    desc: "Easing, durations, and how ACM interfaces move.",
+    span: "ds-b8",
+    tone: "var(--ds-green-tonal)",
+    art: "motion",
+  },
+  {
+    href: "/design/social",
+    title: "Social Media",
+    desc: "Post sizing, grids, and platform-by-platform standards.",
+    span: "ds-b4",
+    tone: "var(--ds-pink-tonal)",
+    art: "social",
+  },
+  {
+    href: "/design/resources",
+    title: "Resources",
+    desc: "Every mark in SVG, PNG, and WebP - ready to download.",
+    span: "ds-b4",
+    tone: "var(--ds-surface-tonal)",
+    art: "download",
+  },
+  {
+    href: "/design/otherresources",
+    title: "Other Resources",
+    desc: "Event, product, and enamel-pin logos - all downloadable.",
+    span: "ds-b8",
+    tone: "var(--ds-green-tonal)",
+    art: "otherresources",
+  },
+];
+---
+
+<DesignLayout title="Home" current="/design">
+  <DesignWordIntro />
+  <section class="ds-hero">
+    <div class="ds-kicker">
+      <span class="ds-kicker-pill">Design Guidelines</span>
+    </div>
+    <h1 class="ds-display">
+      How ACM-VIT<br />looks and moves.
+    </h1>
+    <p class="ds-body-lg">
+      The single source of truth for the ACM-VIT brand: the mark, the palette,
+      typography, the grid, motion, and every platform we publish on. Built
+      for chapter members, collaborators, and anyone representing ACM-VIT.
+    </p>
+    <div style="display:flex; gap:12px; margin-top:28px; flex-wrap:wrap;">
+      <a href="/design/logo" class="ds-btn ds-btn-primary">Start with the logo</a>
+      <a href="/design/resources" class="ds-btn ds-btn-outline">Download assets</a>
+    </div>
+  </section>
+
+  <div class="ds-bento">
+    {
+      sections.map((s) => (
+        <a
+          href={s.href}
+          class:list={["ds-card ds-card-hover ds-home-card ds-reveal", s.span]}
+          style={`--card-tone:${s.tone}`}
+        >
+          <div class="ds-home-art" data-art={s.art}>
+            {s.art === "logo" && (
+              <>
+                <img
+                  class="ds-logo-dark"
+                  src={getAssetUrl("/design/logos/acm-diamond-dark.svg")}
+                  alt=""
+                  loading="lazy"
+                  style="width:96px;height:96px"
+                />
+                <img
+                  class="ds-logo-light"
+                  src={getAssetUrl("/design/logos/acm-diamond-white.svg")}
+                  alt=""
+                  loading="lazy"
+                  style="width:96px;height:96px"
+                />
+              </>
+            )}
+            {s.art === "logosystem" && (
+              <div class="ds-art-diamonds">
+                <span style="background:#135de2" />
+                <span style="background:#f95f4a" />
+                <span style="background:#42cd9d" />
+              </div>
+            )}
+            {s.art === "color" && (
+              <div class="ds-art-swatches">
+                <span style="background:#1c1b1a" />
+                <span style="background:#f95f4a" />
+                <span style="background:#fefcd9" />
+              </div>
+            )}
+            {s.art === "type" && <span class="ds-art-glyph">Aa</span>}
+            {s.art === "grid" && (
+              <div class="ds-art-grid">
+                {Array.from({ length: 6 }).map(() => (
+                  <span />
+                ))}
+              </div>
+            )}
+            {s.art === "motion" && (
+              <svg width="120" height="64" viewBox="0 0 120 64" fill="none">
+                <path
+                  d="M4 60 C 40 60, 40 4, 116 4"
+                  stroke="#1f9d76"
+                  stroke-width="3"
+                  stroke-linecap="round"
+                />
+                <circle cx="116" cy="4" r="5" fill="#1f9d76" />
+              </svg>
+            )}
+            {s.art === "social" && (
+              <div class="ds-art-posts">
+                <span style="aspect-ratio:4/5" />
+                <span style="aspect-ratio:1/1" />
+                <span style="aspect-ratio:9/16" />
+              </div>
+            )}
+            {s.art === "download" && (
+              <svg width="52" height="52" viewBox="0 0 52 52" fill="none" stroke="var(--ds-ink-2)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M26 8v24m0 0 10-10M26 32 16 22" />
+                <path d="M10 40h32" />
+              </svg>
+            )}
+            {s.art === "otherresources" && (
+              <div class="ds-art-stack">
+                <span style="background:#f95f4a" />
+                <span style="background:#135de2" />
+                <span style="background:#1f9d76" />
+              </div>
+            )}
+          </div>
+          <h3 class="ds-h3">{s.title}</h3>
+          <p class="ds-body">{s.desc}</p>
+        </a>
+      ))
+    }
+  </div>
+
+  <section class="ds-section">
+    <div class="ds-sec-head">
+      <span class="ds-sec-num">Principles</span>
+    </div>
+    <h2 class="ds-h2">Four things we hold onto</h2>
+    <div class="ds-bento">
+      <div class="ds-card ds-card-tonal ds-b6 ds-reveal">
+        <h4 class="ds-h4">Confident, not loud</h4>
+        <p class="ds-body">
+          Strong marks, generous whitespace, and restraint. The work carries
+          the weight; the brand frames it.
+        </p>
+      </div>
+      <div class="ds-card ds-card-tonal ds-b6 ds-reveal">
+        <h4 class="ds-h4">Systematic by default</h4>
+        <p class="ds-body">
+          A 4pt rhythm, a fixed palette, one typeface. Constraints keep a
+          40-person chapter looking like one team.
+        </p>
+      </div>
+      <div class="ds-card ds-card-tonal ds-b6 ds-reveal">
+        <h4 class="ds-h4">Playful at the edges</h4>
+        <p class="ds-body">
+          We are students - we experiment, remix, and try new logomarks
+          internally. The core system stays stable so the play reads as
+          intent, not accident.
+        </p>
+      </div>
+      <div class="ds-card ds-card-tonal ds-b6 ds-reveal">
+        <h4 class="ds-h4">Accessible always</h4>
+        <p class="ds-body">
+          Contrast that passes, motion that respects preferences, and copy
+          that says what it means.
+        </p>
+      </div>
+    </div>
+  </section>
+</DesignLayout>
+
+<style>
+  .ds-home-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+  }
+  .ds-home-art {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 150px;
+    border-radius: var(--ds-r-md);
+    background: var(--card-tone);
+    margin-bottom: 18px;
+  }
+  /* the diamond mark flips to its white cut on the dark tinted tile */
+  .ds-logo-light {
+    display: none;
+  }
+  :global(html[data-theme="dark"]) .ds-logo-dark {
+    display: none;
+  }
+  :global(html[data-theme="dark"]) .ds-logo-light {
+    display: block;
+  }
+  :global(html[data-theme="dark"]) .ds-art-swatches span {
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+  .ds-art-glyph {
+    font-size: 64px;
+    font-weight: 660;
+    letter-spacing: -0.04em;
+    color: #135de2;
+  }
+  .ds-art-diamonds {
+    display: flex;
+    gap: 14px;
+  }
+  .ds-art-diamonds span {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    transform: rotate(45deg);
+    box-shadow: 0 4px 12px rgba(28, 27, 26, 0.14);
+  }
+  .ds-art-diamonds span:nth-child(2) {
+    margin-top: 14px;
+  }
+  .ds-art-swatches {
+    display: flex;
+    gap: 10px;
+  }
+  .ds-art-swatches span {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid rgba(28, 27, 26, 0.08);
+  }
+  .ds-art-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 30px);
+    gap: 8px;
+  }
+  .ds-art-grid span {
+    height: 30px;
+    border-radius: 7px;
+    background: #9b51e0;
+    opacity: 0.85;
+  }
+  .ds-art-grid span:nth-child(2n) {
+    opacity: 0.4;
+  }
+  .ds-art-posts {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+  }
+  .ds-art-posts span {
+    width: 34px;
+    border-radius: 6px;
+    background: #ff007a;
+    opacity: 0.75;
+    display: block;
+  }
+  .ds-art-posts span:nth-child(2) {
+    opacity: 0.45;
+  }
+  .ds-art-posts span:nth-child(3) {
+    opacity: 0.9;
+  }
+  /* three overlapping cards - the "other logos" pile */
+  .ds-art-stack {
+    display: flex;
+  }
+  .ds-art-stack span {
+    width: 40px;
+    height: 52px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(28, 27, 26, 0.16);
+    border: 2px solid var(--ds-surface, #fff);
+  }
+  .ds-art-stack span:nth-child(2) {
+    margin-left: -14px;
+    margin-top: 8px;
+  }
+  .ds-art-stack span:nth-child(3) {
+    margin-left: -14px;
+    margin-top: 16px;
+  }
+</style>

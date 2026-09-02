@@ -1,0 +1,171 @@
+{
+  "slug": "localhost",
+  "title": "Localhost",
+  "tagline": "Recruitment, opened in VS Code.",
+  "eyebrow": "ACM-VIT · 2024 · Organising Committee Selections",
+  "themeColor": "#B7AA98",
+  "themeColorSecondary": "#EB5757",
+  "shortDescription": "ACM-VIT's 2024 OCS portal, built end-to-end as VS Code in the browser. Every page, tab, sidebar and editor panel mirrored the editor. Readable content was rendered from Markdown files. Form rounds were Python files inside the editor area.",
+  "longDescription": [
+    "Localhost was ACM-VIT's organising committee selections portal for 2024. The brief was the usual one - run domain rounds for 100+ applicants - but the form factor was a complete rebuild of VS Code as a web app.",
+    "The name is a joke at devs' own expense - every developer's first website lives at localhost, served out of their editor. The recruitment portal returned the favour by being a VS Code clone you open in a browser.",
+    "The interface used a real activity bar, sidebar file explorer, tabbed editors, command palette and integrated terminal. The chapter's pitch, FAQs and round briefs were written as Markdown files and opened like any other tab. Form rounds were styled as Python files - the editor itself was the registration form.",
+    "Under the hood, Localhost ran on Next.js 14 (App Router) with Prisma on CockroachDB, NextAuth for session management, Material UI as the component base, and a Vercel KV-backed rate limiter on top. The whole thing leaned hard on the editor aesthetic, with several easter eggs hidden across the file tree, command palette and terminal for applicants who actually went looking."
+  ],
+  "status": "archived",
+  "statusNote": "Recruitment cycle closed",
+  "cassetteSvg": "/projects/projects-localhost.svg",
+  "gallery": [
+    {
+      "src": "/projects/localhost/projects-localhost-screen-1.webp",
+      "alt": "Localhost VS Code-styled portal"
+    },
+    {
+      "src": "/projects/localhost/projects-localhost-screen-2.webp",
+      "alt": "Localhost editor view"
+    },
+    {
+      "src": "/projects/localhost/projects-localhost-screen-3.webp",
+      "alt": "Localhost markdown content"
+    },
+    {
+      "src": "/projects/localhost/projects-localhost-screen-4.webp",
+      "alt": "Localhost form round"
+    },
+    {
+      "src": "/projects/localhost/projects-localhost-screen-5.webp",
+      "alt": "Localhost terminal pane"
+    },
+    {
+      "src": "/projects/localhost/projects-localhost-screen-6.webp",
+      "alt": "Localhost portal flow"
+    }
+  ],
+  "galleryLayout": "landscape",
+  "stats": [
+    {
+      "value": "2024",
+      "label": "Year"
+    },
+    {
+      "value": "Web",
+      "label": "Platform"
+    },
+    {
+      "value": "VS Code",
+      "label": "Theme"
+    },
+    {
+      "value": ".md + .py",
+      "label": "Content format"
+    }
+  ],
+  "features": [
+    {
+      "title": "Full VS Code shell",
+      "description": "Activity bar, file explorer, tabs, status bar, command palette - all of it."
+    },
+    {
+      "title": "Markdown as content",
+      "description": "Static round briefs, FAQs and chapter intro rendered from .md files inside the editor."
+    },
+    {
+      "title": "Forms as Python files",
+      "description": "Each form round opened as a .py file in the editor. Submitting felt like writing the script."
+    },
+    {
+      "title": "Integrated terminal",
+      "description": "Working terminal inside the portal for navigation and hidden commands."
+    },
+    {
+      "title": "Rate-limited APIs",
+      "description": "Vercel KV + Upstash ratelimit guarded the form endpoints against spam and abuse."
+    },
+    {
+      "title": "Easter eggs",
+      "description": "Hidden files, secret commands and a few small jokes scattered around for the curious."
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Frontend",
+      "slugs": [
+        "nextjs",
+        "react",
+        "typescript",
+        "tailwindcss"
+      ]
+    },
+    {
+      "category": "Backend",
+      "slugs": [
+        "nextjs",
+        "prisma",
+        "cockroachdb"
+      ]
+    },
+    {
+      "category": "Infrastructure",
+      "slugs": [
+        "vercel"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github",
+        "postman"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "kairavsheth",
+      "role": "Lead developer"
+    },
+    {
+      "github": "Supratim69",
+      "role": "Lead developer"
+    },
+    {
+      "github": "lopus-maximus",
+      "role": "Developer"
+    },
+    {
+      "github": "curiousduckkk",
+      "role": "Developer"
+    },
+    {
+      "github": "Realitylion",
+      "role": "Developer"
+    },
+    {
+      "github": "shane-thomas",
+      "role": "Developer"
+    },
+    {
+      "github": "JuxtaRYCT",
+      "role": "Design"
+    }
+  ],
+  "links": [
+    {
+      "label": "Live portal",
+      "href": "https://localhost.acmvit.in/",
+      "kind": "website"
+    },
+    {
+      "label": "GitHub",
+      "href": "https://github.com/ACM-VIT/enrollment-website-2024",
+      "kind": "github"
+    },
+    {
+      "label": "Walkthrough",
+      "href": "https://www.youtube.com/watch?v=AGCgD3d8H4Q&t=113s",
+      "kind": "demo"
+    }
+  ],
+  "commitGraphSeed": 314,
+  "order": 30
+}

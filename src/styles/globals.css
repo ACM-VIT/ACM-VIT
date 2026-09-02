@@ -5,9 +5,30 @@
     --color-primary-pink: #ff007a;
 }
 
-/* Global smooth scrolling */
-html {
-    scroll-behavior: smooth;
+/* No html { scroll-behavior: smooth } here. It was inert while <body> was the
+   scroll container, but now that the window scrolls it would fight the JS
+   scroll tweens (Header/MobileNavbar step scrollTop per frame) and GSAP
+   ScrollTrigger refreshes. Smooth in-page nav is handled in JS explicitly. */
+
+/* ── Theme transition (View Transition API) ── */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 9999;
+}
+
+/* Kill every CSS transition site-wide while Chrome takes the new-state snapshot.
+   Only html and body suppression isn't enough - brand-logos, bulb-handle, etc.
+   all have their own transitions that cause mid-transition colors in the capture. */
+html.is-switching-theme,
+html.is-switching-theme * {
+  transition: none !important;
 }
 
 .page-section {
@@ -22,6 +43,7 @@ html {
 [data-scroll-video-container] .video-bg-section,
 [data-scroll-video-container] .radial-bg,
 [data-scroll-video-container] .about-section,
+[data-scroll-video-container] .about-section-phone,
 [data-scroll-video-container] .about-container,
 [data-scroll-video-container] .hero-section,
 [data-scroll-video-container] .tech-hero-section {
@@ -53,86 +75,777 @@ body.scroll-video-active .diamond-grid {
     color: white;
 }
 
-/* Font Definitions */
-/* Standard */
+/* ═══════════════════════════════════════════════════════
+   LIGHT MODE THEME - Warm peach palette (Juan Mora inspired)
+   ═══════════════════════════════════════════════════════ */
+
+/* Smooth transition between themes */
+html, body {
+  transition: background-color 0.5s ease, color 0.4s ease;
+}
+
+/* ── Base ── */
+html[data-theme="light"],
+html[data-theme="light"] body {
+  background: #F5EDE4 !important;
+}
+
+/* ── Edge glow vignette (light mode only) ── */
+html[data-theme="light"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  pointer-events: none;
+  box-shadow: inset 0 0 175px 55px rgba(215, 145, 100, 0.42);
+}
+
+/* Glow too strong on small screens - keep subtle. Scales down across breakpoints. */
+@media (max-width: 768px) {
+  html[data-theme="light"] body::before {
+    box-shadow: inset 0 0 110px 30px rgba(215, 145, 100, 0.28);
+  }
+}
+
+@media (max-width: 480px) {
+  html[data-theme="light"] body::before {
+    box-shadow: inset 0 0 80px 18px rgba(215, 145, 100, 0.22);
+  }
+}
+
+html[data-theme="light"] .diamond-grid {
+  opacity: 0.04 !important;
+  filter: invert(1);
+}
+
+html[data-theme="light"] .brand-logos img {
+  filter: brightness(0) opacity(0.8);
+  transition: filter 0.4s ease;
+}
+
+/* ── Global text color overrides (all text goes dark) ── */
+html[data-theme="light"] .text-white:not(.anim-btn-icon) {
+  color: #1a1a1a !important;
+}
+html[data-theme="light"] .text-\[\#FEFCD9\],
+html[data-theme="light"] .text-\[\#fefcd9\],
+html[data-theme="light"] .text-\[\#FFFDD0\],
+html[data-theme="light"] .text-yellow-50 {
+  color: #1a1a1a !important;
+}
+html[data-theme="light"] .text-gray-300 {
+  color: #4a4a4a !important;
+}
+html[data-theme="light"] .text-gray-400,
+html[data-theme="light"] .text-neutral-400 {
+  color: #7a7a7a !important;
+}
+html[data-theme="light"] .text-gray-900 {
+  color: #1a1a1a !important;
+}
+html[data-theme="light"] .text-zinc-100 {
+  color: #3d3d3d !important;
+}
+
+/* ── Global border overrides ── */
+html[data-theme="light"] .border-white\/10 {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+html[data-theme="light"] .border-\[\#fefcd9\],
+html[data-theme="light"] .border-\[\#FEFCD9\] {
+  border-color: rgba(26, 26, 26, 0.2) !important;
+}
+html[data-theme="light"] .border-zinc-700,
+html[data-theme="light"] .border-zinc-100 {
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+html[data-theme="light"] .outline-white {
+  outline-color: rgba(0, 0, 0, 0.1) !important;
+}
+html[data-theme="light"] .border-\[\#999999\]\/50,
+html[data-theme="light"] .border-dashed.border-\[\#999999\]\/50 {
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+/* ── Background overrides ── */
+/* Overlays use bg-[#050505]/95 (with opacity modifier) - different class, unaffected */
+html[data-theme="light"] .bg-\[\#050505\],
+html[data-theme="light"] .bg-\[\#060606\] {
+  background: transparent !important;
+}
+
+/* ── Header pill (glass morphism) ── */
+html[data-theme="light"] .header-pill {
+  --glass-bg: rgba(26, 26, 26, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-shadow: rgba(0, 0, 0, 0.2);
+  --glass-highlight: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(1.4) !important;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 0 12px rgba(255, 255, 255, 0.03) !important;
+}
+
+html[data-theme="light"] .header-pill:hover,
+html[data-theme="light"] .header-pill.pill-menu-open {
+  --glass-bg: rgba(26, 26, 26, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 0 16px rgba(255, 255, 255, 0.04) !important;
+}
+
+html[data-theme="light"] .nav-label {
+  color: #FEFCD9 !important;
+}
+html[data-theme="light"] .nav-dot {
+  background: rgba(254, 252, 217, 0.25) !important;
+}
+html[data-theme="light"] .nav-item.active .nav-dot {
+  background: #FEFCD9 !important;
+  box-shadow: 0 0 8px rgba(254, 252, 217, 0.3) !important;
+}
+html[data-theme="light"] .header-pill:hover .nav-item:not(.active) .nav-dot,
+html[data-theme="light"] .header-pill.pill-menu-open .nav-item:not(.active) .nav-dot {
+  background: rgba(254, 252, 217, 0.4) !important;
+}
+html[data-theme="light"] .header-pill:hover .nav-item.active .nav-dot,
+html[data-theme="light"] .header-pill.pill-menu-open .nav-item.active .nav-dot {
+  background: #FEFCD9 !important;
+}
+/* Pink mode dot stays pink */
+html[data-theme="light"] .nav-item.active.pink-mode .nav-dot {
+  background: #ff007a !important;
+  box-shadow: 0 0 8px rgba(255, 0, 122, 0.3) !important;
+}
+html[data-theme="light"] .nav-item.active.pink-mode .nav-label {
+  color: #ff007a !important;
+}
+
+/* ── Megamenu - dark in both modes ── */
+html[data-theme="light"] .megamenu-panel {
+  background: #1e1e1e !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-color: rgba(249, 95, 74, 0.35) !important;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.18),
+    0 0 20px rgba(249, 95, 74, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10) !important;
+}
+html[data-theme="light"] .megamenu-panel::after {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent) !important;
+}
+html[data-theme="light"] .megamenu-tile {
+  background: #262626 !important;
+  border-color: rgba(254, 252, 217, 0.08) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+html[data-theme="light"] .megamenu-tile:hover {
+  background: rgba(249, 95, 74, 0.10) !important;
+  border-color: rgba(249, 95, 74, 0.30) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25) !important;
+}
+html[data-theme="light"] .megamenu-tile .tile-title {
+  color: #FEFCD9 !important;
+}
+html[data-theme="light"] .megamenu-tile .tile-desc {
+  color: rgba(254, 252, 217, 0.45) !important;
+}
+html[data-theme="light"] .megamenu-tile:hover .tile-title {
+  color: #f95f4a !important;
+}
+html[data-theme="light"] .megamenu-tile:hover .tile-desc {
+  color: rgba(254, 252, 217, 0.65) !important;
+}
+html[data-theme="light"] .tile-img {
+  opacity: 0.55 !important;
+  filter: saturate(0.7) !important;
+}
+html[data-theme="light"] .tile-img[src*="acm-logo-black"],
+html[data-theme="light"] .megamenu-tile:hover .tile-img[src*="acm-logo-black"] {
+  filter: invert(1) !important;
+}
+html[data-theme="light"] .megamenu-tile:hover .tile-img {
+  opacity: 1 !important;
+  filter: saturate(1.1) !important;
+}
+
+/* ACM-W pink megamenu */
+html[data-theme="light"] .megamenu-panel[data-panel="acm-w"] {
+  border-color: rgba(255, 0, 122, 0.45) !important;
+}
+html[data-theme="light"] .megamenu-panel[data-panel="acm-w"] .megamenu-tile:hover {
+  background: rgba(255, 0, 122, 0.10) !important;
+  border-color: rgba(255, 0, 122, 0.30) !important;
+}
+html[data-theme="light"] .megamenu-panel[data-panel="acm-w"] .megamenu-tile:hover .tile-title {
+  color: #ff007a !important;
+}
+
+/* ── ACM-W section light mode ── */
+html[data-theme="light"] #acm-w {
+  background: #F5EDE4 !important;
+  color: #1a1a1a !important;
+}
+html[data-theme="light"] #acm-w .text-white {
+  color: #1a1a1a !important;
+}
+html[data-theme="light"] #acm-w .text-primary-pink {
+  color: #ff007a !important;
+}
+html[data-theme="light"] #acm-w img[alt="AcmW Table"] {
+  filter: brightness(0.9) saturate(1.2);
+}
+html[data-theme="light"] #acm-w #tubelight {
+  display: none !important;
+}
+
+/* ── Mobile menu ── */
+html[data-theme="light"] #mobile-menu-overlay {
+  background: rgba(242, 206, 174, 0.98) !important;
+}
+html[data-theme="light"] #mobile-menu-close {
+  color: #1a1a1a !important;
+  border-color: rgba(26, 26, 26, 0.15) !important;
+}
+html[data-theme="light"] .mobile-nav-link {
+  color: #1a1a1a !important;
+}
+html[data-theme="light"] .mobile-nav-link:hover {
+  color: #f95f4a !important;
+}
+html[data-theme="light"] #mobile-menu-overlay span.text-\[\#FEFCD9\] {
+  color: rgba(26, 26, 26, 0.5) !important;
+}
+html[data-theme="light"] .mobile-nav-link span {
+  background: rgba(26, 26, 26, 0.06) !important;
+}
+
+/* ── AnimatedButton (inverted for light mode) ── */
+html[data-theme="light"] .anim-btn {
+  background: #1a1a1a !important;
+}
+html[data-theme="light"] .anim-btn-label {
+  color: #FEFCD9 !important;
+}
+html[data-theme="light"] .anim-btn-icon {
+  color: #1a1a1a !important;
+}
+html[data-theme="light"] .anim-btn:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18) !important;
+}
+
+/* ── Scroll video light mode - dimmed with warm overlay for readability ── */
+html[data-theme="light"] .scroll-media-stack.visible {
+  opacity: 0.45 !important;
+}
+html[data-theme="light"] .scroll-video-overlay.visible {
+  opacity: 0.4 !important;
+  background-color: #F5EDE4 !important;
+}
+
+/* ── Projects section light mode ── */
+html[data-theme="light"] .projects-container .hero {
+  --textColor: #1a1a1a !important;
+  color: #1a1a1a !important;
+}
+html[data-theme="light"] .projects-container .description {
+  color: #1a1a1a !important;
+}
+html[data-theme="light"] .projects-container .content-section {
+  color: #1a1a1a !important;
+}
+html[data-theme="light"] .projects-container .btn.primary {
+  color: #1a1a1a !important;
+}
+html[data-theme="light"] .projects-container .border-dashed {
+  border-color: rgba(26, 26, 26, 0.25) !important;
+}
+html[data-theme="light"] #projects-intro .text-white {
+  color: #1a1a1a !important;
+}
+
+/* ── Events section light mode ── */
+html[data-theme="light"] {
+  --color-secondary: #F5EDE4;
+  --color-shadow: #d4a882;
+  --color-white: #1a1a1a;
+}
+html[data-theme="light"] .s-work {
+  background: #f95f4a !important;
+}
+html[data-theme="light"] .s-work .s__inner {
+  background: #F5EDE4 !important;
+  color: #1a1a1a !important;
+}
+html[data-theme="light"] .s-work .s__mask__path-outer,
+html[data-theme="light"] .s-work .s__mask__path-inner {
+  fill: #f95f4a !important;
+  stroke: #d4a882 !important;
+}
+html[data-theme="light"] .s-work .s__mask__path-lines {
+  stroke: #d4a882 !important;
+}
+html[data-theme="light"] a-work {
+  background: #E8BFA3 !important;
+}
+html[data-theme="light"] a-work .a__caption {
+  color: #f95f4a !important;
+}
+
+/* ── Domains ── */
+html[data-theme="light"] .outline-\[\#FEFCD9\] {
+  outline-color: rgba(26, 26, 26, 0.25) !important;
+}
+
+/* ── Blogs ── */
+html[data-theme="light"] .border-\[\#fefcd9\] {
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ── Contact form ── */
+html[data-theme="light"] #contact input,
+html[data-theme="light"] #contact textarea,
+html[data-theme="light"] #contact select {
+  background: rgba(255, 255, 255, 0.45) !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  color: #1a1a1a !important;
+}
+html[data-theme="light"] #contact input::placeholder,
+html[data-theme="light"] #contact textarea::placeholder {
+  color: rgba(26, 26, 26, 0.4) !important;
+}
+
+/* ── LegendPins text shadow adjustment ── */
+html[data-theme="light"] [style*="text-shadow"] {
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.6) !important;
+}
+
+/* ── Footer: theme-immune. Footer is always dark, so undo the generic
+   light-theme utility recolors for anything inside it. ── */
+html[data-theme="light"] #footer .text-white {
+  color: #fff !important;
+}
+html[data-theme="light"] #footer .text-yellow-50,
+html[data-theme="light"] #footer .text-\[\#FEFCD9\],
+html[data-theme="light"] #footer .text-\[\#fefcd9\] {
+  color: #fefcd9 !important;
+}
+
+/* ── Blog marquee cards: theme-immune. Always a dark photo card, so undo
+   the generic light-theme utility recolors for anything inside it. ── */
+html[data-theme="light"] .blog-mcard .text-\[\#FEFCD9\],
+html[data-theme="light"] .blog-mcard .text-\[\#fefcd9\] {
+  color: #fefcd9 !important;
+}
+
+/* ── Preloader ── */
+html[data-theme="light"] .preloader,
+html[data-theme="light"] [class*="preloader"] {
+  background-color: #F5EDE4 !important;
+}
+html[data-theme="light"] .progress-bar {
+  background-color: rgba(0, 0, 0, 0.08) !important;
+}
+html[data-theme="light"] .progress-fill {
+  background: #1a1a1a !important;
+}
+
+/* ── Domains cassette wrapper ── */
+html[data-theme="light"] .cassette-wrapper::after {
+  background: #F5EDE4 !important;
+}
+
+/* ── Selection stays the same ── */
+
+/* ── Theme toggle - dangling bulb pull cord ── */
+.theme-toggle {
+  position: fixed;
+  top: 0;
+  right: 32px;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: auto;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+
+.theme-toggle:active {
+  cursor: grabbing;
+}
+
+.cord-svg {
+  display: block;
+  overflow: visible;
+}
+
+.bulb-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: filter 0.3s ease;
+}
+
+.theme-toggle:hover .bulb-handle {
+  filter: drop-shadow(0 0 10px rgba(249, 95, 74, 0.55));
+}
+
+/* Bulb "on" in light mode */
+html[data-theme="light"] .bulb-circle {
+  fill: #F95F4A;
+}
+
+/* Tooltip - positioned to the left */
+.bulb-tooltip {
+  position: absolute;
+  top: 72px;
+  right: calc(100% + 12px);
+  white-space: nowrap;
+  font-family: 'PolySans Trial', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: #FEFCD9;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(249, 95, 74, 0.3);
+  border-radius: 8px;
+  padding: 6px 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  transform: translateX(8px);
+}
+
+.theme-toggle:hover .bulb-tooltip {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+html[data-theme="light"] .bulb-tooltip {
+  color: #1a1a1a;
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(249, 95, 74, 0.25);
+}
+
+@media (max-width: 1024px) {
+  .theme-toggle {
+    right: 70px;
+  }
+  .cord-svg { transform: scale(0.85); transform-origin: top center; }
+  .bulb-handle svg { width: 34px; height: 21px; }
+}
+
+@media (max-width: 480px) {
+  .theme-toggle {
+    right: 54px;
+  }
+  .cord-svg { transform: scale(0.75); transform-origin: top center; }
+  .bulb-handle svg { width: 30px; height: 19px; }
+  .bulb-tooltip { font-size: 10px; padding: 5px 10px; }
+}
+
+body.mobile-menu-open .theme-toggle {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* PolySans - Standard */
 @font-face {
-    font-family: "PolySans Trial";
-    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Standard/PolySansTrial-Slim.otf")
-        format("opentype");
-    font-weight: 300;
-    font-style: normal;
-    font-display: swap;
+  font-family: "PolySans Trial";
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  src: url("../assets/fonts/Standard/PolySans-Slim.otf") format("opentype");
 }
 
 @font-face {
-    font-family: "PolySans Trial";
-    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Standard/PolySansTrial-Neutral.otf")
-        format("opentype");
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
+  font-family: "PolySans Trial";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("../assets/fonts/Standard/PolySans-Neutral.otf") format("opentype");
 }
 
 @font-face {
-    font-family: "PolySans Trial";
-    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Standard/PolySansTrial-Median.otf")
-        format("opentype");
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
+  font-family: "PolySans Trial";
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url("../assets/fonts/Standard/PolySans-Median.otf") format("opentype");
 }
 
 @font-face {
-    font-family: "PolySans Trial";
-    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Standard/PolySansTrial-Bulky.otf")
-        format("opentype");
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
-}
-
-/* Mono - used in Board/Cards */
-@font-face {
-    font-family: "PolySans Slim";
-    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-SlimMono.otf")
-        format("opentype");
-    font-weight: 300;
-    font-style: normal;
-    font-display: swap;
+  font-family: "PolySans Trial";
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("../assets/fonts/Standard/PolySans-Bulky.otf") format("opentype");
 }
 
 @font-face {
-    font-family: "PolySans Mono"; /* Renamed from Trial to distinguish or keep as is? Original was "PolySans Trial" locally which conflicts. Let's use specific names or keep local mappings global */
-    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-NeutralMono.otf")
-        format("opentype");
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
+  font-family: "PolySans Trial";
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+  src: url("../assets/fonts/Standard/PolySansItalic-SlimItalic.otf") format("opentype");
 }
 
 @font-face {
-    font-family: "PolySans Medium";
-    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-MedianMono.otf")
-        format("opentype");
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
+  font-family: "PolySans Trial";
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+  src: url("../assets/fonts/Standard/PolySansItalic-NeutralItalic.otf") format("opentype");
 }
 
 @font-face {
-    font-family: "PolySans Bold";
-    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-BulkyMono.otf")
-        format("opentype");
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
+  font-family: "PolySans Trial";
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+  src: url("../assets/fonts/Standard/PolySansItalic-MedianItalic.otf") format("opentype");
 }
 
 @font-face {
-    font-family: "PolySans Bulky Wide";
-    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Wide/PolySansTrial-BulkyWide.otf")
-        format("opentype");
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
+  font-family: "PolySans Trial";
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+  src: url("../assets/fonts/Standard/PolySansItalic-BulkyItalic.otf") format("opentype");
 }
+
+/* PolySans - Mono */
+@font-face {
+  font-family: "PolySans Slim";
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  src: url("../assets/fonts/Mono/PolySans-SlimMono.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "PolySans Mono";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("../assets/fonts/Mono/PolySans-NeutralMono.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "PolySans Medium";
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url("../assets/fonts/Mono/PolySans-MedianMono.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "PolySans Bold";
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("../assets/fonts/Mono/PolySans-BulkyMono.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "PolySans Slim";
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+  src: url("../assets/fonts/Mono/PolySansItalic-SlimMonoItalic.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "PolySans Mono";
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+  src: url("../assets/fonts/Mono/PolySansItalic-NeutralMonoItalic.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "PolySans Medium";
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+  src: url("../assets/fonts/Mono/PolySansItalic-MedianMonoItalic.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "PolySans Bold";
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+  src: url("../assets/fonts/Mono/PolySansItalic-BulkyMonoItalic.otf") format("opentype");
+}
+
+/* PolySans - Wide */
+@font-face {
+  font-family: "PolySans Slim Wide";
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  src: url("../assets/fonts/Wide/PolySans-SlimWide.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "PolySans Wide";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("../assets/fonts/Wide/PolySans-NeutralWide.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "PolySans Median Wide";
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url("../assets/fonts/Wide/PolySans-MedianWide.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "PolySans Bulky Wide";
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("../assets/fonts/Wide/PolySans-BulkyWide.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "PolySans Slim Wide";
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+  src: url("../assets/fonts/Wide/PolySansItalic-SlimWideItalic.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "PolySans Wide";
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+  src: url("../assets/fonts/Wide/PolySansItalic-NeutralWideItalic.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "PolySans Median Wide";
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+  src: url("../assets/fonts/Wide/PolySansItalic-MedianWideItalic.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "PolySans Bulky Wide";
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+  src: url("../assets/fonts/Wide/PolySansItalic-BulkyWideItalic.otf") format("opentype");
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Accessibility helpers (site-wide)
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* Keyboard focus ring. Only shows for keyboard/AT users (:focus-visible), so
+   pointer users never see it and no resting visuals change. Several components
+   set `outline: none`, leaving keyboard users with no visible focus - this
+   restores a consistent, high-contrast indicator everywhere. Uses the existing
+   accent token; a paired light halo keeps it visible on both dark and light
+   surfaces. */
+:focus-visible {
+  outline: 2px solid var(--color-primary-orange, #f95f4a);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+/* Some elements explicitly reset the outline; re-assert it for keyboard focus. */
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--color-primary-orange, #f95f4a);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.35);
+}
+
+/* The skip link moves focus to <main> (tabindex=-1) so AT continues from there;
+   it is a layout container, not a control, so suppress the big focus ring on it. */
+#main-content:focus,
+#main-content:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Skip-to-content link: first thing a keyboard/screen-reader user reaches, lets
+   them jump past the fixed chrome (logos, nav, theme cord) straight to <main>.
+   Off-screen until focused, then slides into the top-left corner. */
+.skip-to-content {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 100000;
+  /* Fully clears the top edge: moved up its own height plus its 10px offset, so
+     no sliver peeks below the viewport top at rest. */
+  transform: translateY(calc(-100% - 20px));
+  padding: 10px 18px;
+  border-radius: 8px;
+  background: var(--color-primary-orange, #f95f4a);
+  color: #0d0e0d;
+  font-family: "PolySans Trial", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease;
+}
+.skip-to-content:focus {
+  transform: translateY(0);
+  outline: 2px solid #0d0e0d;
+  outline-offset: 2px;
+}
+
+/* Reduced-motion safety net. Individual components already gate their GSAP work
+   on this query; this is a CSS-only backstop for decorative CSS animations and
+   transitions. Uses the canonical near-zero-duration + single-iteration pattern
+   so infinite loops resolve to a static frame (no rapid flashing) while any
+   JS listening for transitionend/animationend still fires. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Screen-reader-only utility: content read by assistive tech, hidden visually. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+

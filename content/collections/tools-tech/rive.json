@@ -1,0 +1,8 @@
+{
+  "name": "Rive",
+  "slug": "rive",
+  "svgFile": "/domains/tech/tools/tech-tool-rive.svg",
+  "colorHex": "#1D1D1D",
+  "monochrome": true,
+  "order": 900
+}

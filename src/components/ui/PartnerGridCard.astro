@@ -1,0 +1,166 @@
+---
+interface Props {
+  name: string;
+  /** Fully-resolved logo url. When absent, a named outline cassette is shown. */
+  logoUrl?: string;
+  link?: string;
+  /** Recolour a dark/black monochrome logo to white so it reads on the cassette. */
+  whiten?: boolean;
+  /** Show the company name as a caption beneath the logo. */
+  showName?: boolean;
+}
+
+import { getAssetUrl } from "../../utils/cdn";
+const { name, logoUrl, link, whiten = false, showName = false } = Astro.props;
+
+const hasLogo = Boolean(logoUrl);
+const Tag = link && link !== "#" ? "a" : "div";
+const anchorProps =
+  Tag === "a"
+    ? { href: link, target: "_blank", rel: "noopener noreferrer" }
+    : {};
+---
+
+<Tag {...anchorProps} class="pg-card" aria-label={name}>
+  <div class="pg-shell">
+    <!-- Cassette frame -->
+    <img
+      src={hasLogo
+        ? getAssetUrl("/cassettes/cassettes-partner-cassette.webp")
+        : getAssetUrl("/cassettes/cassettes-partner-outline.svg")}
+      alt=""
+      class="pg-frame"
+      loading="lazy"
+      decoding="async"
+    />
+
+    {
+      hasLogo ? (
+        <div class:list={["pg-logo-wrap", { "has-caption": showName }]}>
+          <img
+            src={logoUrl}
+            alt={name}
+            class:list={["pg-logo", { "is-whiten": whiten }]}
+            loading="lazy"
+            decoding="async"
+          />
+          {showName && <span class="pg-caption">{name}</span>}
+        </div>
+      ) : (
+        <div class="pg-name-wrap">
+          <span class="pg-name">{name}</span>
+        </div>
+      )
+    }
+  </div>
+</Tag>
+
+<style>
+  .pg-card {
+    display: block;
+    width: 100%;
+  }
+
+  .pg-shell {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 257 / 158;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .pg-frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    pointer-events: none;
+  }
+
+  .pg-logo-wrap,
+  .pg-name-wrap {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12%;
+    z-index: 2;
+  }
+
+  .pg-logo {
+    max-width: 62%;
+    max-height: 56%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+
+  /* Logo + name caption stacked (added event partners). */
+  .pg-logo-wrap.has-caption {
+    flex-direction: column;
+    gap: 7%;
+    padding: 9% 10% 16%;
+  }
+  .pg-logo-wrap.has-caption .pg-logo {
+    max-height: 40%;
+  }
+  .pg-caption {
+    font-family: "PolySans Trial", sans-serif;
+    font-weight: 600;
+    font-size: clamp(0.6rem, 1.05vw, 0.82rem);
+    line-height: 1.1;
+    text-align: center;
+    color: #fefcd9;
+    max-width: 92%;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.6);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  :global(html[data-theme="light"]) .pg-caption {
+    color: #fefcd9;
+  }
+
+  /* Dark/black monochrome logos -> white so they read on the dark cassette
+     (both themes use a dark cassette backing). Coloured & white logos are
+     left untouched. */
+  .pg-logo.is-whiten {
+    filter: brightness(0) invert(1);
+  }
+
+  .pg-name {
+    font-family: "PolySans Trial", sans-serif;
+    font-weight: 700;
+    font-size: clamp(0.8rem, 1.4vw, 1.05rem);
+    line-height: 1.15;
+    text-align: center;
+    color: #fefcd9;
+    max-width: 78%;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.55);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .pg-card {
+    transition: transform 0.35s ease;
+  }
+  .pg-card:hover {
+    transform: translateY(-4px);
+  }
+
+  /* ── Dark mode (default): white frame + cream text read fine on dark bg ── */
+
+  /* ── Light mode: give each cassette a dark backing so the white cassette
+     outline and logos/names stay visible, mirroring PartnerCasetteSingular. ── */
+  :global(html[data-theme="light"]) .pg-shell {
+    background-color: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .pg-name {
+    color: #fefcd9;
+  }
+</style>

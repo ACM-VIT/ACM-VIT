@@ -1,0 +1,102 @@
+---
+// Gallery.astro
+import { getAssetUrl } from "../utils/cdn";
+import AnimatedButton from "../components/ui/AnimatedButton.astro";
+---
+
+<section
+  class="gallery-section relative w-full pt-16 pb-0 sm:pt-24 sm:pb-0"
+>
+  <div class="gallery-frame relative w-full overflow-hidden">
+    <img
+      src={getAssetUrl("/gallery/gallery-hero.webp")}
+      alt="ACM-VIT Gallery"
+      class="gallery-image gallery-image-dark w-full object-cover"
+      loading="lazy"
+      decoding="async"
+    />
+    <img
+      src={getAssetUrl("/gallery/gallery-light.webp")}
+      alt="ACM-VIT Gallery"
+      class="gallery-image gallery-image-light w-full object-cover"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+  <div class="gallery-btn-row">
+    <AnimatedButton
+      text="Proof we actually do stuff - view photos!"
+      href="/gallery"
+    />
+  </div>
+</section>
+
+<style>
+  .gallery-section {
+    font-family: "PolySans Trial", "PolySans", system-ui, sans-serif;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  .gallery-section * {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .gallery-section img {
+    -webkit-user-drag: none;
+  }
+
+  .gallery-btn-row {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 8%;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+  }
+
+  .gallery-frame::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(3, 3, 3, 0) 40%,
+      rgba(3, 3, 3, 0.55) 100%
+    );
+    pointer-events: none;
+  }
+
+  .gallery-image {
+    filter: grayscale(1);
+    transition: filter 0.3s ease;
+  }
+
+  .gallery-image-light {
+    display: none;
+  }
+
+  :global(html[data-theme="light"]) .gallery-image-dark {
+    display: none;
+  }
+
+  :global(html[data-theme="light"]) .gallery-image-light {
+    display: block;
+    filter: none;
+  }
+
+  .gallery-frame:hover .gallery-image {
+    filter: grayscale(0.2);
+  }
+
+  :global(html[data-theme="light"]) .gallery-frame::after {
+    background: linear-gradient(
+      180deg,
+      rgba(245, 237, 228, 0) 40%,
+      rgba(245, 237, 228, 0.55) 100%
+    );
+  }
+</style>

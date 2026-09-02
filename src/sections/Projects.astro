@@ -1,0 +1,34 @@
+---
+import SectionHeading from "../components/ui/SectionHeading.astro";
+import ProjectsShowcase from "../components/ui/ProjectsShowcase.astro";
+
+export interface Props {
+  projects: Array<{
+    slug?: string;
+    cassette: { src?: string; svg?: string; alt: string };
+    textContent: { blocks: string[] };
+    buttons: {
+      primary: { backgroundColor: string };
+      icons?: Array<{ type: string; iconColor: string; url?: string }>;
+    };
+    colors: { textColor: string; hoverShadow: string };
+  }>;
+}
+
+const { projects = [] } = Astro.props;
+---
+
+<div class="projects-container flex flex-col">
+  <!-- Animated section heading -->
+  <div class="projects-heading flex min-h-0 md:min-h-[60vh] w-full items-center justify-center py-8 md:py-20">
+    <SectionHeading
+      title=""
+      accent="Projects"
+      subtitle="Built at ACM-VIT - some of our popular projects, made by our members to solve real problems and push boundaries."
+      align="center"
+    />
+  </div>
+
+  <!-- Pinned, gear-driven project walkthrough -->
+  <ProjectsShowcase projects={projects} />
+</div>

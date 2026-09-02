@@ -1,0 +1,473 @@
+---
+export const prerender = true;
+import Layout from "../layouts/Layout.astro";
+import "../styles/globals.css";
+import Footer from "../layouts/Footer.astro";
+import SectionHeading from "../components/ui/SectionHeading.astro";
+import FillButton from "../components/ui/FillButton.astro";
+import { categories } from "../data/faqsData";
+
+let counter = 0;
+---
+
+<Layout pageTitle="FAQs" backHref="/" bleedBg>
+  <main class="faq-page relative w-full overflow-hidden">
+    <div class="faq-glow" aria-hidden="true"></div>
+    <div class="faq-grid-bg" aria-hidden="true">
+      <span class="fg-v" style="left: 20%"></span>
+      <span class="fg-v" style="left: 50%"></span>
+      <span class="fg-v" style="left: 80%"></span>
+    </div>
+
+    <div class="faq-inner relative z-10 mx-auto w-full max-w-4xl px-5 pb-28 pt-32 sm:px-8">
+      <SectionHeading
+        title="Frequently"
+        accent="Asked"
+        subtitle="The liner notes to ACM-VIT - everything people ask us before, during, and occasionally after joining. Press play on a question."
+        align="left"
+        class="mb-12 !px-0"
+      />
+
+      <!-- Quick-jump chips -->
+      <nav class="faq-jump" aria-label="Jump to category">
+        {
+          categories.map((cat) => (
+            <a href={`#${cat.id}`} class="faq-jump-chip" style={`--accent: ${cat.accent}`}>
+              {cat.label}
+            </a>
+          ))
+        }
+      </nav>
+
+      <!-- Categories -->
+      <div class="faq-stack">
+        {
+          categories.map((cat) => (
+            <section id={cat.id} class="faq-category" style={`--accent: ${cat.accent}`} data-reveal>
+              <header class="faq-cat-head">
+                <span class="faq-cat-dot" aria-hidden="true"></span>
+                <h2 class="faq-cat-title">{cat.label}</h2>
+                <span class="faq-cat-count">{String(cat.faqs.length).padStart(2, "0")} tracks</span>
+              </header>
+
+              <div class="faq-list">
+                {
+                  cat.faqs.map((item) => {
+                    counter += 1;
+                    const track = String(counter).padStart(2, "0");
+                    return (
+                      <div class="faq-item" data-faq-item>
+                        <button
+                          class="faq-q"
+                          type="button"
+                          aria-expanded="false"
+                          data-faq-trigger
+                        >
+                          <span class="faq-track">{track}</span>
+                          <span class="faq-q-text">{item.q}</span>
+                          <span class="faq-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5v14l11-7z"/></svg>
+                          </span>
+                        </button>
+                        <div class="faq-panel-wrap">
+                          <div class="faq-panel-inner">
+                            <p class="faq-a">{item.a}</p>
+                            {item.link && (
+                              <p class="faq-a faq-a-link">
+                                <a href={item.link.href}>{item.link.text}</a>
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })
+                }
+              </div>
+            </section>
+          ))
+        }
+      </div>
+
+      <!-- Still stuck -->
+      <div class="faq-cta" data-reveal>
+        <h3 class="faq-cta-title">Still stuck?</h3>
+        <p class="faq-cta-body">Not every track makes the album. If your question didn't get answered, reach out and we'll get back to you.</p>
+        <FillButton label="Get in touch" href="/#contact" class="faq-cta-btn" />
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .faq-page {
+    min-height: 100vh;
+    /* Bleed the grid/glow up behind the fixed header so there's no seam at the
+       .content clearance (pt-28 = 7rem). margin/padding cancel, so inner
+       content keeps its exact position. */
+    margin-top: -7rem;
+    padding-top: 7rem;
+  }
+
+  .faq-glow {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(45% 30% at 20% 8%, rgba(0, 180, 216, 0.16), transparent 70%),
+      radial-gradient(40% 35% at 85% 40%, rgba(249, 95, 74, 0.1), transparent 70%);
+  }
+  .faq-grid-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .fg-v {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(254, 252, 217, 0.06) 0 3px,
+      transparent 3px 18px
+    );
+  }
+  :global(html[data-theme="light"]) .fg-v {
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(38, 59, 51, 0.07) 0 3px,
+      transparent 3px 18px
+    );
+  }
+
+  /* ── Quick jump ── */
+  .faq-jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 3rem;
+  }
+  .faq-jump-chip {
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(254, 252, 217, 0.75);
+    text-decoration: none;
+    padding: 0.5rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid rgba(254, 252, 217, 0.14);
+    background: rgba(254, 252, 217, 0.03);
+    transition: border-color 0.3s ease, color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+  }
+  .faq-jump-chip:hover {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    transform: translateY(-2px);
+  }
+  :global(html[data-theme="light"]) .faq-jump-chip {
+    color: rgba(26, 26, 26, 0.65);
+    border-color: rgba(26, 26, 26, 0.14);
+    background: rgba(0, 0, 0, 0.02);
+  }
+
+  /* ── Category ── */
+  .faq-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+  }
+  .faq-category {
+    scroll-margin-top: 6rem;
+  }
+  .faq-cat-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.7rem;
+    margin-bottom: 1.1rem;
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid rgba(254, 252, 217, 0.12);
+  }
+  .faq-cat-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex: none;
+  }
+  .faq-cat-title {
+    margin: 0;
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: #fefcd9;
+  }
+  .faq-cat-count {
+    margin-left: auto;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(254, 252, 217, 0.4);
+  }
+  :global(html[data-theme="light"]) .faq-cat-head {
+    border-bottom-color: rgba(26, 26, 26, 0.12);
+  }
+  :global(html[data-theme="light"]) .faq-cat-title {
+    color: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .faq-cat-count {
+    color: rgba(26, 26, 26, 0.4);
+  }
+
+  /* ── Items ── */
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .faq-item {
+    border-radius: 14px;
+    background: linear-gradient(160deg, #17171763 0%, #0f0f0f63 100%);
+    border: 1px solid rgba(254, 252, 217, 0.09);
+    transition: border-color 0.35s ease, background 0.35s ease, box-shadow 0.35s ease;
+    overflow: hidden;
+  }
+  .faq-item.is-open {
+    border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+    background: linear-gradient(160deg, #1b1b1b 0%, #0f0f0f 100%);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35);
+  }
+  :global(html[data-theme="light"]) .faq-item {
+    background: rgba(255, 255, 255, 0.35);
+    border-color: rgba(26, 26, 26, 0.1);
+  }
+  :global(html[data-theme="light"]) .faq-item.is-open {
+    background: rgba(255, 255, 255, 0.7);
+    border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  }
+
+  .faq-q {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 1.05rem 1.15rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-family: "PolySans Trial", sans-serif;
+  }
+  .faq-track {
+    flex: none;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    color: rgba(254, 252, 217, 0.35);
+    transition: color 0.3s ease;
+  }
+  .faq-item.is-open .faq-track {
+    color: var(--accent);
+  }
+  .faq-q-text {
+    flex: 1;
+    font-size: 0.98rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: #fefcd9;
+    letter-spacing: -0.005em;
+  }
+  :global(html[data-theme="light"]) .faq-q-text {
+    color: #1a1a1a;
+  }
+  .faq-icon {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    color: rgba(254, 252, 217, 0.5);
+    border: 1px solid rgba(254, 252, 217, 0.15);
+    transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), color 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+  }
+  .faq-icon svg {
+    width: 11px;
+    height: 11px;
+    transform: translateX(1px);
+  }
+  .faq-item.is-open .faq-icon {
+    transform: rotate(90deg);
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+  }
+  :global(html[data-theme="light"]) .faq-icon {
+    border-color: rgba(26, 26, 26, 0.15);
+    color: rgba(26, 26, 26, 0.45);
+  }
+
+  .faq-panel-wrap {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.45s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+  .faq-item.is-open .faq-panel-wrap {
+    grid-template-rows: 1fr;
+  }
+  .faq-panel-inner {
+    overflow: hidden;
+  }
+  .faq-a {
+    margin: 0;
+    padding: 0 1.15rem 1.2rem 2.75rem;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.85rem;
+    line-height: 1.65;
+    color: rgba(254, 252, 217, 0.72);
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 0.35s ease 0.08s, transform 0.35s ease 0.08s;
+  }
+  .faq-item.is-open .faq-a {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  :global(html[data-theme="light"]) .faq-a {
+    color: rgba(26, 26, 26, 0.68);
+  }
+  .faq-a-link {
+    margin-top: -0.7rem;
+  }
+  .faq-a-link a {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+    transition: border-color 0.2s ease;
+  }
+  .faq-a-link a:hover {
+    border-bottom-color: var(--accent);
+  }
+
+  /* ── Bottom CTA ── */
+  .faq-cta {
+    margin-top: 5rem;
+    padding: 2.5rem 2rem;
+    border-radius: 20px;
+    text-align: center;
+    background: radial-gradient(80% 100% at 50% 0%, rgba(0, 180, 216, 0.12), transparent 70%);
+    border: 1px solid rgba(254, 252, 217, 0.1);
+  }
+  .faq-cta-title {
+    margin: 0;
+    font-family: "PolySans Trial", sans-serif;
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    font-weight: 700;
+    color: #fefcd9;
+  }
+  .faq-cta-body {
+    margin: 0.6rem auto 0;
+    max-width: 40ch;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: rgba(254, 252, 217, 0.65);
+  }
+  .faq-cta :global(.faq-cta-btn) {
+    --proj-color: #00b4d8;
+    --proj-color-secondary: #0d0e0d;
+    margin-top: 1.6rem;
+  }
+  :global(html[data-theme="light"]) .faq-cta-title {
+    color: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .faq-cta-body {
+    color: rgba(26, 26, 26, 0.65);
+  }
+  :global(html[data-theme="light"]) .faq-cta {
+    border-color: rgba(26, 26, 26, 0.1);
+    background: radial-gradient(80% 100% at 50% 0%, rgba(0, 180, 216, 0.1), transparent 70%);
+  }
+
+  [data-reveal] {
+    opacity: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal] {
+      opacity: 1;
+    }
+    .faq-panel-wrap,
+    .faq-a,
+    .faq-icon {
+      transition: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .faq-cat-count {
+      display: none;
+    }
+    .faq-a {
+      padding-left: 1.15rem;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener("click", (e) => {
+    const target = e.target as HTMLElement | null;
+    const trigger = target?.closest<HTMLElement>("[data-faq-trigger]");
+    if (!trigger) return;
+
+    const item = trigger.closest<HTMLElement>("[data-faq-item]");
+    if (!item) return;
+
+    const isOpen = item.classList.toggle("is-open");
+    trigger.setAttribute("aria-expanded", String(isOpen));
+  });
+
+  function initFaqReveal() {
+    const els = document.querySelectorAll<HTMLElement>("[data-reveal]");
+    if (!els.length) return;
+
+    import("gsap").then(({ gsap }) => {
+      import("gsap/ScrollTrigger").then(({ ScrollTrigger }) => {
+        gsap.registerPlugin(ScrollTrigger);
+        const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        els.forEach((el) => {
+          if (reduce) {
+            gsap.set(el, { opacity: 1 });
+            return;
+          }
+          gsap.fromTo(
+            el,
+            { opacity: 0, y: 24 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.8,
+              ease: "power3.out",
+              scrollTrigger: { trigger: el, start: "top 88%" },
+            },
+          );
+        });
+      });
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initFaqReveal);
+  } else {
+    initFaqReveal();
+  }
+</script>

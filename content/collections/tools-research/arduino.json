@@ -1,0 +1,8 @@
+{
+  "name": "Arduino IDE",
+  "slug": "arduino",
+  "svgFile": "/domains/research/tools/research-tool-arduino.svg",
+  "colorHex": "#00979D",
+  "isDark": true,
+  "order": 270
+}

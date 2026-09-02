@@ -1,0 +1,510 @@
+---
+// Blueprint trace loader for the /design home. Draftsman construction (full-
+// bleed guides, bundled diagonals, dotted circles, node dots) drawn faint
+// first, then a trace of the SITE cassette: oblique-extruded 3D shell,
+// diamond "+" screws, sprocket hubs in a reel pill, striped tape band, and the
+// perspective bottom lip. "ACM" wipes on in DM Sans; caption types out.
+// pathLength="1" -> no JS length math. Once per session; skips reduced-motion.
+
+const polar = (cx: number, cy: number, r: number, deg: number) => {
+  const a = ((deg - 90) * Math.PI) / 180;
+  return [cx + r * Math.cos(a), cy + r * Math.sin(a)] as const;
+};
+const nn = (v: number) => Math.round(v * 100) / 100;
+
+// --- cassette front face ----------------------------------------------------
+const C = { x: 800, y: 450 };
+const F = { x: 470, y: 244, w: 660, h: 412, r: 34 }; // front outer
+const DX = 28, DY = 22;                              // oblique depth (up-right)
+
+const shellIn = { x: 481, y: 255, w: 638, h: 390, r: 24 };
+const label = { x: 522, y: 288, w: 556, h: 84, r: 10 };
+
+// reels / pill
+const reels = [
+  { cx: 646, cy: 452 },
+  { cx: 954, cy: 452 },
+];
+const RWIN = 46, RTAPE = 40, RT_OUT = 38, RT_IN = 28, RHUB = 15, RHOLE = 8;
+const pill = { x: 590, y: 398, w: 420, h: 108, r: 54 };
+
+const teeth = reels.flatMap((rl) =>
+  Array.from({ length: 14 }, (_, i) => {
+    const [x1, y1] = polar(rl.cx, rl.cy, RT_IN, (i * 360) / 14);
+    const [x2, y2] = polar(rl.cx, rl.cy, RT_OUT, (i * 360) / 14);
+    return { x1: nn(x1), y1: nn(y1), x2: nn(x2), y2: nn(y2) };
+  }),
+);
+
+// tape stripes flanking the reel pill
+const stripes = [410, 424, 438, 452, 466, 480].flatMap((y) => [
+  { x1: 486, y1: y, x2: pill.x - 2, y2: y },
+  { x1: pill.x + pill.w + 2, y1: y, x2: 1114, y2: y },
+]);
+
+// perspective bottom lip
+const lip = "M520 520 L1080 520 L1052 632 L548 632 Z";
+const lipIn = "M532 530 L1068 530 L1044 622 L556 622 Z";
+const rollers = [{ cx: 652, cy: 585 }, { cx: 948, cy: 585 }].map((r) => ({ ...r, rad: 16 }));
+const squares = [{ x: 720, y: 568 }, { x: 860, y: 568 }].map((s) => ({ ...s, s: 20 }));
+const headRect = { x: 786, y: 600, w: 28, h: 13 };
+
+// diamond "+" screws (accent)
+const screws = [
+  { cx: 512, cy: 280 }, { cx: 1088, cy: 280 },
+  { cx: 560, cy: 626 }, { cx: 1040, cy: 626 }, { cx: 800, cy: 530 },
+].map((s) => ({ ...s, r: 13 }));
+
+// --- construction guides ----------------------------------------------------
+const hLines = [244, 288, 372, 452, 528, 656].map((y, i) => ({
+  x1: 0, y1: y, x2: 1600, y2: y, d: 0.05 + i * 0.03, dash: y === 452,
+}));
+const vLines = [470, 522, 646, 800, 954, 1078, 1130].map((x, i) => ({
+  x1: x, y1: 0, x2: x, y2: 900, d: 0.12 + i * 0.03, dash: x === 800,
+}));
+const diagSeeds = [{ a: [79, 0], b: [1521, 900] }, { a: [1521, 0], b: [79, 900] }];
+const diagLines = diagSeeds.flatMap((s, si) =>
+  [-13, 0, 13].map((off, oi) => ({
+    x1: s.a[0] + off, y1: s.a[1], x2: s.b[0] + off, y2: s.b[1],
+    d: 0.3 + si * 0.06 + oi * 0.02,
+  })),
+);
+const bigCircles = [430, 360, 250].map((r, i) => ({ r, d: 0.18 + i * 0.05 }));
+const protractor = reels.flatMap((rl) =>
+  Array.from({ length: 24 }, (_, i) => {
+    const long = i % 2 === 0;
+    const [x1, y1] = polar(rl.cx, rl.cy, RWIN + 5, i * 15);
+    const [x2, y2] = polar(rl.cx, rl.cy, RWIN + (long ? 13 : 8), i * 15);
+    return { x1: nn(x1), y1: nn(y1), x2: nn(x2), y2: nn(y2) };
+  }),
+);
+const nodes = [
+  [F.x, F.y], [F.x + F.w, F.y], [F.x, F.y + F.h], [F.x + F.w, F.y + F.h],
+  [C.x, C.y], [646, 452], [954, 452], [800, 288], [800, 656],
+].map(([cx, cy]) => ({ cx, cy }));
+---
+
+<div class="di" id="design-intro" aria-hidden="true">
+  <div class="di-stage">
+    <svg class="di-svg" viewBox="0 0 1600 900" fill="none" preserveAspectRatio="xMidYMid meet" role="img" aria-label="ACM cassette blueprint">
+      <!-- construction guides -->
+      <g class="di-guides" vector-effect="non-scaling-stroke">
+        {bigCircles.map((c) => (
+          <circle class="g gdot" style={`--d:${c.d}s`} cx={C.x} cy={C.y} r={c.r} pathLength="1" />
+        ))}
+        {hLines.map((l) => (
+          <line class:list={["g", l.dash && "gdash"]} style={`--d:${l.d}s`} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} pathLength="1" />
+        ))}
+        {vLines.map((l) => (
+          <line class:list={["g", l.dash && "gdash"]} style={`--d:${l.d}s`} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} pathLength="1" />
+        ))}
+        {diagLines.map((l) => (
+          <line class="g" style={`--d:${l.d}s`} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} pathLength="1" />
+        ))}
+        {protractor.map((t, i) => (
+          <line class="g" style={`--d:${0.42 + (i % 8) * 0.01}s`} x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2} pathLength="1" />
+        ))}
+        {nodes.map((nd) => (
+          <circle class="g gnode" style="--d:.5s" cx={nd.cx} cy={nd.cy} r="2.6" pathLength="1" />
+        ))}
+      </g>
+
+      <!-- 3D depth: oblique back edges -->
+      <g class="di-depth" vector-effect="non-scaling-stroke">
+        <line class="k dim" style="--d:.55s;--dur:.5s" x1={F.x + DX} y1={F.y - DY} x2={F.x + F.w + DX} y2={F.y - DY} pathLength="1" />
+        <line class="k dim" style="--d:.6s;--dur:.5s"  x1={F.x + F.w + DX} y1={F.y - DY} x2={F.x + F.w + DX} y2={F.y + F.h - DY} pathLength="1" />
+        <line class="k dim" style="--d:.7s;--dur:.3s"  x1={F.x} y1={F.y} x2={F.x + DX} y2={F.y - DY} pathLength="1" />
+        <line class="k dim" style="--d:.7s;--dur:.3s"  x1={F.x + F.w} y1={F.y} x2={F.x + F.w + DX} y2={F.y - DY} pathLength="1" />
+        <line class="k dim" style="--d:.75s;--dur:.3s" x1={F.x + F.w} y1={F.y + F.h} x2={F.x + F.w + DX} y2={F.y + F.h - DY} pathLength="1" />
+      </g>
+
+      <!-- cassette front face -->
+      <g class="di-ink" vector-effect="non-scaling-stroke">
+        <rect class="k" style="--d:.65s;--dur:1s"   x={F.x} y={F.y} width={F.w} height={F.h} rx={F.r} pathLength="1" />
+        <rect class="k dim" style="--d:.9s;--dur:.7s" x={shellIn.x} y={shellIn.y} width={shellIn.w} height={shellIn.h} rx={shellIn.r} pathLength="1" />
+        <rect class="k" style="--d:1.1s;--dur:.55s" x={label.x} y={label.y} width={label.w} height={label.h} rx={label.r} pathLength="1" />
+
+        {stripes.map((s, i) => (
+          <line class="k tape" style={`--d:${1.2 + (i % 4) * 0.03}s;--dur:.35s`} x1={s.x1} y1={s.y1} x2={s.x2} y2={s.y2} pathLength="1" />
+        ))}
+
+        <rect class="k" style="--d:1.3s;--dur:.6s" x={pill.x} y={pill.y} width={pill.w} height={pill.h} rx={pill.r} pathLength="1" />
+        {reels.map((r) => (
+          <g>
+            <circle class="k" style="--d:1.45s;--dur:.45s" cx={r.cx} cy={r.cy} r={RWIN} pathLength="1" />
+            <circle class="k dim" style="--d:1.55s;--dur:.4s" cx={r.cx} cy={r.cy} r={RTAPE} pathLength="1" />
+            <circle class="k" style="--d:1.7s;--dur:.35s" cx={r.cx} cy={r.cy} r={RHUB} pathLength="1" />
+            <circle class="k" style="--d:1.7s;--dur:.35s" cx={r.cx} cy={r.cy} r={RHOLE} pathLength="1" />
+          </g>
+        ))}
+        {teeth.map((t) => (
+          <line class="k" style="--d:1.62s;--dur:.3s" x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2} pathLength="1" />
+        ))}
+
+        <!-- perspective bottom lip -->
+        <path class="k" style="--d:1.5s;--dur:.6s" d={lip} pathLength="1" />
+        <path class="k dim" style="--d:1.62s;--dur:.5s" d={lipIn} pathLength="1" />
+        {rollers.map((r) => (
+          <circle class="k" style="--d:1.78s;--dur:.3s" cx={r.cx} cy={r.cy} r={r.rad} pathLength="1" />
+        ))}
+        {squares.map((s) => (
+          <rect class="k" style="--d:1.8s;--dur:.3s" x={s.x} y={s.y} width={s.s} height={s.s} rx="3" pathLength="1" />
+        ))}
+        <rect class="k fill" style="--d:1.85s;--dur:.2s" x={headRect.x} y={headRect.y} width={headRect.w} height={headRect.h} rx="2" pathLength="1" />
+      </g>
+
+      <!-- diamond "+" screws: accent -->
+      <g class="di-accent" vector-effect="non-scaling-stroke">
+        {screws.map((s, i) => (
+          <g style={`--d:${1.85 + i * 0.05}s`}>
+            <circle class="k" style={`--d:${1.85 + i * 0.05}s;--dur:.3s`} cx={s.cx} cy={s.cy} r={s.r} pathLength="1" />
+            <line class="k" style={`--d:${1.95 + i * 0.05}s;--dur:.2s`} x1={s.cx} y1={s.cy - 8} x2={s.cx} y2={s.cy + 8} pathLength="1" />
+            <line class="k" style={`--d:${1.95 + i * 0.05}s;--dur:.2s`} x1={s.cx - 8} y1={s.cy} x2={s.cx + 8} y2={s.cy} pathLength="1" />
+          </g>
+        ))}
+      </g>
+
+      <!-- label word in DM Sans, wiped on -->
+      <text class="di-word" x="800" y="333" text-anchor="middle" dominant-baseline="middle">ACM</text>
+    </svg>
+
+    <p class="di-caption" id="di-caption"></p>
+  </div>
+</div>
+
+<style>
+  .di {
+    position: fixed;
+    inset: 0;
+    z-index: 2147483000;
+    display: grid;
+    place-items: center;
+    background: #080807;
+    animation: di-out 0.7s 4.2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  }
+  .di-stage { position: relative; width: min(94vw, 1440px); }
+  .di-svg { display: block; width: 100%; height: auto; }
+
+  .di .k {
+    stroke: #fbfaf3;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    opacity: 0;
+    animation:
+      di-draw var(--dur, 0.6s) var(--d, 0s) cubic-bezier(0.55, 0, 0.2, 1) forwards,
+      di-ink 0.01s var(--d, 0s) linear forwards;
+  }
+  .di .k.dim { stroke-width: 1.1; animation-name: di-draw, di-dim; }
+  .di .k.tape { stroke-width: 1; animation-name: di-draw, di-dim; }
+  .di .k.fill { fill: #fbfaf3; stroke: none; }
+  .di .di-accent .k { stroke: #f95f4a; stroke-width: 1.7; }
+  .di .di-depth .k { stroke: #fbfaf3; }
+
+  .di .g {
+    stroke: #cfe0ea;
+    stroke-width: 1;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    opacity: 0;
+    animation:
+      di-draw 0.6s var(--d, 0s) ease forwards,
+      di-fade 0.5s var(--d, 0s) ease forwards;
+  }
+  .di .gdash { stroke-dasharray: 0.02 0.012; }
+  .di .gdot {
+    stroke-dasharray: 0.0016 0.006;
+    animation: di-fade-dot 0.6s var(--d, 0s) ease forwards;
+  }
+  .di .gnode {
+    stroke: none; fill: #f95f4a;
+    stroke-dasharray: none; stroke-dashoffset: 0;
+    animation: di-fade-node 0.4s var(--d, 0s) ease forwards;
+  }
+
+  .di-word {
+    font-family: var(--ds-font, "DM Sans", sans-serif);
+    font-weight: 600;
+    font-size: 58px;
+    letter-spacing: 0.14em;
+    fill: none;
+    stroke: #fbfaf3;
+    stroke-width: 1.4;
+    paint-order: stroke;
+    opacity: 0.98;
+    clip-path: inset(0 100% 0 0);
+    animation: di-wipe 0.85s 2.15s cubic-bezier(0.5, 0, 0.2, 1) forwards;
+  }
+
+  @keyframes di-draw { to { stroke-dashoffset: 0; } }
+  @keyframes di-ink { to { opacity: 0.98; } }
+  @keyframes di-dim { to { opacity: 0.5; } }
+  @keyframes di-fade { to { opacity: 0.14; } }
+  @keyframes di-fade-dot { to { opacity: 0.22; } }
+  @keyframes di-fade-node { to { opacity: 0.55; } }
+  @keyframes di-wipe {
+    from { clip-path: inset(0 100% 0 0); }
+    to { clip-path: inset(0 0 0 0); }
+  }
+  @keyframes di-out {
+    to { opacity: 0; visibility: hidden; transform: scale(1.02); }
+  }
+
+  .di-caption {
+    position: absolute;
+    left: 50%;
+    bottom: 7%;
+    transform: translateX(-50%);
+    margin: 0;
+    white-space: nowrap;
+    font-family: var(--ds-font, "DM Sans", sans-serif);
+    font-size: 16px;
+    letter-spacing: 0.01em;
+    color: #b8b4ac;
+  }
+  .di-caption::after {
+    content: "";
+    display: inline-block;
+    width: 2px;
+    height: 1.05em;
+    margin-left: 3px;
+    vertical-align: -2px;
+    background: #f95f4a;
+    animation: di-blink 0.7s steps(1) infinite;
+  }
+  @keyframes di-blink { 50% { opacity: 0; } }
+
+  @media (prefers-reduced-motion: reduce) { .di { display: none; } }
+  @media (max-width: 640px) { .di-caption { font-size: 12px; } }
+</style>
+
+<script>
+  const intro = document.getElementById("design-intro");
+  const cap = document.getElementById("di-caption");
+  if (intro) {
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const seen = sessionStorage.getItem("ds-intro-seen");
+
+    if (reduce || seen) {
+      intro.remove();
+    } else {
+      sessionStorage.setItem("ds-intro-seen", "1");
+      document.documentElement.style.overflow = "hidden";
+
+      const text = "The ACM-VIT design system. Press play.";
+      let i = 0;
+      const type = () => {
+        if (cap && i <= text.length) {
+          cap.textContent = text.slice(0, i);
+          i++;
+          setTimeout(type, 40);
+        }
+      };
+      setTimeout(type, 900);
+
+      setTimeout(() => {
+        document.documentElement.style.overflow = "";
+        intro.remove();
+      }, 5000);
+    }
+  }
+</script>
+
+---
+// Blueprint trace loader for the /design home. Construction guides draw in
+// first, then the cassette outline + "ACM" trace via stroke-dashoffset
+// (pathLength="1", so no JS length math), a mono caption types out, and the
+// dark overlay fades to reveal the light Design Guidelines shell.
+// Plays once per session (sessionStorage) and is skipped for reduced-motion.
+---
+
+<div class="di" id="design-intro" aria-hidden="true">
+  <div class="di-stage">
+    <svg class="di-svg" viewBox="0 0 640 400" fill="none" role="img" aria-label="ACM cassette">
+      <!-- construction guides: drawn faint, first -->
+      <g class="di-guides" stroke="#faf9f7" stroke-width="1" vector-effect="non-scaling-stroke">
+        <line class="g" style="--d:.05s"  x1="120" y1="100" x2="520" y2="100" pathLength="1" />
+        <line class="g" style="--d:.12s"  x1="120" y1="300" x2="520" y2="300" pathLength="1" />
+        <line class="g" style="--d:.18s"  x1="120" y1="200" x2="520" y2="200" pathLength="1" />
+        <line class="g" style="--d:.10s"  x1="120" y1="100" x2="120" y2="300" pathLength="1" />
+        <line class="g" style="--d:.10s"  x1="520" y1="100" x2="520" y2="300" pathLength="1" />
+        <line class="g" style="--d:.22s"  x1="320" y1="70"  x2="320" y2="330" pathLength="1" />
+        <line class="g" style="--d:.26s"  x1="250" y1="118" x2="250" y2="282" pathLength="1" />
+        <line class="g" style="--d:.26s"  x1="390" y1="118" x2="390" y2="282" pathLength="1" />
+        <line class="g" style="--d:.30s"  x1="120" y1="100" x2="520" y2="300" pathLength="1" />
+        <line class="g" style="--d:.30s"  x1="520" y1="100" x2="120" y2="300" pathLength="1" />
+        <circle class="g gdot" style="--d:.15s" cx="320" cy="200" r="150" stroke-dasharray="1 5" pathLength="1" />
+      </g>
+
+      <!-- cassette outline: bold trace -->
+      <g class="di-ink" stroke="#fdfcf5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke">
+        <rect class="k" style="--d:.6s;--dur:1s"   x="120" y="100" width="400" height="200" rx="18" pathLength="1" />
+        <rect class="k" style="--d:1.05s;--dur:.7s" x="150" y="118" width="340" height="78"  rx="8"  pathLength="1" />
+        <rect class="k" style="--d:1.25s;--dur:.7s" x="180" y="210" width="280" height="72"  rx="12" pathLength="1" />
+        <circle class="k" style="--d:1.5s;--dur:.55s" cx="250" cy="246" r="28" pathLength="1" />
+        <circle class="k" style="--d:1.5s;--dur:.55s" cx="390" cy="246" r="28" pathLength="1" />
+      </g>
+
+      <!-- reel hubs + spokes: accent -->
+      <g class="di-accent" stroke="#f95f4a" stroke-width="2" stroke-linecap="round" vector-effect="non-scaling-stroke">
+        <circle class="k" style="--d:1.85s;--dur:.4s" cx="250" cy="246" r="9" pathLength="1" />
+        <circle class="k" style="--d:1.85s;--dur:.4s" cx="390" cy="246" r="9" pathLength="1" />
+        <line class="k" style="--d:2s;--dur:.3s" x1="250" y1="228" x2="250" y2="237" pathLength="1" />
+        <line class="k" style="--d:2s;--dur:.3s" x1="250" y1="255" x2="250" y2="264" pathLength="1" />
+        <line class="k" style="--d:2s;--dur:.3s" x1="232" y1="246" x2="241" y2="246" pathLength="1" />
+        <line class="k" style="--d:2s;--dur:.3s" x1="259" y1="246" x2="268" y2="246" pathLength="1" />
+        <line class="k" style="--d:2s;--dur:.3s" x1="390" y1="228" x2="390" y2="237" pathLength="1" />
+        <line class="k" style="--d:2s;--dur:.3s" x1="390" y1="255" x2="390" y2="264" pathLength="1" />
+        <line class="k" style="--d:2s;--dur:.3s" x1="372" y1="246" x2="381" y2="246" pathLength="1" />
+        <line class="k" style="--d:2s;--dur:.3s" x1="399" y1="246" x2="408" y2="246" pathLength="1" />
+      </g>
+
+      <!-- ACM: single-stroke letterforms, traced last -->
+      <g class="di-word" stroke="#fdfcf5" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke">
+        <path class="k" style="--d:2.15s;--dur:.28s" d="M230 180 L250 134" pathLength="1" />
+        <path class="k" style="--d:2.35s;--dur:.28s" d="M250 134 L270 180" pathLength="1" />
+        <path class="k" style="--d:2.5s;--dur:.2s"   d="M238 164 L262 164" pathLength="1" />
+        <path class="k" style="--d:2.6s;--dur:.42s"  d="M337.6 142.2 A23 23 0 1 0 337.6 171.8" pathLength="1" />
+        <path class="k" style="--d:2.95s;--dur:.5s"  d="M370 180 L370 134 L390 162 L410 134 L410 180" pathLength="1" />
+      </g>
+    </svg>
+
+    <p class="di-caption" id="di-caption"></p>
+  </div>
+</div>
+
+<style>
+  .di {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: grid;
+    place-items: center;
+    background: #0d0c0b;
+    animation: di-out 0.7s 3.7s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  }
+  .di-stage {
+    width: min(76vw, 620px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+  }
+  .di-svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  /* traced strokes: normalized length via pathLength="1" */
+  .di .k {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    opacity: 0;
+    animation:
+      di-draw var(--dur, 0.6s) var(--d, 0s) cubic-bezier(0.6, 0, 0.2, 1) forwards,
+      di-ink 0.01s var(--d, 0s) linear forwards;
+  }
+  .di .g {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    opacity: 0;
+    animation:
+      di-draw 0.55s var(--d, 0s) ease forwards,
+      di-fade 0.4s var(--d, 0s) ease forwards;
+  }
+  .di .gdot {
+    stroke-dasharray: 0.004 0.02;
+  }
+
+  @keyframes di-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes di-ink {
+    to {
+      opacity: 0.96;
+    }
+  }
+  @keyframes di-fade {
+    to {
+      opacity: 0.16;
+    }
+  }
+  @keyframes di-out {
+    to {
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(1.03);
+    }
+  }
+
+  .di-caption {
+    margin: 0;
+    min-height: 1.2em;
+    font-family: var(--ds-mono, "SF Mono", Menlo, monospace);
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    color: #b8b4ad;
+  }
+  .di-caption::after {
+    content: "";
+    display: inline-block;
+    width: 7px;
+    height: 1em;
+    margin-left: 2px;
+    vertical-align: -2px;
+    background: #f95f4a;
+    animation: di-blink 0.7s steps(1) infinite;
+  }
+  @keyframes di-blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .di {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const intro = document.getElementById("design-intro");
+  const cap = document.getElementById("di-caption");
+  if (!intro) {
+    // nothing to do
+  } else {
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const seen = sessionStorage.getItem("ds-intro-seen");
+
+    if (reduce || seen) {
+      intro.remove();
+    } else {
+      sessionStorage.setItem("ds-intro-seen", "1");
+      document.documentElement.style.overflow = "hidden";
+
+      // typewriter caption, synced to the trace
+      const text = "The ACM-VIT design system. Press play.";
+      let i = 0;
+      const type = () => {
+        if (cap && i <= text.length) {
+          cap.textContent = text.slice(0, i);
+          i++;
+          setTimeout(type, 42);
+        }
+      };
+      setTimeout(type, 900);
+
+      // remove after the fade-out finishes so the page underneath is interactive
+      setTimeout(() => {
+        document.documentElement.style.overflow = "";
+        intro.remove();
+      }, 4500);
+    }
+  }
+</script>

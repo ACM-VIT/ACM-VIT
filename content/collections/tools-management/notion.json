@@ -1,0 +1,8 @@
+{
+  "name": "Notion",
+  "slug": "notion",
+  "svgFile": "/domains/management/tools/management-tool-notion.svg",
+  "colorHex": "#FFFDD0",
+  "monochrome": true,
+  "order": 0
+}

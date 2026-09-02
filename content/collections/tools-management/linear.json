@@ -1,0 +1,8 @@
+{
+  "name": "Linear",
+  "slug": "linear",
+  "svgFile": "/domains/management/tools/management-tool-linear.svg",
+  "colorHex": "#5E6AD2",
+  "monochrome": true,
+  "order": 140
+}

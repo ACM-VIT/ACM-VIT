@@ -1,0 +1,638 @@
+---
+import Cassette from "./Cassette.astro";
+import FillButton from "./FillButton.astro";
+import GearStep from "./GearStep.astro";
+import { getAssetUrl } from "../../utils/cdn";
+
+/**
+ * ProjectsShowcase - scroll-driven, single-place project walkthrough.
+ * The inner panel stays fixed (CSS sticky) while scrolling advances through
+ * projects one after another; the reel stepper tracks progress and the left
+ * text + right cassette cross-fade per project. GSAP ScrollTrigger drives the
+ * index (no pin, so scroll can never trap). Reusable.
+ */
+export interface Props {
+  projects: Array<{
+    slug?: string;
+    cassette: { src?: string; svg?: string; alt: string };
+    textContent: { blocks: string[] };
+    buttons: {
+      primary: { backgroundColor: string };
+      icons?: Array<{ type: string; iconColor: string; url?: string }>;
+    };
+    colors: { textColor: string; hoverShadow: string };
+  }>;
+}
+
+const { projects = [] } = Astro.props;
+
+// FillButton / Cassette need a SOLID accent (a gradient breaks `color:` and
+// SVG gradient stops). Fall back to the first hex in any gradient string.
+const toSolid = (c: string) => {
+  if (!c) return "#F95F4A";
+  if (/gradient/i.test(c)) {
+    const hex = c.match(/#[0-9a-fA-F]{3,8}/);
+    return hex ? hex[0] : "#F95F4A";
+  }
+  return c;
+};
+
+const items = projects.map((p) => ({
+  ...p,
+  name: (p.cassette.alt || "").replace(/\s*image$/i, "").trim() || "Project",
+  href: p.slug ? `/projects/${p.slug}` : "#",
+  accent: toSolid(p.buttons.primary.backgroundColor),
+  icons: p.buttons.icons ?? [],
+}));
+const total = String(items.length).padStart(2, "0");
+// One viewport of scroll per project.
+const sectionHeightVh = Math.max(1, items.length) * 100;
+---
+
+<section
+  class="proj-showcase relative w-full"
+  data-proj-showcase
+  style={`height: ${sectionHeightVh}vh;`}
+>
+  <div class="proj-sticky sticky top-0 hidden md:flex h-screen w-full flex-col justify-center gap-10 overflow-hidden px-[clamp(20px,5vw,72px)] py-10">
+    <!-- Subtle dotted background grid -->
+    <div class="proj-grid-bg pointer-events-none absolute inset-0 z-0" aria-hidden="true">
+      <span class="grid-v" style="left: 52%"></span>
+      <span class="grid-v" style="left: 74%"></span>
+      <span class="grid-v" style="left: 93%"></span>
+      <span class="grid-h" style="top: 38%"></span>
+      <span class="grid-h" style="top: 70%"></span>
+    </div>
+
+    <!-- Reel stepper -->
+    <div class="proj-stepper relative z-10 w-full max-w-6xl">
+      <div class="stepper-inner flex items-center gap-6 overflow-x-auto pb-1 md:gap-10 md:overflow-visible">
+        {
+          items.map((it, i) => (
+            <GearStep index={i} label={it.name} accentColor={it.accent} />
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Body: left text / right cassette -->
+    <div class="proj-body relative z-10 grid w-full grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-12">
+      <!-- Left: stacked text panels -->
+      <div class="proj-text relative min-h-[360px] md:min-h-[440px]">
+        {
+          items.map((it, i) => (
+            <article
+              class:list={["text-panel", { "is-active": i === 0 }]}
+              data-text-panel
+              data-index={i}
+              style={`--proj-color: ${it.accent}; --proj-color-secondary: #0d0e0d; --hoverShadow: ${it.colors.hoverShadow};`}
+            >
+              <span class="panel-eyebrow inline-flex items-center gap-2 font-['PolySans_Trial',sans-serif] text-xs font-light uppercase tracking-[0.3em] text-[#FEFCD9]/70">
+                <span
+                  class="inline-block h-1.5 w-1.5 rounded-full"
+                  style={`background: ${it.accent};`}
+                />
+                Featured · {String(i + 1).padStart(2, "0")} / {total}
+              </span>
+
+              <h3 class="panel-title mt-3 font-['PolySans_Trial',sans-serif] text-3xl font-bold uppercase leading-[1] tracking-[-0.02em] text-[#FEFCD9] sm:text-4xl lg:text-5xl">
+                {it.name}
+              </h3>
+
+              <p class="panel-desc mt-5 max-w-xl font-['PolySans_Trial',sans-serif] text-base font-light leading-[1.55] text-[#FEFCD9]/80 sm:text-lg">
+                {it.textContent.blocks[0]}
+              </p>
+
+              <div class="panel-actions mt-7 flex flex-wrap items-center gap-5">
+                <FillButton href={it.href} label="Learn More" />
+                {it.icons.map((icon) => (
+                  <a
+                    href={icon.url || "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="icon-btn flex h-11 w-11 items-center justify-center rounded-full border border-[var(--proj-color)] bg-transparent transition-all duration-300 hover:-translate-y-[3px] hover:bg-[var(--proj-color)] hover:shadow-[0_8px_20px_var(--hoverShadow)]"
+                    aria-label={icon.type}
+                  >
+                    <img
+                      class="proj-icon-img"
+                      src={getAssetUrl(`/icons/icons-${icon.type}-icon.webp`)}
+                      alt={icon.type}
+                      width="22"
+                      style={`filter: brightness(0) saturate(100%) invert(${icon.iconColor === "#FEFCD9" ? "96%" : "0%"});`}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </a>
+                ))}
+              </div>
+            </article>
+          ))
+        }
+      </div>
+
+      <!-- Right: stacked cassettes -->
+      <div class="proj-visual relative mx-auto aspect-[576/353] w-full max-w-[250px] md:max-w-[540px]">
+        {
+          items.map((it, i) => (
+            <div
+              class:list={["cassette-slide", { "is-active": i === 0 }]}
+              data-cassette-slide
+              data-index={i}
+            >
+              {it.cassette.svg ? (
+                <div class="proj-svg-cassette">
+                  <img
+                    src={getAssetUrl(it.cassette.svg)}
+                    alt={it.cassette.alt}
+                    class="proj-svg-cassette-img"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+              ) : (
+                <Cassette
+                  overlaySrc={it.cassette.src ? getAssetUrl(it.cassette.src) : undefined}
+                  alt={it.cassette.alt}
+                  color={it.accent}
+                />
+              )}
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile: swipeable carousel (one project per screen). Native scroll-snap
+       for the swipe, plus dots + arrows so it's obviously navigable and never
+       ambiguous like the desktop scroll-scrub. -->
+  <div class="proj-mobile md:hidden relative z-10 px-5 pt-2 pb-10">
+    <div class="proj-carousel flex snap-x snap-mandatory overflow-x-auto gap-4" data-proj-carousel>
+      {
+        items.map((it, i) => (
+          <article
+            class="proj-slide snap-center shrink-0 w-full flex flex-col"
+            data-proj-slide
+            data-index={i}
+            style={`--proj-color: ${it.accent}; --hoverShadow: ${it.colors.hoverShadow};`}
+          >
+            <span class="panel-eyebrow inline-flex items-center gap-2 font-['PolySans_Trial',sans-serif] text-xs font-light uppercase tracking-[0.3em] text-[#FEFCD9]/70">
+              <span
+                class="inline-block h-1.5 w-1.5 rounded-full"
+                style={`background: ${it.accent};`}
+              />
+              Featured · {String(i + 1).padStart(2, "0")} / {total}
+            </span>
+
+            <h3 class="panel-title mt-3 font-['PolySans_Trial',sans-serif] text-3xl font-bold uppercase leading-[1] tracking-[-0.02em] text-[#FEFCD9]">
+              {it.name}
+            </h3>
+
+            <p class="panel-desc mt-4 font-['PolySans_Trial',sans-serif] text-base font-light leading-[1.55] text-[#FEFCD9]/80">
+              {it.textContent.blocks[0]}
+            </p>
+
+            <div class="panel-actions mt-6 flex flex-wrap items-center gap-5">
+              <FillButton href={it.href} label="Learn More" />
+              {it.icons.map((icon) => (
+                <a
+                  href={icon.url || "#"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="icon-btn flex h-11 w-11 items-center justify-center rounded-full border border-[var(--proj-color)] bg-transparent transition-all duration-300 active:bg-[var(--proj-color)]"
+                  aria-label={icon.type}
+                >
+                  <img
+                    class="proj-icon-img"
+                    src={getAssetUrl(`/icons/icons-${icon.type}-icon.webp`)}
+                    alt={icon.type}
+                    width="22"
+                    style={`filter: brightness(0) saturate(100%) invert(${icon.iconColor === "#FEFCD9" ? "96%" : "0%"});`}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </a>
+              ))}
+            </div>
+
+            <div class="mt-7 w-full max-w-[250px]">
+              {it.cassette.svg ? (
+                <div class="proj-svg-cassette">
+                  <img
+                    src={getAssetUrl(it.cassette.svg)}
+                    alt={it.cassette.alt}
+                    class="proj-svg-cassette-img"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+              ) : (
+                <Cassette
+                  overlaySrc={it.cassette.src ? getAssetUrl(it.cassette.src) : undefined}
+                  alt={it.cassette.alt}
+                  color={it.accent}
+                />
+              )}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <!-- Controls -->
+    <div class="mt-6 flex items-center justify-center gap-5">
+      <button
+        type="button"
+        class="proj-arrow flex h-10 w-10 items-center justify-center rounded-full border border-[#FEFCD9]/40 text-[#FEFCD9] transition-colors active:bg-[#FEFCD9]/10 disabled:opacity-30"
+        data-proj-prev
+        aria-label="Previous project"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+
+      <div class="flex items-center gap-2" data-proj-dots>
+        {items.map((_, i) => (
+          <button
+            type="button"
+            class="proj-dot"
+            data-proj-dot
+            data-index={i}
+            aria-label={`Go to project ${i + 1}`}
+          />
+        ))}
+      </div>
+
+      <button
+        type="button"
+        class="proj-arrow flex h-10 w-10 items-center justify-center rounded-full border border-[#FEFCD9]/40 text-[#FEFCD9] transition-colors active:bg-[#FEFCD9]/10 disabled:opacity-30"
+        data-proj-next
+        aria-label="Next project"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Dotted background grid that doubles as a section scroll indicator.
+     Base dots stay faint; a masked "fill" layer of stronger dots is revealed
+     up to --prog (set from scroll progress), so the grid darkens as the
+     section finishes and recedes (lighter) on the way back / at the start. */
+  .proj-grid-bg {
+    --prog: 0%;
+    --dot-base: rgba(254, 252, 217, 0.12);
+    --dot-fill: rgba(254, 252, 217, 0.55);
+  }
+  .grid-v {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: repeating-linear-gradient(
+      to bottom,
+      var(--dot-base) 0 3px,
+      transparent 3px 17px
+    );
+  }
+  .grid-v::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      var(--dot-fill) 0 3px,
+      transparent 3px 17px
+    );
+    -webkit-mask: linear-gradient(
+      to bottom,
+      #000 0 var(--prog),
+      transparent var(--prog)
+    );
+    mask: linear-gradient(
+      to bottom,
+      #000 0 var(--prog),
+      transparent var(--prog)
+    );
+  }
+  .grid-h {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: repeating-linear-gradient(
+      to right,
+      var(--dot-base) 0 3px,
+      transparent 3px 17px
+    );
+  }
+  .grid-h::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      to right,
+      var(--dot-fill) 0 3px,
+      transparent 3px 17px
+    );
+    -webkit-mask: linear-gradient(
+      to right,
+      #000 0 var(--prog),
+      transparent var(--prog)
+    );
+    mask: linear-gradient(
+      to right,
+      #000 0 var(--prog),
+      transparent var(--prog)
+    );
+  }
+  :global(html[data-theme="light"]) .proj-grid-bg {
+    --dot-base: rgba(38, 59, 51, 0.1);
+    --dot-fill: rgba(38, 59, 51, 0.55);
+  }
+
+  .text-panel {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: translateY(28px);
+    pointer-events: none;
+    transition:
+      opacity 0.5s ease,
+      transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+  .text-panel.is-active {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  .cassette-slide {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    opacity: 0;
+    transform: rotate(-7deg) scale(0.82);
+    transition:
+      opacity 0.6s ease,
+      transform 0.7s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+  .cassette-slide.is-active {
+    opacity: 1;
+    transform: none;
+  }
+  .cassette-slide.is-prev {
+    opacity: 0;
+    transform: rotate(7deg) scale(0.82);
+  }
+
+  /* Full standalone cassette art (SVG). The art uses white strokes/fills, so in
+     light mode it needs a dark backing to stay visible - mirrors the /projects
+     grid treatment (.proj-svg-cassette). */
+  .proj-svg-cassette {
+    width: 100%;
+    border-radius: 16px;
+  }
+  .proj-svg-cassette-img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  :global(html[data-theme="light"]) .proj-svg-cassette {
+    background: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .proj-svg-cassette-img {
+    filter: sepia(0.15) brightness(0.98);
+  }
+
+  .stepper-inner::-webkit-scrollbar {
+    display: none;
+  }
+  .stepper-inner {
+    scrollbar-width: none;
+  }
+
+  /* Light mode: cream text (with opacity modifiers) escapes the global
+     override, so set readable dark colors explicitly. */
+  :global(html[data-theme="light"]) .panel-title {
+    color: #1a1a1a !important;
+  }
+  :global(html[data-theme="light"]) .panel-desc {
+    color: rgba(26, 26, 26, 0.78) !important;
+  }
+  :global(html[data-theme="light"]) .panel-eyebrow {
+    color: rgba(26, 26, 26, 0.62) !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .text-panel,
+    .cassette-slide {
+      transition: opacity 0.3s ease;
+      transform: none !important;
+    }
+  }
+
+  /* Mobile uses the swipe carousel, so the section must not keep its tall
+     (n x 100vh) scroll-scrub height - collapse to natural content height. */
+  @media (max-width: 767px) {
+    .proj-showcase {
+      height: auto !important;
+    }
+  }
+
+  .proj-carousel {
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+  }
+  .proj-carousel::-webkit-scrollbar {
+    display: none;
+  }
+  .proj-slide {
+    scroll-snap-align: center;
+  }
+
+  .proj-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 9999px;
+    background: rgba(254, 252, 217, 0.3);
+    transition: width 0.3s ease, background-color 0.3s ease;
+  }
+  .proj-dot[data-active="true"] {
+    width: 22px;
+    background: var(--proj-active-color, #f95f4a);
+  }
+  :global(html[data-theme="light"]) .proj-dot {
+    background: rgba(26, 26, 26, 0.25);
+  }
+  :global(html[data-theme="light"]) .proj-arrow {
+    border-color: rgba(26, 26, 26, 0.4);
+    color: #1a1a1a;
+  }
+  /* Icons ship cream-tinted (invert 96%) for the dark theme, which vanishes on
+     the light cream page. Force them dark in light mode - stays legible on the
+     transparent rest state and on the accent-filled hover state. */
+  :global(html[data-theme="light"]) .proj-icon-img {
+    filter: brightness(0) saturate(100%) invert(15%) !important;
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
+  gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+  function initProjectsShowcase() {
+    const section = document.querySelector<HTMLElement>("[data-proj-showcase]");
+    if (!section || section.dataset.psInit) return;
+    section.dataset.psInit = "1";
+
+    const steps = Array.from(
+      section.querySelectorAll<HTMLElement>("[data-gear-step]"),
+    );
+    const textPanels = Array.from(
+      section.querySelectorAll<HTMLElement>("[data-text-panel]"),
+    );
+    const cassettes = Array.from(
+      section.querySelectorAll<HTMLElement>("[data-cassette-slide]"),
+    );
+    const gridBg = section.querySelector<HTMLElement>(".proj-grid-bg");
+    const n = textPanels.length;
+    if (n === 0) return;
+
+    let active = -1;
+    const setActive = (idx: number) => {
+      if (idx === active) return;
+      active = idx;
+      steps.forEach((s, i) => {
+        s.dataset.state = i < idx ? "done" : i === idx ? "active" : "upcoming";
+      });
+      textPanels.forEach((p, i) => p.classList.toggle("is-active", i === idx));
+      cassettes.forEach((c, i) => {
+        c.classList.toggle("is-active", i === idx);
+        c.classList.toggle("is-prev", i < idx);
+      });
+    };
+
+    // Desktop only: the scroll-scrub walkthrough. On phones the markup falls
+    // back to a plain stacked list (.proj-mobile-list) so we skip all of this.
+    // gsap.matchMedia re-runs the setup if the viewport crosses the breakpoint.
+    const mm = gsap.matchMedia();
+    mm.add("(min-width: 768px)", () => {
+      setActive(0);
+
+      // ScrollTrigger reads scroll progress over the tall section; the inner
+      // panel is held in place with CSS sticky (no GSAP pin -> never traps).
+      const st = ScrollTrigger.create({
+        trigger: section,
+        start: "top top",
+        end: "bottom bottom",
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          const idx = Math.min(n - 1, Math.max(0, Math.round(self.progress * (n - 1))));
+          setActive(idx);
+          // Drive the dotted grid as a section scroll indicator.
+          if (gridBg)
+            gridBg.style.setProperty("--prog", `${(self.progress * 100).toFixed(2)}%`);
+        },
+      });
+
+      // Click a reel to jump to that project.
+      const clicks = steps.map((step, i) => {
+        const handler = () => {
+          const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+          const scrollable = section.offsetHeight - window.innerHeight;
+          const target = sectionTop + (n > 1 ? (i / (n - 1)) * scrollable : 0);
+          gsap.to(window, { scrollTo: target, duration: 0.6, ease: "power2.inOut" });
+        };
+        step.addEventListener("click", handler);
+        return { step, handler };
+      });
+
+      requestAnimationFrame(() => ScrollTrigger.refresh());
+
+      return () => {
+        st.kill();
+        clicks.forEach(({ step, handler }) => step.removeEventListener("click", handler));
+      };
+    });
+
+    // ---- Mobile carousel (dots + arrows + swipe) ----------------------------
+    const carousel = section.querySelector<HTMLElement>("[data-proj-carousel]");
+    if (carousel) {
+      const slides = Array.from(
+        carousel.querySelectorAll<HTMLElement>("[data-proj-slide]"),
+      );
+      const dots = Array.from(
+        section.querySelectorAll<HTMLButtonElement>("[data-proj-dot]"),
+      );
+      const prevBtn = section.querySelector<HTMLButtonElement>("[data-proj-prev]");
+      const nextBtn = section.querySelector<HTMLButtonElement>("[data-proj-next]");
+      const base = () => (slides[0]?.offsetLeft ?? 0);
+
+      const currentIndex = () => {
+        const target = carousel.scrollLeft + carousel.clientWidth / 2;
+        let best = 0;
+        let bestDist = Infinity;
+        slides.forEach((s, i) => {
+          const center = s.offsetLeft - base() + s.offsetWidth / 2;
+          const d = Math.abs(center - target);
+          if (d < bestDist) {
+            bestDist = d;
+            best = i;
+          }
+        });
+        return best;
+      };
+
+      const syncControls = () => {
+        const idx = currentIndex();
+        dots.forEach((dot, i) => {
+          dot.dataset.active = i === idx ? "true" : "false";
+          if (i === idx) {
+            const accent = getComputedStyle(slides[i])
+              .getPropertyValue("--proj-color")
+              .trim();
+            if (accent) dot.style.setProperty("--proj-active-color", accent);
+          }
+        });
+        if (prevBtn) prevBtn.disabled = idx <= 0;
+        if (nextBtn) nextBtn.disabled = idx >= slides.length - 1;
+      };
+
+      const goTo = (i: number) => {
+        const clamped = Math.max(0, Math.min(slides.length - 1, i));
+        carousel.scrollTo({
+          left: slides[clamped].offsetLeft - base(),
+          behavior: "smooth",
+        });
+      };
+
+      let raf = 0;
+      carousel.addEventListener("scroll", () => {
+        if (raf) return;
+        raf = requestAnimationFrame(() => {
+          raf = 0;
+          syncControls();
+        });
+      });
+      dots.forEach((dot, i) => dot.addEventListener("click", () => goTo(i)));
+      prevBtn?.addEventListener("click", () => goTo(currentIndex() - 1));
+      nextBtn?.addEventListener("click", () => goTo(currentIndex() + 1));
+
+      syncControls();
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initProjectsShowcase);
+  } else {
+    initProjectsShowcase();
+  }
+  // The section is cloned into the DOM by the responsive variant host.
+  window.addEventListener("variants-mounted", () => initProjectsShowcase());
+</script>

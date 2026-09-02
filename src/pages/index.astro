@@ -1,185 +1,22 @@
 ---
 export const prerender = true;
-import ProjectScreen from "../components/ProjectScreen.astro";
-import Domains from "../components/Domains.astro";
-import DomainsPhone from "../phoneComponents/Domains_Phone.astro";
 import Layout from "../layouts/Layout.astro";
-import Gallery from "../components/Gallery.astro";
-import Board from "../components/Board.astro";
 import "../styles/globals.css";
-import Partners from "../components/Partners.astro";
-import AcmWMotto from "../components/AcmWMotto.astro";
-import AcmWContent from "../components/AcmWContent.astro";
-import { reader } from "../utils/reader";
-import Events from "../components/SWork.astro";
-import ContactUS from "../components/ContactUs.astro";
-import ContactUSPhone from "../phoneComponents/ContactUs_Phone.astro";
-import AcmWBento from "../components/AcmWBento.astro";
-import ProjectsScreenPhone from "../phoneComponents/ProjectScreen-Phone.astro";
-import Gallery_Phone from "../phoneComponents/Gallery_Phone.astro";
-import Hero from "../components/hero.astro";
-import LegendPins from "../components/LegendPins.astro";
-import BecauseTechMatters from "../components/BecauseTechMatters.astro";
-import About from "../components/About.astro";
-import About_Phone from "../phoneComponents/About_Phone.astro";
-import Footer from "../components/Footer.astro";
-import Blogs from "../components/Blogs.astro";
-import IgnitingMinds from "../components/IgnitingMindsSection.astro";
-import CodeOfConduct from "../components/CodeOfConduct.astro";
-import DistinguishedSpeaker from "../components/DistinguishedSpeaker.astro";
-import ProjectsIntro from "../components/ProjectsIntro.astro";
-import ScrollVideo from "../components/ScrollVideo.astro";
+import PageSections from "../components/PageSections.astro";
+import GrepSideTab from "../components/ui/GrepSideTab.astro";
+import Footer from "../layouts/Footer.astro";
+import { items as pages } from "../generated/pages";
 
-const projectsCms = await reader.singletons.projects.read();
-const projectsData = (projectsCms?.items ?? [])
-  .filter((project) => project.cassetteSrc && project.cassetteAlt && project.description1)
-  .map((p) => ({
-  cassette: { src: p.cassetteSrc, alt: p.cassetteAlt },
-  textContent: { blocks: [p.description1, ...(p.description2 ? [p.description2] : [])] },
-  buttons: {
-    primary: {
-      backgroundColor: p.primaryBgColor,
-      textColor: p.primaryTextColor || 'white',
-      borderColor: p.primaryBorderColor || '#FEFCD9',
-      ...(p.primaryBorderRadius ? { borderRadius: p.primaryBorderRadius } : {}),
-    },
-    visitWebsite: {
-      text: p.visitWebsiteText || 'VISIT WEBSITE',
-      backgroundColor: p.visitWebsiteBgColor || p.primaryBgColor,
-      textColor: p.visitWebsiteTextColor || 'white',
-      borderColor: p.visitWebsiteBorderColor || '#FEFCD9',
-      url: p.visitWebsiteUrl || '',
-      ...(p.visitWebsiteBorderRadius ? { borderRadius: p.visitWebsiteBorderRadius } : {}),
-    },
-    icons: (p.icons ?? []).map((icon) => ({
-      type: icon.type || '',
-      backgroundColor: icon.backgroundColor || '',
-      textColor: icon.textColor || '',
-      borderColor: icon.borderColor || '',
-      iconColor: icon.iconColor || '',
-      ...(icon.borderRadius ? { borderRadius: icon.borderRadius } : {}),
-      url: icon.url || '',
-    })),
-  },
-  colors: {
-    textColor: p.textColor || 'white',
-    contentBlockBackground: p.contentBlockBackground || 'rgba(0, 0, 0, 0.15)',
-    hoverShadow: p.hoverShadow || '',
-  },
-}));
-
-const videoStartTime = 0;
-const videoEndTime = undefined; // Use full video duration (set to specific seconds if needed)
+// The homepage is composed from the `pages` collection: an ordered list of
+// block instances editable in the CMS (reorder, toggle). Blocks themselves
+// are code - see src/platform/blocks/registry.ts.
+const home = pages.find((p) => p.slug === "home");
+if (!home) throw new Error('Missing "home" entry in the pages collection');
 ---
 
 <Layout>
-    <ScrollVideo
-        webmSrc="/ACMWebsiteVid.webm"
-        mp4Src="/ACMWebsiteVid.mp4"
-        startTime={videoStartTime}
-        endTime={videoEndTime}
-    >
-        <section id="home" class="page-section relative">
-            <div class="relative h-screen w-screen">
-                <Hero />
-            </div>
-            <LegendPins />
-            <BecauseTechMatters />
-        </section>
+    <PageSections sections={home.sections} />
 
-        <section id="about" class="page-section">
-            <div data-variant-host>
-                <template data-variant="desktop">
-                    <About />
-                </template>
-                <template data-variant="mobile">
-                    <About_Phone />
-                </template>
-            </div>
-        </section>
-    </ScrollVideo>
-
-    <IgnitingMinds />
-    <CodeOfConduct />
-    <DistinguishedSpeaker />
-
-    <section id="domains" class="page-section">
-        <div data-variant-host>
-            <template data-variant="desktop">
-                <Domains />
-            </template>
-            <template data-variant="mobile">
-                <DomainsPhone />
-            </template>
-        </div>
-    </section>
-
-    <section id="events" class="page-section">
-        <Events />
-    </section>
-
-    <ProjectsIntro />
-
-    <section id="projects" class="page-section">
-        <div data-variant-host>
-            <template data-variant="desktop">
-                <ProjectScreen projects={projectsData} />
-            </template>
-            <template data-variant="mobile">
-                <ProjectsScreenPhone projects={projectsData} />
-            </template>
-        </div>
-        <div class="w-full flex justify-center py-10">
-            <a
-                href="https://github.com/ACM-VIT"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-block text-white text-sm sm:text-lg border-2 border-[#F95F4A] hover:bg-[#F95F4A]/10 hover:cursor-pointer py-2 px-5 sm:py-4 sm:px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-['PolySans_Trial'] uppercase"
-            >
-                Checkout all cool projects
-            </a>
-        </div>
-    </section>
-
-    <section id="acm-w" class="page-section">
-        <AcmWMotto />
-        <AcmWContent />
-        <AcmWBento />
-    </section>
-
-    <Board />
-
-    <section id="blogs" class="page-section">
-        <Blogs />
-    </section>
-
-    <section id="partners" class="page-section">
-        <Partners />
-    </section>
-
-    <section id="gallery" class="page-section">
-        <div data-variant-host>
-            <template data-variant="desktop">
-                <Gallery />
-            </template>
-            <template data-variant="mobile">
-                <Gallery_Phone />
-            </template>
-        </div>
-    </section>
-
-    <section id="contact" class="page-section">
-        <div
-            data-variant-host
-            data-variant-query="(max-width: 1024px), (pointer: coarse)"
-        >
-            <template data-variant="desktop">
-                <ContactUS />
-            </template>
-            <template data-variant="mobile">
-                <ContactUSPhone />
-            </template>
-        </div>
-    </section>
+    <GrepSideTab />
     <Footer />
 </Layout>

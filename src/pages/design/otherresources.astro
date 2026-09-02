@@ -1,0 +1,623 @@
+---
+export const prerender = true;
+import DesignLayout from "../../layouts/DesignLayout.astro";
+import { getAssetUrl } from "../../utils/cdn";
+
+const asset = (p: string) => getAssetUrl(`/design/otherresources/${p}`);
+
+// Event, product, and enamel-pin logos the design team has built over the
+// years, collected here so members reach for the same file instead of
+// hunting the drive. One section per event / product, with all the enamel
+// pins gathered at the end. bg is "checker" or "checker-dark" (the
+// transparent-artwork backdrops). raster marks bitmap-only sources that
+// ship without a vector download. Every stage shows the trimmed, uniform
+// {slug}-preview.webp; the download links point at the full-size files.
+type Item = {
+  slug: string;
+  name: string;
+  desc: string;
+  bg: "checker" | "checker-dark";
+  raster?: boolean;
+  // Force the light checker even in dark mode. For pure dark-ink marks and
+  // marks with their own dark backdrop, which would vanish on a dark stage.
+  lit?: boolean;
+};
+
+type Section = {
+  num: string;
+  id: string;
+  title: string;
+  blurb: string;
+  items: Item[];
+};
+
+const sections: Section[] = [
+  {
+    num: "01",
+    id: "cryptic-hunt",
+    title: "Cryptic Hunt",
+    blurb:
+      "The chapter's cryptic puzzle hunt. Four editions, from the aviator-owl mascot to the latest lowercase mark.",
+    items: [
+      {
+        slug: "cryptic-hunt-1",
+        name: "Owl mascot",
+        desc: "The aviator-owl lockup - the original Cryptic Hunt identity.",
+        bg: "checker",
+      },
+      {
+        slug: "cryptic-hunt-2",
+        name: "Cryptic Hunt 2.0",
+        desc: "The bold red display wordmark for the second edition.",
+        bg: "checker",
+      },
+      {
+        slug: "cryptic-hunt-3",
+        name: "Cryptic Hunt 3.0",
+        desc: "The blocky, pixel-carved wordmark for the third edition.",
+        bg: "checker",
+        raster: true,
+      },
+      {
+        slug: "cryptic-hunt-4",
+        name: "Cryptic Hunt 4.0",
+        desc: "The pared-back lowercase wordmark in the event orange.",
+        bg: "checker",
+      },
+    ],
+  },
+  {
+    num: "02",
+    id: "reverse-coding",
+    title: "Reverse Coding",
+    blurb:
+      "The reverse-engineering contest where entrants read the output and rebuild the code. Every edition, all colorways.",
+    items: [
+      {
+        slug: "reverse-coding-classic",
+        name: "Classic",
+        desc: "The earlier wordmark - white REVERSE over blue CODING.",
+        bg: "checker-dark",
+      },
+      {
+        slug: "reverse-coding-2024",
+        name: "Reverse Coding 2024",
+        desc: "The coffee-cup lockup with the taupe-and-purple wordmark.",
+        bg: "checker",
+      },
+      {
+        slug: "reverse-coding-2025",
+        name: "Reverse Coding 2025",
+        desc: "The 2025 wordmark - white REVERSE over the purple CODING.",
+        bg: "checker-dark",
+      },
+      {
+        slug: "reverse-coding-2026",
+        name: "Reverse Coding 2026",
+        desc: "The 2026 wordmark in the deep-red colorway.",
+        bg: "checker-dark",
+      },
+      {
+        slug: "reverse-coding-2026-car",
+        name: "Reverse Coding 2026, winged car",
+        desc: "The 2026 lockup with the gold-winged F1 car on the track. Poster and cover art.",
+        bg: "checker-dark",
+        raster: true,
+      },
+    ],
+  },
+  {
+    num: "03",
+    id: "codex-cryptum",
+    title: "Codex Cryptum",
+    blurb: "The cryptography event. Three yearly seals, 2023 through 2025.",
+    items: [
+      {
+        slug: "codex-cryptum-2023",
+        name: "Codex Cryptum 2023",
+        desc: "The interlocked-C monogram with the two-tone wordmark.",
+        bg: "checker",
+        lit: true,
+      },
+      {
+        slug: "codex-cryptum-2024",
+        name: "Codex Cryptum 2024",
+        desc: "The orange coin badge with the stacked-block cipher motif.",
+        bg: "checker",
+      },
+      {
+        slug: "codex-cryptum-2025",
+        name: "Codex Cryptum 2025",
+        desc: "The crimson coin badge - the 2025 recolour of the seal.",
+        bg: "checker",
+      },
+    ],
+  },
+  {
+    num: "04",
+    id: "code2create",
+    title: "Code2Create",
+    blurb: "The build-focused hackathon. The hexagon emblem and the horizontal lockup.",
+    items: [
+      {
+        slug: "code2create-logo",
+        name: "Emblem",
+        desc: "The hexagon C2C emblem in event green. The square mark for avatars and stickers.",
+        bg: "checker",
+      },
+      {
+        slug: "code2create-wordmark",
+        name: "Lockup",
+        desc: "The horizontal C2C lockup built from the green facets. For headers and banners.",
+        bg: "checker",
+      },
+    ],
+  },
+  {
+    num: "05",
+    id: "apptitude",
+    title: "Apptitude",
+    blurb:
+      "The app-development sprint. The current bracket mark and the original phone lockup.",
+    items: [
+      {
+        slug: "apptitude-v2",
+        name: "Apptitude",
+        desc: "The current mark - the bracketed app icon. Built for dark backdrops.",
+        bg: "checker-dark",
+      },
+      {
+        slug: "apptitude-v1",
+        name: "Apptitude, original",
+        desc: "The first lockup with the phone mockup and warm blobs. Kept for the archive.",
+        bg: "checker",
+        raster: true,
+      },
+    ],
+  },
+  {
+    num: "06",
+    id: "code-plus-plus",
+    title: "Code++",
+    blurb: "The competitive-programming event.",
+    items: [
+      {
+        slug: "code-plus-plus",
+        name: "Code++",
+        desc: "The Code++ brandmark - the violet dot and the pixel diagonal. White type, for dark backdrops.",
+        bg: "checker-dark",
+      },
+    ],
+  },
+  {
+    num: "07",
+    id: "forktober",
+    title: "Forktober",
+    blurb:
+      "The chapter's open-source month. The full lockup and both wordmark colorways.",
+    items: [
+      {
+        slug: "forktober-logo",
+        name: "Forktober",
+        desc: "The full lockup - the git-fork glyph over the wordmark. Reads on a dark backdrop.",
+        bg: "checker-dark",
+      },
+      {
+        slug: "forktober-wordmark-dark",
+        name: "Wordmark",
+        desc: "The Forktober logotype in ink, for light backgrounds.",
+        bg: "checker",
+        lit: true,
+      },
+      {
+        slug: "forktober-wordmark-white",
+        name: "Wordmark, white",
+        desc: "The white colorway of the logotype, for dark and photographic backgrounds.",
+        bg: "checker-dark",
+      },
+    ],
+  },
+  {
+    num: "08",
+    id: "grep",
+    title: "GREP",
+    blurb: "The developer scavenger event. Blue and cream colorways of the pixel wordmark.",
+    items: [
+      {
+        slug: "grep-blue",
+        name: "GREP, blue",
+        desc: "The pixel-block wordmark in electric blue, for light backgrounds.",
+        bg: "checker",
+      },
+      {
+        slug: "grep-cream",
+        name: "GREP, cream",
+        desc: "The cream colorway of the pixel wordmark, for dark backgrounds.",
+        bg: "checker-dark",
+      },
+    ],
+  },
+  {
+    num: "09",
+    id: "neural-hack",
+    title: "The Neural Hack",
+    blurb:
+      "The machine-learning hackathon. The low-poly brain, the wordmark, and the full lockup.",
+    items: [
+      {
+        slug: "neural-hack-logo",
+        name: "Full lockup",
+        desc: "The low-poly brain beside the wordmark. Built for dark backdrops.",
+        bg: "checker-dark",
+      },
+      {
+        slug: "neural-hack-brain",
+        name: "Brain",
+        desc: "The low-poly brain glyph on its own - a compact mark for avatars and stickers.",
+        bg: "checker",
+      },
+      {
+        slug: "neural-hack-wordmark",
+        name: "Wordmark",
+        desc: "The pink NEURAL and outlined HACK logotype. For dark backgrounds.",
+        bg: "checker-dark",
+      },
+    ],
+  },
+  {
+    num: "10",
+    id: "tiny-hack",
+    title: "The Tiny Hack",
+    blurb:
+      "The micro-hackathon. The framed wordmark in ink and white, plus the full scene.",
+    items: [
+      {
+        slug: "tiny-hack-logo",
+        name: "Full scene",
+        desc: "The framed wordmark over the ink-blot scene.",
+        bg: "checker",
+        lit: true,
+      },
+      {
+        slug: "tiny-hack-black",
+        name: "Ink",
+        desc: "The framed wordmark in ink, for light backgrounds.",
+        bg: "checker",
+        lit: true,
+      },
+      {
+        slug: "tiny-hack-white",
+        name: "White",
+        desc: "The white colorway of the framed wordmark, for dark backgrounds.",
+        bg: "checker-dark",
+      },
+    ],
+  },
+  {
+    num: "11",
+    id: "conclave",
+    title: "Conclave",
+    blurb: "The speaker series. The camera-in-loop mark.",
+    items: [
+      {
+        slug: "conclave-logo",
+        name: "Conclave",
+        desc: "The camera-in-loop mark. Reads on a dark backdrop.",
+        bg: "checker-dark",
+      },
+    ],
+  },
+  {
+    num: "12",
+    id: "localhost",
+    title: "localhost",
+    blurb: "The community meetup. The keyboard scene in coral and dark colorways.",
+    items: [
+      {
+        slug: "localhost-red",
+        name: "localhost, red",
+        desc: "The keyboard scene on the coral field.",
+        bg: "checker",
+      },
+      {
+        slug: "localhost-dark",
+        name: "localhost, dark",
+        desc: "The keyboard scene on the dark field.",
+        bg: "checker",
+        lit: true,
+      },
+    ],
+  },
+  {
+    num: "13",
+    id: "examcooker",
+    title: "ExamCooker",
+    blurb: "The exam-prep platform. Brandmark, wordmark, and full lockup.",
+    items: [
+      {
+        slug: "examcooker-logo",
+        name: "Lockup",
+        desc: "The full lockup - the chef-hat brandmark beside the wordmark. White Exam, for dark backdrops.",
+        bg: "checker-dark",
+      },
+      {
+        slug: "examcooker-brandmark",
+        name: "Brandmark",
+        desc: "The chef-hat-and-whisk glyph in the blue gradient. For avatars and app icons.",
+        bg: "checker",
+      },
+      {
+        slug: "examcooker-wordmark",
+        name: "Wordmark",
+        desc: "The ExamCooker logotype - white Exam over blue Cooker, for dark backgrounds.",
+        bg: "checker-dark",
+      },
+    ],
+  },
+  {
+    num: "14",
+    id: "unipool",
+    title: "UniPool",
+    blurb: "The campus ride-share app.",
+    items: [
+      {
+        slug: "unipool-logo",
+        name: "UniPool 2.0",
+        desc: "The app mark - the wordmark on the rounded green tile.",
+        bg: "checker",
+      },
+    ],
+  },
+  {
+    num: "15",
+    id: "enamel",
+    title: "Enamel pins",
+    blurb:
+      "Gold-and-enamel pin renderings drawn for merch drops and giveaways - the chapter marks, the event and product pins, and the welcome-desk hello pin. Reference art for physical pins, stickers, and badges.",
+    items: [
+      {
+        slug: "enamel-acm",
+        name: "ACM",
+        desc: "The ACM diamond as a gold-rimmed enamel pin.",
+        bg: "checker",
+      },
+      {
+        slug: "enamel-acmw",
+        name: "ACM-W",
+        desc: "The ACM-W double diamond enamel pin with the VIT Community line.",
+        bg: "checker",
+      },
+      {
+        slug: "enamel-acmone",
+        name: "ACMOne",
+        desc: "The ACMOne wordmark as a gold enamel pin.",
+        bg: "checker",
+      },
+      {
+        slug: "enamel-code2create",
+        name: "Code2Create",
+        desc: "The C2C hexagon rendered as a gold-and-green enamel pin.",
+        bg: "checker",
+      },
+      {
+        slug: "enamel-cryptic-hunt",
+        name: "Cryptic Hunt",
+        desc: "The Cryptic Hunt mark rendered as a gold enamel pin.",
+        bg: "checker",
+      },
+      {
+        slug: "enamel-reverse-coding",
+        name: "Reverse Coding",
+        desc: "The coffee-cup mark as a gold-and-purple enamel pin.",
+        bg: "checker",
+      },
+      {
+        slug: "enamel-conclave",
+        name: "Conclave",
+        desc: "The camera-loop mark as a gold enamel pin.",
+        bg: "checker",
+      },
+      {
+        slug: "enamel-examcooker",
+        name: "ExamCooker",
+        desc: "The chef-hat glyph as a gold-and-blue enamel pin.",
+        bg: "checker",
+      },
+      {
+        slug: "enamel-unipool",
+        name: "UniPool",
+        desc: "The UniPool mark rendered as a gold enamel pin.",
+        bg: "checker",
+      },
+      {
+        slug: "enamel-hello",
+        name: "hello",
+        desc: "The cursive hello pin in gold enamel - the welcome-desk giveaway.",
+        bg: "checker",
+      },
+    ],
+  },
+];
+
+const dlSizes = [512, 1024, 2048];
+---
+
+<DesignLayout
+  title="Other Resources"
+  description="Event, product, and enamel-pin logos from across ACM-VIT - Cryptic Hunt, Reverse Coding, Codex Cryptum, Forktober, ExamCooker, UniPool, and more, each ready to download in SVG, PNG, and WebP."
+  current="/design/otherresources"
+>
+  <section class="ds-hero">
+    <div class="ds-kicker"><span class="ds-kicker-pill">Assets · Other resources</span></div>
+    <h1 class="ds-h1">The rest of the shelf.</h1>
+    <p class="ds-body-lg">
+      Beyond the ACM mark sits a wider library the design team has drawn over the
+      years - event logos, hackathon identities, product brandmarks, and enamel
+      pins. This is that set, one section per event and product, renamed and
+      downloadable, so everyone pulls the same file instead of rebuilding one.
+    </p>
+    <div style="display:flex; gap:12px; margin-top:26px; flex-wrap:wrap;">
+      <a href="/design/logosystem" class="ds-btn ds-btn-outline">Back to the logo system</a>
+      <a href="#cryptic-hunt" class="ds-btn ds-btn-primary">Jump to the logos</a>
+    </div>
+  </section>
+
+  <section class="ds-section" id="rules">
+    <div class="ds-bento">
+      <div class="ds-card ds-card-tonal ds-b6 ds-reveal">
+        <span class="ds-chip ds-chip-do" style="margin-bottom:14px">Inside ACM-VIT</span>
+        <p class="ds-body">
+          These are for chapter members making event art, merch, and recaps. Pick
+          the edition you need, keep it intact, and download the file here rather
+          than remaking it.
+        </p>
+      </div>
+      <div class="ds-card ds-card-tonal ds-b6 ds-reveal">
+        <span class="ds-chip ds-chip-dont" style="margin-bottom:14px">Outside ACM-VIT</span>
+        <p class="ds-body">
+          Partners, sponsors, and press should use the standard marks on the
+          <a href="/design/logo" style="color:var(--ds-accent-ink); font-weight:600;">Logo page</a>.
+          Need something this set does not cover? Email
+          <a href="mailto:outreach@acmvit.in" style="color:var(--ds-accent-ink); font-weight:600;">outreach@acmvit.in</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {
+    sections.map((g) => (
+      <section class="ds-section" id={g.id}>
+        <div class="ds-sec-head">
+          <span class="ds-sec-num">{g.num}</span>
+          <h2 class="ds-h2">{g.title}</h2>
+        </div>
+        <p class="ds-body">{g.blurb}</p>
+
+        <div class="ds-bento">
+          {g.items.map((l) => (
+            <div class="ds-card ds-b6 ds-reveal" style="padding:0; overflow:hidden;">
+              <div
+                class:list={[
+                  "ds-specimen-stage",
+                  l.bg === "checker" && "ds-checker",
+                  l.bg === "checker-dark" && "ds-checker-dark",
+                  l.lit && "or-lit",
+                ]}
+                style="min-height:230px;"
+              >
+                <img
+                  class="or-art"
+                  src={asset(`${l.slug}-preview.webp`)}
+                  alt={l.name}
+                  loading="lazy"
+                />
+              </div>
+              <div style="padding:20px 24px 24px;">
+                <div style="display:flex; align-items:baseline; justify-content:space-between; gap:12px;">
+                  <h3 class="ds-h4">{l.name}</h3>
+                  <code class="ds-mono ds-small">{l.slug}</code>
+                </div>
+                <p class="ds-body" style="margin-top:6px">{l.desc}</p>
+                {l.raster && <p class="ds-dl-cap">Bitmap source · PNG &amp; WebP only</p>}
+                <div class="ds-dl-rows">
+                  {!l.raster && (
+                    <div class="ds-dl-row">
+                      <span class="ds-mono ds-small">SVG</span>
+                      <span class="ds-dl">
+                        <a href={asset(`${l.slug}.svg`)} download>vector</a>
+                      </span>
+                    </div>
+                  )}
+                  <div class="ds-dl-row">
+                    <span class="ds-mono ds-small">PNG</span>
+                    <span class="ds-dl">
+                      {dlSizes.map((s) => (
+                        <a href={asset(`${l.slug}-${s}.png`)} download>{s}</a>
+                      ))}
+                    </span>
+                  </div>
+                  <div class="ds-dl-row">
+                    <span class="ds-mono ds-small">WebP</span>
+                    <span class="ds-dl">
+                      {dlSizes.map((s) => (
+                        <a href={asset(`${l.slug}-${s}.webp`)} download>{s}</a>
+                      ))}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    ))
+  }
+</DesignLayout>
+
+<style>
+  /* Uniform contain-box so every mark reads at a similar size. The
+     preview files are already trimmed and centred on one canvas, so this
+     just caps the display height. */
+  .or-art {
+    width: 100%;
+    max-width: 440px;
+    height: 150px;
+    object-fit: contain;
+    display: block;
+  }
+  .ds-dl-cap {
+    margin: 16px 0 0;
+    font-size: 11.5px;
+    font-weight: 640;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ds-ink-3);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .ds-dl-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .ds-dl-cap + .ds-dl-rows {
+    margin-top: 8px;
+  }
+  .ds-dl-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .ds-dl-row > .ds-mono {
+    width: 48px;
+    flex: none;
+  }
+  .ds-sec-head .ds-h2 {
+    text-transform: none;
+  }
+
+  /* In dark mode the shared .ds-checker stays a light panel by design (it
+     hosts dark-ink art elsewhere). Here most marks read fine on a dark
+     stage, so flip the light checker to the dark checker in dark mode.
+     Scoped to this page by Astro, so the logo-system page is untouched.
+     Marks tagged .or-lit (pure dark ink / own dark backdrop) opt back out
+     and keep the light checker. */
+  :global(html[data-theme="dark"]) .ds-specimen-stage.ds-checker {
+    background-color: #201e1b;
+    background-image: linear-gradient(45deg, #302d28 25%, transparent 25%),
+      linear-gradient(-45deg, #302d28 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #302d28 75%),
+      linear-gradient(-45deg, transparent 75%, #302d28 75%);
+    background-size: 22px 22px;
+    background-position: 0 0, 0 11px, 11px -11px, -11px 0;
+  }
+  :global(html[data-theme="dark"]) .ds-specimen-stage.ds-checker.or-lit {
+    background-color: #ffffff;
+    background-image: linear-gradient(45deg, #efece6 25%, transparent 25%),
+      linear-gradient(-45deg, #efece6 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #efece6 75%),
+      linear-gradient(-45deg, transparent 75%, #efece6 75%);
+  }
+</style>

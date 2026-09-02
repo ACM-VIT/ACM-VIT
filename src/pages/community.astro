@@ -1,0 +1,468 @@
+---
+export const prerender = true;
+import Layout from "../layouts/Layout.astro";
+import "../styles/globals.css";
+import FillButton from "../components/ui/FillButton.astro";
+
+import Outreach from "../sections/Outreach.astro";
+import Sdg from "../sections/Sdg.astro";
+import KickStartLearn from "../sections/KickStartLearn.astro";
+import CommunityPrograms from "../sections/CommunityPrograms.astro";
+import AcmWCommunity from "../sections/AcmWCommunity.astro";
+import AcmAward from "../sections/AcmAward.astro";
+
+import Footer from "../layouts/Footer.astro";
+
+const yearsSince = new Date().getFullYear() - 2009;
+---
+
+<Layout pageTitle="Community" backHref="/#community" scrollCue={false}>
+  <div class="tape-experience" id="tape-experience">
+    <svg class="tape-svg" id="tape-svg" aria-hidden="true">
+      <path id="tape-shadow" fill="none" stroke-width="0" stroke-linecap="round" class="tape-stroke-shadow" />
+      <path id="tape-path" fill="none" stroke-width="12" stroke-linecap="round" class="tape-stroke-main" />
+      <path id="tape-shine" fill="none" stroke-width="2" stroke-linecap="round" class="tape-stroke-shine" />
+      <g id="tape-markers"></g>
+    </svg>
+
+    <section class="cassette-hero" id="cassette-hero">
+      <div class="cassette-wrapper">
+        <img
+          src="/community/community-cassette-igniting-minds.webp"
+          alt="Igniting Minds cassette tape"
+          class="cassette-img"
+          loading="eager"
+          decoding="async"
+        />
+      </div>
+      <div class="scroll-hint" id="scroll-hint">
+        <span>scroll to unravel</span>
+        <svg width="16" height="24" viewBox="0 0 16 24" fill="none">
+          <path d="M8 4V20M8 20L2 14M8 20L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </section>
+
+    <div data-tape-section>
+      <Outreach />
+    </div>
+
+    <div data-tape-section>
+      <Sdg />
+    </div>
+
+    <div data-tape-section>
+      <KickStartLearn />
+    </div>
+
+    <div data-tape-section>
+      <CommunityPrograms />
+    </div>
+
+    <div data-tape-section>
+      <AcmWCommunity />
+    </div>
+
+    <div data-tape-section>
+      <AcmAward />
+    </div>
+
+    <section class="tape-closing" id="tape-closing">
+      <div class="closing-inner">
+        <p class="closing-years">{yearsSince}</p>
+        <p class="closing-text">years of igniting minds</p>
+        <div class="closing-cta">
+          <FillButton href="/" label="Back to home">
+            <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </FillButton>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <Footer />
+</Layout>
+
+<style>
+  .tape-experience {
+    position: relative;
+    overflow: hidden;
+    min-height: 100vh;
+  }
+
+  .tape-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: visible;
+  }
+
+  /* Hide tape until JS computes path */
+  #tape-path, #tape-shadow, #tape-shine {
+    stroke-dasharray: 999999;
+    stroke-dashoffset: 999999;
+  }
+
+  /* Tape - dark brown like real cassette tape */
+  .tape-stroke-shadow {
+    stroke: none;
+  }
+  .tape-stroke-main {
+    stroke: #FF5F4A;
+    opacity: 1;
+  }
+  .tape-stroke-shine {
+    stroke: #1a1a1a;
+    opacity: 1;
+  }
+
+  :global([data-theme="light"]) .tape-stroke-main {
+    stroke: #C44030;
+  }
+  :global([data-theme="light"]) .tape-stroke-shine {
+    stroke: #8B2A1E;
+  }
+
+  [data-tape-section] {
+    position: relative;
+    z-index: 2;
+  }
+
+  .cassette-hero {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 2rem 6rem;
+    min-height: 100vh;
+    min-height: 100dvh;
+    text-align: center;
+  }
+
+  .cassette-wrapper {
+    position: relative;
+    z-index: 3;
+    width: clamp(400px, 55vw, 800px);
+  }
+
+  .cassette-img {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 30px 80px rgba(0, 0, 0, 0.6));
+    animation: cassetteFloat 6s ease-in-out infinite;
+  }
+
+  @keyframes cassetteFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-14px) rotate(0.5deg); }
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: #FF5F4A;
+    animation: hintPulse 2s ease-in-out infinite;
+  }
+
+  .scroll-hint span {
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  @keyframes hintPulse {
+    0%, 100% { opacity: 0.5; transform: translateY(0); }
+    50% { opacity: 0.8; transform: translateY(4px); }
+  }
+
+  .tape-closing {
+    position: relative;
+    z-index: 2;
+    padding: 14rem 2rem 8rem;
+    text-align: center;
+  }
+
+  .closing-inner {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  .closing-years {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-size: clamp(10rem, 25vw, 20rem);
+    font-weight: 900;
+    color: #FF5F4A;
+    line-height: 0.8;
+    opacity: 0.12;
+    margin: 0;
+  }
+
+  .closing-text {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-size: clamp(1.1rem, 2vw, 1.6rem);
+    color: #FFFDD0;
+    text-transform: lowercase;
+    margin: -2rem 0 4rem;
+  }
+
+  :global([data-theme="light"]) .closing-text {
+    color: #1a1a1a;
+  }
+
+  @media (max-width: 768px) {
+    .cassette-hero {
+      padding: 2rem 1.5rem 5rem;
+      min-height: 70vh;
+    }
+
+    .cassette-wrapper {
+      width: clamp(280px, 80vw, 400px);
+    }
+
+    .tape-closing {
+      padding: 8rem 1.5rem 6rem;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const container = document.getElementById("tape-experience");
+  const svg = document.getElementById("tape-svg");
+  const tapePath = document.getElementById("tape-path");
+  const tapeShadow = document.getElementById("tape-shadow");
+  const tapeShine = document.getElementById("tape-shine");
+  const markersGroup = document.getElementById("tape-markers");
+  const sections = document.querySelectorAll("[data-tape-section]");
+  const cassetteHero = document.getElementById("cassette-hero");
+  const scrollHint = document.getElementById("scroll-hint");
+  const closing = document.getElementById("tape-closing");
+
+  let activeTriggers: ScrollTrigger[] = [];
+
+  function clearAll() {
+    activeTriggers.forEach((t) => t.kill());
+    activeTriggers = [];
+    if (markersGroup) markersGroup.innerHTML = "";
+  }
+
+  function buildTape() {
+    if (!container || !svg || !tapePath || !cassetteHero) return;
+    clearAll();
+
+    const W = container.offsetWidth;
+    const H = container.scrollHeight;
+
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+    svg.style.height = `${H}px`;
+
+    const containerRect = container.getBoundingClientRect();
+    const cassetteImg = cassetteHero.querySelector(
+      ".cassette-img"
+    ) as HTMLElement;
+    if (!cassetteImg) return;
+    const cRect = cassetteImg.getBoundingClientRect();
+
+    // Start point - center of cassette so tape emerges from behind it
+    const startX = cRect.left + cRect.width * 0.5 - containerRect.left;
+    const startY = cRect.top + cRect.height * 0.5 - containerRect.top;
+
+    const waypoints: [number, number][] = [[startX, startY]];
+
+    sections.forEach((sec, i) => {
+      const el = sec as HTMLElement;
+      const sRect = el.getBoundingClientRect();
+      const y = sRect.top + sRect.height * 0.5 - containerRect.top;
+
+      if (W < 769) {
+        const x = i % 2 === 0 ? W * 0.2 : W * 0.8;
+        waypoints.push([x, y]);
+      } else {
+        const progress = i / sections.length;
+        const spread = 0.34 + progress * 0.1;
+        const x =
+          i % 2 === 0 ? W * (0.5 + spread) : W * (0.5 - spread);
+        waypoints.push([x, y]);
+      }
+    });
+
+    if (closing) {
+      const clRect = closing.getBoundingClientRect();
+      const y = clRect.top + clRect.height * 0.35 - containerRect.top;
+      waypoints.push([W * 0.5, y]);
+    }
+
+    // Build path: S-curves between waypoints
+    let d = `M ${waypoints[0][0].toFixed(1)} ${waypoints[0][1].toFixed(1)}`;
+
+    for (let i = 1; i < waypoints.length; i++) {
+      const [px, py] = waypoints[i - 1];
+      const [cx, cy] = waypoints[i];
+      const dy = cy - py;
+      const t = 0.38 + (i / waypoints.length) * 0.12;
+      const cp1y = py + dy * t;
+      const cp2y = cy - dy * t;
+
+      d += ` C ${px.toFixed(1)} ${cp1y.toFixed(1)}, ${cx.toFixed(1)} ${cp2y.toFixed(1)}, ${cx.toFixed(1)} ${cy.toFixed(1)}`;
+    }
+
+    [tapePath, tapeShadow, tapeShine].forEach((p) => {
+      if (p) p.setAttribute("d", d);
+    });
+
+    // Marker dots
+    if (markersGroup) {
+      waypoints.forEach((wp, i) => {
+        if (i === 0 || i === waypoints.length - 1) return;
+        const circle = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "circle"
+        );
+        circle.setAttribute("cx", wp[0].toFixed(1));
+        circle.setAttribute("cy", wp[1].toFixed(1));
+        circle.setAttribute("r", "8");
+        circle.setAttribute("fill", "#1a0f0a");
+        circle.setAttribute("opacity", "0");
+        markersGroup.appendChild(circle);
+      });
+    }
+
+    // Set dasharray/offset IMMEDIATELY so tape is hidden
+    const pathLength = tapePath.getTotalLength();
+
+    [tapePath, tapeShadow, tapeShine].forEach((p) => {
+      if (!p) return;
+      p.style.strokeDasharray = `${pathLength}`;
+      p.style.strokeDashoffset = `${pathLength}`;
+    });
+
+    // ScrollTrigger - scrub:3 for slow, lazy ribbon draw
+    const drawTrigger = ScrollTrigger.create({
+      trigger: container,
+      start: "top top",
+      end: "bottom bottom",
+      scrub: 3,
+      onUpdate: (self) => {
+        const offset = pathLength * (1 - self.progress);
+        [tapePath, tapeShadow, tapeShine].forEach((p) => {
+          if (p) p.style.strokeDashoffset = `${offset}`;
+        });
+
+        if (markersGroup) {
+          const markers = markersGroup.querySelectorAll("circle");
+          markers.forEach((marker, idx) => {
+            const markerProgress = (idx + 1) / (waypoints.length - 1);
+            const visible = self.progress >= markerProgress - 0.02;
+            marker.setAttribute("opacity", visible ? "0.5" : "0");
+          });
+        }
+      },
+    });
+    activeTriggers.push(drawTrigger);
+
+    // Scroll hint fade
+    if (scrollHint) {
+      const hintTrigger = ScrollTrigger.create({
+        trigger: cassetteHero,
+        start: "top top",
+        end: "bottom 60%",
+        scrub: true,
+        onUpdate: (self) => {
+          (scrollHint as HTMLElement).style.opacity = `${Math.max(
+            0,
+            0.5 - self.progress * 2
+          )}`;
+        },
+      });
+      activeTriggers.push(hintTrigger);
+    }
+
+    // Cassette parallax
+    const cassetteWrapper = cassetteHero.querySelector(
+      ".cassette-wrapper"
+    ) as HTMLElement;
+    if (cassetteWrapper) {
+      const parallaxTrigger = ScrollTrigger.create({
+        trigger: cassetteHero,
+        start: "top top",
+        end: "bottom top",
+        scrub: true,
+        onUpdate: (self) => {
+          cassetteWrapper.style.transform = `translateY(${
+            -self.progress * 100
+          }px)`;
+        },
+      });
+      activeTriggers.push(parallaxTrigger);
+    }
+
+    // Closing reveal
+    if (closing) {
+      const closingInner = closing.querySelector(
+        ".closing-inner"
+      ) as HTMLElement;
+      if (closingInner) {
+        gsap.set(closingInner, { opacity: 0, y: 30 });
+        const closingTween = gsap.to(closingInner, {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: "power3.out",
+          paused: true,
+        });
+        const closingTrigger = ScrollTrigger.create({
+          trigger: closing,
+          start: "top 75%",
+          onEnter: () => closingTween.play(),
+          onLeaveBack: () => closingTween.reverse(),
+        });
+        activeTriggers.push(closingTrigger);
+      }
+    }
+
+    ScrollTrigger.refresh(true);
+  }
+
+  function init() {
+    requestAnimationFrame(() => {
+      buildTape();
+      setTimeout(() => {
+        clearAll();
+        buildTape();
+      }, 800);
+    });
+  }
+
+  if (document.readyState === "complete") {
+    init();
+  } else {
+    window.addEventListener("load", init, { once: true });
+  }
+
+  let resizeTimer = 0;
+  window.addEventListener(
+    "resize",
+    () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => {
+        buildTape();
+      }, 300);
+    },
+    { passive: true }
+  );
+</script>

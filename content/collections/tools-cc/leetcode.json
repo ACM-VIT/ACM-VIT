@@ -1,0 +1,8 @@
+{
+  "name": "LeetCode",
+  "slug": "leetcode",
+  "svgFile": "/domains/cc/tools/cc-tool-leetcode.svg",
+  "colorHex": "#FFA116",
+  "monochrome": true,
+  "order": 0
+}

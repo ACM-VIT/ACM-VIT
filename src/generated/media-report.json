@@ -1,0 +1,2166 @@
+{
+  "files": 2912,
+  "bytesTotal": 489474403,
+  "contentReferenced": 678,
+  "missing": [],
+  "orphanCandidates": [
+    "/cassettes/cassettes-team-2022.svg",
+    "/cassettes/cassettes-team-2023.svg",
+    "/cassettes/cassettes-team-2024.svg",
+    "/cassettes/cassettes-team-2025.svg",
+    "/cassettes/cassettes-team-2026.svg",
+    "/cassettes/cassettes-year-2022.svg",
+    "/design-guide/design-guide-hero.png",
+    "/design-guide/design-guide-hero.webp",
+    "/domains/research/domains-research-solidity.svg",
+    "/domains/web/domains-web-typescript.webp",
+    "/events/c2c/sponsors/events-c2c-sponsors-framer.svg",
+    "/events/events-rc.webp",
+    "/fonts/keystatic/PolySans-Bulky.otf",
+    "/fonts/keystatic/PolySans-Median.otf",
+    "/fonts/keystatic/PolySans-Neutral.otf",
+    "/icons/icons-redis.webp",
+    "/keystatic-theme.css",
+    "/projects/projects-acmone.svg",
+    "/team/team-full-core.webp",
+    "/ui/ui-bloglayout.webp"
+  ],
+  "usage": {
+    "/events/events-apptitude-cassette.svg": [
+      "events/apptitude",
+      "singleton:events-section"
+    ],
+    "/events/events-c2c-cassette.svg": [
+      "events/code2create",
+      "singleton:events-section"
+    ],
+    "/events/c2c/events-c2c-sticker-1.webp": [
+      "events/code2create"
+    ],
+    "/events/c2c/events-c2c-sticker-2.webp": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-runpod.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-elevenlabs.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-meribachat.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-mcwitties.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-capitalinc.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-skilloxide.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-onedrop.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-github.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-sashido.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-wolframlanguage.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-balsamiq.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-replit.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-taskade.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-oreilly.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-bilda.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-stickermule.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-echoar.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-axure.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-c4projects.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-zuddl.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-jetbrains.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-digitalocean.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-slack.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-cloudsploit.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-geeksforgeeks.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-wolframalpha.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-codingblocks.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-rosenfeld.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-devfolio.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-fold.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-matic.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-hackerearth.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-indriya.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-ibm.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-hasura.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-anitab.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-bugsee.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-invision.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-jenkins.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-sketch.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-slanglabs.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-shift.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-tta.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-techdomains.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-jsp.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-gitlab.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-iconscout.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-twilio.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-zulip.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-custombaba.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-ozonetel.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-npm.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-producthunt.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-zeplin.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-travisci.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-docker.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-transitus.svg": [
+      "events/code2create"
+    ],
+    "/events/c2c/sponsors/events-c2c-sponsors-tricentis.svg": [
+      "events/code2create"
+    ],
+    "/events/events-codart-cassette.svg": [
+      "events/codart",
+      "singleton:events-section"
+    ],
+    "/events/events-code-plusplus-cassette.svg": [
+      "events/code-plus-plus",
+      "singleton:domain-cc",
+      "singleton:events-section"
+    ],
+    "/events/events-codex-cryptum-cassette.svg": [
+      "events/codex-cryptum",
+      "singleton:events-section"
+    ],
+    "/events/events-cryptic-hunt-cassette.svg": [
+      "events/cryptic-hunt",
+      "aois-tech/appdev",
+      "aois-tech/webdev",
+      "aois-tech/gamestudios",
+      "singleton:domain-management",
+      "singleton:events-section"
+    ],
+    "/events/cryptic-hunt/events-cryptic-hunt-ch-espresso.webp": [
+      "events/cryptic-hunt"
+    ],
+    "/events/cryptic-hunt/events-cryptic-hunt-ch-timeless.webp": [
+      "events/cryptic-hunt"
+    ],
+    "/events/events-forktober-cassette.svg": [
+      "events/forktober",
+      "project-details/open-with-browser",
+      "project-details/scrag",
+      "project-details/digital-circuit-simulator",
+      "project-details/echolink",
+      "project-details/ride-safe",
+      "project-details/pdfmaker",
+      "project-details/fludget",
+      "project-details/gitpositive",
+      "project-details/muscle-magic",
+      "project-details/alarmit",
+      "project-details/sticky-links",
+      "project-details/10-000-hours",
+      "project-details/certify",
+      "project-details/golly-bot",
+      "project-details/maildart-backend",
+      "project-details/paint-me",
+      "project-details/cryptodash",
+      "project-details/todo-app",
+      "project-details/create-boilerplate-node",
+      "project-details/qchat",
+      "project-details/algos-for-all-amigos",
+      "project-details/maildart-frontend",
+      "project-details/acm-github-bot",
+      "project-details/discord-hackpot",
+      "forktober-projects/open-with-browser",
+      "forktober-projects/scrag",
+      "forktober-projects/digital-circuit-simulator",
+      "forktober-projects/echolink",
+      "forktober-projects/ride-safe",
+      "forktober-projects/pdfmaker",
+      "forktober-projects/fludget",
+      "forktober-projects/gitpositive",
+      "forktober-projects/muscle-magic",
+      "forktober-projects/alarmit",
+      "forktober-projects/sticky-links",
+      "forktober-projects/10-000-hours",
+      "forktober-projects/certify",
+      "forktober-projects/golly-bot",
+      "forktober-projects/maildart-backend",
+      "forktober-projects/paint-me",
+      "forktober-projects/cryptodash",
+      "forktober-projects/todo-app",
+      "forktober-projects/create-boilerplate-node",
+      "forktober-projects/qchat",
+      "forktober-projects/algos-for-all-amigos",
+      "forktober-projects/maildart-frontend",
+      "forktober-projects/acm-github-bot",
+      "forktober-projects/discord-hackpot",
+      "aois-tech/foss",
+      "singleton:events-section"
+    ],
+    "/events/events-inspiher-cassette.svg": [
+      "events/inspiher",
+      "singleton:events-section"
+    ],
+    "/events/events-neural-hack-cassette.svg": [
+      "events/neural-hack",
+      "aois-tech/webdev",
+      "singleton:events-section"
+    ],
+    "/events/events-reverse-coding-cassette.svg": [
+      "events/reverse-coding",
+      "aois-tech/webdev",
+      "singleton:domain-management",
+      "singleton:domain-cc",
+      "singleton:events-section"
+    ],
+    "/events/events-reverse-coding-sticker-2026.webp": [
+      "events/reverse-coding"
+    ],
+    "/events/events-reverse-coding-sticker-2025.webp": [
+      "events/reverse-coding"
+    ],
+    "/events/events-the-tiny-hack-cassette.webp": [
+      "events/the-tiny-hack"
+    ],
+    "/events/events-bethebuilder-cassette.webp": [
+      "events/be-the-builder"
+    ],
+    "/events/events-casa-cassette.webp": [
+      "events/casa"
+    ],
+    "/events/events-deepfake-cassette.webp": [
+      "events/deepfake"
+    ],
+    "/events/events-peter-robinson-cassette.webp": [
+      "events/dr-peter-robinson"
+    ],
+    "/community/community-peter-robinson.webp": [
+      "events/dr-peter-robinson",
+      "speakers/dr-peter-robinson"
+    ],
+    "/events/events-federica-sarro-cassette.webp": [
+      "events/dr-federica-sarro"
+    ],
+    "/community/community-federica-sarro.webp": [
+      "events/dr-federica-sarro",
+      "speakers/dr-federica-sarro"
+    ],
+    "/events/events-kickstart-learn-cassette.webp": [
+      "events/kickstart-learn"
+    ],
+    "/events/events-sdg-cassette.webp": [
+      "events/sdg-workshops"
+    ],
+    "/projects/acmone/projects-acmone-logo.webp": [
+      "project-details/acmone",
+      "design-products/acmone"
+    ],
+    "/projects/acmone/projects-acmone-screen-1.webp": [
+      "project-details/acmone",
+      "design-products/acmone"
+    ],
+    "/projects/acmone/projects-acmone-screen-2.webp": [
+      "project-details/acmone",
+      "design-products/acmone"
+    ],
+    "/projects/acmone/projects-acmone-screen-3.webp": [
+      "project-details/acmone",
+      "design-products/acmone"
+    ],
+    "/projects/unipool/projects-unipool-main-logo.svg": [
+      "project-details/unipool"
+    ],
+    "/projects/unipool/projects-unipool-shot-home.webp": [
+      "project-details/unipool",
+      "design-products/unipool"
+    ],
+    "/projects/unipool/projects-unipool-shot-search.webp": [
+      "project-details/unipool",
+      "design-products/unipool"
+    ],
+    "/projects/unipool/projects-unipool-shot-pay.webp": [
+      "project-details/unipool",
+      "design-products/unipool"
+    ],
+    "/projects/examcooker/projects-examcooker-logo.webp": [
+      "project-details/examcooker",
+      "design-products/examcooker"
+    ],
+    "/projects/examcooker/projects-examcooker-shot-1.webp": [
+      "project-details/examcooker",
+      "design-products/examcooker"
+    ],
+    "/projects/examcooker/projects-examcooker-shot-2.webp": [
+      "project-details/examcooker",
+      "design-products/examcooker"
+    ],
+    "/projects/examcooker/projects-examcooker-shot-3.webp": [
+      "project-details/examcooker",
+      "design-products/examcooker"
+    ],
+    "/projects/projects-localhost.svg": [
+      "project-details/localhost"
+    ],
+    "/projects/localhost/projects-localhost-screen-1.webp": [
+      "project-details/localhost"
+    ],
+    "/projects/localhost/projects-localhost-screen-2.webp": [
+      "project-details/localhost"
+    ],
+    "/projects/localhost/projects-localhost-screen-3.webp": [
+      "project-details/localhost"
+    ],
+    "/projects/localhost/projects-localhost-screen-4.webp": [
+      "project-details/localhost"
+    ],
+    "/projects/localhost/projects-localhost-screen-5.webp": [
+      "project-details/localhost"
+    ],
+    "/projects/localhost/projects-localhost-screen-6.webp": [
+      "project-details/localhost"
+    ],
+    "/projects/projects-cover.svg": [
+      "project-details/ocs-25"
+    ],
+    "/projects/ocs-25/projects-ocs-25-screen-1.webp": [
+      "project-details/ocs-25"
+    ],
+    "/projects/ocs-25/projects-ocs-25-screen-2.webp": [
+      "project-details/ocs-25"
+    ],
+    "/projects/ocs-25/projects-ocs-25-screen-3.webp": [
+      "project-details/ocs-25"
+    ],
+    "/projects/ocs-25/projects-ocs-25-screen-4.webp": [
+      "project-details/ocs-25"
+    ],
+    "/projects/ocs-25/projects-ocs-25-screen-5.webp": [
+      "project-details/ocs-25"
+    ],
+    "/projects/ocs-25/projects-ocs-25-screen-6.webp": [
+      "project-details/ocs-25"
+    ],
+    "/projects/cassettes/projects-cassettes-ocs-26.webp": [
+      "project-details/ocs-26",
+      "project-cassettes/ocs-2026"
+    ],
+    "/projects/ocs-26/projects-ocs-26-screen-1.webp": [
+      "project-details/ocs-26"
+    ],
+    "/projects/ocs-26/projects-ocs-26-screen-2.webp": [
+      "project-details/ocs-26"
+    ],
+    "/projects/ocs-26/projects-ocs-26-screen-3.webp": [
+      "project-details/ocs-26"
+    ],
+    "/projects/ocs-26/projects-ocs-26-screen-4.webp": [
+      "project-details/ocs-26"
+    ],
+    "/projects/ocs-26/projects-ocs-26-screen-5.webp": [
+      "project-details/ocs-26"
+    ],
+    "/projects/ocs-26/projects-ocs-26-screen-6.webp": [
+      "project-details/ocs-26"
+    ],
+    "/projects/cassettes/projects-cassettes-ocs-22.svg": [
+      "project-details/ocs-22",
+      "project-cassettes/ocs-2022"
+    ],
+    "/projects/ocs-22/projects-ocs-22-screen-1.webp": [
+      "project-details/ocs-22"
+    ],
+    "/projects/ocs-22/projects-ocs-22-screen-2.webp": [
+      "project-details/ocs-22"
+    ],
+    "/projects/ocs-22/projects-ocs-22-screen-3.webp": [
+      "project-details/ocs-22"
+    ],
+    "/projects/ocs-22/projects-ocs-22-screen-4.webp": [
+      "project-details/ocs-22"
+    ],
+    "/projects/cassettes/projects-cassettes-ocs-23.svg": [
+      "project-details/ocs-23",
+      "project-cassettes/ocs-2023"
+    ],
+    "/projects/ocs-23/projects-ocs-23-frame-10.webp": [
+      "project-details/ocs-23"
+    ],
+    "/projects/ocs-23/projects-ocs-23-frame-11.webp": [
+      "project-details/ocs-23"
+    ],
+    "/projects/ocs-23/projects-ocs-23-frame-12.webp": [
+      "project-details/ocs-23"
+    ],
+    "/projects/projects-cli-rpg.svg": [
+      "project-details/cli-rpg"
+    ],
+    "/projects/cli-rpg/projects-cli-rpg-shot-login.webp": [
+      "project-details/cli-rpg"
+    ],
+    "/projects/cli-rpg/projects-cli-rpg-shot-house.webp": [
+      "project-details/cli-rpg"
+    ],
+    "/projects/cli-rpg/projects-cli-rpg-shot-map.webp": [
+      "project-details/cli-rpg"
+    ],
+    "/projects/cli-rpg/projects-cli-rpg-shot-puzzle.webp": [
+      "project-details/cli-rpg"
+    ],
+    "/projects/cassettes/projects-cassettes-conclave.svg": [
+      "project-details/conclave",
+      "project-cassettes/conclave",
+      "home-projects/conclave"
+    ],
+    "/projects/cassettes/projects-cassettes-wenvy.svg": [
+      "project-details/wenvy",
+      "project-cassettes/wenvy"
+    ],
+    "/projects/wenvy/projects-wenvy-koi.svg": [
+      "project-details/wenvy"
+    ],
+    "/projects/cassettes/projects-cassettes-cli-top.svg": [
+      "project-details/cli-top",
+      "project-cassettes/cli-top"
+    ],
+    "/projects/items/0/cassetteSrc.webp": [
+      "project-cassettes/acmone"
+    ],
+    "/projects/items/1/cassetteSrc.webp": [
+      "project-cassettes/examcooker",
+      "home-projects/examcooker"
+    ],
+    "/projects/items/2/cassetteSrc.webp": [
+      "project-cassettes/cli-rpg",
+      "home-projects/cli-rpg"
+    ],
+    "/projects/items/3/cassetteSrc.webp": [
+      "project-cassettes/unipool",
+      "home-projects/unipool"
+    ],
+    "/projects/items/4/cassetteSrc.webp": [
+      "project-cassettes/localhost",
+      "home-projects/localhost"
+    ],
+    "/projects/items/5/cassetteSrc.webp": [
+      "project-cassettes/ocs",
+      "home-projects/ocs-25"
+    ],
+    "/projects/cassettes/projects-cassettes-tagred.svg": [
+      "project-cassettes/tagred"
+    ],
+    "/projects/cassettes/projects-cassettes-form.svg": [
+      "project-cassettes/form"
+    ],
+    "/projects/cassettes/projects-cassettes-codigo.svg": [
+      "project-cassettes/codigo"
+    ],
+    "/board/2018/abhitej-singh.webp": [
+      "team-years/2018"
+    ],
+    "/board/2018/hardika-goyal.webp": [
+      "team-years/2018"
+    ],
+    "/board/2018/sourish-banerjee.webp": [
+      "team-years/2018"
+    ],
+    "/board/2018/harshit-kedia.webp": [
+      "team-years/2018"
+    ],
+    "/board/2018/shivam.webp": [
+      "team-years/2018"
+    ],
+    "/board/2018/anmol.webp": [
+      "team-years/2018"
+    ],
+    "/board/2018/rishabh.webp": [
+      "team-years/2018"
+    ],
+    "/board/2018/yash-shah.webp": [
+      "team-years/2018"
+    ],
+    "/board/2018/vinit-bodhwani.webp": [
+      "team-years/2018"
+    ],
+    "/board/2018/vibhore-gupta.webp": [
+      "team-years/2018"
+    ],
+    "/board/2019/suchita-mehta.webp": [
+      "team-years/2019"
+    ],
+    "/board/2019/navin-agarwalla.webp": [
+      "team-years/2019"
+    ],
+    "/board/2019/akshit-grover.webp": [
+      "team-years/2019"
+    ],
+    "/board/2019/ankit-prasad.webp": [
+      "team-years/2019"
+    ],
+    "/board/2019/akash-tushar.webp": [
+      "team-years/2019"
+    ],
+    "/board/2019/deep-baldha.webp": [
+      "team-years/2019"
+    ],
+    "/board/2019/prateek-singh.webp": [
+      "team-years/2019"
+    ],
+    "/board/2019/pravigya-pariyar.webp": [
+      "team-years/2019"
+    ],
+    "/board/2019/anant-mishra.webp": [
+      "team-years/2019"
+    ],
+    "/board/2019/mufaddal-ibrahimjee.webp": [
+      "team-years/2019"
+    ],
+    "/board/2019/sanya-taneja.webp": [
+      "team-years/2019"
+    ],
+    "/board/2019/tanmay-jain.webp": [
+      "team-years/2019"
+    ],
+    "/board/2019/shyamli-singh.webp": [
+      "team-years/2019"
+    ],
+    "/board/2019/mudit-agarwal.webp": [
+      "team-years/2019"
+    ],
+    "/board/2019/arnav-saxena.webp": [
+      "team-years/2019"
+    ],
+    "/board/2019/kumar-shaswat.webp": [
+      "team-years/2019"
+    ],
+    "/board/2019/sasya-reddi.webp": [
+      "team-years/2019"
+    ],
+    "/board/2019/ankita-ghosh.webp": [
+      "team-years/2019"
+    ],
+    "/board/2020/kartik-soni.webp": [
+      "team-years/2020"
+    ],
+    "/board/2020/nimisha-bhatia.webp": [
+      "team-years/2020"
+    ],
+    "/board/2020/shubham-awasthi.webp": [
+      "team-years/2020"
+    ],
+    "/board/2020/fiza-rasool.webp": [
+      "team-years/2020"
+    ],
+    "/board/2020/aditya-srivastava.webp": [
+      "team-years/2020"
+    ],
+    "/board/2020/sarthak-dandotiya.webp": [
+      "team-years/2020"
+    ],
+    "/board/2020/svetansu-singh.webp": [
+      "team-years/2020"
+    ],
+    "/board/2020/sparsh-srivastava.webp": [
+      "team-years/2020"
+    ],
+    "/board/2020/subhaditya-mukherjee.webp": [
+      "team-years/2020"
+    ],
+    "/board/2020/rajat-gupta.webp": [
+      "team-years/2020"
+    ],
+    "/board/2020/madhur-dixit.webp": [
+      "team-years/2020"
+    ],
+    "/board/2020/shrey-sindher.webp": [
+      "team-years/2020"
+    ],
+    "/board/2020/shivank-sahai.webp": [
+      "team-years/2020"
+    ],
+    "/board/2020/bhumij-gupta.webp": [
+      "team-years/2020"
+    ],
+    "/board/2021/sarthak-gupta.webp": [
+      "team-years/2021"
+    ],
+    "/board/2021/hrishita-chakrabarti.webp": [
+      "team-years/2021"
+    ],
+    "/board/2021/eesha-shetty.webp": [
+      "team-years/2021"
+    ],
+    "/board/2021/anjali-roy.webp": [
+      "team-years/2021"
+    ],
+    "/board/2021/dhruv-roy.webp": [
+      "team-years/2021"
+    ],
+    "/board/2021/kashish-mittal.webp": [
+      "team-years/2021"
+    ],
+    "/board/2021/devansh-mehta.webp": [
+      "team-years/2021"
+    ],
+    "/board/2021/shovin-kakaraddi.webp": [
+      "team-years/2021"
+    ],
+    "/board/2021/iishi-patel.webp": [
+      "team-years/2021"
+    ],
+    "/board/2021/nimit-jain.webp": [
+      "team-years/2021"
+    ],
+    "/board/2021/garima-bothra.webp": [
+      "team-years/2021"
+    ],
+    "/board/2021/elio-jordan-lopes.webp": [
+      "team-years/2021"
+    ],
+    "/board/2021/siddharth-nahar.webp": [
+      "team-years/2021"
+    ],
+    "/board/2021/sriya-reddi.webp": [
+      "team-years/2021"
+    ],
+    "/board/2021/jerelyn-preeja.webp": [
+      "team-years/2021"
+    ],
+    "/board/2022/rishabh-keshan.webp": [
+      "team-years/2022"
+    ],
+    "/board/2022/ishi-yadav.webp": [
+      "team-years/2022"
+    ],
+    "/board/2022/vinamra-khoria.webp": [
+      "team-years/2022"
+    ],
+    "/board/2022/yash-kumar-verma.webp": [
+      "team-years/2022"
+    ],
+    "/board/2022/rohan-arora.webp": [
+      "team-years/2022"
+    ],
+    "/board/2022/diya-pal.webp": [
+      "team-years/2022"
+    ],
+    "/board/2022/shreyas-khan.webp": [
+      "team-years/2022"
+    ],
+    "/board/2022/hemanth-krishna.webp": [
+      "team-years/2022"
+    ],
+    "/board/2022/ansh-sharma.webp": [
+      "team-years/2022"
+    ],
+    "/board/2022/deepankar-jain.webp": [
+      "team-years/2022"
+    ],
+    "/board/2022/amit-krishna-a.webp": [
+      "team-years/2022"
+    ],
+    "/board/2022/anmol-bhardwaj.webp": [
+      "team-years/2022"
+    ],
+    "/board/2022/aryan-vats.webp": [
+      "team-years/2022"
+    ],
+    "/board/2022/sarthak-bhardwaj.webp": [
+      "team-years/2022"
+    ],
+    "/board/2022/rishav-jain.webp": [
+      "team-years/2022"
+    ],
+    "/board/2022/anusha-verma-chandraju.webp": [
+      "team-years/2022"
+    ],
+    "/board/2022/aritri-basu.webp": [
+      "team-years/2022"
+    ],
+    "/board/2023/harsh-avinash.webp": [
+      "team-years/2023"
+    ],
+    "/board/2023/aryan-khubchandani.webp": [
+      "team-years/2023"
+    ],
+    "/board/2023/sumona-sud.webp": [
+      "team-years/2023"
+    ],
+    "/board/2023/chirayu-sharma.webp": [
+      "team-years/2023"
+    ],
+    "/board/2023/aryaman-kolhe.webp": [
+      "team-years/2023"
+    ],
+    "/board/2023/gagan-malvi.webp": [
+      "team-years/2023"
+    ],
+    "/board/2023/swarup-kharul.webp": [
+      "team-years/2023"
+    ],
+    "/board/2023/jeet-kaushik.webp": [
+      "team-years/2023"
+    ],
+    "/board/2023/dhriti-khangrara.webp": [
+      "team-years/2023"
+    ],
+    "/board/2023/pramika-garg.webp": [
+      "team-years/2023"
+    ],
+    "/board/2023/ananya-grover.webp": [
+      "team-years/2023"
+    ],
+    "/board/2023/aishwarya-manjunath.webp": [
+      "team-years/2023"
+    ],
+    "/board/2023/vaishnavi-mangnale.webp": [
+      "team-years/2023"
+    ],
+    "/board/2024/manav-muthanna.webp": [
+      "team-years/2024"
+    ],
+    "/board/2024/anand-rajaram.webp": [
+      "team-years/2024"
+    ],
+    "/board/2024/shambhavi-sinha.webp": [
+      "team-years/2024"
+    ],
+    "/board/2024/saharsh-bhansali.webp": [
+      "team-years/2024"
+    ],
+    "/board/2024/rohan-khatua.webp": [
+      "team-years/2024"
+    ],
+    "/board/2024/sarthak-gupta.webp": [
+      "team-years/2024"
+    ],
+    "/board/2024/vidit-kothari.webp": [
+      "team-years/2024"
+    ],
+    "/board/2024/ritaank-gunjesh.webp": [
+      "team-years/2024"
+    ],
+    "/board/2024/ojal-binoj-koshy.webp": [
+      "team-years/2024"
+    ],
+    "/board/2024/hari-r-kartha.webp": [
+      "team-years/2024"
+    ],
+    "/board/2024/anshuman-gupta.webp": [
+      "team-years/2024"
+    ],
+    "/board/2024/devanshi-tripathi.webp": [
+      "team-years/2024"
+    ],
+    "/board/2024/aryan-chaudhary.webp": [
+      "team-years/2024"
+    ],
+    "/board/2025/manan-shah.webp": [
+      "team-years/2025"
+    ],
+    "/board/2025/kairav-sheth.webp": [
+      "team-years/2025"
+    ],
+    "/board/2025/sunny-gogoi.webp": [
+      "team-years/2025"
+    ],
+    "/board/2025/eshita-chokhani.webp": [
+      "team-years/2025"
+    ],
+    "/board/2025/yasha-pacholee.webp": [
+      "team-years/2025"
+    ],
+    "/board/2025/tanush-golwala.webp": [
+      "team-years/2025"
+    ],
+    "/board/2025/supratim-ghose.webp": [
+      "team-years/2025"
+    ],
+    "/board/2025/garv-jain.webp": [
+      "team-years/2025"
+    ],
+    "/board/2025/yash-raj-singh.webp": [
+      "team-years/2025"
+    ],
+    "/board/2025/srija-puvvada.webp": [
+      "team-years/2025"
+    ],
+    "/board/2025/harshitaa-kashyap.webp": [
+      "team-years/2025"
+    ],
+    "/board/2025/aastik-narang.webp": [
+      "team-years/2025"
+    ],
+    "/board/2025/shambhavi-paygude.webp": [
+      "team-years/2025"
+    ],
+    "/projects/unipool/projects-unipool-logo.webp": [
+      "design-products/unipool"
+    ],
+    "/design/products/unipool-lockup.png": [
+      "design-products/unipool"
+    ],
+    "/design/products/unipool-icon-home.svg": [
+      "design-products/unipool"
+    ],
+    "/design/products/unipool-icon-search.svg": [
+      "design-products/unipool"
+    ],
+    "/design/products/unipool-icon-map.svg": [
+      "design-products/unipool"
+    ],
+    "/design/products/unipool-icon-location-pin.svg": [
+      "design-products/unipool"
+    ],
+    "/design/products/unipool-icon-message.svg": [
+      "design-products/unipool"
+    ],
+    "/design/products/unipool-icon-bell.svg": [
+      "design-products/unipool"
+    ],
+    "/design/products/unipool-icon-user.svg": [
+      "design-products/unipool"
+    ],
+    "/design/products/unipool-icon-car.svg": [
+      "design-products/unipool"
+    ],
+    "/design/products/examcooker-app-icon.png": [
+      "design-products/examcooker"
+    ],
+    "/design/products/conclave-favicon.svg": [
+      "design-products/conclave"
+    ],
+    "/design/products/conclave-touch-icon.png": [
+      "design-products/conclave"
+    ],
+    "/grep/grep-wordmark.png": [
+      "design-products/grep"
+    ],
+    "/grep/grep-keyboard.svg": [
+      "design-products/grep"
+    ],
+    "/grep/grep-mailbox.svg": [
+      "design-products/grep"
+    ],
+    "/design/logos/acm-horizontal-white.svg": [
+      "design-products/website"
+    ],
+    "/design/logos/acm-diamond-dark.svg": [
+      "design-products/website"
+    ],
+    "/favicon.webp": [
+      "design-products/website"
+    ],
+    "/board/2026/aswani-kumar-cherukuri.webp": [
+      "board-members/aswani-kumar-cherukuri"
+    ],
+    "/board/2026/prakhar-joshi.webp": [
+      "board-members/prakhar-joshi"
+    ],
+    "/board/2026/rohit-sakamuri.webp": [
+      "board-members/rohit-sakamuri"
+    ],
+    "/board/2026/drashti-shukla.webp": [
+      "board-members/drashti-shukla"
+    ],
+    "/board/2026/shaurya-garg.webp": [
+      "board-members/shaurya-garg"
+    ],
+    "/board/2026/ishaan-samdani.webp": [
+      "board-members/ishaan-samdani"
+    ],
+    "/board/2026/rishit-shivam.webp": [
+      "board-members/rishit-shivam"
+    ],
+    "/board/2026/vansh-dhir.webp": [
+      "board-members/vansh-dhir"
+    ],
+    "/board/2026/nishtha-agrawal.webp": [
+      "board-members/nishtha-agrawal"
+    ],
+    "/board/2026/krishika-sureka.webp": [
+      "board-members/krishika-sureka"
+    ],
+    "/board/2026/harshit-narang.webp": [
+      "board-members/harshit-narang"
+    ],
+    "/board/2026/lavanya-jain.webp": [
+      "board-members/lavanya-jain"
+    ],
+    "/board/2026/mahendra-chaudhary.webp": [
+      "board-members/mahendra-chaudhary"
+    ],
+    "/board/2026/navdha-sharma.webp": [
+      "board-members/navdha-sharma"
+    ],
+    "/board/2026/aarjav-jain.webp": [
+      "board-members/aarjav-jain"
+    ],
+    "/board/2026/adheesh-garg.webp": [
+      "board-members/adheesh-garg"
+    ],
+    "/icons/icons-github-icon.webp": [
+      "partners/github"
+    ],
+    "/partners/partner-cloudsploit.webp": [
+      "partners/cloudsploit"
+    ],
+    "/partners/partner-coding-blocks.webp": [
+      "partners/coding-blocks"
+    ],
+    "/partners/partner-fold.webp": [
+      "partners/fold"
+    ],
+    "/partners/partner-slack.webp": [
+      "partners/slack"
+    ],
+    "/partners/partner-devfolio.webp": [
+      "partners/devfolio"
+    ],
+    "/partners/partner-matic.webp": [
+      "partners/matic"
+    ],
+    "/partners/partner-wolfram-language.webp": [
+      "partners/wolfram-language"
+    ],
+    "/partners/partner-bugsee.webp": [
+      "partners/bugsee"
+    ],
+    "/partners/partner-creative-tim.webp": [
+      "partners/creative-tim"
+    ],
+    "/partners/partner-digitalocean.webp": [
+      "partners/digitalocean"
+    ],
+    "/partners/partner-cis.webp": [
+      "partners/cis"
+    ],
+    "/partners/partner-taskade.webp": [
+      "partners/taskade"
+    ],
+    "/partners/partner-jetbrains.webp": [
+      "partners/jetbrains"
+    ],
+    "/partners/partner-invision.webp": [
+      "partners/invision"
+    ],
+    "/partners/partner-geeksforgeeks.webp": [
+      "partners/geeksforgeeks"
+    ],
+    "/partners/partner-ibm.webp": [
+      "partners/ibm"
+    ],
+    "/partners/partner-hasura.webp": [
+      "partners/hasura"
+    ],
+    "/partners/partner-hackerearth.webp": [
+      "partners/hackerearth"
+    ],
+    "/partners/partner-orient-electric.webp": [
+      "partners/orient-electric"
+    ],
+    "/partners/partner-tech-domains.webp": [
+      "partners/tech-domains"
+    ],
+    "/partners/partner-axure.webp": [
+      "partners/axure"
+    ],
+    "/partners/partner-sticker-mule.webp": [
+      "partners/sticker-mule"
+    ],
+    "/partners/partner-cosmos-india.webp": [
+      "partners/cosmos-india"
+    ],
+    "/partners/partner-slang-labs.webp": [
+      "partners/slang-labs"
+    ],
+    "/partners/partner-sketch.webp": [
+      "partners/sketch"
+    ],
+    "/partners/partner-rosenfeld.webp": [
+      "partners/rosenfeld"
+    ],
+    "/partners/partner-glam-studios.webp": [
+      "partners/glam-studios"
+    ],
+    "/partners/partner-easemytrip.webp": [
+      "partners/easemytrip"
+    ],
+    "/partners/partner-into-the-verse.webp": [
+      "partners/into-the-verse"
+    ],
+    "/partners/partner-nuclei.webp": [
+      "partners/nuclei"
+    ],
+    "/partners/partner-hackerrank.webp": [
+      "partners/hackerrank"
+    ],
+    "/partners/partner-urban-jungle.webp": [
+      "partners/urban-jungle"
+    ],
+    "/partners/partner-judge0.webp": [
+      "partners/judge0"
+    ],
+    "/partners/partner-elevenlabs.webp": [
+      "partners/elevenlabs"
+    ],
+    "/partners/partner-runpod.webp": [
+      "partners/runpod"
+    ],
+    "/partners/partner-hey-hoku.webp": [
+      "partners/hey-hoku"
+    ],
+    "/cassettes/cassettes-cassette-tech.webp": [
+      "home-domains/tech"
+    ],
+    "/domains/app/domains-app-android.webp": [
+      "home-domains/tech"
+    ],
+    "/domains/app/domains-app-dart.webp": [
+      "home-domains/tech"
+    ],
+    "/domains/app/domains-app-flutter.webp": [
+      "home-domains/tech"
+    ],
+    "/domains/app/domains-app-java.webp": [
+      "home-domains/tech"
+    ],
+    "/domains/app/domains-app-kotlin.webp": [
+      "home-domains/tech"
+    ],
+    "/domains/app/domains-app-reactjs.webp": [
+      "home-domains/tech"
+    ],
+    "/domains/app/domains-app-swift.webp": [
+      "home-domains/tech"
+    ],
+    "/domains/app/domains-app-typescript.webp": [
+      "home-domains/tech"
+    ],
+    "/domains/web/domains-web-cloudflare.webp": [
+      "home-domains/tech"
+    ],
+    "/domains/web/domains-web-cockroachdb.webp": [
+      "home-domains/tech"
+    ],
+    "/domains/web/domains-web-docker.webp": [
+      "home-domains/tech"
+    ],
+    "/domains/web/domains-web-go-gopher-svgrepo-com.webp": [
+      "home-domains/tech"
+    ],
+    "/domains/web/domains-web-group.webp": [
+      "home-domains/tech"
+    ],
+    "/domains/web/domains-web-nextjs2.webp": [
+      "home-domains/tech"
+    ],
+    "/domains/web/domains-web-nodejs.webp": [
+      "home-domains/tech"
+    ],
+    "/domains/web/domains-web-npm2.webp": [
+      "home-domains/tech"
+    ],
+    "/domains/web/domains-web-postgresql.webp": [
+      "home-domains/tech"
+    ],
+    "/domains/web/domains-web-postman.webp": [
+      "home-domains/tech"
+    ],
+    "/domains/web/domains-web-prisma.webp": [
+      "home-domains/tech"
+    ],
+    "/domains/web/domains-web-redis.webp": [
+      "home-domains/tech"
+    ],
+    "/domains/web/domains-web-tailwindcss.webp": [
+      "home-domains/tech"
+    ],
+    "/aois/tech/aois-tech-app.webp": [
+      "home-domains/tech"
+    ],
+    "/aois/tech/aois-tech-foss.webp": [
+      "home-domains/tech"
+    ],
+    "/aois/tech/aois-tech-gamedev.webp": [
+      "home-domains/tech"
+    ],
+    "/aois/tech/aois-tech-web.webp": [
+      "home-domains/tech"
+    ],
+    "/aois/tech/aois-tech-devops.webp": [
+      "home-domains/tech"
+    ],
+    "/cassettes/cassettes-cassette-cc.webp": [
+      "home-domains/cc"
+    ],
+    "/domains/cc/domains-cc-codeforces-icon.webp": [
+      "home-domains/cc"
+    ],
+    "/domains/cc/domains-cc-cpp.webp": [
+      "home-domains/cc"
+    ],
+    "/domains/cc/domains-cc-icpc-foundation-logo.webp": [
+      "home-domains/cc"
+    ],
+    "/domains/cc/domains-cc-vim.webp": [
+      "home-domains/cc"
+    ],
+    "/cassettes/cassettes-cassette-design.webp": [
+      "home-domains/design"
+    ],
+    "/domains/design/domains-design-ae.webp": [
+      "home-domains/design"
+    ],
+    "/domains/design/domains-design-ai.webp": [
+      "home-domains/design"
+    ],
+    "/domains/design/domains-design-figma.webp": [
+      "home-domains/design"
+    ],
+    "/domains/design/domains-design-final-cut-pro-new.webp": [
+      "home-domains/design"
+    ],
+    "/domains/design/domains-design-ps.webp": [
+      "home-domains/design"
+    ],
+    "/domains/design/domains-design-blender.webp": [
+      "home-domains/design"
+    ],
+    "/aois/design/aois-design-3d.webp": [
+      "home-domains/design"
+    ],
+    "/aois/design/aois-design-illustrations.webp": [
+      "home-domains/design"
+    ],
+    "/aois/design/aois-design-motion-graphics.webp": [
+      "home-domains/design"
+    ],
+    "/aois/design/aois-design-uiux.webp": [
+      "home-domains/design"
+    ],
+    "/aois/design/aois-design-video-editing.webp": [
+      "home-domains/design"
+    ],
+    "/cassettes/cassettes-cassette-research.webp": [
+      "home-domains/research"
+    ],
+    "/domains/research/domains-research-google-colab.webp": [
+      "home-domains/research"
+    ],
+    "/domains/research/domains-research-burp-suite.webp": [
+      "home-domains/research"
+    ],
+    "/domains/research/domains-research-owasp-streamline-simple-icons.webp": [
+      "home-domains/research"
+    ],
+    "/domains/research/domains-research-llvm.webp": [
+      "home-domains/research"
+    ],
+    "/domains/research/domains-research-tensorflow.webp": [
+      "home-domains/research"
+    ],
+    "/domains/research/domains-research-pytorch.webp": [
+      "home-domains/research"
+    ],
+    "/domains/research/domains-research-pandas.webp": [
+      "home-domains/research"
+    ],
+    "/domains/research/domains-research-python.webp": [
+      "home-domains/research"
+    ],
+    "/domains/research/domains-research-qiskit.webp": [
+      "home-domains/research"
+    ],
+    "/aois/research/aois-research-aiml.webp": [
+      "home-domains/research"
+    ],
+    "/aois/research/aois-research-bioinfo.webp": [
+      "home-domains/research"
+    ],
+    "/aois/research/aois-research-blockchain.webp": [
+      "home-domains/research"
+    ],
+    "/aois/research/aois-research-cybersec.webp": [
+      "home-domains/research"
+    ],
+    "/aois/research/aois-research-iot.webp": [
+      "home-domains/research"
+    ],
+    "/aois/research/aois-research-quantum.webp": [
+      "home-domains/research"
+    ],
+    "/cassettes/cassettes-cassette-management.webp": [
+      "home-domains/management"
+    ],
+    "/domains/management/domains-management-slack.webp": [
+      "home-domains/management"
+    ],
+    "/domains/management/domains-management-discord.webp": [
+      "home-domains/management"
+    ],
+    "/domains/management/domains-management-notion-512.webp": [
+      "home-domains/management"
+    ],
+    "/domains/management/domains-management-gmail.webp": [
+      "home-domains/management"
+    ],
+    "/domains/management/domains-management-microsoft-word.webp": [
+      "home-domains/management"
+    ],
+    "/domains/management/domains-management-excel-240.webp": [
+      "home-domains/management"
+    ],
+    "/blogs/blogs-chfailure-blog.webp": [
+      "blog-refs/the-cryptic-hunt-2024-blog"
+    ],
+    "/blogs/blogs-computervision-blog.webp": [
+      "blog-refs/how-do-computers-see-us"
+    ],
+    "/blogs/blogs-examcooker-blog.webp": [
+      "blog-refs/the-chefs-secrets-the-story-behind-examcooker"
+    ],
+    "/blogs/blogs-githappens-blog.webp": [
+      "blog-refs/git-happens"
+    ],
+    "/blogs/blogs-defi-blog.webp": [
+      "blog-refs/defi-101"
+    ],
+    "/blogs/blogs-quantum-blog.webp": [
+      "blog-refs/quantum-timebomb"
+    ],
+    "/blogs/blogs-redis-blog.webp": [
+      "blog-refs/redis-a-stellar-intro"
+    ],
+    "/blogs/blogs-rc-blog.webp": [
+      "blog-refs/rc"
+    ],
+    "/blogs/blogs-microchips-blog.webp": [
+      "blog-refs/how-i-met-your-ai-the-matrix-of-microchips"
+    ],
+    "/blogs/blogs-microinteraction-blog.webp": [
+      "blog-refs/micro-interactions"
+    ],
+    "/domains/tech/tools/tech-tool-nextjs.svg": [
+      "tools-tech/nextjs"
+    ],
+    "/domains/tech/tools/tech-tool-react.svg": [
+      "tools-tech/react"
+    ],
+    "/domains/tech/tools/tech-tool-nodejs.svg": [
+      "tools-tech/nodejs"
+    ],
+    "/domains/tech/tools/tech-tool-go.svg": [
+      "tools-tech/go"
+    ],
+    "/domains/tech/tools/tech-tool-python.svg": [
+      "tools-tech/python"
+    ],
+    "/domains/tech/tools/tech-tool-typescript.svg": [
+      "tools-tech/typescript"
+    ],
+    "/domains/tech/tools/tech-tool-javascript.svg": [
+      "tools-tech/javascript"
+    ],
+    "/domains/tech/tools/tech-tool-tailwindcss.svg": [
+      "tools-tech/tailwindcss"
+    ],
+    "/domains/tech/tools/tech-tool-shadcn.svg": [
+      "tools-tech/shadcn"
+    ],
+    "/domains/tech/tools/tech-tool-prisma.svg": [
+      "tools-tech/prisma"
+    ],
+    "/domains/tech/tools/tech-tool-trpc.svg": [
+      "tools-tech/trpc"
+    ],
+    "/domains/tech/tools/tech-tool-graphql.svg": [
+      "tools-tech/graphql"
+    ],
+    "/domains/tech/tools/tech-tool-apollographql.svg": [
+      "tools-tech/apollographql"
+    ],
+    "/domains/tech/tools/tech-tool-express.svg": [
+      "tools-tech/express"
+    ],
+    "/domains/tech/tools/tech-tool-fastify.svg": [
+      "tools-tech/fastify"
+    ],
+    "/domains/tech/tools/tech-tool-nestjs.svg": [
+      "tools-tech/nestjs"
+    ],
+    "/domains/tech/tools/tech-tool-hono.svg": [
+      "tools-tech/hono"
+    ],
+    "/domains/tech/tools/tech-tool-postgresql.svg": [
+      "tools-tech/postgresql"
+    ],
+    "/domains/tech/tools/tech-tool-mysql.svg": [
+      "tools-tech/mysql"
+    ],
+    "/domains/tech/tools/tech-tool-mongodb.svg": [
+      "tools-tech/mongodb"
+    ],
+    "/domains/tech/tools/tech-tool-redis.svg": [
+      "tools-tech/redis"
+    ],
+    "/domains/tech/tools/tech-tool-cockroachdb.svg": [
+      "tools-tech/cockroachdb"
+    ],
+    "/domains/tech/tools/tech-tool-supabase.svg": [
+      "tools-tech/supabase"
+    ],
+    "/domains/tech/tools/tech-tool-firebase.svg": [
+      "tools-tech/firebase"
+    ],
+    "/domains/tech/tools/tech-tool-docker.svg": [
+      "tools-tech/docker"
+    ],
+    "/domains/tech/tools/tech-tool-kubernetes.svg": [
+      "tools-tech/kubernetes"
+    ],
+    "/domains/tech/tools/tech-tool-nginx.svg": [
+      "tools-tech/nginx"
+    ],
+    "/domains/tech/tools/tech-tool-vercel.svg": [
+      "tools-tech/vercel"
+    ],
+    "/domains/tech/tools/tech-tool-cloudflare.svg": [
+      "tools-tech/cloudflare"
+    ],
+    "/domains/tech/tools/tech-tool-git.svg": [
+      "tools-tech/git"
+    ],
+    "/domains/tech/tools/tech-tool-github.svg": [
+      "tools-tech/github"
+    ],
+    "/domains/tech/tools/tech-tool-postman.svg": [
+      "tools-tech/postman"
+    ],
+    "/domains/tech/tools/tech-tool-flutter.svg": [
+      "tools-tech/flutter"
+    ],
+    "/domains/tech/tools/tech-tool-react-native.svg": [
+      "tools-tech/react-native"
+    ],
+    "/domains/tech/tools/tech-tool-expo.svg": [
+      "tools-tech/expo"
+    ],
+    "/domains/tech/tools/tech-tool-swift.svg": [
+      "tools-tech/swift"
+    ],
+    "/domains/tech/tools/tech-tool-swiftui.svg": [
+      "tools-tech/swiftui"
+    ],
+    "/domains/tech/tools/tech-tool-kotlin.svg": [
+      "tools-tech/kotlin"
+    ],
+    "/domains/tech/tools/tech-tool-jetpack-compose.svg": [
+      "tools-tech/jetpack-compose"
+    ],
+    "/domains/tech/tools/tech-tool-android-studio.svg": [
+      "tools-tech/android-studio"
+    ],
+    "/domains/tech/tools/tech-tool-xcode.svg": [
+      "tools-tech/xcode"
+    ],
+    "/domains/tech/tools/tech-tool-realm.svg": [
+      "tools-tech/realm"
+    ],
+    "/domains/tech/tools/tech-tool-sqlite.svg": [
+      "tools-tech/sqlite"
+    ],
+    "/domains/tech/tools/tech-tool-appwrite.svg": [
+      "tools-tech/appwrite"
+    ],
+    "/domains/tech/tools/tech-tool-fastlane.svg": [
+      "tools-tech/fastlane"
+    ],
+    "/domains/tech/tools/tech-tool-terraform.svg": [
+      "tools-tech/terraform"
+    ],
+    "/domains/tech/tools/tech-tool-ansible.svg": [
+      "tools-tech/ansible"
+    ],
+    "/domains/tech/tools/tech-tool-helm.svg": [
+      "tools-tech/helm"
+    ],
+    "/domains/tech/tools/tech-tool-jenkins.svg": [
+      "tools-tech/jenkins"
+    ],
+    "/domains/tech/tools/tech-tool-github-actions.svg": [
+      "tools-tech/github-actions"
+    ],
+    "/domains/tech/tools/tech-tool-gitlab-ci.svg": [
+      "tools-tech/gitlab-ci"
+    ],
+    "/domains/tech/tools/tech-tool-circleci.svg": [
+      "tools-tech/circleci"
+    ],
+    "/domains/tech/tools/tech-tool-argo-cd.svg": [
+      "tools-tech/argo-cd"
+    ],
+    "/domains/tech/tools/tech-tool-prometheus.svg": [
+      "tools-tech/prometheus"
+    ],
+    "/domains/tech/tools/tech-tool-grafana.svg": [
+      "tools-tech/grafana"
+    ],
+    "/domains/tech/tools/tech-tool-traefik.svg": [
+      "tools-tech/traefik"
+    ],
+    "/domains/tech/tools/tech-tool-aws.svg": [
+      "tools-tech/aws"
+    ],
+    "/domains/tech/tools/tech-tool-azure.svg": [
+      "tools-tech/azure"
+    ],
+    "/domains/tech/tools/tech-tool-gcp.svg": [
+      "tools-tech/gcp"
+    ],
+    "/domains/tech/tools/tech-tool-opentelemetry.svg": [
+      "tools-tech/opentelemetry"
+    ],
+    "/domains/tech/tools/tech-tool-vault.svg": [
+      "tools-tech/vault"
+    ],
+    "/domains/tech/tools/tech-tool-consul.svg": [
+      "tools-tech/consul"
+    ],
+    "/domains/tech/tools/tech-tool-linux.svg": [
+      "tools-tech/linux"
+    ],
+    "/domains/tech/tools/tech-tool-gitlab.svg": [
+      "tools-tech/gitlab"
+    ],
+    "/domains/tech/tools/tech-tool-ubuntu.svg": [
+      "tools-tech/ubuntu"
+    ],
+    "/domains/tech/tools/tech-tool-arch-linux.svg": [
+      "tools-tech/arch-linux"
+    ],
+    "/domains/tech/tools/tech-tool-debian.svg": [
+      "tools-tech/debian"
+    ],
+    "/domains/tech/tools/tech-tool-fedora.svg": [
+      "tools-tech/fedora"
+    ],
+    "/domains/tech/tools/tech-tool-gnu.svg": [
+      "tools-tech/gnu"
+    ],
+    "/domains/tech/tools/tech-tool-gcc.svg": [
+      "tools-tech/gcc"
+    ],
+    "/domains/tech/tools/tech-tool-cmake.svg": [
+      "tools-tech/cmake"
+    ],
+    "/domains/tech/tools/tech-tool-bazel.svg": [
+      "tools-tech/bazel"
+    ],
+    "/domains/tech/tools/tech-tool-meson.svg": [
+      "tools-tech/meson"
+    ],
+    "/domains/tech/tools/tech-tool-nix.svg": [
+      "tools-tech/nix"
+    ],
+    "/domains/tech/tools/tech-tool-homebrew.svg": [
+      "tools-tech/homebrew"
+    ],
+    "/domains/tech/tools/tech-tool-podman.svg": [
+      "tools-tech/podman"
+    ],
+    "/domains/tech/tools/tech-tool-openapi.svg": [
+      "tools-tech/openapi"
+    ],
+    "/domains/tech/tools/tech-tool-apache.svg": [
+      "tools-tech/apache"
+    ],
+    "/domains/tech/tools/tech-tool-neovim.svg": [
+      "tools-tech/neovim"
+    ],
+    "/domains/tech/tools/tech-tool-vim.svg": [
+      "tools-tech/vim"
+    ],
+    "/domains/tech/tools/tech-tool-blender.svg": [
+      "tools-tech/blender"
+    ],
+    "/domains/tech/tools/tech-tool-krita.svg": [
+      "tools-tech/krita"
+    ],
+    "/domains/tech/tools/tech-tool-gimp.svg": [
+      "tools-tech/gimp"
+    ],
+    "/domains/tech/tools/tech-tool-libreoffice.svg": [
+      "tools-tech/libreoffice"
+    ],
+    "/domains/tech/tools/tech-tool-unity.svg": [
+      "tools-tech/unity"
+    ],
+    "/domains/tech/tools/tech-tool-unreal-engine.svg": [
+      "tools-tech/unreal-engine"
+    ],
+    "/domains/tech/tools/tech-tool-godot.svg": [
+      "tools-tech/godot"
+    ],
+    "/domains/tech/tools/tech-tool-houdini.svg": [
+      "tools-tech/houdini"
+    ],
+    "/domains/tech/tools/tech-tool-aseprite.svg": [
+      "tools-tech/aseprite"
+    ],
+    "/domains/tech/tools/tech-tool-spine.svg": [
+      "tools-tech/spine"
+    ],
+    "/domains/tech/tools/tech-tool-rive.svg": [
+      "tools-tech/rive"
+    ],
+    "/domains/tech/tools/tech-tool-csharp.svg": [
+      "tools-tech/csharp"
+    ],
+    "/domains/tech/tools/tech-tool-cplusplus.svg": [
+      "tools-tech/cplusplus"
+    ],
+    "/domains/tech/tools/tech-tool-opengl.svg": [
+      "tools-tech/opengl"
+    ],
+    "/domains/tech/tools/tech-tool-vulkan.svg": [
+      "tools-tech/vulkan"
+    ],
+    "/domains/tech/tools/tech-tool-sdl.svg": [
+      "tools-tech/sdl"
+    ],
+    "/domains/tech/tools/tech-tool-rust.svg": [
+      "tools-tech/rust"
+    ],
+    "/domains/design/tools/design-tool-figma.svg": [
+      "tools-design/figma"
+    ],
+    "/domains/design/tools/design-tool-photoshop.svg": [
+      "tools-design/photoshop"
+    ],
+    "/domains/design/tools/design-tool-illustrator.svg": [
+      "tools-design/illustrator"
+    ],
+    "/domains/design/tools/design-tool-after-effects.svg": [
+      "tools-design/after-effects"
+    ],
+    "/domains/design/tools/design-tool-premiere-pro.svg": [
+      "tools-design/premiere-pro"
+    ],
+    "/domains/design/tools/design-tool-blender.svg": [
+      "tools-design/blender"
+    ],
+    "/domains/design/tools/design-tool-unity.svg": [
+      "tools-design/unity"
+    ],
+    "/domains/design/tools/design-tool-unreal-engine.svg": [
+      "tools-design/unreal-engine"
+    ],
+    "/domains/design/tools/design-tool-framer.svg": [
+      "tools-design/framer"
+    ],
+    "/domains/design/tools/design-tool-sketch.svg": [
+      "tools-design/sketch"
+    ],
+    "/domains/design/tools/design-tool-canva.svg": [
+      "tools-design/canva"
+    ],
+    "/domains/design/tools/design-tool-davinci-resolve.svg": [
+      "tools-design/davinci-resolve"
+    ],
+    "/domains/design/tools/design-tool-krita.svg": [
+      "tools-design/krita"
+    ],
+    "/domains/design/tools/design-tool-coreldraw.svg": [
+      "tools-design/coreldraw"
+    ],
+    "/domains/design/tools/design-tool-lightroom.svg": [
+      "tools-design/lightroom"
+    ],
+    "/domains/design/tools/design-tool-indesign.svg": [
+      "tools-design/indesign"
+    ],
+    "/domains/design/tools/design-tool-affinity-designer.svg": [
+      "tools-design/affinity-designer"
+    ],
+    "/domains/design/tools/design-tool-affinity-photo.svg": [
+      "tools-design/affinity-photo"
+    ],
+    "/domains/design/tools/design-tool-affinity-publisher.svg": [
+      "tools-design/affinity-publisher"
+    ],
+    "/domains/design/tools/design-tool-houdini.svg": [
+      "tools-design/houdini"
+    ],
+    "/domains/design/tools/design-tool-rive.svg": [
+      "tools-design/rive"
+    ],
+    "/domains/design/tools/design-tool-spline.svg": [
+      "tools-design/spline"
+    ],
+    "/domains/design/tools/design-tool-gsap.svg": [
+      "tools-design/gsap"
+    ],
+    "/domains/design/tools/design-tool-final-cut-pro.svg": [
+      "tools-design/final-cut-pro"
+    ],
+    "/domains/design/tools/design-tool-gimp.svg": [
+      "tools-design/gimp"
+    ],
+    "/domains/design/tools/design-tool-shadcn.svg": [
+      "tools-design/shadcn"
+    ],
+    "/domains/design/tools/design-tool-higgsfield.svg": [
+      "tools-design/higgsfield"
+    ],
+    "/domains/research/tools/research-tool-python.svg": [
+      "tools-research/python"
+    ],
+    "/domains/research/tools/research-tool-pytorch.svg": [
+      "tools-research/pytorch"
+    ],
+    "/domains/research/tools/research-tool-tensorflow.svg": [
+      "tools-research/tensorflow"
+    ],
+    "/domains/research/tools/research-tool-keras.svg": [
+      "tools-research/keras"
+    ],
+    "/domains/research/tools/research-tool-huggingface.svg": [
+      "tools-research/huggingface"
+    ],
+    "/domains/research/tools/research-tool-langchain.svg": [
+      "tools-research/langchain"
+    ],
+    "/domains/research/tools/research-tool-pandas.svg": [
+      "tools-research/pandas"
+    ],
+    "/domains/research/tools/research-tool-numpy.svg": [
+      "tools-research/numpy"
+    ],
+    "/domains/research/tools/research-tool-scikit-learn.svg": [
+      "tools-research/scikit-learn"
+    ],
+    "/domains/research/tools/research-tool-opencv.svg": [
+      "tools-research/opencv"
+    ],
+    "/domains/research/tools/research-tool-jupyter.svg": [
+      "tools-research/jupyter"
+    ],
+    "/domains/research/tools/research-tool-google-colab.svg": [
+      "tools-research/google-colab"
+    ],
+    "/domains/research/tools/research-tool-qiskit.svg": [
+      "tools-research/qiskit"
+    ],
+    "/domains/research/tools/research-tool-pennylane.svg": [
+      "tools-research/pennylane"
+    ],
+    "/domains/research/tools/research-tool-solidity.svg": [
+      "tools-research/solidity"
+    ],
+    "/domains/research/tools/research-tool-hardhat.svg": [
+      "tools-research/hardhat"
+    ],
+    "/domains/research/tools/research-tool-openzeppelin.svg": [
+      "tools-research/openzeppelin"
+    ],
+    "/domains/research/tools/research-tool-ethereum.svg": [
+      "tools-research/ethereum"
+    ],
+    "/domains/research/tools/research-tool-ipfs.svg": [
+      "tools-research/ipfs"
+    ],
+    "/domains/research/tools/research-tool-ghidra.svg": [
+      "tools-research/ghidra"
+    ],
+    "/domains/research/tools/research-tool-burp-suite.svg": [
+      "tools-research/burp-suite"
+    ],
+    "/domains/research/tools/research-tool-owasp-zap.svg": [
+      "tools-research/owasp-zap"
+    ],
+    "/domains/research/tools/research-tool-wireshark.svg": [
+      "tools-research/wireshark"
+    ],
+    "/domains/research/tools/research-tool-nmap.svg": [
+      "tools-research/nmap"
+    ],
+    "/domains/research/tools/research-tool-metasploit.svg": [
+      "tools-research/metasploit"
+    ],
+    "/domains/research/tools/research-tool-kali-linux.svg": [
+      "tools-research/kali-linux"
+    ],
+    "/domains/research/tools/research-tool-node-red.svg": [
+      "tools-research/node-red"
+    ],
+    "/domains/research/tools/research-tool-arduino.svg": [
+      "tools-research/arduino"
+    ],
+    "/domains/research/tools/research-tool-platformio.svg": [
+      "tools-research/platformio"
+    ],
+    "/domains/research/tools/research-tool-esp-idf.svg": [
+      "tools-research/esp-idf"
+    ],
+    "/domains/research/tools/research-tool-tensorflow-lite.svg": [
+      "tools-research/tensorflow-lite"
+    ],
+    "/domains/research/tools/research-tool-mqtt.svg": [
+      "tools-research/mqtt"
+    ],
+    "/domains/research/tools/research-tool-raspberry-pi.svg": [
+      "tools-research/raspberry-pi"
+    ],
+    "/domains/research/tools/research-tool-biopython.svg": [
+      "tools-research/biopython"
+    ],
+    "/domains/research/tools/research-tool-blast.svg": [
+      "tools-research/blast"
+    ],
+    "/domains/research/tools/research-tool-galaxy.svg": [
+      "tools-research/galaxy"
+    ],
+    "/domains/research/tools/research-tool-llvm.svg": [
+      "tools-research/llvm"
+    ],
+    "/domains/research/tools/research-tool-docker.svg": [
+      "tools-research/docker"
+    ],
+    "/domains/research/tools/research-tool-linux.svg": [
+      "tools-research/linux"
+    ],
+    "/domains/research/tools/research-tool-git.svg": [
+      "tools-research/git"
+    ],
+    "/domains/management/tools/management-tool-notion.svg": [
+      "tools-management/notion"
+    ],
+    "/domains/management/tools/management-tool-slack.svg": [
+      "tools-management/slack"
+    ],
+    "/domains/management/tools/management-tool-discord.svg": [
+      "tools-management/discord"
+    ],
+    "/domains/management/tools/management-tool-gmail.svg": [
+      "tools-management/gmail"
+    ],
+    "/domains/management/tools/management-tool-googleworkspace.svg": [
+      "tools-management/googleworkspace"
+    ],
+    "/domains/management/tools/management-tool-googlesheets.svg": [
+      "tools-management/googlesheets"
+    ],
+    "/domains/management/tools/management-tool-googledrive.svg": [
+      "tools-management/googledrive"
+    ],
+    "/domains/management/tools/management-tool-googlemeet.svg": [
+      "tools-management/googlemeet"
+    ],
+    "/domains/management/tools/management-tool-microsoftword.svg": [
+      "tools-management/microsoftword"
+    ],
+    "/domains/management/tools/management-tool-microsoftexcel.svg": [
+      "tools-management/microsoftexcel"
+    ],
+    "/domains/management/tools/management-tool-microsoftpowerpoint.svg": [
+      "tools-management/microsoftpowerpoint"
+    ],
+    "/domains/management/tools/management-tool-microsoftteams.svg": [
+      "tools-management/microsoftteams"
+    ],
+    "/domains/management/tools/management-tool-trello.svg": [
+      "tools-management/trello"
+    ],
+    "/domains/management/tools/management-tool-asana.svg": [
+      "tools-management/asana"
+    ],
+    "/domains/management/tools/management-tool-linear.svg": [
+      "tools-management/linear"
+    ],
+    "/domains/management/tools/management-tool-canva.svg": [
+      "tools-management/canva"
+    ],
+    "/domains/management/tools/management-tool-figma.svg": [
+      "tools-management/figma"
+    ],
+    "/domains/management/tools/management-tool-linkedin.svg": [
+      "tools-management/linkedin"
+    ],
+    "/domains/management/tools/management-tool-instagram.svg": [
+      "tools-management/instagram"
+    ],
+    "/domains/management/tools/management-tool-twitter.svg": [
+      "tools-management/twitter"
+    ],
+    "/domains/management/tools/management-tool-mailchimp.svg": [
+      "tools-management/mailchimp"
+    ],
+    "/domains/management/tools/management-tool-hubspot.svg": [
+      "tools-management/hubspot"
+    ],
+    "/domains/management/tools/management-tool-calendly.svg": [
+      "tools-management/calendly"
+    ],
+    "/domains/management/tools/management-tool-zoom.svg": [
+      "tools-management/zoom"
+    ],
+    "/domains/cc/tools/cc-tool-leetcode.svg": [
+      "tools-cc/leetcode"
+    ],
+    "/domains/cc/tools/cc-tool-codeforces.svg": [
+      "tools-cc/codeforces"
+    ],
+    "/domains/cc/tools/cc-tool-hackerrank.svg": [
+      "tools-cc/hackerrank"
+    ],
+    "/domains/cc/tools/cc-tool-codechef.svg": [
+      "tools-cc/codechef"
+    ],
+    "/domains/cc/tools/cc-tool-atcoder.svg": [
+      "tools-cc/atcoder"
+    ],
+    "/domains/cc/tools/cc-tool-hackerearth.svg": [
+      "tools-cc/hackerearth"
+    ],
+    "/domains/cc/tools/cc-tool-geeksforgeeks.svg": [
+      "tools-cc/geeksforgeeks"
+    ],
+    "/domains/cc/tools/cc-tool-topcoder.svg": [
+      "tools-cc/topcoder"
+    ],
+    "/domains/cc/tools/cc-tool-cplusplus.svg": [
+      "tools-cc/cplusplus"
+    ],
+    "/domains/cc/tools/cc-tool-python.svg": [
+      "tools-cc/python"
+    ],
+    "/domains/cc/tools/cc-tool-java.svg": [
+      "tools-cc/java"
+    ],
+    "/domains/cc/tools/cc-tool-gcc.svg": [
+      "tools-cc/gcc"
+    ],
+    "/domains/cc/tools/cc-tool-vscode.svg": [
+      "tools-cc/vscode"
+    ],
+    "/domains/cc/tools/cc-tool-vim.svg": [
+      "tools-cc/vim"
+    ],
+    "/domains/cc/tools/cc-tool-github.svg": [
+      "tools-cc/github"
+    ],
+    "/domains/cc/tools/cc-tool-git.svg": [
+      "tools-cc/git"
+    ],
+    "/domains/cc/tools/cc-tool-linux.svg": [
+      "tools-cc/linux"
+    ],
+    "/aois/tech/cassettes/aois-tech-cassettes-appdev.webp": [
+      "aois-tech/appdev"
+    ],
+    "/events/events-c2c-cassette.webp": [
+      "aois-tech/appdev",
+      "aois-tech/webdev",
+      "singleton:domain-management"
+    ],
+    "/aois/tech/cassettes/aois-tech-cassettes-webdev.webp": [
+      "aois-tech/webdev"
+    ],
+    "/aois/tech/cassettes/aois-tech-cassettes-foss.webp": [
+      "aois-tech/foss"
+    ],
+    "/aois/tech/cassettes/aois-tech-cassettes-gamestudios.webp": [
+      "aois-tech/gamestudios"
+    ],
+    "/aois/tech/cassettes/aois-tech-cassettes-devops.webp": [
+      "aois-tech/devops"
+    ],
+    "/cassettes/cassettes-cassette-tech.svg": [
+      "aois-tech/devops"
+    ],
+    "/aois/design/cassettes/aois-design-cassettes-uiux.webp": [
+      "aois-design/uiux"
+    ],
+    "/aois/design/cassettes/aois-design-cassettes-illustrations.webp": [
+      "aois-design/illustrations"
+    ],
+    "/aois/design/cassettes/aois-design-cassettes-motiongraphics.webp": [
+      "aois-design/motion-graphics"
+    ],
+    "/aois/design/works/aois-design-works-ig-DFAx7IySwDk.webp": [
+      "aois-design/motion-graphics"
+    ],
+    "/aois/design/works/aois-design-works-ig-DOIsnc3Elfz.webp": [
+      "aois-design/motion-graphics",
+      "aois-design/video-editing"
+    ],
+    "/aois/design/works/aois-design-works-yt-tHOMKNF29u4.webp": [
+      "aois-design/motion-graphics",
+      "aois-design/video-editing"
+    ],
+    "/aois/design/works/aois-design-works-ig-DZztruly_0a.webp": [
+      "aois-design/motion-graphics"
+    ],
+    "/aois/design/works/aois-design-works-yt-Rdrg_lSXtgE.webp": [
+      "aois-design/motion-graphics",
+      "aois-design/3d"
+    ],
+    "/aois/design/works/aois-design-works-yt-uv73-uuGcsk.webp": [
+      "aois-design/motion-graphics"
+    ],
+    "/aois/design/works/aois-design-works-yt-nRVoQCC4EGA.webp": [
+      "aois-design/motion-graphics"
+    ],
+    "/aois/design/works/aois-design-works-yt-fZd-Kz_U5MI.webp": [
+      "aois-design/motion-graphics"
+    ],
+    "/aois/design/works/aois-design-works-ig-CjDeKtBA8HM.webp": [
+      "aois-design/motion-graphics"
+    ],
+    "/aois/design/works/aois-design-works-ig-CpVZT5ugvDa.webp": [
+      "aois-design/motion-graphics"
+    ],
+    "/aois/design/works/aois-design-works-ig-C0HCzlJvmMj.webp": [
+      "aois-design/motion-graphics"
+    ],
+    "/aois/design/works/aois-design-works-ig-C1Z-v7MPdkN.webp": [
+      "aois-design/motion-graphics",
+      "aois-design/video-editing"
+    ],
+    "/aois/design/works/aois-design-works-ig-C89eXbHvHOC.webp": [
+      "aois-design/motion-graphics"
+    ],
+    "/aois/design/works/aois-design-works-ig-C-P5bWNp-BO.webp": [
+      "aois-design/motion-graphics"
+    ],
+    "/aois/design/works/aois-design-works-ig-C-fW66VvmO3.webp": [
+      "aois-design/motion-graphics"
+    ],
+    "/aois/design/works/aois-design-works-ig-C_2_GxdPTFH.webp": [
+      "aois-design/motion-graphics"
+    ],
+    "/aois/design/works/aois-design-works-ig-DAJH_k4vt5u.webp": [
+      "aois-design/motion-graphics"
+    ],
+    "/aois/design/works/aois-design-works-ig-DB_td3MpjLy.webp": [
+      "aois-design/motion-graphics"
+    ],
+    "/aois/design/works/aois-design-works-ig-DEiI0DnSX4x.webp": [
+      "aois-design/motion-graphics",
+      "aois-design/video-editing"
+    ],
+    "/aois/design/works/aois-design-works-ig-DOJu3HzkoWd.webp": [
+      "aois-design/motion-graphics",
+      "aois-design/video-editing"
+    ],
+    "/aois/design/works/aois-design-works-ig-DPEFiockvDl.webp": [
+      "aois-design/motion-graphics"
+    ],
+    "/aois/design/works/aois-design-works-ig-DUfhCWQEkyX.webp": [
+      "aois-design/motion-graphics"
+    ],
+    "/aois/design/cassettes/aois-design-cassettes-3d.webp": [
+      "aois-design/3d"
+    ],
+    "/aois/design/works/aois-design-works-yt-yROgeFeoOAo.webp": [
+      "aois-design/3d",
+      "aois-design/video-editing"
+    ],
+    "/aois/design/works/aois-design-works-ig-CikTCbdgJVL.webp": [
+      "aois-design/3d"
+    ],
+    "/aois/design/works/aois-design-works-ig-DOATYouErEk.webp": [
+      "aois-design/3d"
+    ],
+    "/aois/design/works/aois-design-works-ig-DPCbtT1EzaO.webp": [
+      "aois-design/3d"
+    ],
+    "/aois/design/works/aois-design-works-ig-DUWDekTkgRE.webp": [
+      "aois-design/3d"
+    ],
+    "/aois/design/works/aois-design-works-ig-DUZ6CD0Acf3.webp": [
+      "aois-design/3d"
+    ],
+    "/aois/design/cassettes/aois-design-cassettes-video-editing.webp": [
+      "aois-design/video-editing"
+    ],
+    "/aois/design/works/aois-design-works-yt-qf84GjdWBSY.webp": [
+      "aois-design/video-editing"
+    ],
+    "/aois/design/works/aois-design-works-yt-Br65LiZmOA4.webp": [
+      "aois-design/video-editing"
+    ],
+    "/aois/design/works/aois-design-works-yt-moRwDA0pHSk.webp": [
+      "aois-design/video-editing"
+    ],
+    "/aois/design/works/aois-design-works-yt-aL5iNSCdJlQ.webp": [
+      "aois-design/video-editing"
+    ],
+    "/aois/design/works/aois-design-works-yt-1evjuued5Ao.webp": [
+      "aois-design/video-editing"
+    ],
+    "/aois/design/works/aois-design-works-yt-FF5XqPccatk.webp": [
+      "aois-design/video-editing"
+    ],
+    "/aois/design/works/aois-design-works-yt-9YyPB4jK1lQ.webp": [
+      "aois-design/video-editing"
+    ],
+    "/aois/design/works/aois-design-works-ig-CyDjOzsJWgu.webp": [
+      "aois-design/video-editing"
+    ],
+    "/aois/design/works/aois-design-works-ig-C4YPlHhvnGC.webp": [
+      "aois-design/video-editing"
+    ],
+    "/aois/design/works/aois-design-works-ig-C6ioT8EvPK1.webp": [
+      "aois-design/video-editing"
+    ],
+    "/aois/design/works/aois-design-works-ig-C9FT3tuPZEh.webp": [
+      "aois-design/video-editing"
+    ],
+    "/aois/design/works/aois-design-works-ig-C92L7EOJBxX.webp": [
+      "aois-design/video-editing"
+    ],
+    "/aois/design/works/aois-design-works-ig-C_kIncKPwP9.webp": [
+      "aois-design/video-editing"
+    ],
+    "/aois/design/works/aois-design-works-ig-DEP_b1-yaco.webp": [
+      "aois-design/video-editing"
+    ],
+    "/aois/design/works/aois-design-works-ig-DFP_GoRpv3W.webp": [
+      "aois-design/video-editing"
+    ],
+    "/aois/design/works/aois-design-works-ig-DG0dCpiSk58.webp": [
+      "aois-design/video-editing"
+    ],
+    "/aois/design/works/aois-design-works-ig-DOO4J2njBuP.webp": [
+      "aois-design/video-editing"
+    ],
+    "/aois/design/works/aois-design-works-ig-DP5dgCvkrWo.webp": [
+      "aois-design/video-editing"
+    ],
+    "/aois/design/works/aois-design-works-ig-DQoOvq5EmWJ.webp": [
+      "aois-design/video-editing"
+    ],
+    "/aois/research/cassettes/aois-research-cassettes-aiml.webp": [
+      "aois-research/aiml"
+    ],
+    "/aois/research/cassettes/aois-research-cassettes-cybersecurity.webp": [
+      "aois-research/cybersecurity"
+    ],
+    "/aois/research/cassettes/aois-research-cassettes-iot.webp": [
+      "aois-research/iot"
+    ],
+    "/aois/research/cassettes/aois-research-cassettes-blockchain.webp": [
+      "aois-research/blockchain"
+    ],
+    "/aois/research/cassettes/aois-research-cassettes-quantum.webp": [
+      "aois-research/quantum"
+    ],
+    "/aois/research/cassettes/aois-research-cassettes-bioinformatics.webp": [
+      "aois-research/bioinformatics"
+    ],
+    "/cassettes/cassettes-cassette-management.svg": [
+      "singleton:domain-management"
+    ],
+    "/events/events-the-tiny-hack-cassette.svg": [
+      "singleton:events-section"
+    ]
+  }
+}

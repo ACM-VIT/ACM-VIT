@@ -1,0 +1,20 @@
+{
+  "slug": "cli-rpg",
+  "order": 20,
+  "cassetteSrc": "/projects/items/2/cassetteSrc.webp",
+  "cassetteAlt": "CLI RPG Image",
+  "description1": "CLI-RPG brings interactive storytelling to the command line through an immersive text-based adventure. Players navigate a mysterious world filled with challenging puzzles, compelling characters, and detailed ASCII art, all enhanced by dynamic music and an integrated audio visualizer.",
+  "description2": "The game features a branching narrative with multiple endings, inventory management, and diverse locations to explore. Each playthrough offers unique discoveries as players uncover the deeper mysteries driving the storyline forward. Built with Rust, Ratatui, and Supabase, CLI-RPG demonstrates the creative potential of terminal-based applications. It's a unique fusion of classic adventure gaming with modern command-line interfaces, showcasing how technical innovation can create engaging experiences in unexpected formats.",
+  "primaryBgColor": "#16A34A",
+  "primaryTextColor": "white",
+  "primaryBorderColor": "#FEFCD9",
+  "visitWebsiteText": "VISIT WEBSITE",
+  "visitWebsiteUrl": "https://cli-rpg.acmvit.in",
+  "visitWebsiteBgColor": "#16A34A",
+  "visitWebsiteTextColor": "white",
+  "visitWebsiteBorderColor": "#FEFCD9",
+  "icons": [],
+  "textColor": "white",
+  "contentBlockBackground": "rgba(0, 0, 0, 0.15)",
+  "hoverShadow": "rgba(22, 163, 74, 0.4)"
+}

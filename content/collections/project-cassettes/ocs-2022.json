@@ -1,0 +1,10 @@
+{
+  "slug": "ocs-2022",
+  "order": 40,
+  "kind": "svg",
+  "name": "OCS 2022",
+  "color": "#8710DB",
+  "cassetteSvg": "/projects/cassettes/projects-cassettes-ocs-22.svg",
+  "alt": "OCS '22",
+  "url": "/projects/ocs-22"
+}

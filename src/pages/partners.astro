@@ -1,0 +1,335 @@
+---
+export const prerender = true;
+import fs from "node:fs";
+import path from "node:path";
+import Layout from "../layouts/Layout.astro";
+import "../styles/globals.css";
+import Footer from "../layouts/Footer.astro";
+import { getAssetUrl } from "../utils/cdn";
+import { eventDetails } from "../data/eventDetailsData";
+import PartnerGridCard from "../components/ui/PartnerGridCard.astro";
+import { items as cmsPartnerItems } from "../generated/partners";
+
+type GridPartner = {
+  name: string;
+  logoUrl?: string;
+  link?: string;
+  whiten?: boolean;
+  showName?: boolean;
+};
+
+const toPublic = (p: string) => path.join(process.cwd(), "public", p.replace(/^\//, ""));
+
+// Resolve whether a /public asset actually exists on disk (build runs in Node).
+const publicExists = (p: string) => fs.existsSync(toPublic(p));
+
+// Decide how a logo should sit on the dark cassette:
+//   "whiten" - a pure dark/black glyph -> recolour to white
+//   "none"   - coloured, white, or self-contained tile logo -> leave as-is
+type LogoMode = "whiten" | "none";
+const classifyLogo = (rel: string): LogoMode => {
+  if (!rel.toLowerCase().endsWith(".svg")) return "none";
+  let txt = "";
+  try {
+    txt = fs.readFileSync(toPublic(rel), "utf8");
+  } catch {
+    return "none";
+  }
+  const raw = [
+    ...txt.matchAll(
+      /(?:fill|stroke)\s*[:=]\s*["']?\s*(#[0-9a-fA-F]{3,8}|currentColor|black|white|none)/gi,
+    ),
+  ].map((m) => m[1].toLowerCase());
+  const toRgb = (h: string): [number, number, number] | null => {
+    let x = h.slice(1);
+    if (x.length === 3) x = x.split("").map((c) => c + c).join("");
+    if (x.length < 6) return null;
+    return [
+      parseInt(x.slice(0, 2), 16),
+      parseInt(x.slice(2, 4), 16),
+      parseInt(x.slice(4, 6), 16),
+    ];
+  };
+  const rgbs = raw
+    .filter((c) => c.startsWith("#"))
+    .map(toRgb)
+    .filter((v): v is [number, number, number] => v !== null);
+
+  const hasBlackKw = raw.includes("black") || raw.includes("currentcolor");
+  const hasDarkGray = rgbs.some(([r, g, b]) => Math.max(r, g, b) < 180);
+  const hasWhite =
+    raw.includes("white") || rgbs.some(([r, g, b]) => Math.min(r, g, b) >= 220);
+  const hasDark = hasDarkGray || hasBlackKw;
+
+  // Any clearly saturated colour -> a coloured logo, leave it.
+  if (rgbs.some(([r, g, b]) => Math.max(r, g, b) - Math.min(r, g, b) > 28))
+    return "none";
+
+  const onlyWhite =
+    rgbs.length > 0 &&
+    rgbs.every(([r, g, b]) => Math.min(r, g, b) >= 200) &&
+    !hasBlackKw;
+  if (onlyWhite) return "none"; // white logo meant for dark bg
+
+  // Self-contained tile (dark fill + white glyph, or vice-versa) -> leave it,
+  // it already reads on the dark cassette; recolouring/chipping breaks it.
+  if (hasWhite && hasDark) return "none";
+
+  // Pure dark/black glyph, or no colour info -> whiten.
+  if (hasDark || raw.length === 0) return "whiten";
+
+  return "none";
+};
+
+// Normalise a brand name so variants across editions collapse to one key.
+const normalizeName = (n: string) =>
+  n
+    .trim()
+    .toLowerCase()
+    .replace(/\b(rp|inc\.?|pvt\.?|ltd\.?|labs|language|alpha|projects|company|construction)\b/g, "")
+    .replace(/[^a-z0-9]+/g, "")
+    .trim();
+
+// Known partner homepages, keyed by brand name. Applied to both CMS partners
+// (as a fallback when they have no link) and event-edition sponsors (which ship
+// no link at all). Brands we couldn't confidently resolve are left out -> no link.
+const linkByName: Record<string, string> = {
+  "AnitaB.org": "https://anitab.org",
+  "Balsamiq": "https://balsamiq.com",
+  "Docker": "https://www.docker.com",
+  "Egghead.io": "https://egghead.io",
+  "GitLab": "https://gitlab.com",
+  "Iconscout": "https://iconscout.com",
+  "Jenkins": "https://www.jenkins.io",
+  "O'Reilly": "https://www.oreilly.com",
+  "Ozonetel": "https://ozonetel.com",
+  "Product Hunt": "https://www.producthunt.com",
+  "Replit": "https://replit.com",
+  "Travis CI": "https://www.travis-ci.com",
+  "Tricentis": "https://www.tricentis.com",
+  "Twilio": "https://www.twilio.com",
+  "Zeplin": "https://zeplin.io",
+  "Zulip": "https://zulip.com",
+  "npm": "https://www.npmjs.com",
+  "Zuddl": "https://www.zuddl.com",
+  "Sashido": "https://www.sashido.io",
+  "EchoAR": "https://www.echo3d.com",
+};
+const linkFor = (name: string): string | undefined =>
+  linkByName[name] ??
+  Object.entries(linkByName).find(([k]) => normalizeName(k) === normalizeName(name))?.[1];
+
+// 1) Official partners from the CMS singleton (each ships a real logo image).
+const cmsPartners: GridPartner[] = cmsPartnerItems.map((p) => {
+  const mode = classifyLogo(p.imageUrl);
+  return {
+    name: p.title,
+    logoUrl: getAssetUrl(p.imageUrl),
+    link: p.link && p.link !== "#" ? p.link : linkFor(p.title),
+    whiten: mode === "whiten",
+  };
+});
+
+// Any event sponsor that matches a CMS partner is a duplicate -> drop the event
+// version, keep the CMS original with its supplied image.
+const cmsBrandKeys = new Set(cmsPartners.map((p) => normalizeName(p.name)));
+const isExcluded = (name: string) => cmsBrandKeys.has(normalizeName(name));
+
+// 2) Every sponsor/partner that appears across event editions, deduped by both
+// name and logo file (so "Axure" / "Axure RP" -> axure.svg only show once).
+const seenNames = new Set<string>();
+const seenLogos = new Set<string>();
+
+// Flatten all edition sponsors, then keep one entry per brand, preferring the
+// variant that actually has a logo on disk.
+const rawSponsors = Object.values(eventDetails).flatMap((event) =>
+  (event.pastEditions ?? []).flatMap((e) => e.sponsors ?? []),
+);
+const byBrand = new Map<string, GridPartner>();
+for (const s of rawSponsors) {
+  if (isExcluded(s.name)) continue;
+  const nameKey = normalizeName(s.name) || s.name.toLowerCase();
+  const logoOnDisk = s.logo && publicExists(s.logo) ? s.logo : undefined;
+  const logoKey = logoOnDisk ? logoOnDisk.split("/").pop()!.toLowerCase() : "";
+  if (logoKey && seenLogos.has(logoKey)) continue;
+
+  const existing = byBrand.get(nameKey);
+  if (existing) {
+    // Upgrade a name-only entry to a logo one if we find a logo later.
+    if (!existing.logoUrl && logoOnDisk) {
+      const mode = classifyLogo(logoOnDisk);
+      existing.logoUrl = getAssetUrl(logoOnDisk);
+      existing.whiten = mode === "whiten";
+      seenLogos.add(logoKey);
+    }
+    continue;
+  }
+  if (logoKey) seenLogos.add(logoKey);
+  seenNames.add(nameKey);
+  const mode = logoOnDisk ? classifyLogo(logoOnDisk) : "none";
+  byBrand.set(nameKey, {
+    name: s.name,
+    logoUrl: logoOnDisk ? getAssetUrl(logoOnDisk) : undefined,
+    link: linkFor(s.name),
+    whiten: mode === "whiten",
+    // Label every added event partner with its company name.
+    showName: true,
+  });
+}
+const eventPartners: GridPartner[] = [...byBrand.values()];
+
+const allPartners: GridPartner[] = [...cmsPartners, ...eventPartners];
+---
+
+<Layout pageTitle="Partners" backHref="/#partners">
+  <section class="partners-page">
+    <!-- Hero: partners cassette -->
+    <header class="pp-hero">
+      <img
+        src={getAssetUrl("/cassettes/cassettes-partners-cassette.webp")}
+        alt="Partners"
+        class="pp-hero-cassette"
+        loading="eager"
+        decoding="async"
+      />
+      <h1 class="pp-title">Our <span>Partners</span></h1>
+      <p class="pp-lede">
+        Everything we build runs on the trust of the people who back us.
+      </p>
+    </header>
+
+    <!-- Intro copy -->
+    <div class="pp-copy">
+      <p>
+        None of what ACM-VIT does happens in isolation. Every hackathon we host,
+        every workshop we run, and every project we ship is powered by partners
+        who believe in what students can create. From cloud credits and developer
+        tooling to prize pools, mentorship, and on-ground support, our partners
+        turn ambitious ideas into things we can actually put in front of people.
+      </p>
+      <p>
+        Over the years these companies and communities have stood with us through
+        flagship events like Code2Create, Cryptic Hunt, and Reverse Coding, and
+        through the quieter everyday work of growing a technical community. Their
+        support lets us keep our events accessible, our learning open, and our
+        members focused on building rather than worrying about resources.
+      </p>
+      <p>
+        To everyone who has partnered with ACM-VIT, past and present: thank you.
+        You make the work possible.
+      </p>
+    </div>
+
+    <!-- 4-column partner grid -->
+    <div class="pp-grid">
+      {
+        allPartners.map((partner) => (
+          <PartnerGridCard
+            name={partner.name}
+            logoUrl={partner.logoUrl}
+            link={partner.link}
+            whiten={partner.whiten}
+            showName={partner.showName}
+          />
+        ))
+      }
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style>
+  .partners-page {
+    position: relative;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: clamp(2rem, 6vw, 5rem) clamp(1rem, 4vw, 2.5rem) 4rem;
+  }
+
+  /* ── Hero ── */
+  .pp-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+  .pp-hero-cassette {
+    width: clamp(220px, 44vw, 460px);
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.45));
+  }
+  .pp-title {
+    font-family: "PolySans Trial", sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.4rem, 7vw, 5rem);
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    line-height: 0.95;
+    color: #fefcd9;
+    margin: 0;
+  }
+  .pp-title span {
+    color: #f95f4a;
+  }
+  .pp-lede {
+    font-family: "PolySans Trial", sans-serif;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-weight: 300;
+    color: rgba(254, 252, 217, 0.75);
+    max-width: 42rem;
+    margin: 0;
+  }
+
+  /* ── Copy ── */
+  .pp-copy {
+    max-width: 52rem;
+    margin: 0 auto 3.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+  }
+  .pp-copy p {
+    font-family: "PolySans Trial", sans-serif;
+    font-size: clamp(0.95rem, 1.4vw, 1.08rem);
+    line-height: 1.65;
+    font-weight: 300;
+    color: rgba(254, 252, 217, 0.82);
+    margin: 0;
+  }
+
+  /* ── Grid ── */
+  .pp-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(0.9rem, 2vw, 1.75rem);
+  }
+
+  @media (max-width: 1024px) {
+    .pp-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 680px) {
+    .pp-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  /* ── Light mode ── */
+  :global(html[data-theme="light"]) .pp-title {
+    color: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .pp-lede {
+    color: rgba(26, 26, 26, 0.7);
+  }
+  :global(html[data-theme="light"]) .pp-copy p {
+    color: rgba(26, 26, 26, 0.78);
+  }
+  :global(html[data-theme="light"]) .pp-hero-cassette {
+    filter: drop-shadow(0 16px 40px rgba(0, 0, 0, 0.2));
+  }
+</style>

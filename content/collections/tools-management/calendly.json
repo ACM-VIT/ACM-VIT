@@ -1,0 +1,8 @@
+{
+  "name": "Calendly",
+  "slug": "calendly",
+  "svgFile": "/domains/management/tools/management-tool-calendly.svg",
+  "colorHex": "#006BFF",
+  "monochrome": true,
+  "order": 220
+}

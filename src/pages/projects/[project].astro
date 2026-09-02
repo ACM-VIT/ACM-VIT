@@ -1,0 +1,1469 @@
+---
+export const prerender = true;
+
+import { titleToArt } from "../../utils/titleArt";
+import Layout from "../../layouts/Layout.astro";
+import Footer from "../../layouts/Footer.astro";
+import "../../styles/globals.css";
+import "../../styles/design-domain.css";
+import ToolCard from "../../components/ToolCard.astro";
+import FillButton from "../../components/ui/FillButton.astro";
+import { items as homeProjectItems } from "../../generated/home-projects";
+import { getAssetUrl } from "../../utils/cdn";
+import {
+  projectDetails,
+  projectSlugs,
+  lookupTechTool,
+} from "../../data/projectDetailsData";
+
+export function getStaticPaths() {
+  return projectSlugs.map((slug) => ({ params: { project: slug } }));
+}
+
+const { project } = Astro.params;
+const data = projectDetails[project!];
+if (!data) return Astro.redirect("/projects");
+
+const theme = data.themeColor;
+const themeSecondary = data.themeColorSecondary ?? theme;
+
+// The hero already shows the tagline + shortDescription. Some entries
+// (notably the auto-generated Forktober imports) repeat that same line as
+// longDescription[0]. Drop any About paragraph that duplicates the hero copy
+// so the page never says the same thing twice.
+const normalizeCopy = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+const heroCopy = new Set(
+  [data.shortDescription, data.tagline].filter(Boolean).map((s) => normalizeCopy(s as string))
+);
+const aboutParagraphs = data.longDescription.filter((p) => !heroCopy.has(normalizeCopy(p)));
+
+const titleArt = titleToArt(data.title);
+
+// Deterministic commit graph (53 weeks * 7 days).
+const COLS = 53;
+const ROWS = 7;
+function mulberry32(seed: number) {
+  let a = seed >>> 0;
+  return () => {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const rand = mulberry32(data.commitGraphSeed ?? 42);
+const commitCells: number[] = [];
+for (let i = 0; i < COLS * ROWS; i++) {
+  const r = rand();
+  let level = 0;
+  if (r > 0.78) level = 1;
+  if (r > 0.88) level = 2;
+  if (r > 0.94) level = 3;
+  if (r > 0.985) level = 4;
+  commitCells.push(level);
+}
+
+const otherProjects = Object.values(projectDetails)
+  .filter((p) => p.slug !== data.slug)
+  .slice(0, 6);
+
+// Pull the canonical project cassettes from the CMS (same source the homepage
+// showcase uses) and key them by slug. The CMS has no slug field, so derive one
+// from the cassette alt ("ACMOne Image" -> "acmone"), mirroring index.astro.
+const slugAliases: Record<string, string> = { "ocs website": "ocs-25" };
+const validSlugs = new Set(projectSlugs);
+const resolveSlug = (alt: string): string | undefined => {
+  const base = alt.replace(/\s*image$/i, "").trim().toLowerCase();
+  const derived = slugAliases[base] ?? base.replace(/\s+/g, "-");
+  return validSlugs.has(derived) ? derived : undefined;
+};
+const cassetteBySlug: Record<string, string> = {};
+for (const item of homeProjectItems) {
+  if (!item.cassetteSrc || !item.cassetteAlt) continue;
+  const slug = resolveSlug(item.cassetteAlt);
+  if (slug) cassetteBySlug[slug] = item.cassetteSrc;
+}
+
+const statusMap: Record<typeof data.status, { label: string; dot: string }> = {
+  online: { label: data.statusNote ?? "All systems online", dot: "#42CD9D" },
+  degraded: { label: data.statusNote ?? "Degraded performance", dot: "#F2C94C" },
+  maintenance: { label: data.statusNote ?? "Under maintenance", dot: "#F2994A" },
+  offline: { label: data.statusNote ?? "Offline", dot: "#EB5757" },
+  archived: { label: data.statusNote ?? "Archived", dot: "#9B9B9B" },
+};
+const statusInfo = statusMap[data.status];
+
+// Title is conveyed by the hero logo + tagline; no large h1 watermark.
+
+// Per-slug decoration assets. Easy to extend per project.
+const slugDecorations: Record<string, {
+  motorcycle?: string;
+  parking?: string;
+  bigLogo?: string;
+  storeAppleBadge?: string;
+  storeGoogleBadge?: string;
+}> = {
+  unipool: {
+    motorcycle: getAssetUrl("/projects/unipool/projects-unipool-beep-motorcycle.webp"),
+    parking: getAssetUrl("/projects/unipool/projects-unipool-beep-parking.webp"),
+    bigLogo: getAssetUrl("/projects/unipool/projects-unipool-logo.webp"),
+    storeAppleBadge: getAssetUrl("/projects/unipool/projects-unipool-app-store-badge.svg"),
+    storeGoogleBadge: getAssetUrl("/projects/unipool/projects-unipool-google-play-badge.webp"),
+  },
+  examcooker: {
+    storeAppleBadge: getAssetUrl("/projects/examcooker/projects-examcooker-app-store-badge.svg"),
+    storeGoogleBadge: getAssetUrl("/projects/examcooker/projects-examcooker-google-play-badge.webp"),
+  },
+  acmone: {
+    bigLogo: getAssetUrl("/projects/acmone/projects-acmone-logo.webp"),
+    storeGoogleBadge: getAssetUrl("/projects/unipool/projects-unipool-google-play-badge.webp"),
+  },
+  wenvy: {
+    bigLogo: getAssetUrl("/projects/wenvy/projects-wenvy-koi.svg"),
+  },
+};
+const deco = slugDecorations[data.slug] ?? {};
+
+// Witty footer line per project.
+const footerLines: Record<string, string> = {
+  unipool: "End of the line. Driver says park.",
+  examcooker: "Exam's over. Close your tabs.",
+  "cli-rpg": "Game over. Insert coin to continue.",
+  acmone: "Meeting adjourned. See you next stand-up.",
+  "ocs-22": "Save point reached. Power off the console.",
+  "ocs-23": "$ exit. Connection closed.",
+  localhost: "File saved. Editor closed.",
+  "ocs-25": "Goodbye. Shutting down macOS.",
+  "ocs-26": "Tab closed. See you next cycle.",
+  conclave: "Meeting ended. Everyone left.",
+  wenvy: "Secrets sealed. Terminal clear.",
+  "cli-top": "$ exit. Session closed.",
+};
+const footerLine = footerLines[data.slug] ?? "End of the road.";
+
+const githubLink = data.links.find((l) => l.kind === "github");
+const websiteLink = data.links.find((l) => l.kind === "website");
+const playLink = data.links.find((l) => l.kind === "play");
+const appstoreLink = data.links.find((l) => l.kind === "appstore");
+const githubLinks = data.links.filter((l) => l.kind === "github");
+const demoLinks = data.links.filter((l) => l.kind === "demo");
+const docsLinks = data.links.filter((l) => l.kind === "docs");
+const downloadLinks = data.links.filter((l) => l.kind === "download");
+const otherLinks = data.links.filter(
+  (l) => !["website", "play", "appstore", "github", "download", "docs", "demo"].includes(l.kind ?? "")
+);
+const hasTechStack = data.techStack.some((g) => g.slugs.length > 0);
+
+// The old hero eyebrow ("ACM-VIT · Mobile · Chapter Ops") becomes a row of
+// tag chips beside the status badge; the chapter name is implicit on its own site.
+const typeTags = (data.eyebrow ?? "")
+  .split("·")
+  .map((s) => s.trim())
+  .filter((s) => s && s.toUpperCase() !== "ACM-VIT");
+---
+
+<Layout pageTitle={data.title} backHref="/projects">
+  <script is:inline define:vars={{ themeColor: theme, titleArt }}>
+    console.log("%c" + titleArt, "color:" + themeColor + ";font-family:monospace;line-height:1;");
+  </script>
+  <div class="proj-root" data-slug={data.slug} style={`--proj-color: ${theme}; --proj-color-secondary: ${themeSecondary};`}>
+
+    <!-- HERO -->
+    <section class="proj-hero relative overflow-hidden">
+      <div class="proj-commit-graph absolute inset-0 pointer-events-none" aria-hidden="true">
+        <div class="proj-commit-grid">
+          {commitCells.map((level) => (
+            <span class={`proj-commit-cell proj-commit-l${level}`} />
+          ))}
+        </div>
+        <div class="proj-commit-fade" />
+      </div>
+
+      <div class="proj-hero-inner relative z-10 max-w-350 mx-auto px-6 md:px-10 pt-24 md:pt-32 pb-16 md:pb-24">
+        <div class="grid md:grid-cols-[1.15fr_1fr] gap-10 items-center">
+          <div class="flex flex-col gap-6 md:gap-8 items-start">
+            <div class="flex items-center gap-2.5 flex-wrap" data-anim="up">
+              <span class="proj-status-badge" style={`--dot: ${statusInfo.dot}`}>
+                <span class="proj-status-dot"></span>
+                {statusInfo.label}
+              </span>
+              {typeTags.map((tag) => (
+                <span class="proj-tag-chip">{tag}</span>
+              ))}
+            </div>
+
+            <h1 class="proj-hero-title max-w-2xl" data-anim="up">{data.title}</h1>
+            {data.tagline && data.tagline !== data.shortDescription && (
+              <p class="proj-hero-tagline max-w-2xl" data-anim="up">{data.tagline}</p>
+            )}
+            {data.shortDescription && (
+              <p class="proj-hero-desc max-w-2xl" data-anim="up">{data.shortDescription}</p>
+            )}
+
+            <div class="flex flex-wrap items-center gap-3 mt-2" data-anim="up">
+              {websiteLink && (
+                <FillButton href={websiteLink.href} label="Visit website" external>
+                  <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </FillButton>
+              )}
+              {githubLinks.map((l) => (
+                <FillButton href={l.href} label={l.label || "GitHub"} external>
+                  <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11.04 11.04 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.27 5.68.42.36.79 1.07.79 2.16v3.2c0 .31.21.68.79.56C20.21 21.39 23.5 17.08 23.5 12 23.5 5.73 18.27.5 12 .5Z"/></svg>
+                </FillButton>
+              ))}
+              {demoLinks.map((l) => (
+                <FillButton href={l.href} label={l.label || "Watch demo"} external>
+                  <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                </FillButton>
+              ))}
+              {docsLinks.map((l) => (
+                <FillButton href={l.href} label={l.label || "Docs"} external>
+                  <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+                </FillButton>
+              ))}
+              {downloadLinks.map((l) => (
+                <FillButton href={l.href} label={l.label || "Download"} external>
+                  <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                </FillButton>
+              ))}
+              {otherLinks.map((l) => (
+                <FillButton href={l.href} label={l.label} external>
+                  <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </FillButton>
+              ))}
+            </div>
+
+            {(playLink || appstoreLink) && (
+              <div class="flex flex-wrap items-center gap-3" data-anim="up">
+                {appstoreLink && deco.storeAppleBadge && (
+                  <a
+                    href={appstoreLink.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="proj-store-link"
+                    aria-label="Download on the App Store"
+                  >
+                    <img
+                      src={getAssetUrl(deco.storeAppleBadge)}
+                      alt="Download on the App Store"
+                      class="proj-store-img proj-store-img--apple"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </a>
+                )}
+                {playLink && deco.storeGoogleBadge && (
+                  <a
+                    href={playLink.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="proj-store-link"
+                    aria-label="Get it on Google Play"
+                  >
+                    <img
+                      src={getAssetUrl(deco.storeGoogleBadge)}
+                      alt="Get it on Google Play"
+                      class="proj-store-img proj-store-img--google"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </a>
+                )}
+              </div>
+            )}
+          </div>
+
+          {(deco.bigLogo || data.heroImage || data.cassetteSvg) && (
+            <div class="proj-hero-art" data-anim="in">
+              {deco.bigLogo ? (
+                <img
+                  src={getAssetUrl(deco.bigLogo)}
+                  alt={`${data.title} app icon`}
+                  class="proj-hero-art-icon"
+                  loading="eager"
+                  decoding="async"
+                />
+              ) : data.heroImage ? (
+                <img
+                  src={getAssetUrl(data.heroImage)}
+                  alt={`${data.title} logo`}
+                  class="proj-hero-art-icon"
+                  loading="eager"
+                  decoding="async"
+                />
+              ) : data.cassetteSvg ? (
+                <img
+                  src={getAssetUrl(data.cassetteSvg)}
+                  alt={`${data.title} cassette`}
+                  class="proj-hero-art-cassette"
+                  loading="eager"
+                  decoding="async"
+                />
+              ) : null}
+            </div>
+          )}
+        </div>
+
+        {data.stats && data.stats.length > 0 && (
+          <div class="proj-stats grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 md:mt-16" data-animate-group="stagger">
+            {data.stats.map((s) => (
+              <div class="proj-stat" data-anim="up">
+                <div class="proj-stat-value">{s.value}</div>
+                <div class="proj-stat-label">{s.label}</div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+
+    <hr class="proj-divider" />
+
+    <!-- ABOUT -->
+    <section class="proj-section-narrow" id="proj-about">
+      <div class="proj-section-header">
+        <span class="proj-section-rule" data-anim="up" aria-hidden="true"></span>
+        <h2 class="proj-section-title" data-anim="up">
+          What is <span>{data.title}</span>?
+        </h2>
+      </div>
+      <div class="proj-prose" data-anim="up">
+        {aboutParagraphs.map((p) => <p>{p}</p>)}
+      </div>
+    </section>
+
+    <!-- SCREENS GALLERY -->
+    {data.gallery && data.gallery.length > 0 && (
+      <>
+        <hr class="proj-divider" />
+        <section class="proj-section" id="proj-screens">
+          <div class="proj-section-header">
+            <span class="proj-section-rule" data-anim="up" aria-hidden="true"></span>
+            <h2 class="proj-section-title" data-anim="up">
+              Inside the app - see the <span>screens</span>
+            </h2>
+          </div>
+
+          {data.galleryLayout === "landscape" ? (
+            <div class="proj-landscape-grid" data-anim="up">
+              {data.gallery.map((shot) => (
+                <div class="proj-landscape-card">
+                  <img src={getAssetUrl(shot.src)} alt={shot.alt} class="proj-screen-img" loading="lazy" decoding="async" />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div class="proj-screens-stage" data-anim="up">
+              <div class="proj-screens-row">
+                {data.gallery.map((shot, i) => (
+                  <div class={`proj-screen-card proj-screen-card--${i % 3}`}>
+                    <img src={getAssetUrl(shot.src)} alt={shot.alt} class="proj-screen-img" loading="lazy" decoding="async" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </section>
+      </>
+    )}
+
+    <!-- FEATURES -->
+    {data.features && data.features.length > 0 && (
+      <>
+        <hr class="proj-divider" />
+        <section class="proj-section" id="proj-features">
+          <div class="proj-section-header">
+            <span class="proj-section-rule" data-anim="up" aria-hidden="true"></span>
+            <h2 class="proj-section-title" data-anim="up">
+              Features, built for the <span>actual workflow</span>
+            </h2>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {data.features.map((f) => (
+              <div class="proj-feature-card" data-anim="up">
+                <h3 class="proj-feature-title">{f.title}</h3>
+                <p class="proj-feature-desc">{f.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      </>
+    )}
+
+    <!-- TECH STACK (matches /domains/tech card style) -->
+    {hasTechStack && (
+      <>
+        <hr class="proj-divider" />
+        <section class="proj-section dsg-tools-wrap" id="proj-stack" style={`--domain-color: ${theme};`}>
+          <div class="proj-section-header">
+            <span class="proj-section-rule" data-anim="up" aria-hidden="true"></span>
+            <h2 class="proj-section-title" data-anim="up">
+              What it's <span>built with</span>
+            </h2>
+          </div>
+
+          <div class="flex flex-col gap-12">
+            {data.techStack.map((group) => (
+              <div class="flex flex-col gap-5" data-anim="up">
+                <div class="proj-stack-cat-label">{group.category}</div>
+                <div class="proj-tools-grid">
+                  {group.slugs.map((slug, idx) => {
+                    const tool = lookupTechTool(slug);
+                    if (!tool) return null;
+                    return <ToolCard tool={tool} index={idx} />;
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      </>
+    )}
+
+    <!-- DEVELOPERS -->
+    {data.developers && data.developers.length > 0 && (
+      <>
+        <hr class="proj-divider" />
+        <section class="proj-section" id="proj-developers">
+          <div class="proj-section-header">
+            <span class="proj-section-rule" data-anim="up" aria-hidden="true"></span>
+            <h2 class="proj-section-title" data-anim="up">
+              Who <span>built it</span>
+            </h2>
+          </div>
+          <div class="flex flex-wrap gap-4">
+            {data.developers.map((d) => (
+              <a
+                href={`https://github.com/${d.github}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="proj-person-card"
+                data-gh-user={d.github}
+              >
+                <div class="proj-person-avatar-wrap">
+                  <img
+                    src={`https://github.com/${d.github}.png?size=160`}
+                    alt={d.github}
+                    class="proj-person-avatar"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <div class="proj-person-info">
+                  <div class="proj-person-name" data-gh-name>@{d.github}</div>
+                  {d.role && <div class="proj-person-role">{d.role}</div>}
+                </div>
+                <svg class="proj-person-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M7 17 17 7M9 7h8v8"/>
+                </svg>
+              </a>
+            ))}
+          </div>
+        </section>
+      </>
+    )}
+
+    <!-- DESIGNERS -->
+    {data.designers && data.designers.length > 0 && (
+      <>
+        <hr class="proj-divider" />
+        <section class="proj-section" id="proj-designers">
+          <div class="proj-section-header">
+            <span class="proj-section-rule" data-anim="up" aria-hidden="true"></span>
+            <h2 class="proj-section-title" data-anim="up">
+              Who <span>designed it</span>
+            </h2>
+          </div>
+          <div class="flex flex-wrap gap-4">
+            {data.designers.map((d) => (
+              <a
+                href={d.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="proj-person-card"
+              >
+                <div class="proj-person-avatar-wrap proj-person-avatar-wrap--initial">
+                  <span>{d.name.charAt(0).toUpperCase()}</span>
+                </div>
+                <div class="proj-person-info">
+                  <div class="proj-person-name">{d.name}</div>
+                  <div class="proj-person-role">{d.role ?? "LinkedIn"}</div>
+                </div>
+                <svg class="proj-person-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M7 17 17 7M9 7h8v8"/>
+                </svg>
+              </a>
+            ))}
+          </div>
+        </section>
+      </>
+    )}
+
+    <!-- VERSIONS -->
+    {data.versions && data.versions.length > 0 && (
+      <>
+        <hr class="proj-divider" />
+        <section class="proj-section" id="proj-versions">
+          <div class="proj-section-header">
+            <span class="proj-section-rule" data-anim="up" aria-hidden="true"></span>
+            <h2 class="proj-section-title" data-anim="up">
+              Versions - the <span>changelog</span>, sort of
+            </h2>
+          </div>
+          <div class="flex flex-col gap-6">
+            {data.versions.map((v) => (
+              <article class="proj-version-card" data-anim="up" style={v.themeColor ? `--proj-color: ${v.themeColor};` : undefined}>
+                <div class="flex items-start justify-between gap-4 flex-wrap">
+                  <div>
+                    <div class="proj-version-label">{v.label}</div>
+                    <div class="proj-version-year">{v.year}</div>
+                  </div>
+                </div>
+                <p class="proj-version-blurb">{v.blurb}</p>
+
+                {v.developers && v.developers.length > 0 && (
+                  <div class="mt-4">
+                    <div class="proj-version-sub-label">Developers</div>
+                    <div class="flex flex-wrap gap-2 mt-2">
+                      {v.developers.map((dev) => (
+                        <a
+                          href={`https://github.com/${dev.github}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="proj-mini-person"
+                        >
+                          <img
+                            src={`https://github.com/${dev.github}.png?size=80`}
+                            alt={dev.github}
+                            class="proj-mini-avatar"
+                            loading="lazy"
+                            decoding="async"
+                          />
+                          <span>@{dev.github}</span>
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {v.designers && v.designers.length > 0 && (
+                  <div class="mt-4">
+                    <div class="proj-version-sub-label">Designers</div>
+                    <div class="flex flex-wrap gap-2 mt-2">
+                      {v.designers.map((des) => (
+                        <a
+                          href={des.linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="proj-mini-person"
+                        >
+                          <span class="proj-mini-avatar proj-mini-avatar--initial">{des.name.charAt(0)}</span>
+                          <span>{des.name}</span>
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </article>
+            ))}
+          </div>
+        </section>
+      </>
+    )}
+
+    <!-- OTHER PROJECTS -->
+    {otherProjects.length > 0 && (
+      <>
+        <hr class="proj-divider" />
+        <section class="proj-section">
+          <div class="proj-section-header">
+            <span class="proj-section-rule" data-anim="up" aria-hidden="true"></span>
+            <h2 class="proj-section-title" data-anim="up">
+              More from ACM-VIT - other <span>projects</span>
+            </h2>
+          </div>
+          <div class="proj-other-grid">
+            {otherProjects.map((p) => {
+              const cassette = cassetteBySlug[p.slug] ?? p.cassetteSvg;
+              return (
+                <a href={`/projects/${p.slug}`} class="proj-other-card" data-anim="up">
+                  {cassette && (
+                    <div class="proj-other-card-art">
+                      <img
+                        src={getAssetUrl(cassette)}
+                        alt=""
+                        aria-hidden="true"
+                        class="proj-other-card-art-img"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </div>
+                  )}
+                  <span class="proj-other-card-name">{p.title}</span>
+                  <span class="proj-other-card-tag">{p.tagline}</span>
+                </a>
+              );
+            })}
+          </div>
+        </section>
+      </>
+    )}
+
+    <!-- END-OF-ROAD FOOTER -->
+    {(deco.parking || deco.motorcycle) && (
+      <section class="proj-endroad" data-anim="up">
+        <div class="proj-endroad-row">
+          {deco.parking && (
+            <img src={getAssetUrl(deco.parking)} alt="" aria-hidden="true" class="proj-endroad-img proj-endroad-img--parking" loading="lazy" decoding="async" />
+          )}
+          {deco.motorcycle && (
+            <img src={getAssetUrl(deco.motorcycle)} alt="" aria-hidden="true" class="proj-endroad-img proj-endroad-img--motorcycle" loading="lazy" decoding="async" />
+          )}
+        </div>
+        <p class="proj-endroad-caption">{footerLine}</p>
+        <FillButton href="/projects" label="Back to all projects">
+          <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </FillButton>
+      </section>
+    )}
+
+    {!(deco.parking || deco.motorcycle) && (
+      <section class="proj-back-section">
+        {footerLine && <p class="proj-endroad-caption">{footerLine}</p>}
+        <FillButton href="/projects" label="Back to all projects">
+          <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </FillButton>
+      </section>
+    )}
+  </div>
+
+  <Footer />
+</Layout>
+
+<style>
+  .proj-root { position: relative; }
+
+  /* Per-slug button text contrast override (dark theme - light pastel primaries need dark text) */
+  .proj-root[data-slug="ocs-22"] :global(.fill-btn) {
+    color: #1a2410;
+  }
+  .proj-root[data-slug="ocs-22"] :global(.fill-btn:hover) {
+    color: var(--proj-color);
+  }
+  .proj-root[data-slug="localhost"] :global(.fill-btn) {
+    color: #2a1f15;
+  }
+  .proj-root[data-slug="localhost"] :global(.fill-btn:hover) {
+    color: var(--proj-color);
+  }
+  .proj-root[data-slug="ocs-25"] :global(.fill-btn) {
+    color: #2a0a3d;
+  }
+  .proj-root[data-slug="ocs-25"] :global(.fill-btn:hover) {
+    color: var(--proj-color);
+  }
+  .proj-root[data-slug="ocs-26"] :global(.fill-btn) {
+    color: #1a1607;
+  }
+  .proj-root[data-slug="ocs-26"] :global(.fill-btn:hover) {
+    color: var(--proj-color);
+  }
+
+  /* Wenvy koi art: no rotation, no border-radius, allow natural SVG rendering */
+  .proj-root[data-slug="wenvy"] .proj-hero-art-icon {
+    border-radius: 0;
+    transform: none;
+    filter: drop-shadow(0 10px 40px rgba(240, 49, 4, 0.35));
+    max-width: 340px;
+    width: 70%;
+  }
+  :global(html[data-theme="light"]) .proj-root[data-slug="wenvy"] .proj-hero-art-icon {
+    filter: drop-shadow(0 10px 40px rgba(240, 49, 4, 0.25));
+  }
+
+  /* Light theme: restore white text on dark secondary background */
+  :global(html[data-theme="light"]) .proj-root[data-slug="ocs-22"] :global(.fill-btn),
+  :global(html[data-theme="light"]) .proj-root[data-slug="localhost"] :global(.fill-btn),
+  :global(html[data-theme="light"]) .proj-root[data-slug="ocs-25"] :global(.fill-btn),
+  :global(html[data-theme="light"]) .proj-root[data-slug="ocs-26"] :global(.fill-btn) {
+    color: #ffffff;
+  }
+  :global(html[data-theme="light"]) .proj-root[data-slug="ocs-22"] :global(.fill-btn:hover),
+  :global(html[data-theme="light"]) .proj-root[data-slug="localhost"] :global(.fill-btn:hover),
+  :global(html[data-theme="light"]) .proj-root[data-slug="ocs-25"] :global(.fill-btn:hover),
+  :global(html[data-theme="light"]) .proj-root[data-slug="ocs-26"] :global(.fill-btn:hover) {
+    color: var(--proj-color-secondary);
+  }
+
+  /* ───── Reveal on scroll (sections below hero) ───── */
+  .proj-section [data-anim="up"],
+  .proj-section-narrow [data-anim="up"],
+  .proj-endroad[data-anim="up"] {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.55s cubic-bezier(0.25,0.1,0.25,1), transform 0.55s cubic-bezier(0.25,0.1,0.25,1);
+    will-change: opacity, transform;
+  }
+  .proj-section [data-anim="up"].is-in,
+  .proj-section-narrow [data-anim="up"].is-in,
+  .proj-endroad[data-anim="up"].is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ───── Hero ───── */
+  .proj-hero { min-height: 88vh; }
+  /* Tag chips - replace the old hero eyebrow line */
+  .proj-tag-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-color: color-mix(in srgb, var(--proj-color) 45%, transparent);
+    border-radius: 100px;
+    background: rgba(255, 255, 255, 0.02);
+    background: color-mix(in srgb, var(--proj-color) 8%, transparent);
+    font-family: 'PolySans Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--proj-color);
+  }
+  .proj-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 6px 12px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 100px;
+    background: rgba(255,255,255,0.02);
+    font-family: 'PolySans Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(254, 252, 217, 0.78);
+  }
+  .proj-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--dot);
+    box-shadow: 0 0 12px var(--dot);
+    animation: proj-pulse 2.2s ease-in-out infinite;
+  }
+  @keyframes proj-pulse {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.18); }
+  }
+
+  .proj-hero-title {
+    font-family: 'PolySans Trial', sans-serif;
+    font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+    font-weight: 800;
+    color: #FFFDD0;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    margin: 0;
+  }
+  .proj-hero-tagline {
+    font-family: 'PolySans Trial', sans-serif;
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    font-weight: 500;
+    color: rgba(254, 252, 217, 0.88);
+    line-height: 1.4;
+  }
+  :global(html[data-theme="light"]) .proj-hero-title { color: #1a1a1a; }
+  .proj-hero-desc {
+    font-family: 'PolySans Trial', sans-serif;
+    font-size: clamp(0.95rem, 1.4vw, 1.05rem);
+    line-height: 1.7;
+    color: rgba(254, 252, 217, 0.6);
+  }
+
+  /* ── Hero art (app icon + cassette card) ── */
+  .proj-hero-art {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 360px;
+  }
+  .proj-hero-art::before {
+    content: '';
+    position: absolute;
+    width: 70%;
+    height: 70%;
+    border-radius: 50%;
+    background: var(--proj-color);
+    opacity: 0.22;
+    filter: blur(85px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .proj-hero-art-icon {
+    position: relative;
+    width: 64%;
+    max-width: 340px;
+    height: auto;
+    border-radius: 22%;
+    filter: drop-shadow(0 30px 60px rgba(0,0,0,0.55));
+    z-index: 2;
+    transform: rotate(-4deg);
+  }
+  .proj-hero-art-icon[src$=".svg"] {
+    border-radius: 0;
+    transform: none;
+    filter: drop-shadow(0 10px 30px rgba(0,0,0,0.4));
+    max-width: 400px;
+    width: 80%;
+  }
+  .proj-hero-art-cassette {
+    position: relative;
+    width: 82%;
+    max-width: 420px;
+    transform: rotate(-3deg);
+    filter: drop-shadow(0 18px 36px rgba(0,0,0,0.45));
+    opacity: 1;
+    z-index: 2;
+  }
+  :global(html[data-theme="light"]) .proj-hero-art-cassette {
+    background: #1e1e1e;
+    border-radius: 16px;
+    padding: 8px;
+  }
+
+  /* ── Commit graph backdrop ── */
+  .proj-commit-graph {
+    --cell: 18px;
+    --gap: 4px;
+    opacity: 0.55;
+  }
+  .proj-commit-grid {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(53, var(--cell));
+    grid-auto-rows: var(--cell);
+    grid-auto-flow: column;
+    gap: var(--gap);
+    padding: 6rem 2rem 4rem;
+    transform: rotate(-3deg) translateX(-2%);
+    transform-origin: top left;
+    pointer-events: none;
+  }
+  .proj-commit-cell {
+    width: var(--cell);
+    height: var(--cell);
+    border-radius: 4px;
+    background: rgba(255,255,255,0.04);
+  }
+  .proj-commit-l1 { background: color-mix(in srgb, var(--proj-color) 22%, transparent); }
+  .proj-commit-l2 { background: color-mix(in srgb, var(--proj-color) 42%, transparent); }
+  .proj-commit-l3 { background: color-mix(in srgb, var(--proj-color) 66%, transparent); }
+  .proj-commit-l4 { background: color-mix(in srgb, var(--proj-color) 92%, transparent); box-shadow: 0 0 10px color-mix(in srgb, var(--proj-color) 60%, transparent); }
+  .proj-commit-fade {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at top right, transparent, #0d0e0d 70%),
+      linear-gradient(180deg, transparent 30%, #0d0e0d 95%);
+    pointer-events: none;
+  }
+
+  /* ── CTA ── */
+  .proj-cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 12px 22px;
+    border-radius: 100px;
+    font-family: 'PolySans Trial', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+    background: transparent;
+    color: #FFFDD0;
+    border: 1px solid rgba(255,255,255,0.18);
+  }
+  .proj-cta-secondary:hover {
+    background: var(--proj-color);
+    color: var(--proj-color-secondary, #0d0e0d);
+    border-color: var(--proj-color);
+  }
+
+  /* ── Store badges (official) ── */
+  .proj-store-link {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: transform 0.2s ease, filter 0.2s ease;
+  }
+  .proj-store-link:hover {
+    transform: translateY(-2px);
+  }
+  .proj-store-img {
+    display: block;
+    height: 50px;
+    width: auto;
+  }
+  /* Per Apple guidelines, App Store badge has 4px clear space; match Google Play visual height */
+  .proj-store-img--apple { height: 50px; }
+  .proj-store-img--google { height: 70px; margin: -10px -8px; }
+
+  /* ── Stats ── */
+  .proj-stat {
+    padding: 1rem;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    background: rgba(13,14,13,0.55);
+    backdrop-filter: blur(6px);
+  }
+  .proj-stat-value {
+    font-family: 'PolySans Trial', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+    color: var(--proj-color);
+    letter-spacing: -0.02em;
+  }
+  .proj-stat-label {
+    font-family: 'PolySans Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(254, 252, 217, 0.45);
+    margin-top: 0.35rem;
+  }
+
+  /* ── Section frame ── */
+  .proj-divider {
+    border: 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    margin: 0;
+  }
+  .proj-section { padding: 5rem 1.5rem; max-width: 1400px; margin: 0 auto; position: relative; }
+  .proj-section-narrow { padding: 5rem 1.5rem; max-width: 980px; margin: 0 auto; }
+  .proj-section-header { margin-bottom: 2.5rem; }
+  /* Short accent rule - anchors section titles without an eyebrow label */
+  .proj-section-rule {
+    display: block;
+    width: 3.5rem;
+    height: 3px;
+    border-radius: 100px;
+    background: var(--proj-color);
+    margin-bottom: 1rem;
+  }
+  .proj-section-title {
+    font-family: 'PolySans Trial', sans-serif;
+    font-size: clamp(2rem, 4.2vw, 3.2rem);
+    font-weight: 800;
+    color: #FFFDD0;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+  }
+  .proj-section-title span { color: var(--proj-color); }
+  .proj-prose p {
+    font-family: 'PolySans Trial', sans-serif;
+    color: rgba(254, 252, 217, 0.7);
+    font-size: 1rem;
+    line-height: 1.75;
+    margin: 0 0 1rem;
+  }
+
+  /* ── Screens gallery ── */
+  .proj-screens-stage {
+    position: relative;
+    padding: 1rem 0 2rem;
+  }
+  .proj-screens-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+    align-items: end;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .proj-screen-card {
+    position: relative;
+    border-radius: 32px;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--proj-color-secondary) 80%, #0d0e0d);
+    box-shadow:
+      0 30px 60px rgba(0,0,0,0.45),
+      0 0 0 1px rgba(255,255,255,0.04);
+    aspect-ratio: 9 / 19.5;
+    transition: transform 0.45s cubic-bezier(0.22, 0.9, 0.3, 1.2);
+  }
+  .proj-screen-card--0 { transform: rotate(-5deg) translateY(24px); }
+  .proj-screen-card--1 { transform: translateY(-12px) scale(1.05); z-index: 2; }
+  .proj-screen-card--2 { transform: rotate(5deg) translateY(24px); }
+  .proj-screen-card--0:hover { transform: rotate(-5deg) translateY(-4px); z-index: 3; }
+  .proj-screen-card--1:hover { transform: translateY(-20px) scale(1.05); z-index: 3; }
+  .proj-screen-card--2:hover { transform: rotate(5deg) translateY(-4px); z-index: 3; }
+  .proj-screen-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .proj-landscape-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .proj-landscape-card {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: transform 0.3s ease;
+  }
+  .proj-landscape-card:hover {
+    transform: translateY(-4px);
+  }
+  :global(html[data-theme="light"]) .proj-landscape-card {
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+  /* ── Feature cards ── */
+  .proj-feature-card {
+    padding: 1.25rem 1.25rem 1.5rem;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    background: rgba(255,255,255,0.02);
+    transition: border-color 0.25s ease, transform 0.25s ease;
+  }
+  .proj-feature-card:hover {
+    border-color: color-mix(in srgb, var(--proj-color) 55%, transparent);
+    transform: translateY(-2px);
+  }
+  .proj-feature-title {
+    font-family: 'PolySans Trial', sans-serif;
+    font-weight: 700;
+    color: #FFFDD0;
+    font-size: 1.05rem;
+    margin: 0 0 0.5rem;
+  }
+  .proj-feature-desc {
+    font-family: 'PolySans Trial', sans-serif;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: rgba(254, 252, 217, 0.6);
+    margin: 0;
+  }
+
+  /* ── Tech tools grid (matches /domains/tech card style) ── */
+  .proj-stack-cat-label {
+    font-family: 'PolySans Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(254, 252, 217, 0.5);
+  }
+  .proj-tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.85rem;
+  }
+
+  /* ── People cards ── */
+  .proj-person-card {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 10px 16px 10px 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 100px;
+    background: rgba(255,255,255,0.02);
+    text-decoration: none;
+    transition: all 0.25s ease;
+    min-width: 220px;
+  }
+  .proj-person-card:hover {
+    background: color-mix(in srgb, var(--proj-color) 12%, transparent);
+    border-color: var(--proj-color);
+    transform: translateY(-2px);
+  }
+  .proj-person-avatar-wrap {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: rgba(255,255,255,0.06);
+  }
+  .proj-person-avatar-wrap--initial {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--proj-color) 30%, transparent);
+    color: var(--proj-color);
+    font-family: 'PolySans Trial', sans-serif;
+    font-weight: 800;
+    font-size: 1.2rem;
+  }
+  .proj-person-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .proj-person-info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+  }
+  .proj-person-name {
+    font-family: 'PolySans Trial', sans-serif;
+    font-weight: 600;
+    color: #FFFDD0;
+    font-size: 0.92rem;
+  }
+  .proj-person-role {
+    font-family: 'PolySans Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(254, 252, 217, 0.5);
+    margin-top: 0.25rem;
+  }
+  .proj-person-arrow {
+    color: rgba(254, 252, 217, 0.4);
+    margin-left: auto;
+  }
+  .proj-person-card:hover .proj-person-arrow { color: var(--proj-color); }
+
+  /* ── Versions ── */
+  .proj-version-card {
+    padding: 1.5rem 1.5rem 1.75rem;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px;
+    background: rgba(255,255,255,0.02);
+  }
+  .proj-version-label {
+    font-family: 'PolySans Trial', sans-serif;
+    font-weight: 800;
+    font-size: 1.35rem;
+    color: #FFFDD0;
+    letter-spacing: -0.01em;
+  }
+  .proj-version-year {
+    font-family: 'PolySans Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--proj-color);
+    margin-top: 0.25rem;
+  }
+  .proj-version-blurb {
+    margin-top: 0.85rem;
+    color: rgba(254, 252, 217, 0.7);
+    line-height: 1.65;
+    font-size: 0.95rem;
+  }
+  .proj-version-sub-label {
+    font-family: 'PolySans Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(254, 252, 217, 0.45);
+  }
+  .proj-mini-person {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 4px 12px 4px 4px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 100px;
+    background: rgba(255,255,255,0.02);
+    text-decoration: none;
+    color: rgba(254, 252, 217, 0.78);
+    font-family: 'PolySans Trial', sans-serif;
+    font-size: 0.78rem;
+    transition: all 0.2s ease;
+  }
+  .proj-mini-person:hover {
+    border-color: var(--proj-color);
+    color: #FFFDD0;
+  }
+  .proj-mini-avatar {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .proj-mini-avatar--initial {
+    background: color-mix(in srgb, var(--proj-color) 30%, transparent);
+    color: var(--proj-color);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.75rem;
+  }
+
+  /* ── Other projects strip ── */
+  .proj-other-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+  .proj-other-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    background: rgba(255,255,255,0.02);
+    text-decoration: none;
+    transition: all 0.25s ease;
+  }
+  .proj-other-card:hover {
+    border-color: var(--proj-color);
+    transform: translateY(-2px);
+  }
+  .proj-other-card-art {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    aspect-ratio: 2 / 1;
+    border-radius: 10px;
+    background: #1e1e1e;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+  .proj-other-card-art-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .proj-other-card-name {
+    font-family: 'PolySans Trial', sans-serif;
+    font-weight: 700;
+    color: #FFFDD0;
+    font-size: 1rem;
+  }
+  .proj-other-card-tag {
+    font-family: 'PolySans Trial', sans-serif;
+    font-size: 0.78rem;
+    color: rgba(254, 252, 217, 0.55);
+  }
+
+  /* ── End-of-road footer ── */
+  .proj-endroad {
+    position: relative;
+    padding: 6rem 1.5rem 5rem;
+    text-align: center;
+    overflow: hidden;
+  }
+  .proj-endroad-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+  .proj-endroad-img {
+    display: inline-block;
+    height: auto;
+    filter: drop-shadow(0 12px 24px rgba(0,0,0,0.4));
+  }
+  .proj-endroad-img--parking {
+    width: clamp(100px, 18vw, 160px);
+  }
+  .proj-endroad-img--motorcycle {
+    width: clamp(120px, 22vw, 200px);
+    transform: scaleX(-1);
+  }
+  .proj-endroad-caption {
+    margin: 1.5rem auto 1.5rem;
+    max-width: 480px;
+    font-family: 'PolySans Trial', sans-serif;
+    font-size: 1rem;
+    color: rgba(254, 252, 217, 0.6);
+    letter-spacing: -0.005em;
+  }
+
+  .proj-back-section {
+    padding: 3rem 1.5rem 5rem;
+    text-align: center;
+  }
+  /* ───── LIGHT THEME ───── */
+  :global(html[data-theme="light"]) .proj-section-title,
+  :global(html[data-theme="light"]) .proj-feature-title,
+  :global(html[data-theme="light"]) .proj-version-label,
+  :global(html[data-theme="light"]) .proj-other-card-name,
+  :global(html[data-theme="light"]) .proj-person-name {
+    color: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .proj-hero-tagline { color: rgba(26, 26, 26, 0.85); }
+  :global(html[data-theme="light"]) .proj-hero-desc,
+  :global(html[data-theme="light"]) .proj-prose p,
+  :global(html[data-theme="light"]) .proj-feature-desc,
+  :global(html[data-theme="light"]) .proj-version-blurb,
+  :global(html[data-theme="light"]) .proj-other-card-tag,
+  :global(html[data-theme="light"]) .proj-endroad-caption {
+    color: rgba(26, 26, 26, 0.6);
+  }
+  :global(html[data-theme="light"]) .proj-status-badge {
+    background: rgba(0,0,0,0.04);
+    border-color: rgba(0,0,0,0.1);
+    color: rgba(26,26,26,0.75);
+  }
+  :global(html[data-theme="light"]) .proj-feature-card,
+  :global(html[data-theme="light"]) .proj-version-card,
+  :global(html[data-theme="light"]) .proj-other-card,
+  :global(html[data-theme="light"]) .proj-person-card,
+  :global(html[data-theme="light"]) .proj-mini-person {
+    background: rgba(0,0,0,0.02);
+    border-color: rgba(0,0,0,0.1);
+  }
+  :global(html[data-theme="light"]) .proj-stat {
+    background: rgba(255,255,255,0.85);
+    border-color: rgba(0,0,0,0.18);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  :global(html[data-theme="light"]) .proj-stat-label,
+  :global(html[data-theme="light"]) .proj-stack-cat-label,
+  :global(html[data-theme="light"]) .proj-person-role,
+  :global(html[data-theme="light"]) .proj-version-sub-label {
+    color: rgba(26,26,26,0.55);
+  }
+  :global(html[data-theme="light"]) .proj-divider { border-top-color: rgba(0,0,0,0.08); }
+  :global(html[data-theme="light"]) .proj-commit-fade {
+    background:
+      radial-gradient(ellipse at top right, transparent, #f5f1e3 70%),
+      linear-gradient(180deg, transparent 30%, #f5f1e3 95%);
+  }
+  :global(html[data-theme="light"]) .proj-cta-secondary {
+    color: #1a1a1a;
+    border-color: rgba(0,0,0,0.15);
+  }
+  :global(html[data-theme="light"]) .proj-cta-secondary:hover {
+    background: var(--proj-color-secondary, #263B33);
+    color: #ffffff;
+    border-color: var(--proj-color-secondary, #263B33);
+  }
+  :global(html[data-theme="light"]) .proj-screen-card {
+    background: color-mix(in srgb, var(--proj-color) 12%, #ffffff);
+    box-shadow:
+      0 20px 40px rgba(0,0,0,0.1),
+      0 0 0 1px rgba(0,0,0,0.06);
+  }
+  :global(html[data-theme="light"]) .proj-person-arrow {
+    color: rgba(26,26,26,0.35);
+  }
+  :global(html[data-theme="light"]) .proj-person-card:hover .proj-person-arrow {
+    color: var(--proj-color-secondary, #263B33);
+  }
+  :global(html[data-theme="light"]) .proj-person-card:hover {
+    background: color-mix(in srgb, var(--proj-color) 10%, #ffffff);
+  }
+  :global(html[data-theme="light"]) .proj-store-badge {
+    background: #1a1a1a;
+    border-color: rgba(0,0,0,0.2);
+  }
+  :global(html[data-theme="light"]) .proj-mini-person {
+    color: rgba(26,26,26,0.7);
+  }
+  :global(html[data-theme="light"]) .proj-commit-cell {
+    background: rgba(0,0,0,0.04);
+  }
+  :global(html[data-theme="light"]) .proj-tag-chip,
+  :global(html[data-theme="light"]) .proj-section-title span,
+  :global(html[data-theme="light"]) .proj-stat-value,
+  :global(html[data-theme="light"]) .proj-version-year {
+    color: var(--proj-color-secondary, #263B33);
+  }
+  :global(html[data-theme="light"]) .proj-section-rule {
+    background: var(--proj-color-secondary, #263B33);
+  }
+  :global(html[data-theme="light"]) .proj-feature-card:hover {
+    border-color: color-mix(in srgb, var(--proj-color-secondary, #263B33) 50%, transparent);
+  }
+  :global(html[data-theme="light"]) .proj-other-card:hover,
+  :global(html[data-theme="light"]) .proj-person-card:hover,
+  :global(html[data-theme="light"]) .proj-mini-person:hover {
+    border-color: var(--proj-color-secondary, #263B33);
+  }
+  /* ── Responsive ── */
+  @media (max-width: 880px) {
+    .proj-hero-cassette { order: -1; max-width: 320px; margin: 0 auto; }
+    .proj-hero-cassette-img { max-width: 280px; }
+    .proj-screens-row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; }
+    .proj-screen-card { border-radius: 22px; }
+  }
+  @media (max-width: 560px) {
+    .proj-screens-row { grid-template-columns: 1fr; max-width: 240px; margin: 0 auto; }
+    .proj-screen-card--0, .proj-screen-card--1, .proj-screen-card--2 { transform: none; }
+    .proj-screen-card--0:hover, .proj-screen-card--1:hover, .proj-screen-card--2:hover { transform: translateY(-6px); }
+    .proj-landscape-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 760px) {
+    .proj-commit-graph { --cell: 14px; --gap: 3px; opacity: 0.4; }
+    .proj-stat { padding: 0.85rem; }
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  const init = () => {
+    gsap.ticker.wake();
+    const art = document.querySelector('.proj-hero [data-anim="in"]');
+    if (art) {
+      const icon = art.querySelector('.proj-hero-art-icon');
+      if (icon) gsap.to(icon, { y: -10, duration: 3, ease: "sine.inOut", yoyo: true, repeat: -1 });
+    }
+
+    // Intersection-observer-based reveal - avoids gsap.ticker autoSleep races on this page.
+    const revealEls = document.querySelectorAll(
+      '.proj-section [data-anim="up"], .proj-section-narrow [data-anim="up"], .proj-endroad[data-anim="up"]'
+    );
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            (e.target as HTMLElement).classList.add('is-in');
+            io.unobserve(e.target);
+          }
+        });
+      }, { rootMargin: "0px 0px -12% 0px", threshold: 0.05 });
+      revealEls.forEach((el) => io.observe(el));
+    } else {
+      revealEls.forEach((el) => el.classList.add('is-in'));
+    }
+
+    // Resolve real GitHub display names (best effort)
+    const ghNodes = document.querySelectorAll<HTMLElement>('[data-gh-user]');
+    ghNodes.forEach(async (node) => {
+      const user = node.dataset.ghUser;
+      if (!user) return;
+      try {
+        const res = await fetch(`https://api.github.com/users/${user}`, { headers: { Accept: 'application/vnd.github+json' } });
+        if (!res.ok) return;
+        const data = await res.json() as { name?: string; login?: string };
+        const display = data.name?.trim() || data.login;
+        if (!display) return;
+        const nameEl = node.querySelector<HTMLElement>('[data-gh-name]');
+        if (nameEl) nameEl.textContent = display;
+      } catch { /* silent */ }
+    });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init, { once: true });
+  } else {
+    init();
+  }
+</script>

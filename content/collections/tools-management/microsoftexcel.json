@@ -1,0 +1,8 @@
+{
+  "name": "Microsoft Excel",
+  "slug": "microsoftexcel",
+  "svgFile": "/domains/management/tools/management-tool-microsoftexcel.svg",
+  "colorHex": "#217346",
+  "monochrome": true,
+  "order": 90
+}

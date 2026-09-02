@@ -1,0 +1,77 @@
+---
+interface Props {
+  title: string;
+  imageUrl: string;
+  link: string;
+}
+
+import { getAssetUrl } from "../../utils/cdn";
+const { title, imageUrl, link } = Astro.props;
+
+// Link to the partner's homepage when we have one ("#" means unknown -> plain tile).
+const Tag = link && link !== "#" ? "a" : "div";
+const anchorProps =
+  Tag === "a"
+    ? { href: link, target: "_blank", rel: "noopener noreferrer", "aria-label": title }
+    : {};
+---
+
+<Tag
+  {...anchorProps}
+  class="partner-casette-shell w-[80vw] h-[49vw] sm:w-[30vw] sm:h-[18.4vw] lg:w-[17vw] lg:h-[10.4vw] shadow-lg flex flex-col items-center justify-center relative"
+>
+  <div class="partner-casette-frame z-0 absolute inset-0">
+    <img
+      src={getAssetUrl("/cassettes/cassettes-partner-cassette.webp")}
+      alt="Partner Casette Boilerplate"
+      class="partner-casette-bg w-full h-full object-contain object-center pointer-events-none"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+  <div class="z-10 h-full w-full flex justify-center items-center p-[10%]">
+    <img
+      src={imageUrl}
+      alt={title}
+      class="partner-casette-logo object-contain h-full w-full max-h-[60%] max-w-[60%]"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+</Tag>
+
+<style>
+  .partner-casette-shell {
+    overflow: hidden;
+    background: transparent;
+    border-radius: 16px;
+    text-decoration: none;
+    transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+  a.partner-casette-shell:hover {
+    transform: translateY(-4px);
+  }
+
+  .partner-casette-frame {
+    pointer-events: none;
+    border-radius: inherit;
+    overflow: hidden;
+  }
+
+  .partner-casette-bg {
+    border-radius: inherit;
+  }
+
+  :global(html[data-theme="light"]) .partner-casette-bg {
+    filter: none;
+  }
+
+  :global(html[data-theme="light"]) .partner-casette-shell {
+    background-color: #1a1a1a;
+  }
+
+  :global(html[data-theme="light"]) .partner-casette-logo[src$=".svg"] {
+    filter: brightness(0) saturate(100%) invert(52%) sepia(95%) saturate(1678%)
+      hue-rotate(341deg) brightness(102%) contrast(98%);
+  }
+</style>

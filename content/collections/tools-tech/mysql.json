@@ -1,0 +1,7 @@
+{
+  "name": "MySQL",
+  "slug": "mysql",
+  "svgFile": "/domains/tech/tools/tech-tool-mysql.svg",
+  "colorHex": "#4479A1",
+  "order": 180
+}

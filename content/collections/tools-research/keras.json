@@ -1,0 +1,8 @@
+{
+  "name": "Keras",
+  "slug": "keras",
+  "svgFile": "/domains/research/tools/research-tool-keras.svg",
+  "colorHex": "#D00000",
+  "isDark": true,
+  "order": 30
+}

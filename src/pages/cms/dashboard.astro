@@ -1,0 +1,418 @@
+---
+export const prerender = false; // needs the signed-in identity
+
+import "../../styles/globals.css";
+import "../../styles/cms-theme.css";
+import manifest from "../../generated/manifest.json";
+import { getCmsUser } from "../../platform/access/session";
+import { resolvePermissions } from "../../platform/access/permissions";
+import { requireCmsAuth } from "../../platform/access/guard";
+import { generatedCollections, generatedSingletons } from "../../platform/keystatic/generated-config";
+import CmsThemeInit from "../../components/cms/CmsThemeInit.astro";
+import CmsThemeToggle from "../../components/cms/CmsThemeToggle.astro";
+
+const gate = requireCmsAuth(Astro);
+if (gate) return gate;
+
+const user = await getCmsUser(Astro.cookies);
+const perms = resolvePermissions(user.username);
+
+const camel = (k: string) => k.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+const counts = (manifest as any).content as Record<string, { count: number }>;
+const countOf = (kebab: string) => counts[kebab]?.count;
+
+// Keys that actually exist as routes in the Keystatic admin UI. Anything the
+// dashboard lists that ISN'T here (e.g. a `keystatic: false` collection like
+// project-cassettes) has no admin route - linking it 404s. We render those as
+// non-clickable "JSON only" cards instead of dead links.
+const studioKeys = new Set<string>([
+  ...Object.keys(generatedCollections),
+  ...Object.keys(generatedSingletons),
+]);
+const inStudio = (kebab: string) => studioKeys.has(camel(kebab));
+
+type Item = { kebab: string; label: string; kind: "collection" | "singleton" };
+const col = (kebab: string, label: string): Item => ({ kebab, label, kind: "collection" });
+const one = (kebab: string, label: string): Item => ({ kebab, label, kind: "singleton" });
+
+type Section = { id: string; title: string; icon: string; blurb: string; items: Item[] };
+
+// Ordered by editorial frequency - what editors touch most sits first.
+const sections: Section[] = [
+  { id: "events", title: "Events", icon: "calendar", blurb: "Event pages, the calendar and the homepage events band", items: [
+    col("events", "Events"), col("calendar-events", "Calendar events"), one("events-section", "Homepage events band"), one("event-links", "Events link map"),
+  ]},
+  { id: "projects", title: "Projects", icon: "cube", blurb: "Project detail pages, the grid and Forktober", items: [
+    col("project-details", "Projects"), col("project-cassettes", "Projects grid"), col("home-projects", "Homepage showcase"),
+    col("forktober-projects", "Forktober projects"), col("forktober-meta", "Forktober repos"),
+  ]},
+  { id: "people", title: "People", icon: "users", blurb: "Board, past teams, speakers and partners", items: [
+    col("board-members", "Board · current"), col("team-years", "Historical boards"), col("speakers", "Speakers"), col("partners", "Partners"),
+  ]},
+  { id: "homepage", title: "Homepage & site", icon: "home", blurb: "The landing page and global settings", items: [
+    col("home-domains", "Domain cards"), one("site-config", "Site config"), one("faqs-page", "FAQs"), one("achievements-page", "Achievements page"), col("achievements", "Achievements"),
+  ]},
+  { id: "domains", title: "Domains & AOIs", icon: "layers", blurb: "The five domains and their areas of interest", items: [
+    one("domain-tech", "Tech"), one("domain-design", "Design"), one("domain-research", "Research"), one("domain-management", "Management"), one("domain-cc", "Competitive Coding"),
+    col("aois-tech", "AOIs · Tech"), col("aois-design", "AOIs · Design"), col("aois-research", "AOIs · Research"),
+  ]},
+  { id: "tools", title: "Tools", icon: "wrench", blurb: "The tech-stack chips shown per domain", items: [
+    col("tools-tech", "Tech"), col("tools-design", "Design"), col("tools-research", "Research"), col("tools-management", "Management"), col("tools-cc", "Competitive Coding"),
+  ]},
+  { id: "pages", title: "Pages & content", icon: "file", blurb: "Standalone pages, guides and links", items: [
+    col("pages", "Pages"), col("design-products", "Design guides"), col("blog-refs", "Blog links"),
+  ]},
+  { id: "system", title: "System", icon: "sliders", blurb: "Redirects and one-off surfaces", items: [
+    one("redirects", "Redirects"), one("z0d1ak", "z0d1ak CTF"),
+  ]},
+];
+
+const ICONS: Record<string, string> = {
+  grid: '<path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/>',
+  calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+  cube: '<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/>',
+  users: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+  home: '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>',
+  layers: '<path d="M12 2 2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>',
+  wrench: '<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.1 2.1-2.8-2.8z"/>',
+  file: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>',
+  sliders: '<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>',
+  shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  book: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20V2H6.5A2.5 2.5 0 0 0 4 4.5z"/>',
+  logout: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>',
+  external: '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/>',
+  home2: '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>',
+  spark: '<path d="M12 3v6m0 6v6M3 12h6m6 0h6M5.6 5.6l4.2 4.2m4.4 4.4 4.2 4.2M18.4 5.6l-4.2 4.2m-4.4 4.4-4.2 4.2"/>',
+};
+const icon = (name: string) =>
+  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICONS[name] ?? ICONS.grid}</svg>`;
+
+const href = (it: Item) =>
+  it.kind === "collection" ? `/keystatic/collection/${camel(it.kebab)}` : `/keystatic/singleton/${camel(it.kebab)}`;
+const newHref = (it: Item) => `/keystatic/collection/${camel(it.kebab)}/create`;
+const canEdit = (it: Item) => perms.canEdit(camel(it.kebab));
+
+const totalEntries = Object.values(counts).reduce((n, c) => n + (c?.count ?? 0), 0);
+const firstName = (user.username || "there").split(/[^a-zA-Z0-9]/)[0];
+
+const ghOwner = import.meta.env.KEYSTATIC_GITHUB_REPO_OWNER || "JuxtaRYCT";
+const ghName = import.meta.env.KEYSTATIC_GITHUB_REPO_NAME || "ACM-VIT-website-yash";
+const repoUrl = `https://github.com/${ghOwner}/${ghName}`;
+
+// Quick actions = create shortcuts for the collections this user can edit.
+const quickCreate = sections
+  .flatMap((s) => s.items)
+  .filter((it) => it.kind === "collection" && canEdit(it) && inStudio(it.kebab))
+  .slice(0, 5);
+
+const noAccess = !perms.role;
+
+// Tab strip = Overview + one tab per section (+ Access for admins).
+type Tab = { id: string; label: string; icon: string };
+const tabs: Tab[] = [
+  { id: "overview", label: "Overview", icon: "grid" },
+  ...sections.map((s) => ({ id: s.id, label: s.title, icon: s.icon })),
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Dashboard · ACM-VIT Content Studio</title>
+    <link rel="icon" href="/favicon.ico" />
+    <CmsThemeInit />
+  </head>
+  <body>
+    <!-- ══ Top nav ══ -->
+    <header class="nav">
+      <div class="nav-in">
+        <a class="brand" href="/cms">
+          <img src="/logos/logos-acm-logo-black.webp" alt="" width="26" height="26" />
+          <span>ACM<b>·</b>VIT <em>Studio</em></span>
+        </a>
+        <nav class="nav-links">
+          <a href="/keystatic"><i set:html={icon("external")}></i>Keystatic</a>
+          <a href="/cms/guide"><i set:html={icon("book")}></i>Guide</a>
+          <a href="/"><i set:html={icon("logout")}></i>Site</a>
+        </nav>
+        <div class="userbox">
+          <span class="user-role" data-role={perms.role?.id}>{perms.role?.label || "No access"}</span>
+          <span class="user-name">@{user.username || "guest"}</span>
+        </div>
+        <CmsThemeToggle />
+      </div>
+
+      {!noAccess && (
+        <div class="tabbar" role="tablist" aria-label="Content sections">
+          <div class="tabbar-in">
+            {tabs.map((t) => (
+              <button class="tab" role="tab" data-tab={t.id} type="button">
+                <i set:html={icon(t.icon)}></i>{t.label}
+              </button>
+            ))}
+            {perms.canManageAccess && (
+              <a class="tab tab-admin" href="/keystatic/singleton/accessControl">
+                <i set:html={icon("shield")}></i>Access &amp; Roles
+              </a>
+            )}
+          </div>
+        </div>
+      )}
+    </header>
+
+    <!-- ══ Main ══ -->
+    <main class="main">
+      {noAccess ? (
+        <section class="noaccess">
+          <div set:html={icon("shield")}></div>
+          <h2>You're signed in, but not on the access list yet.</h2>
+          <p>Ask a chapter admin to add <strong>@{user.username}</strong> in Access &amp; Roles. Until then there's nothing to edit here.</p>
+          <a href="/">Back to the website</a>
+        </section>
+      ) : (
+        <>
+          <!-- ── Overview panel ── -->
+          <section class="panel is-active" data-panel="overview">
+            <div class="panel-head">
+              <h1>Welcome back, {firstName}</h1>
+              <p>Manage every piece of content on the site from one place.</p>
+            </div>
+
+            <section class="stats">
+              <div class="stat"><span class="stat-num">{totalEntries}</span><span class="stat-lbl">Content entries</span></div>
+              <div class="stat"><span class="stat-num">23</span><span class="stat-lbl">Collections</span></div>
+              <div class="stat"><span class="stat-num">13</span><span class="stat-lbl">Singletons</span></div>
+              <div class="stat"><span class="stat-num">{perms.canEditAll ? "All" : perms.editableCollections.length}</span><span class="stat-lbl">You can edit</span></div>
+            </section>
+
+            <div class="ov-grid">
+              <div class="rail-card">
+                <h3>Your access</h3>
+                <p class="rail-role" data-role={perms.role?.id}>{perms.role?.label}</p>
+                <p class="rail-desc">{perms.role?.description}</p>
+                <ul class="rail-perms">
+                  <li data-ok={perms.canEditAll || perms.editableCollections.length > 0}>{perms.canEditAll ? "Edit all content" : perms.editableCollections.length ? `Edit ${perms.editableCollections.length} sections` : "Read-only"}</li>
+                  <li data-ok={perms.canPublish}>{perms.canPublish ? "Publish live" : "Changes go for review"}</li>
+                  <li data-ok={perms.canManageAccess}>{perms.canManageAccess ? "Manage roles & members" : "No access management"}</li>
+                </ul>
+              </div>
+
+              <div class="rail-card">
+                <h3>Publishing</h3>
+                <p class="rail-desc">
+                  {perms.canPublish
+                    ? "Save commits to a studio/* branch and opens a pull request you can merge - live on the next build."
+                    : "Save opens a pull request on a studio/* branch. A publisher reviews and merges it before it goes live."}
+                </p>
+                <div class="rail-links">
+                  <a href={`${repoUrl}/pulls?q=is%3Apr+is%3Aopen+head%3Astudio%2F`} target="_blank" rel="noopener"><i set:html={icon("external")}></i>Open pull requests</a>
+                  <a href={`${repoUrl}/branches/all?query=studio%2F`} target="_blank" rel="noopener"><i set:html={icon("external")}></i>Draft branches</a>
+                </div>
+              </div>
+
+              {quickCreate.length > 0 && (
+                <div class="rail-card">
+                  <h3>Quick actions</h3>
+                  <div class="rail-quick">
+                    {quickCreate.map((it) => (
+                      <a href={newHref(it)}><span>+</span> New {it.label.replace(/s$/, "").toLowerCase()}</a>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div class="ov-jump">
+              <h3>Jump to a section</h3>
+              <div class="jump-grid">
+                {sections.map((s) => (
+                  <button class="jump" type="button" data-goto={s.id}>
+                    <span class="jump-icon" set:html={icon(s.icon)}></span>
+                    <span class="jump-txt"><b>{s.title}</b><em>{s.items.length} items</em></span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <!-- ── Section panels ── -->
+          {sections.map((s) => (
+            <section class="panel" data-panel={s.id}>
+              <div class="panel-head">
+                <span class="panel-icon" set:html={icon(s.icon)}></span>
+                <div><h1>{s.title}</h1><p>{s.blurb}</p></div>
+              </div>
+              <div class="cards">
+                {s.items.map((it) => {
+                  const editable = canEdit(it);
+                  const routed = inStudio(it.kebab);
+                  const c = it.kind === "collection" ? countOf(it.kebab) : undefined;
+                  const cls = `card${!routed ? " is-json" : editable ? "" : " is-locked"}`;
+                  return (
+                    <div class={cls}>
+                      {routed ? (
+                        <a class="card-main" href={href(it)}>
+                          <span class="card-title">{it.label}</span>
+                          <span class="card-meta">
+                            {it.kind === "collection" ? `${c ?? 0} ${c === 1 ? "entry" : "entries"}` : "Single page"}
+                            {!editable && <span class="card-lock">· view only</span>}
+                          </span>
+                        </a>
+                      ) : (
+                        <span class="card-main" title="This collection has no visual editor - managed as JSON in the repo">
+                          <span class="card-title">{it.label}</span>
+                          <span class="card-meta"><span class="card-lock">JSON only · edit in repo</span></span>
+                        </span>
+                      )}
+                      {routed && it.kind === "collection" && editable && (
+                        <a class="card-new" href={newHref(it)} title={`New ${it.label}`}>+</a>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          ))}
+        </>
+      )}
+    </main>
+
+    <style is:global>
+      * { box-sizing: border-box; }
+      body { margin: 0; background: var(--c-bg); color: var(--c-ink); font-family: "PolySans Trial", Inter, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+      a { color: inherit; text-decoration: none; }
+
+      /* ── Top nav ── */
+      .nav { position: sticky; top: 0; z-index: 30; background: var(--c-nav-bg); backdrop-filter: blur(14px); border-bottom: 1px solid var(--c-line); }
+      .nav-in { display: flex; align-items: center; gap: 1rem; max-width: 78rem; margin: 0 auto; padding: .7rem clamp(1rem, 3vw, 2rem); }
+      .brand { display: flex; align-items: center; gap: .5rem; font-weight: 600; font-size: .98rem; }
+      .brand img { border-radius: 6px; }
+      .brand b { color: var(--c-accent); font-weight: 700; }
+      .brand em { font-style: normal; color: var(--c-muted); font-weight: 400; }
+      .nav-links { display: flex; gap: .1rem; margin-left: auto; }
+      .nav-links a { display: flex; align-items: center; gap: .35rem; padding: .4rem .65rem; border-radius: 8px; font-size: .86rem; color: var(--c-text); transition: background .15s, color .15s; }
+      .nav-links a i, .tab i { display: grid; place-items: center; width: 15px; height: 15px; flex: none; }
+      .nav-links a i svg, .tab i svg { width: 15px; height: 15px; }
+      .nav-links a:hover { background: var(--c-accent-soft); color: var(--c-accent); }
+      .userbox { display: flex; flex-direction: column; align-items: flex-end; gap: .1rem; padding-left: .6rem; margin-left: .3rem; border-left: 1px solid var(--c-line); }
+      .user-role { font-size: .74rem; font-weight: 600; color: #fff; background: var(--c-accent); padding: .1rem .5rem; border-radius: 999px; }
+      .user-role[data-role="viewer"], .user-role[data-role="contributor"] { background: var(--c-muted); }
+      .user-name { font-size: .76rem; color: var(--c-muted); }
+
+      /* ── Tab strip ── */
+      .tabbar { border-top: 1px solid var(--c-line); overflow-x: auto; scrollbar-width: none; }
+      .tabbar::-webkit-scrollbar { display: none; }
+      .tabbar-in { display: flex; gap: .2rem; max-width: 78rem; margin: 0 auto; padding: 0 clamp(1rem, 3vw, 2rem); }
+      .tab { display: inline-flex; align-items: center; gap: .4rem; white-space: nowrap; background: none; border: none; cursor: pointer;
+        font: inherit; font-size: .88rem; color: var(--c-text); padding: .7rem .5rem; margin: 0 .35rem; border-bottom: 2px solid transparent; transition: color .15s, border-color .15s; }
+      .tab i { color: var(--c-muted); transition: color .15s; }
+      .tab:hover { color: var(--c-ink); }
+      .tab:hover i { color: var(--c-ink); }
+      .tab.is-active { color: var(--c-accent); border-bottom-color: var(--c-accent); font-weight: 500; }
+      .tab.is-active i { color: var(--c-accent); }
+      .tab-admin { color: var(--c-accent); margin-left: auto; }
+
+      /* ── Main ── */
+      .main { max-width: 78rem; margin: 0 auto; padding: clamp(1.4rem, 3vw, 2.4rem) clamp(1rem, 3vw, 2rem) 4rem; }
+      .panel { display: none; animation: fade .25s ease; }
+      .panel.is-active { display: block; }
+      @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+      .panel-head { display: flex; align-items: center; gap: .8rem; margin-bottom: 1.6rem; }
+      .panel-head h1 { font-size: 1.7rem; letter-spacing: -.03em; margin: 0; }
+      .panel-head p { margin: .25rem 0 0; color: var(--c-text); font-size: .94rem; }
+      .panel-icon { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 11px; background: var(--c-accent-soft); color: var(--c-accent); flex: none; }
+      .panel-icon svg { width: 22px; height: 22px; }
+
+      /* ── Stats ── */
+      .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.6rem; }
+      .stat { background: var(--c-surface); border: 1px solid var(--c-line); border-radius: 14px; padding: 1rem 1.2rem; display: flex; flex-direction: column; gap: .15rem; }
+      .stat-num { font-size: 1.8rem; font-weight: 700; letter-spacing: -.03em; }
+      .stat-lbl { font-size: .8rem; color: var(--c-muted); }
+
+      /* ── Overview grid ── */
+      .ov-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem; align-items: start; }
+      .rail-card { background: var(--c-surface); border: 1px solid var(--c-line); border-radius: 14px; padding: 1.1rem 1.2rem; }
+      .rail-card h3 { margin: 0 0 .6rem; font-size: .95rem; }
+      .rail-role { display: inline-block; font-size: .82rem; font-weight: 600; color: #fff; background: var(--c-accent); padding: .12rem .55rem; border-radius: 999px; margin: 0 0 .5rem; }
+      .rail-role[data-role="viewer"], .rail-role[data-role="contributor"] { background: var(--c-muted); }
+      .rail-desc { margin: 0; font-size: .86rem; line-height: 1.55; color: var(--c-text); }
+      .rail-perms { list-style: none; margin: .7rem 0 0; padding: 0; display: flex; flex-direction: column; gap: .4rem; }
+      .rail-perms li { font-size: .85rem; padding-left: 1.4rem; position: relative; color: var(--c-text); }
+      .rail-perms li::before { content: "✕"; position: absolute; left: 0; color: var(--c-muted); font-size: .8rem; }
+      .rail-perms li[data-ok="true"]::before { content: "✓"; color: var(--c-accent); font-weight: 700; }
+      .rail-links { display: flex; flex-direction: column; gap: .35rem; margin-top: .7rem; }
+      .rail-links a { display: flex; align-items: center; gap: .4rem; font-size: .86rem; color: var(--c-accent); font-weight: 500; }
+      .rail-links a i { width: 14px; height: 14px; } .rail-links a i svg { width: 14px; height: 14px; }
+      .rail-quick { display: flex; flex-direction: column; gap: .5rem; }
+      .rail-quick a { display: flex; align-items: center; gap: .5rem; font-size: .88rem; padding: .5rem .7rem; border: 1px solid var(--c-line); border-radius: 9px; transition: border-color .15s, color .15s; }
+      .rail-quick a span { display: grid; place-items: center; width: 18px; height: 18px; border-radius: 5px; background: var(--c-accent-soft); color: var(--c-accent); font-weight: 700; }
+      .rail-quick a:hover { border-color: var(--c-accent); color: var(--c-accent); }
+
+      /* ── Jump-to ── */
+      .ov-jump h3 { font-size: 1rem; margin: 0 0 .8rem; }
+      .jump-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: .7rem; }
+      .jump { display: flex; align-items: center; gap: .7rem; text-align: left; cursor: pointer; font: inherit;
+        background: var(--c-surface); border: 1px solid var(--c-line); border-radius: 12px; padding: .8rem .9rem; transition: border-color .16s, transform .16s, box-shadow .16s; }
+      .jump:hover { border-color: var(--c-card-hover-border); transform: translateY(-1px); box-shadow: 0 8px 20px -16px var(--c-shadow); }
+      .jump-icon { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 9px; background: var(--c-accent-soft); color: var(--c-accent); flex: none; }
+      .jump-icon svg { width: 18px; height: 18px; }
+      .jump-txt { display: flex; flex-direction: column; }
+      .jump-txt b { font-weight: 500; font-size: .93rem; }
+      .jump-txt em { font-style: normal; font-size: .78rem; color: var(--c-muted); }
+
+      /* ── Cards ── */
+      .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: .7rem; }
+      .card { display: flex; background: var(--c-surface); border: 1px solid var(--c-line); border-radius: 12px; overflow: hidden; transition: border-color .16s, box-shadow .16s, transform .16s; }
+      .card:hover { border-color: var(--c-card-hover-border); box-shadow: 0 8px 20px -16px var(--c-shadow); transform: translateY(-1px); }
+      .card.is-locked, .card.is-json { opacity: .62; }
+      .card.is-locked:hover, .card.is-json:hover { transform: none; box-shadow: none; border-color: var(--c-line); }
+      .card.is-json .card-main { cursor: default; }
+      .card-main { flex: 1; padding: .8rem .9rem; display: flex; flex-direction: column; gap: .2rem; min-width: 0; }
+      .card-title { font-weight: 500; font-size: .95rem; }
+      .card-meta { font-size: .78rem; color: var(--c-muted); }
+      .card-lock { color: var(--c-lock); }
+      .card-new { width: 40px; display: grid; place-items: center; font-size: 1.3rem; color: #fff; background: var(--c-accent); transition: background .16s; }
+      .card-new:hover { background: var(--c-accent-strong); }
+
+      /* ── No access ── */
+      .noaccess { max-width: 32rem; margin: 3rem auto; text-align: center; }
+      .noaccess > div { width: 54px; height: 54px; margin: 0 auto 1rem; color: var(--c-accent); }
+      .noaccess > div svg { width: 54px; height: 54px; }
+      .noaccess h2 { font-size: 1.3rem; letter-spacing: -.02em; }
+      .noaccess p { color: var(--c-text); line-height: 1.6; }
+      .noaccess a { color: var(--c-accent); font-weight: 500; }
+
+      @media (max-width: 900px) { .ov-grid { grid-template-columns: 1fr; } .stats { grid-template-columns: 1fr 1fr; } }
+      @media (max-width: 620px) { .nav-links a span, .userbox { } .nav-links { display: none; } }
+    </style>
+
+    <script>
+      // Vercel-style tab switching. Panels are all rendered; JS toggles the
+      // active one, syncs the URL hash, and lets Overview's jump-cards navigate.
+      const tabs = [...document.querySelectorAll<HTMLElement>(".tab[data-tab]")];
+      const panels = [...document.querySelectorAll<HTMLElement>(".panel[data-panel]")];
+      const ids = new Set(panels.map((p) => p.dataset.panel!));
+
+      function show(id: string) {
+        if (!ids.has(id)) id = "overview";
+        tabs.forEach((t) => t.classList.toggle("is-active", t.dataset.tab === id));
+        panels.forEach((p) => p.classList.toggle("is-active", p.dataset.panel === id));
+        const hash = `#${id}`;
+        if (location.hash !== hash) history.replaceState(null, "", hash);
+        window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+      }
+
+      tabs.forEach((t) => t.addEventListener("click", () => show(t.dataset.tab!)));
+      document.querySelectorAll<HTMLElement>("[data-goto]").forEach((b) =>
+        b.addEventListener("click", () => show(b.dataset.goto!))
+      );
+      window.addEventListener("hashchange", () => show(location.hash.slice(1)));
+
+      show(location.hash.slice(1) || "overview");
+    </script>
+  </body>
+</html>

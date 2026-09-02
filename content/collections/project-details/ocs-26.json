@@ -1,0 +1,279 @@
+{
+  "slug": "ocs-26",
+  "title": "Explore",
+  "tagline": "A browser, inside your browser.",
+  "eyebrow": "ACM-VIT · 2026 · Organising Committee Selections",
+  "themeColor": "#EFE28B",
+  "themeColorSecondary": "#1A1607",
+  "shortDescription": "ACM-VIT's 2026 OCS portal, themed as a full browser running inside your browser. Each form was a website applicants could open in a tab. Ships an in-house meeting client with breakout rooms, the foundation that became Conclave. Drove the highest enrollment in the chapter's 17-year history.",
+  "longDescription": [
+    "Explore is ACM-VIT's organising committee selections portal for the 2026 cycle. The premise is recursive: it's a browser, rendered inside your real browser. Tabs, URL bar, history, bookmarks, the whole thing.",
+    "Every form round was modelled as its own webpage applicants could navigate to. Apply by opening the page, just like any other site.",
+    "For the first time, the entire meeting infrastructure was built in-house instead of bolting on Google Meet or Zoom. Explore shipped a complete meeting client with the scheduler, signalling and media routing all written by ACM-VIT developers. Every interview, every round, for a very large applicant pool ran on it.",
+    "The meeting app supported the usual stack - video, audio, screen-share, chat - plus instant breakout rooms that interviewers could spin up from inside a live call with one click. After OCS, the meeting client was extracted into its own project and continues life as Conclave.",
+    "Explore also bundled real games. Breaking blocks, Snake, Minecraft, Krunker, skribbl.io - all playable from inside a tab.",
+    "The result: the highest number of registrations ACM-VIT has received in its 17-year history.",
+    "Stack: Next.js 16 with the App Router on React 19, Prisma 6 talking to MongoDB, Better Auth for sessions, Upstash Redis + ratelimit guarding the form endpoints, mediasoup-client + a custom SFU on Node + Socket.io for the meeting backbone, Monaco Editor for code rounds, Tailwind v4, Framer Motion, react-three-fiber + drei + three.js for 3D bits, d3 + lenis for visualisation and smooth scroll, Matter.js for the games physics, Lottie for motion graphics, and PostHog for analytics. The whole thing builds with Turbopack and ships behind a Vercel + Cloudflare R2 pipeline. Code quality is enforced by Biome + Husky."
+  ],
+  "status": "online",
+  "statusNote": "Live · 2026 cycle",
+  "cassetteSvg": "/projects/cassettes/projects-cassettes-ocs-26.webp",
+  "gallery": [
+    {
+      "src": "/projects/ocs-26/projects-ocs-26-screen-1.webp",
+      "alt": "Explore browser-themed portal"
+    },
+    {
+      "src": "/projects/ocs-26/projects-ocs-26-screen-2.webp",
+      "alt": "Explore browser tabs and content"
+    },
+    {
+      "src": "/projects/ocs-26/projects-ocs-26-screen-3.webp",
+      "alt": "Explore form-as-webpage round"
+    },
+    {
+      "src": "/projects/ocs-26/projects-ocs-26-screen-4.webp",
+      "alt": "Explore in-house meeting client"
+    },
+    {
+      "src": "/projects/ocs-26/projects-ocs-26-screen-5.webp",
+      "alt": "Explore game inside browser"
+    },
+    {
+      "src": "/projects/ocs-26/projects-ocs-26-screen-6.webp",
+      "alt": "Explore portal flow"
+    }
+  ],
+  "galleryLayout": "landscape",
+  "stats": [
+    {
+      "value": "2026",
+      "label": "Year"
+    },
+    {
+      "value": "Browser",
+      "label": "Theme"
+    },
+    {
+      "value": "Highest ever",
+      "label": "Registrations"
+    },
+    {
+      "value": "17 years",
+      "label": "Chapter history"
+    }
+  ],
+  "features": [
+    {
+      "title": "Browser inside browser",
+      "description": "Tabs, URL bar, history, bookmarks - the full chrome, rendered on top of the real browser."
+    },
+    {
+      "title": "Forms as webpages",
+      "description": "Each round opens like a regular website. Apply by visiting the page."
+    },
+    {
+      "title": "In-house meeting client",
+      "description": "Full video meeting stack written by ACM-VIT - signalling, scheduler, SFU. No Meet, no Zoom."
+    },
+    {
+      "title": "One-click breakout rooms",
+      "description": "Spin up a breakout from inside a live call. Used heavily during round interviews."
+    },
+    {
+      "title": "Custom SFU",
+      "description": "mediasoup-based selective forwarding unit ships in /sfu - low-bandwidth profiles, transitions, observability."
+    },
+    {
+      "title": "Code rounds via Monaco",
+      "description": "Coding interviews and rounds run on a Monaco editor embedded in the portal."
+    },
+    {
+      "title": "Games in tabs",
+      "description": "Breaking Blocks, Snake, Minecraft, Krunker, skribbl.io - all playable inside the Explore browser."
+    },
+    {
+      "title": "3D and motion",
+      "description": "react-three-fiber, drei and three.js power the 3D bits; Framer Motion + Lottie handle the rest."
+    },
+    {
+      "title": "Smooth scroll + viz",
+      "description": "Lenis for scroll inertia, d3 for data visualisation across the portal."
+    },
+    {
+      "title": "Rate-limited APIs",
+      "description": "Upstash Redis + ratelimit guard all submission endpoints against abuse."
+    },
+    {
+      "title": "PostHog analytics",
+      "description": "Funnel + product analytics wired in across the application flow."
+    },
+    {
+      "title": "Record-breaking reach",
+      "description": "Highest enrollment count ACM-VIT has ever recorded - across all 17 years of the chapter."
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Frontend",
+      "slugs": [
+        "nextjs",
+        "react",
+        "typescript",
+        "tailwindcss"
+      ]
+    },
+    {
+      "category": "Backend",
+      "slugs": [
+        "nextjs",
+        "prisma",
+        "mongodb",
+        "redis"
+      ]
+    },
+    {
+      "category": "Realtime / Meeting",
+      "slugs": [
+        "nodejs",
+        "typescript"
+      ]
+    },
+    {
+      "category": "Infrastructure",
+      "slugs": [
+        "vercel",
+        "cloudflare",
+        "docker"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github",
+        "postman"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "theg1239",
+      "role": "Lead developer"
+    },
+    {
+      "github": "technical-director-acmvit",
+      "role": "Lead developer"
+    },
+    {
+      "github": "AdityaVKochar",
+      "role": "Developer"
+    },
+    {
+      "github": "mahendra785",
+      "role": "Developer"
+    },
+    {
+      "github": "RohitPhaniramSakamuri",
+      "role": "Developer"
+    },
+    {
+      "github": "Van5sh",
+      "role": "Developer"
+    },
+    {
+      "github": "thinkter",
+      "role": "Developer"
+    },
+    {
+      "github": "Krishang-Zinzuwadia",
+      "role": "Developer"
+    },
+    {
+      "github": "adhyan-jain",
+      "role": "Developer"
+    },
+    {
+      "github": "AdheeshGarg",
+      "role": "Developer"
+    },
+    {
+      "github": "arnavsoni1",
+      "role": "Developer"
+    },
+    {
+      "github": "ludicrouslytrue",
+      "role": "Developer"
+    },
+    {
+      "github": "MKDev121",
+      "role": "Developer"
+    },
+    {
+      "github": "POSTI-25",
+      "role": "Developer"
+    },
+    {
+      "github": "Passive-Coder",
+      "role": "Developer"
+    },
+    {
+      "github": "fabjenny13",
+      "role": "Developer"
+    },
+    {
+      "github": "Bhanuch2006",
+      "role": "Developer"
+    },
+    {
+      "github": "Heyaa28041",
+      "role": "Developer"
+    },
+    {
+      "github": "Ishitajoshii",
+      "role": "Developer"
+    },
+    {
+      "github": "LordSlushii",
+      "role": "Developer"
+    },
+    {
+      "github": "navaneethk99",
+      "role": "Developer"
+    },
+    {
+      "github": "chinmayeebadiger",
+      "role": "Developer"
+    },
+    {
+      "github": "TarunRam-git",
+      "role": "Developer"
+    },
+    {
+      "github": "ananyab1404",
+      "role": "Developer"
+    },
+    {
+      "github": "m-rithik",
+      "role": "Developer"
+    },
+    {
+      "github": "vimalaadhityan",
+      "role": "Developer"
+    }
+  ],
+  "links": [
+    {
+      "label": "Explore",
+      "href": "https://explore.acmvit.in/",
+      "kind": "website"
+    },
+    {
+      "label": "Explore repo",
+      "href": "https://github.com/ACM-VIT/explore.acmvit.in",
+      "kind": "github"
+    }
+  ],
+  "commitGraphSeed": 626,
+  "order": 50
+}

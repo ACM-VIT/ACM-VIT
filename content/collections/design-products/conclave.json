@@ -1,0 +1,196 @@
+{
+  "slug": "conclave",
+  "name": "Conclave",
+  "wordmark": "c0nclav3",
+  "tagline": "Meetings, minus the friction.",
+  "category": "Web · Mobile · Real-time",
+  "story": [
+    "Conclave is ACM-VIT's real-time meetings platform: web and mobile clients, a mediasoup SFU underneath, and an in-meeting apps SDK so a call can hold more than faces. It is built for organised, low-friction discussions - the chapter runs on it.",
+    "Of every product in the family, Conclave sits closest to the chapter's own identity. It inherits the website's skeleton directly - PolySans, the ink-dark surfaces, the ACM orange - and pushes it one step darker. The only liberty it takes is its name: the wordmark spells it c0nclav3."
+  ],
+  "accent": "#F95F4A",
+  "accentTonal": "#ffeae5",
+  "hero": {
+    "bg": "#0a0a0b",
+    "fg": "#fafafa",
+    "sub": "#F95F4A"
+  },
+  "facts": [
+    {
+      "label": "Platforms",
+      "value": "Web · iOS · Android"
+    },
+    {
+      "label": "Architecture",
+      "value": "Next.js · Expo · mediasoup SFU"
+    },
+    {
+      "label": "Extensible",
+      "value": "In-meeting apps SDK"
+    },
+    {
+      "label": "Inherits from",
+      "value": "acmvit.in design system"
+    }
+  ],
+  "logos": [
+    {
+      "label": "The diamond",
+      "src": "/design/products/conclave-favicon.svg",
+      "width": 84,
+      "bg": "#0a0a0b",
+      "fg": "#fafafa"
+    },
+    {
+      "label": "Wordmark",
+      "text": {
+        "content": "c0nclav3",
+        "css": "'PolySans Wide DS', 'DM Sans', sans-serif",
+        "size": "34px",
+        "weight": 700
+      },
+      "bg": "#131316",
+      "fg": "#fafafa"
+    }
+  ],
+  "logoNote": "Conclave's mark is the ACM diamond itself, re-cut for the product - the strongest statement of inheritance in the family. The wordmark is typeset, not drawn: c0nclav3 in PolySans Bulky Wide, always lowercase. Diamond for icons and favicons, wordmark for headers; the two rarely need to appear together.",
+  "palette": [
+    {
+      "name": "Void",
+      "hex": "#0a0a0b",
+      "on": "#fafafa",
+      "use": "The call surface. Darker than the website's Ink - video tiles need to float on nothing."
+    },
+    {
+      "name": "Panel",
+      "hex": "#131316",
+      "on": "#fafafa",
+      "use": "Sheets, sidebars, and the meeting chrome."
+    },
+    {
+      "name": "Surface ramp",
+      "hex": "#18181b",
+      "on": "#fafafa",
+      "use": "Cards and controls step 18181b → 232327 → 2e2e33 on hover. Tone does the elevation."
+    },
+    {
+      "name": "Cream",
+      "hex": "#fafafa",
+      "on": "#0a0a0b",
+      "use": "Text and icons. Full-contrast white is reserved for active speakers."
+    },
+    {
+      "name": "ACM Orange",
+      "hex": "#F95F4A",
+      "on": "#ffffff",
+      "use": "Borrowed straight from the chapter. Primary actions, live indicators, focus rings."
+    },
+    {
+      "name": "Pink",
+      "hex": "#FF007A",
+      "on": "#ffffff",
+      "use": "Secondary accent - recording states and ACM-W surfaces."
+    }
+  ],
+  "paletteNote": "There is no light mode and that is a decision, not a gap: a meetings product lives in dark rooms and shared screens. Elevation comes from the surface ramp, never from shadows.",
+  "type": [
+    {
+      "family": "PolySans Bulky Wide",
+      "role": "Display & wordmark",
+      "weights": "Bulky",
+      "css": "'PolySans Wide DS', 'DM Sans', sans-serif",
+      "sample": "c0nclav3",
+      "sampleSize": "44px",
+      "sampleWeight": 700
+    },
+    {
+      "family": "PolySans",
+      "role": "UI & body",
+      "weights": "Slim / Neutral / Median",
+      "css": "'PolySans DS', 'DM Sans', sans-serif",
+      "sample": "A video conferencing platform for meetings, webinars, and collaboration.",
+      "sampleSize": "17px",
+      "sampleWeight": 400
+    },
+    {
+      "family": "Virgil",
+      "role": "Doodles & annotations",
+      "weights": "400",
+      "note": "The Excalidraw hand - used for whiteboard annotations only.",
+      "css": "'Virgil', 'Bradley Hand', cursive",
+      "sample": "circle the action items →",
+      "sampleSize": "20px",
+      "sampleWeight": 400,
+      "approximate": true
+    }
+  ],
+  "typeNote": "Same faces as acmvit.in, same jobs: Bulky Wide shouts, regular PolySans works. Virgil appears only where a human is drawing - never in chrome.",
+  "icons": {
+    "images": [
+      {
+        "src": "/design/products/conclave-favicon.svg",
+        "alt": "Conclave diamond favicon",
+        "label": "favicon",
+        "bg": "#0a0a0b"
+      },
+      {
+        "src": "/design/products/conclave-touch-icon.png",
+        "alt": "Conclave touch icon",
+        "label": "touch icon",
+        "bg": "#131316"
+      }
+    ],
+    "bullets": [
+      "Line icons follow the chapter spec - 1.75px stroke on a 24px grid, rounded caps.",
+      "In-call controls are the icon set's main stage: mic, camera, share, apps - cream at rest.",
+      "Orange fills mean live: an orange icon is capturing, recording, or broadcasting.",
+      "The diamond is the only branded glyph; no other icon carries identity."
+    ]
+  },
+  "personality": {
+    "do": [
+      "Quiet chrome: in a call, the interface recedes and the people are the UI.",
+      "Leetspeak stays in the wordmark - c0nclav3 is a logo, not a spelling.",
+      "Orange means live: active mic, live recording, the join button.",
+      "Motion follows the chapter's rules - power3, fast, functional."
+    ],
+    "dont": [
+      "No light mode. Do not build one for a slide deck.",
+      "Never write c0nclav3 in body copy, docs, or store listings - there it is Conclave.",
+      "Don't introduce a third accent; orange and pink cover every state.",
+      "No shadows for elevation - step the surface ramp instead."
+    ]
+  },
+  "motifs": [
+    {
+      "title": "The wordmark",
+      "desc": "c0nclav3, set in PolySans Bulky Wide. The numerals are the brand's one joke; everything else plays it straight."
+    },
+    {
+      "title": "Surface ramp",
+      "desc": "Four grays between void and control - the same tonal-elevation idea as the chapter site, tuned for video."
+    },
+    {
+      "title": "Tiles on nothing",
+      "desc": "Video tiles get rounded corners on pure void, no borders - light from the video itself does the separating."
+    }
+  ],
+  "links": [
+    {
+      "label": "conclave.acmvit.in",
+      "href": "https://conclave.acmvit.in",
+      "kind": "website"
+    },
+    {
+      "label": "Google Play",
+      "href": "https://play.google.com/store/apps/details?id=com.acmvit.conclave&hl=en",
+      "kind": "play"
+    },
+    {
+      "label": "App Store",
+      "href": "https://apps.apple.com/dk/app/conclave-by-acm-vit/id6758411334",
+      "kind": "appstore"
+    }
+  ],
+  "order": 20
+}

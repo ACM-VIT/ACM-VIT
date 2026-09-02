@@ -1,0 +1,7 @@
+{
+  "name": "NGINX",
+  "slug": "nginx",
+  "svgFile": "/domains/tech/tools/tech-tool-nginx.svg",
+  "colorHex": "#009639",
+  "order": 260
+}

@@ -1,0 +1,236 @@
+---
+interface Props {
+  title: string;
+  fullName: string;
+  position: string;
+  imageUrl: string;
+  linkedinUrl?: string;
+  googleScholarUrl?: string;
+  githubUrl?: string;
+  isW?: boolean;
+}
+
+const {
+  title,
+  fullName,
+  position,
+  imageUrl,
+  linkedinUrl,
+  googleScholarUrl,
+  githubUrl,
+  isW,
+} = Astro.props;
+
+import { getAssetUrl, getImageUrl } from "../../utils/cdn";
+
+// Photo is fetched from the image CDN first; if that fails, fall back to the
+// local webp, then the local png. `imageUrl` is expected to be a local
+// `/board/...` or `/team/...` path with a `.webp` extension.
+const localWebp = imageUrl;
+const localPng = imageUrl ? imageUrl.replace(/\.webp$/i, ".png") : "";
+const cdnSrc = getImageUrl(imageUrl);
+const photoFallbacks = JSON.stringify([localWebp, localPng].filter((u) => u && u !== cdnSrc));
+
+// When no photo is available (e.g. an old board with no usable headshots),
+// render a name-only cassette: drop the photo column and center the info.
+const hasPhoto = !!imageUrl;
+---
+
+<div
+  class="board-card relative w-full aspect-[1.6] rounded-lg bg-white overflow-hidden flex items-end justify-center"
+>
+  <!-- Background Pattern -->
+  <div
+    class="board-card-noise absolute inset-0 pointer-events-none opacity-50 z-0"
+    style={`background-image: url('${getAssetUrl("/backgrounds/backgrounds-noise.webp")}'); background-size: cover;`}
+  >
+  </div>
+  <div
+    class="w-[97%] h-[96.5%] flex justify-center items-center absolute z-20 pointer-events-none"
+  >
+    <img
+      src={isW
+        ? getAssetUrl("/cassettes/cassettes-cassette-layout-pink.webp")
+        : getAssetUrl("/cassettes/cassettes-cassette-layout-orange.webp")}
+      alt="Background Pattern"
+      class="absolute w-full h-full object-cover"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+
+  <div
+    class="w-full flex justify-center items-center z-20 h-[20%] pb-1 absolute bottom-0"
+  >
+    <img
+      src={getAssetUrl("/logos/logos-acm-logo-black.webp")}
+      alt="ACM-VIT Logo"
+      class="h-full object-cover"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+
+  <!-- Member Info -->
+  <div class="flex items-center w-full h-full text-center z-10">
+    {
+      hasPhoto && (
+        <div class="h-full w-2/5 flex items-end overflow-hidden">
+          <img
+            src={cdnSrc}
+            data-photo-fallbacks={photoFallbacks}
+            onerror="window.__acmImgFallback && window.__acmImgFallback(this)"
+            alt={fullName}
+            class="h-full w-full object-cover object-top"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      )
+    }
+
+    <div
+      class:list={[
+        "z-20 flex flex-col justify-center mb-4 sm:mb-10 gap-1 sm:gap-1.5",
+        hasPhoto
+          ? "w-3/5 text-left pl-3 pr-2 sm:pl-8 sm:pr-4"
+          : "w-full text-center items-center px-6",
+      ]}
+    >
+      <div class="">
+        <h3
+          style="font-family: 'PolySans Bold';"
+          class="text-[68%] sm:text-[100%] leading-tight text-gray-900 m-0"
+        >
+          {title}
+          {fullName}
+        </h3>
+        <p
+          style="font-family: PolySans Slim;"
+          class={!isW
+            ? "text-[56%] sm:text-[80%] leading-tight text-primary-orange m-0"
+            : "text-[56%] sm:text-[80%] leading-tight text-[#FF007A] m-0"}
+        >
+          {position}
+        </p>
+      </div>
+
+      <!-- Social Links -->
+      <div class="flex justify-center gap-3 mt-2">
+        {
+          linkedinUrl && (
+            <a
+              href={linkedinUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="hover:cursor-pointer"
+            >
+              <img
+                src={
+                  isW
+                    ? getAssetUrl("/icons/icons-linkedin-pink.webp")
+                    : getAssetUrl("/icons/icons-linkedin-orange.webp")
+                }
+                alt="LinkedIn"
+                class="w-[5vw] h-[5vw] sm:w-[2vw] sm:h-[2vw] lg:w-[1.7vw] lg:h-[1.7vw]"
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+          )
+        }
+
+        {
+          googleScholarUrl && (
+            <a
+              href={googleScholarUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="hover:cursor-pointer"
+            >
+              <img
+                src={
+                  isW
+                    ? getAssetUrl("/icons/icons-google-scholar-pink.webp")
+                    : getAssetUrl("/icons/icons-google-scholar-orange.webp")
+                }
+                alt="Google Scholar"
+                class="w-[5vw] h-[5vw] sm:w-[2vw] sm:h-[2vw] lg:w-[1.7vw] lg:h-[1.7vw]"
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+          )
+        }
+
+        {
+          githubUrl && (
+            <a
+              href={githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="hover:cursor-pointer"
+            >
+              <img
+                src={
+                  isW
+                    ? getAssetUrl("/icons/icons-github-pink.webp")
+                    : getAssetUrl("/icons/icons-github-orange.webp")
+                }
+                alt="GitHub"
+                class="w-[5vw] h-[5vw] sm:w-[2vw] sm:h-[2vw] lg:w-[1.7vw] lg:h-[1.7vw]"
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Shared photo fallback chain: CDN webp -> local webp -> local png.
+  // Astro dedupes this script across every card instance on the page.
+  declare global {
+    interface Window {
+      __acmImgFallback?: (img: HTMLImageElement) => void;
+    }
+  }
+
+  if (!window.__acmImgFallback) {
+    window.__acmImgFallback = (img: HTMLImageElement) => {
+      let list: string[] = [];
+      try {
+        list = JSON.parse(img.dataset.photoFallbacks || "[]");
+      } catch {
+        list = [];
+      }
+      const next = list.shift();
+      if (next) {
+        img.dataset.photoFallbacks = JSON.stringify(list);
+        img.src = next;
+      } else {
+        img.onerror = null;
+      }
+    };
+  }
+</script>
+
+<style>
+  /* Local font-face definitions removed in favor of globals.css */
+
+  /* The card is bg-white with a dark noise texture at 50% - that grain reads
+     as a muddy grey. Fine on the dark page, ugly on the light one. In light
+     mode keep the card near-white with a whisper of grain, and add a border +
+     soft shadow so its edges still separate from the light background. */
+  :global(html[data-theme="light"]) .board-card {
+    background: #fcfcf7;
+    border: 1px solid rgba(38, 59, 51, 0.12);
+    box-shadow: 0 10px 28px rgba(38, 59, 51, 0.1);
+  }
+  :global(html[data-theme="light"]) .board-card-noise {
+    opacity: 0.1;
+  }
+</style>

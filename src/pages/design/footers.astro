@@ -1,0 +1,210 @@
+---
+export const prerender = true;
+import DesignLayout from "../../layouts/DesignLayout.astro";
+import { getAssetUrl } from "../../utils/cdn";
+
+// Pixel heart used as the optional lead-in mark on the sign-off line.
+const heart = [
+  "01100110",
+  "11111111",
+  "11111111",
+  "11111111",
+  "01111110",
+  "00111100",
+  "00011000",
+];
+const cell = 5;
+const step = 6;
+---
+
+<DesignLayout
+  title="Footers & Sign-offs"
+  description="How ACM-VIT signs its work: the crafted-with-love line, post footers, and end marks."
+  current="/design/footers"
+>
+  <section class="ds-hero">
+    <div class="ds-kicker"><span class="ds-kicker-pill">Brand · Sign-offs</span></div>
+    <h1 class="ds-h1">Sign it the same way, every time.</h1>
+    <p class="ds-body-lg">
+      The last line of anything we publish - a website footer, a poster
+      corner, a deck's closing slide - is a signature. Signatures only work
+      when they never change.
+    </p>
+  </section>
+
+  <!-- 01 · The sign-off -->
+  <section class="ds-section" id="signoff">
+    <div class="ds-sec-head"><span class="ds-sec-num">01</span><h2 class="ds-h2">The sign-off line</h2></div>
+    <p class="ds-body">
+      One phrase, exactly one wording. It is "crafted", not "made" - we build
+      things deliberately, and the word carries that.
+    </p>
+    <div class="ds-do-dont">
+      <div class="ds-specimen">
+        <div class="ds-specimen-stage" style="background:#0D0E0D; min-height:120px;">
+          <span style="color:#FEFCD9; font-size:16px;">crafted with love by <strong style="color:#F95F4A;">ACM-VIT</strong></span>
+        </div>
+        <div class="ds-specimen-note">
+          <span class="ds-chip ds-chip-do">Always</span>
+          Lowercase phrase, "ACM-VIT" in caps with the hyphen.
+        </div>
+      </div>
+      <div class="ds-specimen">
+        <div class="ds-specimen-stage" style="background:var(--ds-surface-tonal); min-height:120px; flex-direction:column; gap:8px;">
+          <span style="color:var(--ds-ink-3); font-size:15px; text-decoration:line-through;">made with love by acm vit</span>
+          <span style="color:var(--ds-ink-3); font-size:15px; text-decoration:line-through;">Made with ❤ by ACM VIT</span>
+          <span style="color:var(--ds-ink-3); font-size:15px; text-decoration:line-through;">crafted by ACMVIT</span>
+        </div>
+        <div class="ds-specimen-note">
+          <span class="ds-chip ds-chip-dont">Never</span>
+          No "made", no dropped hyphen, no heart emoji substitutions.
+        </div>
+      </div>
+    </div>
+
+    <div class="ds-specimen" style="margin-top:14px;">
+      <div class="ds-specimen-stage" style="background:#0D0E0D; min-height:120px; flex-direction:column; gap:16px;">
+        <span style="display:inline-flex; align-items:center; gap:16px;">
+          <svg
+            viewBox={`0 0 ${8 * step} ${7 * step}`}
+            style="height:24px; width:auto;"
+            role="img"
+            aria-label="Pixel heart mark"
+          >
+            <g fill="#F95F4A">
+              {heart.map((row, y) =>
+                [...row].map((c, x) =>
+                  c === "1" ? (
+                    <rect x={x * step} y={y * step} width={cell} height={cell} rx="0.8" />
+                  ) : null,
+                ),
+              )}
+            </g>
+          </svg>
+          <span style="color:#FEFCD9; font-size:16px;">crafted with love by <strong style="color:#F95F4A;">ACM-VIT</strong></span>
+        </span>
+        <span style="display:inline-flex; align-items:center; gap:14px;">
+          <svg viewBox="0 0 24 24" style="height:22px; width:auto;" role="img" aria-label="Heart mark">
+            <path d="M12 21C12 21 2.5 14.5 2.5 8.2 2.5 4.8 5 2.5 8 2.5 10 2.5 11.3 3.7 12 5 12.7 3.7 14 2.5 16 2.5 19 2.5 21.5 4.8 21.5 8.2 21.5 14.5 12 21 12 21Z" fill="#F95F4A" />
+          </svg>
+          <span style="color:#FEFCD9; font-size:16px;">crafted with love by <strong style="color:#F95F4A;">ACM-VIT</strong></span>
+        </span>
+      </div>
+      <div class="ds-specimen-note">
+        <span class="ds-chip ds-chip-do">Optional</span>
+        Any heart works - pixel, solid, outline. Keep it at the start, before the line - never mid-sentence, never in place of the word "love".
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 · Writing the name -->
+  <section class="ds-section" id="name">
+    <div class="ds-sec-head"><span class="ds-sec-num">02</span><h2 class="ds-h2">Writing the name</h2></div>
+    <div class="ds-bento">
+      <div class="ds-card ds-b6 ds-reveal">
+        <span class="ds-chip ds-chip-do" style="margin-bottom:12px">Correct</span>
+        <ul class="ds-f-list">
+          <li><strong>ACM-VIT</strong> - the short brand name. The hyphen is not optional.</li>
+          <li><strong>VIT ACM Student Chapter</strong> - the official chapter name per ACM policy, for formal and legal contexts.</li>
+          <li><strong>acm</strong> - lowercase only inside the diamond mark.</li>
+          <li><strong>ACM-W</strong> - same hyphen rule for the women-in-computing community.</li>
+        </ul>
+      </div>
+      <div class="ds-card ds-b6 ds-reveal">
+        <span class="ds-chip ds-chip-dont" style="margin-bottom:12px">Incorrect</span>
+        <ul class="ds-f-list">
+          <li>ACM VIT, ACMVIT, acm-vit, Acm-Vit - wrong casing or missing hyphen.</li>
+          <li>Just "ACM" for the chapter - ACM policy reserves that for the global organization.</li>
+          <li>"ACM Chapter VIT", "VIT-ACM" - never reorder the name.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 · Post footer anatomy -->
+  <section class="ds-section" id="post-footer">
+    <div class="ds-sec-head"><span class="ds-sec-num">03</span><h2 class="ds-h2">Poster & post end marks</h2></div>
+    <p class="ds-body">
+      Every template in the chapter's design kit shares the same frame
+      furniture. Four corners, four jobs:
+    </p>
+    <div class="ds-card ds-card-tonal ds-reveal" style="margin-top:24px; display:flex; justify-content:center; padding:clamp(20px,4vw,44px);">
+      <svg viewBox="0 0 420 470" style="width:100%; max-width:430px" role="img" aria-label="Post template anatomy: VIT logo top-left, ACM lockup top-right, An ACM-VIT Initiative bottom-left, social handles bottom-right">
+        <rect x="10" y="10" width="400" height="450" rx="14" fill="#141414" />
+        <!-- top-left VIT -->
+        <rect x="30" y="30" width="86" height="26" rx="6" fill="none" stroke="#79746e" stroke-dasharray="4 4" />
+        <text x="73" y="47" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="11" fill="#c4c0b8">VIT logo</text>
+        <!-- top-right ACM -->
+        <rect x="304" y="30" width="86" height="26" rx="6" fill="none" stroke="#79746e" stroke-dasharray="4 4" />
+        <text x="347" y="47" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="11" fill="#c4c0b8">ACM lockup</text>
+        <!-- center -->
+        <text x="210" y="245" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="15" font-weight="620" fill="#FEFCD9">Content</text>
+        <!-- bottom-left initiative -->
+        <rect x="30" y="414" width="150" height="26" rx="6" fill="none" stroke="#f95f4a" stroke-dasharray="4 4" />
+        <text x="105" y="431" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="11" fill="#f95f4a">An ACM-VIT Initiative</text>
+        <!-- bottom-right handles -->
+        <rect x="264" y="414" width="126" height="26" rx="6" fill="none" stroke="#79746e" stroke-dasharray="4 4" />
+        <text x="327" y="431" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="11" fill="#c4c0b8">@acmvit handles</text>
+      </svg>
+    </div>
+    <div class="ds-bento">
+      <div class="ds-card ds-b6 ds-reveal">
+        <h3 class="ds-h4">The four corners</h3>
+        <ul class="ds-f-list" style="margin-top:10px">
+          <li><strong>Top left</strong> - VIT institute logo (required on posters published inside campus).</li>
+          <li><strong>Top right</strong> - the ACM-VIT lockup, white variant on dark templates.</li>
+          <li><strong>Bottom left</strong> - the end mark: "An ACM-VIT Initiative".</li>
+          <li><strong>Bottom right</strong> - social handles with platform icons.</li>
+        </ul>
+      </div>
+      <div class="ds-card ds-b6 ds-reveal">
+        <h3 class="ds-h4">Special cases</h3>
+        <ul class="ds-f-list" style="margin-top:10px">
+          <li><strong>DSW posters</strong> - add the "Office of Students' Welfare" strip up top and the coordinator contact block at the bottom, per VIT requirements.</li>
+          <li><strong>ACM-W material</strong> - swap the top-right lockup for the ACM-W mark; everything else stays.</li>
+          <li><strong>Stories</strong> - corners move inside the 9:16 safe zones; the end mark may sit alone.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 · Website & document footers -->
+  <section class="ds-section" id="site-footer">
+    <div class="ds-sec-head"><span class="ds-sec-num">04</span><h2 class="ds-h2">Website & document footers</h2></div>
+    <div class="ds-bento">
+      <div class="ds-card ds-b8 ds-reveal" style="background:#0D0E0D; border-color:#0D0E0D;">
+        <img src={getAssetUrl("/design/logos/acm-horizontal-white.svg")} alt="" style="width:190px; display:block;" loading="lazy" />
+        <div style="display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-top:26px; border-top:1px solid rgba(254,252,217,.14); padding-top:18px;">
+          <span style="color:rgba(254,252,217,.65); font-size:13px;">© 2026 ACM-VIT. All rights reserved.</span>
+          <span style="color:rgba(254,252,217,.65); font-size:13px;">crafted with love by <strong style="color:#F95F4A">ACM-VIT</strong></span>
+        </div>
+      </div>
+      <div class="ds-card ds-b4 ds-reveal">
+        <h3 class="ds-h4">Footer contents, in order</h3>
+        <ul class="ds-f-list" style="margin-top:10px">
+          <li>Lockup or diamond mark</li>
+          <li>Navigation and social links</li>
+          <li>Copyright: © year ACM-VIT. All rights reserved.</li>
+          <li>The sign-off: crafted with love by ACM-VIT</li>
+        </ul>
+        <p class="ds-small" style="margin-top:12px">
+          Decks and PDFs end the same way: last slide or page carries the mark
+          and the sign-off line.
+        </p>
+      </div>
+    </div>
+  </section>
+</DesignLayout>
+
+<style>
+  .ds-f-list {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--ds-ink-2);
+    font-size: 14.5px;
+    line-height: 1.7;
+  }
+  .ds-f-list li + li {
+    margin-top: 6px;
+  }
+</style>

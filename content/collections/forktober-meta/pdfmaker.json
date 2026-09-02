@@ -1,0 +1,10 @@
+{
+  "slug": "pdfmaker",
+  "title": "PDFMaker",
+  "repo": "PDFMaker",
+  "years": [
+    2023
+  ],
+  "description": "Simplify Generating PDFs for your Assignments",
+  "order": 50
+}

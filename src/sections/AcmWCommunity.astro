@@ -1,0 +1,76 @@
+---
+import "../styles/globals.css";
+import { getAssetUrl } from "../utils/cdn";
+import AnimatedButton from "../components/ui/AnimatedButton.astro";
+
+const aims = [
+  {
+    title: "Equal Access",
+    body: "Creating equal access to opportunities in technology so everyone, regardless of gender, has the chance to grow in STEM.",
+  },
+  {
+    title: "Mentorship & Exposure",
+    body: "Talent isn't defined by barriers, but by the right support. We connect women in tech with mentors, peers, and stages to be heard.",
+  },
+  {
+    title: "Amplifying Voices",
+    body: "Through the InspiHER podcast, blogs, and community stalls, we've carved out a space where stories and perspectives are shared.",
+  },
+];
+---
+
+<section
+  id="acm-w"
+  class="relative z-20 py-16 md:py-24 border-t border-white/10 overflow-hidden"
+>
+  <!-- Pink glow -->
+  <div
+    class="absolute inset-0 -z-10 pointer-events-none opacity-70"
+    aria-hidden="true"
+    style="background: radial-gradient(45% 55% at 25% 30%, rgba(255,0,122,0.16), transparent 70%);"
+  ></div>
+
+  <div class="max-w-[1400px] mx-auto px-6 md:px-10">
+    <div class="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
+      <!-- Left: identity + copy -->
+      <div>
+        <img
+          src={getAssetUrl("/logos/logos-acmw-logo.webp")}
+          alt="ACM-W"
+          class="w-56 sm:w-64 md:w-72 h-auto mb-7"
+          loading="lazy"
+          decoding="async"
+        />
+
+        <div class="w-14 h-[3px] rounded-full bg-gradient-to-r from-[#ff007a] to-[#ff5f4a] mb-7"></div>
+
+        <p class="text-gray-300 text-sm md:text-base font-mono leading-relaxed max-w-xl mb-4">
+          ACM-W was created with a simple yet profound mission: to ensure that
+          everyone, regardless of gender, has the chance to grow in STEM. As a
+          sister chapter of ACM-VIT, we are part of a community that values
+          contributions across all computing fields.
+        </p>
+        <p class="text-gray-400 text-sm md:text-base font-mono leading-relaxed max-w-xl mb-8">
+          We stand for inclusion, empowerment, and growth - encouraging women to
+          take initiative, share their ideas, and thrive in computing shoulder
+          to shoulder with their peers.
+        </p>
+
+        <div class="flex flex-col md:flex-row md:flex-wrap items-center gap-6 [&_.anim-btn-anchor]:w-auto [&_.anim-btn]:whitespace-nowrap">
+          <AnimatedButton text="ACM-W Website" href="https://w.acmvit.in" target="_blank" iconBg="#ff007a" />
+          <AnimatedButton text="Learn more" href="https://women.acm.org" target="_blank" iconBg="#ff007a" />
+        </div>
+      </div>
+
+      <!-- Right: aims -->
+      <div class="grid gap-4">
+        {aims.map((aim) => (
+          <div class="rounded-2xl border border-[#ff007a]/15 bg-[#ff007a]/[0.03] p-6 transition-all duration-300 hover:border-[#ff007a]/35 hover:bg-[#ff007a]/[0.06]">
+            <h3 class="text-[#FFFDD0] text-lg font-semibold mb-2">{aim.title}</h3>
+            <p class="text-gray-400 text-sm font-mono leading-relaxed">{aim.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

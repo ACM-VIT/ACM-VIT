@@ -1,0 +1,7 @@
+{
+  "name": "DaVinci Resolve",
+  "slug": "davinci-resolve",
+  "svgFile": "/domains/design/tools/design-tool-davinci-resolve.svg",
+  "colorHex": "#E12D39",
+  "order": 110
+}

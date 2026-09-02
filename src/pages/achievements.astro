@@ -1,0 +1,971 @@
+---
+export const prerender = true;
+import Layout from "../layouts/Layout.astro";
+import "../styles/globals.css";
+import Footer from "../layouts/Footer.astro";
+import FillButton from "../components/ui/FillButton.astro";
+import AnimatedButton from "../components/ui/AnimatedButton.astro";
+import { getAssetUrl } from "../utils/cdn";
+import { stats, achievements } from "../data/achievementsData.ts";
+import {
+  current as z0d1akCurrent,
+  bestWorldRank,
+  achievements as z0d1akResults,
+} from "../data/z0d1akData.ts";
+
+// z0d1ak's podium finishes (top 3), best first.
+const z0d1akPodiums = z0d1akResults
+  .filter((r) => r.place <= 3)
+  .sort((a, b) => a.place - b.place);
+const ordinal = (n: number) => {
+  const s = ["th", "st", "nd", "rd"], v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+};
+
+// ACM-VIT students who led the SGLang docs migration. GitHub handles link to
+// profiles; the one display name without a handle renders as plain text.
+const sglangContributors: { label: string; handle?: string }[] = [
+  { label: "Adhyan-Jain", handle: "Adhyan-Jain" },
+  { label: "Maitri-shah29", handle: "Maitri-shah29" },
+  { label: "architnigam", handle: "architnigam" },
+  { label: "Nakul-Sinha", handle: "Nakul-Sinha" },
+  { label: "divyamagrawal06", handle: "divyamagrawal06" },
+  { label: "A-Taman", handle: "A-Taman" },
+  { label: "nimeshas", handle: "nimeshas" },
+  { label: "IshhanKheria", handle: "IshhanKheria" },
+  { label: "Krishang-Zinzuwadia", handle: "Krishang-Zinzuwadia" },
+  { label: "pokymono", handle: "pokymono" },
+  { label: "Ishitajoshii", handle: "Ishitajoshii" },
+  { label: "AdityaVKochar", handle: "AdityaVKochar" },
+];
+---
+
+<Layout pageTitle="Achievements" backHref="/">
+  <!-- Fixed gold-lit backdrop -->
+  <div class="hall" aria-hidden="true">
+    <div class="a-glow"></div>
+    <div class="a-grid">
+      <span class="ag-v" style="left: 18%"></span>
+      <span class="ag-v" style="left: 50%"></span>
+      <span class="ag-v" style="left: 82%"></span>
+    </div>
+    <canvas id="dustfield"></canvas>
+  </div>
+
+  <main class="a-page" id="top">
+    <!-- ───────────────────────── HERO ───────────────────────── -->
+    <section class="hero">
+      <div class="hero-top">
+        <p class="tagline" data-h>
+          Awards, recognitions, milestones - every late night and every
+          shipped build, cast in gold.
+        </p>
+      </div>
+
+      <h1 class="wordmark" data-h>Achievements</h1>
+
+      <div class="hero-horizon"><span class="hh-glow"></span></div>
+    </section>
+
+    <!-- ─────────────── FEATURED · ACM INTERNATIONAL AWARD ─────────────── -->
+    <section class="feature" id="feature">
+      <div class="feature-copy">
+        <h2 class="feature-title" data-reveal>
+          <span class="ft-cream">ACM</span> International Award
+        </h2>
+        <h3 class="feature-sub" data-reveal>Outstanding School Service</h3>
+        <p class="feature-term" data-reveal>Community Recognition · Term 2025-2026</p>
+        <div class="feature-body" data-reveal>
+          <p>
+            Happy to announce that ACM-VIT has been awarded the ACM International
+            Chapter Award for Outstanding School Service.
+          </p>
+          <p>
+            The recognition reflects a year of community-first work across
+            outreach, student initiatives, and chapter-led experiences built with
+            the same intent that defines the rest of ACM-VIT.
+          </p>
+        </div>
+        <div class="feature-cta" data-reveal>
+          <AnimatedButton text="Check out the awards and more" href="#reel" iconBg="#d4af37" />
+        </div>
+      </div>
+
+      <div class="feature-badge" data-reveal>
+        <img
+          src={getAssetUrl("/ui/ui-acm-celeb.webp")}
+          alt="ACM Student Chapter Excellence Award - Outstanding School Service"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    </section>
+
+    <!-- ─────────────── FEATURED · ACM-W EMERGING CHAPTER ─────────────── -->
+    <section class="feature feature-w" id="acm-w">
+      <div class="feature-copy">
+        <h2 class="feature-title" data-reveal>
+          <span class="ft-cream">Emerging</span> Chapter Award
+        </h2>
+        <h3 class="feature-sub" data-reveal>
+          Vellore Institute of Technology ACM-W Student Chapter, Vellore
+        </h3>
+        <p class="feature-term" data-reveal>ACM-W Recognition · Year 2023</p>
+        <div class="feature-body" data-reveal>
+          <p>
+            The VIT ACM-W Student Chapter was recognized with the ACM-W Emerging
+            Chapter Award, celebrating a young chapter making early, visible
+            impact for women in computing.
+          </p>
+          <p>
+            The award marks the chapter's first year of momentum - the events,
+            mentorship and community it built to bring more women into tech at
+            VIT Vellore.
+          </p>
+        </div>
+      </div>
+
+      <div class="feature-badge" data-reveal>
+        <img
+          class="feature-w-art"
+          src={getAssetUrl("/acmw/acmw-hero.webp")}
+          alt="ACM-W VIT - Emerging Chapter Award 2023"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    </section>
+
+    <!-- ─────────────────── z0d1ak · CAPTURE THE FLAG ─────────────────── -->
+    <section class="chapter z-section" id="z0d1ak">
+      <header class="ch-head" data-reveal>
+        <h2 class="ch-title">z0d1ak on the board</h2>
+        <p class="ch-deck">Capture the Flag</p>
+        <p class="ch-body">
+          ACM-VIT's competitive CTF team climbed to World #{bestWorldRank} and
+          India #{z0d1akCurrent.countryRank} on CTFtime, across
+          {z0d1akCurrent.events} events in {z0d1akCurrent.year}.
+        </p>
+      </header>
+
+      <div class="z-stats" data-reveal>
+        <div class="astat">
+          <span class="astat-num">#{bestWorldRank}</span>
+          <span class="astat-label">Best World Rank</span>
+          <span class="astat-sub">All-time peak</span>
+        </div>
+        <div class="astat">
+          <span class="astat-num">#{z0d1akCurrent.countryRank}</span>
+          <span class="astat-label">India Rank</span>
+          <span class="astat-sub">CTFtime {z0d1akCurrent.year}</span>
+        </div>
+        <div class="astat">
+          <span class="astat-num">{z0d1akCurrent.events}</span>
+          <span class="astat-label">Events Played</span>
+          <span class="astat-sub">Season {z0d1akCurrent.year}</span>
+        </div>
+      </div>
+
+      <div class="z-podiums" data-reveal>
+        {
+          z0d1akPodiums.map((r) => (
+            <div class="z-pod">
+              <span class="z-pod-place">{ordinal(r.place)}</span>
+              <span class="z-pod-event">{r.event}</span>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="z-highlight" data-reveal>
+        <div class="z-hl-copy">
+          <span class="z-hl-tag">1st Place · Override.exe</span>
+          <h3 class="z-hl-title">A first offline CTF title</h3>
+          <p class="z-hl-body">
+            z0d1ak secured first place at Override.exe, an offline Capture The
+            Flag contest hosted by Scaler School of Technology, Bengaluru. The
+            result marks the team's first victory at an in-person CTF.
+          </p>
+        </div>
+        <div class="z-hl-photos">
+          <img
+            src={getAssetUrl("/achievements/achievements-override-cheque.webp")}
+            alt="z0d1ak with the Override.exe winners' cheque at Scaler School of Technology"
+            loading="lazy"
+            decoding="async"
+          />
+          <img
+            src={getAssetUrl("/achievements/achievements-override-scoreboard.webp")}
+            alt="Override.exe scoreboard with z0d1ak in first place"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      </div>
+
+      <div class="z-cta" data-reveal>
+        <FillButton label="Explore z0d1ak" href="/z0d1ak" class="a-fill primary" />
+      </div>
+    </section>
+
+    <!-- ─────────────────── OPEN SOURCE · SGLANG ─────────────────── -->
+    <section class="chapter os-section" id="sglang">
+      <header class="ch-head" data-reveal>
+        <h2 class="ch-title">Contributing to SGLang</h2>
+        <p class="ch-deck">Open source</p>
+        <p class="ch-body">
+          ACM-VIT students led the migration of SGLang's documentation to a new
+          Mintlify-based system, building on the original docs and cookbook that
+          the project's authors first wrote.
+        </p>
+      </header>
+
+      <div class="os-authors" data-reveal>
+        {
+          sglangContributors.map((c) =>
+            c.handle ? (
+              <a
+                class="os-chip"
+                href={`https://github.com/${c.handle}`}
+                target="_blank"
+                rel="noopener"
+              >
+                @{c.handle}
+              </a>
+            ) : (
+              <span class="os-chip os-chip-static">{c.label}</span>
+            ),
+          )
+        }
+      </div>
+
+      <p class="os-advisors" data-reveal>
+        Advised by
+        <a href="https://github.com/adarshxs" target="_blank" rel="noopener">@adarshxs &#8599;</a>
+        (ACM-VIT) and
+        <a href="https://github.com/wisclmy0611" target="_blank" rel="noopener">@wisclmy0611 &#8599;</a>,
+        <a href="https://github.com/Richardczl98" target="_blank" rel="noopener">@Richardczl98 &#8599;</a>
+        (LMSYS).
+      </p>
+
+      <div class="os-ctas" data-reveal>
+        <FillButton
+          label="View the repository"
+          href="https://github.com/sgl-project/sglang"
+          external
+          class="a-fill primary"
+        />
+        <FillButton
+          label="See the announcement"
+          href="https://x.com/lmsysorg/status/2046652338027602236"
+          external
+          class="a-fill"
+        />
+      </div>
+    </section>
+
+    <!-- ─────────────────── YC STARTUP SCHOOL ─────────────────── -->
+    <section class="chapter yc-section" id="yc-startup-school">
+      <header class="ch-head" data-reveal>
+        <h2 class="ch-title">YC Startup School, Bengaluru</h2>
+        <p class="ch-deck">Out in the world</p>
+      </header>
+
+      <div class="yc-copy" data-reveal>
+        <p>
+          On April 19, ACM-VIT members headed to the YC Startup School in
+          Bengaluru.
+        </p>
+        <p>
+          We connected with a strong crowd of ambitious builders from across
+          India, heard direct and practical advice straight from the YC partners
+          and founders, and walked away with genuinely valuable insights on what
+          it takes to build at the next level.
+        </p>
+        <p>
+          In the age where anyone can build anything, the people you build with
+          matter so much, and we're so glad we got to connect with so many great
+          people.
+        </p>
+        <p>
+          Grateful for the experience (+ the credits & merch!) and excited to
+          bring it back to our community at VIT.
+        </p>
+      </div>
+
+      <div class="yc-photos" data-reveal>
+        <img
+          src={getAssetUrl("/achievements/achievements-yc-team.webp")}
+          alt="ACM-VIT students at the YC Startup School India backdrop"
+          loading="lazy"
+          decoding="async"
+        />
+        <img
+          src={getAssetUrl("/achievements/achievements-yc-panel.webp")}
+          alt="Startup advice panel from YC partners on stage"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="yc-cta" data-reveal>
+        <FillButton
+          label="Read the post"
+          href="https://x.com/ACM_VIT/status/2045928863201636697"
+          external
+          class="a-fill primary"
+        />
+      </div>
+    </section>
+
+    <!-- ─────────────── CLOUDFLARE IRL · WENVY ─────────────── -->
+    <section class="chapter hack-section" id="wenvy">
+      <header class="ch-head" data-reveal>
+        <h2 class="ch-title">Cloudflare IRL Hackathon</h2>
+        <p class="ch-deck">Hackathon win</p>
+        <p class="ch-body">
+          On 13 June 2026, an ACM-VIT team won the Cloudflare IRL Hackathon in
+          Bengaluru for building Wenvy - Git for your environment files. Tired of
+          teammates passing secrets around over Slack and WhatsApp, they built a
+          safer way to version, track and share env files.
+        </p>
+      </header>
+
+      <div class="hack-photos" data-reveal>
+        <figure class="hack-fig">
+          <img
+            src={getAssetUrl("/achievements/achievements-wenvy-team.webp")}
+            alt="The ACM-VIT team behind Wenvy at the Cloudflare IRL Hackathon"
+            loading="lazy"
+            decoding="async"
+          />
+          <figcaption>The developers behind Wenvy</figcaption>
+        </figure>
+        <figure class="hack-fig">
+          <img
+            src={getAssetUrl("/achievements/achievements-wenvy-cloudflare.webp")}
+            alt="Cloudflare IRL Hackathon, Bengaluru title screen"
+            loading="lazy"
+            decoding="async"
+          />
+          <figcaption>Cloudflare IRL Hackathon, Bengaluru</figcaption>
+        </figure>
+      </div>
+
+      <div class="hack-cta" data-reveal>
+        <FillButton label="Learn more about Wenvy" href="/projects/wenvy" class="a-fill primary" />
+        <FillButton label="Visit wenvy.dev" href="https://wenvy.dev" external class="a-fill" />
+      </div>
+    </section>
+
+    <!-- ───────────────────── STAT BAND ───────────────────── -->
+    <section class="stat-band">
+      <div class="a-stats" data-reveal>
+        {
+          stats.map((s) => (
+            <div class="astat">
+              <span class="astat-num">{s.num}</span>
+              <span class="astat-label">{s.label}</span>
+              {s.sub && <span class="astat-sub">{s.sub}</span>}
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- ─────────────────── THE REEL ─────────────────── -->
+    <section class="chapter" id="reel">
+      <header class="ch-head" data-reveal>
+        <h2 class="ch-title">Moments worth keeping</h2>
+        <p class="ch-deck">The reel</p>
+        <p class="ch-body">
+          A running record of what ACM-VIT and its members have earned along the
+          way.
+        </p>
+      </header>
+
+      <div class="reel">
+        {
+          achievements.map((a, i) => (
+            <article class="ach-card" data-reveal style={`--d:${i * 0.05}s`}>
+              <div class="ach-year">{a.year}</div>
+              <div class="ach-body">
+                <div class="ach-top">
+                  <h3 class="ach-title">{a.title}</h3>
+                  {a.place && <span class="ach-place">{a.place}</span>}
+                </div>
+                <p class="ach-org">{a.org}</p>
+                <p class="ach-blurb">{a.blurb}</p>
+              </div>
+              {a.image && (
+                <img
+                  class="ach-asset"
+                  src={getAssetUrl(a.image)}
+                  alt={a.title}
+                  loading="lazy"
+                  decoding="async"
+                />
+              )}
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- ───────────────────── CLOSING SENDOFF ───────────────────── -->
+    <section class="sendoff">
+      <h2 class="sendoff-title" data-reveal>Still counting</h2>
+      <p class="sendoff-lead" data-reveal>
+        The next one is yours to write - the best line on this list has not
+        been written yet. Come build it with us.
+      </p>
+      <div class="sendoff-ctas" data-reveal>
+        <FillButton label="Explore our work" href="/projects" class="a-fill primary" />
+        <FillButton label="Meet the team" href="/team" class="a-fill" />
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap");
+</style>
+
+<style>
+  :root {
+    --serif: "Cormorant Garamond", Georgia, serif;
+    --label: "PolySans Mono", "Inter", system-ui, sans-serif;
+    --ink: #fefcd9;
+    --ink-soft: rgba(254, 252, 217, 0.72);
+    --muted: rgba(254, 252, 217, 0.42);
+    --gold: #d4af37; /* theme colour */
+    --gold-bright: #f2d16b;
+    --gold-deep: #a67c1e;
+    --bg-0: #0a0805; /* warm near-black */
+    --line: rgba(212, 175, 55, 0.16);
+  }
+
+  :global(.diamond-grid) { display: none !important; }
+  :global(body) { background: var(--bg-0); }
+
+  .hall {
+    position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+    background: var(--bg-0);
+  }
+  .a-glow {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(46% 40% at 50% 6%, rgba(242, 209, 107, 0.16), transparent 70%),
+      radial-gradient(50% 42% at 50% 108%, rgba(212, 175, 55, 0.14), transparent 72%);
+  }
+  .a-grid { position: absolute; inset: 0; }
+  .ag-v {
+    position: absolute; top: 0; bottom: 0; width: 2px;
+    background: repeating-linear-gradient(
+      to bottom, rgba(212, 175, 55, 0.07) 0 3px, transparent 3px 18px);
+  }
+  #dustfield { position: absolute; inset: 0; display: block; }
+
+  /* ── Page scaffold ── */
+  .a-page { position: relative; z-index: 1; color: var(--ink); font-family: var(--serif); overflow-x: clip; }
+  .a-page section { padding: clamp(7rem, 16vh, 12rem) clamp(1.25rem, 6vw, 5rem); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative; min-height: 92svh; overflow: hidden;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+  }
+  .hero-top {
+    position: relative; z-index: 4;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .wordmark {
+    position: relative; z-index: 2;
+    font-family: var(--serif); font-weight: 500;
+    font-size: clamp(3rem, 12vw, 9.5rem); line-height: 0.9;
+    letter-spacing: 0.01em;
+    background: linear-gradient(180deg, var(--gold-bright), var(--gold) 45%, var(--gold-deep));
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+    text-shadow: 0 0 90px rgba(212, 175, 55, 0.35);
+  }
+  .tagline {
+    font-weight: 400; font-style: italic;
+    font-size: clamp(1.1rem, 2.4vw, 1.6rem);
+    color: var(--ink-soft); max-width: 34ch; line-height: 1.5;
+    margin-top: 1.6rem;
+  }
+
+  .hero-horizon {
+    position: absolute; left: 50%; bottom: -10vh; transform: translateX(-50%);
+    width: 130%; height: 40vh; z-index: 0; pointer-events: none;
+  }
+  .hh-glow {
+    position: absolute; inset: 0;
+    background: radial-gradient(58% 60% at 50% 100%,
+      rgba(242, 209, 107, 0.5) 0%, rgba(212, 175, 55, 0.28) 34%, transparent 72%);
+    animation: hh-breathe 9s ease-in-out infinite;
+  }
+  @keyframes hh-breathe {
+    0%, 100% { transform: scale(1); opacity: 0.85; }
+    50%      { transform: scale(1.07); opacity: 1; }
+  }
+
+  /* ── Featured award ── */
+  .feature {
+    position: relative; overflow: hidden;
+    display: grid; grid-template-columns: 1.15fr 0.85fr; gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+    max-width: 1300px; margin: 0 auto;
+  }
+  .feature-copy { position: relative; z-index: 1; max-width: 46rem; }
+  .feature-title {
+    font-family: "PolySans Trial", sans-serif; font-weight: 800;
+    font-size: clamp(2.6rem, 7vw, 5.5rem); line-height: 0.92;
+    letter-spacing: -0.02em; text-transform: uppercase;
+    color: var(--gold); margin: 1.2rem 0 0;
+    text-shadow: 0 0 60px rgba(212, 175, 55, 0.2);
+  }
+  .feature-title .ft-cream { color: var(--ink); }
+  .feature-sub {
+    font-family: "PolySans Trial", sans-serif; font-weight: 700;
+    font-size: clamp(1.3rem, 3vw, 2rem); color: var(--ink);
+    margin: 2rem 0 0;
+  }
+  .feature-term {
+    font-family: var(--label); font-size: 0.66rem; letter-spacing: 0.24em;
+    text-transform: uppercase; color: var(--gold); margin: 0.9rem 0 0;
+    display: inline-flex; align-items: center; gap: 0.55rem;
+  }
+  .feature-term::before {
+    content: ""; width: 22px; height: 1px; background: var(--gold); flex: none;
+  }
+  .feature-body { margin-top: 1.4rem; display: flex; flex-direction: column; gap: 1.1rem; max-width: 40rem; }
+  .feature-body p {
+    font-family: var(--label); font-size: clamp(0.9rem, 1.5vw, 1.02rem);
+    line-height: 1.7; color: var(--ink-soft); margin: 0;
+  }
+  .feature-cta { margin-top: 2.4rem; }
+  .feature-cta :global(.anim-btn-anchor) { justify-content: flex-start; width: auto; }
+
+  .feature-badge {
+    position: relative; z-index: 1;
+    display: flex; justify-content: center; align-items: center;
+  }
+  .feature-badge img {
+    width: min(100%, 460px); height: auto;
+    filter: drop-shadow(0 18px 44px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 30px rgba(212, 175, 55, 0.18));
+  }
+
+  /* ── ACM-W variant: pink accents ── */
+  .feature-w { --pink: #ff007a; }
+  .feature-w .feature-title { color: var(--pink); text-shadow: 0 0 60px rgba(255, 0, 122, 0.22); }
+  .feature-w .feature-term { color: var(--pink); }
+  .feature-w .feature-term::before { background: var(--pink); }
+  .feature-w-art {
+    border-radius: 16px;
+    border: 1px solid rgba(255, 0, 122, 0.35);
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.5), 0 0 42px rgba(255, 0, 122, 0.22);
+    filter: none !important;
+    aspect-ratio: 4 / 3; object-fit: cover;
+  }
+
+  /* ── Stat band ── */
+  .stat-band { padding-top: clamp(2rem, 5vh, 3.5rem) !important; }
+  .a-stats {
+    max-width: 1000px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(1rem, 3vw, 2.5rem);
+    text-align: center;
+  }
+  .astat { display: flex; flex-direction: column; gap: 0.6rem; }
+  .astat-num {
+    font-family: var(--serif); font-weight: 500;
+    font-size: clamp(2.6rem, 6vw, 4.5rem); line-height: 1; color: var(--gold-bright);
+    text-shadow: 0 0 34px rgba(212, 175, 55, 0.28);
+  }
+  .astat-label { font-family: var(--label); font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink); }
+  .astat-sub { font-family: var(--label); font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+
+  /* ── Chapter head ── */
+  .ch-head { max-width: 640px; margin: 0 auto clamp(3rem, 7vh, 5rem); text-align: center; }
+  .ch-title {
+    font-family: var(--serif); font-weight: 400;
+    font-size: clamp(2.2rem, 5.5vw, 4rem); line-height: 1.05;
+    color: var(--ink); margin: 0;
+  }
+  .ch-deck {
+    font-family: var(--serif); font-style: italic; font-weight: 400;
+    font-size: clamp(1.05rem, 2vw, 1.35rem); line-height: 1.3;
+    color: var(--gold); margin: 0.7rem 0 0;
+  }
+  .ch-body { font-family: var(--serif); font-size: clamp(1.1rem, 2vw, 1.45rem); color: var(--ink-soft); line-height: 1.55; margin-top: 1.4rem; }
+
+  /* ── The reel ── */
+  .reel { max-width: 880px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.2rem; }
+  .ach-card {
+    display: grid; grid-template-columns: 96px 1fr; gap: 1.6rem; align-items: start;
+    padding: clamp(1.4rem, 3vw, 2rem); border-radius: 16px;
+    border: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(30, 24, 12, 0.5), rgba(12, 9, 5, 0.5));
+    transition: border-color 0.35s ease, transform 0.35s ease, background 0.35s ease;
+  }
+  .ach-card:hover {
+    transform: translateY(-3px); border-color: rgba(212, 175, 55, 0.5);
+    background:
+      radial-gradient(90% 90% at 0% 0%, rgba(212, 175, 55, 0.12), transparent 70%),
+      linear-gradient(180deg, rgba(30, 24, 12, 0.6), rgba(12, 9, 5, 0.5));
+  }
+  .ach-year {
+    font-family: var(--serif); font-weight: 500; font-size: clamp(1.6rem, 3vw, 2.2rem);
+    color: var(--gold); line-height: 1; padding-top: 0.15rem;
+  }
+  .ach-top { display: flex; align-items: baseline; gap: 0.9rem; flex-wrap: wrap; }
+  .ach-title { font-family: var(--serif); font-weight: 500; font-size: clamp(1.5rem, 3vw, 2.1rem); color: var(--ink); margin: 0; line-height: 1.1; }
+  .ach-place {
+    font-family: var(--label); font-size: 0.56rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: #1a140a; background: var(--gold-bright); padding: 0.3rem 0.7rem; border-radius: 999px; flex: none;
+  }
+  .ach-org { font-family: var(--label); font-size: 0.64rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin: 0.5rem 0 0; }
+  .ach-blurb { font-family: var(--serif); font-size: 1.15rem; color: var(--ink-soft); line-height: 1.55; margin: 0.7rem 0 0; }
+  .ach-asset {
+    grid-column: 2 / -1; justify-self: start;
+    width: auto; max-width: 100%; height: clamp(70px, 14vw, 110px);
+    margin-top: 1rem; object-fit: contain;
+    filter: drop-shadow(0 10px 26px rgba(0, 0, 0, 0.45));
+  }
+
+  /* ── z0d1ak section ── */
+  .z-section { text-align: center; }
+  .z-stats {
+    max-width: 820px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 3vw, 2.5rem);
+  }
+  .z-podiums {
+    max-width: 720px; margin: clamp(2.5rem, 6vh, 4rem) auto 0;
+    display: flex; flex-direction: column; gap: 0.6rem;
+  }
+  .z-pod {
+    display: flex; align-items: baseline; gap: 1.2rem;
+    padding: 0.9rem 1.4rem; border: 1px solid var(--line); border-radius: 12px;
+    background: linear-gradient(180deg, rgba(30, 24, 12, 0.4), rgba(12, 9, 5, 0.4));
+    text-align: left;
+  }
+  .z-pod-place {
+    font-family: var(--serif); font-weight: 500; font-size: clamp(1.4rem, 3vw, 2rem);
+    color: var(--gold); flex: none; width: 3ch;
+  }
+  .z-pod-event { font-family: var(--serif); font-size: clamp(1.15rem, 2.4vw, 1.6rem); color: var(--ink); }
+  .z-highlight {
+    max-width: 1000px; margin: clamp(2.5rem, 6vh, 4rem) auto 0;
+    padding: clamp(1.4rem, 3vw, 2.2rem); border-radius: 18px;
+    border: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(30, 24, 12, 0.5), rgba(12, 9, 5, 0.5));
+    text-align: left;
+  }
+  .z-hl-tag {
+    font-family: var(--label); font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: #1a140a; background: var(--gold-bright); padding: 0.35rem 0.8rem; border-radius: 999px;
+    display: inline-block;
+  }
+  .z-hl-title {
+    font-family: var(--serif); font-weight: 500; font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    color: var(--ink); margin: 1rem 0 0; line-height: 1.1;
+  }
+  .z-hl-body {
+    font-family: var(--serif); font-size: clamp(1.05rem, 2vw, 1.3rem);
+    color: var(--ink-soft); line-height: 1.55; margin: 0.7rem 0 0; max-width: 64ch;
+  }
+  .z-hl-photos {
+    margin-top: clamp(1.4rem, 3vw, 2rem);
+    display: grid; grid-template-columns: 1fr 1fr; gap: clamp(0.9rem, 2vw, 1.4rem);
+  }
+  .z-hl-photos img {
+    width: 100%; aspect-ratio: 16 / 9; object-fit: cover;
+    border-radius: 12px; border: 1px solid var(--line);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.4);
+  }
+
+  .z-cta { margin-top: clamp(2.5rem, 6vh, 4rem); display: flex; justify-content: center; }
+
+  /* ── SGLang open-source section ── */
+  .os-section { text-align: center; }
+  .os-authors {
+    max-width: 820px; margin: 0 auto;
+    display: flex; flex-wrap: wrap; gap: 0.7rem; justify-content: center;
+  }
+  .os-chip {
+    font-family: var(--label); font-size: 0.72rem; letter-spacing: 0.06em;
+    color: var(--ink); text-decoration: none;
+    padding: 0.55rem 1rem; border-radius: 999px;
+    border: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(30, 24, 12, 0.4), rgba(12, 9, 5, 0.4));
+    transition: border-color 0.3s ease, color 0.3s ease, transform 0.3s ease, background 0.3s ease;
+  }
+  a.os-chip:hover {
+    transform: translateY(-2px); color: var(--gold-bright);
+    border-color: rgba(212, 175, 55, 0.55);
+    background:
+      radial-gradient(90% 90% at 50% 0%, rgba(212, 175, 55, 0.16), transparent 70%),
+      linear-gradient(180deg, rgba(30, 24, 12, 0.5), rgba(12, 9, 5, 0.4));
+  }
+  .os-chip-static { color: var(--ink-soft); }
+  .os-advisors {
+    max-width: 640px; margin: clamp(1.6rem, 4vh, 2.4rem) auto 0;
+    font-family: var(--serif); font-size: clamp(1.05rem, 2vw, 1.3rem);
+    color: var(--ink-soft); line-height: 1.5;
+  }
+  .os-advisors a {
+    color: var(--gold); text-decoration: none;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.35);
+    transition: border-color 0.3s ease, color 0.3s ease;
+  }
+  .os-advisors a:hover { color: var(--gold-bright); border-color: var(--gold); }
+  .os-ctas {
+    margin-top: clamp(2.5rem, 6vh, 4rem);
+    display: flex; flex-wrap: wrap; gap: 1.25rem; justify-content: center; align-items: center;
+  }
+
+  /* ── YC Startup School section ── */
+  .yc-section { text-align: center; }
+  .yc-copy {
+    max-width: 90ch; margin: 0 auto;
+    display: flex; flex-direction: column; gap: 1.1rem;
+  }
+  .yc-copy p {
+    font-family: var(--serif); font-size: clamp(1.1rem, 2vw, 1.4rem);
+    line-height: 1.6; color: var(--ink-soft); margin: 0;
+  }
+  .yc-photos {
+    max-width: 1000px; margin: clamp(2.5rem, 6vh, 4rem) auto 0;
+    display: grid; grid-template-columns: 1fr 1fr; gap: clamp(0.9rem, 2vw, 1.4rem);
+  }
+  .yc-photos img {
+    width: 100%; aspect-ratio: 4 / 3; object-fit: cover;
+    border-radius: 16px; border: 1px solid var(--line);
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.45), 0 0 30px rgba(212, 175, 55, 0.12);
+  }
+  .yc-cta { margin-top: clamp(2.5rem, 6vh, 4rem); display: flex; justify-content: center; }
+
+  /* ── Cloudflare IRL / Wenvy section ── */
+  .hack-section { text-align: center; }
+  .hack-photos {
+    max-width: 1000px; margin: 0 auto;
+    display: grid; grid-template-columns: 1.5fr 1fr; gap: clamp(0.9rem, 2vw, 1.4rem);
+    align-items: start;
+  }
+  .hack-fig { margin: 0; }
+  .hack-fig img {
+    width: 100%; height: clamp(260px, 36vw, 440px); object-fit: cover;
+    border-radius: 16px; border: 1px solid var(--line);
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.45), 0 0 30px rgba(212, 175, 55, 0.12);
+  }
+  .hack-fig figcaption {
+    font-family: var(--label); font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--muted); margin-top: 0.7rem;
+  }
+  .hack-cta {
+    margin-top: clamp(2.5rem, 6vh, 4rem);
+    display: flex; flex-wrap: wrap; gap: 1.25rem; justify-content: center; align-items: center;
+  }
+
+  /* ── Closing sendoff ── */
+  .sendoff { text-align: center; }
+  .sendoff-title { font-family: var(--serif); font-weight: 400; font-size: clamp(2.5rem, 7vw, 4.5rem); color: var(--ink); margin: 0.4rem 0; }
+  .sendoff-lead { font-family: var(--label); font-size: clamp(0.9rem, 1.6vw, 1.05rem); font-weight: 300; color: var(--ink-soft); max-width: 48ch; margin: 1rem auto 0; line-height: 1.7; }
+  .sendoff-ctas { display: flex; flex-wrap: wrap; gap: 1.25rem; justify-content: center; align-items: center; margin-top: 2.5rem; }
+  .a-page :global(.a-fill) { --proj-color: var(--ink); --proj-color-secondary: #1e1e1e; }
+  .a-page :global(.a-fill.primary) { --proj-color: var(--gold); --proj-color-secondary: #0a0805; }
+
+  [data-reveal], [data-h] { opacity: 0; }
+
+  /* ─────────────────────── LIGHT MODE ─────────────────────── */
+  :global(html[data-theme="light"]) .a-page {
+    --ink: #241f16;
+    --ink-soft: rgba(36, 31, 22, 0.76);
+    --muted: rgba(36, 31, 22, 0.5);
+    --gold: #a67c1e;        /* deeper gold reads on cream */
+    --gold-bright: #c79a2b;
+    --line: rgba(166, 124, 30, 0.28);
+  }
+  :global(html[data-theme="light"]) :global(body) { background: #f6f0e2; }
+  :global(html[data-theme="light"]) .hall { background: #f6f0e2; }
+  :global(html[data-theme="light"]) .a-glow {
+    background:
+      radial-gradient(46% 40% at 50% 6%, rgba(212, 175, 55, 0.22), transparent 70%),
+      radial-gradient(50% 42% at 50% 108%, rgba(166, 124, 30, 0.16), transparent 72%);
+  }
+  :global(html[data-theme="light"]) .ag-v {
+    background: repeating-linear-gradient(
+      to bottom, rgba(166, 124, 30, 0.1) 0 3px, transparent 3px 18px);
+  }
+  /* wordmark: deeper gradient so it stays legible on cream */
+  :global(html[data-theme="light"]) .wordmark {
+    background: linear-gradient(180deg, #c79a2b, #a67c1e 45%, #7c5a12);
+    -webkit-background-clip: text; background-clip: text;
+    text-shadow: 0 0 60px rgba(166, 124, 30, 0.2);
+  }
+  :global(html[data-theme="light"]) .hh-glow {
+    background: radial-gradient(58% 60% at 50% 100%,
+      rgba(212, 175, 55, 0.4) 0%, rgba(166, 124, 30, 0.24) 34%, transparent 72%);
+  }
+  :global(html[data-theme="light"]) .astat-num,
+  :global(html[data-theme="light"]) .feature-title { color: var(--gold); text-shadow: none; }
+  :global(html[data-theme="light"]) .feature-title .ft-cream { color: var(--ink); }
+  :global(html[data-theme="light"]) .feature-w .feature-title { color: #d1006a; text-shadow: none; }
+  :global(html[data-theme="light"]) .feature-w .feature-term,
+  :global(html[data-theme="light"]) .feature-w .feature-term::before { color: #d1006a; background: #d1006a; }
+  :global(html[data-theme="light"]) .feature-w-art {
+    border-color: rgba(209, 0, 106, 0.4);
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.16), 0 0 42px rgba(209, 0, 106, 0.16);
+  }
+  /* cards + panels: light surfaces */
+  :global(html[data-theme="light"]) .z-highlight {
+    background: linear-gradient(180deg, rgba(255, 252, 244, 0.9), rgba(247, 240, 226, 0.9));
+    box-shadow: 0 8px 24px rgba(120, 90, 20, 0.08);
+  }
+  :global(html[data-theme="light"]) .ach-card,
+  :global(html[data-theme="light"]) .z-pod,
+  :global(html[data-theme="light"]) .os-chip {
+    background: linear-gradient(180deg, rgba(255, 252, 244, 0.9), rgba(247, 240, 226, 0.9));
+    box-shadow: 0 8px 24px rgba(120, 90, 20, 0.08);
+  }
+  :global(html[data-theme="light"]) a.os-chip:hover {
+    border-color: rgba(166, 124, 30, 0.55); color: var(--gold);
+    background:
+      radial-gradient(90% 90% at 50% 0%, rgba(212, 175, 55, 0.16), transparent 70%),
+      linear-gradient(180deg, rgba(255, 252, 244, 0.95), rgba(247, 240, 226, 0.9));
+  }
+  :global(html[data-theme="light"]) .ach-card:hover {
+    border-color: rgba(166, 124, 30, 0.55);
+    background:
+      radial-gradient(90% 90% at 0% 0%, rgba(212, 175, 55, 0.14), transparent 70%),
+      linear-gradient(180deg, rgba(255, 252, 244, 0.95), rgba(247, 240, 226, 0.9));
+  }
+  :global(html[data-theme="light"]) .ach-place { color: #fff; background: #a67c1e; }
+
+  @media (max-width: 900px) {
+    .feature { grid-template-columns: 1fr; }
+    .feature-badge { order: -1; }
+    .feature-badge img { width: min(100%, 380px); }
+  }
+
+  :global(html[data-theme="light"]) .yc-photos img,
+  :global(html[data-theme="light"]) .hack-fig img {
+    box-shadow: 0 14px 34px rgba(120, 90, 20, 0.14);
+  }
+
+  @media (max-width: 720px) {
+    .a-page section { padding-top: clamp(4.5rem, 11vh, 7rem); padding-bottom: clamp(4.5rem, 11vh, 7rem); }
+    .a-stats { grid-template-columns: 1fr 1fr; gap: 1.8rem 1rem; }
+    .z-stats { grid-template-columns: 1fr; gap: 1.8rem; }
+    .yc-photos { grid-template-columns: 1fr; }
+    .z-hl-photos { grid-template-columns: 1fr; }
+    .hack-photos { grid-template-columns: 1fr; }
+    .hack-fig img { height: clamp(240px, 60vw, 380px); }
+    .ach-card { grid-template-columns: 1fr; gap: 0.4rem; }
+    .ach-year { font-size: 1.1rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal], [data-h] { opacity: 1; }
+    .hh-glow { animation: none !important; }
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ───────────── Drifting gold dust ───────────── */
+  (function dustfield() {
+    const canvasEl = document.getElementById("dustfield") as HTMLCanvasElement | null;
+    if (!canvasEl) return;
+    const ctxRef = canvasEl.getContext("2d");
+    if (!ctxRef) return;
+    const canvas: HTMLCanvasElement = canvasEl;
+    const ctx: CanvasRenderingContext2D = ctxRef;
+    let w = 0, h = 0, dpr = 1, t = 0, scrollY = 0;
+    let motes: { x: number; y: number; r: number; base: number; tw: number; sp: number; depth: number }[] = [];
+
+    function init() {
+      const count = Math.min(120, Math.floor((w * h) / 16000));
+      motes = [];
+      for (let i = 0; i < count; i++) {
+        motes.push({
+          x: Math.random() * w, y: Math.random() * h,
+          r: 0.3 + Math.random() * 1.2,
+          base: 0.14 + Math.random() * 0.45,
+          tw: Math.random() * Math.PI * 2,
+          sp: 0.003 + Math.random() * 0.008,
+          depth: 0.2 + Math.random() * 1,
+        });
+      }
+    }
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = window.innerWidth; h = window.innerHeight;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      canvas.style.width = w + "px"; canvas.style.height = h + "px";
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      init();
+    }
+    function frame() {
+      t += 1;
+      ctx.clearRect(0, 0, w, h);
+      for (const s of motes) {
+        const tw = reduce ? 0.7 : 0.55 + 0.45 * Math.sin(s.tw + t * s.sp * 5);
+        let yy = s.y - scrollY * 0.04 * s.depth;
+        yy = ((yy % h) + h) % h;
+        ctx.globalAlpha = s.base * tw;
+        ctx.fillStyle =
+          document.documentElement.getAttribute("data-theme") === "light"
+            ? "#b8901f"
+            : "#e9c96b";
+        ctx.beginPath();
+        ctx.arc(s.x, yy, s.r, 0, 6.2832);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(frame);
+    }
+    window.addEventListener("scroll", () => { scrollY = window.scrollY; }, { passive: true });
+    window.addEventListener("resize", resize);
+    resize();
+    requestAnimationFrame(frame);
+  })();
+
+  /* ───────────── Hero reveal (waits for the preloader to lift) ───────────── */
+  (function hero() {
+    const startHero = () => {
+      if (reduce) {
+        gsap.set("[data-h]", { opacity: 1 });
+        return;
+      }
+      const tl = gsap.timeline({ delay: 0.1, defaults: { ease: "power3.out" } });
+      tl.fromTo(".wordmark", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.1 })
+        .fromTo(".tagline", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8 }, "-=0.6");
+    };
+
+    let started = false;
+    const go = () => { if (started) return; started = true; startHero(); };
+    window.addEventListener("preloader:done", go, { once: true });
+    if (!document.getElementById("preloader")) go();
+    else window.setTimeout(go, 6000);
+  })();
+
+  /* ───────────── Scroll reveals ───────────── */
+  gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((el) => {
+    if (reduce) { gsap.set(el, { opacity: 1 }); return; }
+    gsap.fromTo(el, { opacity: 0, y: 30 }, {
+      opacity: 1, y: 0, duration: 1, ease: "power3.out",
+      scrollTrigger: { trigger: el, start: "top 86%" },
+    });
+  });
+
+  ScrollTrigger.refresh();
+</script>

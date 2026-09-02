@@ -1,0 +1,10 @@
+{
+  "slug": "alarmit",
+  "title": "AlarmIT",
+  "repo": "AlarmIT",
+  "years": [
+    2022
+  ],
+  "description": "AlarmIT is a simple alarm app. The alarms can be turned off via three methods - normal turnoff, by shaking the device a number of times, by solving maths questions.",
+  "order": 90
+}

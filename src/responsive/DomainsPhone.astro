@@ -1,0 +1,165 @@
+---
+import { getAssetUrl } from "../utils/cdn";
+
+// Cassette -> real domain page (same routes the desktop grid links to).
+const domains = [
+  { key: "tech", label: "Tech Development", img: "/cassettes/cassettes-cassette-tech.webp" },
+  { key: "cc", label: "Competitive Coding", img: "/cassettes/cassettes-cassette-cc.webp" },
+  { key: "design", label: "Design", img: "/cassettes/cassettes-cassette-design.webp" },
+  { key: "management", label: "Management", img: "/cassettes/cassettes-cassette-management.webp" },
+  { key: "research", label: "Research", img: "/cassettes/cassettes-cassette-research.webp" },
+];
+---
+
+<style>
+  /* No own background - inherit the common themed body bg + diamond-grid so it
+     matches the rest of the page and follows light mode automatically. */
+  .domain-mobile-bg-layer {
+    transform: translateY(18%) scale(1.05);
+    will-change: opacity, transform;
+  }
+</style>
+
+<section
+  class="domains-mobile-section min-h-screen relative pt-8 pb-16 px-4 flex flex-col items-center justify-center overflow-hidden"
+>
+  <!-- Fixed Background Layer -->
+  <div
+    class="absolute inset-0 z-0 pointer-events-none opacity-0 domain-mobile-bg-layer"
+  >
+    <img
+      src={getAssetUrl("/backgrounds/backgrounds-glow-ball-red.webp")}
+      alt=""
+      class="w-full h-full object-cover scale-125 will-change-transform transform-gpu"
+      style="backface-visibility: hidden;"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+
+  <div class="relative z-10 w-full flex flex-col items-center">
+    <p
+      class="mobile-section-subtitle text-[#fefcd9] text-center font-['PolySans_Trial',sans-serif] text-[12px] sm:text-sm font-normal pt-4 max-w-[340px] mb-12 leading-[1.6]"
+    >
+      <span style="display:block; margin-bottom: 0.5rem;">
+        Each domain at ACM-VIT is more than a skillset, it's a mindset.
+      </span>
+      <span style="display:block; margin-bottom: 0.5rem;">
+        We build, break, design, analyze, and communicate, not in silos, but in
+        sync.
+      </span>
+      <span style="display:block;">
+        Because true innovation happens where disciplines intersect.
+      </span>
+    </p>
+
+    <div
+      class="domains-mobile-grid flex flex-col gap-8 w-full max-w-[400px] items-center"
+    >
+      {
+        domains.map((d) => (
+          <a
+            href={`/domains/${d.key}`}
+            class="mobile-domain-item block w-full max-w-[250px] cursor-pointer transition-transform duration-200 ease-out active:scale-95"
+            data-domain={d.key}
+          >
+            <img
+              src={getAssetUrl(d.img)}
+              alt={d.label}
+              class="mobile-cassette-img w-full h-auto block drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)]"
+              loading="lazy"
+              decoding="async"
+            />
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function initMobileAnimation() {
+    const section = document.querySelector(".domains-mobile-section");
+    if (!section || (section as HTMLElement).dataset.animInit === "true") return;
+    (section as HTMLElement).dataset.animInit = "true";
+
+    const imgs = document.querySelectorAll<HTMLElement>(".mobile-cassette-img");
+    const subtitle = document.querySelector(".mobile-section-subtitle");
+    const bgLayer = document.querySelector(".domain-mobile-bg-layer");
+
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    // bg glow layer fades in/out with the section
+    if (bgLayer) {
+      gsap.to(bgLayer, {
+        opacity: 0.35,
+        duration: 0.8,
+        scrollTrigger: {
+          trigger: ".domains-mobile-section",
+          start: "top 75%",
+          end: "bottom 40%",
+          toggleActions: "play reverse play reverse",
+        },
+      });
+    }
+
+    // Reduced motion: just make everything visible, skip animation.
+    if (reduceMotion) {
+      gsap.set([subtitle, ...imgs].filter(Boolean), { opacity: 1, y: 0 });
+      return;
+    }
+
+    // Initial hidden state (transform/opacity only - GPU cheap)
+    if (subtitle) gsap.set(subtitle, { opacity: 0, y: 20 });
+    gsap.set(imgs, { opacity: 0, y: 30 });
+
+    // Lightweight scroll-triggered entrance, fires once. No continuous loop so
+    // there's no ongoing repaint cost on phones.
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".domains-mobile-section",
+        start: "top 75%",
+        once: true,
+      },
+    });
+
+    if (subtitle) {
+      tl.to(subtitle, {
+        opacity: 1,
+        y: 0,
+        duration: 0.5,
+        ease: "power3.out",
+      });
+    }
+
+    tl.to(
+      imgs,
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.55,
+        ease: "power3.out",
+        stagger: 0.08,
+      },
+      subtitle ? "-=0.25" : 0
+    );
+  }
+
+  // Initialize mobile animations. The mobile variant is cloned in from a
+  // <template> on `variants-mounted`, so an early DOMContentLoaded run would
+  // find nothing - re-run on that event too (guarded against double-init).
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initMobileAnimation);
+  } else {
+    initMobileAnimation();
+  }
+  window.addEventListener("variants-mounted", () => initMobileAnimation());
+  window.addEventListener("app:variants-mounted", () => initMobileAnimation());
+</script>

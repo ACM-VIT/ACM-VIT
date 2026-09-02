@@ -1,0 +1,1529 @@
+---
+// Cassette Builder - vanilla Astro port (no React/TSX)
+---
+
+<div class="cb-root">
+  <!-- ── Cassette Preview ── -->
+  <div class="mb-8 flex justify-center px-4">
+    <svg
+      id="cb-svg"
+      viewBox="0 0 576 353"
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-auto w-full max-w-[580px]"></svg>
+  </div>
+
+  <!-- ── Controls ── -->
+  <div class="px-4">
+    <!-- Variants -->
+    <div class="cb-card">
+      <span class="cb-section">VARIANTS</span>
+      <div id="cb-variants" class="flex flex-wrap gap-2"></div>
+    </div>
+
+    <!-- Presets -->
+    <div class="cb-card mt-4">
+      <span class="cb-section">PRESETS</span>
+      <div id="cb-presets" class="flex flex-wrap gap-2"></div>
+    </div>
+
+    <!-- Controls grid -->
+    <div class="cb-grid mt-4">
+      <!-- Colors -->
+      <div class="cb-card">
+        <span class="cb-section">COLORS</span>
+        <div id="cb-colors" class="flex flex-col gap-3"></div>
+      </div>
+
+      <!-- Text -->
+      <div class="cb-card">
+        <span class="cb-section">TEXT</span>
+        <div class="flex flex-col gap-3">
+          <div>
+            <span class="cb-field">Title</span>
+            <input
+              id="cb-title"
+              type="text"
+              value="Awesome Mix Vol. 1"
+              placeholder="Your mix title..."
+              maxlength="40"
+              class="cb-input"
+            />
+          </div>
+          <div>
+            <span class="cb-field">Side</span>
+            <div id="cb-side" class="mt-1.5 flex gap-2"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Media -->
+      <div class="cb-card">
+        <span class="cb-section">MEDIA</span>
+        <div class="flex flex-col gap-3">
+          <div>
+            <span class="cb-field">Image</span>
+            <div id="cb-image-actions" class="mt-1.5 flex items-center gap-2"></div>
+            <input id="cb-file" type="file" accept="image/*" class="hidden" />
+            <div id="cb-placement" class="mt-2 flex gap-2"></div>
+          </div>
+          <div>
+            <span class="cb-field">Spotify Song URL</span>
+            <input
+              id="cb-spotify"
+              type="text"
+              placeholder="https://open.spotify.com/track/..."
+              class="cb-input"
+            />
+            <span id="cb-spotify-hint" class="cb-hint mt-1 hidden">
+              Paste a valid Spotify track, album, or playlist URL
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Export buttons -->
+    <div class="mt-6 flex flex-wrap justify-center gap-3">
+      <button id="cb-dl-png" class="cb-action">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        Download PNG
+      </button>
+      <button id="cb-dl-svg" class="cb-action secondary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        Download SVG
+      </button>
+      <button id="cb-share" class="cb-action secondary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+        Share
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── SVG path constants ──
+  const STAR_PATH =
+    "M0.783 -5.742C0.61 -6.596 -0.611 -6.596 -0.784 -5.742L-1.517 -2.141C-1.581 -1.826 -1.826 -1.581 -2.141 -1.517L-5.742 -0.784C-6.596 -0.611 -6.596 0.609 -5.742 0.783L-2.141 1.515C-1.826 1.579 -1.581 1.825 -1.517 2.139L-0.784 5.741C-0.611 6.595 0.61 6.595 0.783 5.741L1.516 2.139C1.58 1.825 1.825 1.579 2.14 1.515L5.741 0.783C6.595 0.609 6.595 -0.611 5.741 -0.784L2.14 -1.517C1.825 -1.581 1.58 -1.826 1.516 -2.141L0.783 -5.742Z";
+
+  const COVER_PATH =
+    "M480.844 0.8H31.387C26.877 0.8 22.55 2.586 19.354 5.768L5.823 19.239C2.607 22.439 0.8 26.79 0.8 31.327V210.809C0.8 220.229 8.436 227.866 17.856 227.866H494.375C503.795 227.866 511.432 220.229 511.432 210.809V31.327C511.432 26.79 509.624 22.439 506.409 19.239L492.878 5.768C489.681 2.586 485.354 0.8 480.844 0.8Z";
+
+  const REEL_GEAR =
+    "M32.865 9.595C36.091 9.595 39.165 10.246 41.963 11.424L39.137 16.32L44.222 19.256L47.044 14.366C51.943 18.09 55.333 23.696 56.135 30.107H50.48V35.98H56.136C55.335 42.398 51.941 48.009 47.036 51.734L44.213 46.844L39.128 49.779L41.954 54.673C39.159 55.849 36.088 56.5 32.865 56.5C29.638 56.5 26.563 55.847 23.765 54.668L26.596 49.767L21.511 46.831L18.684 51.727C13.784 48.001 10.396 42.393 9.596 35.98H15.251V30.107H9.597C10.399 23.693 13.791 18.083 18.694 14.359L21.519 19.252L26.604 16.316L23.777 11.42C26.572 10.244 29.643 9.595 32.865 9.595Z";
+
+  const BUMP_PATH =
+    "M129.727 273.173H450.188C457.619 273.173 464.103 278.21 465.94 285.409L482.951 352.06H93.297L114.198 284.617C116.307 277.812 122.602 273.173 129.727 273.173Z";
+
+  const ARC_STRIPES_PATH =
+    "M451.275 259.559C432.85 267.461 412.554 271.84 391.236 271.84C369.917 271.84 349.622 267.461 331.197 259.559H451.275ZM522.067 197.681C519.51 201.945 516.75 206.074 513.801 210.055H268.67C265.721 206.074 262.962 201.945 260.405 197.681H522.067ZM540.338 151.273C539.447 155.464 538.383 159.591 537.155 163.646H245.317C244.089 159.591 243.025 155.464 242.133 151.273H540.338ZM543.453 111.053C543.602 113.815 543.679 116.597 543.679 119.396C543.679 121.785 543.622 124.161 543.513 126.522H238.958C238.85 124.161 238.792 121.785 238.792 119.396C238.792 116.597 238.87 113.815 239.019 111.053H543.453ZM537.708 77.0176C539.168 82.072 540.376 87.2337 541.312 92.4893H241.16C242.096 87.2337 243.303 82.072 244.763 77.0176H537.708ZM524.916 46.0713C528.191 52.0301 531.079 58.2313 533.547 64.6416H248.924C251.392 58.2311 254.282 52.0302 257.557 46.0713H524.916ZM502.448 15.1357C508.714 21.817 514.385 29.0626 519.376 36.7891H263.096C268.087 29.0627 273.758 21.8169 280.024 15.1357H502.448ZM461.725 -15.8037C474.404 -9.17963 486.036 -0.82562 496.306 8.94727H286.166C296.436 -0.825622 308.067 -9.17962 320.747 -15.8037H461.725ZM391.236 -33.0469C414.181 -33.0469 435.941 -27.977 455.459 -18.8975H327.012C346.53 -27.977 368.291 -33.0469 391.236 -33.0469Z";
+
+  const V2_GEO_PATTERN =
+    "M32.293 30.404C32.418 30.404 32.518 30.506 32.52 30.631C32.639 38.005 38.557 43.945 45.84 43.945C53.122 43.945 59.04 38.005 59.159 30.631C59.161 30.506 59.262 30.404 59.387 30.404C59.511 30.404 59.612 30.506 59.611 30.631C59.56 33.857 58.436 36.819 56.585 39.162C55.325 40.759 55.325 47.591 56.585 49.188C58.436 51.531 59.56 54.492 59.611 57.719C59.612 57.844 59.511 57.945 59.387 57.945C59.262 57.945 59.161 57.843 59.159 57.719C59.04 50.345 53.122 44.404 45.84 44.404C38.557 44.404 32.64 50.345 32.52 57.719C32.518 57.843 32.418 57.945 32.293 57.945C32.168 57.945 32.067 57.844 32.069 57.719C32.12 54.492 33.244 51.531 35.095 49.187C36.356 47.591 36.355 40.759 35.095 39.163C33.244 36.819 32.119 33.858 32.069 30.631C32.067 30.506 32.168 30.404 32.293 30.404ZM45.84 48.536C50.878 48.536 54.976 52.627 55.094 57.719C55.097 57.844 54.996 57.945 54.871 57.945C54.746 57.945 54.646 57.844 54.643 57.719C54.524 52.88 50.628 48.995 45.84 48.995C41.051 48.995 37.155 52.88 37.037 57.719C37.034 57.844 36.933 57.945 36.809 57.945C36.684 57.945 36.583 57.844 36.586 57.719C36.704 52.627 40.802 48.536 45.84 48.536ZM45.84 53.126C48.384 53.126 50.46 55.163 50.576 57.72C50.582 57.844 50.48 57.945 50.355 57.945C50.231 57.945 50.13 57.844 50.124 57.72C50.009 55.417 48.134 53.585 45.84 53.585C43.545 53.585 41.671 55.417 41.555 57.72C41.549 57.844 41.449 57.945 41.324 57.945C41.2 57.945 41.098 57.844 41.104 57.72C41.22 55.163 43.296 53.126 45.84 53.126ZM36.809 30.404C36.933 30.404 37.034 30.506 37.037 30.631C37.155 35.469 41.051 39.355 45.84 39.355C50.628 39.355 54.525 35.469 54.643 30.631C54.646 30.506 54.746 30.404 54.871 30.404C54.996 30.404 55.097 30.506 55.094 30.631C54.976 35.723 50.878 39.814 45.84 39.814C40.802 39.814 36.704 35.723 36.586 30.631C36.583 30.506 36.684 30.404 36.809 30.404ZM41.324 30.404C41.449 30.404 41.549 30.505 41.555 30.63C41.671 32.933 43.545 34.765 45.84 34.765C48.135 34.765 50.009 32.933 50.124 30.63C50.13 30.505 50.231 30.404 50.355 30.404C50.48 30.404 50.582 30.506 50.576 30.63C50.46 33.187 48.384 35.224 45.84 35.224C43.296 35.224 41.22 33.187 41.104 30.63C41.098 30.506 41.2 30.404 41.324 30.404Z";
+
+  // ── Presets ──
+  const PRESETS = [
+    { name: "Classic", body: "#FCE6D2", cover: "#202020", label: "#FCE6D2", stripes: ["#EDA35F", "#F0EE75", "#259F6C", "#86ACE7"] },
+    { name: "Midnight", body: "#1a1a2e", cover: "#0f0f23", label: "#e0d6ff", stripes: ["#e94560", "#a855f7", "#6366f1", "#312e81"] },
+    { name: "Sunset", body: "#fcd4a0", cover: "#2d2d2d", label: "#fff4de", stripes: ["#ff6b6b", "#ffd93d", "#6bcb77", "#4d96ff"] },
+    { name: "Ocean", body: "#a8dadc", cover: "#1d3557", label: "#f1faee", stripes: ["#e63946", "#f1faee", "#a8dadc", "#457b9d"] },
+    { name: "Lavender", body: "#e8d5f5", cover: "#2d1b4e", label: "#f0e6ff", stripes: ["#9b59b6", "#c39bd3", "#a29bfe", "#6c5ce7"] },
+    { name: "Cherry", body: "#ffccd5", cover: "#590d22", label: "#fff0f3", stripes: ["#ff0a54", "#ff477e", "#ff7096", "#ff85a1"] },
+    { name: "Mint", body: "#b8f0d8", cover: "#1a3a2a", label: "#e8fff0", stripes: ["#00b894", "#55efc4", "#ffeaa7", "#fab1a0"] },
+    { name: "Neon", body: "#0d0d0d", cover: "#1a1a1a", label: "#0d0d0d", stripes: ["#39ff14", "#ff073a", "#00f0ff", "#f5ff00"] },
+  ];
+
+  // ── Helpers ──
+  function contrastColor(hex) {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return lum > 0.5 ? "#202020" : "#f0f0f0";
+  }
+
+  function labelFontSize(text) {
+    return Math.max(10, Math.min(24, 290 / Math.max(1, text.length * 0.72)));
+  }
+
+  const esc = (s) =>
+    String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+  // ── Custom color picker ──
+  const THEME_SWATCHES = [
+    "#F95F4A", "#FFFDD0", "#FCE6D2", "#202020", "#EDA35F", "#F0EE75",
+    "#259F6C", "#86ACE7", "#E94560", "#A855F7", "#1D3557", "#FFFFFF",
+  ];
+  const RECENT_KEY = "cb-recent-colors";
+
+  const clamp01 = (n) => Math.min(1, Math.max(0, n));
+
+  function hexToRgbArr(hex) {
+    let h = hex.replace("#", "");
+    if (h.length === 3) h = h.split("").map((c) => c + c).join("");
+    return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+  }
+
+  const rgbToHexStr = (r, g, b) =>
+    "#" + [r, g, b].map((n) => n.toString(16).padStart(2, "0")).join("");
+
+  function rgbToHsv(r, g, b) {
+    r /= 255; g /= 255; b /= 255;
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    const d = max - min;
+    let h = 0;
+    if (d) {
+      if (max === r) h = ((g - b) / d) % 6;
+      else if (max === g) h = (b - r) / d + 2;
+      else h = (r - g) / d + 4;
+      h *= 60;
+      if (h < 0) h += 360;
+    }
+    return { h, s: max ? d / max : 0, v: max };
+  }
+
+  function hsvToRgb(h, s, v) {
+    const c = v * s;
+    const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+    const m = v - c;
+    let r = 0, g = 0, b = 0;
+    if (h < 60) { r = c; g = x; }
+    else if (h < 120) { r = x; g = c; }
+    else if (h < 180) { g = c; b = x; }
+    else if (h < 240) { g = x; b = c; }
+    else if (h < 300) { r = x; b = c; }
+    else { r = c; b = x; }
+    return [Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)];
+  }
+
+  function createColorPicker() {
+    const wrap = document.createElement("div");
+    wrap.className = "cbp-wrap";
+    wrap.hidden = true;
+    wrap.innerHTML = `
+      <div class="cbp-backdrop"></div>
+      <div class="cbp-panel" role="dialog" aria-label="Color picker">
+        <div class="cbp-head">
+          <span class="cbp-title"></span>
+          <button type="button" class="cbp-close" aria-label="Close">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+        <div class="cbp-sv" tabindex="0" aria-label="Saturation and brightness. Arrow keys to adjust, hold Shift for bigger steps.">
+          <div class="cbp-sv-thumb"></div>
+        </div>
+        <div class="cbp-hue" tabindex="0" aria-label="Hue. Arrow keys to adjust, hold Shift for bigger steps.">
+          <div class="cbp-hue-thumb"></div>
+        </div>
+        <div class="cbp-io">
+          <span class="cbp-chip"></span>
+          <div class="cbp-hexwrap">
+            <span class="cbp-hash">#</span>
+            <input class="cbp-hexin" maxlength="6" spellcheck="false" autocomplete="off" aria-label="Hex color" />
+          </div>
+          <button type="button" class="cbp-eye" title="Pick a color from the screen" aria-label="Eyedropper">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 22 1-1h3l9-9"></path><path d="M3 21v-3l9-9"></path><path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l.4.4a2.1 2.1 0 1 1-3 3l-3.8-3.8a2.1 2.1 0 1 1 3-3l.4.4Z"></path></svg>
+          </button>
+        </div>
+        <div class="cbp-vals"></div>
+        <span class="cbp-sec">Theme</span>
+        <div class="cbp-grid cbp-theme"></div>
+        <div class="cbp-recent-block" hidden>
+          <span class="cbp-sec">Recent</span>
+          <div class="cbp-grid cbp-recent"></div>
+        </div>
+      </div>`;
+    document.body.appendChild(wrap);
+
+    const panel = wrap.querySelector(".cbp-panel");
+    const backdrop = wrap.querySelector(".cbp-backdrop");
+    const titleEl = wrap.querySelector(".cbp-title");
+    const closeBtn = wrap.querySelector(".cbp-close");
+    const svEl = wrap.querySelector(".cbp-sv");
+    const svThumb = wrap.querySelector(".cbp-sv-thumb");
+    const hueEl = wrap.querySelector(".cbp-hue");
+    const hueThumb = wrap.querySelector(".cbp-hue-thumb");
+    const chip = wrap.querySelector(".cbp-chip");
+    const hexIn = wrap.querySelector(".cbp-hexin");
+    const eyeBtn = wrap.querySelector(".cbp-eye");
+    const valsEl = wrap.querySelector(".cbp-vals");
+    const themeGrid = wrap.querySelector(".cbp-theme");
+    const recentBlock = wrap.querySelector(".cbp-recent-block");
+    const recentGrid = wrap.querySelector(".cbp-recent");
+
+    let hsv = { h: 0, s: 0, v: 1 };
+    let onChange = null;
+    let trigger = null;
+    let openedWith = "";
+    let current = "";
+    let hideTimer = null;
+
+    const getRecent = () => {
+      try { return JSON.parse(localStorage.getItem(RECENT_KEY)) || []; } catch { return []; }
+    };
+    const saveRecent = (c) => {
+      const list = [c, ...getRecent().filter((x) => x.toLowerCase() !== c.toLowerCase())].slice(0, 8);
+      try { localStorage.setItem(RECENT_KEY, JSON.stringify(list)); } catch { /* ignore */ }
+    };
+
+    function fillGrid(grid, colors) {
+      grid.innerHTML = "";
+      colors.forEach((c) => {
+        const cell = document.createElement("button");
+        cell.type = "button";
+        cell.className = "cbp-cell";
+        cell.style.background = c;
+        cell.dataset.color = c.toLowerCase();
+        cell.title = c.toUpperCase();
+        cell.setAttribute("aria-label", c.toUpperCase());
+        cell.addEventListener("click", () => setHex(c));
+        grid.appendChild(cell);
+      });
+    }
+
+    function markActive(grid, hex) {
+      grid.querySelectorAll(".cbp-cell").forEach((cell) => {
+        cell.classList.toggle("is-active", cell.dataset.color === hex.toLowerCase());
+      });
+    }
+
+    function paint(skipHexInput) {
+      const hex = rgbToHexStr(...hsvToRgb(hsv.h, hsv.s, hsv.v));
+      current = hex;
+      const hueHex = rgbToHexStr(...hsvToRgb(hsv.h, 1, 1));
+      svEl.style.background = `linear-gradient(to top, #000, rgba(0,0,0,0)), linear-gradient(to right, #fff, ${hueHex})`;
+      svThumb.style.left = hsv.s * 100 + "%";
+      svThumb.style.top = (1 - hsv.v) * 100 + "%";
+      svThumb.style.background = hex;
+      hueThumb.style.left = (hsv.h / 360) * 100 + "%";
+      hueThumb.style.background = hueHex;
+      chip.style.background = hex;
+      if (!skipHexInput) hexIn.value = hex.slice(1).toUpperCase();
+      const [r, g, b] = hexToRgbArr(hex);
+      valsEl.textContent = `R ${r} · G ${g} · B ${b}`;
+      markActive(themeGrid, hex);
+      markActive(recentGrid, hex);
+      if (onChange) onChange(hex);
+    }
+
+    function setHex(hex, skipHexInput) {
+      const [r, g, b] = hexToRgbArr(hex);
+      const next = rgbToHsv(r, g, b);
+      // Keep hue/saturation position when the color collapses to grayscale
+      if (next.s === 0) next.h = hsv.h;
+      if (next.v === 0) next.s = hsv.s;
+      hsv = next;
+      paint(skipHexInput);
+    }
+
+    // ── Drag ──
+    function svFromEvent(e) {
+      const r = svEl.getBoundingClientRect();
+      hsv.s = clamp01((e.clientX - r.left) / r.width);
+      hsv.v = 1 - clamp01((e.clientY - r.top) / r.height);
+      paint();
+    }
+    function hueFromEvent(e) {
+      const r = hueEl.getBoundingClientRect();
+      hsv.h = Math.min(359.99, clamp01((e.clientX - r.left) / r.width) * 360);
+      paint();
+    }
+    function dragify(el, handler) {
+      el.addEventListener("pointerdown", (e) => {
+        e.preventDefault();
+        el.setPointerCapture(e.pointerId);
+        handler(e);
+        const move = (ev) => handler(ev);
+        const up = () => {
+          el.removeEventListener("pointermove", move);
+          el.removeEventListener("pointerup", up);
+          el.removeEventListener("pointercancel", up);
+        };
+        el.addEventListener("pointermove", move);
+        el.addEventListener("pointerup", up);
+        el.addEventListener("pointercancel", up);
+      });
+    }
+    dragify(svEl, svFromEvent);
+    dragify(hueEl, hueFromEvent);
+
+    // ── Keyboard ──
+    svEl.addEventListener("keydown", (e) => {
+      const step = e.shiftKey ? 0.1 : 0.02;
+      if (e.key === "ArrowLeft") hsv.s = clamp01(hsv.s - step);
+      else if (e.key === "ArrowRight") hsv.s = clamp01(hsv.s + step);
+      else if (e.key === "ArrowUp") hsv.v = clamp01(hsv.v + step);
+      else if (e.key === "ArrowDown") hsv.v = clamp01(hsv.v - step);
+      else return;
+      e.preventDefault();
+      paint();
+    });
+    hueEl.addEventListener("keydown", (e) => {
+      const step = e.shiftKey ? 18 : 4;
+      if (e.key === "ArrowLeft" || e.key === "ArrowDown") hsv.h = Math.max(0, hsv.h - step);
+      else if (e.key === "ArrowRight" || e.key === "ArrowUp") hsv.h = Math.min(359.99, hsv.h + step);
+      else return;
+      e.preventDefault();
+      paint();
+    });
+
+    // ── Hex input ──
+    hexIn.addEventListener("input", () => {
+      const v = hexIn.value.replace(/[^0-9a-fA-F]/g, "").slice(0, 6);
+      hexIn.value = v.toUpperCase();
+      if (v.length === 3 || v.length === 6) setHex("#" + v, true);
+    });
+    hexIn.addEventListener("blur", () => {
+      if (current) hexIn.value = current.slice(1).toUpperCase();
+    });
+    hexIn.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") hexIn.blur();
+    });
+
+    // ── Eyedropper (Chromium only) ──
+    if (window.EyeDropper) {
+      eyeBtn.addEventListener("click", async () => {
+        try {
+          const res = await new window.EyeDropper().open();
+          setHex(res.sRGBHex);
+        } catch { /* cancelled */ }
+      });
+    } else {
+      eyeBtn.hidden = true;
+    }
+
+    // ── Open / close / position ──
+    function position() {
+      if (window.matchMedia("(max-width: 639px)").matches) {
+        wrap.classList.add("is-sheet");
+        panel.style.left = "";
+        panel.style.top = "";
+        return;
+      }
+      wrap.classList.remove("is-sheet");
+      const r = trigger.getBoundingClientRect();
+      const pw = panel.offsetWidth;
+      const ph = panel.offsetHeight;
+      const x = Math.min(Math.max(12, r.left + r.width / 2 - pw / 2), window.innerWidth - pw - 12);
+      let y = r.bottom + 10;
+      if (y + ph > window.innerHeight - 12) y = r.top - ph - 10;
+      if (y < 12) y = 12;
+      panel.style.left = x + "px";
+      panel.style.top = y + "px";
+    }
+
+    const onScroll = () => { if (trigger) position(); };
+    const onKey = (e) => { if (e.key === "Escape") close(); };
+
+    function open(triggerEl, value, name, cb) {
+      clearTimeout(hideTimer);
+      if (trigger) trigger.classList.remove("is-open");
+      trigger = triggerEl;
+      openedWith = value.toLowerCase();
+      titleEl.textContent = name;
+      onChange = null;
+      setHex(value);
+      onChange = cb;
+      fillGrid(themeGrid, THEME_SWATCHES);
+      const rec = getRecent();
+      recentBlock.hidden = !rec.length;
+      fillGrid(recentGrid, rec);
+      markActive(themeGrid, current);
+      markActive(recentGrid, current);
+      wrap.hidden = false;
+      wrap.style.pointerEvents = "";
+      trigger.classList.add("is-open");
+      position();
+      void panel.offsetWidth; /* flush styles so the open transition runs */
+      wrap.classList.add("is-visible");
+      svEl.focus({ preventScroll: true });
+      document.addEventListener("keydown", onKey);
+      window.addEventListener("scroll", onScroll, true);
+      window.addEventListener("resize", position);
+    }
+
+    function close() {
+      if (wrap.hidden) return;
+      if (current && current.toLowerCase() !== openedWith) saveRecent(current);
+      wrap.classList.remove("is-visible");
+      wrap.style.pointerEvents = "none";
+      hideTimer = setTimeout(() => { wrap.hidden = true; }, 180);
+      if (trigger) trigger.classList.remove("is-open");
+      onChange = null;
+      trigger = null;
+      document.removeEventListener("keydown", onKey);
+      window.removeEventListener("scroll", onScroll, true);
+      window.removeEventListener("resize", position);
+    }
+
+    closeBtn.addEventListener("click", close);
+    backdrop.addEventListener("pointerdown", (e) => {
+      close();
+      // Let a click on another swatch land in one tap
+      const under = document.elementFromPoint(e.clientX, e.clientY);
+      const nextSwatch = under && under.closest(".cb-swatch");
+      if (nextSwatch) nextSwatch.click();
+    });
+
+    return { open, close, el: wrap };
+  }
+
+  let sharedPicker = null;
+  function getPicker() {
+    if (!sharedPicker) sharedPicker = createColorPicker();
+    return sharedPicker;
+  }
+
+  // ── State ──
+  const state = {
+    bodyColor: "#FCE6D2",
+    coverColor: "#202020",
+    labelColor: "#FCE6D2",
+    stripes: ["#EDA35F", "#F0EE75", "#259F6C", "#86ACE7"],
+    labelText: "Awesome Mix Vol. 1",
+    side: "A",
+    uploadedImage: null,
+    imagePlacement: "cover",
+    spotifyUrl: "",
+    spotifyCodeImg: null,
+    downloading: false,
+    variant: 1,
+  };
+
+  function init(root) {
+    const svgEl = root.querySelector("#cb-svg");
+    const fileInput = root.querySelector("#cb-file");
+    const titleInput = root.querySelector("#cb-title");
+    const spotifyInput = root.querySelector("#cb-spotify");
+    const spotifyHint = root.querySelector("#cb-spotify-hint");
+
+    // ── SVG render ──
+    function coverPattern() {
+      const st = state.stripes;
+      if (state.variant === 1) {
+        return `
+          <rect x="0" y="128" width="512" height="13" fill="${st[0]}" />
+          <rect x="0" y="141" width="512" height="13" fill="${st[1]}" />
+          <rect x="0" y="154" width="512" height="13" fill="${st[2]}" />
+          <rect x="0" y="167" width="512" height="13" fill="${st[3]}" />`;
+      }
+      if (state.variant === 2) {
+        return `<path d="${ARC_STRIPES_PATH}" fill="${st[0]}" />`;
+      }
+      if (state.variant === 3) {
+        // Big dark spool disc on the left (sits behind the reel housing)
+        return `
+          <circle cx="140" cy="150" r="138" fill="#202020" />
+          <circle cx="140" cy="150" r="138" fill="none" stroke="${st[0]}" stroke-width="3" opacity="0.7" />
+          <circle cx="140" cy="150" r="106" fill="none" stroke="${st[0]}" stroke-width="1.5" opacity="0.4" />`;
+      }
+      // variant 4: layered horizontal stripe bands (single accent colour)
+      const bands = [[86, 10], [102, 5], [116, 10], [134, 4], [148, 12], [168, 5], [182, 10], [204, 6]];
+      return bands
+        .map(([y, h], i) => `<rect x="0" y="${y}" width="512" height="${h}" fill="${st[0]}" opacity="${i % 2 ? 0.7 : 1}" />`)
+        .join("");
+    }
+
+    function coverDecorations() {
+      const textColor = contrastColor(state.labelColor);
+      const fontSize = labelFontSize(state.labelText);
+      const onLabelImg = state.uploadedImage && state.imagePlacement === "label";
+      const txt = esc(state.labelText);
+      const side = esc(state.side);
+
+      if (state.variant === 1) {
+        return `
+          <text x="18" y="30" fill="${state.bodyColor}" font-size="15" font-family="'PolySans Trial', sans-serif" font-weight="500">${side}</text>
+          <text x="18" y="44" fill="${state.bodyColor}" font-size="7" font-family="'PolySans Mono', monospace" letter-spacing="0.1em" opacity="0.7">side</text>
+          <g transform="translate(480, 20) scale(1.6)"><path d="${STAR_PATH}" fill="${state.bodyColor}" /></g>
+          <text x="480" y="13" fill="${state.bodyColor}" font-size="6" font-family="'PolySans Mono', monospace" text-anchor="middle">1</text>
+          <g transform="translate(87, 8)">
+            <rect width="338" height="95" rx="47.5" fill="${state.labelColor}" stroke="#202020" stroke-width="1.6" />
+            ${onLabelImg ? `<g clip-path="url(#cb-label-clip)"><image href="${state.uploadedImage}" x="0" y="0" width="338" height="95" preserveAspectRatio="xMidYMid slice" opacity="0.6" /></g>` : ""}
+            <text x="169" y="52" text-anchor="middle" dominant-baseline="middle" font-family="'Rock Salt', cursive" font-size="${fontSize}"
+              fill="${onLabelImg ? "#fff" : textColor}"
+              style="paint-order: stroke; stroke: ${onLabelImg ? "rgba(0,0,0,0.5)" : "none"}; stroke-width: ${onLabelImg ? 2 : 0};">${txt}</text>
+          </g>`;
+      }
+      if (state.variant === 2) {
+        const v2Size = Math.max(7, Math.min(13, 120 / Math.max(1, state.labelText.length * 0.7)));
+        return `
+          <g transform="translate(27, 25)">
+            <rect width="169" height="38" fill="#202020" />
+            <rect x="3.6" y="3.6" width="31" height="31" fill="${state.stripes[0]}" />
+            <g transform="translate(-13.5, -14.2) scale(0.82)"><path d="${V2_GEO_PATTERN}" fill="#fafafa" /></g>
+            <text x="108" y="22" text-anchor="middle" dominant-baseline="middle" font-family="'Rock Salt', cursive" font-size="${v2Size}" fill="#fff">${txt}</text>
+          </g>
+          <text x="30" y="112" fill="#f3f3f3" font-size="8" font-family="'PolySans Trial', sans-serif" font-weight="400" letter-spacing="0.05em">${side}</text>
+          <text x="30" y="140" fill="#f3f3f3" font-size="5.5" font-family="'PolySans Mono', monospace" letter-spacing="0.08em" opacity="0.8">SIDE</text>`;
+      }
+      if (state.variant === 3) {
+        // INDEX label card top-right + side indicator top-left
+        const v3Size = Math.max(11, Math.min(20, 320 / Math.max(1, state.labelText.length * 0.72)));
+        return `
+          <text x="18" y="30" fill="${state.bodyColor}" font-size="15" font-family="'PolySans Trial', sans-serif" font-weight="500">${side}</text>
+          <text x="18" y="44" fill="${state.bodyColor}" font-size="7" font-family="'PolySans Mono', monospace" letter-spacing="0.1em" opacity="0.7">side</text>
+          <g transform="translate(168, 14)">
+            <rect width="302" height="70" rx="8" fill="${state.labelColor}" stroke="#202020" stroke-width="1.6" />
+            ${onLabelImg ? `<g><clipPath id="cb-v3-label-clip"><rect width="302" height="70" rx="8" /></clipPath><image href="${state.uploadedImage}" x="0" y="0" width="302" height="70" preserveAspectRatio="xMidYMid slice" opacity="0.6" clip-path="url(#cb-v3-label-clip)" /></g>` : ""}
+            <text x="14" y="19" font-family="'PolySans Mono', monospace" font-size="8.5" letter-spacing="0.18em" fill="${onLabelImg ? "#fff" : textColor}" opacity="0.7">INDEX</text>
+            <line x1="14" y1="48" x2="288" y2="48" stroke="${onLabelImg ? "#fff" : textColor}" stroke-width="0.6" opacity="0.35" />
+            <text x="158" y="42" text-anchor="middle" dominant-baseline="middle" font-family="'Rock Salt', cursive" font-size="${v3Size}"
+              fill="${onLabelImg ? "#fff" : textColor}"
+              style="paint-order: stroke; stroke: ${onLabelImg ? "rgba(0,0,0,0.5)" : "none"}; stroke-width: ${onLabelImg ? 2 : 0};">${txt}</text>
+          </g>`;
+      }
+      // variant 4: big handwritten title across the top
+      const v4Size = Math.max(13, Math.min(30, 460 / Math.max(1, state.labelText.length * 0.7)));
+      return `
+        <text x="18" y="30" fill="${state.bodyColor}" font-size="15" font-family="'PolySans Trial', sans-serif" font-weight="500">${side}</text>
+        <text x="18" y="44" fill="${state.bodyColor}" font-size="7" font-family="'PolySans Mono', monospace" letter-spacing="0.1em" opacity="0.7">side</text>
+        <text x="256" y="58" text-anchor="middle" dominant-baseline="middle" font-family="'Rock Salt', cursive" font-size="${v4Size}" fill="${state.bodyColor}">${txt}</text>`;
+    }
+
+    function svgMarkup() {
+      const onCoverImg = state.uploadedImage && state.imagePlacement === "cover";
+      return `
+        <defs>
+          <style>@import url('https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap');</style>
+          <clipPath id="cb-cover-clip"><path d="${COVER_PATH}" /></clipPath>
+          <clipPath id="cb-label-clip"><rect width="338" height="95" rx="47.5" /></clipPath>
+        </defs>
+
+        <rect x="0.8" y="0.8" width="574.06" height="351.26" rx="24.25" fill="${state.bodyColor}" stroke="#202020" stroke-width="1.6" />
+
+        <g transform="translate(32, 10)">
+          <path d="${COVER_PATH}" fill="${state.coverColor}" />
+          <g clip-path="url(#cb-cover-clip)">${coverPattern()}</g>
+          ${onCoverImg ? `<g clip-path="url(#cb-cover-clip)"><image href="${state.uploadedImage}" x="0" y="0" width="512" height="228" preserveAspectRatio="xMidYMid slice" opacity="0.7" /></g>` : ""}
+          <path d="${COVER_PATH}" fill="none" stroke="#202020" stroke-width="1.6" />
+
+          ${coverDecorations()}
+
+          <g transform="translate(87, 110)">
+            <rect width="338" height="88" rx="44" fill="${state.bodyColor}" stroke="#202020" stroke-width="1.6" />
+            <g transform="translate(62, 44)">
+              <circle r="30.65" fill="none" stroke="#202020" stroke-width="1.6" />
+              <g transform="translate(-33, -33)"><path d="${REEL_GEAR}" fill="#202020" /></g>
+            </g>
+            <rect x="126" y="24" width="86" height="38" rx="3" fill="none" stroke="#202020" stroke-width="1.6" />
+            <path d="M126 27C126 25.343 127.343 24 129 24H169C169 24 169 62 169 62H129C127.343 62 126 60.657 126 59V27Z" fill="#202020" />
+            <g transform="translate(276, 44)">
+              <circle r="30.65" fill="none" stroke="#202020" stroke-width="1.6" />
+              <g transform="translate(-33, -33)"><path d="${REEL_GEAR}" fill="#202020" /></g>
+            </g>
+          </g>
+
+          <g transform="translate(50, 200)" opacity="0.5">
+            <ellipse rx="16" ry="9" fill="none" stroke="${state.bodyColor}" stroke-width="0.6" />
+            <ellipse rx="13" ry="7" fill="none" stroke="${state.bodyColor}" stroke-width="0.6" />
+            <ellipse rx="10" ry="5" fill="none" stroke="${state.bodyColor}" stroke-width="0.6" />
+            <ellipse rx="7" ry="3" fill="none" stroke="${state.bodyColor}" stroke-width="0.5" />
+          </g>
+
+          <g transform="translate(256, 208)">
+            <rect x="-6" y="-8" width="12" height="16" rx="1.5" fill="none" stroke="${state.bodyColor}" stroke-width="0.8" opacity="0.6" />
+            <text x="0" y="14" text-anchor="middle" fill="${state.bodyColor}" font-size="7" font-family="'PolySans Mono', monospace" opacity="0.6">90</text>
+          </g>
+
+          <text x="432" y="215" fill="${state.bodyColor}" font-size="7.5" font-family="'PolySans Mono', monospace" letter-spacing="0.18em" opacity="0.7">STEREO</text>
+
+          <g transform="translate(470, 210)" opacity="0.5">
+            <path d="M0 0C3-2 6-1 8 1S6 6 3 5S1 1 4 0" fill="none" stroke="${state.bodyColor}" stroke-width="0.8" />
+          </g>
+        </g>
+
+        <path d="${BUMP_PATH}" fill="none" stroke="#202020" stroke-width="1.6" />
+        <circle cx="151.911" cy="327.807" r="14.925" fill="#202020" />
+        <circle cx="424.283" cy="327.807" r="14.925" fill="#202020" />
+        <rect x="197.484" y="313.682" width="18.66" height="18.66" rx="3.2" fill="#202020" />
+        <rect x="360.054" y="313.682" width="18.66" height="18.66" rx="3.2" fill="#202020" />
+        <rect x="278" y="330" width="20.3" height="12.8" rx="3.2" fill="${state.bodyColor}" stroke="#202020" stroke-width="1.6" />
+        ${state.spotifyCodeImg
+          ? `<image href="${state.spotifyCodeImg}" x="168" y="278" width="240" height="34" preserveAspectRatio="xMidYMid meet" opacity="0.9" />`
+          : `<g transform="translate(288, 289)"><path d="${STAR_PATH}" fill="#202020" /></g>`}
+
+        <circle cx="62.363" cy="325.675" r="17.06" fill="${state.bodyColor}" stroke="#202020" stroke-width="1.6" />
+        <circle cx="62.363" cy="325.675" r="7.18" fill="none" stroke="#202020" stroke-width="1.6" />
+        <circle cx="513.297" cy="325.675" r="17.06" fill="${state.bodyColor}" stroke="#202020" stroke-width="1.6" />
+        <circle cx="513.297" cy="325.675" r="7.18" fill="none" stroke="#202020" stroke-width="1.6" />
+
+        <g transform="translate(24, 24)"><path d="${STAR_PATH}" fill="#202020" /></g>
+        <g transform="translate(552, 24)"><path d="${STAR_PATH}" fill="#202020" /></g>
+        <g transform="translate(24, 329)"><path d="${STAR_PATH}" fill="#202020" /></g>
+        <g transform="translate(552, 329)"><path d="${STAR_PATH}" fill="#202020" /></g>`;
+    }
+
+    function renderSVG() {
+      svgEl.innerHTML = svgMarkup();
+    }
+
+    // ── Controls render ──
+    const variantsEl = root.querySelector("#cb-variants");
+    const presetsEl = root.querySelector("#cb-presets");
+    const colorsEl = root.querySelector("#cb-colors");
+    const sideEl = root.querySelector("#cb-side");
+    const imageActionsEl = root.querySelector("#cb-image-actions");
+    const placementEl = root.querySelector("#cb-placement");
+
+    function renderVariants() {
+      const names = { 1: "Classic Bars", 2: "Arc Stripes", 3: "Retro Minimal", 4: "Dual Window" };
+      variantsEl.innerHTML = "";
+      [1, 2, 3, 4].forEach((v) => {
+        const b = document.createElement("button");
+        b.className = "cb-pill" + (state.variant === v ? " is-active" : "");
+        b.textContent = names[v];
+        b.addEventListener("click", () => {
+          state.variant = v;
+          renderSVG();
+          renderVariants();
+        });
+        variantsEl.appendChild(b);
+      });
+    }
+
+    function renderPresets() {
+      presetsEl.innerHTML = "";
+      PRESETS.forEach((p) => {
+        const b = document.createElement("button");
+        b.className = "cb-preset" + (state.bodyColor === p.body && state.coverColor === p.cover ? " is-active" : "");
+        const dots = p.stripes
+          .map((c) => `<span class="cb-dot" style="background:${c}"></span>`)
+          .join("");
+        b.innerHTML = `<span class="cb-dots">${dots}</span>${p.name}`;
+        b.addEventListener("click", () => {
+          state.bodyColor = p.body;
+          state.coverColor = p.cover;
+          state.labelColor = p.label;
+          state.stripes = [...p.stripes];
+          renderSVG();
+          renderPresets();
+          renderColors();
+          updateSpotify();
+        });
+        presetsEl.appendChild(b);
+      });
+    }
+
+    function makeSwatch(value, onChange, name) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "cb-swatch";
+      b.style.background = value;
+      b.dataset.color = value;
+      b.setAttribute("aria-label", `${name || "Color"}: ${value}`);
+      b.addEventListener("click", () => {
+        getPicker().open(b, b.dataset.color, name || "Color", (v) => {
+          b.dataset.color = v;
+          b.style.background = v;
+          onChange(v);
+        });
+      });
+      return b;
+    }
+
+    function colorRow(labelText, get, set) {
+      const row = document.createElement("div");
+      row.className = "flex items-center justify-between";
+      const name = document.createElement("span");
+      name.className = "cb-field";
+      name.textContent = labelText;
+      const right = document.createElement("div");
+      right.className = "flex items-center gap-2";
+      const hex = document.createElement("span");
+      hex.className = "cb-hex";
+      hex.textContent = get();
+      const swatch = makeSwatch(get(), (v) => {
+        set(v);
+        hex.textContent = v;
+        renderSVG();
+        renderPresets();
+      }, labelText);
+      right.appendChild(hex);
+      right.appendChild(swatch);
+      row.appendChild(name);
+      row.appendChild(right);
+      return row;
+    }
+
+    function renderColors() {
+      colorsEl.innerHTML = "";
+      colorsEl.appendChild(colorRow("Body", () => state.bodyColor, (v) => { state.bodyColor = v; updateSpotify(); }));
+      colorsEl.appendChild(colorRow("Cover", () => state.coverColor, (v) => { state.coverColor = v; }));
+      colorsEl.appendChild(colorRow("Label", () => state.labelColor, (v) => { state.labelColor = v; }));
+
+      const stripesWrap = document.createElement("div");
+      const lbl = document.createElement("span");
+      lbl.className = "cb-field";
+      lbl.textContent = "Stripes";
+      const row = document.createElement("div");
+      row.className = "mt-1.5 flex gap-2";
+      state.stripes.forEach((c, i) => {
+        row.appendChild(
+          makeSwatch(c, (v) => {
+            state.stripes = state.stripes.map((s, idx) => (idx === i ? v : s));
+            renderSVG();
+          }, "Stripe " + (i + 1))
+        );
+      });
+      stripesWrap.appendChild(lbl);
+      stripesWrap.appendChild(row);
+      colorsEl.appendChild(stripesWrap);
+    }
+
+    function renderSide() {
+      sideEl.innerHTML = "";
+      ["A", "B"].forEach((sd) => {
+        const b = document.createElement("button");
+        b.className = "cb-pill" + (state.side === sd ? " is-active" : "");
+        b.textContent = "Side " + sd;
+        b.addEventListener("click", () => {
+          state.side = sd;
+          renderSVG();
+          renderSide();
+        });
+        sideEl.appendChild(b);
+      });
+    }
+
+    function renderMedia() {
+      // Upload / change + remove
+      imageActionsEl.innerHTML = "";
+      const upload = document.createElement("button");
+      upload.className = "cb-pill cb-pill-accent flex-1";
+      upload.textContent = state.uploadedImage ? "Change" : "Upload";
+      upload.addEventListener("click", () => fileInput.click());
+      imageActionsEl.appendChild(upload);
+
+      if (state.uploadedImage) {
+        const remove = document.createElement("button");
+        remove.className = "cb-pill cb-pill-danger";
+        remove.textContent = "Remove";
+        remove.addEventListener("click", () => {
+          state.uploadedImage = null;
+          fileInput.value = "";
+          renderSVG();
+          renderMedia();
+        });
+        imageActionsEl.appendChild(remove);
+      }
+
+      // Placement
+      placementEl.innerHTML = "";
+      if (state.uploadedImage) {
+        ["cover", "label"].forEach((p) => {
+          const b = document.createElement("button");
+          b.className = "cb-pill cb-pill-sm" + (state.imagePlacement === p ? " is-active" : "");
+          b.textContent = "On " + p;
+          b.addEventListener("click", () => {
+            state.imagePlacement = p;
+            renderSVG();
+            renderMedia();
+          });
+          placementEl.appendChild(b);
+        });
+      }
+    }
+
+    // ── Spotify code ──
+    function updateSpotify() {
+      const match = state.spotifyUrl.match(/(track|album|playlist|episode|show|artist)\/([a-zA-Z0-9]+)/);
+      if (!match) {
+        state.spotifyCodeImg = null;
+        renderSVG();
+        updateSpotifyHint();
+        return;
+      }
+      const uri = `spotify:${match[1]}:${match[2]}`;
+      const bg = state.bodyColor.replace("#", "");
+      const bar = contrastColor(state.bodyColor) === "#202020" ? "black" : "white";
+      const url = `https://scannables.scdn.co/uri/plain/png/${bg}/${bar}/640/${uri}`;
+
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => {
+        const c = document.createElement("canvas");
+        c.width = img.naturalWidth;
+        c.height = img.naturalHeight;
+        c.getContext("2d").drawImage(img, 0, 0);
+        try {
+          state.spotifyCodeImg = c.toDataURL("image/png");
+        } catch {
+          state.spotifyCodeImg = url;
+        }
+        renderSVG();
+        updateSpotifyHint();
+      };
+      img.onerror = () => {
+        state.spotifyCodeImg = null;
+        renderSVG();
+        updateSpotifyHint();
+      };
+      img.src = url;
+    }
+
+    function updateSpotifyHint() {
+      const show = state.spotifyUrl && !state.spotifyCodeImg;
+      spotifyHint.classList.toggle("hidden", !show);
+    }
+
+    // ── Inputs ──
+    titleInput.addEventListener("input", (e) => {
+      state.labelText = e.target.value;
+      renderSVG();
+    });
+
+    spotifyInput.addEventListener("input", (e) => {
+      state.spotifyUrl = e.target.value;
+      updateSpotify();
+    });
+
+    fileInput.addEventListener("change", (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        state.uploadedImage = ev.target.result;
+        renderSVG();
+        renderMedia();
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // ── Export ──
+    function downloadSVG() {
+      const data = new XMLSerializer().serializeToString(svgEl);
+      const blob = new Blob([data], { type: "image/svg+xml;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `cassette-${Date.now()}.svg`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    const dlPng = root.querySelector("#cb-dl-png");
+    async function downloadPNG() {
+      if (state.downloading) return;
+      state.downloading = true;
+      dlPng.disabled = true;
+      try {
+        const data = new XMLSerializer().serializeToString(svgEl);
+        const canvas = document.createElement("canvas");
+        canvas.width = 2304;
+        canvas.height = 1412;
+        const ctx = canvas.getContext("2d");
+        const img = new Image();
+        const blob = new Blob([data], { type: "image/svg+xml;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        await new Promise((resolve, reject) => {
+          img.onload = () => {
+            ctx.drawImage(img, 0, 0, 2304, 1412);
+            URL.revokeObjectURL(url);
+            try {
+              const a = document.createElement("a");
+              a.href = canvas.toDataURL("image/png");
+              a.download = `cassette-${Date.now()}.png`;
+              a.click();
+            } catch {
+              downloadSVG();
+            }
+            resolve();
+          };
+          img.onerror = () => {
+            URL.revokeObjectURL(url);
+            downloadSVG();
+            reject();
+          };
+          img.src = url;
+        });
+      } catch {
+        // ignore
+      } finally {
+        state.downloading = false;
+        dlPng.disabled = false;
+      }
+    }
+
+    async function handleShare() {
+      try {
+        const data = new XMLSerializer().serializeToString(svgEl);
+        const blob = new Blob([data], { type: "image/svg+xml" });
+        const file = new File([blob], "my-cassette.svg", { type: "image/svg+xml" });
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            title: "My Custom Cassette",
+            text: "Built with ACM-VIT Cassette Builder",
+            files: [file],
+          });
+          return;
+        }
+      } catch {
+        // ignore
+      }
+      downloadSVG();
+    }
+
+    dlPng.addEventListener("click", downloadPNG);
+    root.querySelector("#cb-dl-svg").addEventListener("click", downloadSVG);
+    root.querySelector("#cb-share").addEventListener("click", handleShare);
+
+    // ── First paint ──
+    renderSVG();
+    renderVariants();
+    renderPresets();
+    renderColors();
+    renderSide();
+    renderMedia();
+    updateSpotifyHint();
+  }
+
+  function boot() {
+    document.querySelectorAll(".cb-root").forEach((root) => {
+      if (root.dataset.cbInit) return;
+      root.dataset.cbInit = "1";
+      init(root);
+    });
+  }
+
+  boot();
+  document.addEventListener("astro:page-load", boot);
+  document.addEventListener("variants-mounted", boot);
+  document.addEventListener("astro:before-swap", () => {
+    if (sharedPicker) sharedPicker.el.remove();
+    sharedPicker = null;
+  });
+</script>
+
+<style is:global>
+  .cb-root {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .cb-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+    gap: 1rem;
+  }
+
+  /* ── Card ── */
+  .cb-card {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 1.25rem;
+    background: rgba(255, 95, 74, 0.04);
+  }
+
+  /* ── Section heading ── */
+  .cb-section {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #f95f4a;
+  }
+
+  /* ── Field label ── */
+  .cb-field {
+    display: block;
+    margin-bottom: 0.1rem;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    color: rgba(255, 253, 208, 0.6);
+  }
+
+  /* ── Hint / hex ── */
+  .cb-hint {
+    display: block;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.6rem;
+    color: rgba(255, 253, 208, 0.4);
+  }
+
+  .cb-hex {
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    color: rgba(255, 253, 208, 0.4);
+  }
+
+  /* ── Input ── */
+  .cb-input {
+    box-sizing: border-box;
+    width: 100%;
+    margin-top: 0.35rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.25);
+    color: #fffdd0;
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 0.85rem;
+    outline: none;
+  }
+
+  /* ── Pill ── */
+  .cb-pill {
+    padding: 0.4rem 0.75rem;
+    border-radius: 100px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+    color: #fffdd0;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .cb-pill.is-active {
+    background: rgba(249, 95, 74, 0.25);
+    border-color: rgba(249, 95, 74, 0.5);
+  }
+
+  .cb-pill-sm {
+    padding: 0.25rem 0.6rem;
+    font-size: 0.6rem;
+  }
+
+  .cb-pill-accent {
+    background: rgba(249, 95, 74, 0.15);
+    border-color: rgba(249, 95, 74, 0.3);
+  }
+
+  .cb-pill-danger {
+    background: rgba(255, 60, 60, 0.1);
+    border-color: rgba(255, 60, 60, 0.3);
+    color: #ff6b6b;
+  }
+
+  /* ── Preset button ── */
+  .cb-preset {
+    padding: 0.4rem 0.8rem;
+    border-radius: 100px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+    color: #fffdd0;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .cb-preset.is-active {
+    background: rgba(249, 95, 74, 0.25);
+  }
+
+  .cb-dots {
+    display: inline-flex;
+    gap: 3px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  .cb-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  /* ── Color swatch ── */
+  .cb-swatch {
+    position: relative;
+    display: block;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    flex-shrink: 0;
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.18);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.15);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .cb-swatch:hover,
+  .cb-swatch.is-open {
+    border-color: #f95f4a;
+    box-shadow: 0 0 0 3px rgba(249, 95, 74, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.2);
+    transform: scale(1.12);
+  }
+
+  /* ── Custom color picker ── */
+  .cbp-wrap {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+  }
+
+  .cbp-backdrop {
+    position: absolute;
+    inset: 0;
+    background: transparent;
+    transition: background 0.2s;
+  }
+
+  .cbp-panel {
+    position: absolute;
+    width: 272px;
+    padding: 0.9rem;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(18, 18, 18, 0.92);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+    transition: opacity 0.18s ease, transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .cbp-wrap.is-visible .cbp-panel {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Bottom sheet on phones */
+  .cbp-wrap.is-sheet .cbp-backdrop {
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .cbp-wrap.is-sheet .cbp-panel {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    top: auto;
+    width: auto;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding-bottom: calc(0.9rem + env(safe-area-inset-bottom));
+    transform: translateY(24px);
+  }
+
+  .cbp-wrap.is-sheet.is-visible .cbp-panel {
+    transform: none;
+  }
+
+  .cbp-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.65rem;
+  }
+
+  .cbp-title {
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #f95f4a;
+  }
+
+  .cbp-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: rgba(255, 253, 208, 0.5);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .cbp-close:hover {
+    color: #f95f4a;
+    background: rgba(249, 95, 74, 0.12);
+  }
+
+  .cbp-sv {
+    position: relative;
+    height: 150px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    cursor: crosshair;
+    touch-action: none;
+  }
+
+  .cbp-sv-thumb {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2.5px solid #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5), inset 0 0 2px rgba(0, 0, 0, 0.3);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .cbp-hue {
+    position: relative;
+    height: 14px;
+    margin-top: 0.75rem;
+    border-radius: 100px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);
+    cursor: pointer;
+    touch-action: none;
+  }
+
+  .cbp-hue-thumb {
+    position: absolute;
+    top: 50%;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2.5px solid #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .cbp-io {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .cbp-chip {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.15);
+  }
+
+  .cbp-hexwrap {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+    height: 34px;
+    padding: 0 0.6rem;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.25);
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.75rem;
+  }
+
+  .cbp-hash {
+    color: rgba(255, 253, 208, 0.4);
+    margin-right: 2px;
+  }
+
+  .cbp-hexin {
+    width: 100%;
+    min-width: 0;
+    border: none;
+    background: transparent;
+    color: #fffdd0;
+    font-family: inherit;
+    font-size: inherit;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    outline: none;
+  }
+
+  .cbp-eye {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    padding: 0;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 253, 208, 0.7);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .cbp-eye:hover {
+    color: #f95f4a;
+    border-color: rgba(249, 95, 74, 0.5);
+    background: rgba(249, 95, 74, 0.12);
+  }
+
+  .cbp-vals {
+    margin-top: 0.45rem;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    color: rgba(255, 253, 208, 0.4);
+  }
+
+  .cbp-sec {
+    display: block;
+    margin: 0.7rem 0 0.45rem;
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #f95f4a;
+  }
+
+  .cbp-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+  }
+
+  .cbp-cell {
+    aspect-ratio: 1;
+    padding: 0;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+
+  .cbp-cell:hover {
+    transform: scale(1.12);
+  }
+
+  .cbp-cell.is-active {
+    outline: 2px solid #f95f4a;
+    outline-offset: 2px;
+  }
+
+  .cbp-sv:focus-visible,
+  .cbp-hue:focus-visible,
+  .cbp-cell:focus-visible,
+  .cbp-eye:focus-visible,
+  .cbp-close:focus-visible {
+    outline: 2px solid #f95f4a;
+    outline-offset: 2px;
+  }
+
+  /* ── Action buttons ── */
+  .cb-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.5rem;
+    border-radius: 100px;
+    border: 1px solid rgba(249, 95, 74, 0.5);
+    background: rgba(249, 95, 74, 0.2);
+    color: #f95f4a;
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+
+  .cb-action.secondary {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.12);
+    color: #fffdd0;
+  }
+
+  .cb-action:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+
+  /* ── Light theme overrides ── */
+  html[data-theme="light"] .cb-card {
+    background: rgba(249, 95, 74, 0.05);
+  }
+  html[data-theme="light"] .cb-field {
+    color: rgba(0, 0, 0, 0.55);
+  }
+  html[data-theme="light"] .cb-hint,
+  html[data-theme="light"] .cb-hex {
+    color: rgba(0, 0, 0, 0.35);
+  }
+  html[data-theme="light"] .cb-input {
+    border-color: rgba(0, 0, 0, 0.12);
+    background: rgba(0, 0, 0, 0.05);
+    color: #1a1a1a;
+  }
+  html[data-theme="light"] .cb-pill,
+  html[data-theme="light"] .cb-preset {
+    border-color: rgba(0, 0, 0, 0.12);
+    background: rgba(0, 0, 0, 0.04);
+    color: #1a1a1a;
+  }
+  html[data-theme="light"] .cb-pill.is-active {
+    background: rgba(249, 95, 74, 0.25);
+    border-color: rgba(249, 95, 74, 0.5);
+  }
+  html[data-theme="light"] .cb-pill-accent {
+    background: rgba(249, 95, 74, 0.15);
+    border-color: rgba(249, 95, 74, 0.3);
+  }
+  html[data-theme="light"] .cb-pill-danger {
+    background: rgba(255, 60, 60, 0.1);
+    border-color: rgba(255, 60, 60, 0.3);
+    color: #ff6b6b;
+  }
+  html[data-theme="light"] .cb-preset.is-active {
+    background: rgba(249, 95, 74, 0.25);
+  }
+  html[data-theme="light"] .cb-swatch {
+    border-color: rgba(0, 0, 0, 0.15);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.3);
+  }
+  html[data-theme="light"] .cb-swatch:hover,
+  html[data-theme="light"] .cb-swatch.is-open {
+    border-color: #f95f4a;
+    box-shadow: 0 0 0 3px rgba(249, 95, 74, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.3);
+  }
+  html[data-theme="light"] .cbp-panel {
+    border-color: rgba(0, 0, 0, 0.1);
+    background: rgba(255, 253, 244, 0.95);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+  }
+  html[data-theme="light"] .cbp-close {
+    color: rgba(0, 0, 0, 0.45);
+  }
+  html[data-theme="light"] .cbp-sv,
+  html[data-theme="light"] .cbp-hue,
+  html[data-theme="light"] .cbp-chip,
+  html[data-theme="light"] .cbp-cell {
+    border-color: rgba(0, 0, 0, 0.12);
+  }
+  html[data-theme="light"] .cbp-hexwrap {
+    border-color: rgba(0, 0, 0, 0.12);
+    background: rgba(0, 0, 0, 0.05);
+  }
+  html[data-theme="light"] .cbp-hash {
+    color: rgba(0, 0, 0, 0.35);
+  }
+  html[data-theme="light"] .cbp-hexin {
+    color: #1a1a1a;
+  }
+  html[data-theme="light"] .cbp-eye {
+    border-color: rgba(0, 0, 0, 0.12);
+    background: rgba(0, 0, 0, 0.04);
+    color: rgba(0, 0, 0, 0.55);
+  }
+  html[data-theme="light"] .cbp-vals {
+    color: rgba(0, 0, 0, 0.4);
+  }
+  html[data-theme="light"] .cb-action.secondary {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.12);
+    color: #1a1a1a;
+  }
+</style>

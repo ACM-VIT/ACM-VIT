@@ -1,0 +1,301 @@
+---
+export const prerender = true;
+
+import Layout from "../../layouts/Layout.astro";
+import Footer from "../../layouts/Footer.astro";
+import "../../styles/globals.css";
+import "../../styles/design-domain.css";
+import { getAssetUrl } from "../../utils/cdn";
+import ToolCard from "../../components/ToolCard.astro";
+import FillButton from "../../components/ui/FillButton.astro";
+import {
+  RESEARCH_THEME_COLOR,
+  researchTools,
+  researchAOIs,
+  researchHero,
+  researchDescription,
+  researchStats,
+  researchFooterMessage,
+} from "../../data/researchDomainData";
+
+const researchEventsCustom = [
+  {
+    slug: "reverse-coding",
+    title: "Reverse Coding",
+    cassette: "/events/events-reverse-coding-cassette.svg",
+    desc: "Research spends months building Reverse Coding's problem set, writing test cases, stress testing against AI agents, and seeding questions into the contest portal.",
+    external: false,
+  },
+  {
+    slug: "cryptic-hunt",
+    title: "Cryptic Hunt",
+    cassette: "/events/events-cryptic-hunt-cassette.svg",
+    desc: "One of India's largest scavenger hunts. Research crafts the puzzles, calibrates difficulty, and holds question quality through the run of the event.",
+    external: false,
+  },
+  {
+    slug: "neural-hack",
+    title: "Neural Hack",
+    cassette: "/events/events-neural-hack-cassette.svg",
+    desc: "ACM-VIT's flagship AI/ML hackathon, run by the Research domain. Teams build end-to-end ML systems under the clock, judged on technical depth and applied impact.",
+    external: true,
+    href: "https://nh.acmvit.in/",
+  },
+];
+
+const pyramidSizes = [4, 9, 12, 15];
+const pyramidRows: (typeof researchTools)[] = [];
+let offset = 0;
+for (const size of pyramidSizes) {
+  pyramidRows.push(researchTools.slice(offset, offset + size));
+  offset += size;
+}
+---
+
+<Layout pageTitle="Research" backHref="/#domains">
+  <div style={`--domain-color: ${RESEARCH_THEME_COLOR};`}>
+
+    <section class="dsg-hero">
+      <div class="dsg-hero-centered">
+        <img
+          src={getAssetUrl("/aois/research/cassettes/aois-research-cassettes-research-illustration.webp")}
+          alt="Research Illustration"
+          class="dsg-hero-illustration"
+          data-dsg-animate="fade-up"
+          loading="eager"
+          decoding="async"
+        />
+        <nav class="dsg-hero-crumbs" aria-label="Breadcrumb" data-dsg-animate="fade-up">
+          <svg class="dsg-hero-crumb-reel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <circle cx="12" cy="12" r="3.4" />
+            <path d="M12 2v6.6M12 15.4V22M2 12h6.6M15.4 12H22" />
+          </svg>
+          <ol>
+            <li><a href="/">Home</a></li>
+            <li><a href="/#domains">Domains</a></li>
+            <li aria-current="page">Research</li>
+          </ol>
+        </nav>
+        <h1 class="dsg-hero-title" data-dsg-animate="fade-up">
+          RESEARCH
+        </h1>
+        <p class="dsg-hero-desc" data-dsg-animate="fade-up">
+          {researchHero}
+        </p>
+        <div data-dsg-animate="fade-up">
+          <a href="#research-aois" class="dsg-hero-cta">
+            Explore AOIs
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="dsg-stats">
+      {researchStats.map((stat) => (
+        <div class="dsg-stat" data-dsg-animate="fade-up">
+          <div class="dsg-stat-value">{stat.value}</div>
+          <div class="dsg-stat-label">{stat.label}</div>
+        </div>
+      ))}
+    </section>
+
+    <section class="dsg-about">
+      <div class="dsg-about-inner">
+        <h2 class="dsg-about-heading" data-dsg-animate="fade-up">
+          What we <span>do</span>
+        </h2>
+        <div class="dsg-about-body" data-dsg-animate="fade-up">
+          {researchDescription.map((p) => <p>{p}</p>)}
+        </div>
+      </div>
+    </section>
+
+    <hr class="dsg-divider" />
+
+    <section class="dsg-tools">
+      <div class="dsg-tools-header">
+        <p class="dsg-tools-label" data-dsg-animate="fade-up">Our Arsenal</p>
+        <h2 class="dsg-tools-title" data-dsg-animate="fade-up">Tools We Use</h2>
+      </div>
+      <div class="dsg-tools-pyramid">
+        {pyramidRows.map((row, rowIdx) => {
+          const startIdx = pyramidSizes.slice(0, rowIdx).reduce((a, b) => a + b, 0);
+          return (
+            <div class="dsg-tools-pyramid-row">
+              {row.map((tool, i) => (
+                <ToolCard tool={tool} index={startIdx + i} />
+              ))}
+            </div>
+          );
+        })}
+      </div>
+    </section>
+
+    <hr class="dsg-divider" />
+
+    <section class="dsg-aoi" id="research-aois">
+      <div class="dsg-aoi-header">
+        <p class="dsg-aoi-label" data-dsg-animate="fade-up">Explore</p>
+        <h2 class="dsg-aoi-title" data-dsg-animate="fade-up">Areas of Interest</h2>
+      </div>
+      <div class="dsg-aoi-list">
+        {researchAOIs.map((aoi) => (
+          <a
+            href={`/domains/research/${aoi.key}`}
+            class="dsg-aoi-item"
+            data-dsg-animate="fade-up"
+          >
+            <div class="dsg-aoi-img-wrap">
+              <img
+                src={getAssetUrl(aoi.cassetteSrc)}
+                alt={aoi.title}
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div class="dsg-aoi-info">
+              <h3>{aoi.title}</h3>
+              <p>{aoi.shortDescription}</p>
+              <span class="dsg-aoi-link-text">Learn more</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <hr class="dsg-divider" />
+
+    <section class="dsg-events">
+      <div class="dsg-events-header">
+        <p class="dsg-events-label" data-dsg-animate="fade-up">Events</p>
+        <h2 class="dsg-events-title" data-dsg-animate="fade-up">Research in Action</h2>
+      </div>
+      <div class="dsg-events-row">
+        {researchEventsCustom.map((event) => {
+          const href = event.external ? (event as any).href : `/events/${event.slug}`;
+          const extra = event.external ? { target: "_blank", rel: "noopener noreferrer" } : {};
+          return (
+            <a href={href} {...extra} class="dsg-event-card" data-dsg-animate="fade-up">
+              <img
+                src={getAssetUrl(event.cassette)}
+                alt={event.title}
+                loading="lazy"
+                decoding="async"
+              />
+              <h4>{event.title}</h4>
+              <p>{event.desc}</p>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+
+    <section class="dsg-footer-section">
+      <div class="dsg-cassette-fan" data-dsg-fan>
+        {researchAOIs.slice(0, 5).map((aoi, i) => (
+          <div class="dsg-fan-card" style={`--fan-index: ${i}`} data-fan-card>
+            <img
+              src={getAssetUrl(aoi.cassetteSrc)}
+              alt={aoi.title}
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        ))}
+      </div>
+      <p class="dsg-footer-msg">{researchFooterMessage}</p>
+      <FillButton href="/" label="Back to Home" style={`--proj-color: ${RESEARCH_THEME_COLOR}; --proj-color-secondary: #0d0e0d;`}>
+        <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </FillButton>
+    </section>
+  </div>
+
+  <Footer />
+</Layout>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  const entry = gsap.timeline({ defaults: { ease: "power3.out" }, paused: true });
+
+  const heroEls = document.querySelectorAll('.dsg-hero-centered [data-dsg-animate="fade-up"]');
+  entry.fromTo(heroEls,
+    { opacity: 0, y: 30 },
+    { opacity: 1, y: 0, duration: 0.6, stagger: 0.12 }
+  );
+
+  window.addEventListener("preloader:done", () => entry.play(), { once: true });
+
+  const fanCards = document.querySelectorAll("[data-fan-card]");
+  const fanSection = document.querySelector(".dsg-cassette-fan");
+
+  if (fanSection && fanCards.length > 0) {
+    const fanAngles = [-30, -15, 0, 15, 30];
+    const fanOffsetsX = [-280, -140, 0, 140, 280];
+    const fanOffsetsY = [40, 10, -10, 10, 40];
+
+    fanCards.forEach((card) => {
+      gsap.set(card, { opacity: 0, rotation: 0, x: 0, y: 40, scale: 0.5 });
+    });
+
+    const fanTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: fanSection,
+        start: "top 80%",
+        once: true,
+      },
+    });
+
+    fanCards.forEach((card, i) => {
+      fanTl.to(card, {
+        opacity: 1,
+        rotation: fanAngles[i] ?? 0,
+        x: fanOffsetsX[i] ?? 0,
+        y: fanOffsetsY[i] ?? 0,
+        scale: 1,
+        duration: 0.6,
+        ease: "back.out(1.2)",
+      }, i === 0 ? "+=0" : "-=0.45");
+    });
+  }
+
+  const scrollEls = document.querySelectorAll(
+    '.dsg-about [data-dsg-animate], .dsg-tools [data-dsg-animate], .dsg-aoi [data-dsg-animate], .dsg-events [data-dsg-animate], .dsg-stats [data-dsg-animate], .dsg-footer-section [data-dsg-animate]'
+  );
+  scrollEls.forEach((el) => {
+    gsap.fromTo(el,
+      { opacity: 0, y: 24 },
+      {
+        opacity: 1, y: 0, duration: 0.6, ease: "power2.out",
+        delay: parseFloat((el as HTMLElement).style.getPropertyValue('--card-delay') || '0'),
+        scrollTrigger: {
+          trigger: el,
+          start: "top 88%",
+          once: true,
+        },
+      }
+    );
+  });
+
+  document.querySelectorAll('.dsg-aoi-item').forEach((card) => {
+    card.addEventListener('mousemove', (e: Event) => {
+      const me = e as MouseEvent;
+      const rect = (card as HTMLElement).getBoundingClientRect();
+      const x = (me.clientX - rect.left) / rect.width;
+      const y = (me.clientY - rect.top) / rect.height;
+      const rotateX = (0.5 - y) * 6;
+      const rotateY = (x - 0.5) * 6;
+      (card as HTMLElement).style.transform =
+        `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      (card as HTMLElement).style.transform = '';
+    });
+  });
+</script>

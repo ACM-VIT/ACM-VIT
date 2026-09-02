@@ -1,0 +1,12 @@
+{
+  "slug": "9",
+  "order": 80,
+  "id": "9",
+  "title": "Board Meeting",
+  "date": "2026-07-20",
+  "startTime": "20:00",
+  "endTime": "21:30",
+  "domain": "management",
+  "description": "Monthly board sync - event planning, budget review, and membership updates.",
+  "location": "TT 623, VIT Vellore"
+}

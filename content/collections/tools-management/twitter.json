@@ -1,0 +1,8 @@
+{
+  "name": "X / Twitter",
+  "slug": "twitter",
+  "svgFile": "/domains/management/tools/management-tool-twitter.svg",
+  "colorHex": "#FFFDD0",
+  "monochrome": true,
+  "order": 190
+}

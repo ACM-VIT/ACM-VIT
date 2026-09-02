@@ -1,0 +1,13 @@
+{
+  "slug": "localhost",
+  "order": 60,
+  "kind": "overlay",
+  "name": "Localhost",
+  "color": "#eb5757",
+  "image": "/projects/items/4/cassetteSrc.webp",
+  "alt": "Localhost",
+  "url": "/projects/localhost",
+  "sizePercent": 85,
+  "sizeAxis": "width",
+  "offsetY": -5
+}

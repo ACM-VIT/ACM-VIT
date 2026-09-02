@@ -1,0 +1,20 @@
+{
+  "slug": "unipool",
+  "order": 30,
+  "cassetteSrc": "/projects/items/3/cassetteSrc.webp",
+  "cassetteAlt": "UniPool Image",
+  "description1": "UniPool is a comprehensive carpooling platform that connects you across India with seamless ride-sharing solutions. Whether hosting or joining rides, the platform's dynamic search capabilities work nationwide, from campus trips to intercity travel, breaking free from predefined route limitations.",
+  "description2": "Real-time notifications keep users updated on ride status, bookings, and acceptances, while built-in group messaging connects all the riders for easy coordination. Direct messaging enables one-on-one communication between riders and hosts. Powered by a proprietary search algorithm with advanced filtering, UniPool intelligently matches riders with optimal routes and schedules. The platform transforms carpooling into a connected travel community, making intercity and local travel more accessible, affordable, and social especially for VIT students.",
+  "primaryBgColor": "#7100FF",
+  "primaryTextColor": "white",
+  "primaryBorderColor": "#FEFCD9",
+  "visitWebsiteText": "VISIT WEBSITE",
+  "visitWebsiteUrl": "https://unipool.acmvit.in",
+  "visitWebsiteBgColor": "#7100FF",
+  "visitWebsiteTextColor": "white",
+  "visitWebsiteBorderColor": "#FEFCD9",
+  "icons": [],
+  "textColor": "white",
+  "contentBlockBackground": "rgba(0, 0, 0, 0.15)",
+  "hoverShadow": "rgba(124, 58, 237, 0.4)"
+}

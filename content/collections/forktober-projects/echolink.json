@@ -1,0 +1,80 @@
+{
+  "slug": "echolink",
+  "title": "EchoLink",
+  "tagline": "An app to sync audio devices",
+  "eyebrow": "ACM-VIT · Forktober 2023 · Open Source",
+  "themeColor": "#EFEFEF",
+  "themeColorSecondary": "#1a1a1a",
+  "shortDescription": "An app to sync audio devices",
+  "longDescription": [
+    "An app to sync audio devices",
+    "EchoLink was part of ACM-VIT's Forktober open-source drive in 2023, opening up to student contributors during Hacktoberfest.",
+    "The repository is archived. It remains on GitHub as a record of the Forktober edition that ran it, but is no longer accepting new contributions.",
+    "Across its lifetime, the project drew 7 contributors, 49 pull requests and 99 commits."
+  ],
+  "status": "archived",
+  "statusNote": "Forktober 2023 · Archived",
+  "cassetteSvg": "/events/events-forktober-cassette.svg",
+  "stats": [
+    {
+      "value": "7",
+      "label": "Contributors"
+    },
+    {
+      "value": "49",
+      "label": "Pull requests"
+    },
+    {
+      "value": "99",
+      "label": "Commits"
+    },
+    {
+      "value": "3",
+      "label": "Stars"
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Stack",
+      "slugs": [
+        "flutter"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "JuxtaRYCT"
+    },
+    {
+      "github": "tanushgolwala"
+    },
+    {
+      "github": "Abh1noob"
+    },
+    {
+      "github": "harshitaak07"
+    },
+    {
+      "github": "aastikn"
+    },
+    {
+      "github": "RohanKhatua"
+    }
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/ACM-VIT/EchoLink",
+      "kind": "github"
+    }
+  ],
+  "commitGraphSeed": 845,
+  "order": 30
+}

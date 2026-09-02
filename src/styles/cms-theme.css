@@ -1,0 +1,116 @@
+/**
+ * Shared design tokens for the Content Studio surfaces (login, dashboard,
+ * guide). One palette, two themes. Pages consume the --c-* tokens only, so a
+ * single flip of [data-theme] on <html> re-skins everything.
+ *
+ * Theme resolution:
+ *   - no [data-theme]        -> follow the OS (prefers-color-scheme)
+ *   - [data-theme="light"]   -> force light
+ *   - [data-theme="dark"]    -> force dark
+ * The pre-paint script in CmsThemeInit.astro sets the attribute before first
+ * paint from localStorage("acm-cms-theme") to avoid a flash.
+ */
+
+:root {
+  --c-bg: #f7f1e8;
+  --c-surface: #fffdf9;
+  --c-surface-2: #efe7d9;
+  --c-ink: #2a2620;
+  --c-text: #5b5445;
+  --c-muted: #8a8171;
+  --c-line: rgba(120, 90, 60, 0.16);
+  --c-accent: #f95f4a;
+  --c-accent-strong: #ec4f38;
+  --c-accent-2: #ff007a;
+  --c-accent-soft: rgba(249, 95, 74, 0.12);
+  --c-accent-ink: #fff;
+  --c-code-bg: rgba(120, 90, 60, 0.1);
+  --c-code-fg: #7a4a30;
+  --c-lock: #b98a4a;
+  --c-nav-bg: rgba(247, 241, 232, 0.82);
+  --c-card-hover-border: #e6c9b8;
+  --c-shadow: rgba(120, 60, 30, 0.45);
+  --c-callout-bg: rgba(249, 95, 74, 0.07);
+}
+
+/* System-driven dark (only when the user hasn't explicitly chosen) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --c-bg: #1a1713;
+    --c-surface: #221e18;
+    --c-surface-2: #29241d;
+    --c-ink: #f4eee2;
+    --c-text: #c9bfab;
+    --c-muted: #8f856f;
+    --c-line: rgba(240, 225, 200, 0.13);
+    --c-accent: #ff6a55;
+    --c-accent-strong: #ff7d68;
+    --c-accent-2: #ff2d86;
+    --c-accent-soft: rgba(255, 106, 85, 0.16);
+    --c-accent-ink: #1a1713;
+    --c-code-bg: rgba(240, 225, 200, 0.09);
+    --c-code-fg: #f0b48c;
+    --c-lock: #d99a4a;
+    --c-nav-bg: rgba(26, 23, 19, 0.82);
+    --c-card-hover-border: rgba(255, 140, 110, 0.35);
+    --c-shadow: rgba(0, 0, 0, 0.55);
+    --c-callout-bg: rgba(255, 106, 85, 0.1);
+  }
+}
+
+/* Explicit dark (wins over the media query) */
+:root[data-theme="dark"] {
+  --c-bg: #1a1713;
+  --c-surface: #221e18;
+  --c-surface-2: #29241d;
+  --c-ink: #f4eee2;
+  --c-text: #c9bfab;
+  --c-muted: #8f856f;
+  --c-line: rgba(240, 225, 200, 0.13);
+  --c-accent: #ff6a55;
+  --c-accent-strong: #ff7d68;
+  --c-accent-2: #ff2d86;
+  --c-accent-soft: rgba(255, 106, 85, 0.16);
+  --c-accent-ink: #1a1713;
+  --c-code-bg: rgba(240, 225, 200, 0.09);
+  --c-code-fg: #f0b48c;
+  --c-lock: #d99a4a;
+  --c-nav-bg: rgba(26, 23, 19, 0.82);
+  --c-card-hover-border: rgba(255, 140, 110, 0.35);
+  --c-shadow: rgba(0, 0, 0, 0.55);
+  --c-callout-bg: rgba(255, 106, 85, 0.1);
+}
+
+/* The ACM mark asset is solid black - invert it in dark mode so it doesn't
+   vanish on the dark chrome. (No white logo variant ships in public/logos.) */
+:root[data-theme="dark"] .brand img,
+:root[data-theme="dark"] .cms-brand img { filter: invert(1) brightness(1.9); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .brand img,
+  :root:not([data-theme="light"]) .cms-brand img { filter: invert(1) brightness(1.9); }
+}
+
+/* ── Shared theme-toggle button ── */
+.c-themetoggle {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border: 1px solid var(--c-line);
+  border-radius: 9px;
+  background: var(--c-surface);
+  color: var(--c-muted);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.c-themetoggle:hover { color: var(--c-accent); border-color: var(--c-accent); }
+.c-themetoggle svg { width: 17px; height: 17px; }
+.c-themetoggle .c-sun { display: none; }
+.c-themetoggle .c-moon { display: block; }
+:root[data-theme="dark"] .c-themetoggle .c-sun { display: block; }
+:root[data-theme="dark"] .c-themetoggle .c-moon { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .c-themetoggle .c-sun { display: block; }
+  :root:not([data-theme="light"]) .c-themetoggle .c-moon { display: none; }
+}

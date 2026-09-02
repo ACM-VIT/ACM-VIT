@@ -1,0 +1,255 @@
+---
+export const prerender = true;
+
+import Layout from "../../layouts/Layout.astro";
+import Footer from "../../layouts/Footer.astro";
+import "../../styles/globals.css";
+import "../../styles/domain.css";
+import { getAssetUrl } from "../../utils/cdn";
+import FillButton from "../../components/ui/FillButton.astro";
+
+import { items as allDomains } from "../../generated/home-domains";
+
+// Theme color mapping
+const themeHexMap: Record<string, string> = {
+  tech: "#9B51E0",
+  competitive: "#42CD9D",
+  design: "#FF0054",
+  research: "#135DE2",
+  management: "#008080",
+};
+
+// Stats per domain
+const domainStats: Record<string, { value: string; label: string }[]> = {
+  tech: [
+    { value: "5", label: "AOIs" },
+  ],
+  cc: [],
+  design: [
+    { value: "5", label: "AOIs" },
+  ],
+  research: [
+    { value: "6", label: "AOIs" },
+  ],
+  management: [],
+};
+
+export function getStaticPaths() {
+  return [
+    { params: { domain: "tech" } },
+    { params: { domain: "cc" } },
+    { params: { domain: "research" } },
+    { params: { domain: "management" } },
+  ];
+}
+
+const { domain } = Astro.params;
+const domainData = allDomains.find((d) => d.key === domain);
+if (!domainData) return Astro.redirect("/");
+
+const themeColor = themeHexMap[domainData.themeColor] || "#F95F4A";
+const stats = domainStats[domain!] || [];
+const hasAois = domainData.aois && domainData.aois.length > 0;
+
+// Split title for typography effect - first word normal, rest accent colored
+const titleWords = domainData.title.split(" ");
+const titleMain = titleWords[0];
+const titleAccent = titleWords.length > 1 ? titleWords.slice(1).join(" ") : "";
+---
+
+<Layout pageTitle={domainData.title} backHref="/#domains">
+  <div style={`--domain-color: ${themeColor};`}>
+    <!-- Hero -->
+    <section class="domain-hero">
+      <div class="domain-hero-inner">
+        <div class="domain-hero-text">
+          <nav class="domain-hero-crumbs" aria-label="Breadcrumb" data-animate="fade-up">
+            <svg class="domain-hero-crumb-reel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" />
+              <circle cx="12" cy="12" r="3.4" />
+              <path d="M12 2v6.6M12 15.4V22M2 12h6.6M15.4 12H22" />
+            </svg>
+            <ol>
+              <li><a href="/">Home</a></li>
+              <li><a href="/#domains">Domains</a></li>
+              <li aria-current="page">{domainData.title}</li>
+            </ol>
+          </nav>
+          <h1 class="domain-hero-title" data-animate="fade-up">
+            {titleMain}
+            {titleAccent && <span>{titleAccent}</span>}
+          </h1>
+          <p class="domain-hero-desc" data-animate="fade-up">
+            {domainData.description}
+          </p>
+          {domainData.buttonText && (
+            <div data-animate="fade-up">
+              <a href="#domain-aois" class="domain-hero-cta">
+                {domainData.buttonText}
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </a>
+            </div>
+          )}
+        </div>
+        <div class="domain-hero-cassette" data-animate="fade-in">
+          <img
+            src={getAssetUrl(domainData.cassetteSvg.replace('.webp', '.svg'))}
+            alt={domainData.title}
+            class="domain-hero-cassette-img"
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Tech Stack Marquee -->
+    {domainData.techIcons.length > 0 && (
+      <section class="domain-marquee-section">
+        <p class="domain-marquee-label">Tech Stack & Tools</p>
+        <div class="domain-marquee-track">
+          {/* Duplicate icons 4x for seamless loop */}
+          {[...Array(4)].map(() => (
+            <div class="domain-marquee-set">
+              {domainData.techIcons.map((icon) => (
+                <img
+                  src={getAssetUrl(icon.src)}
+                  alt={icon.alt}
+                  class="domain-marquee-icon"
+                  loading="lazy"
+                  decoding="async"
+                  title={icon.alt}
+                />
+              ))}
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Stats -->
+    {stats.length > 0 && (
+      <section class="domain-stats" data-animate-group="stagger">
+        {stats.map((stat) => (
+          <div class="domain-stat" data-animate="fade-up">
+            <div class="domain-stat-value">{stat.value}</div>
+            <div class="domain-stat-label">{stat.label}</div>
+          </div>
+        ))}
+      </section>
+    )}
+
+    <!-- About -->
+    <section class="domain-about-section">
+      <div class="domain-about-inner">
+        <h2 class="domain-about-heading" data-animate="fade-up">
+          What we <span>do</span>
+        </h2>
+        <p class="domain-about-body" data-animate="fade-up">
+          {domainData.description}
+        </p>
+      </div>
+    </section>
+
+    <hr class="domain-divider" />
+
+    <!-- AOIs -->
+    {hasAois && (
+      <section class="domain-aoi-section" id="domain-aois">
+        <div class="domain-aoi-header">
+          <p class="domain-aoi-label" data-animate="fade-up">Explore</p>
+          <h2 class="domain-aoi-title" data-animate="fade-up">Areas of Interest</h2>
+        </div>
+        <div class="domain-aoi-grid">
+          {domainData.aois.map((aoi, i) => (
+            <div class="domain-aoi-card" data-animate="fade-up" style={`--card-delay: ${i * 0.08}s`}>
+              <img
+                src={getAssetUrl(aoi.src)}
+                alt={aoi.alt}
+                class="domain-aoi-card-img"
+                loading="lazy"
+                decoding="async"
+              />
+              <span class="domain-aoi-card-name">{aoi.alt}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Back to Home -->
+    <section class="domain-back-section">
+      <FillButton href="/" label="Back to Home" style={`--proj-color: ${themeColor}; --proj-color-secondary: #0d0e0d;`}>
+        <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </FillButton>
+    </section>
+  </div>
+
+  <Footer />
+</Layout>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    // Hero entrance animations
+    const heroEls = document.querySelectorAll('.domain-hero [data-animate="fade-up"]');
+    gsap.fromTo(heroEls,
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 0.7, ease: "power3.out", stagger: 0.12, delay: 0.3 }
+    );
+
+    const cassette = document.querySelector('.domain-hero [data-animate="fade-in"]');
+    if (cassette) {
+      gsap.fromTo(cassette,
+        { opacity: 0, scale: 0.9, rotate: -5 },
+        { opacity: 1, scale: 1, rotate: 0, duration: 0.8, ease: "power3.out", delay: 0.5 }
+      );
+
+      // Subtle float
+      gsap.to(cassette.querySelector('.domain-hero-cassette-img'), {
+        y: -12, duration: 2.5, ease: "sine.inOut", yoyo: true, repeat: -1,
+      });
+    }
+
+    // Scroll-triggered animations for sections below hero
+    const scrollEls = document.querySelectorAll(
+      '.domain-about-section [data-animate], .domain-aoi-section [data-animate], .domain-stats [data-animate]'
+    );
+    scrollEls.forEach((el) => {
+      gsap.fromTo(el,
+        { opacity: 0, y: 24 },
+        {
+          opacity: 1, y: 0, duration: 0.6, ease: "power2.out",
+          delay: parseFloat((el as HTMLElement).style.getPropertyValue('--card-delay') || '0'),
+          scrollTrigger: {
+            trigger: el,
+            start: "top 88%",
+            once: true,
+          },
+        }
+      );
+    });
+
+    // AOI card tilt
+    document.querySelectorAll('.domain-aoi-card').forEach((card) => {
+      card.addEventListener('mousemove', (e: Event) => {
+        const me = e as MouseEvent;
+        const rect = (card as HTMLElement).getBoundingClientRect();
+        const x = (me.clientX - rect.left) / rect.width;
+        const y = (me.clientY - rect.top) / rect.height;
+        const rotateX = (0.5 - y) * 10;
+        const rotateY = (x - 0.5) * 10;
+        (card as HTMLElement).style.transform =
+          `perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        (card as HTMLElement).style.transform = '';
+      });
+    });
+  });
+</script>

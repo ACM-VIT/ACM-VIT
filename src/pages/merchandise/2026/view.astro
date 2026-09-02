@@ -1,0 +1,455 @@
+---
+import { getAssetUrl } from "../../../utils/cdn";
+export const prerender = true;
+import Layout from "../../../layouts/Layout.astro";
+import "../../../styles/globals.css";
+import Footer from "../../../layouts/Footer.astro";
+
+const items = [
+  { name: "Board", slug: "board", accent: "#FF0054" },
+  { name: "Tech", slug: "tech", accent: "#6C8EFF" },
+  { name: "Competitive Coding", slug: "cc", accent: "#42CD9D" },
+  { name: "Design", slug: "design", accent: "#FF0054" },
+  { name: "Management", slug: "management", accent: "#008080" },
+  { name: "Research", slug: "research", accent: "#135DE2" },
+];
+---
+
+<Layout pageTitle="2026 - View Collection" backHref="/merchandise/2026" scrollCue={false}>
+  <section class="vw" data-vw>
+    <div class="vw-tint" data-vw-tint></div>
+
+    <div class="vw-left">
+      <h1 class="vw-title" data-vw-title>Atlas Tee</h1>
+      <p class="vw-domain" data-vw-domain>Board</p>
+      <p class="vw-sub" data-vw-sub>
+        Six domains, one Atlas system.<br />
+        Swipe through all 6.
+      </p>
+    </div>
+
+    <div class="vw-stage" data-vw-stage>
+      {items.map((item, i) => (
+        <div
+          class={`vw-product ${i === 0 ? "vw-product--active" : ""}`}
+          data-vw-product={item.slug}
+          data-idx={i}
+        >
+          <div class="vw-solo">
+            <img
+              class="vw-pimg"
+              src={getAssetUrl(`/merch/2026/merch-2026-${item.slug}.webp`)}
+              alt={`${item.name} Tee`}
+              loading={i === 0 ? "eager" : "lazy"}
+            />
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <div class="vw-dock-wrap">
+    <div class="vw-dock" data-vw-dock>
+      <button class="vw-dock-btn dock-ctrl" data-arrow="prev" aria-label="Previous">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+
+      <div class="vw-dock-sep dock-div"></div>
+
+      <div class="vw-dots dock-ctrl">
+        {items.map((item, i) => (
+          <button
+            class={`vw-navdot ${i === 0 ? "active" : ""}`}
+            data-nav={i}
+            style={`--dot-c: ${item.accent}`}
+            aria-label={item.name}
+          ><span></span></button>
+        ))}
+      </div>
+
+      <div class="vw-dock-sep dock-div"></div>
+
+      <button class="vw-dock-btn dock-ctrl" data-arrow="next" aria-label="Next">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <section class="m26-end" data-m26-end>
+    <div class="m26-end__inner">
+      <p class="m26-end__text" data-end-anim>you have reached the end of the rack</p>
+      <p class="m26-end__sub" data-end-anim>no more hangers, just vibes from here</p>
+      <img
+        src={getAssetUrl("/merch/merch-lineup.webp")}
+        alt="ACM-VIT merchandise lineup"
+        class="m26-end__img"
+        loading="lazy"
+        data-end-anim
+      />
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap');
+
+  .vw { position: relative; width: 100%; height: 100vh; height: 100svh; overflow: hidden; }
+  .vw-tint {
+    position: absolute; inset: 0; z-index: 0;
+    background: radial-gradient(ellipse at 55% 45%, rgba(255, 0, 84, 0.035) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .vw-left {
+    position: absolute;
+    left: clamp(1.5rem, 5vw, 5rem);
+    top: clamp(90px, 12vh, 130px);
+    z-index: 5;
+    max-width: 38%;
+  }
+
+  .vw-title {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.6rem, 3.2vw, 2.8rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: #FEFCD9;
+    margin: 0 0 1rem;
+  }
+
+  .vw-domain {
+    font-family: "Rock Salt", cursive;
+    font-size: clamp(1.2rem, 2.4vw, 2rem);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: #F95F4A;
+    margin: 0 0 0.8rem;
+  }
+
+  .vw-sub {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-size: clamp(0.82rem, 1.1vw, 1rem);
+    font-weight: 400;
+    line-height: 1.65;
+    color: rgba(254, 252, 217, 0.62);
+    margin: 0;
+  }
+
+  .vw-stage {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .vw-product {
+    position: absolute;
+    width: clamp(520px, 70vw, 1000px);
+    height: clamp(280px, 44vh, 540px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 2;
+    margin-top: 1%;
+  }
+
+  .vw-product--active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .vw-solo {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .vw-pimg {
+    width: 95%;
+    height: 95%;
+    object-fit: contain;
+    filter: drop-shadow(0 16px 40px rgba(0, 0, 0, 0.45));
+  }
+
+  .vw-dock-wrap {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9000;
+    pointer-events: none;
+  }
+
+  .vw-dock {
+    display: flex;
+    min-height: 52px;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: rgba(30, 30, 30, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    pointer-events: auto;
+  }
+
+  .vw-dock-sep { width: 1px; height: 18px; background: rgba(255, 255, 255, 0.08); flex-shrink: 0; }
+
+  .vw-dock-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(254, 252, 217, 0.72);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .vw-dock-btn:hover { background: rgba(255, 255, 255, 0.12); color: rgba(254, 252, 217, 0.95); }
+  .vw-dock-btn:active { transform: scale(0.92); }
+
+  .vw-dots { display: flex; align-items: center; gap: 4px; }
+  .vw-navdot {
+    width: 16px; height: 16px; border-radius: 50%;
+    border: none; background: transparent;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    padding: 0;
+    transition: transform 0.3s ease;
+  }
+  .vw-navdot:hover { transform: scale(1.3); }
+  .vw-navdot span {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--dot-c);
+    opacity: 0.3;
+    transition: opacity 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .vw-navdot.active span {
+    opacity: 1;
+    transform: scale(1.5);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.06);
+  }
+
+  .m26-end { position: relative; padding: 5rem 1.5rem 2rem; overflow: hidden; }
+  .m26-end__inner { max-width: 56rem; margin: 0 auto; display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .m26-end__text {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.5rem, 4vw, 2.8rem);
+    letter-spacing: -0.02em;
+    color: rgba(254, 252, 217, 0.32);
+    text-transform: lowercase;
+    margin: 0;
+  }
+  .m26-end__sub {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: rgba(254, 252, 217, 0.22);
+    margin: 0.25rem 0 0;
+  }
+  .m26-end__img {
+    width: 100%;
+    max-width: 48rem;
+    height: auto;
+    object-fit: contain;
+    margin-top: 2rem;
+    mix-blend-mode: lighten;
+    filter: drop-shadow(0 16px 40px rgba(0, 0, 0, 0.3));
+  }
+
+  @media (max-width: 1024px) {
+    /* Dock is surfaced inside the mobile bottom navbar (MobileNavbar merch panel). */
+    .vw-dock-wrap { display: none; }
+    .vw-product { width: clamp(420px, 64vw, 780px); height: clamp(240px, 38vh, 460px); }
+  }
+
+  @media (max-width: 768px) {
+    .vw-left { top: 80px; max-width: 55%; }
+    .vw-title { font-size: clamp(1.3rem, 4.5vw, 2rem); }
+    .vw-domain { font-size: clamp(1rem, 3.5vw, 1.5rem); }
+    .vw-product { width: 94vw; height: clamp(200px, 34vh, 320px); margin-top: 3%; }
+    .vw-sub { display: none; }
+  }
+
+  @media (max-width: 480px) {
+    .vw-left { top: 72px; max-width: 65%; }
+    .vw-product { width: 96vw; height: 36vh; }
+    .vw-dots { gap: 2px; }
+    .vw-navdot { width: 14px; height: 14px; }
+    .vw-navdot span { width: 5px; height: 5px; }
+    .vw-dock { padding: 6px 10px; gap: 4px; }
+    .vw-dock-btn { width: 28px; height: 28px; }
+  }
+
+  :global(html[data-theme="light"]) .vw-title { color: #1a1a1a; }
+  :global(html[data-theme="light"]) .vw-domain { color: #d94430; }
+  :global(html[data-theme="light"]) .vw-sub { color: rgba(30, 20, 10, 0.66); }
+  :global(html[data-theme="light"]) .vw-dock {
+    background: rgba(22, 22, 22, 0.94);
+    border-color: rgba(249, 95, 74, 0.25);
+    box-shadow: 0 12px 36px rgba(45, 20, 12, 0.25);
+  }
+  :global(html[data-theme="light"]) .vw-pimg { filter: drop-shadow(0 16px 40px rgba(0, 0, 0, 0.12)); }
+  :global(html[data-theme="light"]) .m26-end__text { color: rgba(30, 20, 10, 0.3); }
+  :global(html[data-theme="light"]) .m26-end__sub { color: rgba(30, 20, 10, 0.22); }
+  :global(html[data-theme="light"]) .m26-end__img { mix-blend-mode: multiply; filter: drop-shadow(0 16px 40px rgba(0, 0, 0, 0.08)); }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { Flip } from "gsap/Flip";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(Flip, ScrollTrigger);
+
+  const ITEMS = [
+    { name: "Board", slug: "board", accent: "#FF0054" },
+    { name: "Tech", slug: "tech", accent: "#6C8EFF" },
+    { name: "Competitive Coding", slug: "cc", accent: "#42CD9D" },
+    { name: "Design", slug: "design", accent: "#FF0054" },
+    { name: "Management", slug: "management", accent: "#008080" },
+    { name: "Research", slug: "research", accent: "#135DE2" },
+  ];
+
+  let idx = 0;
+  let busy = false;
+
+  const products = document.querySelectorAll<HTMLElement>(".vw-product");
+  const navDots = document.querySelectorAll<HTMLButtonElement>(".vw-navdot");
+  const arrows = document.querySelectorAll<HTMLButtonElement>("[data-arrow]");
+  const titleEl = document.querySelector<HTMLElement>("[data-vw-title]");
+  const domainEl = document.querySelector<HTMLElement>("[data-vw-domain]");
+  const tint = document.querySelector<HTMLElement>("[data-vw-tint]");
+  const dock = document.querySelector<HTMLElement>("[data-vw-dock]");
+
+  function hexToRgb(hex: string) {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `${r},${g},${b}`;
+  }
+
+  function updateMeta(item: typeof ITEMS[0]) {
+    if (titleEl) titleEl.textContent = "Atlas Tee";
+    if (domainEl) {
+      domainEl.textContent = item.name;
+      domainEl.style.color = item.accent;
+    }
+  }
+
+  const entry = gsap.timeline({ defaults: { ease: "power3.out" }, paused: true });
+  window.addEventListener("preloader:done", () => entry.play(), { once: true });
+  entry.fromTo("[data-vw-title]", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 });
+  entry.fromTo("[data-vw-domain]", { opacity: 0, x: -10 }, { opacity: 1, x: 0, duration: 0.45 }, "-=0.25");
+  entry.fromTo("[data-vw-sub]", { opacity: 0 }, { opacity: 1, duration: 0.4 }, "-=0.2");
+
+  const firstP = products[0];
+  if (firstP) {
+    entry.fromTo(firstP,
+      { opacity: 0, y: 50, scale: 0.88 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "power3.out" },
+      "-=0.4"
+    );
+  }
+
+  if (dock) {
+    const controls = dock.querySelectorAll<HTMLElement>(".dock-ctrl");
+    const dividers = dock.querySelectorAll<HTMLElement>(".dock-div");
+
+    const naturalW = dock.getBoundingClientRect().width;
+    const naturalH = dock.getBoundingClientRect().height;
+
+    gsap.set(dock, {
+      opacity: 0, y: 24, scale: 0.7,
+      width: naturalH, height: naturalH,
+      overflow: "hidden",
+    });
+    gsap.set([controls, dividers], { opacity: 0 });
+
+    const dockTl = gsap.timeline();
+    dockTl.to(dock, { opacity: 1, y: -6, scale: 1.05, duration: 0.35, ease: "power2.out" });
+    dockTl.to(dock, { y: 0, scale: 1, duration: 0.25, ease: "power3.out" });
+    dockTl.add(() => {
+      const state = Flip.getState(dock);
+      dock.style.width = `${naturalW}px`;
+      Flip.from(state, {
+        duration: 0.5,
+        ease: "power3.out",
+        onComplete: () => {
+          dock.style.width = "";
+          dock.style.height = "";
+          dock.style.overflow = "";
+          gsap.to([controls, dividers], { opacity: 1, duration: 0.3, stagger: 0.025, ease: "power2.out" });
+        },
+      });
+    }, "-=0.08");
+
+    entry.add(dockTl, "-=0.3");
+  }
+
+  function go(newIdx: number) {
+    if (newIdx === idx || busy) return;
+    busy = true;
+
+    const oldP = products[idx];
+    const newP = products[newIdx];
+    const item = ITEMS[newIdx];
+    if (!oldP || !newP || !item) { busy = false; return; }
+
+    const tl = gsap.timeline({ onComplete: () => { idx = newIdx; busy = false; } });
+
+    tl.to(oldP, { opacity: 0, scale: 0.88, duration: 0.3, ease: "power2.in",
+      onComplete: () => oldP.classList.remove("vw-product--active")
+    });
+
+    tl.fromTo(newP,
+      { opacity: 0, scale: 1.08 },
+      { opacity: 1, scale: 1, duration: 0.5, ease: "power3.out",
+        onStart: () => newP.classList.add("vw-product--active")
+      },
+      "-=0.05"
+    );
+
+    tl.add(() => updateMeta(item), 0.15);
+
+    const rgb = hexToRgb(item.accent);
+    tl.to(tint, {
+      background: `radial-gradient(ellipse at 55% 45%, rgba(${rgb},0.035) 0%, transparent 65%)`,
+      duration: 0.5,
+    }, 0);
+
+    navDots.forEach((d, i) => d.classList.toggle("active", i === newIdx));
+  }
+
+  navDots.forEach((d) => d.addEventListener("click", () => go(parseInt(d.dataset.nav || "0"))));
+  arrows.forEach((a) => a.addEventListener("click", () => {
+    const n = ITEMS.length;
+    go(a.dataset.arrow === "next" ? (idx + 1) % n : (idx - 1 + n) % n);
+  }));
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight") go((idx + 1) % ITEMS.length);
+    if (e.key === "ArrowLeft") go((idx - 1 + ITEMS.length) % ITEMS.length);
+  });
+
+  const endAnims = document.querySelectorAll("[data-end-anim]");
+  gsap.fromTo(endAnims,
+    { opacity: 0, y: 30 },
+    {
+      opacity: 1, y: 0, duration: 0.7, stagger: 0.12, ease: "power3.out",
+      scrollTrigger: { trigger: ".m26-end", start: "top 85%", once: true },
+    }
+  );
+</script>

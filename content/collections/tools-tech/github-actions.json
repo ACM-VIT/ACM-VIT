@@ -1,0 +1,8 @@
+{
+  "name": "GitHub Actions",
+  "slug": "github-actions",
+  "svgFile": "/domains/tech/tools/tech-tool-github-actions.svg",
+  "colorHex": "#2088FF",
+  "monochrome": true,
+  "order": 490
+}

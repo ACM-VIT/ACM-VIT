@@ -1,0 +1,432 @@
+---
+import { DOMAIN_COLORS } from '../../data/calendarEventsData';
+---
+
+<div class="cal-container" id="cal-root">
+  <!-- Toolbar -->
+  <div class="cal-toolbar">
+    <div class="cal-toolbar-left">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" class="cal-tape-icon">
+        <rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.5"></rect>
+        <circle cx="8.5" cy="12" r="3" stroke="currentColor" stroke-width="1.5"></circle>
+        <circle cx="15.5" cy="12" r="3" stroke="currentColor" stroke-width="1.5"></circle>
+        <circle cx="8.5" cy="12" r="1" fill="currentColor"></circle>
+        <circle cx="15.5" cy="12" r="1" fill="currentColor"></circle>
+        <path d="M11.5 12h1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+        <line x1="5" y1="18" x2="19" y2="18" stroke="currentColor" stroke-width="1" opacity="0.4"></line>
+      </svg>
+      <button class="cal-nav-btn" data-nav="-1" aria-label="Previous">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <h2 class="cal-month-label" id="cal-month-label"></h2>
+      <button class="cal-nav-btn" data-nav="1" aria-label="Next">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    </div>
+
+    <button class="cal-today-btn" id="cal-today-btn">Today</button>
+
+    <div class="cal-view-toggle">
+      <button class="cal-view-btn" data-view="month">Month</button>
+      <button class="cal-view-btn" data-view="week">Week</button>
+    </div>
+  </div>
+
+  <!-- Domain Legend -->
+  <div class="cal-legend" id="cal-legend"></div>
+
+  <!-- Day Headers -->
+  <div class="cal-header-row">
+    <div class="cal-header-cell">Sun</div>
+    <div class="cal-header-cell">Mon</div>
+    <div class="cal-header-cell">Tue</div>
+    <div class="cal-header-cell">Wed</div>
+    <div class="cal-header-cell">Thu</div>
+    <div class="cal-header-cell">Fri</div>
+    <div class="cal-header-cell">Sat</div>
+  </div>
+
+  <!-- Grid -->
+  <div class="cal-grid" id="cal-grid"></div>
+
+  <!-- Upcoming Events -->
+  <div class="cal-upcoming">
+    <div class="cal-upcoming-header">
+      <h3 class="cal-upcoming-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" class="cal-tape-icon">
+          <rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.5"></rect>
+          <circle cx="8.5" cy="12" r="3" stroke="currentColor" stroke-width="1.5"></circle>
+          <circle cx="15.5" cy="12" r="3" stroke="currentColor" stroke-width="1.5"></circle>
+          <circle cx="8.5" cy="12" r="1" fill="currentColor"></circle>
+          <circle cx="15.5" cy="12" r="1" fill="currentColor"></circle>
+          <path d="M11.5 12h1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+          <line x1="5" y1="18" x2="19" y2="18" stroke="currentColor" stroke-width="1" opacity="0.4"></line>
+        </svg>
+        Queue
+      </h3>
+      <div class="cal-tape-deck">
+        <span class="cal-reel cal-reel-left"></span>
+        <span class="cal-tape-strip"></span>
+        <span class="cal-reel cal-reel-right"></span>
+      </div>
+    </div>
+    <div id="cal-upcoming-list"></div>
+  </div>
+
+  <!-- Modal mount point -->
+  <div id="cal-modal-root"></div>
+</div>
+
+<script>
+  import { SAMPLE_EVENTS, DOMAIN_COLORS, type CalendarEvent, type EventDomain } from '../../data/calendarEventsData';
+
+  const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+  const SCREW_D = "M9.595 0C14.894 0 19.189 4.296 19.189 9.595C19.188 14.893 14.893 19.188 9.595 19.189C4.296 19.189 0 14.893 0 9.595C0 4.296 4.296 0 9.595 0ZM10.378 3.853C10.205 2.999 8.984 2.999 8.811 3.853L8.078 7.454C8.014 7.769 7.769 8.014 7.454 8.078L3.853 8.811C2.999 8.984 2.999 10.204 3.853 10.378L7.454 11.11C7.769 11.174 8.014 11.42 8.078 11.734L8.811 15.336C8.984 16.19 10.205 16.19 10.378 15.336L11.111 11.734C11.175 11.42 11.42 11.174 11.735 11.11L15.336 10.378C16.19 10.204 16.19 8.984 15.336 8.811L11.735 8.078C11.42 8.014 11.175 7.769 11.111 7.454L10.378 3.853Z";
+
+  function getDaysInMonth(year: number, month: number) {
+    return new Date(year, month + 1, 0).getDate();
+  }
+
+  function getFirstDayOfMonth(year: number, month: number) {
+    return new Date(year, month, 1).getDay();
+  }
+
+  function formatDate(d: Date) {
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  }
+
+  function formatTime(t: string) {
+    const [h, m] = t.split(':').map(Number);
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    return `${h % 12 || 12}:${String(m).padStart(2, '0')} ${ampm}`;
+  }
+
+  function getEventsForDate(date: string, filters: Set<EventDomain>, allEvents: CalendarEvent[]) {
+    const events = allEvents.filter(e => e.date === date);
+    if (filters.size === 0) return events;
+    return events.filter(e => filters.has(e.domain));
+  }
+
+  function escapeHtml(s: string) {
+    return s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
+  }
+
+  // State
+  let currentDate = new Date(2026, 6, 1);
+  let viewMode: 'month' | 'week' = 'month';
+  let selectedEvent: CalendarEvent | null = null;
+  let activeFilters = new Set<EventDomain>();
+  let allEvents: CalendarEvent[] = [...SAMPLE_EVENTS];
+  const today = new Date();
+
+  // Element refs
+  const monthLabel = document.getElementById('cal-month-label')!;
+  const legendEl = document.getElementById('cal-legend')!;
+  const gridEl = document.getElementById('cal-grid')!;
+  const upcomingEl = document.getElementById('cal-upcoming-list')!;
+  const modalRoot = document.getElementById('cal-modal-root')!;
+  const todayBtn = document.getElementById('cal-today-btn')!;
+  const navBtns = document.querySelectorAll<HTMLButtonElement>('[data-nav]');
+  const viewBtns = document.querySelectorAll<HTMLButtonElement>('[data-view]');
+
+  function toggleFilter(domain: EventDomain) {
+    if (activeFilters.has(domain)) activeFilters.delete(domain);
+    else activeFilters.add(domain);
+    renderLegend();
+    renderGrid();
+  }
+
+  function navigate(dir: number) {
+    const d = new Date(currentDate);
+    if (viewMode === 'month') d.setMonth(d.getMonth() + dir);
+    else d.setDate(d.getDate() + dir * 7);
+    currentDate = d;
+    renderAll();
+  }
+
+  function setViewMode(mode: 'month' | 'week') {
+    viewMode = mode;
+    renderAll();
+  }
+
+  function buildMonthGrid() {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const daysInMonth = getDaysInMonth(year, month);
+    const firstDay = getFirstDayOfMonth(year, month);
+    const prevMonthDays = getDaysInMonth(year, month - 1);
+    const cells: { date: Date; isCurrentMonth: boolean }[] = [];
+
+    for (let i = firstDay - 1; i >= 0; i--)
+      cells.push({ date: new Date(year, month - 1, prevMonthDays - i), isCurrentMonth: false });
+    for (let i = 1; i <= daysInMonth; i++)
+      cells.push({ date: new Date(year, month, i), isCurrentMonth: true });
+    const remaining = 42 - cells.length;
+    for (let i = 1; i <= remaining; i++)
+      cells.push({ date: new Date(year, month + 1, i), isCurrentMonth: false });
+    return cells;
+  }
+
+  function buildWeekGrid() {
+    const month = currentDate.getMonth();
+    const startOfWeek = new Date(currentDate);
+    startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+    return Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(startOfWeek);
+      d.setDate(startOfWeek.getDate() + i);
+      return { date: d, isCurrentMonth: d.getMonth() === month };
+    });
+  }
+
+  function isToday(d: Date) {
+    return d.getDate() === today.getDate() && d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear();
+  }
+
+  function renderToolbar() {
+    monthLabel.textContent = `${MONTHS[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+    viewBtns.forEach(btn => {
+      const mode = btn.dataset.view as 'month' | 'week';
+      btn.className = `cal-view-btn ${viewMode === mode ? 'cal-view-active' : ''}`;
+    });
+  }
+
+  function renderLegend() {
+    legendEl.innerHTML = '';
+    (Object.entries(DOMAIN_COLORS) as [EventDomain, typeof DOMAIN_COLORS[EventDomain]][]).forEach(([key, val]) => {
+      const active = activeFilters.size === 0 || activeFilters.has(key);
+      const btn = document.createElement('button');
+      btn.className = `cal-legend-pill ${active ? '' : 'cal-legend-inactive'}`;
+      if (active) btn.style.borderColor = val.border;
+      btn.innerHTML = `
+        <img src="${val.cassette}" alt="" class="cal-legend-cassette" style="opacity: ${active ? 1 : 0.3}" />
+        <span class="cal-legend-text"${active ? ` style="color: ${val.text}"` : ''}>${escapeHtml(val.label)}</span>
+      `;
+      btn.addEventListener('click', () => toggleFilter(key));
+      legendEl.appendChild(btn);
+    });
+  }
+
+  function renderGrid() {
+    const cells = viewMode === 'month' ? buildMonthGrid() : buildWeekGrid();
+    gridEl.className = `cal-grid ${viewMode === 'week' ? 'cal-grid-week' : ''}`;
+    gridEl.innerHTML = '';
+
+    cells.forEach(({ date, isCurrentMonth }) => {
+      const dateStr = formatDate(date);
+      const events = getEventsForDate(dateStr, activeFilters, allEvents);
+      const hasEvents = events.length > 0;
+      const todayFlag = isToday(date);
+
+      const dayEl = document.createElement('div');
+      dayEl.className = `cal-day ${isCurrentMonth ? '' : 'cal-day-other'} ${todayFlag ? 'cal-day-today' : ''} ${hasEvents ? 'cal-day-has-events' : ''}`;
+
+      const numSpan = document.createElement('span');
+      numSpan.className = `cal-day-num ${todayFlag ? 'cal-day-num-today' : ''}`;
+      numSpan.textContent = String(date.getDate());
+      dayEl.appendChild(numSpan);
+
+      if (hasEvents) {
+        const eventsWrap = document.createElement('div');
+        eventsWrap.className = 'cal-day-events';
+        events.slice(0, 3).forEach(ev => {
+          const c = DOMAIN_COLORS[ev.domain];
+          const pill = document.createElement('div');
+          pill.className = 'cal-event-pill';
+          pill.style.background = c.bg;
+          pill.style.borderLeftColor = c.border;
+          pill.innerHTML = `<span class="cal-pill-text" style="color: ${c.text}">${escapeHtml(ev.title)}</span>`;
+          pill.addEventListener('click', () => openModal(ev));
+          eventsWrap.appendChild(pill);
+        });
+        if (events.length > 3) {
+          const more = document.createElement('span');
+          more.className = 'cal-day-more';
+          more.textContent = `+${events.length - 3} more`;
+          eventsWrap.appendChild(more);
+        }
+        dayEl.appendChild(eventsWrap);
+
+        const dotsWrap = document.createElement('div');
+        dotsWrap.className = 'cal-day-dots';
+        events.slice(0, 4).forEach(ev => {
+          const dot = document.createElement('span');
+          dot.className = 'cal-dot';
+          dot.style.background = DOMAIN_COLORS[ev.domain].border;
+          dotsWrap.appendChild(dot);
+        });
+        dayEl.appendChild(dotsWrap);
+      }
+
+      gridEl.appendChild(dayEl);
+    });
+  }
+
+  function renderUpcoming() {
+    upcomingEl.innerHTML = '';
+    const items = allEvents
+      .filter(e => new Date(e.date) >= new Date(formatDate(currentDate)))
+      .sort((a, b) => a.date.localeCompare(b.date))
+      .slice(0, 5);
+
+    items.forEach(ev => {
+      const colors = DOMAIN_COLORS[ev.domain];
+      const item = document.createElement('div');
+      item.className = 'cal-upcoming-item';
+      item.style.borderLeftColor = colors.border;
+      item.innerHTML = `
+        <img src="${colors.cassette}" alt="" class="cal-upcoming-cassette" />
+        <div class="cal-upcoming-info">
+          <span class="cal-upcoming-name">${escapeHtml(ev.title)}</span>
+          <span class="cal-upcoming-time" style="color: ${colors.text}">
+            ${new Date(ev.date + 'T00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} · ${formatTime(ev.startTime)}
+          </span>
+        </div>
+      `;
+      item.addEventListener('click', () => openModal(ev));
+      upcomingEl.appendChild(item);
+    });
+  }
+
+  let modalEscHandler: ((e: KeyboardEvent) => void) | null = null;
+
+  function closeModal() {
+    selectedEvent = null;
+    modalRoot.innerHTML = '';
+    if (modalEscHandler) {
+      window.removeEventListener('keydown', modalEscHandler);
+      modalEscHandler = null;
+    }
+  }
+
+  function openModal(event: CalendarEvent) {
+    selectedEvent = event;
+    const colors = DOMAIN_COLORS[event.domain];
+
+    const overlay = document.createElement('div');
+    overlay.className = 'cal-detail-overlay';
+    overlay.innerHTML = `
+      <div class="cal-cassette-wrapper">
+        <button class="cal-detail-close" aria-label="Close">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+
+        <svg class="cal-cassette-frame" viewBox="0 0 576 353" fill="none">
+          <rect x="0.8" y="0.8" width="574.06" height="351.26" rx="24.25" fill="#FCE6D2" stroke="#202020" stroke-width="1.6"/>
+          <g transform="translate(14.5,14)"><path d="${SCREW_D}" fill="#202020"/></g>
+          <g transform="translate(14.5,319.9)"><path d="${SCREW_D}" fill="#202020"/></g>
+          <g transform="translate(542.2,14)"><path d="${SCREW_D}" fill="#202020"/></g>
+          <g transform="translate(542.2,319.9)"><path d="${SCREW_D}" fill="#202020"/></g>
+          <g transform="translate(32,14)">
+            <path d="M479 0.8H31C26.5 0.8 22.2 2.6 19 5.8L5.5 19.2C2.3 22.4 0.5 26.8 0.5 31.3V209C0.5 218.4 8.1 226 17.5 226H492.5C501.9 226 509.5 218.4 509.5 209V31.3C509.5 26.8 507.7 22.4 504.5 19.2L491 5.8C487.8 2.6 483.5 0.8 479 0.8Z" fill="#261D1E" stroke="#202020" stroke-width="1.6"/>
+          </g>
+          <path d="M67.4 145.5C61.9 189.6 40.2 294.7 45.8 328.6" stroke="#202020" stroke-width="0.53"/>
+          <path d="M62.4 342.5C99.4 343 509.3 342.5 513.3 342.5" stroke="#202020" stroke-width="0.53"/>
+          <path d="M436.3 138.1C455.1 166 515.9 277.8 529.5 321.4" stroke="#202020" stroke-width="0.53"/>
+          <path d="M129.7 273.2H450.2C457.6 273.2 464.1 278.2 465.9 285.4L483 352.1H93.3L114.2 284.6C116.3 277.8 122.6 273.2 129.7 273.2Z" stroke="#202020" stroke-width="1.6"/>
+          <circle cx="151.9" cy="327.8" r="14.1" stroke="#202020" stroke-width="1.6"/>
+          <circle cx="424.3" cy="327.8" r="14.1" stroke="#202020" stroke-width="1.6"/>
+          <rect x="197.5" y="313.7" width="18.7" height="18.7" rx="2.4" stroke="#202020" stroke-width="1.6"/>
+          <rect x="360.1" y="313.7" width="18.7" height="18.7" rx="2.4" stroke="#202020" stroke-width="1.6"/>
+          <path d="M277.7 333.1C277.7 331.4 279.1 329.9 280.9 329.9H294.8C296.5 329.9 298 331.4 298 333.1V342.7H277.7V333.1Z" fill="#202020"/>
+          <path d="M62.4 308.6C71.8 308.6 79.4 316.3 79.4 325.7C79.4 335.1 71.8 342.7 62.4 342.7C52.9 342.7 45.3 335.1 45.3 325.7C45.3 316.3 52.9 308.6 62.4 308.6ZM62.4 318.5C58.4 318.5 55.2 321.7 55.2 325.7C55.2 329.6 58.4 332.9 62.4 332.9C66.3 332.9 69.5 329.6 69.5 325.7C69.5 321.7 66.3 318.5 62.4 318.5Z" fill="#202020"/>
+          <path d="M513.3 308.6C522.7 308.6 530.4 316.3 530.4 325.7C530.4 335.1 522.7 342.7 513.3 342.7C503.9 342.7 496.2 335.1 496.2 325.7C496.2 316.3 503.9 308.6 513.3 308.6ZM513.3 318.5C509.3 318.5 506.1 321.7 506.1 325.7C506.1 329.6 509.3 332.9 513.3 332.9C517.3 332.9 520.5 329.6 520.5 325.7C520.5 321.7 517.3 318.5 513.3 318.5Z" fill="#202020"/>
+          <path d="M287.8 279.3C293.1 279.3 297.4 283.6 297.4 288.9C297.4 294.2 293.1 298.5 287.8 298.5C282.5 298.5 278.2 294.2 278.2 288.9C278.2 283.6 282.5 279.3 287.8 279.3ZM288.6 283.2C288.4 282.3 287.2 282.3 287 283.2L286.3 286.8C286.3 287.1 286 287.3 285.7 287.4L282.1 288.1C281.2 288.3 281.2 289.5 282.1 289.7L285.7 290.4C286 290.5 286.2 290.7 286.3 291L287 294.6C287.2 295.5 288.4 295.5 288.6 294.6L289.3 291C289.4 290.7 289.7 290.5 290 290.4L293.6 289.7C294.4 289.5 294.4 288.3 293.6 288.1L290 287.4C289.7 287.3 289.4 287.1 289.3 286.8L288.6 283.2Z" fill="#202020"/>
+        </svg>
+
+        <div class="cal-cassette-brand-row">
+          <span class="cal-cassette-brand">ACM-VIT</span>
+          <span class="cal-cassette-type" style="color: ${colors.border}">${escapeHtml(colors.label.toUpperCase())}</span>
+        </div>
+
+        <div class="cal-label-content">
+          <div class="cal-label-glow" style="background: radial-gradient(ellipse 100% 50% at 50% 120%, ${colors.border}18 0%, transparent 70%)"></div>
+          <div class="cal-label-side" style="color: ${colors.border}">A SIDE</div>
+
+          <div class="cal-label-domain" style="color: ${colors.text}">
+            <span class="cal-domain-dot" style="background: ${colors.border}"></span>
+            ${escapeHtml(colors.label)}
+          </div>
+
+          <h3 class="cal-label-title">${escapeHtml(event.title)}</h3>
+
+          <div class="cal-label-meta">
+            <span>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              ${new Date(event.date + 'T00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+            </span>
+            <span>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              ${formatTime(event.startTime)} – ${formatTime(event.endTime)}
+            </span>
+            <span>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              ${escapeHtml(event.location)}
+            </span>
+          </div>
+
+          <p class="cal-label-desc">${escapeHtml(event.description)}</p>
+
+          ${event.href ? `<a href="${event.href}" class="cal-label-link" style="color: ${colors.text}; border-color: ${colors.border}">Read Blog →</a>` : ''}
+        </div>
+      </div>
+    `;
+
+    overlay.addEventListener('click', closeModal);
+    const wrapper = overlay.querySelector('.cal-cassette-wrapper')!;
+    wrapper.addEventListener('click', e => e.stopPropagation());
+    overlay.querySelector('.cal-detail-close')!.addEventListener('click', closeModal);
+
+    modalRoot.innerHTML = '';
+    modalRoot.appendChild(overlay);
+
+    modalEscHandler = (e: KeyboardEvent) => { if (e.key === 'Escape') closeModal(); };
+    window.addEventListener('keydown', modalEscHandler);
+  }
+
+  function renderAll() {
+    renderToolbar();
+    renderLegend();
+    renderGrid();
+    renderUpcoming();
+  }
+
+  // Wire up static controls
+  navBtns.forEach(btn => {
+    btn.addEventListener('click', () => navigate(Number(btn.dataset.nav)));
+  });
+  viewBtns.forEach(btn => {
+    btn.addEventListener('click', () => setViewMode(btn.dataset.view as 'month' | 'week'));
+  });
+  todayBtn.addEventListener('click', () => {
+    currentDate = new Date();
+    renderAll();
+  });
+
+  // Initial render
+  renderAll();
+
+  // Fetch blog dates and merge
+  fetch('/api/blog-dates')
+    .then(res => res.json())
+    .then((blogDates: { title: string; date: string; url: string; source: string }[]) => {
+      const blogEvents: CalendarEvent[] = blogDates.map((b, i) => ({
+        id: `blog-${i}`,
+        title: b.title,
+        date: b.date,
+        startTime: '00:00',
+        endTime: '23:59',
+        domain: 'blog' as EventDomain,
+        description: `Blog post published on ${b.source === 'hashnode' ? 'Hashnode' : 'Medium'}`,
+        location: b.source === 'hashnode' ? 'blog.acmvit.in' : 'medium.com/acmvit',
+        href: b.url,
+      }));
+      allEvents = [...SAMPLE_EVENTS, ...blogEvents];
+      renderGrid();
+      renderUpcoming();
+    })
+    .catch(() => { /* keep static events on failure */ });
+</script>

@@ -1,0 +1,143 @@
+---
+// Shared bottom legends for home page
+---
+
+<div
+  class="legend-pins-wrapper absolute top-0 left-0 w-full h-screen pointer-events-none z-60"
+  aria-hidden="false"
+>
+  <!-- Left Legend -->
+  <div
+    class="legend-pin left-legend absolute bottom-8 z-60 font-['PolySans_Trial',sans-serif] text-[#FEFCD9] max-w-[42vw] left-8 max-lg:bottom-7 max-md:max-w-[80vw] max-md:left-4 max-md:bottom-24"
+  >
+    <div class="legend-left-inner inline-flex flex-col gap-1">
+      <div
+        class="legend-line text-lg leading-[1.15] font-normal [text-shadow:1px_1px_2px_rgba(0,0,0,0.45)] max-xl:text-[0.95rem] max-lg:text-[0.85rem] max-[860px]:text-[0.8rem] max-md:text-[0.75rem] max-[480px]:text-[0.7rem]"
+      >
+        Established in&nbsp;<span class="accent text-[#F95F4A]">2009</span>.
+      </div>
+      <div
+        class="legend-line text-lg leading-[1.15] font-normal [text-shadow:1px_1px_2px_rgba(0,0,0,0.45)] max-xl:text-[0.95rem] max-lg:text-[0.85rem] max-[860px]:text-[0.8rem] max-md:text-[0.75rem] max-[480px]:text-[0.7rem]"
+      >
+        Evolving ever since.
+      </div>
+    </div>
+  </div>
+  <!-- Right Legend -->
+  <div
+    class="legend-pin right-legend absolute bottom-8 z-60 font-['PolySans_Trial',sans-serif] text-[#FEFCD9] max-w-[42vw] right-24 text-right flex justify-end max-lg:bottom-7 max-md:left-4 max-md:right-auto max-md:text-left max-md:justify-start max-md:bottom-6 max-md:max-w-[80vw]"
+  >
+    <div class="legend-right-inner inline-flex flex-col gap-1">
+      <div
+        class="legend-line text-lg leading-[1.15] font-normal [text-shadow:1px_1px_2px_rgba(0,0,0,0.45)] max-xl:text-[0.95rem] max-lg:text-[0.85rem] max-[860px]:text-[0.8rem] max-md:text-[0.75rem] max-[480px]:text-[0.7rem] whitespace-nowrap"
+      >
+        We're not just another <span class="accent text-[#F95F4A]"
+          >tech chapter</span
+        ><span class="punct text-[#FEFCD9]">.</span>
+      </div>
+      <div
+        class="legend-line text-lg leading-[1.15] font-normal [text-shadow:1px_1px_2px_rgba(0,0,0,0.45)] max-xl:text-[0.95rem] max-lg:text-[0.85rem] max-[860px]:text-[0.8rem] max-md:text-[0.75rem] max-[480px]:text-[0.7rem] whitespace-nowrap"
+      >
+        We're the <span class="accent text-[#F95F4A]">conspiracy</span><span
+          class="punct text-[#FEFCD9]"
+        >
+          that actually works.</span
+        >
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<style>
+  @media (max-width: 768px) {
+    .legend-pin {
+      display: none;
+    }
+
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .legend-pin {
+      display: none;
+    }
+  }
+
+  body.mobile-menu-open .legend-pins-wrapper {
+    opacity: 0;
+    pointer-events: none;
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const wrapper = document.querySelector(".legend-pins-wrapper");
+  const brandLogos = document.querySelector(".brand-logos");
+  const homeSection = document.getElementById("home");
+  const techSection = document.getElementById("tech-hero");
+
+  if (homeSection && techSection && wrapper) {
+    document.body.appendChild(wrapper);
+
+    const setWrapperVisibility = (show: boolean) => {
+      gsap.killTweensOf(wrapper);
+      if (brandLogos) {
+        gsap.killTweensOf(brandLogos);
+      }
+
+      gsap.to(wrapper, {
+        opacity: show ? 1 : 0,
+        duration: 0.35,
+        ease: "power2.out",
+        onStart: () => {
+          if (show) {
+            (wrapper as HTMLElement).style.pointerEvents = "";
+          }
+        },
+        onComplete: () => {
+          if (!show) {
+            (wrapper as HTMLElement).style.pointerEvents = "none";
+          }
+        },
+      });
+
+      if (brandLogos) {
+        gsap.to(brandLogos, {
+          opacity: show ? 1 : 0,
+          duration: 0.35,
+          ease: "power2.out",
+        });
+      }
+    };
+
+    ScrollTrigger.create({
+      trigger: homeSection,
+      start: "top top",
+      endTrigger: techSection,
+      end: "top 10% bottom",
+      pin: wrapper,
+      pinSpacing: false,
+      onLeave: () => {
+        setWrapperVisibility(false);
+      },
+      onEnterBack: () => {
+        setWrapperVisibility(true);
+      },
+      onRefresh: (self) => {
+        if (
+          self.pin &&
+          self.pin.parentNode &&
+          self.pin.parentNode instanceof Element &&
+          self.pin.parentNode.classList.contains("pin-spacer")
+        ) {
+          (self.pin.parentNode as HTMLElement).style.pointerEvents = "none";
+        }
+      },
+    });
+  }
+</script>

@@ -1,0 +1,67 @@
+---
+import "../styles/globals.css";
+
+const focusAreas = [
+  "Education",
+  "Healthcare",
+  "Sustainability",
+  "Climate Action",
+  "Social Equality",
+  "Innovation",
+];
+---
+
+<section
+  id="community-sdg"
+  class="relative z-20 py-16 md:py-24 border-t border-white/10 overflow-hidden"
+>
+  <div class="max-w-[1400px] mx-auto px-6 md:px-10">
+    <div class="grid md:grid-cols-2 gap-10 lg:gap-16 items-start">
+      <!-- Left: title + copy -->
+      <div>
+        <h2
+          class="text-5xl sm:text-6xl md:text-6xl lg:text-7xl font-bold text-[#FFFDD0] uppercase tracking-tighter leading-[0.85]"
+        >
+          SDG<br /><span class="text-[#FF5F4A]">INITIATIVE</span>
+        </h2>
+
+        <div class="w-14 h-[3px] rounded-full bg-gradient-to-r from-[#FF5F4A] to-[#ff007a] my-7"></div>
+
+        <p class="text-gray-300 text-sm md:text-base font-mono leading-relaxed max-w-xl mb-5">
+          Every year, ACM-VIT runs events centered around the United Nations
+          Sustainable Development Goals, challenging participants to point
+          technology and innovation at social good - solving real-world problems.
+        </p>
+        <p class="text-gray-400 text-sm md:text-base font-mono leading-relaxed max-w-xl">
+          Aligned with SDG 4: Quality Education, our workshops focus on reducing
+          the digital learning gap in rural communities - exploring modern web
+          technologies and showing how simple digital tools can strengthen
+          classrooms with limited resources.
+        </p>
+      </div>
+
+      <!-- Right: focus areas + highlight -->
+      <div class="space-y-6">
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {focusAreas.map((area) => (
+            <div class="flex items-center justify-center text-center rounded-xl border border-[#FF5F4A]/20 bg-[#FF5F4A]/[0.04] px-3 py-4 text-[#FF5F4A] text-xs sm:text-sm font-semibold uppercase tracking-wide transition-all duration-300 hover:border-[#FF5F4A]/50 hover:bg-[#FF5F4A]/[0.1]">
+              {area}
+            </div>
+          ))}
+        </div>
+
+        <div class="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
+          <p class="text-[#FF5F4A] font-mono text-[0.7rem] tracking-[0.2em] uppercase mb-2">
+            Digital Learning for Rural Schools
+          </p>
+          <p class="text-gray-300 text-sm font-mono leading-relaxed">
+            By combining technical learning with real social impact, these
+            sessions reflect ACM-VIT's commitment to inclusive,
+            technology-driven growth - empowering participants to support better
+            educational access where it is needed most.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,8 @@
+{
+  "name": "Rive",
+  "slug": "rive",
+  "svgFile": "/domains/design/tools/design-tool-rive.svg",
+  "colorHex": "#1D1D1D",
+  "isDark": true,
+  "order": 200
+}

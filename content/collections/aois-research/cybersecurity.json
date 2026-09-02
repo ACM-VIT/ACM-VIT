@@ -1,0 +1,23 @@
+{
+  "slug": "cybersecurity",
+  "order": 10,
+  "key": "cybersecurity",
+  "title": "Cybersecurity",
+  "shortDescription": "Reverse engineering, web exploitation, network forensics and the offensive security skills behind India's top CTF team.",
+  "longDescription": [
+    "The Cybersecurity AOI is home to z0d1ak, ACM-VIT's competitive CTF squad and currently India's number one ranked team and seventh in the world.",
+    "Members do focused research across binary exploitation, web security, cryptography, and network defense, and turn that work into projects, writeups, and tools."
+  ],
+  "cassetteSrc": "/aois/research/cassettes/aois-research-cassettes-cybersecurity.webp",
+  "tools": [
+    "ghidra",
+    "burp-suite",
+    "owasp-zap",
+    "wireshark",
+    "nmap",
+    "metasploit",
+    "kali-linux",
+    "python",
+    "linux"
+  ]
+}

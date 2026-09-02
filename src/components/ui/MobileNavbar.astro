@@ -1,0 +1,1702 @@
+---
+// Mobile bottom navbar. Single pill morphs between 3 states:
+//   nav   - section label + menu/music buttons
+//   menu  - section list grid + close
+//   music - track info + transport controls + progress + close
+// Solid #1e1e1e fill. GSAP morph between states.
+
+import { getAssetUrl } from "../../utils/cdn";
+import { teamYears, yearLabel } from "../../data/teamData";
+import { getAllPosts } from "../../lib/blog";
+
+export interface Props {
+  /** Static label for subpages (e.g. "Z0D1AK"). Falls back to live section in nav state. */
+  pageTitle?: string;
+}
+
+const { pageTitle } = Astro.props;
+const initialLabel = pageTitle || "Home";
+const lockedLabel = !!pageTitle;
+
+// Dynamic submenu data (mirrors Header.astro).
+const boardYears = teamYears.slice(0, 5);
+const latestPosts = (await getAllPosts().catch(() => [])).slice(0, 6);
+
+// Subsections mirror the desktop megamenu (Header.astro `dropdowns`).
+// Sections listed here show a caret and open a submenu on tap.
+interface SubItem {
+  title: string;
+  desc: string;
+  href: string;
+  /** Square brand mark shown in the round button instead of the letter glyph. */
+  icon?: string;
+  /** Theme color fill for the round button (letter glyph stays). */
+  color?: string;
+}
+const subsections: Record<string, SubItem[]> = {
+  about: [
+    { title: "ACM-VIT", desc: "Our chapter's mission & culture", href: "/#about-acmvit" },
+    { title: "VIT University", desc: "One of India's top tech universities", href: "/#about-vit" },
+    { title: "ACM Global", desc: "World's largest computing society", href: "/#about-acm" },
+  ],
+  domains: [
+    { title: "Tech", desc: "App Dev, Web, FOSS, DevOps", href: "/domains/tech", color: "#9B51E0" },
+    { title: "Competitive Coding", desc: "Codeforces, ICPC, C++", href: "/domains/cc", color: "#42CD9D" },
+    { title: "Design", desc: "UI/UX, Motion Graphics, 3D", href: "/domains/design", color: "#FF0054" },
+    { title: "Research", desc: "AI/ML, Blockchain, Quantum", href: "/domains/research", color: "#135DE2" },
+    { title: "Management", desc: "Operations & coordination", href: "/domains/management", color: "#008080" },
+  ],
+  events: [
+    { title: "All Events", desc: "Browse every event we run", href: "/events" },
+    { title: "Code2Create", desc: "National-level hackathon", href: "/events/code2create", icon: getAssetUrl("/icons/icons-mn-code2create.svg") },
+    { title: "Cryptic Hunt", desc: "Cipher-cracking scavenger hunt across VIT", href: "/events/cryptic-hunt", icon: getAssetUrl("/icons/icons-mn-cryptic-hunt.svg") },
+    { title: "inspiHer", desc: "Celebrating women in technology", href: "/events/inspiher", icon: getAssetUrl("/icons/icons-mn-inspiher.svg") },
+    { title: "Forktober", desc: "Open source contribution drive", href: "/events/forktober", icon: getAssetUrl("/icons/icons-mn-forktober.svg") },
+    { title: "The Neural Hack", desc: "Deep dive into AI & ML", href: "/events/neural-hack", icon: getAssetUrl("/icons/icons-mn-neural-hack.svg") },
+  ],
+  projects: [
+    { title: "All Projects", desc: "Browse every project we build", href: "/projects" },
+    { title: "Conclave", desc: "Real-time meetings platform, built from scratch", href: "/projects/conclave" },
+    { title: "ExamCooker", desc: "Exam prep hub for VIT students", href: "/projects/examcooker" },
+    { title: "CLI RPG", desc: "Terminal-based role-playing game", href: "/projects/cli-rpg" },
+    { title: "UniPool", desc: "Campus carpooling made easy", href: "/projects/unipool" },
+    { title: "Localhost", desc: "ACM's 2024 organizing committee selections website", href: "/projects/localhost" },
+    { title: "OCS Website", desc: "Open community showcase site", href: "/projects/ocs-25" },
+  ],
+  "acm-w": [
+    { title: "Our Mission", desc: "Supporting women in computing", href: "/#acm-w" },
+    { title: "Initiatives", desc: "Programs & activities", href: "/#acm-w-content" },
+    { title: "Showcase", desc: "Highlights of our work", href: "/#acm-w-bento" },
+  ],
+  community: [
+    { title: "Outreach", desc: "Beyond The Norm workshops for schools", href: "/community#community-outreach" },
+    { title: "SDG Initiative", desc: "Digital learning for rural communities", href: "/community#community-sdg" },
+    { title: "International Award", desc: "Outstanding School Service", href: "/community#community-award" },
+    { title: "Code of Conduct", desc: "ACM ethical principles & values", href: "/community#community-conduct" },
+    { title: "ACM-W", desc: "Inclusion & women in tech", href: "/community#acm-w" },
+  ],
+  team: [
+    { title: "Full Team", desc: "Meet everyone, year by year", href: "/team" },
+    ...boardYears.map((year) => ({
+      title: `${year} Board`,
+      desc: `The ${yearLabel(year)} board`,
+      href: `/team#year-${year}`,
+      icon: getAssetUrl(`/cassettes/cassettes-team-${year}.svg`),
+    })),
+  ],
+  blogs: [
+    { title: "All Blogs", desc: "Browse every article we've published", href: "/blogs" },
+    ...latestPosts.map((post) => ({
+      title: post.title,
+      desc: `${post.source === "hashnode" ? "Hashnode" : "Medium"} · ${post.readingTime} min read`,
+      href: `/blogs/${post.source}/${post.slug}`,
+      icon: post.coverImage || undefined,
+    })),
+  ],
+  gallery: [
+    { title: "All Photos", desc: "Browse the full gallery", href: "/gallery" },
+    { title: "2026", desc: "This year's events & candids", href: "/gallery#gallery-year-2026", icon: getAssetUrl("/cassettes/cassettes-year-2026.svg") },
+    { title: "2025", desc: "Events, boards & late nights", href: "/gallery#gallery-year-2025", icon: getAssetUrl("/cassettes/cassettes-year-2025.svg") },
+    { title: "2024", desc: "Events, boards & late nights", href: "/gallery#gallery-year-2024", icon: getAssetUrl("/cassettes/cassettes-year-2024.svg") },
+    { title: "2023", desc: "Events, boards & late nights", href: "/gallery#gallery-year-2023", icon: getAssetUrl("/cassettes/cassettes-year-2023.svg") },
+  ],
+
+  more: [
+    { title: "FAQs", desc: "Everything you wanted to know, answered", href: "/faqs" },
+    { title: "Design Guide", desc: "Brand marks, colors, type & the rules we bend", href: "/design" },
+    { title: "Code of Conduct", desc: "ACM ethical principles & values", href: "/code-of-conduct" },
+    { title: "Merchandise", desc: "Official ACM-VIT merch & collectibles", href: "/merchandise" },
+    { title: "GREP Newsletter", desc: "Our bi-annual technical newsletter", href: "/grep" },
+    { title: "z0d1ak", desc: "ACM-VIT's competitive CTF team", href: "/z0d1ak" },
+    { title: "Achievements", desc: "Awards, recognitions & milestones", href: "/achievements" },
+    { title: "Cassette Builder", desc: "Design your own custom cassette", href: "/cassette-builder" },
+    { title: "Calendar", desc: "Upcoming events & important dates", href: "/calendar" },
+  ],
+};
+
+// Section labels used by the submenu header (title-case).
+const sectionTitles: Record<string, string> = {
+  about: "About", domains: "Domains", events: "Events", projects: "Projects",
+  "acm-w": "ACM-W", community: "Community", team: "Team", blogs: "Blogs",
+  gallery: "Gallery", more: "More",
+};
+
+const navItems = [
+  { id: "about", label: "About", href: "/#about" },
+  { id: "domains", label: "Domains", href: "/#domains" },
+  { id: "events", label: "Events", href: "/#events" },
+  { id: "projects", label: "Projects", href: "/#projects" },
+  { id: "acm-w", label: "ACM-W", href: "/#acm-w" },
+  { id: "community", label: "Community", href: "/community" },
+  { id: "team", label: "Team", href: "/#team" },
+  { id: "blogs", label: "Blogs", href: "/blogs" },
+  { id: "partners", label: "Partners", href: "/#partners" },
+  { id: "gallery", label: "Gallery", href: "/#gallery" },
+  { id: "contact", label: "Contact", href: "/#contact" },
+  { id: "more", label: "More", href: "/#more" },
+].map((item) => ({ ...item, hasSub: !!subsections[item.id] }));
+---
+
+<div
+  id="mn-root"
+  class="mn-root pointer-events-none fixed left-1/2 z-[60] -translate-x-1/2"
+  style="bottom: calc(16px + env(safe-area-inset-bottom, 0px));"
+  data-locked-label={lockedLabel ? "true" : undefined}
+>
+  {/* "Keep scrolling" hint - floats just above the pill on unusual-scroll
+      sections, mirroring the desktop dock's swell (driven by the cue:nudge
+      event). Tap to nudge a screen down. */}
+  <button id="mn-scroll-hint" class="mn-scroll-hint pointer-events-auto" type="button" aria-label="Keep scrolling">
+    <span class="mn-scroll-hint-label">Keep scrolling</span>
+    <span class="mn-scroll-hint-arrow" aria-hidden="true"></span>
+  </button>
+
+  <div id="mn-pill" class="mn-pill pointer-events-auto overflow-hidden" data-state="nav">
+    <!-- ── NAV state: label + buttons ── -->
+    <div data-panel="nav" class="mn-panel mn-panel-nav flex items-center justify-between gap-2 px-4 py-2">
+      <div class="flex min-w-0 items-center gap-2">
+        <span
+          id="mn-section-dot"
+          class="mn-section-dot inline-block h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#F95F4A]"
+        ></span>
+        <span
+          id="mn-label"
+          class="mn-label min-w-0 truncate text-[11px] font-['PolySans_Trial'] uppercase tracking-[0.14em] text-[#FEFCD9]"
+          >{initialLabel}</span
+        >
+      </div>
+      <div class="flex flex-shrink-0 items-center gap-1.5">
+        <button
+          id="mn-blog-btn"
+          aria-label="Article tools"
+          class="mn-blog-btn mn-btn hidden h-9 w-9 flex-shrink-0 items-center justify-center rounded-full transition-transform active:scale-90"
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+        </button>
+        <button
+          id="mn-merch-btn"
+          aria-label="Browse collection"
+          class="mn-merch-btn mn-btn hidden h-9 w-9 flex-shrink-0 items-center justify-center rounded-full transition-transform active:scale-90"
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path>
+          </svg>
+        </button>
+        <button
+          id="mn-menu-btn"
+          aria-label="Open menu"
+          class="mn-btn flex h-9 w-9 items-center justify-center rounded-full transition-transform active:scale-90"
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <circle cx="5" cy="5" r="1.6"></circle>
+            <circle cx="12" cy="5" r="1.6"></circle>
+            <circle cx="19" cy="5" r="1.6"></circle>
+            <circle cx="5" cy="12" r="1.6"></circle>
+            <circle cx="12" cy="12" r="1.6"></circle>
+            <circle cx="19" cy="12" r="1.6"></circle>
+            <circle cx="5" cy="19" r="1.6"></circle>
+            <circle cx="12" cy="19" r="1.6"></circle>
+            <circle cx="19" cy="19" r="1.6"></circle>
+          </svg>
+        </button>
+        <button
+          id="mn-theme-btn"
+          aria-label="Toggle theme"
+          class="mn-btn flex h-9 w-9 items-center justify-center rounded-full transition-transform active:scale-90"
+        >
+          <svg id="mn-theme-moon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/>
+          </svg>
+          <svg id="mn-theme-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+          </svg>
+        </button>
+        <button
+          id="mn-music-btn"
+          aria-label="Open music player"
+          class="mn-btn-primary relative flex h-9 w-9 items-center justify-center rounded-full transition-transform active:scale-90"
+        >
+          <span
+            id="mn-music-eq"
+            class="mn-music-eq hidden items-end gap-[2px]"
+            aria-hidden="true"
+          >
+            <span class="mn-eq-bar h-[5px]"></span>
+            <span class="mn-eq-bar h-[10px]"></span>
+            <span class="mn-eq-bar h-[14px]"></span>
+            <span class="mn-eq-bar h-[7px]"></span>
+          </span>
+          <svg
+            id="mn-music-note"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M9 18V5l12-2v13"></path>
+            <circle cx="6" cy="18" r="3"></circle>
+            <circle cx="18" cy="16" r="3"></circle>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ── MENU state: section grid ── -->
+    <div data-panel="menu" class="mn-panel mn-panel-menu hidden flex-col gap-2 px-3 py-3">
+      <div class="flex items-center justify-between px-2 pb-1">
+        <span class="text-[10px] font-['PolySans_Trial'] uppercase tracking-[0.22em] text-[#FEFCD9]/55"
+          >Navigate</span
+        >
+        <button
+          data-mn-close
+          aria-label="Close"
+          class="mn-close flex h-7 w-7 items-center justify-center rounded-full transition-transform active:scale-90"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <ul class="grid grid-cols-2 gap-1.5">
+        {navItems.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              data-mn-link={item.id}
+              data-mn-sub={item.hasSub ? "true" : undefined}
+              class="mn-link flex items-center gap-2.5 rounded-2xl px-3 py-2.5 text-[#FEFCD9] active:bg-white/10"
+            >
+              <span class="mn-link-dot h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#F95F4A]/55"></span>
+              <span class="min-w-0 flex-1 truncate text-[11px] font-['PolySans_Trial'] uppercase tracking-[0.1em]">
+                {item.label}
+              </span>
+              {item.hasSub && (
+                <span
+                  data-mn-caret={item.id}
+                  class="mn-link-caret-hit -my-2 -mr-1 flex flex-shrink-0 items-center px-2 py-2"
+                  aria-hidden="true"
+                >
+                  <svg
+                    class="mn-link-caret h-3 w-3 text-[#FEFCD9]/40"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.4"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M9 6l6 6-6 6" />
+                  </svg>
+                </span>
+              )}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- ── SUBMENU state: FaceTime-style section panel (built from data) ── -->
+    <div data-panel="submenu" class="mn-panel mn-panel-sub hidden flex-col gap-3.5 px-4 py-3.5">
+      <!-- Header: avatar glyph + title/subtitle + info (go to section) -->
+      <div class="flex items-center gap-3">
+        <span id="mn-sub-avatar" class="mn-sub-avatar flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full">
+          <span id="mn-sub-glyph" class="mn-sub-glyph">-</span>
+        </span>
+        <div class="min-w-0 flex-1">
+          <p id="mn-sub-title" class="mn-sub-title truncate">-</p>
+          <p id="mn-sub-subtitle" class="mn-sub-subtitle truncate">-</p>
+        </div>
+        <button
+          id="mn-sub-goto"
+          aria-label="Go to section"
+          class="mn-sub-info flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full transition-transform active:scale-90"
+        >
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 11v5" stroke-width="2" stroke-linecap="round" />
+            <circle cx="12" cy="7.7" r="1.15" fill="currentColor" stroke="none" />
+          </svg>
+        </button>
+      </div>
+      <!-- Round subsection buttons + red "hang up" back button (built in JS) -->
+      <div id="mn-sub-list" class="mn-sub-grid flex max-h-[42vh] flex-wrap justify-center gap-x-3 gap-y-3 overflow-y-auto"></div>
+    </div>
+
+    <!-- Subsection data for client submenu build -->
+    <script type="application/json" id="mn-sub-data" set:html={JSON.stringify({ subsections, sectionTitles })}></script>
+
+    <!-- ── MUSIC state: compact player ── -->
+    <div data-panel="music" class="mn-panel mn-panel-music hidden flex-col gap-3 px-4 py-3">
+      <div class="flex items-start justify-between gap-3">
+        <div class="min-w-0 flex-1">
+          <p class="text-[10px] font-['PolySans_Trial'] uppercase tracking-[0.22em] text-[#FEFCD9]/55">Now Playing</p>
+          <p id="mn-track-title" class="truncate text-[13px] font-['PolySans_Trial'] text-[#FEFCD9]">-</p>
+          <p id="mn-track-artist" class="truncate text-[10px] font-['PolySans_Mono'] uppercase tracking-[0.12em] text-[#FEFCD9]/55">-</p>
+        </div>
+        <button
+          data-mn-close
+          aria-label="Close"
+          class="mn-close mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full transition-transform active:scale-90"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Progress -->
+      <div class="flex items-center gap-2">
+        <span id="mn-time-cur" class="text-[10px] font-['PolySans_Mono'] text-[#FEFCD9]/50">0:00</span>
+        <div id="mn-prog-track" class="relative h-1 flex-1 cursor-pointer rounded-full bg-[#FEFCD9]/15">
+          <div id="mn-prog-fill" class="h-full rounded-full bg-[#F95F4A]" style="width:0%"></div>
+        </div>
+        <span id="mn-time-dur" class="text-[10px] font-['PolySans_Mono'] text-[#FEFCD9]/50">0:00</span>
+      </div>
+
+      <!-- Transport -->
+      <div class="flex items-center justify-center gap-6">
+        <button id="mn-prev" aria-label="Previous track" class="mn-trans flex h-9 w-9 items-center justify-center text-[#FEFCD9] active:scale-90 transition-transform">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18 18V6l-9 6 9 6zM6 6h2v12H6z"/>
+          </svg>
+        </button>
+        <button id="mn-play" aria-label="Play" class="mn-play flex h-12 w-12 items-center justify-center rounded-full bg-[#F95F4A] text-[#FEFCD9] active:scale-90 transition-transform">
+          <svg id="mn-play-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+          <svg id="mn-pause-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="hidden">
+            <rect x="6" y="5" width="4" height="14" rx="1"/>
+            <rect x="14" y="5" width="4" height="14" rx="1"/>
+          </svg>
+        </button>
+        <button id="mn-next" aria-label="Next track" class="mn-trans flex h-9 w-9 items-center justify-center text-[#FEFCD9] active:scale-90 transition-transform">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6 6v12l9-6-9-6zm10 0h2v12h-2z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ── BLOG state: article tools (proxies to hidden BlogDock) ── -->
+    <div data-panel="blog" class="mn-panel mn-panel-blog hidden flex-col gap-3 px-4 py-3">
+      <div class="flex items-center justify-between px-1">
+        <span class="text-[10px] font-['PolySans_Trial'] uppercase tracking-[0.22em] text-[#FEFCD9]/55">Article</span>
+        <button
+          data-mn-close
+          aria-label="Close"
+          class="mn-close flex h-7 w-7 items-center justify-center rounded-full transition-transform active:scale-90"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="flex items-center justify-around gap-2 pb-1">
+        <button id="mn-blog-listen" class="mn-blog-ctl flex flex-col items-center gap-1.5">
+          <span class="mn-blog-icon flex h-12 w-12 items-center justify-center rounded-full">
+            <svg id="mn-blog-listen-play" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+            </svg>
+            <svg id="mn-blog-listen-stop" class="hidden" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="6" y="4" width="4" height="16" rx="1" />
+              <rect x="14" y="4" width="4" height="16" rx="1" />
+            </svg>
+          </span>
+          <span id="mn-blog-listen-label" class="text-[9px] font-['PolySans_Trial'] uppercase tracking-[0.12em] text-[#FEFCD9]/60">Listen</span>
+        </button>
+        <button id="mn-blog-notes" class="mn-blog-ctl flex flex-col items-center gap-1.5">
+          <span class="mn-blog-icon flex h-12 w-12 items-center justify-center rounded-full">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="16" y1="13" x2="8" y2="13" />
+              <line x1="16" y1="17" x2="8" y2="17" />
+            </svg>
+          </span>
+          <span class="text-[9px] font-['PolySans_Trial'] uppercase tracking-[0.12em] text-[#FEFCD9]/60">Notes</span>
+        </button>
+        <button id="mn-blog-share" class="mn-blog-ctl flex flex-col items-center gap-1.5">
+          <span class="mn-blog-icon flex h-12 w-12 items-center justify-center rounded-full">
+            <svg id="mn-blog-share-default" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" />
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+            </svg>
+            <svg id="mn-blog-share-copied" class="hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </span>
+          <span id="mn-blog-share-label" class="text-[9px] font-['PolySans_Trial'] uppercase tracking-[0.12em] text-[#FEFCD9]/60">Share</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ── NOTES state: in-pill scratchpad (synced to hidden BlogDock notes) ── -->
+    <div data-panel="notes" class="mn-panel mn-panel-notes hidden flex-col gap-2 px-3 py-3">
+      <div class="flex items-center justify-between px-1">
+        <button
+          data-mn-notes-back
+          aria-label="Back to article tools"
+          class="mn-close flex h-7 w-7 items-center justify-center rounded-full transition-transform active:scale-90"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
+        <span class="text-[10px] font-['PolySans_Trial'] uppercase tracking-[0.22em] text-[#FEFCD9]/55">Scratchpad</span>
+        <button
+          data-mn-close
+          aria-label="Close"
+          class="mn-close flex h-7 w-7 items-center justify-center rounded-full transition-transform active:scale-90"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <textarea
+        id="mn-notes-input"
+        placeholder="Write a quick note..."
+        class="mn-notes-input h-[150px] w-full resize-none rounded-2xl px-3 py-2.5 text-[12px] leading-relaxed text-[#FEFCD9] outline-none"
+      ></textarea>
+    </div>
+
+    <!-- ── MERCH state: collection nav (proxies to hidden [data-vw-dock]) ── -->
+    <div data-panel="merch" class="mn-panel mn-panel-merch hidden flex-col gap-2.5 px-4 py-3">
+      <div class="flex items-center justify-between px-1">
+        <div class="min-w-0">
+          <p class="text-[10px] font-['PolySans_Trial'] uppercase tracking-[0.22em] text-[#FEFCD9]/55">Collection</p>
+          <p id="mn-merch-name" class="truncate text-[14px] font-['PolySans_Trial'] font-semibold text-[#FEFCD9]">-</p>
+        </div>
+        <button
+          data-mn-close
+          aria-label="Close"
+          class="mn-close mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full transition-transform active:scale-90"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="flex items-center gap-3">
+        <button id="mn-merch-prev" aria-label="Previous item" class="mn-btn flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full transition-transform active:scale-90">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+        </button>
+        <div id="mn-merch-dots" class="flex flex-1 flex-wrap items-center justify-center gap-2.5"></div>
+        <button id="mn-merch-next" aria-label="Next item" class="mn-btn flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full transition-transform active:scale-90">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6" /></svg>
+        </button>
+      </div>
+      <!-- Colour toggle: shown only when the real dock exposes [data-cdot] (mirrors it) -->
+      <div id="mn-merch-colors" class="mn-merch-colors hidden items-center justify-center gap-3 border-t border-[#FEFCD9]/10 pt-2.5">
+        <span class="font-['PolySans_Trial'] text-[10px] uppercase tracking-[0.22em] text-[#FEFCD9]/55">Colour</span>
+        <button id="mn-merch-cdot-black" data-mn-cdot="black" aria-label="Black" class="mn-merch-cdot is-active">
+          <span class="mn-merch-cdot-fill mn-merch-cdot-fill--black"></span>
+        </button>
+        <button id="mn-merch-cdot-white" data-mn-cdot="white" aria-label="White" class="mn-merch-cdot">
+          <span class="mn-merch-cdot-fill mn-merch-cdot-fill--white"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Desktop hide */
+  @media (min-width: 1025px) {
+    .mn-root { display: none; }
+  }
+
+  /* Clearance for the floating navbar pill below the last content.
+     Applied to the footer (solid black) instead of the body so the reserved
+     strip matches the footer, rather than exposing the greenish page canvas
+     (#0d0e0d) past it - which looked like the page flowed past the footer. */
+  @media (max-width: 1024px) {
+    :global(footer#footer) {
+      padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+    }
+  }
+
+  /* Pill - solid 1e1e1e, no glass */
+  .mn-pill {
+    width: 320px;
+    max-width: calc(100vw - 24px);
+    background: #1e1e1e;
+    border-radius: 28px;
+    box-shadow:
+      0 10px 28px rgba(0, 0, 0, 0.55),
+      0 0 0 1px rgba(249, 95, 74, 0.45);
+    opacity: 0;
+    transform: translateY(140%);
+    will-change: width, transform, background-color, box-shadow;
+  }
+
+  /* ── "Keep scrolling" hint (floats above the pill) ── */
+  .mn-scroll-hint {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 10px);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 14px;
+    border-radius: 9999px;
+    background: #1e1e1e;
+    border: 1px solid rgba(249, 95, 74, 0.55);
+    box-shadow:
+      0 8px 22px rgba(0, 0, 0, 0.5),
+      0 0 14px rgba(249, 95, 74, 0.14);
+    cursor: pointer;
+    white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
+    /* hidden until a nudge section is active */
+    opacity: 0;
+    transform: translate(-50%, 8px);
+    pointer-events: none;
+    /* Snap easing (design-guide: docks/pills/toggles) */
+    transition:
+      opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .mn-scroll-hint.is-visible {
+    opacity: 1;
+    transform: translate(-50%, 0);
+    pointer-events: auto;
+  }
+  .mn-scroll-hint:active { transform: translate(-50%, 0) scale(0.94); }
+
+  .mn-scroll-hint-label {
+    font-family: "PolySans Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-indent: 0.2em;
+    text-transform: uppercase;
+    color: rgba(254, 252, 217, 0.9);
+  }
+  .mn-scroll-hint-arrow {
+    width: 6px;
+    height: 6px;
+    flex-shrink: 0;
+    border-right: 2px solid #f95f4a;
+    border-bottom: 2px solid #f95f4a;
+    transform: rotate(45deg);
+    animation: mnHintBob 1.4s ease-in-out infinite;
+  }
+  @keyframes mnHintBob {
+    0%, 100% { transform: rotate(45deg) translate(0, 0); opacity: 0.55; }
+    50%      { transform: rotate(45deg) translate(1.5px, 1.5px); opacity: 1; }
+  }
+  /* Sideways sections (projects swipe carousel): chevron points right, bobs
+     horizontally instead of down. */
+  .mn-scroll-hint.is-sideways .mn-scroll-hint-arrow {
+    transform: rotate(-45deg);
+    animation-name: mnHintBobX;
+  }
+  @keyframes mnHintBobX {
+    0%, 100% { transform: rotate(-45deg) translate(0, 0); opacity: 0.55; }
+    50%      { transform: rotate(-45deg) translate(1.5px, -1.5px); opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mn-scroll-hint-arrow { animation: none; opacity: 1; }
+    .mn-scroll-hint { transition: opacity 0.2s ease; }
+  }
+
+  /* Collapsed (intro): pill shrinks to bare music button before Flip-expand */
+  .mn-pill.is-collapsed {
+    width: 44px;
+    background: transparent;
+    box-shadow: none;
+  }
+  .mn-pill.is-collapsed .mn-panel-nav {
+    padding: 4px;
+    gap: 0;
+    justify-content: center;
+  }
+  .mn-pill.is-collapsed .mn-panel-nav > div:first-child,
+  .mn-pill.is-collapsed #mn-theme-btn,
+  .mn-pill.is-collapsed #mn-menu-btn {
+    display: none;
+  }
+
+  /* Panels stacked; only active visible */
+  .mn-panel { display: none; }
+  .mn-panel-nav { display: flex; }
+
+  /* Action buttons */
+  .mn-btn {
+    background: rgba(254, 252, 217, 0.08);
+    color: #fefcd9;
+    border: 1px solid rgba(254, 252, 217, 0.06);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mn-btn:active { background: rgba(254, 252, 217, 0.16); }
+
+  .mn-btn-primary {
+    background: #f95f4a;
+    color: #fefcd9;
+    border: 1px solid rgba(254, 252, 217, 0.25);
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(249, 95, 74, 0.32);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mn-btn-primary:active { background: #e8513d; }
+
+  .mn-close {
+    background: rgba(254, 252, 217, 0.08);
+    color: #fefcd9;
+    border: 1px solid rgba(254, 252, 217, 0.08);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mn-close:active { background: rgba(254, 252, 217, 0.16); }
+
+  /* Section dot */
+  .mn-section-dot {
+    box-shadow: 0 0 6px rgba(249, 95, 74, 0.6);
+  }
+  .mn-section-dot[data-pink] {
+    background: #ff007a !important;
+    box-shadow: 0 0 6px rgba(255, 0, 122, 0.6);
+  }
+
+  /* Active link in menu */
+  .mn-link[data-active] {
+    background: rgba(249, 95, 74, 0.16);
+  }
+  .mn-link[data-active] .mn-link-dot {
+    background: #f95f4a;
+    box-shadow: 0 0 6px rgba(249, 95, 74, 0.55);
+  }
+  .mn-link[data-active="acm-w"] .mn-link-dot {
+    background: #ff007a;
+    box-shadow: 0 0 6px rgba(255, 0, 122, 0.55);
+  }
+
+  /* Menu caret (has-subsections indicator) */
+  .mn-link-caret { transition: transform 0.28s cubic-bezier(0.25, 0.1, 0.25, 1), color 0.2s ease; }
+  .mn-link:active .mn-link-caret { transform: translateX(2px); color: #f95f4a; }
+
+  /* ── Submenu: FaceTime-style call panel ── */
+  /* Header avatar — orange arc halo behind a section glyph */
+  .mn-sub-avatar {
+    background: radial-gradient(circle at 30% 30%, #ff8b52, #f95f4a 55%, #7a1e12 100%);
+    box-shadow: 0 0 0 1px rgba(249, 95, 74, 0.35), 0 4px 12px rgba(249, 95, 74, 0.3);
+  }
+  .mn-sub-glyph {
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e1e1e;
+    line-height: 1;
+  }
+  .mn-sub-title {
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fefcd9;
+    line-height: 1.15;
+  }
+  .mn-sub-subtitle {
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 12px;
+    color: rgba(254, 252, 217, 0.5);
+    line-height: 1.2;
+    margin-top: 1px;
+  }
+  /* Info (i) button — go to full section */
+  .mn-sub-info {
+    background: rgba(254, 252, 217, 0.08);
+    color: rgba(254, 252, 217, 0.7);
+    border: 1px solid rgba(254, 252, 217, 0.08);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mn-sub-info:active { background: rgba(254, 252, 217, 0.16); }
+
+  /* Round subsection buttons (built in JS → :global so Astro scoping doesn't
+     strip styles from dynamically created nodes). */
+  :global(.mn-sub-btn) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    width: 62px;
+    text-decoration: none;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+  :global(.mn-sub-btn-circle) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 9999px;
+    transition: transform 0.16s cubic-bezier(0.25, 0.1, 0.25, 1), filter 0.2s ease;
+  }
+  :global(.mn-sub-btn:active .mn-sub-btn-circle) { transform: scale(0.9); }
+  :global(.mn-sub-btn-glyph) {
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  :global(.mn-sub-btn-label) {
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.02em;
+    color: rgba(254, 252, 217, 0.65);
+    text-align: center;
+    line-height: 1.15;
+    max-width: 62px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  /* Light circle (white bg, dark glyph) */
+  :global(.mn-sub-btn.is-light .mn-sub-btn-circle) { background: #fefcd9; }
+  :global(.mn-sub-btn.is-light .mn-sub-btn-glyph) { color: #1e1e1e; }
+  /* Dark circle (muted bg, light glyph) */
+  :global(.mn-sub-btn.is-dark .mn-sub-btn-circle) {
+    background: rgba(254, 252, 217, 0.1);
+    border: 1px solid rgba(254, 252, 217, 0.08);
+  }
+  :global(.mn-sub-btn.is-dark .mn-sub-btn-glyph) { color: #fefcd9; }
+  /* Red circle (hang-up style back) */
+  :global(.mn-sub-btn.is-red .mn-sub-btn-circle) {
+    background: #f5473d;
+    color: #fefcd9;
+    box-shadow: 0 4px 12px rgba(245, 71, 61, 0.35);
+  }
+  /* Domain-tinted circle (bg set inline from item color) */
+  :global(.mn-sub-btn.is-tinted .mn-sub-btn-glyph) { color: #fff; }
+  /* Brand-mark icon inside the circle (event logos etc.) */
+  :global(.mn-sub-btn-icon) {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+    display: block;
+  }
+
+  #mn-sub-list { scrollbar-width: none; }
+  #mn-sub-list::-webkit-scrollbar { display: none; }
+
+  /* Blog button attention pulse (invites first click; removed after use) */
+  .mn-blog-btn.mn-attn {
+    background: #f95f4a;
+    color: #fefcd9;
+    border-color: rgba(254, 252, 217, 0.25);
+    animation: mnBlogPulse 1.8s ease-in-out infinite;
+  }
+  @keyframes mnBlogPulse {
+    0%, 100% {
+      box-shadow: 0 0 0 0 rgba(249, 95, 74, 0.5), 0 4px 12px rgba(249, 95, 74, 0.32);
+      transform: scale(1);
+    }
+    50% {
+      box-shadow: 0 0 0 7px rgba(249, 95, 74, 0), 0 4px 12px rgba(249, 95, 74, 0.32);
+      transform: scale(1.08);
+    }
+  }
+
+  /* Blog tools controls */
+  .mn-blog-ctl {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mn-blog-icon {
+    background: rgba(254, 252, 217, 0.08);
+    color: #fefcd9;
+    border: 1px solid rgba(254, 252, 217, 0.06);
+    transition: transform 0.18s cubic-bezier(0.25, 0.1, 0.25, 1), background 0.2s ease, color 0.2s ease;
+  }
+  .mn-blog-ctl:active .mn-blog-icon { transform: scale(0.9); }
+  .mn-blog-ctl.is-active .mn-blog-icon {
+    background: #f95f4a;
+    color: #fefcd9;
+    border-color: rgba(254, 252, 217, 0.25);
+    box-shadow: 0 4px 12px rgba(249, 95, 74, 0.32);
+  }
+
+  /* Notes textarea */
+  .mn-notes-input {
+    background: rgba(254, 252, 217, 0.05);
+    border: 1px solid rgba(254, 252, 217, 0.08);
+    font-family: "PolySans Mono", monospace;
+  }
+  .mn-notes-input::placeholder { color: rgba(254, 252, 217, 0.25); }
+  .mn-notes-input:focus { border-color: rgba(249, 95, 74, 0.4); }
+
+  /* Merch collection dots (mirror the hidden merch dock; per-item accent via
+     --dot-c). Built in JS → :global so Astro scoping keeps the styles. */
+  :global(.mn-merch-dot) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 9999px;
+    background: rgba(254, 252, 217, 0.08);
+    border: 1px solid rgba(254, 252, 217, 0.08);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.16s cubic-bezier(0.25, 0.1, 0.25, 1), background 0.2s ease, border-color 0.2s ease;
+  }
+  :global(.mn-merch-dot span) {
+    width: 8px;
+    height: 8px;
+    border-radius: 9999px;
+    background: rgba(254, 252, 217, 0.4);
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  :global(.mn-merch-dot:active) { transform: scale(0.9); }
+  :global(.mn-merch-dot.is-active) {
+    background: rgba(249, 95, 74, 0.18); /* solid fallback (older iPad WebKit) */
+    background: color-mix(in srgb, var(--dot-c, #f95f4a) 22%, transparent);
+    border-color: var(--dot-c, #f95f4a);
+  }
+  :global(.mn-merch-dot.is-active span) {
+    background: var(--dot-c, #f95f4a);
+    transform: scale(1.15);
+  }
+
+  /* Merch colour swatches (mirror the hidden dock's black/white [data-cdot]) */
+  .mn-merch-cdot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: none;
+    border-radius: 9999px;
+    background: transparent;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .mn-merch-cdot:active { transform: scale(0.9); }
+  .mn-merch-cdot-fill {
+    width: 18px;
+    height: 18px;
+    border-radius: 9999px;
+    transition: box-shadow 0.35s ease, transform 0.35s ease;
+  }
+  .mn-merch-cdot-fill--black { background: #1a1a1a; border: 2px solid rgba(255, 255, 255, 0.18); }
+  .mn-merch-cdot-fill--white { background: #eee; border: 2px solid rgba(255, 255, 255, 0.18); }
+  .mn-merch-cdot.is-active .mn-merch-cdot-fill {
+    box-shadow: 0 0 0 3px rgba(249, 95, 74, 0.6);
+    transform: scale(1.12);
+  }
+  .mn-merch-cdot.is-disabled { opacity: 0.2; pointer-events: none; }
+
+  /* Music EQ */
+  .mn-music-eq.is-playing { display: inline-flex; }
+  .mn-music-eq.is-playing ~ #mn-music-note { display: none; }
+  .mn-eq-bar { width: 2px; border-radius: 1px; background: currentColor; }
+  .mn-music-eq.is-playing .mn-eq-bar:nth-child(1) { animation: mnEq1 0.65s ease-in-out infinite; }
+  .mn-music-eq.is-playing .mn-eq-bar:nth-child(2) { animation: mnEq2 0.78s ease-in-out infinite; }
+  .mn-music-eq.is-playing .mn-eq-bar:nth-child(3) { animation: mnEq3 0.55s ease-in-out infinite; }
+  .mn-music-eq.is-playing .mn-eq-bar:nth-child(4) { animation: mnEq4 0.72s ease-in-out infinite; }
+  @keyframes mnEq1 { 0%,100%{height:4px} 30%{height:13px} 60%{height:6px} }
+  @keyframes mnEq2 { 0%,100%{height:11px} 30%{height:4px} 60%{height:10px} }
+  @keyframes mnEq3 { 0%,100%{height:8px} 25%{height:14px} 60%{height:4px} }
+  @keyframes mnEq4 { 0%,100%{height:10px} 35%{height:5px} 65%{height:13px} }
+
+  /* Light mode - same dark pill, no orange glow */
+  :global(html[data-theme="light"]) .mn-pill {
+    background: #1e1e1e;
+    box-shadow:
+      0 10px 28px rgba(0, 0, 0, 0.22),
+      0 0 0 1px rgba(0, 0, 0, 0.18);
+  }
+  :global(html[data-theme="light"]) .mn-btn-primary {
+    box-shadow: none !important;
+  }
+  :global(html[data-theme="light"]) .mn-section-dot,
+  :global(html[data-theme="light"]) .mn-link[data-active] .mn-link-dot {
+    box-shadow: none !important;
+  }
+  :global(html[data-theme="light"]) .mn-label,
+  :global(html[data-theme="light"]) .mn-link,
+  :global(html[data-theme="light"]) .mn-link span,
+  :global(html[data-theme="light"]) .mn-close,
+  :global(html[data-theme="light"]) .mn-btn,
+  :global(html[data-theme="light"]) .mn-btn-primary,
+  :global(html[data-theme="light"]) .mn-trans,
+  :global(html[data-theme="light"]) .mn-play,
+  :global(html[data-theme="light"]) #mn-track-title,
+  :global(html[data-theme="light"]) #mn-track-artist,
+  :global(html[data-theme="light"]) #mn-time-cur,
+  :global(html[data-theme="light"]) #mn-time-dur {
+    color: #fefcd9 !important;
+  }
+  :global(html[data-theme="light"]) .mn-section-dot {
+    background: #f95f4a !important;
+  }
+</style>
+
+<script>
+  // @ts-nocheck
+  import { gsap } from "gsap";
+  import { Flip } from "gsap/Flip";
+  gsap.registerPlugin(Flip);
+
+  function initMobileNavbar() {
+    const root = document.getElementById("mn-root");
+    const pill = document.getElementById("mn-pill");
+    const label = document.getElementById("mn-label");
+    const dot = document.getElementById("mn-section-dot");
+    if (!root || !pill || !label) return;
+
+    const lockedLabel = root.dataset.lockedLabel === "true";
+
+    const panelNav = pill.querySelector('[data-panel="nav"]') as HTMLElement;
+    const panelMenu = pill.querySelector('[data-panel="menu"]') as HTMLElement;
+    const panelMusic = pill.querySelector('[data-panel="music"]') as HTMLElement;
+    const panelSub = pill.querySelector('[data-panel="submenu"]') as HTMLElement;
+    const panelBlog = pill.querySelector('[data-panel="blog"]') as HTMLElement;
+    const panelNotes = pill.querySelector('[data-panel="notes"]') as HTMLElement;
+    const panelMerch = pill.querySelector('[data-panel="merch"]') as HTMLElement;
+    const panels = { nav: panelNav, menu: panelMenu, music: panelMusic, submenu: panelSub, blog: panelBlog, notes: panelNotes, merch: panelMerch };
+    type PanelState = keyof typeof panels;
+
+    const labelMap: Record<string, string> = {
+      home: "Home", about: "About", domains: "Domains", events: "Events",
+      projects: "Projects", "acm-w": "ACM-W", community: "Community",
+      team: "Team", blogs: "Blogs", partners: "Partners", gallery: "Gallery",
+      contact: "Contact", more: "More",
+    };
+
+    /* ── Section tracking ── */
+    function setActiveSection(id: string) {
+      if (lockedLabel) return;
+      const text =
+        labelMap[id] ||
+        (id ? id.charAt(0).toUpperCase() + id.slice(1).replace(/-/g, " ") : "Home");
+      if (label.textContent !== text) {
+        if (dot) {
+          if (id === "acm-w") dot.setAttribute("data-pink", "");
+          else dot.removeAttribute("data-pink");
+        }
+        gsap.timeline()
+          .to(label, { y: -8, opacity: 0, duration: 0.14, ease: "power2.in" })
+          .add(() => { label.textContent = text; })
+          .fromTo(label, { y: 8, opacity: 0 }, { y: 0, opacity: 1, duration: 0.2, ease: "power2.out" });
+      }
+      // Active link highlight in menu
+      pill.querySelectorAll(".mn-link").forEach((l) => {
+        if (l.getAttribute("data-mn-link") === id) l.setAttribute("data-active", id);
+        else l.removeAttribute("data-active");
+      });
+    }
+    window.addEventListener("nav:section", (e: any) => setActiveSection(e.detail?.id));
+
+    /* ── "Keep scrolling" hint (mirrors the desktop dock's swell) ──
+       The desktop dock is display:none ≤1024px but its script still runs and
+       emits cue:nudge; we surface it as a chip above the pill. Only in nav
+       state so it doesn't collide with an open menu/music panel. */
+    const scrollHint = document.getElementById("mn-scroll-hint");
+    const scrollHintLabel = scrollHint?.querySelector(".mn-scroll-hint-label");
+    let hintActive = false;
+    let hintDir: "x" | "y" = "y";
+    function updateScrollHint() {
+      scrollHint?.classList.toggle(
+        "is-visible",
+        hintActive && pill.dataset.state === "nav"
+      );
+    }
+    window.addEventListener("cue:nudge", (e: any) => {
+      hintActive = !!e.detail?.active;
+      hintDir = e.detail?.dir === "x" ? "x" : "y";
+      if (scrollHintLabel && e.detail?.label)
+        scrollHintLabel.textContent = e.detail.label;
+      // Sideways sections (e.g. projects carousel) get a rightward arrow.
+      scrollHint?.classList.toggle("is-sideways", hintDir === "x");
+      updateScrollHint();
+    });
+    scrollHint?.addEventListener("click", () => {
+      // Sideways sections are swiped by hand; only vertical nudges auto-scroll.
+      if (hintDir === "x") return;
+      smoothScrollToY(getScroller().scrollTop + window.innerHeight * 0.82);
+    });
+
+    /* ── Morph between states (Flip) ── */
+    // Interrupt an in-flight morph instead of swallowing the tap - a quick
+    // menu-open -> item-tap otherwise left the pill stuck on the old panel.
+    let flipAnim: ReturnType<typeof Flip.from> | null = null;
+    let fadeAnim: gsap.core.Tween | null = null;
+    function morphTo(nextState: PanelState) {
+      const cur = pill.dataset.state as PanelState;
+      if (cur === nextState) return;
+      flipAnim?.kill();
+      fadeAnim?.kill();
+
+      const curPanel = panels[cur];
+      const nextPanel = panels[nextState];
+
+      const state = Flip.getState(pill);
+      curPanel.style.display = "none";
+      nextPanel.style.display = "flex";
+      pill.dataset.state = nextState;
+      updateScrollHint();
+
+      flipAnim = Flip.from(state, {
+        duration: 0.42,
+        ease: "power3.out",
+        absolute: false,
+        onComplete: () => { flipAnim = null; },
+      });
+
+      // Fade panel contents in
+      fadeAnim = gsap.fromTo(
+        nextPanel.children,
+        { opacity: 0, y: 8 },
+        { opacity: 1, y: 0, duration: 0.28, stagger: 0.035, ease: "power2.out", delay: 0.05 },
+      );
+    }
+
+    /* ── Theme toggle ── */
+    const themeBtn = document.getElementById("mn-theme-btn");
+    const moonIcon = document.getElementById("mn-theme-moon");
+    const sunIcon = document.getElementById("mn-theme-sun");
+    function syncThemeIcons() {
+      const isLight = document.documentElement.getAttribute("data-theme") === "light";
+      moonIcon?.classList.toggle("hidden", isLight);
+      sunIcon?.classList.toggle("hidden", !isLight);
+    }
+    syncThemeIcons();
+    themeBtn?.addEventListener("click", () => {
+      const fn = (window as any).acmToggleTheme;
+      if (typeof fn === "function") {
+        // Reveal from the theme button's center, not the desktop bulb.
+        const r = themeBtn.getBoundingClientRect();
+        fn(r.left + r.width / 2, r.top + r.height / 2);
+      } else {
+        // Fallback: flip data-theme directly
+        const html = document.documentElement;
+        if (html.getAttribute("data-theme") === "light") {
+          html.removeAttribute("data-theme");
+          localStorage.setItem("acm-theme", "dark");
+        } else {
+          html.setAttribute("data-theme", "light");
+          localStorage.setItem("acm-theme", "light");
+        }
+      }
+      setTimeout(syncThemeIcons, 50);
+    });
+    // React to theme changes from elsewhere (bulb pull)
+    new MutationObserver(syncThemeIcons).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+
+    document.getElementById("mn-menu-btn")?.addEventListener("click", () => {
+      morphTo("menu");
+    });
+    document.getElementById("mn-music-btn")?.addEventListener("click", () => {
+      morphTo("music");
+    });
+    pill.querySelectorAll("[data-mn-close]").forEach((btn) => {
+      btn.addEventListener("click", () => morphTo("nav"));
+    });
+
+    /* ── Deterministic rAF smooth scroll ──
+       scrollIntoView({behavior:"smooth"}) is unreliable on mobile Safari (often
+       jumps instantly). Animate window.scrollTo ourselves so it's smooth on
+       every mobile browser, and recompute target top at click time. */
+    // The site scrolls the <body> element (Layout sets html,body{height:100%;
+    // overflow-x:hidden} → body becomes the scroll container, NOT the window).
+    // Detect the element that actually scrolls so this works on every page.
+    function getScroller(): HTMLElement {
+      const se = (document.scrollingElement || document.documentElement) as HTMLElement;
+      if (se && se.scrollHeight > se.clientHeight + 2) return se;
+      if (document.body.scrollHeight > document.body.clientHeight + 2) return document.body;
+      return se || document.documentElement;
+    }
+
+    let scrollRaf = 0;
+    function smoothScrollToY(destY: number, duration = 620) {
+      const scroller = getScroller();
+      const startY = scroller.scrollTop;
+      const max = scroller.scrollHeight - scroller.clientHeight;
+      const target = Math.max(0, Math.min(destY, max));
+      const dist = target - startY;
+      if (Math.abs(dist) < 2) return;
+      const t0 = performance.now();
+      const ease = (p: number) =>
+        p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; // easeInOutCubic
+      cancelAnimationFrame(scrollRaf);
+      const step = (now: number) => {
+        const p = Math.min(1, (now - t0) / duration);
+        // Set scrollTop directly (not scrollTo{behavior}), else CSS
+        // scroll-behavior:smooth restarts a native tween each frame and stalls.
+        scroller.scrollTop = startY + dist * ease(p);
+        if (p < 1) scrollRaf = requestAnimationFrame(step);
+      };
+      scrollRaf = requestAnimationFrame(step);
+    }
+
+    /* ── Navigate helper (smooth same-page scroll, else default nav) ──
+       Same-page hash links (e.g. "/#partners") scroll smoothly in-page.
+       Cross-page links (e.g. "/blogs", or "/#x" when not on that page) fall
+       through to default navigation. Returns true if handled locally. */
+    function navigateHref(href: string, e?: Event) {
+      const hashIdx = href.indexOf("#");
+      if (hashIdx === -1) return false;
+
+      const path = href.slice(0, hashIdx);
+      const id = href.slice(hashIdx + 1);
+      if (!id) return false;
+
+      const samePage = path === "" || path === window.location.pathname;
+      const target = samePage ? document.getElementById(id) : null;
+      if (!target) return false;
+
+      // Handle it ourselves; stop the desktop Header click handler from also
+      // firing its own (conflicting) scrollIntoView on the same target.
+      e?.preventDefault();
+      e?.stopPropagation();
+
+      // Offset for the section's scroll-margin (page-section = 84px), minus a
+      // touch so it sits a bit lower than the very top on mobile.
+      const cs = getComputedStyle(target);
+      const marginTop = parseInt(cs.scrollMarginTop || "0", 10) || 0;
+      const destY = getScroller().scrollTop + target.getBoundingClientRect().top - marginTop;
+      smoothScrollToY(destY);
+      history.pushState(null, "", href);
+      return true;
+    }
+
+    /* ── Submenu (subsections of a section, mirrors desktop megamenu) ── */
+    let subData: { subsections: Record<string, any[]>; sectionTitles: Record<string, string> } = {
+      subsections: {}, sectionTitles: {},
+    };
+    try {
+      const raw = document.getElementById("mn-sub-data")?.textContent;
+      if (raw) subData = JSON.parse(raw);
+    } catch {}
+
+    const subTitle = document.getElementById("mn-sub-title");
+    const subGlyph = document.getElementById("mn-sub-glyph");
+    const subSubtitle = document.getElementById("mn-sub-subtitle");
+    const subList = document.getElementById("mn-sub-list");
+    const subGoto = document.getElementById("mn-sub-goto");
+    let subSectionHref = "";
+
+    // X glyph for the red close button.
+    const CLOSE_SVG =
+      `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>`;
+
+    function openSubmenu(sectionId: string, sectionHref: string) {
+      const items = subData.subsections[sectionId];
+      if (!items || !subList) return;
+      subSectionHref = sectionHref;
+      const title = subData.sectionTitles[sectionId] || sectionId;
+      if (subTitle) subTitle.textContent = title;
+      if (subGlyph) subGlyph.textContent = title.charAt(0).toUpperCase();
+      if (subSubtitle)
+        subSubtitle.textContent = `${items.length} ${items.length === 1 ? "section" : "sections"}`;
+
+      subList.innerHTML = "";
+      // One round button per subsection. Brand-mark icon > theme-color letter >
+      // alternating light/dark letter (fallback).
+      items.forEach((it, i) => {
+        const btn = document.createElement("a");
+        btn.href = it.href;
+        btn.className = "mn-sub-btn " + (it.icon ? "is-dark has-icon" : i % 2 === 0 ? "is-light" : "is-dark");
+        btn.innerHTML =
+          `<span class="mn-sub-btn-circle"><span class="mn-sub-btn-glyph"></span></span>` +
+          `<span class="mn-sub-btn-label"></span>`;
+        const circle = btn.querySelector(".mn-sub-btn-circle") as HTMLElement;
+        if (it.icon) {
+          const img = document.createElement("img");
+          img.src = it.icon;
+          img.alt = "";
+          img.className = "mn-sub-btn-icon";
+          circle.replaceChildren(img);
+        } else {
+          if (it.color) {
+            btn.classList.remove("is-light", "is-dark");
+            btn.classList.add("is-tinted");
+            circle.style.background = it.color;
+          }
+          (btn.querySelector(".mn-sub-btn-glyph") as HTMLElement).textContent =
+            it.title.charAt(0).toUpperCase();
+        }
+        (btn.querySelector(".mn-sub-btn-label") as HTMLElement).textContent = it.title;
+        btn.addEventListener("click", (e) => {
+          morphTo("nav");
+          // Cross-page links: navigate explicitly rather than relying on the
+          // anchor default surviving the pill morph.
+          if (!navigateHref(it.href, e) && it.href) {
+            e.preventDefault();
+            window.location.href = it.href;
+          }
+        });
+        subList.appendChild(btn);
+      });
+
+      // Red close button → dismiss the pill back to nav.
+      const close = document.createElement("button");
+      close.type = "button";
+      close.className = "mn-sub-btn is-red";
+      close.setAttribute("aria-label", "Close");
+      close.innerHTML =
+        `<span class="mn-sub-btn-circle">${CLOSE_SVG}</span>` +
+        `<span class="mn-sub-btn-label">Close</span>`;
+      close.addEventListener("click", () => morphTo("nav"));
+      subList.appendChild(close);
+
+      subList.scrollTop = 0;
+      morphTo("submenu");
+    }
+
+    subGoto?.addEventListener("click", () => {
+      morphTo("nav");
+      // Cross-page (or non-hash) section links: navigateHref can't smooth-scroll,
+      // so fall back to a real navigation.
+      if (!navigateHref(subSectionHref) && subSectionHref) {
+        window.location.href = subSectionHref;
+      }
+    });
+
+    // Row tap → smooth-scroll to the section (or navigate cross-page).
+    pill.querySelectorAll(".mn-link").forEach((link) => {
+      link.addEventListener("click", (e) => {
+        const href = link.getAttribute("href") || "";
+        morphTo("nav");
+        if (!navigateHref(href, e) && href) {
+          e.preventDefault();
+          window.location.href = href;
+        }
+      });
+    });
+    // Caret tap → open the subsection submenu (doesn't trigger the row scroll).
+    pill.querySelectorAll("[data-mn-caret]").forEach((caret) => {
+      caret.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const id = caret.getAttribute("data-mn-caret") || "";
+        const link = caret.closest("li")?.querySelector(".mn-link");
+        const href = link?.getAttribute("href") || "";
+        openSubmenu(id, href);
+      });
+    });
+    document.addEventListener("pointerdown", (e) => {
+      if (pill.dataset.state === "nav") return;
+      const target = e.target as Node;
+      if (!pill.contains(target)) morphTo("nav");
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && pill.dataset.state !== "nav") morphTo("nav");
+    });
+
+    /* ── Blog tools wiring (proxies to the hidden BlogDock on blog pages) ──
+       On mobile the standalone dock pill is hidden (see BlogDock.astro); we
+       surface its Listen / Notes / Share actions here and forward clicks to the
+       dock's real buttons, mirroring their state back. ── */
+    const blogBtn = document.getElementById("mn-blog-btn");
+    const dock = document.querySelector("[data-blog-dock-root]");
+    if (blogBtn && dock) {
+      blogBtn.classList.remove("hidden");
+      blogBtn.classList.add("flex");
+
+      const dockListen = dock.querySelector("[data-listen-btn]") as HTMLElement | null;
+      const dockShare = dock.querySelector("[data-share-btn]") as HTMLElement | null;
+
+      const listenCtl = document.getElementById("mn-blog-listen");
+      const listenPlay = document.getElementById("mn-blog-listen-play");
+      const listenStop = document.getElementById("mn-blog-listen-stop");
+      const listenLabel = document.getElementById("mn-blog-listen-label");
+      const shareDefault = document.getElementById("mn-blog-share-default");
+      const shareCopied = document.getElementById("mn-blog-share-copied");
+      const shareLabel = document.getElementById("mn-blog-share-label");
+
+      // Attention pulse until the user opens the tools the first time.
+      blogBtn.classList.add("mn-attn");
+      blogBtn.addEventListener("click", () => {
+        blogBtn.classList.remove("mn-attn");
+        morphTo("blog");
+      });
+
+      // Listen: forward to dock, mirror active state via its button's class.
+      listenCtl?.addEventListener("click", () => dockListen?.click());
+      function syncListen() {
+        const on = !!dockListen?.classList.contains("is-active");
+        listenCtl?.classList.toggle("is-active", on);
+        listenPlay?.classList.toggle("hidden", on);
+        listenStop?.classList.toggle("hidden", !on);
+        if (listenLabel) listenLabel.textContent = on ? "Stop" : "Listen";
+      }
+      if (dockListen) {
+        new MutationObserver(syncListen).observe(dockListen, {
+          attributes: true, attributeFilter: ["class"],
+        });
+        syncListen();
+      }
+
+      // Notes: morph the pill into an in-pill scratchpad, synced to the dock's
+      // hidden textarea (which persists to localStorage).
+      const dockNotesInput = dock.querySelector("[data-scratchpad-input]") as HTMLTextAreaElement | null;
+      const notesInput = document.getElementById("mn-notes-input") as HTMLTextAreaElement | null;
+      document.getElementById("mn-blog-notes")?.addEventListener("click", () => {
+        if (notesInput && dockNotesInput) notesInput.value = dockNotesInput.value;
+        morphTo("notes");
+        setTimeout(() => notesInput?.focus(), 320);
+      });
+      pill.querySelector("[data-mn-notes-back]")?.addEventListener("click", () => morphTo("blog"));
+      // Mirror typing into the dock textarea + fire its input handler to save.
+      notesInput?.addEventListener("input", () => {
+        if (!dockNotesInput) return;
+        dockNotesInput.value = notesInput.value;
+        dockNotesInput.dispatchEvent(new Event("input", { bubbles: true }));
+      });
+
+      // Share: forward + mirror the copied confirmation.
+      document.getElementById("mn-blog-share")?.addEventListener("click", () => {
+        dockShare?.click();
+      });
+      if (dockShare) {
+        new MutationObserver(() => {
+          const copied = !dock.querySelector("[data-share-icon-copied]")?.classList.contains("hidden");
+          shareDefault?.classList.toggle("hidden", copied);
+          shareCopied?.classList.toggle("hidden", !copied);
+          if (shareLabel) shareLabel.textContent = copied ? "Copied" : "Share";
+        }).observe(dock.querySelector("[data-share-icon-copied]") as HTMLElement, {
+          attributes: true, attributeFilter: ["class"],
+        });
+      }
+    }
+
+    /* ── Merch collection wiring (proxies to the hidden merch dock on merch
+       view pages). The standalone [data-vw-dock] is hidden on mobile (see the
+       merch view CSS); we surface its prev / dots / next here and forward taps
+       to the real controls, mirroring the active item back. ── */
+    const merchDock = document.querySelector("[data-vw-dock]");
+    const merchBtn = document.getElementById("mn-merch-btn");
+    if (merchDock && merchBtn) {
+      merchBtn.classList.remove("hidden");
+      merchBtn.classList.add("flex");
+      merchBtn.addEventListener("click", () => morphTo("merch"));
+
+      const realDots = Array.from(merchDock.querySelectorAll("[data-nav]")) as HTMLElement[];
+      const realPrev = merchDock.querySelector('[data-arrow="prev"]') as HTMLElement | null;
+      const realNext = merchDock.querySelector('[data-arrow="next"]') as HTMLElement | null;
+      const dotsWrap = document.getElementById("mn-merch-dots");
+      const merchName = document.getElementById("mn-merch-name");
+
+      // Build one mirror dot per real nav dot (same accent + label).
+      realDots.forEach((rd, i) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "mn-merch-dot";
+        b.setAttribute("aria-label", rd.getAttribute("aria-label") || `Item ${i + 1}`);
+        b.style.setProperty("--dot-c", rd.style.getPropertyValue("--dot-c") || "#f95f4a");
+        b.innerHTML = "<span></span>";
+        b.addEventListener("click", () => rd.click());
+        dotsWrap?.appendChild(b);
+      });
+
+      const mirrorDots = Array.from(dotsWrap?.querySelectorAll(".mn-merch-dot") || []) as HTMLElement[];
+      function syncMerch() {
+        let activeIdx = 0;
+        realDots.forEach((rd, i) => {
+          const on = rd.classList.contains("active");
+          mirrorDots[i]?.classList.toggle("is-active", on);
+          if (on) activeIdx = i;
+        });
+        if (merchName)
+          merchName.textContent = realDots[activeIdx]?.getAttribute("aria-label") || "-";
+      }
+      realDots.forEach((rd) =>
+        new MutationObserver(syncMerch).observe(rd, { attributes: true, attributeFilter: ["class"] }),
+      );
+      syncMerch();
+
+      document.getElementById("mn-merch-prev")?.addEventListener("click", () => realPrev?.click());
+      document.getElementById("mn-merch-next")?.addEventListener("click", () => realNext?.click());
+
+      /* Colour toggle: some collections (e.g. 2025) ship a black/white variant
+         via [data-cdot] in the real dock. Surface + mirror it here when present. */
+      const realCdots = Array.from(merchDock.querySelectorAll("[data-cdot]")) as HTMLElement[];
+      const colorRow = document.getElementById("mn-merch-colors");
+      if (realCdots.length && colorRow) {
+        colorRow.classList.remove("hidden");
+        colorRow.classList.add("flex");
+
+        const realByColor = (c: string) => realCdots.find((rc) => rc.dataset.cdot === c) || null;
+        const mirrorCdots = Array.from(
+          colorRow.querySelectorAll("[data-mn-cdot]"),
+        ) as HTMLElement[];
+
+        mirrorCdots.forEach((mc) => {
+          mc.addEventListener("click", () => {
+            if (mc.classList.contains("is-disabled")) return;
+            realByColor(mc.dataset.mnCdot || "")?.click();
+          });
+        });
+
+        function syncColors() {
+          mirrorCdots.forEach((mc) => {
+            const rc = realByColor(mc.dataset.mnCdot || "");
+            if (!rc) return;
+            mc.classList.toggle("is-active", rc.classList.contains("active"));
+            mc.classList.toggle("is-disabled", rc.classList.contains("disabled"));
+          });
+        }
+        realCdots.forEach((rc) =>
+          new MutationObserver(syncColors).observe(rc, {
+            attributes: true,
+            attributeFilter: ["class"],
+          }),
+        );
+        syncColors();
+      }
+    }
+
+    /* ── Music player wiring (controls existing CassettePlayer audio + state) ── */
+    const audio = document.getElementById("cp-audio") as HTMLAudioElement | null;
+    const cpSvgTitle = document.getElementById("cp-svg-title");
+    const cpSvgArtist = document.getElementById("cp-svg-artist");
+    const cpPrev = document.getElementById("cp-prev");
+    const cpNext = document.getElementById("cp-next");
+    const cpPlayG = document.getElementById("cp-play-g");
+
+    const trackTitle = document.getElementById("mn-track-title");
+    const trackArtist = document.getElementById("mn-track-artist");
+    const timeCur = document.getElementById("mn-time-cur");
+    const timeDur = document.getElementById("mn-time-dur");
+    const progFill = document.getElementById("mn-prog-fill");
+    const progTrack = document.getElementById("mn-prog-track");
+    const playBtn = document.getElementById("mn-play");
+    const playIcon = document.getElementById("mn-play-icon");
+    const pauseIcon = document.getElementById("mn-pause-icon");
+    const eqWrap = document.getElementById("mn-music-eq");
+    const noteIcon = document.getElementById("mn-music-note");
+
+    const fmt = (s: number) => {
+      if (!isFinite(s) || s < 0) return "0:00";
+      return `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+    };
+
+    function syncTrackText() {
+      if (trackTitle && cpSvgTitle) trackTitle.textContent = cpSvgTitle.textContent || "-";
+      if (trackArtist && cpSvgArtist) trackArtist.textContent = cpSvgArtist.textContent || "-";
+    }
+    syncTrackText();
+
+    if (audio) {
+      audio.addEventListener("timeupdate", () => {
+        if (!audio.duration) return;
+        if (timeCur) timeCur.textContent = fmt(audio.currentTime);
+        if (progFill) (progFill as HTMLElement).style.width = `${(audio.currentTime / audio.duration) * 100}%`;
+      });
+      audio.addEventListener("loadedmetadata", () => {
+        if (timeDur) timeDur.textContent = fmt(audio.duration);
+        syncTrackText();
+      });
+      const reflect = () => {
+        const playing = !audio.paused;
+        playIcon?.classList.toggle("hidden", playing);
+        pauseIcon?.classList.toggle("hidden", !playing);
+        if (playing) {
+          eqWrap?.classList.add("is-playing");
+          if (noteIcon) (noteIcon as HTMLElement).style.display = "none";
+        } else {
+          eqWrap?.classList.remove("is-playing");
+          if (noteIcon) (noteIcon as HTMLElement).style.display = "";
+        }
+        syncTrackText();
+      };
+      audio.addEventListener("play", reflect);
+      audio.addEventListener("pause", reflect);
+      reflect();
+    }
+
+    // Playback owned by another tab: CassettePlayer relays its state here
+    window.addEventListener("cassette:remote-state", (e) => {
+      const d = (e as CustomEvent).detail;
+      if (!d) return;
+      if (trackTitle) trackTitle.textContent = d.title;
+      if (trackArtist) trackArtist.textContent = d.artist;
+      if (timeCur) timeCur.textContent = fmt(d.time);
+      if (timeDur) timeDur.textContent = fmt(d.duration);
+      if (progFill) (progFill as HTMLElement).style.width = d.duration ? `${(d.time / d.duration) * 100}%` : "0%";
+      playIcon?.classList.toggle("hidden", !d.paused);
+      pauseIcon?.classList.toggle("hidden", d.paused);
+      eqWrap?.classList.toggle("is-playing", !d.paused);
+      if (noteIcon) (noteIcon as HTMLElement).style.display = d.paused ? "" : "none";
+    });
+
+    playBtn?.addEventListener("click", () => {
+      const api = (window as any).acmCassette;
+      if (api?.toggle) { api.toggle(); return; }
+      if (!audio) return;
+      if (audio.paused) audio.play().catch(() => {});
+      else audio.pause();
+    });
+    document.getElementById("mn-prev")?.addEventListener("click", () => {
+      cpPrev?.dispatchEvent(new MouseEvent("click"));
+      setTimeout(syncTrackText, 50);
+    });
+    document.getElementById("mn-next")?.addEventListener("click", () => {
+      cpNext?.dispatchEvent(new MouseEvent("click"));
+      setTimeout(syncTrackText, 50);
+    });
+    progTrack?.addEventListener("pointerdown", (e) => {
+      const r = (progTrack as HTMLElement).getBoundingClientRect();
+      const pct = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+      const api = (window as any).acmCassette;
+      if (api?.seekFraction) { api.seekFraction(pct); return; }
+      if (!audio || !audio.duration) return;
+      audio.currentTime = pct * audio.duration;
+    });
+
+    /* ── Intro (clip-path approach):
+         1) Pill drops in as bare orange music circle (clip tight around btn,
+            pill bg + shadow invisible)
+         2) Single locked tween: pill bg + shadow fade in, clip-path opens left,
+            pill translates back to 0 → music btn slides into right slot while
+            pill forms around it
+         3) Cross-dissolve label + theme + menu after pill fully formed
+    ── */
+    let played = false;
+    function playIntro() {
+      if (played) return;
+      played = true;
+
+      const themeBtnEl = document.getElementById("mn-theme-btn");
+      const menuBtnEl = document.getElementById("mn-menu-btn");
+      const musicBtnEl = document.getElementById("mn-music-btn");
+      const labelArea = panelNav.children[0] as HTMLElement | undefined;
+      const popEls = [themeBtnEl, menuBtnEl].filter(Boolean) as HTMLElement[];
+
+      const PILL_W = 320;
+      const RIGHT_PAD = 16; // panel-nav px-4
+      const Y_PAD = 8;      // panel-nav py-2
+      const BTN_W = 36;
+
+      const musicLeftInPill = PILL_W - RIGHT_PAD - BTN_W;       // 268
+      const musicCenterInPill = PILL_W - RIGHT_PAD - BTN_W / 2; // 286
+
+      // Tight clip exactly around music btn — pill bg/border invisible during drop
+      const tightClip =
+        `inset(${Y_PAD}px ${RIGHT_PAD}px ${Y_PAD}px ${musicLeftInPill}px round ${BTN_W / 2}px)`;
+      const expandedClip = `inset(0px 0px 0px 0px round 28px)`;
+
+      // Translate pill left so music btn center sits at viewport center initially
+      const dx = -(musicCenterInPill - PILL_W / 2); // -126
+
+      const dropBg = "rgba(30, 30, 30, 0)";
+      const finalBg = "rgba(30, 30, 30, 1)";
+      const dropShadow = "0 0 0 0 rgba(0,0,0,0), 0 0 0 0 rgba(249,95,74,0)";
+      const finalShadow =
+        "0 10px 28px rgba(0,0,0,0.55), 0 0 0 1px rgba(249,95,74,0.45)";
+
+      // Initial state: only music btn visible
+      gsap.set(pill, {
+        opacity: 0,
+        y: 140,
+        scale: 0.7,
+        x: dx,
+        clipPath: tightClip,
+        backgroundColor: dropBg,
+        boxShadow: dropShadow,
+      });
+      if (labelArea) gsap.set(labelArea, { opacity: 0 });
+      gsap.set(popEls, { opacity: 0 });
+
+      const tl = gsap.timeline();
+
+      // Phase 1: drop in (just the music btn)
+      tl.to(pill, {
+        opacity: 1,
+        y: -8,
+        scale: 1.05,
+        duration: 0.55,
+        ease: "power2.out",
+      })
+        .to(pill, {
+          y: 0,
+          scale: 1,
+          duration: 0.4,
+          ease: "power3.out",
+        })
+
+        // Phase 2: single tween - pill forms (bg+shadow+clip) while music
+        // slides into right slot. All locked to same ease/duration.
+        .to(pill, {
+          x: 0,
+          clipPath: expandedClip,
+          backgroundColor: finalBg,
+          boxShadow: finalShadow,
+          duration: 0.85,
+          ease: "power2.inOut",
+          onComplete: () => {
+            gsap.set(pill, {
+              clearProps: "clipPath,backgroundColor,boxShadow",
+            });
+          },
+        })
+
+        // Phase 3: cross-dissolve label + theme + menu
+        .to(
+          [labelArea, ...popEls].filter(Boolean),
+          {
+            opacity: 1,
+            duration: 0.4,
+            ease: "power2.out",
+            stagger: 0.05,
+          },
+          ">0.05",
+        );
+    }
+
+    const INTRO_DELAY = 1000;
+    if (sessionStorage.getItem("preloaderShown")) {
+      setTimeout(playIntro, INTRO_DELAY);
+    } else {
+      window.addEventListener(
+        "preloader:done",
+        () => setTimeout(playIntro, INTRO_DELAY),
+        { once: true },
+      );
+      setTimeout(playIntro, 3500);
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initMobileNavbar, { once: true });
+  } else {
+    initMobileNavbar();
+  }
+</script>

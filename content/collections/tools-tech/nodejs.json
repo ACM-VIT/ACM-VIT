@@ -1,0 +1,7 @@
+{
+  "name": "Node.js",
+  "slug": "nodejs",
+  "svgFile": "/domains/tech/tools/tech-tool-nodejs.svg",
+  "colorHex": "#5FA04E",
+  "order": 20
+}

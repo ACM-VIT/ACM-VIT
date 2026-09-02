@@ -1,0 +1,164 @@
+---
+export const prerender = true;
+
+import Layout from "../../layouts/Layout.astro";
+import Footer from "../../layouts/Footer.astro";
+import "../../styles/globals.css";
+import { getAssetUrl } from "../../utils/cdn";
+import { eventDetails } from "../../data/eventDetailsData";
+
+// Curated order matching the visual layout
+const eventOrder = [
+  "code2create",
+  "cryptic-hunt",
+  "reverse-coding",
+  "codex-cryptum",
+  "the-tiny-hack",
+  "code-plus-plus",
+  "codart",
+  "apptitude",
+  "inspiher",
+  "neural-hack",
+  "forktober",
+  "be-the-builder",
+  "casa",
+  "deepfake",
+  "dr-peter-robinson",
+  "dr-federica-sarro",
+  "kickstart-learn",
+  "sdg-workshops",
+];
+
+const events = eventOrder
+  .map((slug) => eventDetails[slug])
+  .filter(Boolean);
+---
+
+<Layout pageTitle="Events" backHref="/#events">
+  <section class="events-page">
+    <div class="events-page__header">
+      <p class="events-page__subtitle" data-animate="fade-up">
+        Where tech meets energy - ACM-VIT events are more than just gatherings, they're launches for ideas, collabs, and the next big things.
+      </p>
+    </div>
+
+    <div class="events-page__grid">
+      {events.map((ev) => (
+        <a
+          href={`/events/${ev.slug}`}
+          class="events-page__card"
+          data-animate="fade-up"
+        >
+          <img
+            src={getAssetUrl(ev.cassetteSvg)}
+            alt={ev.title}
+            loading="lazy"
+            decoding="async"
+            class="events-page__cassette"
+          />
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const header = document.querySelector('.events-page__subtitle[data-animate]');
+    if (header) {
+      gsap.fromTo(header,
+        { opacity: 0, y: 24 },
+        { opacity: 1, y: 0, duration: 0.7, ease: "power3.out", delay: 0.2 }
+      );
+    }
+
+    const cards = document.querySelectorAll('.events-page__card[data-animate]');
+    gsap.fromTo(cards,
+      { opacity: 0, y: 32, scale: 0.95 },
+      {
+        opacity: 1, y: 0, scale: 1,
+        duration: 0.6, ease: "power3.out",
+        stagger: 0.08, delay: 0.35,
+      }
+    );
+  });
+</script>
+
+<style>
+  .events-page {
+    min-height: 100vh;
+    padding: 7rem 1.5rem 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .events-page__header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .events-page__subtitle {
+    font-family: 'PolySans Mono', monospace;
+    font-size: clamp(0.8rem, 1.8vw, 1rem);
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.6);
+    max-width: 600px;
+    margin: 0 auto;
+    letter-spacing: 0.01em;
+  }
+
+  html[data-theme="light"] .events-page__subtitle {
+    color: rgba(0, 0, 0, 0.55);
+  }
+
+  .events-page__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+    justify-items: center;
+  }
+
+
+  .events-page__card {
+    display: block;
+    border-radius: 1rem;
+    overflow: hidden;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.35s ease;
+    will-change: transform;
+  }
+
+  .events-page__card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 0 8px 1px #efefef;
+  }
+
+  html[data-theme="light"] .events-page__card:hover {
+    box-shadow: 0 0 8px 1px #F95F4A;
+  }
+
+  .events-page__cassette {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 1rem;
+  }
+
+  @media (max-width: 600px) {
+    .events-page {
+      padding: 6rem 1rem 3rem;
+    }
+
+    .events-page__grid {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+  }
+</style>

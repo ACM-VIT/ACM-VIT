@@ -1,0 +1,8 @@
+{
+  "name": "Vercel",
+  "slug": "vercel",
+  "svgFile": "/domains/tech/tools/tech-tool-vercel.svg",
+  "colorHex": "#FFFDD0",
+  "monochrome": true,
+  "order": 270
+}

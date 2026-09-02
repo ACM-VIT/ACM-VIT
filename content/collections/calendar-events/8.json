@@ -1,0 +1,12 @@
+{
+  "slug": "8",
+  "order": 70,
+  "id": "8",
+  "title": "Research Paper Reading",
+  "date": "2026-07-17",
+  "startTime": "18:00",
+  "endTime": "19:30",
+  "domain": "research",
+  "description": "Weekly reading group discussing \"Attention Is All You Need\" and transformer architectures.",
+  "location": "Online (Discord)"
+}

@@ -1,0 +1,237 @@
+---
+export const prerender = true;
+import DesignLayout from "../../layouts/DesignLayout.astro";
+
+type Swatch = {
+  name: string;
+  hex: string;
+  on: "light" | "dark";
+  role: string;
+};
+
+const core: Swatch[] = [
+  { name: "ACM Orange", hex: "#F95F4A", on: "dark", role: "The brand accent. CTAs, links, highlights, the color people remember." },
+  { name: "Ink", hex: "#0D0E0D", on: "dark", role: "Default dark background across the website and dark collateral." },
+  { name: "Cream", hex: "#FEFCD9", on: "light", role: "Primary text on dark surfaces; the warm counterpart to Ink." },
+  { name: "Mark Gray", hex: "#333333", on: "dark", role: "The logo ink. Reserved for the mark and near-black UI text." },
+];
+
+const extended: Swatch[] = [
+  { name: "Pink", hex: "#FF007A", on: "dark", role: "ACM-W and merch contexts." },
+  { name: "Blue", hex: "#135DE2", on: "dark", role: "GREP and informational accents." },
+  { name: "Green", hex: "#42CD9D", on: "light", role: "z0d1ak and success states." },
+  { name: "Gold", hex: "#F2C94C", on: "light", role: "Achievements, celebratory moments." },
+  { name: "Purple", hex: "#9B51E0", on: "dark", role: "Cassette Builder, creative tools." },
+  { name: "Teal", hex: "#008080", on: "dark", role: "Calendar and scheduling." },
+  { name: "Cyan", hex: "#00B4D8", on: "dark", role: "FAQs, reference and docs." },
+  { name: "Paper", hex: "#F5EDE4", on: "light", role: "Light-mode background." },
+];
+
+const hexToRgb = (hex: string) => {
+  const n = parseInt(hex.slice(1), 16);
+  return `${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}`;
+};
+---
+
+<DesignLayout
+  title="Color"
+  description="The ACM-VIT palette: core brand colors, product accents, usage ratios, and contrast rules."
+  current="/design/color"
+>
+  <section class="ds-hero">
+    <div class="ds-kicker"><span class="ds-kicker-pill">Brand · Color</span></div>
+    <h1 class="ds-h1">Warm ink, one loud orange.</h1>
+    <p class="ds-body-lg">
+      The palette is a warm near-black, a warm off-white, and a single
+      signature orange - with a small set of product accents that never
+      outshout it. Copy a value by clicking any swatch.
+    </p>
+  </section>
+
+  <!-- 01 · Core -->
+  <section class="ds-section" id="core">
+    <div class="ds-sec-head"><span class="ds-sec-num">01</span><h2 class="ds-h2">Core palette</h2></div>
+    <div class="ds-bento">
+      {
+        core.map((c) => (
+          <button
+            class="ds-swatch ds-b6 ds-reveal"
+            style={`background:${c.hex}; color:${c.on === "dark" ? "#fff" : "#1c1b1a"}`}
+            data-hex={c.hex}
+            type="button"
+            title="Click to copy hex"
+          >
+            <span class="ds-swatch-name">{c.name}</span>
+            <span class="ds-swatch-role">{c.role}</span>
+            <span class="ds-swatch-vals">
+              <span class="ds-mono">{c.hex}</span>
+              <span class="ds-mono">rgb({hexToRgb(c.hex)})</span>
+            </span>
+          </button>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 02 · Extended -->
+  <section class="ds-section" id="extended">
+    <div class="ds-sec-head"><span class="ds-sec-num">02</span><h2 class="ds-h2">Product accents</h2></div>
+    <p class="ds-body">
+      Each ACM-VIT product owns one accent. Inside that product's material the
+      accent may lead; everywhere else it supports the orange.
+    </p>
+    <div class="ds-bento">
+      {
+        extended.map((c) => (
+          <button
+            class="ds-swatch ds-swatch-sm ds-b3 ds-reveal"
+            style={`background:${c.hex}; color:${c.on === "dark" ? "#fff" : "#1c1b1a"}`}
+            data-hex={c.hex}
+            type="button"
+            title="Click to copy hex"
+          >
+            <span class="ds-swatch-name">{c.name}</span>
+            <span class="ds-swatch-role">{c.role}</span>
+            <span class="ds-swatch-vals">
+              <span class="ds-mono">{c.hex}</span>
+            </span>
+          </button>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 03 · Ratios -->
+  <section class="ds-section" id="ratio">
+    <div class="ds-sec-head"><span class="ds-sec-num">03</span><h2 class="ds-h2">Usage ratio</h2></div>
+    <p class="ds-body">
+      A composition should read as mostly surface, some text, a measured hit
+      of orange. As a rule of thumb:
+    </p>
+    <div class="ds-card ds-reveal" style="margin-top:24px; padding:26px;">
+      <div class="ds-ratio-bar" role="img" aria-label="Usage ratio: 60% surface, 30% text and structure, 10% accent">
+        <span style="flex:6; background:var(--ds-surface-tonal); color:var(--ds-ink-2)">60% surface</span>
+        <span style="flex:3; background:var(--ds-ink); color:var(--ds-bg)">30% text & structure</span>
+        <span style="flex:1.2; background:var(--ds-accent); color:#fff">10%</span>
+      </div>
+      <p class="ds-small" style="margin-top:14px">
+        The 10% is the accent - orange on chapter material, the product color
+        inside a product. If everything is orange, nothing is.
+      </p>
+    </div>
+  </section>
+
+  <!-- 04 · Contrast -->
+  <section class="ds-section" id="contrast">
+    <div class="ds-sec-head"><span class="ds-sec-num">04</span><h2 class="ds-h2">Contrast rules</h2></div>
+    <div class="ds-bento">
+      <div class="ds-card ds-b6 ds-reveal">
+        <span class="ds-chip ds-chip-do" style="margin-bottom:12px">Do</span>
+        <ul class="ds-list">
+          <li>Body text meets WCAG AA: <span class="ds-mono">4.5:1</span> minimum.</li>
+          <li>Large display text may drop to <span class="ds-mono">3:1</span>.</li>
+          <li>Cream on Ink and Ink on Cream both pass comfortably - default to them.</li>
+          <li>Orange on Ink for accents and large type only.</li>
+        </ul>
+      </div>
+      <div class="ds-card ds-b6 ds-reveal">
+        <span class="ds-chip ds-chip-dont" style="margin-bottom:12px">Don't</span>
+        <ul class="ds-list">
+          <li>Orange body text on white - it fails AA at text sizes.</li>
+          <li>Gold or cyan text on light surfaces.</li>
+          <li>Color as the only signal - pair it with an icon or label.</li>
+          <li>Gradients behind body text.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</DesignLayout>
+
+<style>
+  .ds-swatch {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 4px;
+    min-height: 210px;
+    border: 1px solid rgba(28, 27, 26, 0.08);
+    border-radius: var(--ds-r-lg);
+    padding: 22px;
+    text-align: left;
+    font-family: var(--ds-font);
+    cursor: copy;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .ds-swatch:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(28, 27, 26, 0.14);
+  }
+  :global(html[data-theme="dark"]) .ds-swatch {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  .ds-swatch-sm {
+    min-height: 168px;
+    padding: 18px;
+  }
+  .ds-swatch-name {
+    font-size: 17px;
+    font-weight: 660;
+    letter-spacing: -0.01em;
+  }
+  .ds-swatch-role {
+    font-size: 12.5px;
+    line-height: 1.45;
+    opacity: 0.82;
+  }
+  .ds-swatch-vals {
+    display: flex;
+    gap: 14px;
+    margin-top: 10px;
+    font-size: 12px;
+    opacity: 0.9;
+  }
+  .ds-ratio-bar {
+    display: flex;
+    gap: 6px;
+    height: 74px;
+    border-radius: var(--ds-r-sm);
+    overflow: hidden;
+  }
+  .ds-ratio-bar span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 620;
+    border-radius: 8px;
+    min-width: 0;
+    white-space: nowrap;
+  }
+  .ds-list {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--ds-ink-2);
+    font-size: 14.5px;
+    line-height: 1.7;
+  }
+  .ds-list li + li {
+    margin-top: 6px;
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>(".ds-swatch").forEach((b) => {
+    b.addEventListener("click", async () => {
+      const hex = b.dataset.hex ?? "";
+      try {
+        await navigator.clipboard.writeText(hex);
+        const name = b.querySelector(".ds-swatch-name");
+        if (name) {
+          const orig = name.textContent;
+          name.textContent = "Copied " + hex;
+          setTimeout(() => (name.textContent = orig), 1200);
+        }
+      } catch {}
+    });
+  });
+</script>

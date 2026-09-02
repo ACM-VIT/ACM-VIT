@@ -1,0 +1,374 @@
+---
+import AnimatedButton from "../components/ui/AnimatedButton.astro";
+---
+
+<section class="community-landing relative flex min-h-screen w-full items-center overflow-hidden">
+  <!-- Background layers -->
+  <div class="cl-glow" aria-hidden="true"></div>
+  <div class="cl-grid" aria-hidden="true">
+    <span class="cl-grid-v" style="left: 28%"></span>
+    <span class="cl-grid-v" style="left: 64%"></span>
+    <span class="cl-grid-v" style="left: 86%"></span>
+    <span class="cl-grid-h" style="top: 30%"></span>
+    <span class="cl-grid-h" style="top: 72%"></span>
+  </div>
+
+  <div class="cl-inner">
+    <!-- Left: copy -->
+    <div class="cl-left">
+      <h2 class="cl-heading">
+        <span class="cl-word">COMM</span><span class="cl-unity-line"><span class="cl-word accent">UNITY</span><img
+            src="/community/community-pixel-heart.webp"
+            alt=""
+            class="cl-heart"
+            loading="lazy"
+            decoding="async"
+          /></span>
+      </h2>
+
+      <span class="cl-bar" aria-hidden="true"></span>
+
+      <p class="cl-text">
+        At ACM-VIT, technology goes beyond the code - it's a tool to uplift,
+        empower, and create meaningful change. Our community-driven initiatives
+        spark curiosity, strengthen digital literacy, and bring the power of
+        technology closer to those who need it most.
+      </p>
+
+      <div class="cl-cta">
+        <AnimatedButton text="Unravel the tape" href="/community" />
+      </div>
+    </div>
+
+    <!-- Right: cassette hero + floating community moments -->
+    <div class="cl-visual">
+      <div class="cl-cassette-glow" aria-hidden="true"></div>
+
+      <img
+        src="/community/community-cassette-igniting-minds.webp"
+        alt="Igniting Minds cassette"
+        class="cl-cassette"
+        loading="eager"
+        decoding="async"
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  .community-landing {
+    padding-block: clamp(4rem, 8vh, 7rem);
+    isolation: isolate;
+  }
+
+  /* ── Background ── */
+  .cl-glow {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background:
+      radial-gradient(
+        55% 55% at 72% 42%,
+        rgba(249, 95, 74, 0.3),
+        transparent 70%
+      ),
+      radial-gradient(
+        40% 50% at 18% 80%,
+        rgba(255, 0, 122, 0.14),
+        transparent 70%
+      );
+    animation: clGlowPulse 9s ease-in-out infinite;
+  }
+  @keyframes clGlowPulse {
+    0%, 100% { opacity: 0.85; }
+    50% { opacity: 1; }
+  }
+
+  .cl-grid {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+  .cl-grid-v {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(254, 252, 217, 0.1) 0 3px,
+      transparent 3px 17px
+    );
+  }
+  .cl-grid-h {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: repeating-linear-gradient(
+      to right,
+      rgba(254, 252, 217, 0.1) 0 3px,
+      transparent 3px 17px
+    );
+  }
+
+  /* ── Layout ── */
+  .cl-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    align-items: center;
+    gap: clamp(2rem, 5vw, 5rem);
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 2rem clamp(1.5rem, 5vw, 4.5rem);
+  }
+
+  .cl-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+    min-width: 0;
+  }
+
+  .cl-heading {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-size: clamp(2.75rem, 7.5vw, 7rem);
+    line-height: 0.95;
+    color: #fffdd0;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.05em;
+    margin: 0;
+    max-width: 100%;
+    word-break: break-word;
+  }
+  .cl-heading .accent {
+    background: linear-gradient(120deg, #ff5f4a 0%, #ff007a 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .cl-word {
+    display: inline-block;
+  }
+  .cl-unity-line {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25em;
+  }
+  .cl-heart {
+    width: clamp(2rem, 4vw, 3.4rem);
+    height: auto;
+    flex-shrink: 0;
+    image-rendering: pixelated;
+    animation: clHeartBeat 1.4s ease-in-out infinite;
+  }
+  @keyframes clHeartBeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+  }
+
+  .cl-bar {
+    display: block;
+    height: 4px;
+    width: clamp(80px, 12vw, 160px);
+    border-radius: 999px;
+    background: linear-gradient(90deg, #ff5f4a, #ff007a);
+    transform-origin: left;
+  }
+
+  .cl-text {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-size: clamp(1rem, 1.2vw, 1.2rem);
+    line-height: 1.65;
+    color: rgba(254, 252, 217, 0.8);
+    font-weight: 400;
+    margin: 0;
+    max-width: 54ch;
+  }
+
+  .cl-cta {
+    margin-top: 0.75rem;
+  }
+
+  /* ── Visual ── */
+  .cl-visual {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 480px;
+  }
+
+  .cl-cassette-glow {
+    position: absolute;
+    width: 70%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(249, 95, 74, 0.45), transparent 65%);
+    filter: blur(40px);
+    z-index: 0;
+  }
+
+  .cl-cassette {
+    position: relative;
+    z-index: 2;
+    width: clamp(320px, 36vw, 540px);
+    height: auto;
+    filter: drop-shadow(0 30px 70px rgba(0, 0, 0, 0.6));
+    animation: clCassetteBob 6s ease-in-out infinite;
+  }
+  @keyframes clCassetteBob {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-14px) rotate(0.6deg); }
+  }
+
+
+  /* ── Reveal initial state (set before GSAP runs) ── */
+  .cl-text,
+  .cl-cta {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  .cl-word {
+    opacity: 0;
+    transform: translateY(40%);
+  }
+  .cl-bar {
+    transform: scaleX(0);
+  }
+  .cl-cassette {
+    opacity: 0;
+  }
+  .cl-heading {
+    padding: 0.12em 0;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 1024px) {
+    .cl-inner {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 2.5rem;
+    }
+    .cl-left {
+      align-items: center;
+      order: 2;
+    }
+    .cl-visual {
+      order: 1;
+      min-height: 420px;
+    }
+    .cl-text {
+      margin-inline: auto;
+    }
+  }
+
+  /* Match the uniform landing-page cassette width on phones (same 250px as the
+     domain / about cassettes). Aspect ratio preserved via height: auto. */
+  @media (max-width: 768px) {
+    .cl-cassette {
+      width: 250px;
+    }
+    .cl-visual {
+      min-height: 320px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cl-glow,
+    .cl-cassette,
+    .cl-heart {
+      animation: none;
+    }
+  }
+
+  /* ── Light mode ── */
+  :global(html[data-theme="light"]) .cl-heading {
+    color: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .cl-text {
+    color: rgba(26, 26, 26, 0.78);
+  }
+  :global(html[data-theme="light"]) .cl-grid-v {
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(38, 59, 51, 0.1) 0 3px,
+      transparent 3px 17px
+    );
+  }
+  :global(html[data-theme="light"]) .cl-grid-h {
+    background: repeating-linear-gradient(
+      to right,
+      rgba(38, 59, 51, 0.1) 0 3px,
+      transparent 3px 17px
+    );
+  }
+  :global(html[data-theme="light"]) .cl-glow {
+    opacity: 0.6;
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function initCommunity() {
+    const section = document.querySelector<HTMLElement>(".community-landing");
+    if (!section || section.dataset.clInit) return;
+    section.dataset.clInit = "1";
+
+    const q = gsap.utils.selector(section);
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: "top 72%",
+        toggleActions: "play none none reverse",
+      },
+    });
+
+    tl.to(q(".cl-word"), {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      ease: "power3.out",
+      stagger: 0.12,
+    })
+      .to(q(".cl-bar"), { scaleX: 1, duration: 0.6, ease: "power3.out" }, "-=0.4")
+      .to(q(".cl-text"), { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, "-=0.4")
+      .to(q(".cl-cta"), { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, "-=0.3")
+      .to(
+        q(".cl-cassette"),
+        { opacity: 1, duration: 0.7, ease: "power2.out" },
+        "<-0.4",
+      );
+
+    // Scroll parallax on floating cards.
+    q("[data-parallax]").forEach((el) => {
+      const depth = parseFloat((el as HTMLElement).dataset.parallax || "0");
+      gsap.to(el, {
+        y: depth,
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1,
+        },
+      });
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initCommunity);
+  } else {
+    initCommunity();
+  }
+  window.addEventListener("variants-mounted", () => initCommunity());
+</script>

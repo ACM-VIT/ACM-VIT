@@ -1,0 +1,246 @@
+---
+// Introduction Section
+import ScrollCue from "../components/ui/ScrollCue.astro";
+---
+
+<div class="relative -mt-28">
+  <!-- Hero Section 1 -->
+  <section
+    class="hero-section video-bg-section w-screen h-screen relative flex items-center justify-start pl-[15vw] max-md:pl-[8vw] max-md:text-left max-md:justify-start"
+    data-cue-anchor
+  >
+    <div
+      class="max-w-[600px] text-white"
+      style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);"
+    >
+      <div
+        class="hero-text-wrap w-[1145px] inline-flex flex-col justify-start items-start max-md:w-full max-md:max-w-[96vw]"
+      >
+        <div
+          class="hero-line-1 self-stretch justify-start text-7xl font-bold max-md:text-[clamp(2.2rem,10vw,3rem)] max-md:leading-[1.05]"
+          style="color:#F95F4A; font-family: 'PolySans Bulky Wide'"
+        >
+          we are the
+        </div>
+        <div
+          class="hero-line-2 self-stretch justify-end text-yellow-50 text-7xl font-bold max-md:text-[clamp(2.2rem,11.2vw,3.4rem)] max-md:leading-[1.05] max-md:inline-block"
+          style="font-family: 'PolySans Bulky Wide'"
+        >
+          association for<br />computing machinery
+        </div>
+      </div>
+    </div>
+
+    <ScrollCue target="#about" />
+
+    <style>
+      .hero-line-1,
+      .hero-line-2 {
+        opacity: 0;
+      }
+
+      .radial-bg {
+        background-image: radial-gradient(
+            circle at 30% 50%,
+            rgba(26, 26, 26, 0.6) 0%,
+            rgba(6, 6, 6, 0.85) 70%
+          ),
+          url("/about/about-rishit.webp");
+        background-repeat: no-repeat, no-repeat;
+        background-position:
+          center center,
+          center 30%;
+        background-size: cover, cover;
+        background-attachment: fixed, fixed;
+        background-color: #060606;
+      }
+      .hero-section {
+        height: 100vh;
+        position: relative;
+      }
+      .hero-text-wrap {
+        max-width: calc(100vw - 19vw);
+      }
+      .legend-pin {
+        position: absolute;
+      }
+
+      .hero-section.in-view .legend-pin {
+        position: fixed !important;
+        bottom: 2rem !important;
+        z-index: 60 !important;
+      }
+
+      .hero-section.in-view .left-legend {
+        left: 2rem !important;
+      }
+      .hero-section.in-view .right-legend {
+        right: 2rem !important;
+      }
+
+      @media (min-width: 769px) and (max-width: 1320px) {
+        .hero-section {
+          padding-left: clamp(2rem, 8vw, 8rem);
+        }
+
+        .hero-text-wrap {
+          width: min(1145px, calc(100vw - clamp(2rem, 8vw, 8rem) - 4vw));
+          max-width: calc(100vw - clamp(2rem, 8vw, 8rem) - 4vw);
+        }
+
+        .hero-line-1,
+        .hero-line-2 {
+          font-size: clamp(3.1rem, 7vw, 4.5rem);
+          line-height: 1.05;
+        }
+
+      }
+
+      @media (min-width: 769px) and (max-width: 1141px) {
+        .hero-line-1,
+        .hero-line-2 {
+          font-size: clamp(3.1rem, 6.3vw, 4.05rem);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .hero-section {
+          padding-left: 8vw;
+        }
+        .hero-text-wrap {
+          width: 100%;
+          max-width: 92vw;
+        }
+        .hero-line-1 {
+          font-size: clamp(2.2rem, 8.5vw, 3.6rem);
+          line-height: 1.05;
+        }
+        .hero-line-2 {
+          font-size: clamp(2.2rem, 9.5vw, 4rem);
+          line-height: 1.05;
+        }
+        .hero-line-2 br {
+          display: none;
+        }
+        .radial-bg {
+          background-attachment: scroll, scroll;
+        }
+        .hero-section.in-view .legend-pin {
+          bottom: auto !important;
+          top: 5rem !important;
+        }
+        .hero-section.in-view .left-legend {
+          left: 1rem !important;
+        }
+        .hero-section.in-view .right-legend {
+          top: 8rem !important;
+          right: auto !important;
+          left: 1rem !important;
+        }
+      }
+    </style>
+
+    <script>
+      import { gsap } from "gsap";
+      import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
+      import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+      gsap.registerPlugin(ScrambleTextPlugin, ScrollTrigger);
+
+      const initScramble = () => {
+        const line1 = document.querySelector(".hero-line-1");
+        const line2 = document.querySelector(".hero-line-2");
+        const section1 = document.querySelector(".hero-section");
+
+        if (!line1 || !line2 || !section1) return;
+
+        // Helper to wrap words in spans
+        const wrapWords = (element: Element, hoverMap?: string[]) => {
+          const childNodes = Array.from(element.childNodes);
+          element.innerHTML = "";
+          let wordIdx = 0;
+
+          childNodes.forEach((node) => {
+            if (node.nodeType === Node.TEXT_NODE) {
+              const textContent = node.textContent;
+              if (textContent) {
+                const words = textContent.trim().split(/\s+/);
+                words.forEach((word) => {
+                  if (word) {
+                    const span = document.createElement("span");
+                    span.textContent = word;
+                    span.className = "hover-scramble inline-block mr-2"; // mr-2 for spacing
+                    span.dataset.original = word;
+                    if (hoverMap && hoverMap[wordIdx]) {
+                      span.dataset.hover = hoverMap[wordIdx];
+                    }
+                    wordIdx++;
+                    element.appendChild(span);
+                    element.appendChild(document.createTextNode(" ")); // Space between words
+                  }
+                });
+              }
+            } else {
+              element.appendChild(node);
+            }
+          });
+        };
+
+        wrapWords(line1);
+        wrapWords(line2, ["alliance", "of", "caffeinated", "misfits"]);
+
+
+        gsap.set([line1, line2], { opacity: 1 });
+
+        const scrambleLine = (line: Element, useHover: boolean) => {
+          const wordEls = line.querySelectorAll(".hover-scramble");
+          wordEls.forEach((w) => {
+            if (!(w instanceof HTMLElement)) return;
+            const target = useHover
+              ? w.dataset.hover || w.dataset.original || ""
+              : w.dataset.original || "";
+            gsap.to(w, {
+              duration: 0.8,
+              scrambleText: {
+                text: target,
+                chars: "upperAndLowerCase",
+                revealDelay: 0.1,
+                speed: 0.3,
+              },
+            });
+          });
+        };
+
+        [line1, line2].forEach((line) => {
+          line.addEventListener("mouseenter", () => scrambleLine(line, true));
+          line.addEventListener("mouseleave", () => scrambleLine(line, false));
+        });
+
+        try {
+          const io = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                const isInView = entry.isIntersecting;
+                section1.classList.toggle("in-view", isInView);
+                document.body.classList.toggle("hero-in-view", isInView);
+              });
+            },
+            { root: null, rootMargin: "10% 0px 0px 0px", threshold: 0.05 }
+          );
+
+          io.observe(section1);
+        } catch (e) {
+          console.warn(
+            "IntersectionObserver not available - legend pinning will remain scoped via absolute positioning."
+          );
+        }
+      };
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initScramble);
+      } else {
+        initScramble();
+      }
+    </script>
+  </section>
+</div>

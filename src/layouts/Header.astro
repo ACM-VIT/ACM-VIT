@@ -1,0 +1,1552 @@
+---
+// Header.astro
+import { getAssetUrl } from "../utils/cdn";
+import MobileNavbar from "../components/ui/MobileNavbar.astro";
+import { teamYears, yearLabel } from "../data/teamData";
+import { getAllPosts } from "../lib/blog";
+
+// ── Dynamic dropdown data ───────────────────────────────────────────────────
+// Team: boards for the last 5 years, each linking to its block on /team.
+const boardYears = teamYears.slice(0, 5);
+// Blogs: the 6 latest posts across Hashnode + Medium (memoised at build time).
+const latestPosts = (await getAllPosts().catch(() => [])).slice(0, 6);
+
+export interface Props {
+  /** When set, replaces the dot nav with a compact subpage pill (page title + back button). */
+  pageTitle?: string;
+  /** Where the back button navigates. Defaults to "/#<pageTitle lowercase>". */
+  backHref?: string;
+}
+
+const { pageTitle, backHref } = Astro.props;
+const isSubpage = !!pageTitle;
+const resolvedBackHref = backHref || `/#${(pageTitle || '').toLowerCase().replace(/\s+/g, '-')}`;
+
+interface DropdownItem {
+  title: string;
+  desc: string;
+  href: string;
+  img: string;
+  color?: string;
+  /** Full-width "view all" CTA tile - text only, spans the whole panel row. */
+  all?: boolean;
+}
+
+const dropdowns: Record<string, DropdownItem[]> = {
+  about: [
+    { title: "ACM-VIT", desc: "Our chapter's mission & culture", href: "/#about-acmvit", img: "/about/about-acmvit-cassette.webp" },
+    { title: "VIT University", desc: "One of India's top tech universities", href: "/#about-vit", img: "/about/about-vit-cassette.webp" },
+    { title: "ACM Global", desc: "World's largest computing society", href: "/#about-acm", img: "/about/about-acm-cassette.webp" },
+  ],
+  community: [
+    { title: "Outreach", desc: "Beyond The Norm workshops for schools", href: "/community#community-outreach", img: "/outreach/outreach-event.webp" },
+    { title: "SDG Initiative", desc: "Digital learning for rural communities", href: "/community#community-sdg", img: "/outreach/outreach-beyond-norm-logo.webp" },
+    { title: "International Award", desc: "Outstanding School Service", href: "/community#community-award", img: "/ui/ui-acm-celeb.webp" },
+    { title: "Code of Conduct", desc: "ACM ethical principles & values", href: "/community#community-conduct", img: "/logos/logos-acm-logo-black.webp" },
+    { title: "ACM-W", desc: "Inclusion & women in tech", href: "/community#acm-w", img: "/logos/logos-acmw-logo.webp" },
+  ],
+  domains: [
+    { title: "Tech", desc: "App Dev, Web, FOSS, DevOps", href: "/domains/tech", img: "/cassettes/cassettes-cassette-tech.webp", color: "#9B51E0" },
+    { title: "Competitive Coding", desc: "Codeforces, ICPC, C++", href: "/domains/cc", img: "/cassettes/cassettes-cassette-cc.webp", color: "#42CD9D" },
+    { title: "Design", desc: "UI/UX, Motion Graphics, 3D", href: "/domains/design", img: "/cassettes/cassettes-cassette-design.webp", color: "#FF0054" },
+    { title: "Research", desc: "AI/ML, Blockchain, Quantum", href: "/domains/research", img: "/cassettes/cassettes-cassette-research.webp", color: "#135DE2" },
+    { title: "Management", desc: "Operations & coordination", href: "/domains/management", img: "/cassettes/cassettes-cassette-management.webp", color: "#008080" },
+  ],
+  events: [
+    { title: "Code2Create", desc: "National-level hackathon", href: "/events/code2create", img: "/events/events-c2c-cassette.webp" },
+    { title: "Cryptic Hunt", desc: "Cipher-cracking scavenger hunt across VIT", href: "/events/cryptic-hunt", img: "/events/events-cryptic-hunt-cassette.webp" },
+    { title: "inspiHer", desc: "Celebrating women in technology", href: "/events/inspiher", img: "/events/events-inspiher-cassette.webp" },
+    { title: "Forktober", desc: "Open source contribution drive", href: "/events/forktober", img: "/events/events-forktober-cassette.webp" },
+    { title: "The Neural Hack", desc: "Deep dive into AI & ML", href: "/events/neural-hack", img: "/events/events-neural-hack-cassette.webp" },
+    { title: "All Events", desc: "Browse every event we run", href: "/events", img: "", all: true },
+  ],
+  projects: [
+    { title: "Conclave", desc: "Real-time meetings platform, built from scratch", href: "/projects/conclave", img: getAssetUrl("/projects/cassettes/projects-cassettes-conclave.svg") },
+    { title: "ExamCooker", desc: "Exam prep hub for VIT students", href: "/projects/examcooker", img: getAssetUrl("/projects/projects-examcooker.svg") },
+    { title: "CLI RPG", desc: "Terminal-based role-playing game", href: "/projects/cli-rpg", img: getAssetUrl("/projects/projects-cli-rpg.svg") },
+    { title: "UniPool", desc: "Campus carpooling made easy", href: "/projects/unipool", img: getAssetUrl("/projects/projects-unipool.svg") },
+    { title: "Localhost", desc: "ACM's 2024 organizing committee selections website", href: "/projects/localhost", img: getAssetUrl("/projects/projects-localhost.svg") },
+    { title: "OCS Website", desc: "Open community showcase site", href: "/projects/ocs-26", img: getAssetUrl("/projects/projects-cover.svg") },
+    { title: "All Projects", desc: "Browse every project we build", href: "/projects", img: "", all: true },
+  ],
+  "acm-w": [
+    { title: "Our Mission", desc: "Supporting women in computing", href: "/#acm-w", img: "/logos/logos-acmw-logo.webp" },
+    { title: "Initiatives", desc: "Programs & activities", href: "/#acm-w-content", img: "/acmw/acmw-acmwmotto.webp" },
+    { title: "Showcase", desc: "Highlights of our work", href: "/#acm-w-bento", img: "/acmw/acmw-bento.webp" },
+  ],
+  team: [
+    ...boardYears.map((year) => ({
+      title: `${year} Board`,
+      desc: `The ${yearLabel(year)} board`,
+      href: `/team#year-${year}`,
+      img: `/cassettes/cassettes-team-${year}.svg`,
+    })),
+    { title: "Full Team", desc: "Meet everyone, year by year", href: "/team", img: "", all: true },
+  ],
+  blogs: [
+    ...latestPosts.map((post) => ({
+      title: post.title,
+      desc: `${post.source === "hashnode" ? "Hashnode" : "Medium"} · ${post.readingTime} min read`,
+      href: `/blogs/${post.source}/${post.slug}`,
+      img: post.coverImage || "/blogs/blogs-placeholder.webp",
+    })),
+    { title: "All Blogs", desc: "Browse every article we've published", href: "/blogs", img: "", all: true },
+  ],
+  gallery: [
+    { title: "2026", desc: "This year's events & candids", href: "/gallery#gallery-year-2026", img: "/cassettes/cassettes-year-2026.svg" },
+    { title: "2025", desc: "Events, boards & late nights", href: "/gallery#gallery-year-2025", img: "/cassettes/cassettes-year-2025.svg" },
+    { title: "2024", desc: "Events, boards & late nights", href: "/gallery#gallery-year-2024", img: "/cassettes/cassettes-year-2024.svg" },
+    { title: "2023", desc: "Events, boards & late nights", href: "/gallery#gallery-year-2023", img: "/cassettes/cassettes-year-2023.svg" },
+    { title: "All Photos", desc: "Browse the full gallery", href: "/gallery", img: "", all: true },
+  ],
+  more: [
+    { title: "FAQs", desc: "Everything you wanted to know, answered", href: "/faqs", img: "/icons/icons-faq.svg" },
+    { title: "Design Guide", desc: "Brand marks, colors, type & the rules we bend", href: "/design", img: "/cassettes/cassettes-cassette-design.webp" },
+    { title: "Code of Conduct", desc: "ACM ethical principles & values", href: "/code-of-conduct", img: "/logos/logos-acm-logo-black.webp" },
+    { title: "Merchandise", desc: "Official ACM-VIT merch & collectibles", href: "/merchandise", img: getAssetUrl("/merch/2025/black-back/merch-2025-black-back-design.webp") },
+    { title: "GREP Newsletter", desc: "Our bi-annual technical newsletter", href: "/grep", img: "/grep/grep-wordmark.png" },
+    { title: "z0d1ak", desc: "ACM-VIT's competitive CTF team", href: "/z0d1ak", img: "/z0d1ak/z0d1ak-logo.svg" },
+    { title: "Achievements", desc: "Awards, recognitions & milestones", href: "/achievements", img: "/ui/ui-trophy.webp" },
+    { title: "Cassette Builder", desc: "Design your own custom cassette", href: "/cassette-builder", img: "/cassettes/cassettes-cassette-tech.webp" },
+    { title: "Calendar", desc: "Upcoming events & important dates", href: "/calendar", img: "/icons/icons-calendar.svg" },
+  ],
+};
+---
+
+<header
+  class="site-header fixed top-5 left-0 right-0 z-50 w-full px-4 py-2 pointer-events-none"
+>
+  <div
+    class="header-inner relative max-w-fit mx-auto flex justify-center pointer-events-auto"
+  >
+    <nav aria-label="Primary">
+      <!-- Desktop nav -->
+      <div class="nav-desktop">
+        <div class="pill-island-wrap" id="pillIslandWrap">
+        <div class={`header-pill ${isSubpage ? 'subpage-mode' : ''}`} id="headerPill" data-subpage={isSubpage ? 'true' : undefined}>
+          {/* Subpage title - shown only on subpages, hidden when nav expands */}
+          {isSubpage && (
+            <span class="subpage-island-label">{pageTitle}</span>
+          )}
+          <a href="/#about" class="nav-item" data-section="about" style="--dot-i:0">
+            <span class="nav-dot"></span>
+            <span class="nav-label">About</span>
+          </a>
+          <a href="/#domains" class="nav-item" data-section="domains" style="--dot-i:1">
+            <span class="nav-dot"></span>
+            <span class="nav-label">Domains</span>
+          </a>
+          <a href="/#events" class="nav-item" data-section="events" style="--dot-i:2">
+            <span class="nav-dot"></span>
+            <span class="nav-label">Events</span>
+          </a>
+          <a href="/#projects" class="nav-item" data-section="projects" style="--dot-i:3">
+            <span class="nav-dot"></span>
+            <span class="nav-label">Projects</span>
+          </a>
+          <a href="/#acm-w" class="nav-item" data-section="acm-w" style="--dot-i:4">
+            <span class="nav-dot"></span>
+            <span class="nav-label">ACM-W</span>
+          </a>
+          <a href="/#community" class="nav-item" data-section="community" style="--dot-i:5">
+            <span class="nav-dot"></span>
+            <span class="nav-label">Community</span>
+          </a>
+          <a href="/#team" class="nav-item" data-section="team" style="--dot-i:6">
+            <span class="nav-dot"></span>
+            <span class="nav-label">Team</span>
+          </a>
+          <a href="/#blogs" class="nav-item" data-section="blogs" style="--dot-i:7">
+            <span class="nav-dot"></span>
+            <span class="nav-label">Blogs</span>
+          </a>
+          <a href="/#partners" class="nav-item" data-section="partners" style="--dot-i:8">
+            <span class="nav-dot"></span>
+            <span class="nav-label">Partners</span>
+          </a>
+          <a href="/#gallery" class="nav-item" data-section="gallery" style="--dot-i:9">
+            <span class="nav-dot"></span>
+            <span class="nav-label">Gallery</span>
+          </a>
+          <a href="/#contact" class="nav-item" data-section="contact" style="--dot-i:10">
+            <span class="nav-dot"></span>
+            <span class="nav-label">Contact</span>
+          </a>
+          <a href="/#more" class="nav-item" data-section="more" style="--dot-i:11">
+            <span class="nav-dot"></span>
+            <span class="nav-label">More</span>
+          </a>
+        </div>
+
+        {/* Back button bubble - separate from pill, Dynamic Island style */}
+        {isSubpage && (
+          <a href={resolvedBackHref} class="subpage-back-bubble" aria-label="Back to home">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M3 19V5" stroke="#FEFCD9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M13 6L7 12L13 18" stroke="#FEFCD9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7 12H21" stroke="#FEFCD9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        )}
+        </div>
+
+        <!-- Megamenu dropdown -->
+        <div class="nav-megamenu" id="navMegamenu">
+          {Object.entries(dropdowns).map(([key, items]) => (
+            <div class="megamenu-panel" data-panel={key}>
+              <div class="megamenu-grid">
+                {items.map((item, i) => item.all ? (
+                  <a href={item.href} class="megamenu-tile all-tile" style={`--tile-i: ${i}`}>
+                    <span class="all-tile-label">{item.title}</span>
+                    <svg class="all-tile-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none">
+                      <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </a>
+                ) : (
+                  <a
+                    href={item.href}
+                    class="megamenu-tile"
+                    data-tilt
+                    style={`--tile-i: ${i}; ${item.color ? `--tile-color: ${item.color}` : ''}`}
+                  >
+                    {item.color && <span class="tile-color-bar" />}
+                    <div class="tile-text">
+                      <span class="tile-title">{item.title}</span>
+                      <span class="tile-desc">{item.desc}</span>
+                    </div>
+                    <img
+                      class="tile-img"
+                      src={getAssetUrl(item.img)}
+                      alt={item.title}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </a>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Mobile bottom navbar (morphing pill: nav / menu / music) -->
+      <div class="nav-mobile">
+        <MobileNavbar pageTitle={pageTitle} />
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  /* ── Pill + back-bubble wrapper ── */
+  .pill-island-wrap {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  /* During the split morph: solid shapes, kill glass effects so the two
+     overlapping shapes read as one seamless silhouette. The drop-shadows
+     trace the UNION outline (waist included) - a faux border that keeps the
+     silhouette visible on near-black pages, matching the glass border glow */
+  .pill-island-wrap.split-active {
+    filter:
+      drop-shadow(0 0 1px rgba(249, 95, 74, 0.85))
+      drop-shadow(0 0 1px rgba(249, 95, 74, 0.45))
+      drop-shadow(0 8px 20px rgba(0, 0, 0, 0.55));
+  }
+
+  .pill-island-wrap.split-active .header-pill,
+  .pill-island-wrap.split-active .subpage-back-bubble {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .pill-island-wrap.split-active .header-pill::before,
+  .pill-island-wrap.split-active .header-pill::after,
+  .pill-island-wrap.split-active .subpage-back-bubble::before {
+    display: none !important;
+  }
+
+  /* ── Bubble intro (GSAP + Flip) ── */
+  .header-pill.pill-collapsed {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    overflow: hidden;
+    justify-content: center;
+  }
+
+  .header-pill.pill-collapsed .nav-item {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* ── Pill container ── */
+  .header-pill {
+    /* astro-liquid-glass tokens (scoped to pill) */
+    --glass-bg: rgba(6, 2, 2, 0.22);
+    --glass-blur: 32px;
+    --glass-saturate: 220%;
+    --glass-border: rgba(249, 95, 74, 0.75);
+    --glass-highlight: rgba(255, 255, 255, 0.18);
+    --glass-shadow: rgba(0, 0, 0, 0.5);
+    --lens-edge-light: transparent;
+    --lens-edge-dark: transparent;
+
+    /* astro-liquid-glass .glass base styles (ported from package) */
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    gap: 0;
+    height: 44px;
+    padding: 0 16px;
+    border-radius: 100px;
+    /* Safari: backdrop-filter region ignores border-radius without an
+       explicit clip - glass corners poke past the border otherwise */
+    overflow: hidden;
+    box-shadow:
+      0 8px 32px var(--glass-shadow),
+      0 0 18px rgba(249, 95, 74, 0.10),
+      0 0 6px rgba(249, 95, 74, 0.08),
+      inset 0 1px 0 var(--glass-highlight),
+      inset 0 0 12px rgba(249, 95, 74, 0.04);
+    transition:
+      box-shadow 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
+      border-color 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
+      padding 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+    /* Hidden until GSAP intro */
+    opacity: 0;
+  }
+
+  /* astro-liquid-glass lens-edge light effect (::before) + top highlight (::after) */
+  .header-pill::before,
+  .header-pill::after {
+    border-radius: inherit;
+    content: "";
+    pointer-events: none;
+    position: absolute;
+  }
+
+  /* Diagonal lens refraction - light top-left, dark bottom-right */
+  .header-pill::before {
+    background: linear-gradient(
+      135deg,
+      var(--lens-edge-light) 0%,
+      transparent 40%,
+      transparent 60%,
+      var(--lens-edge-dark) 100%
+    );
+    inset: 0;
+    opacity: 0.85;
+  }
+
+  /* Top inner highlight - like a glass rim catching light. Full inset so
+     border-radius: inherit isn't clamped by a half-height box (which gives
+     the sheen tighter corners than the pill) */
+  .header-pill::after {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 50%);
+    inset: 0;
+  }
+
+  /* Intro complete - GSAP sets opacity/transform, this class gates child visibility */
+  .header-pill.pill-intro-play {
+    opacity: 1;
+  }
+
+  /* Hover state - also triggered by .pill-menu-open when megamenu is visible */
+  .header-pill:hover,
+  .header-pill.pill-menu-open {
+    --glass-border: rgba(249, 95, 74, 1.0);
+    --glass-bg: rgba(6, 2, 2, 0.32);
+    box-shadow:
+      0 12px 40px rgba(0, 0, 0, 0.55),
+      0 0 24px rgba(249, 95, 74, 0.14),
+      0 0 8px rgba(249, 95, 74, 0.10),
+      inset 0 1px 0 rgba(255, 255, 255, 0.07),
+      inset 0 0 16px rgba(249, 95, 74, 0.06);
+    padding: 0 20px;
+  }
+
+  /* ── Each nav item ── */
+  .nav-item {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 5px 10px;
+    border-radius: 100px;
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    background: transparent;
+    transition: gap 0.38s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+
+  /* Hover on pill - expand all items */
+  .header-pill:hover .nav-item,
+  .header-pill.pill-menu-open .nav-item {
+    gap: 7px;
+  }
+
+  .nav-item.active {
+    gap: 8px;
+  }
+
+  /* ── Dot ── */
+  .nav-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(254, 252, 217, 0.28);
+    flex-shrink: 0;
+    transition:
+      background 0.35s cubic-bezier(0.25, 0.1, 0.25, 1),
+      transform 0.38s cubic-bezier(0.25, 0.1, 0.25, 1),
+      box-shadow 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+
+  .nav-item.active .nav-dot {
+    background: #fefcd9;
+    box-shadow: 0 0 8px rgba(254, 252, 217, 0.5);
+  }
+
+  .header-pill:hover .nav-item:not(.active) .nav-dot,
+  .header-pill.pill-menu-open .nav-item:not(.active) .nav-dot {
+    background: rgba(254, 252, 217, 0.5);
+    transform: scale(1.15);
+  }
+
+  .header-pill:hover .nav-item.active .nav-dot,
+  .header-pill.pill-menu-open .nav-item.active .nav-dot {
+    transform: scale(1.2);
+  }
+
+  /* ── Nav item hover - orange highlight ── */
+  .nav-item:hover .nav-dot {
+    background: #f95f4a !important;
+    box-shadow: 0 0 8px rgba(249, 95, 74, 0.5);
+    transform: scale(1.25);
+  }
+  .nav-item:hover .nav-label {
+    color: #f95f4a !important;
+    opacity: 1 !important;
+  }
+
+  /* ACM-W hover - pink */
+  .nav-item[data-section="acm-w"]:hover .nav-dot {
+    background: #ff007a !important;
+    box-shadow: 0 0 8px rgba(255, 0, 122, 0.5);
+  }
+  .nav-item[data-section="acm-w"]:hover .nav-label {
+    color: #ff007a !important;
+  }
+
+  /* ── Label: hidden until active or pill hovered ── */
+  .nav-label {
+    font-size: 12px;
+    font-family: "PolySans Trial", sans-serif;
+    color: #fefcd9;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    font-weight: 400;
+    white-space: nowrap;
+    max-width: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+      max-width 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
+      opacity 0.3s cubic-bezier(0.25, 0.1, 0.25, 1),
+      color 0.25s ease;
+  }
+
+  /* Show all labels on pill hover */
+  .header-pill:hover .nav-label,
+  .header-pill.pill-menu-open .nav-label {
+    max-width: 120px;
+    opacity: 0.8;
+  }
+
+  /* Active label always visible, full opacity */
+  .nav-item.active .nav-label {
+    max-width: 120px;
+    opacity: 1;
+  }
+
+  /* On hover + active: full opacity */
+  .header-pill:hover .nav-item.active .nav-label,
+  .header-pill.pill-menu-open .nav-item.active .nav-label {
+    opacity: 1;
+  }
+
+  /* ── Megamenu dropdown ── */
+  .nav-megamenu {
+    position: absolute;
+    top: calc(100% + 14px);
+    left: 50%;
+    transform: translateX(-50%) translateY(10px) scale(0.96);
+    transform-origin: top center;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 60;
+    width: max(760px, 100%);
+    transition:
+      opacity 0.25s cubic-bezier(0.25, 0.1, 0.25, 1),
+      transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+
+  .nav-megamenu.open {
+    pointer-events: auto;
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+
+  .megamenu-panel {
+    display: none;
+    background: rgba(6, 2, 2, 0.72);
+    backdrop-filter: blur(40px) saturate(220%);
+    -webkit-backdrop-filter: blur(40px) saturate(220%);
+    border: 1px solid rgba(249, 95, 74, 0.55);
+    border-radius: 22px;
+    padding: 18px;
+    box-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.55),
+      0 0 20px rgba(249, 95, 74, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .megamenu-panel::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent);
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  .megamenu-panel.active {
+    display: block;
+  }
+
+  /* Bento grid */
+  .megamenu-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* 5-item panels: 3 top + 2 bottom spanning wider */
+  .megamenu-panel[data-panel="community"] .megamenu-grid,
+  .megamenu-panel[data-panel="domains"] .megamenu-grid,
+  .megamenu-panel[data-panel="events"] .megamenu-grid,
+  .megamenu-panel[data-panel="team"] .megamenu-grid,
+  .megamenu-panel[data-panel="more"] .megamenu-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .megamenu-panel[data-panel="community"] .megamenu-tile,
+  .megamenu-panel[data-panel="domains"] .megamenu-tile,
+  .megamenu-panel[data-panel="events"] .megamenu-tile,
+  .megamenu-panel[data-panel="team"] .megamenu-tile,
+  .megamenu-panel[data-panel="more"] .megamenu-tile {
+    grid-column: span 2;
+  }
+
+  .megamenu-panel[data-panel="community"] .megamenu-tile:nth-child(4),
+  .megamenu-panel[data-panel="community"] .megamenu-tile:nth-child(5),
+  .megamenu-panel[data-panel="domains"] .megamenu-tile:nth-child(4),
+  .megamenu-panel[data-panel="domains"] .megamenu-tile:nth-child(5),
+  .megamenu-panel[data-panel="events"] .megamenu-tile:nth-child(4),
+  .megamenu-panel[data-panel="events"] .megamenu-tile:nth-child(5),
+  .megamenu-panel[data-panel="team"] .megamenu-tile:nth-child(4),
+  .megamenu-panel[data-panel="team"] .megamenu-tile:nth-child(5) {
+    grid-column: span 3;
+  }
+
+  /* Gallery: 4 year cassettes in a clean 2×2 */
+  .megamenu-panel[data-panel="gallery"] .megamenu-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* More panel: 9 items - clean 3×3 (every tile spans 2 in the 6-col grid). */
+
+  /* 6-item panel: clean 3×2 grid */
+  .megamenu-panel[data-panel="projects"] .megamenu-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Tile stagger */
+  .nav-megamenu.open .megamenu-tile {
+    animation: tileSlideIn 0.28s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+    animation-delay: calc(var(--tile-i, 0) * 0.05s);
+  }
+
+  @keyframes tileSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* ── Bento tile ── */
+  .megamenu-tile {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    padding: 0;
+    border-radius: 16px;
+    text-decoration: none;
+    border: 1px solid rgba(254, 252, 217, 0.08);
+    background: rgba(13, 14, 13, 0.45);
+    overflow: hidden;
+    min-height: 120px;
+    will-change: transform;
+    transition:
+      border-color 0.25s ease,
+      box-shadow 0.25s ease,
+      background 0.25s ease;
+  }
+
+  .megamenu-tile:hover {
+    background: rgba(249, 95, 74, 0.06);
+    border-color: rgba(249, 95, 74, 0.30);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 0 12px rgba(249, 95, 74, 0.06);
+  }
+
+  /* Domain color top bar */
+  .tile-color-bar {
+    position: absolute;
+    top: 0;
+    left: 16px;
+    right: 16px;
+    height: 3px;
+    border-radius: 0 0 3px 3px;
+    background: var(--tile-color, #F95F4A);
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+  }
+
+  .megamenu-tile:hover .tile-color-bar {
+    opacity: 1;
+  }
+
+  /* Tile text area */
+  .tile-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    padding: 16px 0 16px 18px;
+    min-width: 0;
+  }
+
+  .tile-title {
+    color: #fefcd9;
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    line-height: 1.2;
+    transition: color 0.2s ease;
+  }
+
+  .tile-desc {
+    color: rgba(254, 252, 217, 0.45);
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 12px;
+    line-height: 1.4;
+    transition: color 0.2s ease;
+  }
+
+  .megamenu-tile:hover .tile-title {
+    color: #F95F4A;
+  }
+
+  .megamenu-tile:hover .tile-desc {
+    color: rgba(254, 252, 217, 0.65);
+  }
+
+  /* Tile image - contained inside tile */
+  .tile-img {
+    width: 130px;
+    height: 100%;
+    flex-shrink: 0;
+    object-fit: contain;
+    object-position: center;
+    padding: 12px 14px 12px 0;
+    opacity: 0.55;
+    transform: rotate(-3deg) scale(1.02);
+    filter: saturate(0.7);
+    transition:
+      opacity 0.35s cubic-bezier(0.25, 0.1, 0.25, 1),
+      transform 0.35s cubic-bezier(0.25, 0.1, 0.25, 1),
+      filter 0.35s ease;
+  }
+
+  .megamenu-tile:hover .tile-img {
+    opacity: 1;
+    transform: rotate(0deg) scale(1.08);
+    filter: saturate(1.1);
+  }
+
+  /* ── Full-width "view all" CTA tile ── */
+  .all-tile {
+    grid-column: 1 / -1 !important;
+    min-height: 0;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px;
+    color: #fefcd9;
+  }
+
+  .all-tile-label {
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    transition: color 0.2s ease;
+  }
+
+  .all-tile-arrow {
+    transition: transform 0.25s cubic-bezier(0.25, 0.1, 0.25, 1), color 0.2s ease;
+  }
+
+  .all-tile:hover .all-tile-label {
+    color: #f95f4a;
+  }
+
+  .all-tile:hover .all-tile-arrow {
+    color: #f95f4a;
+    transform: translateX(4px);
+  }
+
+  /* Black acm logo invisible on dark tile - invert to white */
+  .tile-img[src*="acm-logo-black"] {
+    filter: invert(1);
+  }
+  .megamenu-tile:hover .tile-img[src*="acm-logo-black"] {
+    filter: invert(1);
+  }
+
+  /* GREP wordmark - smaller than default tile img */
+  .tile-img[src*="grep-wordmark"] {
+    width: 88px;
+    padding: 30px 22px;
+  }
+  .megamenu-tile:hover .tile-img[src*="grep-wordmark"] {
+    transform: scale(1.04);
+  }
+
+  /* ── Pink mode for ACM-W ── */
+  .nav-item.active.pink-mode .nav-dot {
+    background: #ff007a;
+    box-shadow: 0 0 8px rgba(255, 0, 122, 0.5);
+  }
+
+  .nav-item.active.pink-mode .nav-label {
+    color: #ff007a;
+  }
+
+  /* ACM-W pink megamenu panel */
+  .megamenu-panel[data-panel="acm-w"] {
+    border-color: rgba(255, 0, 122, 0.50);
+    box-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.55),
+      0 0 20px rgba(255, 0, 122, 0.10),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  .megamenu-panel[data-panel="acm-w"] .megamenu-tile:hover {
+    background: rgba(255, 0, 122, 0.08);
+    border-color: rgba(255, 0, 122, 0.35);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 0 12px rgba(255, 0, 122, 0.08);
+  }
+
+  .megamenu-panel[data-panel="acm-w"] .megamenu-tile:hover .tile-title {
+    color: #ff007a;
+  }
+
+  .megamenu-panel[data-panel="acm-w"] .megamenu-tile:hover .tile-img {
+    filter: saturate(1.1) drop-shadow(0 4px 12px rgba(255, 0, 122, 0.12));
+  }
+
+  /* Light mode: nav pill is solid dark, matching the megamenu bento (#1e1e1e)
+     instead of the translucent glass that let the paper bg bleed through. */
+  :global(html[data-theme="light"]) .header-pill {
+    --glass-bg: #1e1e1e;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  /* ── Subpage Dynamic Island ── */
+
+  /* Light mode: dark fill on both subpage pills */
+  :global(html[data-theme="light"]) .header-pill.subpage-mode {
+    --glass-bg: rgba(20, 20, 24, 0.85);
+    --glass-border: rgba(20, 20, 24, 0.3);
+    --glass-highlight: rgba(255, 255, 255, 0.10);
+    --glass-shadow: rgba(0, 0, 0, 0.15);
+  }
+
+  :global(html[data-theme="light"]) .header-pill.subpage-mode .subpage-island-label {
+    color: #FEFCD9;
+  }
+
+  /* Island label - page title inside pill */
+  .subpage-island-label {
+    font-family: 'PolySans Trial', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #FEFCD9;
+    white-space: nowrap;
+    position: relative;
+    z-index: 1;
+    padding: 0 4px;
+    opacity: 0;
+    max-width: 0;
+    overflow: hidden;
+  }
+
+  /* After intro: label visible - GSAP controls this */
+
+  /* Subpage pill resting state - orange background (applied by GSAP via inline styles) */
+
+  /* In subpage mode: hide nav items by default */
+  .header-pill.subpage-mode .nav-item {
+    max-width: 0;
+    opacity: 0;
+    padding: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transition: max-width 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
+                opacity 0.25s ease,
+                padding 0.3s ease;
+  }
+
+  /* On hover: expand nav items, hide island label, revert to glass bg */
+  .header-pill.subpage-mode.subpage-expanded,
+  .header-pill.subpage-mode.pill-menu-open {
+    --glass-bg: rgba(6, 2, 2, 0.32) !important;
+    --glass-border: rgba(249, 95, 74, 1.0) !important;
+  }
+
+  .header-pill.subpage-mode.subpage-expanded .nav-item,
+  .header-pill.subpage-mode.pill-menu-open .nav-item {
+    max-width: 150px;
+    opacity: 1;
+    padding: 5px 10px;
+    pointer-events: auto;
+  }
+
+  .header-pill.subpage-mode.subpage-expanded .subpage-island-label,
+  .header-pill.subpage-mode.pill-menu-open .subpage-island-label {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Back button bubble - orange filled */
+  .subpage-back-bubble {
+    --glass-bg: #F95F4A;
+    --glass-blur: 32px;
+    --glass-saturate: 220%;
+    --glass-border: rgba(254, 252, 217, 0.35);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    /* Safari backdrop-filter radius clip (same as .header-pill) */
+    overflow: hidden;
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    border: 1px solid var(--glass-border);
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.5),
+      0 0 18px rgba(249, 95, 74, 0.10),
+      inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    cursor: pointer;
+    text-decoration: none;
+    margin-left: 8px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+
+  /* Glass highlight on bubble */
+  .subpage-back-bubble::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.15), transparent 60%);
+    pointer-events: none;
+  }
+
+  .subpage-back-bubble:hover {
+    --glass-border: rgba(254, 252, 217, 0.5);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55),
+                0 0 24px rgba(249, 95, 74, 0.20),
+                inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    transform: scale(1.08);
+  }
+
+  /* ── Layout ── */
+  .nav-desktop {
+    display: flex;
+    align-items: center;
+    position: relative;
+    transform: scale(var(--nav-bar-scale, 1));
+    transform-origin: top center;
+    transition: transform 160ms ease;
+  }
+
+  .nav-mobile {
+    display: none;
+  }
+
+  /* ── Mobile breakpoints ── */
+  @media (max-width: 1024px) {
+    body.partners-active .site-header {
+      z-index: 200;
+    }
+    .site-header {
+      top: auto;
+      bottom: auto;
+      padding: 0;
+      pointer-events: none;
+    }
+    .header-inner {
+      pointer-events: none;
+    }
+    .nav-desktop {
+      display: none;
+      transform: none;
+    }
+    .nav-megamenu {
+      display: none;
+    }
+    .nav-mobile {
+      display: block;
+    }
+  }
+</style>
+
+<script>
+  // @ts-nocheck
+  import { gsap } from "gsap";
+  import { Flip } from "gsap/Flip";
+  gsap.registerPlugin(Flip);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const sections = document.querySelectorAll("section[id], footer[id]");
+
+    // Section → nav-item mapping
+    const idMapping = {
+      work: "events",
+      "igniting-minds-section": "community",
+      "community-outreach": "community",
+      "community-sdg": "community",
+      "community-conduct": "community",
+      "community-award": "community",
+      "projects-intro": "projects",
+    };
+
+    // ── Dot nav active state ──
+    function setActiveItem(navSection) {
+      const items = document.querySelectorAll(".nav-desktop .nav-item");
+      items.forEach((item) => {
+        item.classList.remove("active", "pink-mode");
+      });
+
+      if (!navSection) return;
+
+      const target = document.querySelector(
+        `.nav-desktop .nav-item[data-section="${navSection}"]`
+      );
+      if (!target) return;
+
+      target.classList.add("active");
+      if (navSection === "acm-w") target.classList.add("pink-mode");
+    }
+
+    function applyNavState(sectionId) {
+      if (!sectionId || sectionId === "footer") {
+        setActiveItem(null);
+        window.dispatchEvent(new CustomEvent("nav:section", { detail: { id: "home" } }));
+        return;
+      }
+      const mappedId = idMapping[sectionId] || sectionId;
+      setActiveItem(mappedId);
+      window.dispatchEvent(new CustomEvent("nav:section", { detail: { id: mappedId } }));
+    }
+
+    // ── Scroll tracking ──
+    let currentSectionId = null;
+    let rafPending = false;
+    let lastScrollY = window.scrollY || window.pageYOffset;
+
+    function getActiveSection() {
+      const focusLine = window.innerHeight * 0.3;
+      let activeSection = null;
+      let closestSection = null;
+      let closestDistance = Infinity;
+
+      sections.forEach((section) => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= focusLine && rect.bottom >= focusLine) {
+          activeSection = section;
+        }
+        let distance = 0;
+        if (rect.top > focusLine) {
+          distance = rect.top - focusLine;
+        } else if (rect.bottom < focusLine) {
+          distance = focusLine - rect.bottom;
+        }
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestSection = section;
+        }
+      });
+
+      return activeSection || closestSection;
+    }
+
+    function updateActiveSection() {
+      rafPending = false;
+      const scrollY = window.scrollY || window.pageYOffset;
+      lastScrollY = scrollY;
+      const activeSection = getActiveSection();
+      if (!activeSection) return;
+      const id = activeSection.getAttribute("id");
+      if (!id || id === currentSectionId) return;
+      currentSectionId = id;
+      applyNavState(id);
+    }
+
+    function scheduleNavUpdate() {
+      if (rafPending) return;
+      rafPending = true;
+      requestAnimationFrame(updateActiveSection);
+    }
+
+    const observer = new IntersectionObserver(
+      () => scheduleNavUpdate(),
+      { root: null, rootMargin: "-20% 0px -60% 0px", threshold: 0 }
+    );
+    sections.forEach((s) => observer.observe(s));
+    window.addEventListener("scroll", scheduleNavUpdate, { passive: true });
+
+    // The document scroll lives on <body> here (overflow-y: auto), not the
+    // window - so window.scrollTo is a no-op. Find the element that actually
+    // scrolls before tweening.
+    function getScroller(): HTMLElement {
+      const candidates = [
+        document.scrollingElement,
+        document.documentElement,
+        document.body,
+      ].filter(Boolean) as HTMLElement[];
+      for (const el of candidates) {
+        if (el.scrollHeight > el.clientHeight + 4) return el;
+      }
+      return (document.scrollingElement as HTMLElement) || document.documentElement;
+    }
+
+    // Self-correcting smooth scroll: re-reads the target's live position each
+    // frame, so lazy content settling below doesn't leave it landing short.
+    function smoothScrollToSection(target: Element) {
+      const scroller = getScroller();
+      const finalTargetY = () =>
+        scroller.scrollTop + target.getBoundingClientRect().top;
+
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+      if (reduceMotion) {
+        scroller.scrollTop = finalTargetY();
+        return;
+      }
+
+      const startY = scroller.scrollTop;
+      const duration = 800;
+      const ease = (t: number) => 1 - Math.pow(1 - t, 3);
+      // Bypass CSS scroll-behavior so our per-frame writes aren't double-eased.
+      const prevBehavior = scroller.style.scrollBehavior;
+      scroller.style.scrollBehavior = "auto";
+
+      let start: number | undefined;
+      const step = (ts: number) => {
+        if (start === undefined) start = ts;
+        const p = Math.min((ts - start) / duration, 1);
+        scroller.scrollTop = startY + (finalTargetY() - startY) * ease(p);
+        if (p < 1) {
+          requestAnimationFrame(step);
+        } else {
+          scroller.style.scrollBehavior = prevBehavior;
+        }
+      };
+      requestAnimationFrame(step);
+    }
+
+    // ── Smooth scroll ──
+    document.addEventListener("click", (e) => {
+      const el = e.target instanceof Element ? e.target.closest('a[href*="#"]') : null;
+      if (!el) return;
+      const href = el.getAttribute("href");
+      if (!href) return;
+
+      // Extract section id from href (handles both "#about" and "/#about")
+      const hashIndex = href.indexOf("#");
+      if (hashIndex === -1) return;
+      const id = href.slice(hashIndex + 1);
+      if (!id) return;
+
+      // If on a different page, let the browser navigate to /#section
+      const hrefPath = href.slice(0, hashIndex) || "/";
+      if (hrefPath !== "/" && hrefPath !== window.location.pathname) return;
+
+      const target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+
+      // Contact (200vh) and More (curtain + pinned boombox below it) sit below
+      // lazy-loaded content, so a captured scrollIntoView target goes stale and
+      // lands short. Tween manually, re-reading the target position every frame
+      // so it self-corrects as content below settles - and stays smooth.
+      if (id === "contact" || id === "more") {
+        smoothScrollToSection(target);
+        history.replaceState(null, "", window.location.pathname);
+        applyNavState(id);
+        currentSectionId = id;
+        return;
+      }
+
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      // Clean URL - no hash
+      history.replaceState(null, "", window.location.pathname);
+      applyNavState(id);
+      currentSectionId = id;
+    });
+
+    scheduleNavUpdate();
+
+    // ── Clean hash from URL on load (after browser scrolls to target) ──
+    if (window.location.hash) {
+      const hashId = window.location.hash.slice(1);
+      requestAnimationFrame(() => {
+        history.replaceState(null, "", window.location.pathname);
+        if (hashId) applyNavState(hashId);
+      });
+    }
+
+    // ── Megamenu interaction ──
+    const megamenu = document.getElementById("navMegamenu");
+    const megamenuPanels = megamenu ? megamenu.querySelectorAll(".megamenu-panel") : [];
+    const sectionsWithDropdowns = ["about", "community", "domains", "events", "projects", "team", "blogs", "acm-w", "gallery", "more"];
+    let megamenuTimer = null;
+    let currentPanel = null;
+
+    const pill = document.getElementById("headerPill");
+
+    function showMegamenu(section) {
+      if (!megamenu) return;
+      megamenuPanels.forEach((p) => p.classList.remove("active"));
+      const panel = megamenu.querySelector(`[data-panel="${section}"]`);
+      if (!panel) return;
+      panel.classList.add("active");
+      currentPanel = section;
+      megamenu.classList.add("open");
+      if (pill) pill.classList.add("pill-menu-open");
+    }
+
+    function hideMegamenu() {
+      if (!megamenu) return;
+      megamenu.classList.remove("open");
+      currentPanel = null;
+      if (pill) pill.classList.remove("pill-menu-open");
+      setTimeout(() => {
+        if (!currentPanel) {
+          megamenuPanels.forEach((p) => p.classList.remove("active"));
+        }
+      }, 280);
+    }
+
+    function startHideTimer() {
+      megamenuTimer = setTimeout(hideMegamenu, 180);
+    }
+
+    function cancelHideTimer() {
+      if (megamenuTimer) {
+        clearTimeout(megamenuTimer);
+        megamenuTimer = null;
+      }
+    }
+
+    // Nav item hover → show panel
+    document.querySelectorAll(".nav-desktop .nav-item").forEach((item) => {
+      const section = item.getAttribute("data-section");
+      if (!sectionsWithDropdowns.includes(section)) return;
+
+      item.addEventListener("mouseenter", () => {
+        cancelHideTimer();
+        showMegamenu(section);
+      });
+      item.addEventListener("mouseleave", () => {
+        startHideTimer();
+      });
+    });
+
+    // Megamenu hover → keep open
+    if (megamenu) {
+      megamenu.addEventListener("mouseenter", () => {
+        cancelHideTimer();
+      });
+      megamenu.addEventListener("mouseleave", () => {
+        startHideTimer();
+      });
+    }
+
+    // Close megamenu on scroll
+    window.addEventListener("scroll", () => {
+      if (currentPanel) hideMegamenu();
+    }, { passive: true });
+
+    // Close megamenu when clicking a tile
+    if (megamenu) {
+      megamenu.querySelectorAll(".megamenu-tile").forEach((tile) => {
+        tile.addEventListener("click", () => {
+          hideMegamenu();
+        });
+      });
+    }
+
+    // ── Tilt micro-interaction ──
+    document.querySelectorAll("[data-tilt]").forEach((tile) => {
+      tile.addEventListener("mousemove", (e) => {
+        const rect = tile.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width;
+        const y = (e.clientY - rect.top) / rect.height;
+        const rotateX = (0.5 - y) * 8;
+        const rotateY = (x - 0.5) * 8;
+        tile.style.transform =
+          `perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+      });
+      tile.addEventListener("mouseleave", () => {
+        tile.style.transform = "";
+      });
+    });
+
+    // ── Bubble intro animation (GSAP) ──
+    if (pill) {
+      let introFired = false;
+
+      // ── Subpage intro: circle drop → Flip expand full capsule → constriction pinch-off ──
+      if (pill.dataset.subpage === 'true') {
+        introFired = true;
+
+        const splitWrap = document.getElementById('pillIslandWrap');
+        const backBubble = document.querySelector('.subpage-back-bubble');
+        const label = pill.querySelector('.subpage-island-label');
+        const bubbleIcon = backBubble ? backBubble.querySelector('svg') : null;
+        const solidDark = 'rgb(24, 18, 18)';
+
+        // Start as collapsed circle
+        pill.classList.add('pill-collapsed');
+        pill.style.transition = 'none';
+        gsap.set(pill, { opacity: 0, y: -24, scale: 0.7 });
+        if (label) gsap.set(label, { opacity: 0, maxWidth: 0, padding: 0 });
+        if (backBubble) {
+          // Kill CSS transitions so GSAP owns transform during the intro
+          backBubble.style.transition = 'none';
+          // Out of flow for the whole intro, anchored to the capsule's right
+          // edge: the wrap width equals the visible capsule width, so the
+          // header's flex centering never shifts as the pill expands/retracts
+          gsap.set(backBubble, {
+            opacity: 0, scale: 1,
+            position: 'absolute', top: 0, right: 0, marginLeft: 0,
+            background: solidDark,
+            backdropFilter: 'none', webkitBackdropFilter: 'none',
+            borderColor: 'transparent', boxShadow: 'none',
+          });
+        }
+        if (bubbleIcon) gsap.set(bubbleIcon, { opacity: 0, scale: 0.5, transformOrigin: '50% 50%' });
+
+        function playSubpageIntro() {
+        const dropTl = gsap.timeline({ delay: 0.1 });
+
+        // Phase 1: Circle drops in
+        dropTl.to(pill, {
+          opacity: 1, y: 8, scale: 1.05,
+          duration: 0.28, ease: 'power2.out',
+        })
+        // Phase 2: Bounce back
+        .to(pill, { y: -5, scale: 1, duration: 0.16, ease: 'power2.inOut' })
+        // Phase 3: Settle
+        .to(pill, { y: 0, duration: 0.12, ease: 'power2.out' })
+        // Phase 4: Flip expand circle → pill
+        .add(() => {
+          // Reserve the label's layout space now so capsule width == final
+          // pill+bubble width, but keep it invisible until the split is done
+          if (label) gsap.set(label, { opacity: 0, maxWidth: 300, padding: '0 4px' });
+
+          const state = Flip.getState(pill);
+          pill.classList.remove('pill-collapsed');
+          pill.classList.add('pill-intro-play');
+          // Expand to the FULL capsule width - pill + bubble footprint drawn
+          // as one shape (16px base + 44px bubble + 8px gap)
+          pill.style.paddingRight = '68px';
+
+          Flip.from(state, {
+            duration: 0.32,
+            ease: 'power3.out',
+            clearProps: 'all',
+            onComplete() {
+              // Phase 5: constriction split - the full-width capsule pinches
+              // its right end off into the back bubble. Pure geometry: two
+              // solid same-color shapes overlap, so the union silhouette
+              // narrows into a waist as the pill edge retracts across the
+              // bubble. (No SVG gooey filter - Safari renders feColorMatrix
+              // metaballs as a plain blur smear.)
+              pill.style.transition = 'none';
+              pill.style.background = solidDark;
+              pill.style.backdropFilter = 'none';
+              pill.style.webkitBackdropFilter = 'none';
+              pill.style.borderColor = 'transparent';
+              pill.style.boxShadow = 'none';
+              // clearProps: 'all' wiped the inline padding - re-reserve the
+              // bubble footprint before this frame paints
+              pill.style.paddingRight = '68px';
+
+              // Lock the wrap width so flex centering can't shift while the
+              // pill retracts - pill+bubble bounds stay identical to the capsule
+              if (splitWrap) {
+                splitWrap.style.width = splitWrap.getBoundingClientRect().width + 'px';
+                splitWrap.classList.add('split-active');
+              }
+
+              // Bubble sits embedded in the capsule's right end (absolute,
+              // right: 0), already at its final screen position, invisible
+              // against the solid pill
+              if (backBubble) gsap.set(backBubble, { opacity: 1 });
+
+              const glassBg = 'rgba(6, 2, 2, 0.22)';
+              const glassBorder = 'rgba(249, 95, 74, 0.75)';
+
+              const breakTl = gsap.timeline({
+                onComplete() {
+                  // Restore CSS transitions first, then clear inline styles so
+                  // remaining deltas (box-shadow, glow) ease in via CSS
+                  pill.style.transition = '';
+                  pill.style.background = '';
+                  pill.style.backdropFilter = '';
+                  pill.style.webkitBackdropFilter = '';
+                  pill.style.borderColor = '';
+                  pill.style.boxShadow = '';
+                  pill.style.paddingRight = '';
+                  gsap.set(pill, { clearProps: 'x,scaleX,backgroundColor,borderColor,paddingRight' });
+                  // Back into flex flow + unlock wrap: natural layout is the
+                  // same total width, so nothing moves on screen
+                  if (splitWrap) splitWrap.style.width = '';
+                  if (backBubble) {
+                    backBubble.style.transition = '';
+                    gsap.set(backBubble, {
+                      clearProps: 'position,top,right,marginLeft,x,scale,scaleX,scaleY,transformOrigin,background,backdropFilter,webkitBackdropFilter,borderColor,boxShadow',
+                    });
+                  }
+                  if (bubbleIcon) gsap.set(bubbleIcon, { clearProps: 'scale,transformOrigin' });
+                },
+              });
+
+              // Brief beat so the full capsule registers, then the pill's
+              // right edge retracts - the silhouette necks down over the
+              // embedded bubble and pinches off
+              breakTl.to(pill, {
+                paddingRight: 16,
+                duration: 0.22, ease: 'power2.inOut',
+              }, 0.04)
+              // Surface tension: bubble stretches toward the receding edge...
+              .to(backBubble, {
+                scaleX: 1.07, transformOrigin: '100% 50%',
+                duration: 0.08, ease: 'power2.out',
+              }, 0.17)
+              // ...and bounces apart as the shapes let go: quick pop away
+              // from the pill, then an elastic settle back to resting spot
+              .to(backBubble, {
+                scaleX: 1.1, scaleY: 1.06, x: 7,
+                duration: 0.09, ease: 'power2.out',
+              }, 0.26)
+              .to(backBubble, {
+                scaleX: 1, scaleY: 1, x: 0,
+                duration: 0.45, ease: 'elastic.out(1.1, 0.4)',
+              }, 0.35)
+              // Bubble melts dark → orange as the waist narrows
+              .to(backBubble, {
+                background: '#F95F4A',
+                duration: 0.15, ease: 'sine.inOut',
+              }, 0.17)
+              // Back arrow resolves in
+              .to(bubbleIcon, {
+                opacity: 1, scale: 1,
+                duration: 0.14, ease: 'power2.out',
+              }, 0.24)
+              // Title fades in once the pill has separated
+              .to(label, {
+                opacity: 1,
+                duration: 0.22, ease: 'power2.out',
+              }, 0.3)
+              // Pill recoils off the separation - kicks left, springs back
+              .to(pill, {
+                scaleX: 0.97, x: -4, transformOrigin: '100% 50%',
+                duration: 0.07, ease: 'power2.out',
+              }, 0.26)
+              .to(pill, {
+                scaleX: 1, x: 0,
+                duration: 0.35, ease: 'elastic.out(1, 0.45)',
+              }, 0.33)
+              // Shapes fully apart: ease glass back in
+              .add(() => {
+                if (splitWrap) splitWrap.classList.remove('split-active');
+                pill.style.backdropFilter = '';
+                pill.style.webkitBackdropFilter = '';
+                if (backBubble) gsap.set(backBubble, { backdropFilter: '', webkitBackdropFilter: '' });
+              }, 0.34)
+              .to(pill, {
+                backgroundColor: glassBg, borderColor: glassBorder,
+                duration: 0.25, ease: 'power2.out',
+              }, 0.34)
+              .to(backBubble, {
+                borderColor: 'rgba(254, 252, 217, 0.35)',
+                duration: 0.25, ease: 'power2.out',
+              }, 0.34);
+            },
+          });
+        });
+
+        } // end playSubpageIntro
+
+        // Wait for preloader to finish before playing subpage intro
+        window.addEventListener("preloader:done", () => {
+          setTimeout(playSubpageIntro, 250);
+        }, { once: true });
+
+        // ── Subpage hover: pill only (not bubble), debounced ──
+        let hoverTimer = null;
+        pill.addEventListener('mouseenter', () => {
+          clearTimeout(hoverTimer);
+          pill.classList.add('subpage-expanded');
+        });
+        pill.addEventListener('mouseleave', () => {
+          hoverTimer = setTimeout(() => {
+            pill.classList.remove('subpage-expanded');
+          }, 150);
+        });
+      }
+
+      function triggerPillIntro() {
+        if (introFired) return;
+        introFired = true;
+
+        const dots = pill.querySelectorAll(".nav-dot");
+        const navItems = pill.querySelectorAll(".nav-item");
+
+        // Start collapsed as small circle, kill CSS transitions during intro
+        pill.classList.add("pill-collapsed");
+        pill.style.transition = "none";
+        gsap.set(pill, { opacity: 0, y: -24, scale: 0.7 });
+        gsap.set(dots, { opacity: 0 });
+
+        const pillTl = gsap.timeline({
+          onComplete: () => {
+            pill.classList.add("pill-intro-play");
+          },
+        });
+
+        // Phase 1: Circle drops in from above, overshoots down
+        pillTl.to(pill, {
+          opacity: 1,
+          y: 8,
+          scale: 1.05,
+          duration: 0.28,
+          ease: "power2.out",
+        })
+        // Phase 2: Bounce back up
+        .to(pill, {
+          y: -5,
+          scale: 1,
+          duration: 0.16,
+          ease: "power2.inOut",
+        })
+        // Phase 3: Settle + expand circle → pill (Flip)
+        .to(pill, {
+          y: 0,
+          duration: 0.12,
+          ease: "power2.out",
+          onStart: () => {
+            const state = Flip.getState(pill);
+            pill.classList.remove("pill-collapsed");
+
+            Flip.from(state, {
+              duration: 0.38,
+              ease: "power3.out",
+              clearProps: "all",
+              onComplete: () => {
+                // Restore CSS transitions now that intro is done
+                pill.style.transition = "";
+                // Phase 4: Dots stagger in after expansion
+                gsap.to(dots, {
+                  opacity: 1,
+                  duration: 0.2,
+                  ease: "power2.out",
+                  stagger: 0.02,
+                });
+              },
+            });
+          },
+        });
+      }
+
+      // If preloader already shown before, 500ms delay then drop
+      if (sessionStorage.getItem("preloaderShown")) {
+        setTimeout(triggerPillIntro, 250);
+      } else {
+        // First visit - wait for preloader to fully finish
+        window.addEventListener("preloader:done", () => {
+          setTimeout(triggerPillIntro, 250);
+        }, { once: true });
+      }
+    }
+
+  });
+</script>

@@ -1,0 +1,8 @@
+{
+  "name": "CodeChef",
+  "slug": "codechef",
+  "svgFile": "/domains/cc/tools/cc-tool-codechef.svg",
+  "colorHex": "#5B4638",
+  "monochrome": true,
+  "order": 30
+}

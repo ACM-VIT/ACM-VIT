@@ -1,0 +1,43 @@
+{
+  "slug": "devops",
+  "order": 40,
+  "key": "devops",
+  "title": "DevOps",
+  "shortDescription": "Provisioning, key management, deployment and the load-handling that keeps every ACM project standing under traffic.",
+  "longDescription": [
+    "DevOps provisions resources for every project, manages and rotates keys, handles deployment pipelines, and keeps servers standing when traffic spikes during event windows.",
+    "When Cryptic Hunt opens or a hackathon portal goes live, DevOps is the team watching the dashboards, scaling capacity, debugging incidents and making sure none of the work the rest of the chapter shipped goes dark.",
+    "Beyond reactive ops, DevOps owns the long game, monitoring, observability, secrets handling, infrastructure-as-code and the boring discipline that makes the exciting parts of every other AOI possible."
+  ],
+  "cassetteSrc": "/aois/tech/cassettes/aois-tech-cassettes-devops.webp",
+  "tools": [
+    "terraform",
+    "ansible",
+    "helm",
+    "jenkins",
+    "github-actions",
+    "gitlab-ci",
+    "circleci",
+    "argo-cd",
+    "prometheus",
+    "grafana",
+    "traefik",
+    "aws",
+    "azure",
+    "gcp",
+    "opentelemetry",
+    "vault",
+    "consul",
+    "docker",
+    "kubernetes",
+    "nginx",
+    "linux"
+  ],
+  "projects": [
+    {
+      "title": "All ACM-VIT Infra",
+      "cassette": "/cassettes/cassettes-cassette-tech.svg",
+      "desc": "DevOps quietly runs every deployed ACM-VIT project, from the websites and apps you see to the keys, queues and dashboards you do not."
+    }
+  ]
+}

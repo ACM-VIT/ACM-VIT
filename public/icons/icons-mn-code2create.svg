@@ -1,0 +1,41 @@
+<svg width="36" height="40" viewBox="0 0 36 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g filter="url(#filter0_n_680_12918)">
+<g clip-path="url(#clip0_680_12918)">
+<path d="M16.0824 0.45376L1.69375 8.75954C0.64461 9.36456 0 10.4825 0 11.6925V28.3041C0 29.5141 0.64461 30.6321 1.69375 31.2371L16.0824 39.5429C17.1315 40.1479 18.4207 40.1479 19.4699 39.5429L33.8585 31.2371C34.9076 30.6321 35.5522 29.5141 35.5522 28.3041V11.6925C35.5522 10.4825 34.9076 9.36456 33.8585 8.75954L19.4731 0.45376C18.424 -0.151253 17.1315 -0.151253 16.0824 0.45376Z" fill="#FAFBFB"/>
+<path d="M33.2105 28.909V11.0907L17.776 2.17993L2.34155 11.0907V28.909L17.776 37.8165L33.2105 28.909Z" fill="#2C2C2C" stroke="#48BA86" stroke-width="0.153445" stroke-miterlimit="10"/>
+<path d="M17.7959 7.26343L6.77173 13.6259V13.6818L17.7959 19.995V7.26343Z" fill="#D3EBE0"/>
+<path d="M17.7959 19.9951V32.7267L17.8058 32.73L28.8365 26.3609V26.3149L17.7959 19.9951Z" fill="#5EBF94"/>
+<path d="M17.7959 19.9951L6.77173 13.6819V26.3543L17.7959 19.9951Z" fill="#48BA86"/>
+<path d="M6.77173 26.3543V26.3609L17.7959 32.7267V19.9951L6.77173 26.3543Z" fill="#ADDBC8"/>
+<path d="M28.8431 13.6226L17.7959 20.0016V7.25684L28.8431 13.6226Z" fill="#86CCAC"/>
+</g>
+</g>
+<defs>
+<filter id="filter0_n_680_12918" x="0" y="0" width="35.5554" height="40" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feTurbulence type="fractalNoise" baseFrequency="2.5470743179321289 2.5470743179321289" stitchTiles="stitch" numOctaves="3" result="noise" seed="1840" />
+<feColorMatrix in="noise" type="luminanceToAlpha" result="alphaNoise" />
+<feComponentTransfer in="alphaNoise" result="coloredNoise1">
+<feFuncA type="discrete" tableValues="1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 "/>
+</feComponentTransfer>
+<feComposite operator="in" in2="shape" in="coloredNoise1" result="noise1Clipped" />
+<feComponentTransfer in="alphaNoise" result="coloredNoise2">
+<feFuncA type="discrete" tableValues="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 "/>
+</feComponentTransfer>
+<feComposite operator="in" in2="shape" in="coloredNoise2" result="noise2Clipped" />
+<feFlood flood-color="rgba(0, 0, 0, 0.25)" result="color1Flood" />
+<feComposite operator="in" in2="noise1Clipped" in="color1Flood" result="color1" />
+<feFlood flood-color="rgba(255, 255, 255, 0.25)" result="color2Flood" />
+<feComposite operator="in" in2="noise2Clipped" in="color2Flood" result="color2" />
+<feMerge result="effect1_noise_680_12918">
+<feMergeNode in="shape" />
+<feMergeNode in="color1" />
+<feMergeNode in="color2" />
+</feMerge>
+</filter>
+<clipPath id="clip0_680_12918">
+<rect width="35.5555" height="39.9999" fill="white"/>
+</clipPath>
+</defs>
+</svg>

@@ -1,0 +1,8 @@
+{
+  "name": "Linux",
+  "slug": "linux",
+  "svgFile": "/domains/research/tools/research-tool-linux.svg",
+  "colorHex": "#FCC624",
+  "isDark": true,
+  "order": 380
+}

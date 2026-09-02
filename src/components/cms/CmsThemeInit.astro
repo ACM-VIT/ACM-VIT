@@ -1,0 +1,15 @@
+---
+// Pre-paint theme setter. Drop this in <head> BEFORE any styled markup so the
+// stored theme is applied before first paint (no light->dark flash). If the
+// user never chose, we leave [data-theme] off and the CSS media query decides.
+---
+<script is:inline>
+  (function () {
+    try {
+      var t = localStorage.getItem("acm-cms-theme");
+      if (t === "dark" || t === "light") {
+        document.documentElement.setAttribute("data-theme", t);
+      }
+    } catch (e) {}
+  })();
+</script>

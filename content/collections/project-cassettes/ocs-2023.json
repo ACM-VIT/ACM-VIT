@@ -1,0 +1,10 @@
+{
+  "slug": "ocs-2023",
+  "order": 50,
+  "kind": "svg",
+  "name": "OCS 2023",
+  "color": "#9F40DB",
+  "cassetteSvg": "/projects/cassettes/projects-cassettes-ocs-23.svg",
+  "alt": "OCS '23",
+  "url": "/projects/ocs-23"
+}

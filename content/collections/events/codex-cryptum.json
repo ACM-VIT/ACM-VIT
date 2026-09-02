@@ -1,0 +1,108 @@
+{
+  "slug": "codex-cryptum",
+  "title": "Codex Cryptum",
+  "tagline": "Beyond the Obvious",
+  "eyebrow": "ACM-VIT · Cybersecurity Workshop",
+  "themeKey": "cc",
+  "themeColor": "#FF7A01",
+  "hideCtaBanner": true,
+  "cassetteSvg": "/events/events-codex-cryptum-cassette.svg",
+  "shortDescription": "Codex Cryptum is ACM-VIT's cybersecurity workshop series where students learn the basics of cybersecurity, exploits, cryptography, and digital forensics - the perfect preparation for Cryptic Hunt.",
+  "longDescription": [
+    "Codex Cryptum is ACM-VIT's hands-on cybersecurity workshop designed to equip students with the fundamentals of cybersecurity. Across its four editions, participants have learned about exploits, cryptography, steganography, web security, and digital forensics from experienced mentors.",
+    "The workshop grew out of Cryptic Hunt's ecosystem - as the scavenger hunt gained popularity, ACM-VIT recognized the need for a structured learning path that would help participants build the skills to tackle Cryptic Hunt's increasingly complex challenges. Codex Cryptum became that bridge, teaching the techniques behind the puzzles.",
+    "From classical ciphers and encoding schemes to web exploitation and OSINT, Codex Cryptum covers the building blocks that make someone a stronger puzzle solver and a more security-aware developer. It's a natural stepping stone into both Cryptic Hunt and the broader cybersecurity community at VIT."
+  ],
+  "format": "Workshop · Hands-on cybersecurity sessions",
+  "duration": "1 day",
+  "mode": "Hybrid",
+  "audience": "All undergraduate students - no prior security background needed",
+  "team": "Individual",
+  "organizedBy": "ACM-VIT · Cross-domain",
+  "firstHeld": "2021",
+  "recurrence": "Annual · Fall semester",
+  "registrationUrl": "https://codexcryptum.acmvit.in",
+  "primaryCtaLabel": "Visit codexcryptum.acmvit.in",
+  "stats": [
+    {
+      "value": "4",
+      "label": "Editions"
+    }
+  ],
+  "tracks": [
+    {
+      "name": "Cryptography",
+      "description": "Classical ciphers, encoding schemes, hash functions, and cryptanalysis basics."
+    },
+    {
+      "name": "Web Security",
+      "description": "Common web vulnerabilities, OWASP basics, and hands-on exploit walkthroughs."
+    },
+    {
+      "name": "Steganography & Forensics",
+      "description": "Hidden data in images, audio, and files - the skills behind Cryptic Hunt's toughest puzzles."
+    },
+    {
+      "name": "OSINT",
+      "description": "Open-source intelligence gathering, web sleuthing, and digital footprint analysis."
+    }
+  ],
+  "schedule": [],
+  "prizes": [],
+  "highlights": [],
+  "perks": [
+    "Hands-on exercises with guided walkthroughs",
+    "Direct preparation for Cryptic Hunt challenges",
+    "Pathway into ACM-VIT's security study groups"
+  ],
+  "faq": [
+    {
+      "q": "Do I need prior cybersecurity background?",
+      "a": "No. Codex Cryptum starts from the basics and builds up."
+    },
+    {
+      "q": "Is this related to Cryptic Hunt?",
+      "a": "Yes - Codex Cryptum was created as a learning path to help participants build the skills needed for Cryptic Hunt."
+    }
+  ],
+  "instagramHandle": "acmvit",
+  "socials": [
+    {
+      "label": "Instagram · @acmvit",
+      "href": "https://instagram.com/acmvit"
+    },
+    {
+      "label": "Website",
+      "href": "https://codexcryptum.acmvit.in"
+    }
+  ],
+  "pastEditions": [
+    {
+      "year": "2025",
+      "edition": "Codex Cryptum 4.0",
+      "description": "Fourth edition, continuing to build the cybersecurity learning pipeline at VIT."
+    },
+    {
+      "year": "2024",
+      "edition": "Codex Cryptum 3.0",
+      "description": "Third edition held during Gravitas 2024, expanding the workshop's scope and reach.",
+      "links": [
+        {
+          "label": "Portal",
+          "href": "https://codexcryptum.acmvit.in"
+        }
+      ]
+    },
+    {
+      "year": "2023",
+      "edition": "Codex Cryptum 2.0",
+      "description": "Second edition, returning in-person with expanded topics and hands-on labs."
+    },
+    {
+      "year": "2021",
+      "edition": "Codex Cryptum 1.0",
+      "description": "The inaugural edition, conducted online. Laid the foundation for ACM-VIT's cybersecurity workshop series."
+    }
+  ],
+  "order": 40
+}

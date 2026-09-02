@@ -1,0 +1,96 @@
+---
+import type { BlogPost } from '../../lib/blog/types';
+
+interface Props {
+  post: BlogPost;
+  featured?: boolean;
+}
+
+const { post, featured = false } = Astro.props;
+
+const formattedDate = new Date(post.publishedAt).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+});
+
+const internalUrl = `/blogs/${post.source}/${post.slug}`;
+---
+
+<a
+  href={internalUrl}
+  class:list={[
+    'group relative overflow-hidden rounded-2xl border border-white/10 flex flex-col',
+    'bg-white/[0.03] transition-all duration-300',
+    'hover:border-[#F95F4A]/30 hover:bg-white/[0.06] hover:shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:-translate-y-0.5',
+    'text-inherit no-underline',
+  ]}
+>
+  {/* Cover image */}
+  <div
+    class:list={[
+      'relative overflow-hidden',
+      featured ? 'flex-1 min-h-[260px]' : 'h-[140px]',
+    ]}
+  >
+    {post.coverImage ? (
+      <img
+        src={post.coverImage}
+        alt={post.title}
+        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        loading="lazy"
+        decoding="async"
+      />
+    ) : (
+      <div class="w-full h-full bg-gradient-to-br from-[#F95F4A]/20 to-[#F95F4A]/5 flex items-center justify-center">
+        <svg class="w-12 h-12 text-[#F95F4A]/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+      </div>
+    )}
+    {/* Gradient overlay on hover */}
+    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+    {/* Source badge */}
+    <span class="absolute top-3 right-3 px-2.5 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider bg-black/50 text-white/90 backdrop-blur-sm border border-white/10">
+      {post.source}
+    </span>
+  </div>
+
+  {/* Content */}
+  <div class="p-4 sm:p-5">
+    <h3
+      class:list={[
+        "font-['PolySans_Trial'] font-medium text-[#FEFCD9] group-hover:text-[#F95F4A] transition-colors duration-200 leading-tight",
+        featured ? 'text-xl sm:text-2xl' : 'text-base sm:text-lg',
+      ]}
+    >
+      {post.title}
+    </h3>
+
+    {featured && post.brief && (
+      <p class="mt-3 text-sm text-gray-400 leading-relaxed line-clamp-2">
+        {post.brief}
+      </p>
+    )}
+
+    <div class="mt-3 flex items-center gap-3 text-xs text-gray-500 font-mono">
+      <time datetime={post.publishedAt}>{formattedDate}</time>
+      <span class="w-1 h-1 rounded-full bg-gray-600" />
+      <span>{post.readingTime} min read</span>
+    </div>
+
+    {post.tags.length > 0 && (
+      <div class="mt-3 flex flex-wrap gap-1.5">
+        {post.tags.slice(0, 3).map((tag) => (
+          <span class="px-2 py-0.5 rounded-md text-[10px] font-mono uppercase tracking-wide bg-white/5 text-gray-400 border border-white/5">
+            {tag}
+          </span>
+        ))}
+      </div>
+    )}
+  </div>
+
+  {/* Cassette tape hole decorations */}
+  <div class="absolute top-3 left-3 w-2 h-2 rounded-full border border-white/10" />
+  <div class="absolute bottom-3 right-3 w-2 h-2 rounded-full border border-white/10" />
+</a>

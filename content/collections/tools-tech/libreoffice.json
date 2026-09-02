@@ -1,0 +1,8 @@
+{
+  "name": "LibreOffice",
+  "slug": "libreoffice",
+  "svgFile": "/domains/tech/tools/tech-tool-libreoffice.svg",
+  "colorHex": "#18A303",
+  "monochrome": true,
+  "order": 830
+}

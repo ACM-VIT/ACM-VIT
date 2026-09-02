@@ -1,0 +1,8 @@
+{
+  "name": "LLVM",
+  "slug": "llvm",
+  "svgFile": "/domains/research/tools/research-tool-llvm.svg",
+  "colorHex": "#262D3A",
+  "isDark": true,
+  "order": 360
+}

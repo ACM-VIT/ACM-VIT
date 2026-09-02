@@ -1,0 +1,8 @@
+{
+  "name": "Scikit-learn",
+  "slug": "scikit-learn",
+  "svgFile": "/domains/research/tools/research-tool-scikit-learn.svg",
+  "colorHex": "#F7931E",
+  "isDark": true,
+  "order": 80
+}

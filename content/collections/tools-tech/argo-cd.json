@@ -1,0 +1,8 @@
+{
+  "name": "Argo CD",
+  "slug": "argo-cd",
+  "svgFile": "/domains/tech/tools/tech-tool-argo-cd.svg",
+  "colorHex": "#EF7B4D",
+  "monochrome": true,
+  "order": 520
+}

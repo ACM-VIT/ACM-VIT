@@ -1,0 +1,185 @@
+---
+export const prerender = true;
+import DesignLayout from "../../layouts/DesignLayout.astro";
+import { getAssetUrl } from "../../utils/cdn";
+
+const logos = (p: string) => getAssetUrl(`/design/logos/${p}`);
+
+const assets = [
+  { name: "Diamond mark · dark", file: "acm-diamond-dark", bg: "light" },
+  { name: "Diamond mark · white", file: "acm-diamond-white", bg: "dark" },
+  { name: "Horizontal lockup · dark", file: "acm-horizontal-dark", bg: "light", wide: true },
+  { name: "Horizontal lockup · white", file: "acm-horizontal-white", bg: "dark", wide: true },
+  { name: "Stacked lockup · dark", file: "acm-stacked-dark", bg: "light" },
+  { name: "Stacked lockup · white", file: "acm-stacked-white", bg: "dark" },
+  { name: "ACM-W mark · dark", file: "acmw-dark", bg: "light", wide: true },
+  { name: "ACM-W mark · white", file: "acmw-white", bg: "dark", wide: true },
+];
+
+const sizes = [512, 1024, 2048];
+---
+
+<DesignLayout
+  title="Resources"
+  description="Download every ACM-VIT mark in SVG, PNG, and WebP, plus fonts and color values."
+  current="/design/resources"
+>
+  <section class="ds-hero">
+    <div class="ds-kicker"><span class="ds-kicker-pill">Assets · Downloads</span></div>
+    <h1 class="ds-h1">Take the real files.</h1>
+    <p class="ds-body-lg">
+      Every official mark, in every format. SVG for print and product work,
+      PNG when you need raster with transparency, WebP for the web. If you
+      are tempted to screenshot a logo - this page is faster.
+    </p>
+  </section>
+
+  <!-- 01 · Logo files -->
+  <section class="ds-section" id="logos">
+    <div class="ds-sec-head"><span class="ds-sec-num">01</span><h2 class="ds-h2">Logo files</h2></div>
+    <p class="ds-body">
+      PNG and WebP come in 512, 1024, and 2048px widths. SVG scales to
+      anything. Looking for the expressive variants - heritage lockups,
+      colorways, seasonal, pins, and illustrations? Check out the
+      <a href="/design/logosystem" style="color:var(--ds-accent-ink); font-weight:600;">ACM logo system</a>.
+    </p>
+    <div class="ds-bento">
+      {
+        assets.map((a) => (
+          <div class="ds-card ds-b6 ds-reveal" style="padding:0; overflow:hidden;">
+            <div
+              class:list={["ds-specimen-stage", a.bg === "light" && "ds-checker"]}
+              style={`min-height:170px; ${a.bg === "dark" ? "background:#1c1b1a;" : ""}`}
+            >
+              <img
+                src={logos(`${a.file}.svg`)}
+                alt={a.name}
+                style={`max-width:${a.wide ? "72%" : "34%"}; max-height:120px;`}
+                loading="lazy"
+              />
+            </div>
+            <div style="padding:18px 22px 22px;">
+              <h3 class="ds-h4">{a.name}</h3>
+              <div class="ds-dl-rows">
+                <div class="ds-dl-row">
+                  <span class="ds-mono ds-small">SVG</span>
+                  <span class="ds-dl">
+                    <a href={logos(`${a.file}.svg`)} download>vector</a>
+                  </span>
+                </div>
+                <div class="ds-dl-row">
+                  <span class="ds-mono ds-small">PNG</span>
+                  <span class="ds-dl">
+                    {sizes.map((s) => (
+                      <a href={logos(`${a.file}-${s}.png`)} download>{s}</a>
+                    ))}
+                  </span>
+                </div>
+                <div class="ds-dl-row">
+                  <span class="ds-mono ds-small">WebP</span>
+                  <span class="ds-dl">
+                    {sizes.map((s) => (
+                      <a href={logos(`${a.file}-${s}.webp`)} download>{s}</a>
+                    ))}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 02 · Type & color -->
+  <section class="ds-section" id="type-color">
+    <div class="ds-sec-head"><span class="ds-sec-num">02</span><h2 class="ds-h2">Type & color</h2></div>
+    <div class="ds-bento">
+      <div class="ds-card ds-b6 ds-reveal">
+        <h3 class="ds-h4">DM Sans</h3>
+        <p class="ds-body" style="margin-top:6px">
+          The official typeface, free under the Open Font License. Get it from
+          Google Fonts - variable weight 100 to 1000, italics included.
+        </p>
+        <a class="ds-btn ds-btn-outline ds-btn-sm" style="margin-top:16px" href="https://fonts.google.com/specimen/DM+Sans" target="_blank" rel="noopener">
+          fonts.google.com/specimen/DM+Sans ↗
+        </a>
+      </div>
+      <div class="ds-card ds-b6 ds-reveal">
+        <h3 class="ds-h4">Palette as tokens</h3>
+        <p class="ds-body" style="margin-top:6px">
+          Copy the core values, or grab everything from the Color page.
+        </p>
+        <pre class="ds-tokens"><code>--acm-orange: #F95F4A;
+--acm-ink:    #0D0E0D;
+--acm-cream:  #FEFCD9;
+--acm-paper:  #F5EDE4;
+--acm-mark:   #333333;</code></pre>
+        <button class="ds-btn ds-btn-outline ds-btn-sm" id="copy-tokens" style="margin-top:14px" type="button">Copy CSS variables</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 · Rules recap -->
+  <section class="ds-section" id="recap">
+    <div class="ds-sec-head"><span class="ds-sec-num">03</span><h2 class="ds-h2">Before you ship</h2></div>
+    <div class="ds-card ds-card-tonal ds-reveal">
+      <ul class="ds-r-list">
+        <li>Clearspace: <span class="ds-mono">0.25×</span> the diamond's width, all sides.</li>
+        <li>Minimum sizes: 24px diamond, 140px horizontal lockup on screen.</li>
+        <li>Dark mark on light, white mark on dark - nothing else.</li>
+        <li>External partners use these files unmodified. Questions:
+          <a href="mailto:outreach@acmvit.in" style="color:var(--ds-accent-ink); font-weight:600;">outreach@acmvit.in</a>
+        </li>
+      </ul>
+    </div>
+  </section>
+</DesignLayout>
+
+<style>
+  .ds-dl-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .ds-dl-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .ds-dl-row > .ds-mono {
+    width: 42px;
+    flex: none;
+  }
+  .ds-tokens {
+    margin: 14px 0 0;
+    padding: 16px 18px;
+    background: var(--ds-surface-tonal);
+    border-radius: var(--ds-r-sm);
+    font-family: var(--ds-mono);
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: var(--ds-ink);
+    overflow-x: auto;
+  }
+  .ds-r-list {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--ds-ink-2);
+    font-size: 15px;
+    line-height: 1.9;
+  }
+</style>
+
+<script>
+  const tokens = `--acm-orange: #F95F4A;\n--acm-ink: #0D0E0D;\n--acm-cream: #FEFCD9;\n--acm-paper: #F5EDE4;\n--acm-mark: #333333;`;
+  const btn = document.getElementById("copy-tokens");
+  btn?.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(tokens);
+      btn.textContent = "Copied";
+      setTimeout(() => (btn.textContent = "Copy CSS variables"), 1200);
+    } catch {}
+  });
+</script>

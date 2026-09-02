@@ -1,0 +1,7 @@
+{
+  "name": "Prometheus",
+  "slug": "prometheus",
+  "svgFile": "/domains/tech/tools/tech-tool-prometheus.svg",
+  "colorHex": "#E6522C",
+  "order": 530
+}

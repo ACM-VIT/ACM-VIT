@@ -1,0 +1,80 @@
+{
+  "slug": "certify",
+  "title": "Certify",
+  "tagline": "A mass certificate generator with a given design",
+  "eyebrow": "ACM-VIT · Forktober 2021, 2022 · Open Source",
+  "themeColor": "#EFEFEF",
+  "themeColorSecondary": "#1a1a1a",
+  "shortDescription": "A mass certificate generator with a given design",
+  "longDescription": [
+    "A mass certificate generator with a given design",
+    "Certify was part of ACM-VIT's Forktober open-source drive across 2021, 2022, opening up to student contributors during Hacktoberfest.",
+    "The repository is archived. It remains on GitHub as a record of the Forktober edition that ran it, but is no longer accepting new contributions.",
+    "Across its lifetime, the project drew 11 contributors, 13 pull requests and 46 commits."
+  ],
+  "status": "archived",
+  "statusNote": "Forktober 2022 · Archived",
+  "cassetteSvg": "/events/events-forktober-cassette.svg",
+  "stats": [
+    {
+      "value": "11",
+      "label": "Contributors"
+    },
+    {
+      "value": "13",
+      "label": "Pull requests"
+    },
+    {
+      "value": "46",
+      "label": "Commits"
+    },
+    {
+      "value": "4",
+      "label": "Stars"
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Stack",
+      "slugs": [
+        "javascript"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "pranavvdesai"
+    },
+    {
+      "github": "anandamideShakyan"
+    },
+    {
+      "github": "1407arjun"
+    },
+    {
+      "github": "lio2011"
+    },
+    {
+      "github": "SwarupKharul"
+    },
+    {
+      "github": "YashKumarVerma"
+    }
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/ACM-VIT/certify",
+      "kind": "github"
+    }
+  ],
+  "commitGraphSeed": 758,
+  "order": 120
+}

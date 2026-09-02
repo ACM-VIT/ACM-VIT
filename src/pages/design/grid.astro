@@ -1,0 +1,365 @@
+---
+export const prerender = true;
+import DesignLayout from "../../layouts/DesignLayout.astro";
+
+// Column specs from the ACM-VIT Website 2025 Figma file (Grids page):
+// desktop frames at 1512 use 12 / 20 / 108, tablet at 834 uses 8 / 16 / 32,
+// mobile at 440 uses 4 / 8 / 16, all over an 8px baseline row grid.
+// Exact layout-grid values from the Figma Grids page (node 115:107),
+// pulled via the REST API: frames "MacBook Pro 14" (1512 x 982),
+// "iPad Pro 11" (834 x 1194), "iPhone 16 Pro Max" (440 x 956).
+const figmaGrids = [
+  {
+    device: "Desktop",
+    frame: "MacBook Pro 14\"",
+    size: "1512 × 982",
+    w: 1512,
+    h: 982,
+    count: 12,
+    gutter: 20,
+    margin: 108,
+    colw: "≈ 89.7",
+  },
+  {
+    device: "Tablet",
+    frame: "iPad Pro 11\"",
+    size: "834 × 1194",
+    w: 834,
+    h: 1194,
+    count: 8,
+    gutter: 16,
+    margin: 32,
+    colw: "82.25",
+  },
+  {
+    device: "Mobile",
+    frame: "iPhone 16 Pro Max",
+    size: "440 × 956",
+    w: 440,
+    h: 956,
+    count: 4,
+    gutter: 8,
+    margin: 16,
+    colw: "96",
+  },
+];
+
+const breakpoints = [
+  { name: "xs", min: "0", cols: 4, margin: "16", gutter: "8", note: "Phones (Figma ref: iPhone 16 Pro Max, 440)" },
+  { name: "sm", min: "480", cols: 4, margin: "16", gutter: "8", note: "Large phones" },
+  { name: "md", min: "640", cols: 8, margin: "32", gutter: "16", note: "Small tablets" },
+  { name: "lg", min: "768", cols: 8, margin: "32", gutter: "16", note: "Tablets (Figma ref: iPad Pro 11\", 834)" },
+  { name: "xl", min: "1024", cols: 12, margin: "108", gutter: "20", note: "Laptops - chrome and layout flip here" },
+  { name: "2xl", min: "1280", cols: 12, margin: "108 / auto", gutter: "20", note: "Desktops (Figma ref: MacBook Pro 14\", 1512)" },
+];
+---
+
+<DesignLayout
+  title="Grid & Layout"
+  description="ACM-VIT layout grids: columns, margins, gutters, breakpoints, and container rules."
+  current="/design/grid"
+>
+  <section class="ds-hero">
+    <div class="ds-kicker"><span class="ds-kicker-pill">Foundations · Grid</span></div>
+    <h1 class="ds-h1">Twelve columns, one rhythm.</h1>
+    <p class="ds-body-lg">
+      Layouts build on a column grid that grows from 4 columns on phones to 12
+      on desktop, with every measurement snapped to the 4pt rhythm. The same
+      grid drives the website, decks, and print.
+    </p>
+  </section>
+
+  <!-- 01 · Live grid -->
+  <section class="ds-section" id="columns">
+    <div class="ds-sec-head"><span class="ds-sec-num">01</span><h2 class="ds-h2">The column grid</h2></div>
+    <p class="ds-body">
+      This diagram is live - resize the window and watch the column count step
+      down at each breakpoint.
+    </p>
+    <div class="ds-card ds-reveal" style="margin-top:24px;">
+      <div class="ds-grid-demo" id="grid-demo" aria-hidden="true"></div>
+      <p class="ds-small" style="margin-top:14px; text-align:center;" id="grid-label"></p>
+    </div>
+  </section>
+
+  <!-- 02 · Breakpoints -->
+  <section class="ds-section" id="breakpoints">
+    <div class="ds-sec-head"><span class="ds-sec-num">02</span><h2 class="ds-h2">Breakpoints</h2></div>
+    <p class="ds-body">
+      Six canonical stops, matching the Tailwind config used on the website
+      and the reference frames in the ACM-VIT Website 2025 Figma file. The
+      important one is <span class="ds-mono">1024</span>: navigation chrome,
+      docks, and split layouts all flip between mobile and desktop there -
+      never at 768. Vertically, everything sits on an
+      <span class="ds-mono">8px baseline row grid</span>.
+    </p>
+    <div class="ds-card ds-reveal" style="margin-top:24px; padding:0; overflow-x:auto;">
+      <table class="ds-table" style="margin-top:0">
+        <thead>
+          <tr><th>Token</th><th>Min width</th><th>Columns</th><th>Margin</th><th>Gutter</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          {
+            breakpoints.map((b) => (
+              <tr>
+                <td class="ds-mono">{b.name}</td>
+                <td class="ds-mono">{b.min}px</td>
+                <td class="ds-mono">{b.cols}</td>
+                <td class="ds-mono">{b.margin}</td>
+                <td class="ds-mono">{b.gutter}</td>
+                <td>{b.note}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 03 · Figma setup -->
+  <section class="ds-section" id="figma">
+    <div class="ds-sec-head"><span class="ds-sec-num">03</span><h2 class="ds-h2">Setting it up in Figma</h2></div>
+    <p class="ds-body">
+      The reference frames live on the <em>Grids</em> page of the ACM-VIT
+      Website 2025 Figma file. To recreate them, add a
+      <span class="ds-mono">Layout grid</span> to each device frame with
+      exactly these values - the diagrams below are drawn to scale from those
+      frames.
+    </p>
+    <div class="ds-bento">
+      {
+        figmaGrids.map((g) => (
+          <div class="ds-card ds-b4 ds-reveal" style="display:flex; flex-direction:column;">
+            <div style="display:flex; align-items:center; justify-content:center; min-height:255px;">
+              <div
+                class="ds-fig-frame"
+                style={`width:${g.w / 5}px; aspect-ratio:${g.w}/${g.h}; --n:${g.count}; --g:${((g.gutter / g.w) * 100).toFixed(2)}%; --m:${((g.margin / g.w) * 100).toFixed(2)}%;`}
+                aria-hidden="true"
+              >
+                {Array.from({ length: g.count }).map(() => (<span />))}
+              </div>
+            </div>
+            <h3 class="ds-h4" style="margin-top:12px">{g.device}</h3>
+            <p class="ds-small" style="margin-top:2px">
+              {g.frame} frame · <span class="ds-mono">{g.size}</span>
+            </p>
+            <table class="ds-table ds-fig-table" style="margin-top:12px">
+              <tbody>
+                <tr><td>Grid</td><td class="ds-mono">Columns</td></tr>
+                <tr><td>Count</td><td class="ds-mono">{g.count}</td></tr>
+                <tr><td>Type</td><td class="ds-mono">Stretch</td></tr>
+                <tr><td>Width</td><td class="ds-mono">Auto (renders {g.colw})</td></tr>
+                <tr><td>Gutter</td><td class="ds-mono">{g.gutter}</td></tr>
+                <tr><td>Margin</td><td class="ds-mono">{g.margin}</td></tr>
+              </tbody>
+            </table>
+          </div>
+        ))
+      }
+      <div class="ds-card ds-card-tonal ds-reveal">
+        <h3 class="ds-h4">The baseline rows grid</h3>
+        <p class="ds-body" style="margin-top:6px">
+          Every frame also carries a second layout grid for the
+          <span class="ds-mono">8px</span> vertical rhythm - same values at
+          every size. Add it as:
+        </p>
+        <div class="ds-fig-rows">
+          <span>Grid <b class="ds-mono">Rows</b></span>
+          <span>Count <b class="ds-mono">Auto</b></span>
+          <span>Type <b class="ds-mono">Top</b></span>
+          <span>Height <b class="ds-mono">8</b></span>
+          <span>Gutter <b class="ds-mono">8</b></span>
+          <span>Offset <b class="ds-mono">0</b></span>
+        </div>
+        <p class="ds-small" style="margin-top:12px">
+          Grid color for both layers: <span class="ds-mono">#FF0000</span> at
+          <span class="ds-mono">10%</span> opacity.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 · Containers -->
+  <section class="ds-section" id="containers">
+    <div class="ds-sec-head"><span class="ds-sec-num">04</span><h2 class="ds-h2">Containers</h2></div>
+    <div class="ds-bento">
+      <div class="ds-card ds-b4 ds-reveal">
+        <h3 class="ds-h4">Reading container</h3>
+        <p class="ds-body" style="margin-top:6px">
+          <span class="ds-mono">max-width: 720px</span> - long-form text:
+          blogs, codes of conduct, articles.
+        </p>
+      </div>
+      <div class="ds-card ds-b4 ds-reveal">
+        <h3 class="ds-h4">Content container</h3>
+        <p class="ds-body" style="margin-top:6px">
+          <span class="ds-mono">max-width: 1024px</span> - default page
+          content, forms, mixed sections.
+        </p>
+      </div>
+      <div class="ds-card ds-b4 ds-reveal">
+        <h3 class="ds-h4">Wide container</h3>
+        <p class="ds-body" style="margin-top:6px">
+          <span class="ds-mono">max-width: 1280px</span> - galleries, bento
+          grids, hero compositions.
+        </p>
+      </div>
+    </div>
+    <div class="ds-card ds-card-tonal ds-reveal" style="margin-top:14px;">
+      <div class="ds-container-demo" aria-hidden="true">
+        <div style="width:100%"><span>wide · 1280</span></div>
+        <div style="width:80%"><span>content · 1024</span></div>
+        <div style="width:56%"><span>reading · 720</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 · Rules -->
+  <section class="ds-section" id="rules">
+    <div class="ds-sec-head"><span class="ds-sec-num">05</span><h2 class="ds-h2">Layout rules</h2></div>
+    <div class="ds-bento">
+      <div class="ds-card ds-b6 ds-reveal">
+        <span class="ds-chip ds-chip-do" style="margin-bottom:12px">Do</span>
+        <ul class="ds-g-list">
+          <li>Span whole columns; never split a gutter.</li>
+          <li>Flip navigation and split layouts at <span class="ds-mono">1024</span>.</li>
+          <li>Let bento tiles span 4 / 6 / 8 / 12 columns.</li>
+          <li>Keep vertical section spacing on the 4pt scale (see Spacing).</li>
+          <li>Design mobile-first; the grid grows, it doesn't shrink.</li>
+        </ul>
+      </div>
+      <div class="ds-card ds-b6 ds-reveal">
+        <span class="ds-chip ds-chip-dont" style="margin-bottom:12px">Don't</span>
+        <ul class="ds-g-list">
+          <li>No arbitrary breakpoints ("looks right at 937px").</li>
+          <li>No full-bleed text - text always sits inside a container.</li>
+          <li>No 5- or 7-column arrangements; factors of 12 only.</li>
+          <li>No horizontal scroll, ever, at any width.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</DesignLayout>
+
+<style>
+  .ds-grid-demo {
+    display: grid;
+    gap: var(--demo-gutter, 24px);
+    grid-template-columns: repeat(var(--demo-cols, 12), 1fr);
+    min-height: 180px;
+  }
+  .ds-grid-demo :global(span) {
+    background: var(--ds-purple-tonal);
+    border: 1px solid #e3d3f7;
+    border-radius: 8px;
+  }
+  :global(html[data-theme="dark"]) .ds-grid-demo :global(span) {
+    border-color: var(--ds-line-2);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 8px;
+    font-size: 11px;
+    font-weight: 640;
+    color: var(--ds-purple);
+  }
+  .ds-fig-frame {
+    display: grid;
+    grid-template-columns: repeat(var(--n), 1fr);
+    gap: var(--g);
+    padding-inline: var(--m);
+    background: #ffffff;
+    border: 1px solid var(--ds-line-2);
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(28, 27, 26, 0.07);
+    background-image: repeating-linear-gradient(
+      to bottom,
+      rgba(255, 0, 0, 0.05) 0,
+      rgba(255, 0, 0, 0.05) 1.6px,
+      transparent 1.6px,
+      transparent 3.2px
+    );
+  }
+  .ds-fig-frame span {
+    background: rgba(255, 0, 0, 0.1);
+  }
+  .ds-fig-table td {
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 13px;
+  }
+  .ds-fig-rows {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .ds-fig-rows span {
+    background: var(--ds-surface);
+    border: 1px solid var(--ds-line-2);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 13px;
+    color: var(--ds-ink-2);
+  }
+  .ds-fig-rows b {
+    color: var(--ds-ink);
+    font-weight: 660;
+    margin-left: 4px;
+  }
+  .ds-container-demo {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+  .ds-container-demo > div {
+    background: var(--ds-surface);
+    border: 1px solid var(--ds-line-2);
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+  }
+  .ds-container-demo span {
+    font-size: 12px;
+    font-weight: 620;
+    color: var(--ds-ink-3);
+    font-family: var(--ds-mono);
+  }
+  .ds-g-list {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--ds-ink-2);
+    font-size: 14.5px;
+    line-height: 1.7;
+  }
+  .ds-g-list li + li {
+    margin-top: 6px;
+  }
+</style>
+
+<script>
+  const demo = document.getElementById("grid-demo");
+  const label = document.getElementById("grid-label");
+  const stops = [
+    { min: 1024, cols: 12, gutter: 20, name: "xl / 2xl" },
+    { min: 640, cols: 8, gutter: 16, name: "md / lg" },
+    { min: 0, cols: 4, gutter: 8, name: "xs / sm" },
+  ];
+  const render = () => {
+    if (!demo || !label) return;
+    const w = demo.clientWidth;
+    // demo mirrors viewport tiers at reduced widths
+    const stop =
+      w >= 820 ? stops[0] : w >= 480 ? stops[1] : stops[2];
+    demo.style.setProperty("--demo-cols", String(stop.cols));
+    demo.style.setProperty("--demo-gutter", stop.gutter + "px");
+    demo.innerHTML = Array.from(
+      { length: stop.cols },
+      (_, i) => `<span>${i + 1}</span>`,
+    ).join("");
+    label.textContent = `${stop.cols} columns · ${stop.gutter}px gutters (${stop.name})`;
+  };
+  render();
+  addEventListener("resize", render);
+</script>

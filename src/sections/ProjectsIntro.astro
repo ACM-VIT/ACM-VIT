@@ -1,0 +1,150 @@
+<section
+  id="projects-intro"
+  class="w-full min-h-[55vh] md:min-h-screen flex items-center justify-center px-6 py-16 md:py-0"
+>
+  <div
+    class="w-full max-w-6xl flex justify-start reveal-text-container font-polysans"
+  >
+    <p
+      class="leading-[1.5] max-[640px]:leading-[1.4] max-[480px]:leading-[1.35]"
+    >
+      <span
+        class="text-[#F95F4A] text-xl md:text-2xl lg:text-2xl font-light split-text
+               max-[640px]:text-lg
+               max-[480px]:text-base"
+        >At ACM VIT, we conduct structured project cycles throughout the year to
+        foster innovation, hands-on learning, and creative problem-solving.
+      </span><span
+        class="text-white text-xl md:text-2xl lg:text-2xl font-light split-text
+               max-[640px]:text-lg
+               max-[480px]:text-base"
+        >These project cycles reflect the diversity of technologies explored
+        within the chapter and encourage members to push boundaries, experiment
+        boldly, and grow through real-world application. Through these projects,
+        we also aim to create meaningful community impact by building solutions
+        that address real-world challenges and contribute beyond the campus.</span
+      >
+    </p>
+  </div>
+</section>
+
+<style>
+  .font-polysans {
+    font-family: "PolySans Trial", sans-serif;
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const container = document.querySelector(".reveal-text-container");
+
+  if (container) {
+    const splitTextElements = container.querySelectorAll(".split-text");
+
+    // Split text into words for each span
+    splitTextElements.forEach((element) => {
+      const text = element.textContent || "";
+      element.innerHTML = text
+        .split(/(\s+)/)
+        .map((word) => {
+          if (word.match(/^\s+$/)) return word;
+          return `<span class="inline-block word">${word}</span>`;
+        })
+        .join("");
+    });
+    if (typeof window !== "undefined") {
+      if (window.innerWidth < 768) {
+        gsap.fromTo(
+          container,
+          {
+            transformOrigin: "0% 50%",
+            rotate: 3,
+            force3D: true, // Force GPU acceleration
+          },
+          {
+            ease: "none",
+            rotate: 0,
+            force3D: true, // Force GPU acceleration
+            willChange: "transform", // Hint browser
+            scrollTrigger: {
+              trigger: container,
+              start: "top 120%", // Adjusted to start earlier
+              end: "top center", // Finish rotation while text still in view
+              scrub: 1,
+            },
+          }
+        );
+
+        // Collect all words from all spans for unified stagger
+        const allWords = container.querySelectorAll(".word");
+
+        gsap.fromTo(
+          allWords,
+          {
+            opacity: 0.1,
+            willChange: "opacity", // Optimized will-change
+          },
+          {
+            ease: "none",
+            opacity: 1,
+            stagger: 0.05,
+            scrollTrigger: {
+              trigger: container,
+              start: "top 120%", // Adjusted to start earlier
+              end: "top center", // Finish darkening while text still in view
+              scrub: 1,
+            },
+          }
+        );
+      } else {
+        gsap.fromTo(
+          container,
+          {
+            transformOrigin: "0% 50%",
+            rotate: 3,
+            force3D: true, // Force GPU acceleration
+          },
+          {
+            ease: "none",
+            rotate: 0,
+            force3D: true, // Force GPU acceleration
+            willChange: "transform", // Hint browser
+            scrollTrigger: {
+              trigger: container,
+              start: "top 80%", // Adjusted to start earlier
+              end: "top center", // Finish rotation while text still in view
+              scrub: 1,
+            },
+          }
+        );
+
+        // Collect all words from all spans for unified stagger
+        const allWords = container.querySelectorAll(".word");
+
+        gsap.fromTo(
+          allWords,
+          {
+            opacity: 0.1,
+            willChange: "opacity", // Optimized will-change
+          },
+          {
+            ease: "none",
+            opacity: 1,
+            stagger: 0.05,
+            scrollTrigger: {
+              trigger: container,
+              start: "top 80%", // Adjusted to start earlier
+              end: "top center", // Finish darkening while text still in view
+              scrub: 1,
+            },
+          }
+        );
+      }
+    }
+  }
+  // Container Animation (Rotation)
+</script>

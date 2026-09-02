@@ -1,0 +1,149 @@
+---
+/**
+ * SectionHeading - reusable animated section title.
+ * Theme: cream (#FEFCD9) text, red (#F95F4A) accent, PolySans Trial.
+ * Scroll-triggered reveal: title words rise + clip-reveal, accent bar
+ * wipes in. Light-mode compatible via globals.css token overrides.
+ *
+ * Usage:
+ *   <SectionHeading title="Our" accent="Projects"
+ *     subtitle="Some of our popular projects" />
+ */
+export interface Props {
+  /** Leading (non-accent) part of the title. */
+  title: string;
+  /** Highlighted part of the title, rendered in the accent color. */
+  accent?: string;
+  /** Optional supporting line below the title. */
+  subtitle?: string;
+  /** Text alignment. */
+  align?: "left" | "center";
+  /** Accent color override. */
+  accentColor?: string;
+  /** Drop the space between title and accent - for mid-word two-tone splits. */
+  joinAccent?: boolean;
+  class?: string;
+}
+
+const {
+  title,
+  accent = "",
+  subtitle,
+  align = "center",
+  accentColor = "#F95F4A",
+  joinAccent = false,
+  class: className = "",
+} = Astro.props;
+
+const alignClasses =
+  align === "center"
+    ? "items-center text-center mx-auto"
+    : "items-start text-left";
+---
+
+<div
+  class:list={[
+    "section-heading flex w-full max-w-5xl flex-col gap-4 px-6",
+    alignClasses,
+    className,
+  ]}
+  style={`--accent: ${accentColor};`}
+  data-section-heading
+>
+  <h2
+    class="sh-title m-0 font-['PolySans_Trial',sans-serif] text-4xl font-bold uppercase leading-[0.95] tracking-[-0.03em] text-[#FEFCD9] sm:text-6xl lg:text-7xl"
+  >
+    {joinAccent ? (
+      <span class="sh-word inline-block">{title}<span class="text-[var(--accent)]">{accent}</span></span>
+    ) : (
+      <Fragment>
+        {title && <span class="sh-word mr-[0.28em] inline-block">{title}</span>}
+        {accent && <span class="sh-word inline-block text-[var(--accent)]">{accent}</span>}
+      </Fragment>
+    )}
+  </h2>
+
+  <span
+    class="sh-bar block h-[3px] w-24 origin-left rounded-full bg-[var(--accent)]"
+  ></span>
+
+  {
+    subtitle && (
+      <p class="sh-subtitle m-0 max-w-2xl font-['PolySans_Trial',sans-serif] text-base font-light leading-relaxed text-[#FEFCD9]/75 sm:text-lg">
+        {subtitle}
+      </p>
+    )
+  }
+</div>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function initSectionHeadings() {
+    document
+      .querySelectorAll<HTMLElement>("[data-section-heading]")
+      .forEach((heading) => {
+        if (heading.dataset.shInit) return;
+        heading.dataset.shInit = "1";
+
+        const words = heading.querySelectorAll(".sh-word");
+        const bar = heading.querySelector(".sh-bar");
+        const subtitle = heading.querySelector(".sh-subtitle");
+
+        gsap.set(words, { yPercent: 110, opacity: 0 });
+        gsap.set(bar, { scaleX: 0 });
+        if (subtitle) gsap.set(subtitle, { opacity: 0, y: 16 });
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: heading,
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+          },
+        });
+
+        tl.to(words, {
+          yPercent: 0,
+          opacity: 1,
+          duration: 0.8,
+          ease: "power3.out",
+          stagger: 0.12,
+        }).to(bar, { scaleX: 1, duration: 0.6, ease: "power3.out" }, "-=0.4");
+
+        if (subtitle)
+          tl.to(
+            subtitle,
+            { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
+            "-=0.3",
+          );
+      });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initSectionHeadings);
+  } else {
+    initSectionHeadings();
+  }
+  // Re-run after the responsive variant host clones its template into the DOM.
+  window.addEventListener("variants-mounted", () => initSectionHeadings());
+</script>
+
+<style>
+  /* Clip the rising words so they reveal from behind the baseline. */
+  .sh-title {
+    overflow: hidden;
+    /* Horizontal breathing room so bold edge glyphs (leading M, trailing S)
+       aren't clipped by overflow:hidden. Negative margin cancels it for layout
+       so alignment with the accent bar is unchanged. */
+    padding: 0 0.14em 0.08em;
+    margin-inline: -0.14em;
+  }
+
+  /* Light mode: cream text with opacity modifiers needs explicit dark color. */
+  :global(html[data-theme="light"]) .sh-subtitle {
+    color: rgba(26, 26, 26, 0.72) !important;
+  }
+</style>

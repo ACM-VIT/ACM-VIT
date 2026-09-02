@@ -1,0 +1,12 @@
+{
+  "slug": "1",
+  "order": 0,
+  "id": "1",
+  "title": "Code2Create",
+  "date": "2026-07-05",
+  "startTime": "10:00",
+  "endTime": "18:00",
+  "domain": "tech",
+  "description": "ACM-VIT's flagship 24-hour hackathon bringing together 500+ developers to build, innovate, and create.",
+  "location": "Anna Auditorium, VIT Vellore"
+}

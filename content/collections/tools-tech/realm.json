@@ -1,0 +1,8 @@
+{
+  "name": "Realm",
+  "slug": "realm",
+  "svgFile": "/domains/tech/tools/tech-tool-realm.svg",
+  "colorHex": "#39477F",
+  "monochrome": true,
+  "order": 410
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Docker",
+  "slug": "docker",
+  "svgFile": "/domains/research/tools/research-tool-docker.svg",
+  "colorHex": "#2496ED",
+  "isDark": true,
+  "order": 370
+}

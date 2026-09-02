@@ -1,0 +1,39 @@
+{
+  "slug": "sdg-workshops",
+  "title": "SDG Workshops",
+  "tagline": "Building tech solutions for sustainable development goals.",
+  "eyebrow": "ACM-VIT · VIT SDG Week",
+  "themeKey": "tech",
+  "themeColor": "#00689D",
+  "themeColorSecondary": "#E5243B",
+  "hideCtaBanner": true,
+  "cassetteSvg": "/events/events-sdg-cassette.webp",
+  "shortDescription": "Every year during VIT's SDG Week, ACM-VIT conducts hands-on workshops where students build MERN stack solutions addressing one of the United Nations' Sustainable Development Goals.",
+  "longDescription": [
+    "SDG Workshops are conducted by ACM-VIT every year as part of VIT's SDG Week. Each edition focuses on one of the United Nations' 17 Sustainable Development Goals, challenging students to build real tech solutions that address pressing global issues - from clean energy and quality education to responsible consumption and climate action.",
+    "The workshops use the MERN stack (MongoDB, Express, React, Node.js) as the foundation, chosen for its accessibility and versatility so that even beginners can get up to speed quickly. ACM-VIT members guide participants through the entire process - from understanding the problem statement to building and deploying a working solution. The event bridges the gap between learning to code and applying those skills to create meaningful social impact."
+  ],
+  "format": "Workshop · Hands-on Build",
+  "duration": "1–2 sessions",
+  "mode": "Offline",
+  "audience": "All students",
+  "team": "Individual",
+  "organizedBy": "ACM-VIT",
+  "recurrence": "Annual · VIT SDG Week",
+  "registrationUrl": "https://instagram.com/acmvit",
+  "primaryCtaLabel": "Follow ACM-VIT",
+  "stats": [],
+  "tracks": [],
+  "schedule": [],
+  "prizes": [],
+  "highlights": [],
+  "perks": [],
+  "faq": [],
+  "socials": [
+    {
+      "label": "Instagram · @acmvit",
+      "href": "https://instagram.com/acmvit"
+    }
+  ],
+  "order": 170
+}

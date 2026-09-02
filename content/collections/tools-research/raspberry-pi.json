@@ -1,0 +1,8 @@
+{
+  "name": "Raspberry Pi",
+  "slug": "raspberry-pi",
+  "svgFile": "/domains/research/tools/research-tool-raspberry-pi.svg",
+  "colorHex": "#A22846",
+  "isDark": true,
+  "order": 320
+}

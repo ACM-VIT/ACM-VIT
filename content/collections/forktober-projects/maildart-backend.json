@@ -1,0 +1,78 @@
+{
+  "slug": "maildart-backend",
+  "title": "MailDart Backend",
+  "tagline": "A mass mailer operating through a given set of emails in JSON",
+  "eyebrow": "ACM-VIT · Forktober 2021, 2022 · Open Source",
+  "themeColor": "#EFEFEF",
+  "themeColorSecondary": "#1a1a1a",
+  "shortDescription": "A mass mailer operating through a given set of emails in JSON",
+  "longDescription": [
+    "A mass mailer operating through a given set of emails in JSON",
+    "MailDart Backend was part of ACM-VIT's Forktober open-source drive across 2021, 2022, opening up to student contributors during Hacktoberfest.",
+    "The repository is archived. It remains on GitHub as a record of the Forktober edition that ran it, but is no longer accepting new contributions.",
+    "Across its lifetime, the project drew 6 contributors, 6 pull requests and 11 commits."
+  ],
+  "status": "archived",
+  "statusNote": "Forktober 2022 · Archived",
+  "cassetteSvg": "/events/events-forktober-cassette.svg",
+  "stats": [
+    {
+      "value": "6",
+      "label": "Contributors"
+    },
+    {
+      "value": "6",
+      "label": "Pull requests"
+    },
+    {
+      "value": "11",
+      "label": "Commits"
+    },
+    {
+      "value": "3",
+      "label": "Stars"
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Stack",
+      "slugs": [
+        "javascript",
+        "nodejs"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "decipher07"
+    },
+    {
+      "github": "YashKumarVerma"
+    },
+    {
+      "github": "Mannan-Goyal"
+    },
+    {
+      "github": "1407arjun"
+    },
+    {
+      "github": "MaheraFurniturewala"
+    }
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/ACM-VIT/maildart-backend",
+      "kind": "github"
+    }
+  ],
+  "commitGraphSeed": 603,
+  "order": 140
+}

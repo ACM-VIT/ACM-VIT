@@ -1,0 +1,407 @@
+---
+export const prerender = false; // gated behind login
+import "../../styles/globals.css";
+import "../../styles/cms-theme.css";
+import { requireCmsAuth } from "../../platform/access/guard";
+import CmsThemeInit from "../../components/cms/CmsThemeInit.astro";
+import CmsThemeToggle from "../../components/cms/CmsThemeToggle.astro";
+
+const gate = requireCmsAuth(Astro);
+if (gate) return gate;
+
+// Editor onboarding, delivered as a guided tour. First login lands here (see
+// /cms redirect); a left stepper walks through it one step at a time with
+// Back/Next, and "Skip tour" / "Finish" set the cms_tour_done cookie and drop
+// the editor on the dashboard. The deep technical reference stays in PLATFORM.md.
+type Step = { id: string; label: string; sub: string; icon: string };
+const steps: Step[] = [
+  { id: "what",    label: "What this is",       sub: "The platform in a minute", icon: "grid" },
+  { id: "login",   label: "Getting in",         sub: "Signing into the Studio",  icon: "key" },
+  { id: "model",   label: "How it's organised", sub: "Collections & singletons", icon: "layers" },
+  { id: "edit",    label: "Editing",            sub: "Make a change, step by step", icon: "pencil" },
+  { id: "recipes", label: "Common jobs",        sub: "The things you'll do most", icon: "list" },
+  { id: "publish", label: "Publishing",         sub: "How changes go live",      icon: "rocket" },
+  { id: "rules",   label: "Rules & gotchas",    sub: "Stay out of trouble",      icon: "alert" },
+  { id: "dev",     label: "For developers",     sub: "Where the schema lives",   icon: "code" },
+];
+
+const collections = [
+  ["Pages", "Free-form pages that ship at /p/<slug>"],
+  ["Events", "Event detail pages + the homepage events section"],
+  ["Projects", "Project detail pages and the homepage showcase"],
+  ["Domains & AOIs", "The five domains and their areas of interest"],
+  ["Tools", "The tech-stack chips shown per domain"],
+  ["People", "Current board, historical boards, speakers, partners"],
+  ["FAQs", "The categorised questions on /faqs"],
+  ["Site config & redirects", "Global settings and URL redirects"],
+];
+
+const recipes = [
+  { t: "Add an event", s: [
+    "Open Events -> New entry.",
+    "Fill title, date, description, cover image.",
+    "Save. It appears at /events/<slug> and in the events section.",
+  ]},
+  { t: "Add a board member", s: [
+    "Open People -> Board · current year -> New entry.",
+    "Add name, role, photo (uploads into /board) and socials.",
+    "Order controls where they sit on the team page.",
+  ]},
+  { t: "Update a domain page", s: [
+    "Open Domains & AOIs -> the domain singleton.",
+    "Edit the hero copy, stats and description.",
+    "Tools and AOIs are separate collections linked by slug.",
+  ]},
+  { t: "Redirect an old URL", s: [
+    "Open Site config & redirects -> Redirects.",
+    "Add from, to and 301 (permanent) or 302 (temporary).",
+    "The redirect is emitted on the next build - old links never 404.",
+  ]},
+];
+
+const ICONS: Record<string, string> = {
+  grid: '<path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/>',
+  key: '<circle cx="7.5" cy="15.5" r="4.5"/><path d="M10.7 12.3 21 2M16 7l3 3M14 9l3 3"/>',
+  layers: '<path d="M12 2 2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>',
+  pencil: '<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+  list: '<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
+  rocket: '<path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09zM12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>',
+  alert: '<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4M12 17h.01"/>',
+  code: '<path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>',
+  arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+};
+const icon = (name: string) =>
+  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICONS[name] ?? ICONS.grid}</svg>`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Welcome tour · ACM-VIT Content Studio</title>
+    <link rel="icon" href="/favicon.ico" />
+    <CmsThemeInit />
+  </head>
+  <body>
+    <!-- ══ Slim top bar ══ -->
+    <header class="tbar">
+      <a class="brand" href="/">
+        <img src="/logos/logos-acm-logo-black.webp" alt="" width="26" height="26" />
+        <span>ACM<b>·</b>VIT <em>Studio</em></span>
+      </a>
+      <span class="tbar-tag">Welcome tour</span>
+      <div class="tbar-right">
+        <button class="btn-skip" type="button" data-skip>Skip tour</button>
+        <CmsThemeToggle />
+      </div>
+    </header>
+
+    <!-- ══ Tour: stepper (left) + step content (right) ══ -->
+    <div class="tour">
+      <!-- Left: prominent vertical stepper -->
+      <aside class="stepper" aria-label="Tour steps">
+        <p class="stepper-head">Getting started</p>
+        <ol class="stepper-list">
+          {steps.map((s, n) => (
+            <li>
+              <button class="step" type="button" data-step={s.id} data-i={n}>
+                <span class="step-dot"><span class="step-n">{n + 1}</span><span class="step-ok" set:html={icon("check")}></span></span>
+                <span class="step-txt"><b>{s.label}</b><em>{s.sub}</em></span>
+              </button>
+            </li>
+          ))}
+        </ol>
+        <a class="stepper-foot" href="/cms/dashboard">Go to dashboard -&gt;</a>
+      </aside>
+
+      <!-- Right: one step at a time -->
+      <main class="stage">
+        <div class="stage-inner">
+          <!-- What -->
+          <section class="panel" data-panel="what">
+            <span class="eyebrow-n">Step 1</span>
+            <h1>Run the site without touching code</h1>
+            <p class="lede">
+              Everything on acmvit is content in one place. You edit it in a visual admin,
+              hit save, and it ships on the next deploy - the platform refuses to build bad
+              content, so you can't take the site down.
+            </p>
+            <div class="flow">
+              <span>You edit in <code>/keystatic</code></span><i>-&gt;</i>
+              <span>Saved as content</span><i>-&gt;</i>
+              <span>Validated on build</span><i>-&gt;</i>
+              <span>Live on the site</span>
+            </div>
+          </section>
+
+          <!-- Getting in -->
+          <section class="panel" data-panel="login">
+            <span class="eyebrow-n">Step 2</span>
+            <h1>Getting in</h1>
+            <ol>
+              <li>Go to <a href="/cms">the Content Studio</a> and choose <strong>Sign in with GitHub</strong>.</li>
+              <li>In production you sign in with the chapter <strong>GitHub</strong> account - access is whoever has rights to the content repo.</li>
+              <li>Running locally there is no login; the admin opens straight away.</li>
+            </ol>
+            <p class="callout">After signing in you land on the <a href="/cms/dashboard">dashboard</a> - the map of every collection and singleton you can edit.</p>
+          </section>
+
+          <!-- Model -->
+          <section class="panel" data-panel="model">
+            <span class="eyebrow-n">Step 3</span>
+            <h1>How content is organised</h1>
+            <p>Two shapes, and that is the whole mental model:</p>
+            <div class="cards">
+              <div class="card"><h3>Collections</h3><p>Many entries of the same kind - events, projects, board members. You add, edit and remove entries.</p></div>
+              <div class="card"><h3>Singletons</h3><p>One-off pages and settings - a domain page, the homepage sections, site config. You edit the one that exists.</p></div>
+            </div>
+            <table class="tbl">
+              <thead><tr><th>Where</th><th>What it controls</th></tr></thead>
+              <tbody>{collections.map(([w, d]) => (<tr><td>{w}</td><td>{d}</td></tr>))}</tbody>
+            </table>
+          </section>
+
+          <!-- Editing -->
+          <section class="panel" data-panel="edit">
+            <span class="eyebrow-n">Step 4</span>
+            <h1>Editing, step by step</h1>
+            <ol>
+              <li>Open a collection or singleton from the dashboard or the Keystatic sidebar.</li>
+              <li>For a collection, pick an entry or hit <strong>New entry</strong>.</li>
+              <li>Fill the fields. Required ones are marked; images upload straight into the right public folder.</li>
+              <li>Press <strong>Save</strong>. Your change is committed to content.</li>
+              <li>It goes live on the next deploy (next step).</li>
+            </ol>
+            <p class="callout">Draft, publish-from and publish-until fields let you stage content ahead of time - a future publish date keeps an entry hidden until then, automatically.</p>
+          </section>
+
+          <!-- Recipes -->
+          <section class="panel" data-panel="recipes">
+            <span class="eyebrow-n">Step 5</span>
+            <h1>Common jobs</h1>
+            <div class="cards">
+              {recipes.map((r) => (
+                <div class="card"><h3>{r.t}</h3><ol class="tight">{r.s.map((step) => <li>{step}</li>)}</ol></div>
+              ))}
+            </div>
+          </section>
+
+          <!-- Publishing -->
+          <section class="panel" data-panel="publish">
+            <span class="eyebrow-n">Step 6</span>
+            <h1>Publishing & going live</h1>
+            <p>
+              Saving stores your change. It appears on <a href="https://acmvit.juxtaryct.com">the live site</a>
+              after the next build + deploy, which validates and compiles all content first. If a deploy runs
+              on every push, saving is all you do; otherwise a maintainer runs the deploy.
+            </p>
+            <p class="callout">Editors on a review role save to a <code>studio/*</code> branch and open a pull request - a publisher merges it before it ships. Publishers merge their own.</p>
+          </section>
+
+          <!-- Rules -->
+          <section class="panel" data-panel="rules">
+            <span class="eyebrow-n">Step 7</span>
+            <h1>Rules & gotchas</h1>
+            <ul class="rules">
+              <li><strong>The one rule:</strong> content changes happen in <code>/keystatic</code>, never by hand-editing generated files.</li>
+              <li><strong>Broken links can't ship.</strong> If an entry points at something that doesn't exist, the build fails with a clear message instead of shipping a dead page.</li>
+              <li><strong>Slugs are forever-ish.</strong> Change a slug and the old URL breaks - add a redirect at the same time.</li>
+              <li><strong>Images:</strong> upload through the form; they land in the correct <code>public/</code> folder automatically. Heavy media is served from the CDN.</li>
+              <li><strong>Drafts stay hidden</strong> until published - safe to prepare content early.</li>
+            </ul>
+          </section>
+
+          <!-- Developers -->
+          <section class="panel" data-panel="dev">
+            <span class="eyebrow-n">Step 8</span>
+            <h1>For developers</h1>
+            <p>The schema registry is the single source of truth; the admin, types and validation all follow from it.</p>
+            <ul class="code-list">
+              <li><code>npm run content:compile</code> - validate + regenerate <code>src/generated/*</code></li>
+              <li><code>npm run dev</code> - runs the compile, serves the site + <code>/keystatic</code></li>
+              <li>Add a collection in <code>src/platform/schema/registry.ts</code> - the admin UI follows.</li>
+              <li>Full reference: <code>PLATFORM.md</code>; deploying: <code>DEPLOYMENT.md</code>.</li>
+            </ul>
+            <p class="callout">That's the tour. Hit <strong>Finish</strong> and you'll drop onto the dashboard, ready to edit.</p>
+          </section>
+        </div>
+
+        <!-- Footer controls -->
+        <footer class="tour-foot">
+          <button class="btn-ghost" type="button" data-prev>&lt;- Back</button>
+          <div class="progress">
+            <span class="progress-bar"><i data-bar></i></span>
+            <span class="progress-txt" data-ptext>Step 1 of {steps.length}</span>
+          </div>
+          <button class="btn-primary" type="button" data-next>Next <i set:html={icon("arrow")}></i></button>
+        </footer>
+      </main>
+    </div>
+
+    <style is:global>
+      * { box-sizing: border-box; }
+      body { margin: 0; background: var(--c-bg); color: var(--c-ink); font-family: "PolySans Trial", Inter, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+      a { color: inherit; text-decoration: none; }
+
+      /* ── Slim top bar ── */
+      .tbar { position: sticky; top: 0; z-index: 30; display: flex; align-items: center; gap: 1rem; height: 3.4rem;
+        padding: 0 clamp(1rem, 3vw, 1.6rem); background: var(--c-nav-bg); backdrop-filter: blur(14px); border-bottom: 1px solid var(--c-line); }
+      .brand { display: flex; align-items: center; gap: .5rem; font-weight: 600; font-size: .98rem; }
+      .brand img { border-radius: 6px; }
+      .brand b { color: var(--c-accent); font-weight: 700; }
+      .brand em { font-style: normal; color: var(--c-muted); font-weight: 400; }
+      .tbar-tag { font-size: .74rem; font-weight: 600; color: var(--c-accent-ink); background: var(--c-accent); padding: .12rem .6rem; border-radius: 999px; }
+      .tbar-right { display: flex; align-items: center; gap: .6rem; margin-left: auto; }
+      .btn-skip { font: inherit; font-size: .86rem; color: var(--c-text); background: none; border: 1px solid var(--c-line); padding: .4rem .8rem; border-radius: 8px; cursor: pointer; transition: color .15s, border-color .15s; }
+      .btn-skip:hover { color: var(--c-accent); border-color: var(--c-accent); }
+
+      /* ── Tour layout ── */
+      .tour { display: grid; grid-template-columns: 18rem 1fr; max-width: 78rem; margin: 0 auto; min-height: calc(100vh - 3.4rem); }
+
+      /* Left stepper - the prominent navigation */
+      .stepper { border-right: 1px solid var(--c-line); padding: 1.6rem 1rem; display: flex; flex-direction: column; position: sticky; top: 3.4rem; align-self: start; height: calc(100vh - 3.4rem); }
+      .stepper-head { font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--c-muted); margin: .2rem .6rem 1rem; }
+      .stepper-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .1rem; flex: 1; counter-reset: none; }
+      .step { position: relative; width: 100%; display: flex; align-items: center; gap: .7rem; text-align: left; cursor: pointer; font: inherit;
+        background: none; border: none; padding: .55rem .6rem; border-radius: 10px; color: var(--c-text); transition: background .15s; }
+      /* connector line between dots */
+      .stepper-list li:not(:last-child) .step::before { content: ""; position: absolute; left: calc(.6rem + 13px); top: 2.1rem; width: 2px; height: calc(100% - 1.2rem); background: var(--c-line); }
+      .step-dot { position: relative; z-index: 1; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; flex: none;
+        background: var(--c-surface); border: 1.5px solid var(--c-line); color: var(--c-muted); font-size: .8rem; font-weight: 600; }
+      .step-dot .step-ok { display: none; width: 14px; height: 14px; }
+      .step-dot .step-ok svg { width: 14px; height: 14px; }
+      .step-txt { display: flex; flex-direction: column; min-width: 0; }
+      .step-txt b { font-weight: 500; font-size: .9rem; color: var(--c-ink); }
+      .step-txt em { font-style: normal; font-size: .76rem; color: var(--c-muted); }
+      .step:hover { background: var(--c-accent-soft); }
+      /* active */
+      .step.is-active { background: var(--c-accent-soft); }
+      .step.is-active .step-dot { background: var(--c-accent); border-color: var(--c-accent); color: var(--c-accent-ink); }
+      .step.is-active .step-txt b { color: var(--c-accent); }
+      /* done */
+      .step.is-done .step-dot { background: var(--c-accent); border-color: var(--c-accent); color: var(--c-accent-ink); }
+      .step.is-done .step-dot .step-n { display: none; }
+      .step.is-done .step-dot .step-ok { display: block; }
+      .stepper-foot { margin-top: 1rem; padding: .6rem; font-size: .84rem; color: var(--c-muted); border-top: 1px solid var(--c-line); }
+      .stepper-foot:hover { color: var(--c-accent); }
+
+      /* Right stage */
+      .stage { display: flex; flex-direction: column; min-width: 0; }
+      .stage-inner { flex: 1; padding: clamp(1.8rem, 4vw, 3.2rem) clamp(1.2rem, 4vw, 3rem); max-width: 46rem; }
+      .panel { display: none; animation: fade .28s ease; }
+      .panel.is-active { display: block; }
+      @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+      .eyebrow-n { font-size: .74rem; font-weight: 600; letter-spacing: .08em; color: var(--c-accent); text-transform: uppercase; }
+      .panel h1 { font-size: clamp(1.7rem, 3.4vw, 2.4rem); line-height: 1.06; letter-spacing: -.03em; margin: .5rem 0 1rem; }
+      .panel h3 { font-size: 1.05rem; margin: 0 0 .5rem; }
+      .panel p { line-height: 1.65; color: var(--c-text); }
+      .lede { font-size: 1.08rem; }
+      .panel a { color: var(--c-accent); font-weight: 500; }
+      .panel a:hover { text-decoration: underline; }
+      .panel code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .85em; background: var(--c-code-bg); padding: .12em .42em; border-radius: 5px; color: var(--c-code-fg); }
+      .panel ol, .panel ul { line-height: 1.7; color: var(--c-text); padding-left: 1.2rem; }
+      .panel li { margin: .35rem 0; }
+
+      .flow { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; margin-top: 1.6rem; font-size: .86rem; }
+      .flow span { background: var(--c-surface); border: 1px solid var(--c-line); padding: .5rem .85rem; border-radius: 10px; box-shadow: 0 4px 14px -10px var(--c-shadow); color: var(--c-ink); }
+      .flow i { color: var(--c-accent); font-style: normal; font-weight: 700; }
+
+      .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.2rem 0; }
+      .card { background: var(--c-surface); border: 1px solid var(--c-line); border-radius: 14px; padding: 1.2rem 1.3rem; }
+      .card p { margin: 0; font-size: .95rem; color: var(--c-text); }
+      .card ol.tight { margin: 0; padding-left: 1.1rem; font-size: .92rem; }
+
+      .tbl { width: 100%; border-collapse: collapse; margin-top: .6rem; font-size: .94rem; }
+      .tbl th { text-align: left; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--c-muted); padding: .5rem .6rem; }
+      .tbl td { padding: .55rem .6rem; border-top: 1px solid var(--c-line); vertical-align: top; color: var(--c-text); }
+      .tbl td:first-child { font-weight: 500; white-space: nowrap; color: var(--c-ink); }
+
+      .callout { margin-top: 1.2rem; padding: 1rem 1.2rem; background: var(--c-callout-bg); border-left: 3px solid var(--c-accent); border-radius: 0 10px 10px 0; }
+      .rules li { margin: .55rem 0; }
+      .code-list { list-style: none; padding: 0; }
+      .code-list li { margin: .5rem 0; }
+
+      /* Footer controls */
+      .tour-foot { position: sticky; bottom: 0; display: flex; align-items: center; gap: 1rem; padding: 1rem clamp(1.2rem, 4vw, 3rem);
+        background: var(--c-nav-bg); backdrop-filter: blur(14px); border-top: 1px solid var(--c-line); }
+      .progress { flex: 1; display: flex; flex-direction: column; gap: .35rem; max-width: 22rem; }
+      .progress-bar { height: 6px; border-radius: 999px; background: var(--c-line); overflow: hidden; }
+      .progress-bar i { display: block; height: 100%; width: 12.5%; background: var(--c-accent); border-radius: 999px; transition: width .3s ease; }
+      .progress-txt { font-size: .78rem; color: var(--c-muted); }
+      .btn-ghost, .btn-primary { font: inherit; font-size: .9rem; cursor: pointer; border-radius: 10px; display: inline-flex; align-items: center; gap: .4rem; transition: background .15s, color .15s, border-color .15s, opacity .15s; }
+      .btn-ghost { background: none; border: 1px solid var(--c-line); color: var(--c-text); padding: .55rem 1rem; }
+      .btn-ghost:hover { border-color: var(--c-accent); color: var(--c-accent); }
+      .btn-ghost:disabled { opacity: .4; cursor: not-allowed; }
+      .btn-ghost:disabled:hover { border-color: var(--c-line); color: var(--c-text); }
+      .btn-primary { background: var(--c-accent); border: 1px solid var(--c-accent); color: var(--c-accent-ink); padding: .55rem 1.2rem; font-weight: 500; }
+      .btn-primary:hover { background: var(--c-accent-strong); border-color: var(--c-accent-strong); }
+      .btn-primary i { width: 15px; height: 15px; } .btn-primary i svg { width: 15px; height: 15px; }
+
+      @media (max-width: 860px) {
+        .tour { grid-template-columns: 1fr; }
+        .stepper { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--c-line); padding: 1rem; }
+        .stepper-list { flex-direction: row; overflow-x: auto; gap: .3rem; scrollbar-width: none; }
+        .stepper-list::-webkit-scrollbar { display: none; }
+        .stepper-list li:not(:last-child) .step::before { display: none; }
+        .step { flex: none; }
+        .step-txt em { display: none; }
+        .stepper-head, .stepper-foot { display: none; }
+        .cards { grid-template-columns: 1fr; }
+      }
+    </style>
+
+    <script>
+      // Guided-tour controller: one step visible at a time, driven by the left
+      // stepper and Back/Next. Skip/Finish set the cms_tour_done cookie so the
+      // /cms redirect stops routing here and the editor lands on the dashboard.
+      const order = [...document.querySelectorAll<HTMLElement>(".step[data-step]")].map((s) => s.dataset.step!);
+      const stepBtns = [...document.querySelectorAll<HTMLElement>(".step[data-step]")];
+      const panels = [...document.querySelectorAll<HTMLElement>(".panel[data-panel]")];
+      const prevBtn = document.querySelector<HTMLButtonElement>("[data-prev]")!;
+      const nextBtn = document.querySelector<HTMLButtonElement>("[data-next]")!;
+      const bar = document.querySelector<HTMLElement>("[data-bar]")!;
+      const ptext = document.querySelector<HTMLElement>("[data-ptext]")!;
+      const total = order.length;
+      let i = 0;
+
+      function finishCookie() {
+        try { document.cookie = "cms_tour_done=1; path=/; max-age=31536000; samesite=lax"; } catch (e) {}
+      }
+
+      function render() {
+        const id = order[i];
+        panels.forEach((p) => p.classList.toggle("is-active", p.dataset.panel === id));
+        stepBtns.forEach((b, n) => {
+          b.classList.toggle("is-active", n === i);
+          b.classList.toggle("is-done", n < i);
+        });
+        bar.style.width = `${((i + 1) / total) * 100}%`;
+        ptext.textContent = `Step ${i + 1} of ${total}`;
+        prevBtn.disabled = i === 0;
+        nextBtn.innerHTML = i === total - 1
+          ? 'Finish <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'
+          : 'Next <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+        history.replaceState(null, "", `#${id}`);
+      }
+
+      function go(n: number) { i = Math.max(0, Math.min(total - 1, n)); render(); document.querySelector(".stage-inner")?.scrollIntoView({ behavior: "smooth", block: "start" }); }
+
+      stepBtns.forEach((b, n) => b.addEventListener("click", () => go(n)));
+      prevBtn.addEventListener("click", () => go(i - 1));
+      nextBtn.addEventListener("click", () => {
+        if (i === total - 1) { finishCookie(); location.href = "/cms/dashboard"; return; }
+        go(i + 1);
+      });
+      document.querySelector("[data-skip]")?.addEventListener("click", () => { finishCookie(); location.href = "/cms/dashboard"; });
+      document.querySelector(".stepper-foot")?.addEventListener("click", finishCookie);
+
+      const start = order.indexOf(location.hash.slice(1));
+      i = start >= 0 ? start : 0;
+      render();
+    </script>
+  </body>
+</html>

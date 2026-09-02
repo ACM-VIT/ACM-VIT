@@ -1,0 +1,299 @@
+---
+import { getAssetUrl } from "../utils/cdn";
+import FillButton from "../components/ui/FillButton.astro";
+const fallbackEmail = "hello@acmvit.in";
+const rawEndpoint = (import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? "").trim();
+const formAction = rawEndpoint ? undefined : `mailto:${fallbackEmail}`;
+
+// Keep in sync with the desktop ContactUs form field set.
+const SUBJECTS = [
+  "General Inquiry",
+  "Collaboration",
+  "Sponsorship",
+  "Join ACM",
+  "Event Info",
+  "Feedback",
+  "Other",
+];
+---
+
+<section class="w-full px-4 py-12">
+  <div
+    class="mx-auto max-w-xl rounded-4xl border border-white/15 bg-white/4 p-6 text-white shadow-[0_15px_45px_rgba(0,0,0,0.45)]"
+  >
+    <div class="mb-5 text-center">
+      <h3 class="text-3xl font-semibold uppercase">Contact us!</h3>
+      <p class="mt-2 text-xs uppercase tracking-[0.45em] text-white/60">
+        Say Hello!
+      </p>
+    </div>
+
+    <form
+      class="flex flex-col gap-3 text-sm"
+      method="POST"
+      novalidate
+      id="contact-form-mobile"
+    >
+      <div class="flex flex-col gap-3 sm:flex-row sm:gap-3">
+        <label
+          class="flex flex-col gap-1.5 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-white/60"
+        >
+          First Name
+          <input
+            type="text"
+            name="firstName"
+            required
+            class="rounded-2xl border-2 border-dashed border-white/35 bg-transparent px-4 py-2.5 text-sm font-normal tracking-normal normal-case text-white outline-none transition focus:border-[#F95F4A]"
+          />
+        </label>
+        <label
+          class="flex flex-col gap-1.5 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-white/60"
+        >
+          Last Name
+          <input
+            type="text"
+            name="lastName"
+            class="rounded-2xl border-2 border-dashed border-white/35 bg-transparent px-4 py-2.5 text-sm font-normal tracking-normal normal-case text-white outline-none transition focus:border-[#F95F4A]"
+          />
+        </label>
+      </div>
+
+      <label
+        class="flex flex-col gap-1.5 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-white/60"
+      >
+        Email
+        <input
+          type="email"
+          name="email"
+          required
+          class="rounded-2xl border-2 border-dashed border-white/35 bg-transparent px-4 py-2.5 text-sm font-normal tracking-normal normal-case text-white outline-none transition focus:border-[#F95F4A]"
+        />
+      </label>
+
+      <label
+        class="flex flex-col gap-1.5 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-white/60"
+      >
+        Phone
+        <input
+          type="tel"
+          name="phone"
+          inputmode="tel"
+          pattern="^[0-9+()\s-]{7,}$"
+          class="rounded-2xl border-2 border-dashed border-white/35 bg-transparent px-4 py-2.5 text-sm font-normal tracking-normal normal-case text-white outline-none transition focus:border-[#F95F4A]"
+        />
+      </label>
+
+      <label
+        class="flex flex-col gap-1.5 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-white/60"
+      >
+        Organization
+        <input
+          type="text"
+          name="organization"
+          class="rounded-2xl border-2 border-dashed border-white/35 bg-transparent px-4 py-2.5 text-sm font-normal tracking-normal normal-case text-white outline-none transition focus:border-[#F95F4A]"
+        />
+      </label>
+
+      <label
+        class="flex flex-col gap-1.5 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-white/60"
+      >
+        Subject
+        <select
+          name="subject"
+          required
+          class="rounded-2xl border-2 border-dashed border-white/35 bg-transparent px-4 py-2.5 text-sm font-normal tracking-normal normal-case text-white outline-none transition focus:border-[#F95F4A] appearance-none cursor-pointer"
+        >
+          <option value="" disabled selected class="text-black">Select...</option>
+          {SUBJECTS.map((s) => <option value={s} class="text-black">{s}</option>)}
+        </select>
+      </label>
+
+      <label
+        class="flex flex-col gap-1.5 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-white/60"
+      >
+        Message
+        <textarea
+          name="message"
+          rows="4"
+          required
+          class="rounded-2xl border-2 border-dashed border-white/35 bg-transparent px-4 py-2.5 text-sm font-normal tracking-normal normal-case text-white outline-none transition focus:border-[#F95F4A]"
+        ></textarea>
+      </label>
+
+      <div class="mt-2 flex flex-col items-center gap-2">
+        <FillButton type="submit" label="Submit" class="contact-submit" />
+        <p
+          id="contact-status-mobile"
+          class="contact-status-mobile hidden text-center text-xs"
+          role="status"
+          aria-live="polite"
+        ></p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById(
+    "contact-form-mobile"
+  ) as HTMLFormElement;
+  if (form) {
+    // Ctrl/Cmd + Enter submits from any field (incl. textarea newlines)
+    form.addEventListener("keydown", (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+        e.preventDefault();
+        form.requestSubmit();
+      }
+    });
+
+    const statusEl = document.getElementById(
+      "contact-status-mobile"
+    ) as HTMLElement | null;
+
+    // ---- Custom validation (no native bubble) ----
+    const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+    const isValidPhone = (v: string) => /^[+\d][\d\s\-()]{6,}$/.test(v);
+
+    const fieldOf = (name: string) =>
+      form.querySelector(`[name="${name}"]`) as
+        | HTMLInputElement
+        | HTMLSelectElement
+        | HTMLTextAreaElement
+        | null;
+
+    const markError = (el: Element | null) => {
+      if (!el) return;
+      el.classList.remove("contact-field-error");
+      void (el as HTMLElement).offsetWidth; // reflow to restart shake
+      el.classList.add("contact-field-error");
+      el.setAttribute("aria-invalid", "true");
+    };
+    const clearError = (el: Element | null) => {
+      el?.classList.remove("contact-field-error");
+      el?.removeAttribute("aria-invalid");
+    };
+
+    form.querySelectorAll("input, select, textarea").forEach((el) => {
+      el.addEventListener("input", () => clearError(el));
+      el.addEventListener("change", () => clearError(el));
+    });
+
+    function validate(): { ok: boolean; message: string; first: Element | null } {
+      const checks: { name: string; test: (v: string) => boolean }[] = [
+        { name: "firstName", test: (v) => v.trim().length > 0 },
+        { name: "email", test: (v) => isValidEmail(v.trim()) },
+        { name: "subject", test: (v) => v.trim().length > 0 },
+        { name: "message", test: (v) => v.trim().length > 0 },
+        { name: "phone", test: (v) => v.trim() === "" || isValidPhone(v.trim()) },
+      ];
+
+      let first: Element | null = null;
+      let emailBad = false;
+      let phoneOnly = false;
+      for (const c of checks) {
+        const el = fieldOf(c.name);
+        const val = el ? String((el as HTMLInputElement).value) : "";
+        if (!c.test(val)) {
+          markError(el);
+          if (!first) {
+            first = el;
+            if (c.name === "phone") phoneOnly = true;
+          }
+          if (c.name === "email" && val.trim()) emailBad = true;
+        } else {
+          clearError(el);
+        }
+      }
+
+      if (!first) return { ok: true, message: "", first: null };
+      let message = "Please fill in the required fields.";
+      if (phoneOnly) message = "That doesn't look like a valid phone number.";
+      else if (emailBad) message = "That doesn't look like a valid email.";
+      return { ok: false, message, first };
+    }
+
+    const showStatus = (msg: string, cls: string) => {
+      if (!statusEl) return;
+      statusEl.textContent = msg;
+      statusEl.className = `contact-status-mobile text-center text-xs ${cls}`;
+    };
+    const hideStatus = () => {
+      if (!statusEl) return;
+      statusEl.textContent = "";
+      statusEl.className = "contact-status-mobile hidden text-center text-xs";
+    };
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const result = validate();
+      if (!result.ok) {
+        showStatus(result.message, "text-red-400");
+        (result.first as HTMLElement | null)?.focus();
+        return;
+      }
+
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn ? submitBtn.innerHTML : "Submit";
+      const setSubmitting = (submitting: boolean) => {
+        if (!submitBtn) return;
+        submitBtn.innerHTML = submitting ? "Sending..." : originalBtnText;
+        (submitBtn as HTMLButtonElement).disabled = submitting;
+      };
+
+      setSubmitting(true);
+
+      const formData = new FormData(form);
+      // Handle radio buttons specifically if needed, but Object.fromEntries handles it if checked
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        const response = await fetch("/api/contact", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+
+        if (response.ok) {
+          form.reset();
+          showStatus("Thanks! We'll get back to you.", "text-emerald-300");
+        } else {
+          const resData = await response.json();
+          console.warn(`Failed to send message: ${resData.message || "Error"}`);
+          showStatus("Something went wrong. Please try again.", "text-red-400");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        showStatus("Something went wrong. Please try again.", "text-red-400");
+      } finally {
+        setSubmitting(false);
+        setTimeout(hideStatus, 3500);
+      }
+    });
+  }
+</script>
+
+<style>
+  /* Custom validation error state: red border + shake nudge. */
+  #contact-form-mobile .contact-field-error {
+    border-color: #ef4444 !important;
+    border-style: solid !important;
+    animation: contact-mobile-shake 0.4s ease;
+  }
+
+  @keyframes contact-mobile-shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-5px); }
+    40% { transform: translateX(5px); }
+    60% { transform: translateX(-3px); }
+    80% { transform: translateX(3px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #contact-form-mobile .contact-field-error {
+      animation: none;
+    }
+  }
+</style>

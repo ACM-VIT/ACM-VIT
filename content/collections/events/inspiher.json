@@ -1,0 +1,121 @@
+{
+  "slug": "inspiher",
+  "title": "inspiHer",
+  "tagline": "if they can you can too",
+  "eyebrow": "ACM-W VIT · Podcast & Speaker Series",
+  "themeKey": "management",
+  "themeColor": "#CE307D",
+  "hideCtaBanner": true,
+  "cassetteSvg": "/events/events-inspiher-cassette.svg",
+  "isAcmW": true,
+  "shortDescription": "inspiHer is ACM-VIT's flagship podcast and speaker series organized under ACM-W, created to showcase the journeys of accomplished women in technology, research, entrepreneurship, design, and STEM through candid conversations.",
+  "longDescription": [
+    "inspiHer is ACM-VIT's flagship podcast and speaker series organized under ACM-W (Association for Computing Machinery - Women's Chapter). It was created to showcase the journeys of accomplished women in technology, research, entrepreneurship, design, and STEM, while making these stories accessible to students through candid conversations rather than formal lectures.",
+    "The series is built around the idea that seeing successful women in technology discuss their experiences can inspire more students - especially women - to pursue careers in computing and leadership. Each episode explores the speaker's career journey, college experiences, breaking into the tech industry, challenges faced as women in STEM, work-life balance, leadership experiences, building communities, and advice for students.",
+    "Unlike a technical workshop where the focus is on learning a technology, inspiHer focuses on the people behind the technology. The conversations are intentionally informal so students can relate to the speaker's experiences. It extends beyond coding into leadership, entrepreneurship, mental health, communication, and personal growth."
+  ],
+  "format": "Podcast & Speaker Series",
+  "duration": "Ongoing series",
+  "mode": "Online",
+  "audience": "All students - focused on inspiring women in STEM",
+  "team": "Individual",
+  "organizedBy": "ACM-W VIT · Women's Chapter",
+  "recurrence": "4 seasons to date",
+  "registrationUrl": "https://acmvit.in/events",
+  "primaryCtaLabel": "Watch on YouTube",
+  "stats": [
+    {
+      "value": "4",
+      "label": "Seasons"
+    }
+  ],
+  "tracks": [],
+  "schedule": [],
+  "prizes": [],
+  "highlights": [],
+  "perks": [
+    "Career guidance through real experiences",
+    "Relatable role models for aspiring engineers",
+    "Conversations on leadership, entrepreneurship, and personal growth"
+  ],
+  "faq": [
+    {
+      "q": "What is inspiHer?",
+      "a": "A podcast and speaker series by ACM-W VIT showcasing the journeys of accomplished women in technology through candid conversations."
+    },
+    {
+      "q": "Where can I watch?",
+      "a": "All seasons are available on YouTube."
+    }
+  ],
+  "instagramHandle": "acmvit",
+  "socials": [
+    {
+      "label": "Season 1 · YouTube",
+      "href": "https://www.youtube.com/playlist?list=PLW6zTUiVTfF6iqZGfuKruN5iNN5u6XBmX"
+    },
+    {
+      "label": "Season 2 · YouTube",
+      "href": "https://www.youtube.com/playlist?list=PLW6zTUiVTfF7hyT1BWL3RMspLHU0CWMJu"
+    },
+    {
+      "label": "Season 3 · YouTube",
+      "href": "https://www.youtube.com/watch?v=FJvIf-I8PfI&list=PLW6zTUiVTfF6nWF-p0pWokPr3Z6U5I0d1"
+    },
+    {
+      "label": "Season 4 · YouTube",
+      "href": "https://www.youtube.com/playlist?list=PLW6zTUiVTfF77nYKDBsZGS2sDbjmX_UyP"
+    },
+    {
+      "label": "Instagram · @acmvit",
+      "href": "https://instagram.com/acmvit"
+    }
+  ],
+  "pastEditions": [
+    {
+      "year": "Season 4",
+      "edition": "inspiHer Season 4",
+      "description": "Fourth season of the podcast and speaker series.",
+      "links": [
+        {
+          "label": "YouTube Playlist",
+          "href": "https://www.youtube.com/playlist?list=PLW6zTUiVTfF77nYKDBsZGS2sDbjmX_UyP"
+        }
+      ]
+    },
+    {
+      "year": "Season 3",
+      "edition": "inspiHer Season 3",
+      "description": "Third season continuing the candid conversations with women in tech.",
+      "links": [
+        {
+          "label": "YouTube Playlist",
+          "href": "https://www.youtube.com/watch?v=FJvIf-I8PfI&list=PLW6zTUiVTfF6nWF-p0pWokPr3Z6U5I0d1"
+        }
+      ]
+    },
+    {
+      "year": "Season 2",
+      "edition": "inspiHer Season 2",
+      "description": "Second season expanding the range of speakers and topics.",
+      "links": [
+        {
+          "label": "YouTube Playlist",
+          "href": "https://www.youtube.com/playlist?list=PLW6zTUiVTfF7hyT1BWL3RMspLHU0CWMJu"
+        }
+      ]
+    },
+    {
+      "year": "Season 1",
+      "edition": "inspiHer Season 1",
+      "description": "The inaugural season that launched the podcast series.",
+      "links": [
+        {
+          "label": "YouTube Playlist",
+          "href": "https://www.youtube.com/playlist?list=PLW6zTUiVTfF6iqZGfuKruN5iNN5u6XBmX"
+        }
+      ]
+    }
+  ],
+  "order": 70
+}

@@ -1,0 +1,10 @@
+{
+  "slug": "acm-github-bot",
+  "title": "ACM GitHub Bot",
+  "repo": "acm-github-bot",
+  "years": [
+    2021
+  ],
+  "description": "Github bot for ACM Organization",
+  "order": 220
+}

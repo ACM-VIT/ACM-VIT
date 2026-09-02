@@ -1,17 +1,24 @@
 {
-  "name": "acmvit-website",
+  "name": "content-platform-acm-vit",
   "compatibility_date": "2026-01-01",
   "compatibility_flags": [
     "nodejs_compat"
   ],
   "main": "dist/_worker.js/index.js",
+  "workers_dev": false,
+  "routes": [
+    {
+      "pattern": "acmvit.juxtaryct.com",
+      "custom_domain": true
+    }
+  ],
   "assets": {
     "directory": "dist",
     "binding": "ASSETS"
   },
   "vars": {
-    "KEYSTATIC_GITHUB_REPO_OWNER": "ACM-VIT",
-    "KEYSTATIC_GITHUB_REPO_NAME": "ACM-VIT"
+    "KEYSTATIC_GITHUB_REPO_OWNER": "JuxtaRYCT",
+    "KEYSTATIC_GITHUB_REPO_NAME": "ACM-VIT-website-yash"
   },
   "observability": {
     "enabled": false,

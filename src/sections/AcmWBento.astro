@@ -1,0 +1,107 @@
+---
+import { getAssetUrl } from "../utils/cdn";
+---
+
+<section
+  class="w-full h-screen relative overflow-hidden select-none"
+>
+  <img
+    src={getAssetUrl("/acmw/acmw-hero.webp")}
+    alt="ACM-W"
+    class="acmw-hero-img absolute inset-0 w-full h-full object-cover"
+    loading="lazy"
+    decoding="async"
+  />
+
+  <!-- She Codes. -->
+  <div class="absolute top-[5%] left-[4%] sm:left-[5%]">
+    <p class="acmw-hero-text leading-[0.9]">
+      She<br />Codes.
+    </p>
+  </div>
+
+  <!-- She Leads. -->
+  <div class="absolute bottom-[5%] right-[4%] sm:right-[5%] text-right">
+    <p class="acmw-hero-text leading-[0.9]">
+      She<br />Leads.
+    </p>
+  </div>
+
+  <!-- Tubelight under the bento -->
+  <div
+    class="relative flex items-center justify-center -mt-37.5 -mb-65 max-[480px]:-mt-2.5 max-[480px]:-mb-30"
+  >
+    <img
+      id="bento-tubelight"
+      src={getAssetUrl("/effects/effects-white-tubelight.webp")}
+      alt="Decorative tubelight"
+      loading="lazy"
+      decoding="async"
+      class="w-[85vw] max-w-360 opacity-0 select-none z-[-100] rotate-180
+             mask-[radial-gradient(circle,black_20%,transparent_75%)]
+             mask-no-repeat mask-center mask-contain
+             max-[480px]:w-[98vw] max-[480px]:max-w-none"
+    />
+  </div>
+</section>
+
+<style>
+  /* Face (profile eye/nose/lips) sits at ~55-78% horizontally in the 16:9 art.
+     object-cover crops the sides on narrow viewports, so bias the focal point
+     toward the face as the screen narrows. Widest desktop shows the whole
+     image, so center is fine there. */
+  .acmw-hero-img {
+    object-position: 64% 45%; /* narrow / portrait phones - lock onto face */
+  }
+
+  @media (min-aspect-ratio: 1/1) {
+    .acmw-hero-img {
+      object-position: 58% 42%; /* landscape tablets / short windows */
+    }
+  }
+
+  @media (min-aspect-ratio: 16/10) {
+    .acmw-hero-img {
+      object-position: center; /* wide desktop - full image visible */
+    }
+  }
+
+  .acmw-hero-text {
+    font-family: "PolySans Bulky Wide", sans-serif;
+    font-weight: 700;
+    color: #e8346c;
+    font-size: clamp(2.2rem, 7vw, 6rem);
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const light = document.getElementById("bento-tubelight");
+    if (!light) return;
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: light,
+        start: "top 80%",
+        end: "top 55%",
+        scrub: false,
+        once: true,
+      },
+    });
+
+    tl.to(light, { opacity: 0, duration: 0.3 })
+      .to(light, { opacity: 0.35, duration: 0.09 })
+      .to(light, { opacity: 0, duration: 0.08 })
+      .to(light, { opacity: 0.55, duration: 0.12 })
+      .to(light, { opacity: 0.12, duration: 0.08 })
+      .to(light, { opacity: 0.65, duration: 0.14 })
+      .to(light, { opacity: 0.2, duration: 0.1 })
+      .to(light, { opacity: 0.75, duration: 0.16 })
+      .to(light, { opacity: 0.3, duration: 0.09 })
+      .to(light, { opacity: 1, duration: 0.5, ease: "power2.out" });
+  });
+</script>

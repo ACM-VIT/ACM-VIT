@@ -1,0 +1,8 @@
+{
+  "name": "ESP-IDF",
+  "slug": "esp-idf",
+  "svgFile": "/domains/research/tools/research-tool-esp-idf.svg",
+  "colorHex": "#E7352C",
+  "isDark": true,
+  "order": 290
+}

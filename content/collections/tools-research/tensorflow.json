@@ -1,0 +1,7 @@
+{
+  "name": "TensorFlow",
+  "slug": "tensorflow",
+  "svgFile": "/domains/research/tools/research-tool-tensorflow.svg",
+  "colorHex": "#FF6F00",
+  "order": 20
+}

@@ -1,0 +1,328 @@
+{
+  "slug": "ocs-25",
+  "title": "OS",
+  "tagline": "Recruitment, but it's an entire operating system.",
+  "eyebrow": "ACM-VIT · 2025 · Organising Committee Selections",
+  "themeColor": "#DCA2C4",
+  "themeColorSecondary": "#600EC7",
+  "shortDescription": "ACM-VIT's 2025 OCS portal, rebuilt as a full macOS-style desktop in the browser. Window management, tiling, a menu bar, an honest dock, working terminal, real apps for every domain - and a fair amount of hidden games.",
+  "longDescription": [
+    "OS is ACM-VIT's organising committee selections portal for 2025, and it's the most ambitious recruitment site the chapter has shipped. The whole interface is a macOS-style desktop running in a browser tab.",
+    "It ships the things a real OS ships: a top menu bar with system status and clocks, an animated dock, draggable and resizable windows, tiling and stacking, a working terminal, a Finder-style file explorer, a Photos app for chapter memories, a Notes app, a Calculator, a Calendar, and Settings - including a wallpaper picker and theme switcher.",
+    "Every recruitment domain runs as its own dedicated app instead of a generic form. The App domain opens inside an App Store clone. Web opens inside a GitHub-styled repo browser. Competitive Coding runs in a LeetCode-style problem view with a Monaco editor. Design opens as a Figma-styled canvas. Research lives inside a Reddit-style subreddit. Management runs as a Discord server with channels and polls.",
+    "There are real games in here. A 2048 tile clone. ACM Draws - a multiplayer scribble game built on top of socket.io with the same feature set as skribbl.io. And DOOM, embedded and playable.",
+    "There's also a FaceTime-style scheduler for interview slots - applicants pick a time and the call card flips like a real ringing call.",
+    "Easter eggs are scattered across the entire OS. Hidden apps, hidden dock items, secret terminal commands, secret keyboard shortcuts, and at least one app that only opens if you go looking. The bar set by previous OCS sites has been thoroughly cleared.",
+    "Under the hood: Next.js 16 with the App Router on React 19, Prisma 6 talking to CockroachDB, NextAuth v5 for auth, AWS S3 + CloudFront for asset delivery, socket.io for the multiplayer scribble game, the Monaco Editor for the LeetCode app, and a Radix + shadcn/ui + Tailwind base. Window dragging, tiling and resizing are powered by react-rnd, animations by Framer Motion, and the whole thing leans on next-mdx-remote for in-app content."
+  ],
+  "status": "archived",
+  "statusNote": "Recruitment cycle closed",
+  "cassetteSvg": "/projects/projects-cover.svg",
+  "gallery": [
+    {
+      "src": "/projects/ocs-25/projects-ocs-25-screen-1.webp",
+      "alt": "OS desktop"
+    },
+    {
+      "src": "/projects/ocs-25/projects-ocs-25-screen-2.webp",
+      "alt": "OS app window"
+    },
+    {
+      "src": "/projects/ocs-25/projects-ocs-25-screen-3.webp",
+      "alt": "OS domain app"
+    },
+    {
+      "src": "/projects/ocs-25/projects-ocs-25-screen-4.webp",
+      "alt": "OS terminal / scheduler"
+    },
+    {
+      "src": "/projects/ocs-25/projects-ocs-25-screen-5.webp",
+      "alt": "OS game view"
+    },
+    {
+      "src": "/projects/ocs-25/projects-ocs-25-screen-6.webp",
+      "alt": "OS settings / wallpaper"
+    }
+  ],
+  "galleryLayout": "landscape",
+  "stats": [
+    {
+      "value": "2025",
+      "label": "Year"
+    },
+    {
+      "value": "Web",
+      "label": "Platform"
+    },
+    {
+      "value": "macOS",
+      "label": "Theme"
+    },
+    {
+      "value": "6 domain apps",
+      "label": "Recruitment flow"
+    }
+  ],
+  "features": [
+    {
+      "title": "macOS desktop in a tab",
+      "description": "Menu bar, dock, draggable + resizable + tiled windows, system tray, working terminal. The full shell."
+    },
+    {
+      "title": "App Store - App domain",
+      "description": "Mobile app recruitment runs inside an App Store clone with featured cards, ratings and install flow."
+    },
+    {
+      "title": "GitHub - Web domain",
+      "description": "Web domain opens as a GitHub repo, with README, file tree and contribution flow as the recruitment form."
+    },
+    {
+      "title": "LeetCode - CC domain",
+      "description": "Competitive Coding runs inside a LeetCode-style problem view backed by the Monaco editor."
+    },
+    {
+      "title": "Figma - Design domain",
+      "description": "Design domain opens as a Figma canvas with layers, frames and a properties panel."
+    },
+    {
+      "title": "Reddit - Research domain",
+      "description": "Research domain renders as a subreddit, with posts, comments and upvotes around the round prompts."
+    },
+    {
+      "title": "Discord - Management domain",
+      "description": "Management domain is a Discord server clone, complete with channels, server polls and a member list."
+    },
+    {
+      "title": "ACM Draws",
+      "description": "A socket.io-powered multiplayer scribble game modeled on skribbl.io - lobbies, rounds, word reveal, scoring."
+    },
+    {
+      "title": "DOOM, in the browser",
+      "description": "DOOM bundled inside an app window. Yes, really."
+    },
+    {
+      "title": "2048",
+      "description": "A polished 2048 clone, playable inside its own window."
+    },
+    {
+      "title": "FaceTime scheduler",
+      "description": "Interview slots picked through a FaceTime-style ringing call UI. Each applicant gets a slot card."
+    },
+    {
+      "title": "Notes, Calendar, Calculator",
+      "description": "Daily-driver apps shipped alongside the recruitment ones so the desktop actually feels populated."
+    },
+    {
+      "title": "Settings + wallpaper picker",
+      "description": "Theme switcher, dock controls and a wallpaper gallery, just like the real thing."
+    },
+    {
+      "title": "Easter eggs everywhere",
+      "description": "Hidden apps, secret commands, surprise dock items, keyboard shortcuts. Bring patience."
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Frontend",
+      "slugs": [
+        "nextjs",
+        "react",
+        "typescript",
+        "tailwindcss",
+        "shadcn"
+      ]
+    },
+    {
+      "category": "Backend",
+      "slugs": [
+        "nextjs",
+        "prisma",
+        "cockroachdb"
+      ]
+    },
+    {
+      "category": "Infrastructure",
+      "slugs": [
+        "vercel",
+        "aws",
+        "cloudflare"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github",
+        "postman"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "theg1239",
+      "role": "Lead developer"
+    },
+    {
+      "github": "RohitPhaniramSakamuri",
+      "role": "Developer"
+    },
+    {
+      "github": "qwerty-dvorak",
+      "role": "Developer"
+    },
+    {
+      "github": "pokymono",
+      "role": "Developer"
+    },
+    {
+      "github": "mahendra785",
+      "role": "Developer"
+    },
+    {
+      "github": "Quasar-025",
+      "role": "Developer"
+    },
+    {
+      "github": "adii2ma",
+      "role": "Developer"
+    },
+    {
+      "github": "btcry",
+      "role": "Developer"
+    },
+    {
+      "github": "Van5sh",
+      "role": "Developer"
+    },
+    {
+      "github": "SarupaVL",
+      "role": "Developer"
+    },
+    {
+      "github": "drashtishukla",
+      "role": "Developer"
+    },
+    {
+      "github": "abhiiii9av",
+      "role": "Developer"
+    },
+    {
+      "github": "yashsinha1224",
+      "role": "Developer"
+    },
+    {
+      "github": "Kashishsingh4",
+      "role": "Developer"
+    },
+    {
+      "github": "JuxtaRYCT",
+      "role": "Developer"
+    },
+    {
+      "github": "Supratim69",
+      "role": "Developer"
+    },
+    {
+      "github": "ShauryaGarg17",
+      "role": "Developer"
+    },
+    {
+      "github": "TejasGhatte",
+      "role": "Developer"
+    },
+    {
+      "github": "Avadhoot1905",
+      "role": "Developer"
+    },
+    {
+      "github": "harshitnarang28",
+      "role": "Developer"
+    },
+    {
+      "github": "kairavsheth",
+      "role": "Developer"
+    },
+    {
+      "github": "D-Vspec",
+      "role": "Developer"
+    },
+    {
+      "github": "JothishKamal",
+      "role": "Developer"
+    },
+    {
+      "github": "tanushgolwala",
+      "role": "Developer"
+    },
+    {
+      "github": "vg-21",
+      "role": "Developer"
+    }
+  ],
+  "designers": [
+    {
+      "name": "Aarjav Jain",
+      "linkedin": "https://www.linkedin.com/in/bharatwalejain/",
+      "role": "Design"
+    },
+    {
+      "name": "Krishika Sureka",
+      "linkedin": "https://www.linkedin.com/in/krishikasureka/",
+      "role": "Design"
+    },
+    {
+      "name": "Aditya Singh",
+      "linkedin": "https://www.linkedin.com/in/aditya-singh-750717310/",
+      "role": "Design"
+    },
+    {
+      "name": "Prakhar Joshi",
+      "linkedin": "https://www.linkedin.com/in/prakharjoshi23/",
+      "role": "Design"
+    },
+    {
+      "name": "Nishtha Aggarwal",
+      "linkedin": "https://hashnode.com/@nishthaaggarwal",
+      "role": "Design"
+    },
+    {
+      "name": "Arnav Srivastava",
+      "linkedin": "https://www.linkedin.com/in/arnav-srivastava-16825b290/",
+      "role": "Design"
+    },
+    {
+      "name": "Yashika Panda",
+      "linkedin": "https://www.linkedin.com/in/yashikapanda-26825m/",
+      "role": "Design"
+    },
+    {
+      "name": "Naincy Jain",
+      "linkedin": "https://www.linkedin.com/in/naincy-jain-38a20a283/",
+      "role": "Design"
+    },
+    {
+      "name": "Aradhya Gupta",
+      "linkedin": "https://www.linkedin.com/in/aradhya-gupta-designer/",
+      "role": "Design"
+    },
+    {
+      "name": "JuxtaRYCT",
+      "linkedin": "https://www.linkedin.com/in/juxtaryct/",
+      "role": "Design"
+    }
+  ],
+  "links": [
+    {
+      "label": "Live OS",
+      "href": "https://os.acmvit.in",
+      "kind": "website"
+    },
+    {
+      "label": "GitHub",
+      "href": "https://github.com/ACM-VIT/os.acmvit.in",
+      "kind": "github"
+    }
+  ],
+  "commitGraphSeed": 555,
+  "order": 40
+}

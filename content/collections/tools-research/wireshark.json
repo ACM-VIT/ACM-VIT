@@ -1,0 +1,8 @@
+{
+  "name": "Wireshark",
+  "slug": "wireshark",
+  "svgFile": "/domains/research/tools/research-tool-wireshark.svg",
+  "colorHex": "#1679A7",
+  "isDark": true,
+  "order": 220
+}

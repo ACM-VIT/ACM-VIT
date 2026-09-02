@@ -1,0 +1,80 @@
+{
+  "slug": "pdfmaker",
+  "title": "PDFMaker",
+  "tagline": "Simplify Generating PDFs for your Assignments",
+  "eyebrow": "ACM-VIT · Forktober 2023 · Open Source",
+  "themeColor": "#EFEFEF",
+  "themeColorSecondary": "#1a1a1a",
+  "shortDescription": "Simplify Generating PDFs for your Assignments",
+  "longDescription": [
+    "Simplify Generating PDFs for your Assignments",
+    "PDFMaker was part of ACM-VIT's Forktober open-source drive in 2023, opening up to student contributors during Hacktoberfest.",
+    "The repository is archived. It remains on GitHub as a record of the Forktober edition that ran it, but is no longer accepting new contributions.",
+    "Across its lifetime, the project drew 6 contributors, 7 pull requests and 34 commits."
+  ],
+  "status": "archived",
+  "statusNote": "Forktober 2023 · Archived",
+  "cassetteSvg": "/events/events-forktober-cassette.svg",
+  "stats": [
+    {
+      "value": "6",
+      "label": "Contributors"
+    },
+    {
+      "value": "7",
+      "label": "Pull requests"
+    },
+    {
+      "value": "34",
+      "label": "Commits"
+    },
+    {
+      "value": "2",
+      "label": "Stars"
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Stack",
+      "slugs": [
+        "python"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "adarshxs"
+    },
+    {
+      "github": "MarvelMathesh"
+    },
+    {
+      "github": "RohanKhatua"
+    },
+    {
+      "github": "Samuelsuhas96"
+    },
+    {
+      "github": "abhi-shek-09"
+    },
+    {
+      "github": "yr1404"
+    }
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/ACM-VIT/PDFMaker",
+      "kind": "github"
+    }
+  ],
+  "commitGraphSeed": 842,
+  "order": 170
+}

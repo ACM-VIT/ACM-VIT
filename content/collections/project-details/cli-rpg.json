@@ -1,0 +1,185 @@
+{
+  "slug": "cli-rpg",
+  "title": "CLI-RPG",
+  "tagline": "Mystery of the Forgotten.",
+  "eyebrow": "ACM-VIT · Game · Terminal",
+  "themeColor": "#16A34A",
+  "themeColorSecondary": "#0F3D1E",
+  "shortDescription": "A text-based adventure game in your terminal. Explore a mysterious world, solve puzzles, manage your inventory, and uncover secrets - all through the command line.",
+  "longDescription": [
+    "Mystery of the Forgotten is a CLI role-playing game built during the ACM-VIT project cycle. Players navigate a mysterious world filled with branching storylines, diverse characters, and challenging puzzles - entirely through text commands.",
+    "The game features an inventory management system, ASCII art for every location and encounter, and an integrated music player with a live audio visualizer - all running inside a terminal. Multiple endings mean each playthrough can go differently depending on your choices.",
+    "Built in Rust using Ratatui for the terminal UI and Supabase on the backend, CLI-RPG is a showcase of what's possible when you push the command line beyond its usual limits."
+  ],
+  "status": "online",
+  "statusNote": "Playable now",
+  "heroImage": "/projects/projects-cli-rpg.svg",
+  "gallery": [
+    {
+      "src": "/projects/cli-rpg/projects-cli-rpg-shot-login.webp",
+      "alt": "CLI-RPG login screen"
+    },
+    {
+      "src": "/projects/cli-rpg/projects-cli-rpg-shot-house.webp",
+      "alt": "CLI-RPG haunted house ASCII art"
+    },
+    {
+      "src": "/projects/cli-rpg/projects-cli-rpg-shot-map.webp",
+      "alt": "CLI-RPG floor plan exploration"
+    },
+    {
+      "src": "/projects/cli-rpg/projects-cli-rpg-shot-puzzle.webp",
+      "alt": "CLI-RPG DNA sequence puzzle"
+    }
+  ],
+  "galleryLayout": "landscape",
+  "stats": [
+    {
+      "value": "Rust",
+      "label": "Built in"
+    },
+    {
+      "value": "Multiple",
+      "label": "Endings"
+    },
+    {
+      "value": "Terminal",
+      "label": "Platform"
+    },
+    {
+      "value": "2024",
+      "label": "First shipped"
+    }
+  ],
+  "features": [
+    {
+      "title": "Branching storyline",
+      "description": "Multiple endings based on your choices. Every playthrough reveals something different."
+    },
+    {
+      "title": "ASCII art",
+      "description": "Hand-crafted ASCII art for locations, characters, and encounters."
+    },
+    {
+      "title": "Music player",
+      "description": "Integrated music player with an interactive audio visualizer, all in the terminal."
+    },
+    {
+      "title": "Inventory system",
+      "description": "Collect, use, and manage items as you explore the world."
+    },
+    {
+      "title": "Puzzles and minigames",
+      "description": "Various puzzles and games woven into the narrative."
+    },
+    {
+      "title": "Terminal-native",
+      "description": "No GUI, no browser. Pure command-line experience built with Ratatui."
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Core",
+      "slugs": [
+        "rust"
+      ]
+    },
+    {
+      "category": "Backend",
+      "slugs": [
+        "supabase"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "aastikn",
+      "role": "Maintainer"
+    },
+    {
+      "github": "shambhavipaygude",
+      "role": "Maintainer"
+    },
+    {
+      "github": "JuxtaRYCT",
+      "role": "Maintainer"
+    },
+    {
+      "github": "D-Vspec",
+      "role": "Developer"
+    },
+    {
+      "github": "AV295",
+      "role": "Developer"
+    },
+    {
+      "github": "bharatwalejain",
+      "role": "Developer"
+    },
+    {
+      "github": "Zxcivic",
+      "role": "Developer"
+    },
+    {
+      "github": "AJ1312",
+      "role": "Developer"
+    },
+    {
+      "github": "GHAUTHAM2509",
+      "role": "Developer"
+    },
+    {
+      "github": "btcry",
+      "role": "Developer"
+    },
+    {
+      "github": "theforce1579",
+      "role": "Developer"
+    },
+    {
+      "github": "NAINCY1710",
+      "role": "Developer"
+    },
+    {
+      "github": "parthgoyal974",
+      "role": "Developer"
+    },
+    {
+      "github": "SINGHPARTH2003",
+      "role": "Developer"
+    },
+    {
+      "github": "prateekpurohit13",
+      "role": "Developer"
+    },
+    {
+      "github": "ShauryaGarg17",
+      "role": "Developer"
+    },
+    {
+      "github": "SonitBahl",
+      "role": "Developer"
+    },
+    {
+      "github": "0VISH",
+      "role": "Developer"
+    }
+  ],
+  "designers": [],
+  "links": [
+    {
+      "label": "Website",
+      "href": "https://cli-rpg.acmvit.in/",
+      "kind": "website"
+    }
+  ],
+  "commitGraphSeed": 203,
+  "order": 80
+}

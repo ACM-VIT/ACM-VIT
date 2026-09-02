@@ -1,0 +1,53 @@
+{
+  "slug": "dr-peter-robinson",
+  "title": "Computers Have Feelings Too",
+  "tagline": "Exploring emotion-aware computing with Dr. Peter Robinson.",
+  "eyebrow": "ACM-VIT · Distinguished Speaker Session",
+  "themeKey": "research",
+  "themeColor": "#F3ED99",
+  "hideCtaBanner": true,
+  "cassetteSvg": "/events/events-peter-robinson-cassette.webp",
+  "shortDescription": "A Distinguished Speaker Session where Dr. Peter Robinson, Professor Emeritus of Computer Technology at the University of Cambridge, explored Human-Computer Interaction and its intersection with Affective Computing.",
+  "longDescription": [
+    "ACM-VIT hosted a Distinguished Speaker Session with Dr. Peter Robinson, Professor Emeritus of Computer Technology at the University of Cambridge. The session, titled 'Computers Have Feelings Too', explored Human-Computer Interaction (HCI) and its intersection with Affective Computing.",
+    "The session explored how emerging technologies are being designed to recognise, interpret, and simulate human emotions. The event provided valuable insights into the evolving relationship between humans and machines, emphasising the role of psychology and design in shaping intelligent, emotion-aware systems."
+  ],
+  "format": "Speaker Session · Distinguished Speaker Programme",
+  "duration": "1 session",
+  "mode": "Online",
+  "audience": "All students",
+  "team": "Individual",
+  "organizedBy": "ACM-VIT",
+  "recurrence": "One-time session",
+  "registrationUrl": "https://www.youtube.com/watch?v=YEY1P62zAf8&t=27s",
+  "primaryCtaLabel": "Watch Recording",
+  "speaker": {
+    "name": "Dr. Peter Robinson",
+    "role": "Professor Emeritus of Computer Technology",
+    "institution": "University of Cambridge",
+    "image": "/community/community-peter-robinson.webp",
+    "bio": [
+      "Peter Robinson is Professor Emeritus of Computer Technology and a Fellow of Gonville & Caius College at the University of Cambridge. He was part of the Rainbow Group in the Computer Laboratory, where his research focused on Human-Computer Interaction and Affective Computing - designing systems that can recognise, interpret, and respond to human emotions.",
+      "His work has explored how computers can understand facial expressions, tone of voice, and body language to build more intuitive and emotionally aware interfaces. His contributions have significantly shaped the field of emotion-sensing technology and its applications in education, healthcare, and assistive systems."
+    ],
+    "profileUrl": "https://www.cst.cam.ac.uk/people/pr10"
+  },
+  "stats": [],
+  "tracks": [],
+  "schedule": [],
+  "prizes": [],
+  "highlights": [],
+  "perks": [],
+  "faq": [],
+  "socials": [
+    {
+      "label": "Recording · YouTube",
+      "href": "https://www.youtube.com/watch?v=YEY1P62zAf8&t=27s"
+    },
+    {
+      "label": "Instagram · @acmvit",
+      "href": "https://instagram.com/acmvit"
+    }
+  ],
+  "order": 140
+}

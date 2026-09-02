@@ -1,0 +1,40 @@
+---
+// Reading progress bar - pure Tailwind, JS toggles opacity classes
+---
+
+<div
+  id="reading-progress"
+  class="fixed top-0 left-0 w-full h-[3px] z-[100] opacity-0 transition-opacity duration-300"
+>
+  <div
+    id="reading-progress-bar"
+    class="h-full bg-gradient-to-r from-[#F95F4A] to-[#FF8A6B] w-0 rounded-r-sm"
+    style="transition: width 50ms linear;"
+  />
+</div>
+
+<script>
+  const progressBar       = document.getElementById('reading-progress-bar');
+  const progressContainer = document.getElementById('reading-progress');
+
+  if (progressBar && progressContainer) {
+    const updateProgress = () => {
+      const scrollTop  = window.scrollY || document.documentElement.scrollTop;
+      const docHeight  = document.documentElement.scrollHeight - window.innerHeight;
+      const progress   = Math.min((scrollTop / docHeight) * 100, 100);
+
+      progressBar.style.width = `${progress}%`;
+
+      if (scrollTop > 100) {
+        progressContainer.classList.remove('opacity-0');
+        progressContainer.classList.add('opacity-100');
+      } else {
+        progressContainer.classList.remove('opacity-100');
+        progressContainer.classList.add('opacity-0');
+      }
+    };
+
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+  }
+</script>

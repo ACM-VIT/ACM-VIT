@@ -1,0 +1,8 @@
+{
+  "name": "Node-RED",
+  "slug": "node-red",
+  "svgFile": "/domains/research/tools/research-tool-node-red.svg",
+  "colorHex": "#8F0000",
+  "isDark": true,
+  "order": 260
+}

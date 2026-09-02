@@ -1,0 +1,706 @@
+---
+export const prerender = true;
+import fs from "node:fs";
+import path from "node:path";
+import Layout from "../layouts/Layout.astro";
+import "../styles/globals.css";
+import Footer from "../layouts/Footer.astro";
+import { getAssetUrl } from "../utils/cdn";
+
+// ── Gallery images ─────────────────────────────────────────────────────────
+// Walk /public/gallery, keep only the webp photos inside the event subfolders.
+// Skip the decorative top-level assets (bg text, logo, hero bento + its light
+// variant) so they don't leak into the masonry as tiles.
+const GALLERY_DIR = path.join(process.cwd(), "public", "gallery");
+const SKIP = new Set([
+  "gallery-bg-text.webp",
+  "gallery.webp",
+  "gallery-hero.webp",
+  "gallery-light.webp",
+]);
+
+function walk(dir: string): string[] {
+  const out: string[] = [];
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) out.push(...walk(full));
+    else if (entry.name.toLowerCase().endsWith(".webp") && !SKIP.has(entry.name))
+      out.push(full);
+  }
+  return out;
+}
+
+// Deterministic hash so height buckets stay stable across builds.
+const hash = (s: string) => {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+  return Math.abs(h);
+};
+
+// Varied heights give the masonry its staggered look (script uses height / 2).
+const HEIGHTS = [640, 820, 560, 940, 720, 500, 860];
+
+const photos = walk(GALLERY_DIR)
+  .map((abs) => {
+    const rel = "/" + path.relative(path.join(process.cwd(), "public"), abs).split(path.sep).join("/");
+    return { rel, key: hash(rel) };
+  })
+  .sort((a, b) => a.key - b.key);
+
+const items = photos.map((p, i) => ({
+  id: `g${i}`,
+  img: getAssetUrl(p.rel),
+  height: HEIGHTS[p.key % HEIGHTS.length],
+}));
+
+// ── Event cassettes, grouped by year ───────────────────────────────────────
+// Cassette artwork per event (falls back to a generic tape for events without
+// dedicated art, e.g. Hack Story).
+const cassetteArt: Record<string, string> = {
+  "Reverse Coding": "/events/events-reverse-coding-cassette.webp",
+  Code2Create: "/events/events-c2c-cassette.webp",
+  "Cryptic Hunt": "/events/events-cryptic-hunt-cassette.webp",
+  "Hack Story": "/cassettes/cassettes-cassette-layout-orange.webp",
+  KSL: "/events/events-kickstart-learn-cassette.webp",
+  Casa: "/events/events-casa-cassette.webp",
+  SDG: "/events/events-sdg-cassette.webp",
+  Nightslips: "/cassettes/cassettes-cassette-layout-pink.webp",
+  "Random Fun": "/cassettes/cassettes-cassette-layout-orange.webp",
+  "Codex Cryptum": "/events/events-codex-cryptum-cassette.svg",
+  "Life at ACM BTS": "/events/events-lifeatacm-cassette.svg",
+  "Be the Builder": "/events/events-bethebuilder-cassette.webp",
+};
+const FALLBACK_ART = "/cassettes/cassettes-cassette-layout-white.webp";
+
+// Events with a real photo cover: the photo sits behind the transparent
+// cassette-layout frame (screws/shell art), same compositing as the board
+// member cards. `frame` should be one of the cassettes-cassette-layout-*
+// assets (RGBA, transparent everywhere except the printed shell/screws).
+const cassettePhotoArt: Record<string, { photo: string; frame: string }> = {
+  Nightslips: {
+    photo: "/gallery/nightslip/gallery-nightslip-cover.webp",
+    frame: "/cassettes/cassettes-cassette-layout-pink.webp",
+  },
+};
+
+// Real Google Photos album links per cassette title. Anything not listed here
+// falls back to the shared gallery placeholder below.
+const albumLinks: Record<string, string> = {
+  "Reverse Coding 2026":
+    "https://photos.google.com/share/AF1QipORSjd32KaeGWjGqykJw6ae6e0UKyvip2s66hupApfU97o0EojsP-XU28obaDIYwg?key=YnVxMUNnZ2w2cTQ3bF9GbmNFczUwOG5EYWEyYzdR",
+};
+const FALLBACK_ALBUM = "https://photos.google.com/share/dummy-album";
+
+// Events added to every year group.
+const EVERY_YEAR = ["Nightslips", "Random Fun", "KSL", "Casa", "SDG", "Life at ACM BTS", "Codex Cryptum"];
+
+type YearGroup = { year: string; events: { title: string; event: string }[] };
+const galleryYears: YearGroup[] = [
+  {
+    year: "2026",
+    events: [
+      { title: "Reverse Coding 2026", event: "Reverse Coding" },
+      { title: "Be the Builder 2026", event: "Be the Builder" },
+    ],
+  },
+  {
+    year: "2025",
+    events: [
+      { title: "Reverse Coding 2025", event: "Reverse Coding" },
+      { title: "Code2Create 2025", event: "Code2Create" },
+      { title: "Cryptic Hunt 2025", event: "Cryptic Hunt" },
+      { title: "Be the Builder 2025", event: "Be the Builder" },
+    ],
+  },
+  {
+    year: "2024",
+    events: [
+      { title: "Reverse Coding 2024", event: "Reverse Coding" },
+      { title: "Cryptic Hunt 2024", event: "Cryptic Hunt" },
+      { title: "Be the Builder 2024", event: "Be the Builder" },
+    ],
+  },
+  {
+    year: "2023",
+    events: [
+      { title: "Hack Story", event: "Hack Story" },
+      { title: "Cryptic Hunt 2023", event: "Cryptic Hunt" },
+    ],
+  },
+];
+
+const yearSections = galleryYears
+  .filter((g) => g.events.length > 0)
+  .map((g) => {
+    // Every year also gets the recurring cassettes, titled with its year.
+    const events = [
+      ...g.events,
+      ...EVERY_YEAR.map((event) => ({ title: `${event} ${g.year}`, event })),
+    ];
+    return {
+      year: g.year,
+      cassettes: events.map((e) => {
+        const photoArt = cassettePhotoArt[e.event];
+        return {
+          title: e.title,
+          href: albumLinks[e.title] ?? FALLBACK_ALBUM,
+          src: photoArt ? undefined : getAssetUrl(cassetteArt[e.event] ?? FALLBACK_ART),
+          photo: photoArt ? getAssetUrl(photoArt.photo) : undefined,
+          frame: photoArt ? getAssetUrl(photoArt.frame) : undefined,
+        };
+      }),
+    };
+  });
+---
+
+<Layout pageTitle="Gallery" backHref="/">
+  <section class="gallery-page">
+    <!-- Masonry grid as background + centered GALLERY title on top -->
+    <div class="gp-stage">
+      <!-- Masonry grid (ported from reactbits.dev/components/masonry) -->
+      <div class="gallery-masonry" id="galleryMasonry" data-masonry>
+        {
+          items.map((item) => (
+            <div
+              class="gm-item"
+              data-key={item.id}
+              data-height={item.height}
+              data-img={item.img}
+            >
+              <div
+                class="gm-img"
+                style={`background-image: url("${encodeURI(item.img)}");`}
+              />
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- Centered overlay title, pinned while grid scrolls behind -->
+      <div class="gp-overlay">
+        <div class="gp-overlay-inner">
+          <h1 class="gp-title">GALLERY</h1>
+          <p class="gp-lede">
+            Moments from the events, boards, and late nights that made the year.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Event cassettes, grouped by year -->
+    <section class="gp-cassettes">
+      <h2 class="gp-sub">
+        <span>Events</span> on tape
+      </h2>
+      {
+        yearSections.map((group) => (
+          <div class="gp-year" id={`gallery-year-${group.year}`} style="scroll-margin-top: 7rem">
+            <h3 class="gp-year-label">{group.year}</h3>
+            <div class="gp-cassette-grid">
+              {group.cassettes.map((c) => (
+                <a
+                  class="gp-cassette"
+                  href={c.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={c.title}
+                >
+                  {c.photo ? (
+                    <div class="gp-cassette-photo">
+                      <img
+                        src={c.photo}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        class="gp-cassette-photo-img"
+                      />
+                      <img
+                        src={c.frame}
+                        alt={c.title}
+                        loading="lazy"
+                        decoding="async"
+                        class="gp-cassette-photo-frame"
+                      />
+                      <span class="gp-cassette-photo-title">NIGHTSLIPS</span>
+                      <span class="gp-cassette-photo-grain"></span>
+                    </div>
+                  ) : (
+                    <img
+                      src={c.src}
+                      alt={c.title}
+                      loading="lazy"
+                      decoding="async"
+                      class="gp-cassette-art"
+                    />
+                  )}
+                  <span class="gp-cassette-label">{c.title}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </section>
+  </section>
+
+  <Footer />
+</Layout>
+
+<script>
+  // ── Masonry engine (vanilla port of reactbits.dev/components/masonry) ──
+  // Wrapper handles absolute layout (x/y/w/h); the inner .gm-img handles the
+  // scroll-triggered reveal so the two transforms never fight.
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  const container = document.getElementById("galleryMasonry");
+  if (container) {
+    const itemsEls = Array.from(
+      container.querySelectorAll<HTMLElement>(".gm-item"),
+    );
+
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    // Weak-device bail: no saveData, low RAM, or few cores -> skip the reveal
+    // entirely and just show the grid. Keeps low-end phones smooth.
+    const navAny = navigator as any;
+    const weakDevice =
+      Boolean(navAny.saveData) ||
+      (typeof navAny.deviceMemory === "number" && navAny.deviceMemory <= 2) ||
+      (typeof navAny.hardwareConcurrency === "number" &&
+        navAny.hardwareConcurrency <= 2);
+
+    // No blur (repaints every frame) - transform + opacity only, so the whole
+    // reveal runs on the compositor and never touches layout/paint per frame.
+    const skipAnim = prefersReduced || weakDevice;
+
+    // Prime the reveal state on the inner image.
+    if (!skipAnim) {
+      itemsEls.forEach((el) => {
+        const img = el.querySelector<HTMLElement>(".gm-img");
+        if (img) {
+          gsap.set(img, {
+            opacity: 0,
+            yPercent: 8,
+            scale: 0.96,
+            willChange: "transform, opacity",
+          });
+        }
+      });
+    }
+
+    // Shared reveal tween. Clears will-change on finish so we don't keep 35
+    // compositor layers pinned in memory after the animation is done.
+    const revealTween = (
+      targets: HTMLElement[] | Element[],
+      stagger: number,
+    ) =>
+      gsap.to(targets, {
+        opacity: 1,
+        yPercent: 0,
+        scale: 1,
+        duration: 0.7,
+        ease: "power3.out",
+        force3D: true,
+        stagger: { each: stagger, from: "start" },
+        overwrite: true,
+        onComplete: () =>
+          (targets as HTMLElement[]).forEach(
+            (el) => (el.style.willChange = "auto"),
+          ),
+      });
+
+    const getColumns = () => {
+      if (matchMedia("(min-width:1500px)").matches) return 5;
+      if (matchMedia("(min-width:1000px)").matches) return 4;
+      if (matchMedia("(min-width:600px)").matches) return 3;
+      if (matchMedia("(min-width:400px)").matches) return 2;
+      return 1;
+    };
+
+    let hasMounted = false;
+
+    const layout = () => {
+      const width = container.clientWidth;
+      if (!width) return;
+
+      const columns = getColumns();
+      const columnWidth = width / columns;
+      const colHeights = new Array(columns).fill(0);
+
+      // On phones / small screens keep only a few photos so the cassette list
+      // isn't buried under a long scroll. Larger screens show them all.
+      const isCompact = columns <= 2;
+      const limit = isCompact ? (columns === 1 ? 5 : 8) : itemsEls.length;
+
+      itemsEls.forEach((el, i) => {
+        const img = el.querySelector<HTMLElement>(".gm-img");
+        if (i >= limit) {
+          el.style.display = "none";
+          img?.classList.add("gm-hidden");
+        } else {
+          el.style.display = "";
+          if (img?.classList.contains("gm-hidden")) {
+            img.classList.remove("gm-hidden");
+            // Un-hidden after mount (resized up): show it without a late reveal.
+            if (hasMounted && !img.classList.contains("gm-revealed")) {
+              img.classList.add("gm-revealed");
+              gsap.set(img, { opacity: 1, yPercent: 0, scale: 1, willChange: "auto" });
+            }
+          }
+        }
+      });
+      const active = itemsEls.slice(0, limit);
+
+      const viewportH = window.innerHeight;
+      const introImgs: HTMLElement[] = [];
+
+      active.forEach((el) => {
+        const rawH = Number(el.dataset.height) || 600;
+        const h = rawH / 2;
+        const col = colHeights.indexOf(Math.min(...colHeights));
+        const x = columnWidth * col;
+        const y = colHeights[col];
+        colHeights[col] += h;
+
+        const props = { x, y, width: columnWidth, height: h };
+
+        if (!hasMounted) {
+          gsap.set(el, { opacity: 1, ...props });
+          // Tiles that start within the first screen get the load-in intro.
+          if (y < viewportH) {
+            const img = el.querySelector<HTMLElement>(".gm-img");
+            if (img) introImgs.push(img);
+          }
+        } else {
+          gsap.to(el, {
+            ...props,
+            duration: 0.6,
+            ease: "power3.out",
+            overwrite: "auto",
+          });
+        }
+      });
+
+      container.style.height = `${Math.max(...colHeights)}px`;
+
+      if (!hasMounted) {
+        hasMounted = true;
+        // Claim the intro tiles up front so the scroll batch below skips them
+        // (otherwise it reveals them instantly while still behind the curtain).
+        if (!skipAnim) {
+          introImgs.forEach((img) => img.classList.add("gm-revealed"));
+        }
+        revealOnScroll();
+        introReveal(introImgs);
+      }
+      ScrollTrigger.refresh();
+    };
+
+    // Staggered load-in for the tiles already on screen at page load.
+    // Deferred until the preloader curtain lifts so it isn't played hidden.
+    let introStarted = false;
+    const startIntro = (imgs: HTMLElement[]) => {
+      if (introStarted || skipAnim || !imgs.length) return;
+      introStarted = true;
+      imgs.forEach((img) => img.classList.add("gm-revealed"));
+      revealTween(imgs, 0.06);
+    };
+    const introReveal = (imgs: HTMLElement[]) => {
+      if (skipAnim || !imgs.length) return;
+      const pl = document.getElementById("preloader");
+      const plGone = !pl || getComputedStyle(pl).display === "none";
+      if (plGone) {
+        startIntro(imgs);
+      } else {
+        window.addEventListener("preloader:done", () => startIntro(imgs), {
+          once: true,
+        });
+        // Fallback in case the event was missed.
+        window.setTimeout(() => startIntro(imgs), 4000);
+      }
+    };
+
+    // Reveal remaining tiles as they scroll into view, staggered per batch.
+    const revealOnScroll = () => {
+      if (skipAnim) return;
+      ScrollTrigger.batch(".gm-img:not(.gm-revealed):not(.gm-hidden)", {
+        start: "top 90%",
+        onEnter: (batch) => {
+          batch.forEach((el) => (el as HTMLElement).classList.add("gm-revealed"));
+          revealTween(batch as unknown as HTMLElement[], 0.07);
+        },
+      });
+    };
+
+    // Preload images so heights/positions are correct before animating in.
+    const urls = itemsEls
+      .map((el) => el.dataset.img)
+      .filter((u): u is string => Boolean(u));
+    Promise.all(
+      urls.map(
+        (src) =>
+          new Promise<void>((resolve) => {
+            const img = new Image();
+            img.src = src;
+            img.onload = img.onerror = () => resolve();
+          }),
+      ),
+    ).then(() => layout());
+
+    let ro: ResizeObserver | null = new ResizeObserver(() => layout());
+    ro.observe(container);
+
+    // Hover scale
+    itemsEls.forEach((el) => {
+      el.addEventListener("mouseenter", () => {
+        gsap.to(el, { scale: 0.95, duration: 0.3, ease: "power2.out" });
+      });
+      el.addEventListener("mouseleave", () => {
+        gsap.to(el, { scale: 1, duration: 0.3, ease: "power2.out" });
+      });
+    });
+  }
+</script>
+
+<style>
+  .gallery-page {
+    position: relative;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: clamp(2rem, 6vw, 5rem) clamp(1rem, 4vw, 2.5rem) 4rem;
+  }
+
+  /* ── Stage: grid background + pinned centered title ── */
+  .gp-stage {
+    position: relative;
+    width: 100%;
+  }
+
+  .gp-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .gp-overlay-inner {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 1rem;
+  }
+  /* Dark vignette so the title stays legible over the photos */
+  .gp-overlay-inner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      60% 45% at 50% 50%,
+      rgba(3, 3, 3, 0.72) 0%,
+      rgba(3, 3, 3, 0.45) 45%,
+      rgba(3, 3, 3, 0) 100%
+    );
+    pointer-events: none;
+  }
+  .gp-overlay-inner > * {
+    position: relative;
+  }
+  .gp-title {
+    font-family: "PolySans Trial", sans-serif;
+    font-weight: 800;
+    font-size: clamp(3.5rem, 16vw, 12rem);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    color: #fefcd9;
+    margin: 0;
+    text-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+  }
+  .gp-lede {
+    font-family: "PolySans Trial", sans-serif;
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-weight: 300;
+    color: rgba(254, 252, 217, 0.85);
+    max-width: 34rem;
+    margin: 1.25rem auto 0;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.7);
+  }
+
+  /* ── Masonry ── */
+  .gallery-masonry {
+    position: relative;
+    width: 100%;
+  }
+  .gm-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 6px;
+    cursor: pointer;
+    opacity: 0;
+    /* Only the transform (layout translate + hover) is promoted; the reveal
+       manages its own will-change on .gm-img and clears it when done. */
+    will-change: transform;
+  }
+  .gm-img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center center;
+    border-radius: 10px;
+    box-shadow: 0 10px 50px -10px rgba(0, 0, 0, 0.5);
+    transition: box-shadow 0.35s ease;
+  }
+  .gm-item:hover .gm-img {
+    box-shadow: 0 16px 44px -8px rgba(249, 95, 74, 0.35);
+  }
+
+  /* ── Event cassettes ── */
+  .gp-cassettes {
+    margin-top: clamp(4rem, 10vw, 8rem);
+  }
+  .gp-sub {
+    font-family: "PolySans Trial", sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    color: #fefcd9;
+    margin: 0 0 2rem;
+  }
+  .gp-sub span {
+    color: #f95f4a;
+  }
+  .gp-year {
+    margin-bottom: clamp(2.5rem, 6vw, 4rem);
+  }
+  .gp-year-label {
+    font-family: "PolySans Mono", monospace;
+    font-size: clamp(1.1rem, 3vw, 1.6rem);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #fefcd9;
+    margin: 0 0 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(254, 252, 217, 0.14);
+  }
+  .gp-cassette-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1rem, 2.5vw, 2rem);
+  }
+  .gp-cassette {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    transition: transform 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+  .gp-cassette:hover {
+    transform: translateY(-6px);
+  }
+  .gp-cassette-art {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 14px 34px rgba(0, 0, 0, 0.45));
+    transition: filter 0.35s ease;
+  }
+  .gp-cassette:hover .gp-cassette-art {
+    filter: drop-shadow(0 18px 44px rgba(249, 95, 74, 0.3));
+  }
+
+  /* Photo-cover cassette: real photo underneath, transparent cassette-layout
+     frame (shell outline + screws) layered on top, corners curved like a card. */
+  .gp-cassette-photo {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 882 / 546;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 2px solid rgba(255, 0, 122, 0.55);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
+    transition: box-shadow 0.35s ease, border-color 0.35s ease;
+  }
+  .gp-cassette:hover .gp-cassette-photo {
+    border-color: rgba(255, 0, 122, 0.85);
+    box-shadow: 0 18px 44px rgba(249, 95, 74, 0.3);
+  }
+  .gp-cassette-photo-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .gp-cassette-photo-frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+  .gp-cassette-photo-title {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-family: "PolySans Trial", sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.1rem, 2.6vw, 1.8rem);
+    letter-spacing: -0.01em;
+    color: #fefcd9;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85);
+    pointer-events: none;
+  }
+  .gp-cassette-photo-grain {
+    position: absolute;
+    inset: 0;
+    background-image: url("/backgrounds/backgrounds-noise.webp");
+    background-size: cover;
+    opacity: 0.35;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+  }
+  .gp-cassette-label {
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(254, 252, 217, 0.75);
+  }
+
+  @media (max-width: 780px) {
+    .gp-cassette-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 480px) {
+    .gp-cassette-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ── Light mode ── */
+  /* Title/lede stay light: they sit over photos + a dark vignette. */
+  :global(html[data-theme="light"]) .gp-sub,
+  :global(html[data-theme="light"]) .gp-year-label {
+    color: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .gp-year-label {
+    border-bottom-color: rgba(26, 26, 26, 0.14);
+  }
+  :global(html[data-theme="light"]) .gp-cassette-label {
+    color: rgba(26, 26, 26, 0.7);
+  }
+</style>

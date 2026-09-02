@@ -1,0 +1,877 @@
+/* ============================================================
+   ACM-VIT Design Guidelines - standalone light-mode doc system
+   Used only by /design/* pages. DM Sans everywhere.
+   Layout language inspired by m3.material.io: tonal surfaces,
+   large radii, bento grids, persistent left rail.
+   ============================================================ */
+
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 100 1000;
+  font-display: swap;
+  src: url("/design/fonts/dm-sans-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 100 1000;
+  font-display: swap;
+  src: url("/design/fonts/dm-sans-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "DM Sans";
+  font-style: italic;
+  font-weight: 100 1000;
+  font-display: swap;
+  src: url("/design/fonts/dm-sans-italic-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+.ds-root,
+.ds-root *,
+.ds-root *::before,
+.ds-root *::after {
+  box-sizing: border-box;
+}
+
+.ds-root h1,
+.ds-root h2,
+.ds-root h3,
+.ds-root h4,
+.ds-root p {
+  margin: 0;
+}
+
+.ds-root img,
+.ds-root svg {
+  max-width: 100%;
+}
+
+.ds-root {
+  /* ---- color tokens (light only) ---- */
+  --ds-bg: #faf9f7;
+  --ds-surface: #ffffff;
+  --ds-surface-tonal: #f4f1ec;
+  --ds-surface-tonal-2: #ece7df;
+  --ds-ink: #1c1b1a;
+  --ds-ink-2: #4d4a46;
+  --ds-ink-3: #79746e;
+  --ds-line: #e5e1da;
+  --ds-line-2: #d4cfc6;
+
+  --ds-accent: #f95f4a;
+  --ds-accent-ink: #b3341f;
+  --ds-accent-tonal: #ffeae5;
+  --ds-blue: #135de2;
+  --ds-blue-tonal: #e7eefc;
+  --ds-green: #1f9d76;
+  --ds-green-tonal: #e3f5ee;
+  --ds-gold: #c8971b;
+  --ds-gold-tonal: #fdf3d7;
+  --ds-purple: #9b51e0;
+  --ds-purple-tonal: #f3eafc;
+  --ds-pink: #ff007a;
+  --ds-pink-tonal: #ffe5f1;
+
+  --ds-diamond: #333333;
+  --ds-diamond-fg: #ffffff;
+  --ds-cream: #fefcd9;
+
+  /* ---- shape ---- */
+  --ds-r-xs: 8px;
+  --ds-r-sm: 12px;
+  --ds-r-md: 16px;
+  --ds-r-lg: 24px;
+  --ds-r-xl: 32px;
+  --ds-r-full: 999px;
+
+  /* ---- type ---- */
+  --ds-font: "DM Sans", "Helvetica Neue", Arial, sans-serif;
+  --ds-mono: "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, monospace;
+
+  font-family: var(--ds-font);
+  background: var(--ds-bg);
+  color: var(--ds-ink);
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  accent-color: var(--ds-accent);
+  color-scheme: light;
+}
+
+.ds-root ::selection {
+  background: var(--ds-accent);
+  color: #fff;
+}
+
+/* ============ type scale (4pt-aligned) ============ */
+.ds-display {
+  font-size: clamp(44px, 7vw, 76px);
+  line-height: 1.02;
+  font-weight: 640;
+  letter-spacing: -0.03em;
+}
+.ds-h1 {
+  font-size: clamp(36px, 5vw, 56px);
+  line-height: 1.05;
+  font-weight: 620;
+  letter-spacing: -0.025em;
+}
+.ds-h2 {
+  font-size: clamp(26px, 3.4vw, 36px);
+  line-height: 1.12;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.ds-h3 {
+  font-size: clamp(20px, 2.4vw, 24px);
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+}
+.ds-h4 {
+  font-size: 17px;
+  line-height: 1.3;
+  font-weight: 620;
+  letter-spacing: -0.008em;
+}
+.ds-body-lg {
+  font-size: clamp(17px, 1.6vw, 20px);
+  line-height: 1.55;
+  font-weight: 400;
+  color: var(--ds-ink-2);
+}
+.ds-body {
+  font-size: 15.5px;
+  line-height: 1.6;
+  font-weight: 400;
+  color: var(--ds-ink-2);
+}
+.ds-small {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ds-ink-3);
+}
+.ds-mono {
+  font-family: var(--ds-mono);
+  font-size: 0.86em;
+  letter-spacing: -0.01em;
+}
+
+/* ============ shell layout ============ */
+.ds-shell {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  min-height: 100dvh;
+}
+
+/* ---- top bar ---- */
+.ds-topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 20px;
+  background: color-mix(in srgb, var(--ds-bg) 86%, transparent);
+  background-color: rgba(250, 249, 247, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--ds-line);
+}
+.ds-topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--ds-ink);
+  font-weight: 640;
+  font-size: 16.5px;
+  letter-spacing: -0.01em;
+}
+.ds-topbar-brand img {
+  width: 30px;
+  height: 30px;
+  display: block;
+}
+.ds-topbar-brand .ds-brand-sub {
+  color: var(--ds-ink-3);
+  font-weight: 460;
+}
+/* brand mark swaps to the white diamond in dark mode */
+.ds-topbar-brand .ds-brand-mark-light {
+  display: none;
+}
+/* theme toggle */
+.ds-topbar-toggle {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--ds-r-full);
+  border: 1px solid var(--ds-line);
+  background: var(--ds-surface);
+  color: var(--ds-ink-2);
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+.ds-topbar-toggle:hover {
+  border-color: var(--ds-line-2);
+  background: var(--ds-surface-tonal);
+  color: var(--ds-ink);
+}
+.ds-topbar-toggle .ds-icon-sun {
+  display: none;
+}
+.ds-topbar-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ds-topbar-link {
+  font-size: 13.5px;
+  font-weight: 560;
+  color: var(--ds-ink-2);
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: var(--ds-r-full);
+  border: 1px solid var(--ds-line);
+  background: var(--ds-surface);
+  transition: border-color 0.18s ease, background 0.18s ease;
+}
+.ds-topbar-link:hover {
+  border-color: var(--ds-line-2);
+  background: var(--ds-surface-tonal);
+}
+.ds-topbar-brand span {
+  white-space: nowrap;
+}
+@media (max-width: 639px) {
+  .ds-topbar-link {
+    display: none;
+  }
+  .ds-topbar-link:last-child {
+    display: inline-block;
+  }
+  /* Narrow bar: hamburger + brand + toggle + acmvit.in overflow a phone.
+     Tighten the frame and drop the "Design" subtext so it all fits. */
+  .ds-topbar {
+    padding: 0 14px;
+    gap: 8px;
+  }
+  .ds-topbar-brand {
+    font-size: 15px;
+    min-width: 0;
+  }
+  .ds-topbar-brand span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .ds-topbar-brand .ds-brand-sub {
+    display: none;
+  }
+}
+
+/* ---- left rail ---- */
+.ds-rail {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100dvh;
+  padding: 84px 14px 24px 18px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-line-2) transparent;
+  border-right: 1px solid var(--ds-line);
+  background: var(--ds-bg);
+}
+.ds-rail-group {
+  margin-bottom: 22px;
+}
+.ds-rail-label {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 660;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ds-ink-3);
+  padding: 0 12px;
+  margin-bottom: 6px;
+}
+.ds-rail a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  margin: 1px 0;
+  border-radius: var(--ds-r-full);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ds-ink-2);
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.ds-rail a:hover {
+  background: var(--ds-surface-tonal);
+  color: var(--ds-ink);
+}
+.ds-rail a[aria-current="page"] {
+  background: var(--ds-accent-tonal);
+  color: var(--ds-accent-ink);
+  font-weight: 620;
+}
+.ds-rail a[aria-current="page"] .ds-rail-dot {
+  background: var(--ds-accent);
+}
+.ds-rail-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ds-line-2);
+  flex: none;
+  transition: background 0.15s ease;
+}
+
+/* ---- content column ---- */
+.ds-main {
+  padding: 104px clamp(20px, 4.5vw, 64px) 96px;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+.ds-main-narrow {
+  max-width: 980px;
+}
+
+/* ============ building blocks ============ */
+.ds-hero {
+  margin-bottom: 48px;
+}
+.ds-hero .ds-body-lg {
+  max-width: 62ch;
+  margin-top: 18px;
+}
+.ds-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.ds-kicker .ds-kicker-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 13px;
+  border-radius: var(--ds-r-full);
+  background: var(--ds-surface);
+  border: 1px solid var(--ds-line);
+  font-size: 12.5px;
+  font-weight: 620;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ds-ink-2);
+}
+.ds-kicker .ds-kicker-pill::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ds-accent);
+}
+
+.ds-section {
+  margin-top: 72px;
+  scroll-margin-top: 88px;
+}
+.ds-section > .ds-h2 {
+  margin-bottom: 10px;
+}
+.ds-section > .ds-body {
+  max-width: 68ch;
+}
+.ds-sec-head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+.ds-sec-num {
+  font-size: 13px;
+  font-weight: 640;
+  color: var(--ds-accent);
+  letter-spacing: 0.06em;
+}
+
+/* ---- cards ---- */
+.ds-card {
+  background: var(--ds-surface);
+  border: 1px solid var(--ds-line);
+  border-radius: var(--ds-r-lg);
+  padding: 26px;
+  transition: box-shadow 0.22s ease, transform 0.22s ease, border-color 0.22s ease;
+}
+.ds-card-tonal {
+  background: var(--ds-surface-tonal);
+  border-color: transparent;
+}
+.ds-card-hover:hover {
+  border-color: var(--ds-line-2);
+  box-shadow: 0 10px 34px rgba(28, 27, 26, 0.07);
+  transform: translateY(-2px);
+}
+.ds-card h3 + p,
+.ds-card h4 + p {
+  margin-top: 6px;
+}
+
+/* ---- bento grid ---- */
+.ds-bento {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  margin-top: 28px;
+}
+.ds-bento > * {
+  grid-column: span 12;
+}
+@media (min-width: 640px) {
+  .ds-b6 {
+    grid-column: span 6;
+  }
+  .ds-b4 {
+    grid-column: span 6;
+  }
+  .ds-b8 {
+    grid-column: span 12;
+  }
+}
+@media (min-width: 1024px) {
+  .ds-b4 {
+    grid-column: span 4;
+  }
+  .ds-b6 {
+    grid-column: span 6;
+  }
+  .ds-b8 {
+    grid-column: span 8;
+  }
+  .ds-b3 {
+    grid-column: span 3;
+  }
+}
+
+/* ---- spec chips / do-don't ---- */
+.ds-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 12px;
+  border-radius: var(--ds-r-full);
+  font-size: 12.5px;
+  font-weight: 600;
+  background: var(--ds-surface-tonal);
+  color: var(--ds-ink-2);
+}
+.ds-chip-do {
+  background: var(--ds-green-tonal);
+  color: var(--ds-green);
+}
+.ds-chip-dont {
+  background: var(--ds-accent-tonal);
+  color: var(--ds-accent-ink);
+}
+
+.ds-do-dont {
+  display: grid;
+  gap: 14px;
+  margin-top: 24px;
+}
+@media (min-width: 768px) {
+  .ds-do-dont {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.ds-specimen {
+  border-radius: var(--ds-r-md);
+  overflow: hidden;
+  border: 1px solid var(--ds-line);
+  background: var(--ds-surface);
+}
+.ds-specimen-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 190px;
+  padding: 28px;
+  position: relative;
+}
+.ds-specimen-note {
+  padding: 13px 16px;
+  border-top: 1px solid var(--ds-line);
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--ds-ink-2);
+}
+.ds-specimen-note svg {
+  flex: none;
+  margin-top: 1.5px;
+}
+
+/* ---- tables ---- */
+.ds-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin-top: 20px;
+}
+.ds-table th {
+  text-align: left;
+  font-size: 12px;
+  font-weight: 660;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ds-ink-3);
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--ds-line-2);
+}
+.ds-table td {
+  padding: 13px 14px;
+  border-bottom: 1px solid var(--ds-line);
+  color: var(--ds-ink-2);
+  vertical-align: top;
+}
+.ds-table td:first-child {
+  color: var(--ds-ink);
+  font-weight: 560;
+}
+
+/* ---- buttons ---- */
+.ds-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 22px;
+  border-radius: var(--ds-r-full);
+  font-family: var(--ds-font);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease,
+    border-color 0.16s ease;
+}
+.ds-btn-primary {
+  background: var(--ds-ink);
+  color: #fff;
+}
+.ds-btn-primary:hover {
+  background: #000;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(28, 27, 26, 0.18);
+}
+.ds-btn-accent {
+  background: var(--ds-accent);
+  color: #fff;
+}
+.ds-btn-accent:hover {
+  background: #e8503b;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(249, 95, 74, 0.32);
+}
+.ds-btn-outline {
+  background: var(--ds-surface);
+  border-color: var(--ds-line-2);
+  color: var(--ds-ink);
+}
+.ds-btn-outline:hover {
+  border-color: var(--ds-ink-3);
+  background: var(--ds-surface-tonal);
+}
+.ds-btn-sm {
+  padding: 7px 15px;
+  font-size: 13px;
+}
+
+/* ---- download split-button ---- */
+.ds-dl {
+  display: inline-flex;
+  border: 1px solid var(--ds-line-2);
+  border-radius: var(--ds-r-full);
+  overflow: hidden;
+  background: var(--ds-surface);
+}
+.ds-dl a {
+  padding: 7px 14px;
+  font-size: 12.5px;
+  font-weight: 640;
+  color: var(--ds-ink-2);
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.ds-dl a + a {
+  border-left: 1px solid var(--ds-line);
+}
+.ds-dl a:hover {
+  background: var(--ds-ink);
+  color: #fff;
+}
+
+/* ---- checker backdrop for logo stages ---- */
+.ds-checker {
+  background-image: linear-gradient(45deg, #efece6 25%, transparent 25%),
+    linear-gradient(-45deg, #efece6 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #efece6 75%),
+    linear-gradient(-45deg, transparent 75%, #efece6 75%);
+  background-size: 22px 22px;
+  background-position: 0 0, 0 11px, 11px -11px, -11px 0;
+}
+/* dark tone of the same checker, for white / light-ink artwork that would
+   disappear on the light checker. Theme-independent (always dark). */
+.ds-checker-dark {
+  background-color: #201e1b;
+  background-image: linear-gradient(45deg, #302d28 25%, transparent 25%),
+    linear-gradient(-45deg, #302d28 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #302d28 75%),
+    linear-gradient(-45deg, transparent 75%, #302d28 75%);
+  background-size: 22px 22px;
+  background-position: 0 0, 0 11px, 11px -11px, -11px 0;
+}
+
+/* ---- scrim (mobile drawer backdrop, out of grid flow) ---- */
+.ds-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 65;
+  background: rgba(28, 27, 26, 0.34);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.24s ease;
+}
+
+/* ---- footer ---- */
+.ds-footer {
+  border-top: 1px solid var(--ds-line);
+  margin-top: 96px;
+  padding: 40px 0 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--ds-ink-3);
+  font-size: 13.5px;
+}
+.ds-footer a {
+  color: var(--ds-ink-2);
+  text-decoration: none;
+  font-weight: 560;
+}
+.ds-footer a:hover {
+  color: var(--ds-accent-ink);
+}
+
+/* ---- next/prev pager ---- */
+.ds-pager {
+  display: grid;
+  gap: 14px;
+  margin-top: 72px;
+}
+@media (min-width: 640px) {
+  .ds-pager {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.ds-pager a {
+  display: block;
+  padding: 20px 24px;
+  border: 1px solid var(--ds-line);
+  border-radius: var(--ds-r-md);
+  text-decoration: none;
+  background: var(--ds-surface);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.ds-pager a:hover {
+  border-color: var(--ds-line-2);
+  box-shadow: 0 8px 26px rgba(28, 27, 26, 0.06);
+}
+.ds-pager .ds-pager-label {
+  font-size: 12px;
+  font-weight: 640;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ds-ink-3);
+}
+.ds-pager .ds-pager-title {
+  display: block;
+  margin-top: 5px;
+  font-size: 17px;
+  font-weight: 620;
+  color: var(--ds-ink);
+}
+.ds-pager .ds-pager-next {
+  text-align: right;
+}
+
+/* ---- mobile ---- */
+.ds-menu-btn {
+  display: none;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--ds-r-full);
+  border: 1px solid var(--ds-line);
+  background: var(--ds-surface);
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--ds-ink);
+}
+@media (max-width: 1023px) {
+  .ds-shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .ds-menu-btn {
+    display: inline-flex;
+  }
+  .ds-rail {
+    position: fixed;
+    z-index: 70;
+    inset: 0 auto 0 0;
+    width: min(320px, 86vw);
+    transform: translateX(-102%);
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow: 0 0 60px rgba(28, 27, 26, 0.18);
+    padding-top: 24px;
+  }
+  .ds-rail.is-open {
+    transform: translateX(0);
+  }
+  .ds-scrim.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .ds-main {
+    padding-top: 92px;
+  }
+}
+
+/* ---- reveal animation (subtle, respects reduced motion) ---- */
+@media (prefers-reduced-motion: no-preference) {
+  .ds-reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .ds-reveal.is-in {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ============================================================
+   Dark mode — /design guidelines. Activated by data-theme="dark"
+   on <html> (set pre-paint by an inline script in DesignLayout).
+   The system is token-driven, so overriding the --ds-* palette
+   flips almost everything. A few chrome rules bake in light
+   values and get explicit dark variants below.
+
+   NOT re-themed on purpose: intentional specimens that document a
+   fixed surface - the Ink website card, the dark poster mockups,
+   the two-ink logo stages, and the palette swatches themselves.
+   ============================================================ */
+html[data-theme="dark"] .ds-root {
+  --ds-bg: #111110;
+  --ds-surface: #1a1917;
+  --ds-surface-tonal: #211f1c;
+  --ds-surface-tonal-2: #2b2823;
+  --ds-ink: #f3f1ea;
+  --ds-ink-2: #c6c1b6;
+  --ds-ink-3: #8d887e;
+  --ds-line: #2c2925;
+  --ds-line-2: #3c372f;
+
+  --ds-accent: #fb6a54;
+  --ds-accent-ink: #ff9583;
+  --ds-accent-tonal: #3a201b;
+  --ds-blue: #5fa0ff;
+  --ds-blue-tonal: #18273f;
+  --ds-green: #4fd1a0;
+  --ds-green-tonal: #123329;
+  --ds-gold: #e3ba52;
+  --ds-gold-tonal: #342b14;
+  --ds-purple: #b985ee;
+  --ds-purple-tonal: #291d3c;
+  --ds-pink: #ff5c9d;
+  --ds-pink-tonal: #3a1526;
+
+  /* schematic diamond: light fill + dark knockout, so the mark
+     stays legible when a guide diagram sits on a dark surface. */
+  --ds-diamond: #ece9e0;
+  --ds-diamond-fg: #17140f;
+
+  color-scheme: dark;
+}
+
+/* topbar glass over the dark background */
+html[data-theme="dark"] .ds-root .ds-topbar {
+  background: color-mix(in srgb, var(--ds-bg) 86%, transparent);
+  background-color: rgba(17, 17, 16, 0.9);
+}
+
+/* brand mark: hide the dark diamond, show the white one */
+html[data-theme="dark"] .ds-root .ds-brand-mark-dark {
+  display: none;
+}
+html[data-theme="dark"] .ds-root .ds-brand-mark-light {
+  display: inline-block;
+}
+
+/* toggle icon: moon -> sun */
+html[data-theme="dark"] .ds-root .ds-topbar-toggle .ds-icon-moon {
+  display: none;
+}
+html[data-theme="dark"] .ds-root .ds-topbar-toggle .ds-icon-sun {
+  display: inline-block;
+}
+
+/* primary/ink buttons invert: --ds-ink is now light, so the label
+   and hover need the dark background as their foreground. */
+html[data-theme="dark"] .ds-root .ds-btn-primary {
+  color: var(--ds-bg);
+}
+html[data-theme="dark"] .ds-root .ds-btn-primary:hover {
+  background: #ffffff;
+}
+html[data-theme="dark"] .ds-root .ds-dl a:hover {
+  color: var(--ds-bg);
+}
+
+/* Transparency checker hosts dark-ink artwork, so it must stay a light
+   panel. In dark mode its transparent squares would otherwise reveal the
+   near-black card and turn into a harsh black/white grid - give it a solid
+   light base so it reads like the light-mode checker. */
+html[data-theme="dark"] .ds-root .ds-checker {
+  background-color: #ffffff;
+}

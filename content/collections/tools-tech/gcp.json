@@ -1,0 +1,7 @@
+{
+  "name": "Google Cloud",
+  "slug": "gcp",
+  "svgFile": "/domains/tech/tools/tech-tool-gcp.svg",
+  "colorHex": "#4285F4",
+  "order": 580
+}

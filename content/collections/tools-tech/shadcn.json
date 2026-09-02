@@ -1,0 +1,8 @@
+{
+  "name": "shadcn/ui",
+  "slug": "shadcn",
+  "svgFile": "/domains/tech/tools/tech-tool-shadcn.svg",
+  "colorHex": "#FFFDD0",
+  "monochrome": true,
+  "order": 80
+}

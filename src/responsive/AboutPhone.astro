@@ -1,0 +1,224 @@
+---
+import { getAssetUrl } from "../utils/cdn";
+---
+
+<!-- About Sections for Phone -->
+<div class="w-full overflow-hidden">
+  <!-- About Section 1 -->
+  <section
+    class="about-section-phone section-1 w-full h-screen relative flex flex-col justify-center px-4 py-8 overflow-hidden radial-overlay"
+  >
+    <div
+      class="content-wrapper flex flex-col items-center justify-center h-full gap-4"
+    >
+      <div class="text-container-phone text-white p-4 text-right">
+        <div class="flex flex-col gap-4 text-[0.8rem] leading-[1.4]">
+          <p>
+            As the official student chapter of the Association for Computing
+            Machinery at VIT Vellore, we've been pushing boundaries and
+            challenging conventions since 2009. From research and development
+            to open-source contributions and unorthodox events, we turn ideas
+            into real-world impact.
+          </p>
+          <p>
+            We don't just write code - we ask questions, build with purpose, and
+            learn together. With a culture built on trust and innovation, we're
+            here to build tools, solve problems, and grow as a community -
+            because technology, at its best, brings people together.
+          </p>
+        </div>
+      </div>
+      <div
+        class="svg-container-phone w-full max-w-[250px] flex justify-center items-end"
+      >
+        <img
+          src={getAssetUrl("/about/about-acmvit-cassette.svg")}
+          alt="Cassette 1"
+          class="cassette-svg-phone w-full h-auto origin-center drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] will-change-transform"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section 2 -->
+  <section
+    class="about-section-phone section-2 w-full h-screen relative flex flex-col justify-center px-4 py-8 overflow-hidden radial-overlay"
+  >
+    <div
+      class="content-wrapper flex flex-col items-center justify-center h-full gap-4"
+    >
+      <div class="text-container-phone text-white p-4 text-left">
+        <div class="flex flex-col gap-4 text-[0.8rem] leading-[1.4]">
+          <p>
+            Founded in 1984, VIT Vellore is one of India's top engineering
+            institutions, renowned for academic excellence, global outlook, and
+            a strong emphasis on research and innovation. With students from
+            across India and around the world, VIT offers a diverse and
+            inclusive learning environment.
+          </p>
+          <p>
+            The university provides world-class infrastructure, experienced
+            faculty, and a wide range of industry-connected programs designed to
+            prepare students for professional success. From pioneering research
+            to impactful engineering projects, VIT empowers students to make
+            meaningful contributions across every field.
+          </p>
+        </div>
+      </div>
+      <div
+        class="svg-container-phone w-full max-w-[250px] flex justify-center items-end"
+      >
+        <img
+          src={getAssetUrl("/about/about-vit-cassette.webp")}
+          alt="Cassette 2"
+          class="cassette-svg-phone w-full h-auto origin-center drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] will-change-transform"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section 3 -->
+  <section
+    class="about-section-phone section-3 w-full h-screen relative flex flex-col justify-center px-4 py-8 overflow-hidden radial-overlay"
+  >
+    <div
+      class="content-wrapper flex flex-col items-center justify-center h-full gap-4"
+    >
+      <div class="text-container-phone text-white p-4 text-right">
+        <div class="flex flex-col gap-4 text-[0.8rem] leading-[1.4]">
+          <p>
+            The Association for Computing Machinery (ACM) is the world's
+            largest educational and scientific computing society. Since its
+            inception in 1947, ACM has united educators, researchers, and
+            professionals to advance computing as a science and a profession.
+          </p>
+          <p>
+            It promotes the highest standards of technical excellence, fosters
+            lifelong learning, and supports career development through a global
+            network of conferences, publications, and professional communities.
+            With a strong commitment to innovation and leadership, ACM
+            continues to shape the future of computing worldwide.
+          </p>
+        </div>
+      </div>
+      <div
+        class="svg-container-phone w-full max-w-[250px] flex justify-center items-end"
+      >
+        <img
+          src={getAssetUrl("/about/about-acm-cassette.webp")}
+          alt="Cassette 3"
+          class="cassette-svg-phone w-full h-auto origin-center drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] will-change-transform"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    </div>
+  </section>
+</div>
+
+<style>
+  .radial-overlay {
+    position: relative;
+  }
+  .radial-overlay::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(
+      circle at 30% 50%,
+      rgba(6, 6, 6, 0.12) 0%,
+      rgba(6, 6, 6, 0.3) 75%
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+  .radial-overlay > * {
+    position: relative;
+    z-index: 1;
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function initPhoneAnimations() {
+    const sections = document.querySelectorAll(".about-section-phone");
+
+    sections.forEach((section, index) => {
+      const cassette = section.querySelector(".cassette-svg-phone");
+
+      if (cassette) {
+        let xStart, xEnd, rotationEnd;
+
+        if (index === 0) {
+          // Section 1
+          xStart = -100; // Reduced from -200
+          xEnd = -20; // Reduced from -40
+          rotationEnd = 10; // Reduced rotation
+        } else if (index === 1) {
+          // Section 2
+          xStart = 100; // Reduced from 200
+          xEnd = 25; // Reduced from 50
+          rotationEnd = -10;
+        } else {
+          // Section 3
+          xStart = -100;
+          xEnd = -20;
+          rotationEnd = 10;
+        }
+
+        const rotationStart = -45;
+
+        gsap.fromTo(
+          cassette,
+          {
+            y: 300,
+            x: xStart,
+            rotation: rotationStart,
+          },
+          {
+            y: 0,
+            x: xEnd,
+            rotation: rotationEnd,
+            duration: 1,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: section,
+              start: "top 70%",
+              end: "bottom bottom",
+              scrub: 1,
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      }
+    });
+
+    // Refresh ScrollTrigger to ensure positions are correct after layout
+    ScrollTrigger.refresh();
+  }
+
+  let phoneInit = false;
+  const safeInit = () => {
+    if (phoneInit) return;
+    phoneInit = true;
+    initPhoneAnimations();
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", safeInit);
+  } else {
+    safeInit();
+  }
+
+  window.addEventListener("load", () => {
+    ScrollTrigger.refresh();
+  });
+</script>

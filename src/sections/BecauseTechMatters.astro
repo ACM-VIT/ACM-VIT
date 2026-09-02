@@ -1,0 +1,175 @@
+---
+// Because Technology Matters
+---
+
+<div class="relative -mt-28">
+  <section
+    class="btm-section w-screen min-h-[100vh] relative flex items-center justify-center overflow-hidden"
+    id="tech-hero"
+  >
+    <div class="btm-text-container relative z-10" id="textContainer">
+      <div class="btm-line">
+        <span class="btm-word btm-word-accent">because</span>
+      </div>
+      <div class="btm-line">
+        <span class="btm-word">technology</span>
+      </div>
+      <div class="btm-line">
+        <span class="btm-word btm-word-outline">matters</span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<style>
+  .btm-section {
+    position: relative;
+    background: transparent;
+  }
+
+  .btm-text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 12vw;
+    width: 100%;
+  }
+
+  .btm-line {
+    overflow: hidden;
+  }
+
+  .btm-word {
+    font-family: "PolySans Bulky Wide", sans-serif;
+    font-size: clamp(3rem, 8vw, 8rem);
+    font-weight: 800;
+    line-height: 1.05;
+    color: #FEFCD9;
+    display: inline-block;
+  }
+
+  .btm-word-accent {
+    color: #f95f4a;
+  }
+
+  .btm-word-outline {
+    color: transparent;
+    -webkit-text-stroke: 2.5px #FEFCD9;
+  }
+
+  .btm-letter {
+    display: inline-block;
+    transform-origin: 50% 100%;
+    will-change: transform, opacity;
+    opacity: 0;
+  }
+
+  :global(html[data-theme="light"]) .btm-word {
+    color: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .btm-word-accent {
+    color: #f95f4a;
+  }
+  :global(html[data-theme="light"]) .btm-word-outline {
+    -webkit-text-stroke-color: #1a1a1a;
+  }
+
+  @media (max-width: 768px) {
+    .btm-text-container {
+      padding-left: 8vw;
+    }
+    .btm-word {
+      font-size: clamp(2.2rem, 10vw, 4rem);
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const initBTM = () => {
+    const section = document.getElementById("tech-hero");
+    if (!section) return;
+
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    const words = section.querySelectorAll<HTMLElement>(".btm-word");
+
+    // Split words into letters
+    const allLetters: HTMLElement[] = [];
+    words.forEach((word) => {
+      const text = word.textContent || "";
+      word.textContent = "";
+      [...text].forEach((ch) => {
+        const span = document.createElement("span");
+        span.className = "btm-letter";
+        span.textContent = ch;
+        word.appendChild(span);
+        allLetters.push(span);
+      });
+    });
+
+    if (reduceMotion) {
+      gsap.set(allLetters, { opacity: 1 });
+      return;
+    }
+
+    // Initial state: dropped down + rotated
+    gsap.set(allLetters, {
+      yPercent: 110,
+      rotation: -8,
+      opacity: 0,
+    });
+
+    // Reveal once on enter — no pin, no scrub
+    ScrollTrigger.create({
+      trigger: section,
+      start: "top 75%",
+      once: true,
+      onEnter: () => {
+        gsap.to(allLetters, {
+          yPercent: 0,
+          rotation: 0,
+          opacity: 1,
+          duration: 0.9,
+          ease: "power3.out",
+          stagger: { each: 0.025, from: "start" },
+        });
+      },
+    });
+
+    // Lightweight hover wave per word
+    words.forEach((word) => {
+      const letters = Array.from(word.querySelectorAll<HTMLElement>(".btm-letter"));
+      word.addEventListener("mouseenter", () => {
+        gsap.to(letters, {
+          y: -14,
+          duration: 0.35,
+          ease: "power2.out",
+          stagger: { each: 0.025, from: "start" },
+          overwrite: "auto",
+        });
+      });
+      word.addEventListener("mouseleave", () => {
+        gsap.to(letters, {
+          y: 0,
+          duration: 0.5,
+          ease: "elastic.out(1, 0.55)",
+          stagger: { each: 0.015, from: "start" },
+          overwrite: "auto",
+        });
+      });
+    });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initBTM);
+  } else {
+    initBTM();
+  }
+</script>

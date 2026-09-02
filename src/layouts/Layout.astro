@@ -1,8 +1,37 @@
 ---
-import CelebrationPopup from "../components/CelebrationPopup.astro";
-import Preloader from "../components/Preloader.astro";
-import Header from "../components/Header.astro";
+import Preloader from "./Preloader.astro";
+import Header from "./Header.astro";
+import CassettePlayer from "../components/ui/CassettePlayer.astro";
+import ScrollCue from "../components/ui/ScrollCue.astro";
+import Breadcrumbs from "../components/ui/Breadcrumbs.astro";
 import { getAssetUrl } from "../utils/cdn";
+// Global styles (fonts, tokens, a11y helpers) - imported at the layout level so
+// the skip link, keyboard focus ring and reduced-motion backstop apply on every
+// page, not only ones whose sections happen to import globals.css.
+import "../styles/globals.css";
+
+type Crumb = { label: string; href?: string };
+
+export interface Props {
+  /** Subpage title for compact navbar. Omit for homepage dot nav. */
+  pageTitle?: string;
+  /** Back button href for subpage navbar. */
+  backHref?: string;
+  /** Set false on pages that own the bottom-centre lane (desktop docks). */
+  scrollCue?: boolean;
+  /** Set false to drop the top-docked "keep scrolling" bubble on this page. */
+  scrollDock?: boolean;
+  /** Custom breadcrumb trail, or false to hide it on this page. */
+  crumbs?: Crumb[] | false;
+  /**
+   * Set on pages whose root element bleeds its background up behind the fixed
+   * header (via a negative top margin). Floats the crumbs out of normal flow so
+   * their ~32px height can't push the page box down and reopen the header seam.
+   */
+  bleedBg?: boolean;
+}
+
+const { pageTitle, backHref, scrollCue = true, scrollDock = true, crumbs, bleedBg = false } = Astro.props;
 
 const site = Astro.site ?? new URL("https://www.acmvit.in");
 const canonicalUrl = new URL(Astro.url.pathname, site);
@@ -17,9 +46,65 @@ if (cdnEnv) {
   }
 }
 
-const title = "ACM-VIT";
+const mediaCdnEnv = import.meta.env.PUBLIC_MEDIA_CDN_URL;
+let mediaOrigin: string | null = null;
+if (mediaCdnEnv) {
+  try {
+    const origin = new URL(mediaCdnEnv).origin;
+    // Avoid emitting a duplicate hint if media shares the asset CDN origin.
+    if (origin !== cdnOrigin) mediaOrigin = origin;
+  } catch {
+    mediaOrigin = null;
+  }
+}
+// Cleaned base used by the client-side media failsafe to map a failed CDN
+// URL back to its origin-local path.
+const mediaCdnBase = mediaCdnEnv ? mediaCdnEnv.replace(/\/$/, "") : "";
+
+const title = pageTitle ? `${pageTitle} - ACM-VIT` : "ACM-VIT";
 const description =
   "ACM-VIT is the official student chapter of the Association for Computing Machinery at VIT Vellore, focused on building impactful technology, encouraging innovation, and growing a collaborative student community.";
+const isLandingPage = Astro.url.pathname === "/";
+
+// ── Breadcrumb trail ──────────────────────────────────────────────────────
+// Auto-derived from the URL path unless the page passes an explicit trail (or
+// false to hide). Skipped on the homepage and on /domains/* pages, which carry
+// their own bespoke in-hero breadcrumb.
+const pathname = Astro.url.pathname.replace(/\/+$/, "") || "/";
+const crumbLabels: Record<string, string> = {
+  faqs: "FAQs",
+  "code-of-conduct": "Code of Conduct",
+  z0d1ak: "z0d1ak",
+  p: "Pages",
+};
+const prettyCrumb = (seg: string) =>
+  crumbLabels[seg] ??
+  decodeURIComponent(seg)
+    .replace(/-/g, " ")
+    .replace(/\b\w/g, (m) => m.toUpperCase());
+
+let crumbItems: Crumb[] = [];
+const showCrumbs =
+  crumbs !== false &&
+  !isLandingPage &&
+  !pathname.startsWith("/domains/");
+if (showCrumbs) {
+  if (Array.isArray(crumbs)) {
+    crumbItems = crumbs;
+  } else {
+    const segs = pathname.split("/").filter(Boolean);
+    crumbItems = [{ label: "Home", href: "/" }];
+    let acc = "";
+    segs.forEach((seg, i) => {
+      acc += "/" + seg;
+      const isLast = i === segs.length - 1;
+      crumbItems.push({
+        label: isLast ? pageTitle || prettyCrumb(seg) : prettyCrumb(seg),
+        href: isLast ? undefined : acc,
+      });
+    });
+  }
+}
 ---
 
 <!doctype html>
@@ -28,6 +113,68 @@ const description =
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/webp" href={getAssetUrl("/favicon.webp")} />
+
+    <!-- webp-first failsafe: if a .webp image fails to load, fall back to the
+         original raster/vector kept alongside it (png -> jpg -> jpeg -> svg). -->
+    <script is:inline>
+      (function () {
+        var EXT = [".png", ".jpg", ".jpeg", ".svg"];
+        document.addEventListener(
+          "error",
+          function (e) {
+            var el = e.target;
+            if (!el || el.tagName !== "IMG") return;
+            var src = el.currentSrc || el.src || "";
+            if (src.slice(-5) !== ".webp") return;
+            var step = parseInt(el.getAttribute("data-fb") || "-1", 10) + 1;
+            if (step >= EXT.length) return;
+            el.setAttribute("data-fb", step);
+            el.src = src.slice(0, -5) + EXT[step];
+          },
+          true
+        );
+      })();
+    </script>
+
+    <!-- media CDN failsafe: if a <video>/<audio> served from the media CDN
+         fails to load (404 / network), rewrite its source(s) back to the
+         origin-local path and reload once. <source> fallback does NOT fire on
+         network errors, so this is handled in JS. No-op when the CDN is unset. -->
+    <script is:inline define:vars={{ mediaCdnBase }}>
+      (function () {
+        if (!mediaCdnBase) return;
+        var toLocal = function (url) {
+          if (typeof url !== "string" || url.indexOf(mediaCdnBase) !== 0) return null;
+          return url.slice(mediaCdnBase.length) || null;
+        };
+        var recover = function (media) {
+          if (!media || media.getAttribute("data-media-fb")) return;
+          media.setAttribute("data-media-fb", "1");
+          var sources = media.querySelectorAll("source");
+          if (sources.length) {
+            var swapped = false;
+            sources.forEach(function (s) {
+              var local = toLocal(s.getAttribute("src"));
+              if (local) { s.setAttribute("src", local); swapped = true; }
+            });
+            if (swapped) media.load();
+          } else {
+            var local = toLocal(media.currentSrc || media.src);
+            if (local) { media.src = local; media.load(); }
+          }
+        };
+        document.addEventListener(
+          "error",
+          function (e) {
+            var el = e.target;
+            if (!el || !el.tagName) return;
+            if (el.tagName === "SOURCE") recover(el.parentElement);
+            else if (el.tagName === "VIDEO" || el.tagName === "AUDIO") recover(el);
+          },
+          true
+        );
+      })();
+    </script>
 
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -43,7 +190,7 @@ const description =
     <meta property="og:image:type" content="image/webp" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="ACM-VIT" />
+    <meta property="og:image:alt" content="ACM-VIT - because technology matters" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
@@ -52,29 +199,34 @@ const description =
 
     {cdnOrigin && <link rel="dns-prefetch" href={cdnOrigin} />}
     {cdnOrigin && <link rel="preconnect" href={cdnOrigin} crossorigin />}
+    {mediaOrigin && <link rel="dns-prefetch" href={mediaOrigin} />}
+    {mediaOrigin && <link rel="preconnect" href={mediaOrigin} crossorigin />}
     <link
       rel="preload"
       as="image"
-      href={getAssetUrl("/acm_topleft.webp")}
+      href={getAssetUrl("/logos/logos-acm-topleft.webp")}
+      fetchpriority="high"
+    />
+    {
+      isLandingPage && (
+        <link
+          rel="preload"
+          as="image"
+          href={getAssetUrl("/logos/logos-vit.webp")}
+          fetchpriority="high"
+        />
+      )
+    }
+    <link
+      rel="preload"
+      as="image"
+      href={getAssetUrl("/backgrounds/backgrounds-background-pattern.webp")}
       fetchpriority="high"
     />
     <link
       rel="preload"
       as="image"
-      href={getAssetUrl("/VIT.webp")}
-      fetchpriority="high"
-    />
-    <link
-      rel="preload"
-      as="image"
-      href={getAssetUrl("/background_pattern.webp")}
-      fetchpriority="high"
-    />
-    <link
-      rel="preload"
-      as="video"
-      href={getAssetUrl("/ACMWebsiteVid.mp4")}
-      type="video/mp4"
+      href={getAssetUrl("/scroll-video-frames/dark/0001.webp")}
       fetchpriority="high"
     />
 
@@ -84,39 +236,114 @@ const description =
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap"
       rel="stylesheet"
     />
+    <!-- Prevent flash of wrong theme -->
+    <script is:inline>
+      (function(){
+        var t = localStorage.getItem('acm-theme');
+        if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      })();
+    </script>
+    <script is:inline>
+      (function(){
+        var art = [
+          " █████╗  ██████╗███╗   ███╗      ██╗   ██╗██╗████████╗",
+          "██╔══██╗██╔════╝████╗ ████║      ██║   ██║██║╚══██╔══╝",
+          "███████║██║     ██╔████╔██║█████╗██║   ██║██║   ██║   ",
+          "██╔══██║██║     ██║╚██╔╝██║╚════╝╚██╗ ██╔╝██║   ██║   ",
+          "██║  ██║╚██████╗██║ ╚═╝ ██║       ╚████╔╝ ██║   ██║   ",
+          "╚═╝  ╚═╝ ╚═════╝╚═╝     ╚═╝        ╚═══╝  ╚═╝   ╚═╝   "
+        ].join("\n");
+        console.log("%c" + art, "color:#f95f4a;font-family:monospace;line-height:1;");
+      })();
+    </script>
   </head>
   <body>
+    <!-- Keyboard/screen-reader jump link: skips the fixed logos, nav and theme
+         cord and moves focus straight to the page's main content. -->
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
     <Preloader />
-    <CelebrationPopup />
+
     <div
       class="diamond-grid"
-      style={`background-image: url('${getAssetUrl("/background_pattern.webp")}');`}
+      style={`background-image: url('${getAssetUrl("/backgrounds/backgrounds-background-pattern.webp")}');`}
     >
     </div>
-    <div class="brand-logos" aria-label="ACM-VIT and VIT">
-      <img
-        src={getAssetUrl("/acm_topleft.webp")}
-        alt="ACM-VIT"
-        class="acm-logo"
-        loading="eager"
-        decoding="async"
-        fetchpriority="high"
-      />
-      <img
-        src={getAssetUrl("/VIT.webp")}
-        alt="VIT"
-        class="vit-logo"
-        loading="eager"
-        decoding="async"
-        fetchpriority="high"
-      />
+    <div class="brand-logos" aria-label={isLandingPage ? "ACM-VIT and VIT" : "ACM-VIT"}>
+      <a href="/" class="acm-logo-link" aria-label="ACM-VIT home">
+        <img
+          src={getAssetUrl("/logos/logos-acm-topleft.webp")}
+          alt="ACM-VIT"
+          class="acm-logo"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        />
+      </a>
+      {
+        isLandingPage && (
+          <span class="brand-divider" aria-hidden="true" />
+        )
+      }
+      {
+        isLandingPage && (
+          <a
+            href="https://vit.ac.in/"
+            class="vit-logo-link"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="VIT (opens in a new tab)"
+          >
+            <img
+              src={getAssetUrl("/logos/logos-vit.webp")}
+              alt="VIT"
+              class="vit-logo"
+              loading="eager"
+              decoding="async"
+              fetchpriority="high"
+            />
+          </a>
+        )
+      }
     </div>
+    <!-- Theme toggle - dangling bulb pull cord -->
+    <div id="theme-toggle" class="theme-toggle" aria-label="Toggle light/dark mode" role="button" tabindex="0">
+      <div class="bulb-tooltip">pull me to see what happens</div>
+      <!-- Dashed cord - SVG path updated dynamically for sway -->
+      <svg id="cord-svg" class="cord-svg" width="6" height="80" viewBox="0 0 6 80">
+        <path id="cord-path" d="M3 0 Q 3 40 3 80" stroke="#F95F4A" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="6 6" fill="none"/>
+      </svg>
+      <!-- Bulb handle - draggable -->
+      <div id="bulb-handle" class="bulb-handle">
+        <svg width="40" height="25" viewBox="0 0 40 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8.75 1.25L1.25 13.75H38.25L30.75 1.25H8.75Z" fill="#F95F4A" stroke="#F95F4A" stroke-width="2.5" stroke-linejoin="round"/>
+          <circle class="bulb-circle" cx="19.25" cy="14.2461" r="8.75" stroke="#F95F4A" stroke-width="2.5"/>
+        </svg>
+      </div>
+    </div>
+
     <div class="app-root min-h-screen flex flex-col">
-      <Header />
-      <main class="content flex-1 relative pt-28">
+      <Header pageTitle={pageTitle} backHref={backHref} />
+      <main id="main-content" tabindex="-1" class="content flex-1 relative pt-28">
+        {crumbItems.length > 0 && (
+          <div class:list={["page-crumbs-bar", bleedBg && "page-crumbs-bar--bleed"]}>
+            <Breadcrumbs items={crumbItems} />
+          </div>
+        )}
         <slot />
       </main>
     </div>
+
+    <CassettePlayer />
+
+    {
+      /* Initial centre hint on every page (landing gets its own from Hero). */
+      scrollCue && !isLandingPage && <ScrollCue mode="fixed" />
+    }
+
+    {/* Top-docked scroll cue on every page: relocates beside the navbar past
+        the hero, swells into "keep scrolling" on [data-scroll-nudge] sections. */}
+    {scrollDock && <ScrollCue mode="dock" />}
+
     <script>
       import { gsap } from "gsap";
       import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -358,10 +585,6 @@ const description =
             scaleFromWidth(width, 1363, 768, 0.8, 0.55).toFixed(4)
           );
           root.style.setProperty(
-            "--grep-button-scale",
-            scaleFromWidth(width, 1136, 768, 0.8, 0.5).toFixed(4)
-          );
-          root.style.setProperty(
             "--nav-bar-scale",
             navScaleFromWidth(width).toFixed(4)
           );
@@ -391,6 +614,179 @@ const description =
         });
       })();
     </script>
+    <script>
+      import "../scripts/animated-button";
+    </script>
+    <script>
+      // @ts-nocheck
+      import { gsap } from "gsap";
+
+      const toggle = document.getElementById('theme-toggle');
+      if (toggle) {
+        // expose theme switch for MobileNavbar (assigned after function decl below)
+        const cordSvg = document.getElementById('cord-svg');
+        const cordPath = document.getElementById('cord-path');
+        const bulbHandle = document.getElementById('bulb-handle');
+
+        const CORD_BASE = 80;
+        const PULL_THRESHOLD = 30;
+        const PULL_MAX = 90;
+
+        let isDragging = false;
+        let animating = false;
+        let startY = 0;
+        let pullAmount = 0;
+
+        function updateCord(pull, sway) {
+          const h = CORD_BASE + pull;
+          cordSvg.setAttribute('height', String(h));
+          cordSvg.setAttribute('viewBox', `0 0 6 ${h}`);
+          const cx = 3 + (sway || 0);
+          cordPath.setAttribute('d', `M3 0 Q ${cx} ${h / 2} 3 ${h}`);
+          bulbHandle.style.transform = `translateY(${pull}px)`;
+        }
+
+        function doThemeSwitch(originX, originY) {
+          const html = document.documentElement;
+          const isLight = html.getAttribute('data-theme') === 'light';
+
+          if (document.startViewTransition) {
+            // Reveal origin: explicit coords (e.g. mobile theme btn) else bulb center.
+            let x = originX, y = originY;
+            if (typeof x !== 'number' || typeof y !== 'number') {
+              const rect = bulbHandle.getBoundingClientRect();
+              x = rect.left + rect.width / 2;
+              y = rect.top + rect.height / 2;
+            }
+            // Use PERCENTAGES, not px, for the reveal origin + radius.
+            // Chrome (retina/HiDPI) resolves clip-path px on the view-transition
+            // pseudo in DEVICE pixels while getBoundingClientRect() returns CSS
+            // pixels, so px coords land at gbcr/dpr (origin shifts to ~center on
+            // dpr=2). Percentages resolve against the pseudo box and are
+            // dpr-invariant, so the reveal always starts at the bulb/button.
+            const px = (x / window.innerWidth) * 100;
+            const py = (y / window.innerHeight) * 100;
+            // 150% radius guarantees full coverage from any corner origin.
+            const endRadius = 150;
+
+            // Kill ALL transitions site-wide so Chrome's new-state snapshot
+            // captures fully-settled colors, not mid-transition values.
+            html.classList.add('is-switching-theme');
+
+            const transition = document.startViewTransition(() => {
+              if (isLight) { html.removeAttribute('data-theme'); localStorage.setItem('acm-theme', 'dark'); }
+              else { html.setAttribute('data-theme', 'light'); localStorage.setItem('acm-theme', 'light'); }
+            });
+
+            const restore = () => html.classList.remove('is-switching-theme');
+
+            transition.ready.then(() => {
+              document.documentElement.animate(
+                { clipPath: [`circle(0% at ${px}% ${py}%)`, `circle(${endRadius}% at ${px}% ${py}%)`] },
+                { duration: 600, easing: 'cubic-bezier(0.4, 0, 0.2, 1)', pseudoElement: '::view-transition-new(root)' }
+              );
+            }).catch(restore);
+
+            transition.finished.then(restore).catch(restore);
+          } else {
+            if (isLight) { html.removeAttribute('data-theme'); localStorage.setItem('acm-theme', 'dark'); }
+            else { html.setAttribute('data-theme', 'light'); localStorage.setItem('acm-theme', 'light'); }
+          }
+        }
+
+        function bounceBack(switched) {
+          animating = true;
+          const proxy = { pull: pullAmount, sway: 0 };
+
+          // Cord sway - thread wobble after release
+          if (switched) {
+            gsap.fromTo(proxy, { sway: 8 }, {
+              sway: 0,
+              duration: 1.6,
+              ease: 'elastic.out(1, 0.2)',
+              onUpdate: () => updateCord(proxy.pull, proxy.sway),
+            });
+          }
+
+          // Snap back with elastic bounce
+          gsap.to(proxy, {
+            pull: 0,
+            duration: switched ? 0.9 : 0.5,
+            ease: switched ? 'elastic.out(1.2, 0.3)' : 'elastic.out(1, 0.4)',
+            onUpdate: () => updateCord(proxy.pull, proxy.sway),
+            onComplete: () => {
+              animating = false;
+              updateCord(0, 0);
+            },
+          });
+        }
+
+        (window as any).acmToggleTheme = doThemeSwitch;
+
+        // ── Pointer drag ──
+        toggle.addEventListener('pointerdown', (e) => {
+          if (animating) return;
+          isDragging = true;
+          startY = e.clientY;
+          pullAmount = 0;
+          toggle.setPointerCapture(e.pointerId);
+          e.preventDefault();
+        });
+
+        toggle.addEventListener('pointermove', (e) => {
+          if (!isDragging) return;
+          const dy = Math.max(0, e.clientY - startY);
+          pullAmount = Math.min(dy, PULL_MAX);
+          updateCord(pullAmount, 0);
+        });
+
+        toggle.addEventListener('pointerup', (e) => {
+          if (!isDragging) return;
+          isDragging = false;
+
+          // Quick tap - animate a full pull + switch
+          if (pullAmount < 5) {
+            animating = true;
+            const proxy = { pull: 0, sway: 0 };
+            gsap.to(proxy, {
+              pull: PULL_THRESHOLD + 15,
+              duration: 0.2,
+              ease: 'power2.in',
+              onUpdate: () => updateCord(proxy.pull, proxy.sway),
+              onComplete: () => {
+                pullAmount = proxy.pull;
+                doThemeSwitch();
+                bounceBack(true);
+              },
+            });
+            return;
+          }
+
+          const switched = pullAmount >= PULL_THRESHOLD;
+          if (switched) doThemeSwitch();
+          bounceBack(switched);
+        });
+
+        toggle.addEventListener('pointercancel', () => {
+          if (isDragging) {
+            isDragging = false;
+            bounceBack(false);
+          }
+        });
+
+        // ── Keyboard ──
+        toggle.addEventListener('keydown', (e) => {
+          if (animating) return;
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            pullAmount = PULL_THRESHOLD + 15;
+            updateCord(pullAmount, 0);
+            doThemeSwitch();
+            bounceBack(true);
+          }
+        });
+      }
+    </script>
   </body>
 </html>
 
@@ -399,8 +795,16 @@ const description =
   body {
     margin: 0;
     width: 100%;
-    height: 100%;
-    overflow-x: hidden;
+    /* overflow-x: clip, NOT hidden, and no height: 100%. The old combo
+       (height: 100% + overflow-x: hidden) turned <body> into an inner scroll
+       container: the page scrolled inside body while the window never scrolled
+       (window.scrollY stuck at 0). That broke native scrolling guarantees -
+       macOS trackpads could overscroll past the footer into a void without
+       bouncing back; scroll restoration and window.scrollTo were no-ops.
+       clip cuts horizontal overflow without creating a scroll container, so
+       the viewport scrolls the page and position: sticky sections still pin
+       to it. */
+    overflow-x: clip;
     overscroll-behavior-y: none;
     position: relative;
     background: #0d0e0d;
@@ -413,6 +817,25 @@ const description =
     -ms-overflow-style: none;
   }
 
+  /* Safari/WebKit ignores overscroll-behavior for the document rubber-band,
+     and the exposed gutter paints the viewport canvas = html's background.
+     Match it to the footer's black so a bounce past the footer shows no strip. */
+  html {
+    background: #000;
+  }
+
+  /* Legacy WebKit (Safari < 16 / older iPads) has no overflow: clip. There,
+     overflow-x: hidden would make body a non-scrolling scroll container and
+     kill every position: sticky section, so restore the old body-scroller
+     setup (body scrolls the page) for those browsers only. */
+  @supports not (overflow: clip) {
+    html,
+    body {
+      height: 100%;
+      overflow-x: hidden;
+    }
+  }
+
   /* Hide scrollbar for Chrome, Safari and Opera */
   html::-webkit-scrollbar,
   body::-webkit-scrollbar {
@@ -421,7 +844,6 @@ const description =
 
   :root {
     --brand-logo-scale: 1;
-    --grep-button-scale: 1;
     --nav-bar-scale: 1;
   }
 
@@ -435,7 +857,7 @@ const description =
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    opacity: 0.5;
+    opacity: 0.1;
     z-index: 0;
     pointer-events: none;
   }
@@ -447,13 +869,22 @@ const description =
     z-index: 1000;
     display: flex;
     align-items: center;
-    gap: clamp(10px, 0.9vw, 16px);
+    /* Co-brand spacing per design guide (logo <-> partner divider): ~34px each side */
+    gap: clamp(20px, 2vw, 34px);
     pointer-events: none;
     transform: scale(var(--brand-logo-scale));
     transform-origin: top left;
     transition:
       opacity 180ms ease,
       transform 160ms ease;
+  }
+
+  .acm-logo-link,
+  .vit-logo-link {
+    display: inline-flex;
+    line-height: 0;
+    pointer-events: auto;
+    cursor: pointer;
   }
 
   .acm-logo {
@@ -463,17 +894,36 @@ const description =
 
   .vit-logo {
     width: auto;
-    height: 44px;
+    height: 60px;
     object-fit: contain;
   }
 
-  @media screen and (max-width: 952px) {
+  /* Thin co-brand divider between the ACM-VIT mark and the VIT partner mark.
+     Design guide: 1px rule, optical height of the marks. Desktop landing only. */
+  .brand-divider {
+    flex: none;
+    width: 1px;
+    height: 64px;
+    background: rgba(255, 255, 255, 0.28);
+    pointer-events: none;
+  }
+
+  :global(html[data-theme="light"]) .brand-divider {
+    background: rgba(26, 26, 26, 0.2);
+  }
+
+  @media screen and (max-width: 1024px) {
     .brand-logos {
       transform: scale(0.7);
     }
+
+    /* Below desktop the two marks split to opposite corners; drop the divider. */
+    .brand-divider {
+      display: none;
+    }
   }
 
-  @media screen and (min-width: 769px) and (max-width: 952px) {
+  @media screen and (min-width: 769px) and (max-width: 1024px) {
     .brand-logos {
       right: 20px;
       transform: none;
@@ -503,6 +953,38 @@ const description =
     z-index: 1;
     width: 100%;
     height: 100%;
+  }
+
+  /* Top-of-page breadcrumb trail (tape-deck styled). Sits just under the
+     floating header, clear of the fixed brand logos above it. */
+  .page-crumbs-bar {
+    position: relative;
+    z-index: 3;
+    padding: 0.15rem clamp(1.25rem, 5vw, 4rem) 0;
+    margin-bottom: 0.35rem;
+  }
+
+  /* Bleed pages: the page root pulls its background up behind the header with a
+     negative top margin sized to cancel the .content clearance (pt-28 = 7rem)
+     exactly. A crumbs bar in normal flow adds its own ~32px on top of that, so
+     the pull lands short and the grid/glow starts ~32px down - a visible seam
+     across the header. Float the crumbs in the clearance instead (same visual
+     spot) so they consume no flow height; the raised z-index keeps their links
+     above the page's own z-10 inner wrapper, which now spans up behind them. */
+  .page-crumbs-bar--bleed {
+    position: absolute;
+    top: 7rem;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 768px) {
+    .page-crumbs-bar {
+      padding-left: 1.1rem;
+      padding-right: 1.1rem;
+    }
   }
 
   @media screen and (max-width: 768px) {
@@ -546,7 +1028,7 @@ const description =
     }
   }
 
-  @media screen and (max-width: 427px) {
+  @media screen and (max-width: 480px) {
     .brand-logos {
       transform: none;
     }
@@ -560,5 +1042,12 @@ const description =
   body.mobile-menu-open .brand-logos {
     opacity: 0;
     pointer-events: none;
+  }
+
+  /* Mobile: navbar provides theme toggle, hide bulb cord */
+  @media screen and (max-width: 1024px) {
+    :global(.theme-toggle) {
+      display: none !important;
+    }
   }
 </style>

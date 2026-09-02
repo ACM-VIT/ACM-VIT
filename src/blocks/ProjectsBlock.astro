@@ -1,0 +1,100 @@
+---
+import ProjectsIntro from "../sections/ProjectsIntro.astro";
+import Projects from "../sections/Projects.astro";
+import AnimatedButton from "../components/ui/AnimatedButton.astro";
+import { projectSlugs } from "../data/projectDetailsData";
+import { items as homeProjectItems } from "../generated/home-projects";
+
+// Wire each CMS project to its detail page (/projects/<slug>). CMS has no slug
+// field, so derive one from the cassette alt ("ACMOne Image" -> "acmone") and
+// validate against the real detail-page slugs. Explicit aliases cover cases
+// where the alt doesn't kebab-case cleanly to the slug.
+const slugAliases: Record<string, string> = {
+  "ocs website": "ocs-25",
+};
+const validSlugs = new Set(projectSlugs);
+const resolveSlug = (alt: string): string | undefined => {
+  const base = alt.replace(/\s*image$/i, "").trim().toLowerCase();
+  const derived = slugAliases[base] ?? base.replace(/\s+/g, "-");
+  return validSlugs.has(derived) ? derived : undefined;
+};
+
+const projectsData = homeProjectItems
+  .filter((project) => (project.cassetteSrc || project.cassetteSvg) && project.cassetteAlt && project.description1)
+  .map((p) => ({
+  slug: resolveSlug(p.cassetteAlt!),
+  cassette: { src: p.cassetteSrc, svg: p.cassetteSvg, alt: p.cassetteAlt! },
+  textContent: { blocks: [p.description1, ...(p.description2 ? [p.description2] : [])] },
+  buttons: {
+    primary: {
+      backgroundColor: p.primaryBgColor,
+      textColor: p.primaryTextColor || 'white',
+      borderColor: p.primaryBorderColor || '#FEFCD9',
+      ...(p.primaryBorderRadius ? { borderRadius: p.primaryBorderRadius } : {}),
+    },
+    visitWebsite: {
+      text: p.visitWebsiteText || 'VISIT WEBSITE',
+      backgroundColor: p.visitWebsiteBgColor || p.primaryBgColor,
+      textColor: p.visitWebsiteTextColor || 'white',
+      borderColor: p.visitWebsiteBorderColor || '#FEFCD9',
+      url: p.visitWebsiteUrl || '',
+      ...(p.visitWebsiteBorderRadius ? { borderRadius: p.visitWebsiteBorderRadius } : {}),
+    },
+    icons: (p.icons ?? []).map((icon) => ({
+      type: icon.type || '',
+      backgroundColor: icon.backgroundColor || '',
+      textColor: icon.textColor || '',
+      borderColor: icon.borderColor || '',
+      iconColor: icon.iconColor || '',
+      ...(icon.borderRadius ? { borderRadius: icon.borderRadius } : {}),
+      url: icon.url || '',
+    })),
+  },
+  colors: {
+    textColor: p.textColor || 'white',
+    contentBlockBackground: p.contentBlockBackground || 'rgba(0, 0, 0, 0.15)',
+    hoverShadow: p.hoverShadow || '',
+  },
+}));
+---
+
+<ProjectsIntro />
+
+<section id="projects" class="page-section" data-scroll-nudge data-nudge-label="Scroll sideways" data-nudge-dir="x">
+    <Projects projects={projectsData} />
+    <div class="proj-cta relative w-full flex items-center justify-center h-auto py-10 md:h-[45vh] md:py-0 overflow-hidden">
+        <div class="proj-cta-grid pointer-events-none absolute inset-0 z-0 hidden md:block" aria-hidden="true">
+            <span class="cta-grid-v" style="left: 52%"></span>
+            <span class="cta-grid-v" style="left: 74%"></span>
+            <span class="cta-grid-v" style="left: 93%"></span>
+        </div>
+        <div class="relative z-10">
+        <AnimatedButton
+            text="Checkout all cool projects"
+            href="/projects"
+        />
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Continue the ProjectsShowcase dotted vertical lines into the CTA block. */
+    .cta-grid-v {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: repeating-linear-gradient(
+            to bottom,
+            rgba(254, 252, 217, 0.55) 0 3px,
+            transparent 3px 17px
+        );
+    }
+    :global(html[data-theme="light"]) .cta-grid-v {
+        background: repeating-linear-gradient(
+            to bottom,
+            rgba(38, 59, 51, 0.55) 0 3px,
+            transparent 3px 17px
+        );
+    }
+</style>

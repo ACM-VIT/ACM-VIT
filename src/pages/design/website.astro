@@ -1,0 +1,185 @@
+---
+export const prerender = true;
+import DesignLayout from "../../layouts/DesignLayout.astro";
+import { getAssetUrl } from "../../utils/cdn";
+
+const products = [
+  {
+    name: "acmvit.in",
+    href: "/design/products/website",
+    accent: "#F95F4A",
+    tonal: "#ffeae5",
+    desc: "The chapter site itself - dark-first, cassette identity, orange accents. The system every other product inherits.",
+    type: "PolySans / DM Sans",
+  },
+  {
+    name: "UniPool",
+    href: "/design/products/unipool",
+    accent: "#B5D750",
+    tonal: "#f2f8da",
+    desc: "Campus carpooling on iOS and Android. Deep forest surfaces, lime for action, warm cream paper.",
+    type: "Trap display / Nunito Sans",
+  },
+  {
+    name: "ExamCooker",
+    href: "/design/products/examcooker",
+    accent: "#5FC4E7",
+    tonal: "#e7f5fb",
+    desc: "Past papers, notes, and syllabi for every VIT course. A kitchen in two moods: steam-blue light and midnight-navy dark.",
+    type: "Plus Jakarta Sans",
+  },
+  {
+    name: "Conclave",
+    href: "/design/products/conclave",
+    accent: "#F95F4A",
+    tonal: "#ffeae5",
+    desc: "Real-time meetings with an in-meeting apps SDK. The closest sub-brand to the chapter: PolySans, void-dark surfaces, ACM orange.",
+    type: "PolySans (inherited)",
+  },
+  {
+    name: "GREP",
+    href: "/design/products/grep",
+    accent: "#2023FE",
+    tonal: "#e6e7ff",
+    desc: "The quarterly newsletter. One cobalt ink on cream paper, a pixel wordmark, and a keyboard motif throughout.",
+    type: "ChessType / Borel / Inter",
+  },
+  {
+    name: "ACMOne",
+    href: "/design/products/acmone",
+    accent: "#7F8CC0",
+    tonal: "#eceef7",
+    desc: "The chapter's internal ops app. Pastel periwinkle, mint, and dusty rose on a plum-dark ink - the family's quietest identity.",
+    type: "Garet Heavy / DM Sans",
+  },
+];
+---
+
+<DesignLayout
+  title="Website & Products"
+  description="How the ACM-VIT system applies to the website and product sub-brands."
+  current="/design/website"
+>
+  <section class="ds-hero">
+    <div class="ds-kicker"><span class="ds-kicker-pill">Platforms · Products</span></div>
+    <h1 class="ds-h1">One system, many voices.</h1>
+    <p class="ds-body-lg">
+      Every ACM-VIT product inherits the same skeleton - the mark, DM Sans,
+      the 4pt grid, the motion rules - and owns exactly one accent color and
+      one personality trait. That is the whole franchise model.
+    </p>
+  </section>
+
+  <!-- 01 · The website -->
+  <section class="ds-section" id="website">
+    <div class="ds-sec-head"><span class="ds-sec-num">01</span><h2 class="ds-h2">The website</h2></div>
+    <div class="ds-bento">
+      <div class="ds-card ds-b8 ds-reveal" style="background:#0D0E0D; border-color:#0D0E0D; color:#FEFCD9;">
+        <img src={getAssetUrl("/design/logos/acm-horizontal-white.svg")} alt="ACM-VIT" style="width:230px; display:block;" />
+        <p style="margin-top:22px; font-size:15px; line-height:1.6; color:#FEFCD9; opacity:.85; max-width:56ch;">
+          acmvit.in runs dark: Ink <span class="ds-mono">#0D0E0D</span>
+          surfaces, Cream <span class="ds-mono">#FEFCD9</span> text, orange
+          accents, and the cassette motif threaded through heroes, tiles, and
+          the player. Light mode uses Paper <span class="ds-mono">#F5EDE4</span>
+          with charcoal text.
+        </p>
+        <a href="/sleeve-notes" class="ds-btn ds-btn-sm" style="margin-top:20px; background:#FEFCD9; color:#0D0E0D;">
+          Website-specific guide →
+        </a>
+      </div>
+      <div class="ds-card ds-b4 ds-reveal">
+        <h3 class="ds-h4">Website invariants</h3>
+        <ul class="ds-w-list" style="margin-top:10px">
+          <li>Navigation and split layouts flip at <span class="ds-mono">1024px</span>.</li>
+          <li>WebP-first images with original fallback.</li>
+          <li>GSAP motion, <span class="ds-mono">power3.out</span> default.</li>
+          <li>Floating docks on desktop become navbar panels on mobile.</li>
+          <li>Every page ships an OpenGraph image.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 · Products -->
+  <section class="ds-section" id="products">
+    <div class="ds-sec-head"><span class="ds-sec-num">02</span><h2 class="ds-h2">Product sub-brands</h2></div>
+    <p class="ds-body">
+      A product may push its personality hard - inside its own surface. On
+      shared chapter material, everything returns to orange. Each product has
+      its own full guide - click through.
+    </p>
+    <div class="ds-bento">
+      {
+        products.map((p) => (
+          <a href={p.href} class="ds-card ds-card-hover ds-b6 ds-reveal ds-w-product" style={`border-top:4px solid ${p.accent};`}>
+            <div style="display:flex; align-items:center; gap:12px;">
+              <span style={`width:14px; height:14px; border-radius:4px; transform:rotate(45deg); background:${p.accent}; flex:none;`} />
+              <h3 class="ds-h3">{p.name}</h3>
+              <code class="ds-mono ds-small" style="margin-left:auto">{p.accent}</code>
+            </div>
+            <p class="ds-body" style="margin-top:12px">{p.desc}</p>
+            <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; align-items:center;">
+              <span class="ds-chip" style={`background:${p.tonal}; color:${p.accent};`}>Accent</span>
+              <span class="ds-chip">{p.type}</span>
+              <span class="ds-small" style="margin-left:auto; font-weight:640;">Design guide →</span>
+            </div>
+          </a>
+        ))
+      }
+      <div class="ds-card ds-card-tonal ds-b6 ds-reveal" style="display:flex; flex-direction:column; justify-content:center;">
+        <h3 class="ds-h4">Starting a new product?</h3>
+        <p class="ds-body" style="margin-top:8px">
+          Pick an unused accent from the palette, keep DM Sans unless there is
+          a strong concept reason not to, and bring it to the design team
+          before anything ships publicly.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 · What products may and may not change -->
+  <section class="ds-section" id="latitude">
+    <div class="ds-sec-head"><span class="ds-sec-num">03</span><h2 class="ds-h2">Latitude</h2></div>
+    <div class="ds-bento">
+      <div class="ds-card ds-b6 ds-reveal">
+        <span class="ds-chip ds-chip-do" style="margin-bottom:12px">Products may</span>
+        <ul class="ds-w-list">
+          <li>Lead with their accent color on their own surfaces.</li>
+          <li>Introduce a display face with a concept reason (z0d1ak's Cinzel).</li>
+          <li>Remix the mark for internal drops - reviewed by the design team.</li>
+          <li>Set their own imagery mood inside the grading rules.</li>
+        </ul>
+      </div>
+      <div class="ds-card ds-b6 ds-reveal">
+        <span class="ds-chip ds-chip-dont" style="margin-bottom:12px">Products may not</span>
+        <ul class="ds-w-list">
+          <li>Alter the diamond's geometry or the wordmark inside it.</li>
+          <li>Invent colors outside the palette.</li>
+          <li>Break the 4pt rhythm or the breakpoint system.</li>
+          <li>Ship a public identity change without design-team review.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</DesignLayout>
+
+<style>
+  .ds-w-list {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--ds-ink-2);
+    font-size: 14.5px;
+    line-height: 1.7;
+  }
+  .ds-w-list li + li {
+    margin-top: 6px;
+  }
+  .ds-w-product {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+  .ds-card[style*="#0D0E0D"] .ds-mono {
+    color: #f95f4a;
+  }
+</style>

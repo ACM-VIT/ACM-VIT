@@ -1,0 +1,10 @@
+{
+  "slug": "discord-hackpot",
+  "title": "Discord Hackpot",
+  "repo": "discord-hackpot",
+  "years": [
+    2021
+  ],
+  "description": "Discord Hackpot is a discord bot to assist organizing events over discord",
+  "order": 230
+}

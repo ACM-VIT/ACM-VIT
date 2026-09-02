@@ -1,0 +1,11 @@
+{
+  "slug": "tagred",
+  "order": 120,
+  "kind": "svg",
+  "name": "TAGRED",
+  "color": "#E53E3E",
+  "cassetteSvg": "/projects/cassettes/projects-cassettes-tagred.svg",
+  "alt": "TAGRED",
+  "url": "#",
+  "comingSoon": true
+}

@@ -1,0 +1,350 @@
+---
+import { getAssetUrl } from "../../../utils/cdn";
+export const prerender = true;
+import Layout from "../../../layouts/Layout.astro";
+import "../../../styles/globals.css";
+import Footer from "../../../layouts/Footer.astro";
+---
+
+<Layout pageTitle="Board Farewell" backHref="/merchandise">
+  <section class="bf-hero" data-bf-hero>
+    <div class="bf-line bf-line--1"></div>
+    <div class="bf-line bf-line--2"></div>
+
+    <div class="bf-center-col">
+      <h1 class="bf-title" data-bf-title>
+        <span class="bf-tc" data-tc>B</span><span class="bf-tc" data-tc>O</span><span class="bf-tc" data-tc>A</span><span class="bf-tc" data-tc>R</span><span class="bf-tc" data-tc>D</span><span class="bf-tc" data-tc>&nbsp;</span><span class="bf-tc" data-tc>F</span><span class="bf-tc" data-tc>A</span><span class="bf-tc" data-tc>R</span><span class="bf-tc" data-tc>E</span><span class="bf-tc" data-tc>W</span><span class="bf-tc" data-tc>E</span><span class="bf-tc" data-tc>L</span><span class="bf-tc" data-tc>L</span>
+      </h1>
+    </div>
+
+    <div class="bf-tee" data-bf-tee>
+      <img src={getAssetUrl("/merch/board-farewell/merch-board-farewell-tee.webp")} alt="Board Farewell Tee" loading="eager" />
+    </div>
+
+    <div class="bf-badge" data-badge>
+      <span class="bf-badge__label">LIMITED</span>
+      <span class="bf-badge__year">BF</span>
+    </div>
+
+    <div class="bf-hero-info" data-hero-info>
+      <h2 class="bf-hero-info__title">For the outgoing board.</h2>
+      <p class="bf-hero-info__body">
+        A sendoff, not a catalog drop - a short, limited run made to mark the
+        end of a board tenure. Not on the regular catalog, not produced again.
+        A token of the year each board steered the chapter through.
+      </p>
+    </div>
+  </section>
+
+  <section class="bf-cover-section" data-bf-cover>
+    <div class="bf-cover-wrap">
+      <h3 class="bf-cover-title" data-cover-anim>The cover art, up close.</h3>
+      <img
+        src={getAssetUrl("/merch/board-farewell/merch-board-farewell-cover.webp")}
+        alt="Board Farewell Cover Art"
+        class="bf-cover-img"
+        loading="lazy"
+        data-cover-anim
+      />
+    </div>
+  </section>
+
+  <section class="bf-end" data-bf-end>
+    <div class="bf-end__inner">
+      <p class="bf-end__text" data-end-anim>you have reached the end of the rack</p>
+      <p class="bf-end__sub" data-end-anim>no more hangers, just vibes from here</p>
+      <img
+        src={getAssetUrl("/merch/merch-lineup.webp")}
+        alt="ACM-VIT merchandise lineup"
+        class="bf-end__img"
+        loading="lazy"
+        data-end-anim
+      />
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style>
+  .bf-hero {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100svh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .bf-line {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 184, 0, 0.16) 30%, rgba(255, 184, 0, 0.16) 70%, transparent 100%);
+  }
+  .bf-line--1 { top: 18%; }
+  .bf-line--2 { bottom: 22%; }
+
+  .bf-center-col {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    pointer-events: none;
+    text-align: center;
+  }
+
+  .bf-title {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-weight: 800;
+    font-size: clamp(3rem, 9vw, 9rem);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    color: rgba(255, 184, 0, 0.2);
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .bf-tc { display: inline-block; opacity: 0; transform: translateY(60px); }
+
+  .bf-tee {
+    position: absolute;
+    z-index: 2;
+    right: 4%;
+    bottom: 6%;
+    width: clamp(220px, 32vw, 460px);
+    aspect-ratio: 1.1;
+    opacity: 0;
+    transform: translateY(40px) rotate(4deg);
+  }
+
+  .bf-tee img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.5));
+  }
+
+  .bf-badge {
+    position: absolute;
+    top: 50%;
+    right: 28px;
+    transform: translateY(-50%);
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    opacity: 0;
+  }
+
+  .bf-badge__label {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-size: 0.55rem;
+    font-weight: 500;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: rgba(255, 184, 0, 0.5);
+  }
+
+  .bf-badge__year {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(255, 184, 0, 0.28);
+  }
+
+  .bf-hero-info {
+    position: absolute;
+    left: clamp(1.5rem, 4vw, 3.5rem);
+    bottom: clamp(3rem, 8vh, 6rem);
+    z-index: 5;
+    max-width: 440px;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+
+  .bf-hero-info__title {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.4rem, 2.5vw, 2rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: #FEFCD9;
+    margin: 0 0 0.6rem;
+  }
+
+  .bf-hero-info__body {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-size: 0.8rem;
+    font-weight: 400;
+    line-height: 1.65;
+    color: rgba(254, 252, 217, 0.72);
+    margin: 0;
+    max-width: 380px;
+  }
+
+  /* Cover section */
+  .bf-cover-section {
+    position: relative;
+    padding: 6rem 1.5rem 3rem;
+  }
+
+  .bf-cover-wrap {
+    max-width: 64rem;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+
+  .bf-cover-title {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    letter-spacing: -0.02em;
+    color: #FEFCD9;
+    margin: 0 0 2.5rem;
+  }
+
+  .bf-cover-img {
+    width: 100%;
+    max-width: 56rem;
+    height: auto;
+    object-fit: contain;
+    border-radius: 1rem;
+    filter: drop-shadow(0 24px 60px rgba(0, 0, 0, 0.5));
+  }
+
+  /* End */
+  .bf-end { position: relative; padding: 5rem 1.5rem 2rem; overflow: hidden; }
+  .bf-end__inner { max-width: 56rem; margin: 0 auto; display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .bf-end__text {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.5rem, 4vw, 2.8rem);
+    letter-spacing: -0.02em;
+    color: rgba(254, 252, 217, 0.32);
+    text-transform: lowercase;
+    margin: 0;
+  }
+  .bf-end__sub {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: rgba(254, 252, 217, 0.22);
+    margin: 0.25rem 0 0;
+  }
+  .bf-end__img {
+    width: 100%;
+    max-width: 48rem;
+    height: auto;
+    object-fit: contain;
+    margin-top: 2rem;
+    mix-blend-mode: lighten;
+    filter: drop-shadow(0 16px 40px rgba(0, 0, 0, 0.3));
+  }
+
+  @media (max-width: 768px) {
+    .bf-title { font-size: clamp(2.4rem, 11vw, 4rem); }
+    .bf-tee { right: -4%; width: 60vw; bottom: 4%; }
+    .bf-badge { display: none; }
+    .bf-hero-info { max-width: 55%; bottom: calc(80px + env(safe-area-inset-bottom, 0px)); }
+    .bf-hero-info__body { font-size: 0.72rem; max-width: 100%; }
+  }
+
+  /* Phones: stack the hero vertically so the tee and info never overlap */
+  @media (max-width: 480px) {
+    .bf-hero {
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 0;
+      padding: 5.5rem 1.25rem calc(104px + env(safe-area-inset-bottom, 0px));
+    }
+    .bf-line--2 { display: none; }
+    .bf-title { font-size: clamp(2rem, 12vw, 3rem); }
+    .bf-center-col { order: 1; }
+    .bf-tee {
+      order: 2;
+      position: relative;
+      right: auto;
+      bottom: auto;
+      width: 68vw;
+      max-width: 280px;
+      margin: 1.5rem auto 0;
+      transform: rotate(4deg);
+    }
+    .bf-hero-info {
+      order: 3;
+      position: relative;
+      left: auto;
+      bottom: auto;
+      max-width: 100%;
+      margin-top: 1.75rem;
+    }
+  }
+
+  :global(html[data-theme="light"]) .bf-title { color: rgba(214, 152, 0, 0.18); }
+  :global(html[data-theme="light"]) .bf-badge__label { color: rgba(200, 144, 0, 0.5); }
+  :global(html[data-theme="light"]) .bf-badge__year { -webkit-text-stroke-color: rgba(200, 144, 0, 0.2); }
+  :global(html[data-theme="light"]) .bf-hero-info__title,
+  :global(html[data-theme="light"]) .bf-cover-title { color: #1a1a1a; }
+  :global(html[data-theme="light"]) .bf-hero-info__body { color: rgba(30, 20, 10, 0.72); }
+  :global(html[data-theme="light"]) .bf-tee img { filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.15)); }
+  :global(html[data-theme="light"]) .bf-cover-img { filter: drop-shadow(0 24px 60px rgba(0, 0, 0, 0.12)); }
+  :global(html[data-theme="light"]) .bf-end__text { color: rgba(30, 20, 10, 0.3); }
+  :global(html[data-theme="light"]) .bf-end__sub { color: rgba(30, 20, 10, 0.22); }
+  :global(html[data-theme="light"]) .bf-end__img { mix-blend-mode: multiply; filter: drop-shadow(0 16px 40px rgba(0, 0, 0, 0.08)); }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  const chars = document.querySelectorAll("[data-tc]");
+  const tee = document.querySelector("[data-bf-tee]");
+  const badge = document.querySelector("[data-badge]");
+  const heroInfo = document.querySelector("[data-hero-info]");
+
+  const tl = gsap.timeline({ defaults: { ease: "power3.out" }, delay: 0.3 });
+
+  tl.to(chars, { opacity: 1, y: 0, duration: 0.7, stagger: 0.04 });
+  if (tee) tl.to(tee, { opacity: 1, y: 0, duration: 0.85, ease: "power3.out" }, "-=0.4");
+  if (badge) tl.to(badge, { opacity: 1, duration: 0.45 }, "-=0.4");
+  if (heroInfo) tl.to(heroInfo, { opacity: 1, y: 0, duration: 0.6 }, "-=0.3");
+
+  if (tee) {
+    gsap.to(tee, {
+      y: "+=10",
+      duration: 3.5,
+      ease: "sine.inOut",
+      repeat: -1,
+      yoyo: true,
+    });
+  }
+
+  const coverAnims = document.querySelectorAll("[data-cover-anim]");
+  gsap.fromTo(coverAnims,
+    { opacity: 0, y: 30 },
+    {
+      opacity: 1, y: 0, duration: 0.8, stagger: 0.12, ease: "power3.out",
+      scrollTrigger: { trigger: ".bf-cover-section", start: "top 80%", once: true },
+    }
+  );
+
+  const endAnims = document.querySelectorAll("[data-end-anim]");
+  gsap.fromTo(endAnims,
+    { opacity: 0, y: 30 },
+    {
+      opacity: 1, y: 0, duration: 0.7, stagger: 0.12, ease: "power3.out",
+      scrollTrigger: { trigger: ".bf-end", start: "top 85%", once: true },
+    }
+  );
+</script>

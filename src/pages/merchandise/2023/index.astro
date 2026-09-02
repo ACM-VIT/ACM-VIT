@@ -1,0 +1,339 @@
+---
+import { getAssetUrl } from "../../../utils/cdn";
+export const prerender = true;
+import Layout from "../../../layouts/Layout.astro";
+import "../../../styles/globals.css";
+import Footer from "../../../layouts/Footer.astro";
+import AnimatedButton from "../../../components/ui/AnimatedButton.astro";
+---
+
+<Layout pageTitle="2023 Edition" backHref="/merchandise">
+  <section class="m23-hero" data-m23-hero>
+    <div class="m23-line m23-line--1"></div>
+    <div class="m23-line m23-line--2"></div>
+
+    <div class="m23-center-col">
+      <div class="m23-year-wrap">
+        <h1 class="m23-year" data-m23-year>
+          <span class="m23-yc" data-yc>2</span><span class="m23-yc" data-yc>0</span><span class="m23-yc" data-yc>2</span><span class="m23-yc" data-yc>3</span>
+        </h1>
+      </div>
+      <div class="m23-cta" data-m23-cta>
+        <AnimatedButton text="View Collection" href="/merchandise/2023/view" iconBg="#FF6B9D" />
+      </div>
+    </div>
+
+    <div class="m23-htee m23-htee--1" data-htee>
+      <img src={getAssetUrl("/merch/2023/merch-2023-front.webp")} alt="Common Front" loading="eager" />
+    </div>
+    <div class="m23-htee m23-htee--2" data-htee>
+      <img src={getAssetUrl("/merch/2023/merch-2023-web.webp")} alt="Web Back" loading="eager" />
+    </div>
+    <div class="m23-htee m23-htee--3" data-htee>
+      <img src={getAssetUrl("/merch/2023/merch-2023-design.webp")} alt="Design Back" loading="lazy" />
+    </div>
+
+    <div class="m23-badge" data-badge>
+      <span class="m23-badge__label">EDITION</span>
+      <span class="m23-badge__year">'23</span>
+    </div>
+
+    <div class="m23-hero-info" data-hero-info>
+      <h2 class="m23-hero-info__title">One front. Six backs.</h2>
+      <p class="m23-hero-info__body">
+        The 2023 collection - a shared cover for every domain on the front, with the domain identity
+        printed on the back. Six tees in total, unified by a single visual
+        language.
+      </p>
+    </div>
+  </section>
+
+  <section class="m23-end" data-m23-end>
+    <div class="m23-end__inner">
+      <p class="m23-end__text" data-end-anim>you have reached the end of the rack</p>
+      <p class="m23-end__sub" data-end-anim>no more hangers, just vibes from here</p>
+      <img
+        src={getAssetUrl("/merch/merch-lineup.webp")}
+        alt="ACM-VIT merchandise lineup"
+        class="m23-end__img"
+        loading="lazy"
+        data-end-anim
+      />
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style>
+  .m23-hero {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100svh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .m23-line {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 107, 157, 0.14) 30%, rgba(255, 107, 157, 0.14) 70%, transparent 100%);
+  }
+  .m23-line--1 { top: 18%; }
+  .m23-line--2 { bottom: 22%; }
+
+  .m23-center-col {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+    pointer-events: none;
+  }
+
+  .m23-year-wrap { pointer-events: none; user-select: none; }
+
+  .m23-cta {
+    opacity: 0;
+    transform: translateY(12px);
+    pointer-events: auto;
+    z-index: 5;
+    position: relative;
+  }
+
+  .m23-year {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-weight: 800;
+    font-size: clamp(20vw, 28vw, 38vw);
+    line-height: 0.88;
+    letter-spacing: -0.04em;
+    color: rgba(255, 107, 157, 0.18);
+    margin: 0;
+    display: flex;
+    white-space: nowrap;
+  }
+
+  .m23-yc { display: inline-block; opacity: 0; transform: translateY(80px); }
+
+  .m23-htee { position: absolute; z-index: 2; opacity: 0; transform: translateY(40px); }
+  .m23-htee img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.5)); }
+
+  .m23-htee--1 {
+    left: 8%;
+    top: 50%;
+    width: clamp(200px, 28vw, 380px);
+    aspect-ratio: 1;
+    transform: translateY(-55%) rotate(-7deg);
+  }
+  .m23-htee--2 {
+    right: 6%;
+    top: 38%;
+    width: clamp(160px, 20vw, 280px);
+    aspect-ratio: 1;
+    transform: translateY(-50%) rotate(5deg);
+  }
+  .m23-htee--3 {
+    right: 14%;
+    bottom: 8%;
+    width: clamp(120px, 14vw, 200px);
+    aspect-ratio: 1;
+    transform: rotate(-3deg);
+  }
+
+  .m23-badge {
+    position: absolute;
+    top: 50%;
+    right: 28px;
+    transform: translateY(-50%);
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    opacity: 0;
+  }
+
+  .m23-badge__label {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-size: 0.55rem;
+    font-weight: 500;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: rgba(255, 107, 157, 0.5);
+  }
+
+  .m23-badge__year {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(255, 107, 157, 0.25);
+  }
+
+  .m23-hero-info {
+    position: absolute;
+    left: clamp(1.5rem, 4vw, 3.5rem);
+    bottom: clamp(3rem, 8vh, 6rem);
+    z-index: 5;
+    max-width: 440px;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .m23-hero-info__title {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.4rem, 2.5vw, 2rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: #FEFCD9;
+    margin: 0 0 0.6rem;
+  }
+
+  .m23-hero-info__body {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-size: 0.8rem;
+    font-weight: 400;
+    line-height: 1.65;
+    color: rgba(254, 252, 217, 0.72);
+    margin: 0 0 1.2rem;
+    max-width: 380px;
+  }
+
+  .m23-end { position: relative; padding: 5rem 1.5rem 2rem; overflow: hidden; }
+  .m23-end__inner { max-width: 56rem; margin: 0 auto; display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .m23-end__text {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.5rem, 4vw, 2.8rem);
+    letter-spacing: -0.02em;
+    color: rgba(254, 252, 217, 0.32);
+    text-transform: lowercase;
+    margin: 0;
+  }
+  .m23-end__sub {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: rgba(254, 252, 217, 0.22);
+    margin: 0.25rem 0 0;
+  }
+  .m23-end__img {
+    width: 100%;
+    max-width: 48rem;
+    height: auto;
+    object-fit: contain;
+    margin-top: 2rem;
+    mix-blend-mode: lighten;
+    filter: drop-shadow(0 16px 40px rgba(0, 0, 0, 0.3));
+  }
+
+  @media (max-width: 1024px) {
+    .m23-htee--1 { width: clamp(180px, 26vw, 300px); }
+    .m23-htee--2 { width: clamp(150px, 20vw, 240px); }
+    .m23-htee--3 { width: clamp(100px, 12vw, 160px); }
+  }
+
+  @media (max-width: 768px) {
+    .m23-year { font-size: clamp(22vw, 28vw, 32vw); }
+    .m23-htee--1 { left: 4%; width: clamp(150px, 36vw, 220px); }
+    .m23-htee--2 { right: 2%; width: clamp(130px, 28vw, 180px); }
+    .m23-htee--3 { display: none; }
+    .m23-badge { display: none; }
+    .m23-hero-info { max-width: 55%; bottom: calc(80px + env(safe-area-inset-bottom, 0px)); }
+    .m23-hero-info__body { font-size: 0.72rem; max-width: 100%; }
+  }
+
+  /* Phones: stack the hero vertically so nothing overlaps the CTA or navbar */
+  @media (max-width: 480px) {
+    .m23-hero {
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 0;
+      padding: 5.5rem 1.25rem calc(104px + env(safe-area-inset-bottom, 0px));
+    }
+    .m23-line--2 { display: none; }
+    .m23-year { font-size: 24vw; }
+    .m23-center-col { order: 2; margin-top: 0.5rem; gap: 1rem; }
+    .m23-htee--2,
+    .m23-htee--3 { display: none; }
+    .m23-htee--1 {
+      order: 1;
+      position: relative;
+      left: auto;
+      top: auto;
+      width: 58vw;
+      max-width: 240px;
+      margin: 0 auto;
+      transform: rotate(-4deg);
+    }
+    .m23-hero-info {
+      order: 3;
+      position: relative;
+      left: auto;
+      bottom: auto;
+      max-width: 100%;
+      margin-top: 1.75rem;
+    }
+  }
+
+  :global(html[data-theme="light"]) .m23-year { color: rgba(255, 107, 157, 0.14); }
+  :global(html[data-theme="light"]) .m23-badge__label { color: rgba(214, 78, 130, 0.45); }
+  :global(html[data-theme="light"]) .m23-badge__year { -webkit-text-stroke-color: rgba(214, 78, 130, 0.18); }
+  :global(html[data-theme="light"]) .m23-hero-info__title { color: #1a1a1a; }
+  :global(html[data-theme="light"]) .m23-hero-info__body { color: rgba(30, 20, 10, 0.72); }
+  :global(html[data-theme="light"]) .m23-htee img { filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.15)); }
+  :global(html[data-theme="light"]) .m23-end__text { color: rgba(30, 20, 10, 0.3); }
+  :global(html[data-theme="light"]) .m23-end__sub { color: rgba(30, 20, 10, 0.22); }
+  :global(html[data-theme="light"]) .m23-end__img { mix-blend-mode: multiply; filter: drop-shadow(0 16px 40px rgba(0, 0, 0, 0.08)); }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  const chars = document.querySelectorAll("[data-yc]");
+  const htees = document.querySelectorAll("[data-htee]");
+  const badge = document.querySelector("[data-badge]");
+  const heroInfo = document.querySelector("[data-hero-info]");
+  const cta = document.querySelector("[data-m23-cta]");
+
+  const tl = gsap.timeline({ defaults: { ease: "power3.out" }, delay: 0.35 });
+
+  tl.to(chars, { opacity: 1, y: 0, duration: 0.85, stagger: 0.1 });
+  if (cta) tl.to(cta, { opacity: 1, y: 0, duration: 0.5 }, "-=0.3");
+
+  htees.forEach((tee, i) => {
+    tl.to(tee, { opacity: 1, y: 0, duration: 0.75, ease: "power3.out" }, `-=${0.55 - i * 0.08}`);
+  });
+
+  if (badge) tl.to(badge, { opacity: 1, duration: 0.45 }, "-=0.3");
+  if (heroInfo) tl.to(heroInfo, { opacity: 1, y: 0, duration: 0.6 }, "-=0.3");
+
+  htees.forEach((tee, i) => {
+    gsap.to(tee, {
+      y: `+=${7 + i * 3}`,
+      duration: 3 + i * 0.6,
+      ease: "sine.inOut",
+      repeat: -1,
+      yoyo: true,
+      delay: i * 0.4,
+    });
+  });
+
+  const endAnims = document.querySelectorAll("[data-end-anim]");
+  gsap.fromTo(endAnims,
+    { opacity: 0, y: 30 },
+    {
+      opacity: 1, y: 0, duration: 0.7, stagger: 0.12, ease: "power3.out",
+      scrollTrigger: { trigger: ".m23-end", start: "top 85%", once: true },
+    }
+  );
+</script>

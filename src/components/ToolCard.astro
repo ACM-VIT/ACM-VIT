@@ -1,0 +1,97 @@
+---
+import { getAssetUrl } from "../utils/cdn";
+
+interface Tool {
+  name: string;
+  slug: string;
+  svgFile: string;
+  colorHex: string;
+  isDark?: boolean;
+  monochrome?: boolean;
+}
+
+interface Props {
+  tool: Tool;
+  index?: number;
+  delaySeconds?: number;
+}
+
+const { tool, index = 0, delaySeconds } = Astro.props;
+const delay = delaySeconds ?? index * 0.03;
+const iconUrl = getAssetUrl(tool.svgFile);
+---
+
+<div
+  class="dsg-tool-card"
+  data-dsg-animate="fade-up"
+  style={`--tool-color: ${tool.colorHex}; --card-delay: ${delay}s`}
+  {...(tool.isDark ? { "data-dark-icon": "" } : {})}
+>
+  {tool.monochrome ? (
+    <span
+      class="dsg-tool-icon dsg-tool-icon--mask"
+      style={`--icon-url: url('${iconUrl}')`}
+      role="img"
+      aria-label={tool.name}
+    />
+  ) : (
+    <img
+      src={iconUrl}
+      alt={tool.name}
+      class="dsg-tool-icon"
+      loading="lazy"
+      decoding="async"
+    />
+  )}
+  <span class="dsg-tool-name" data-tool-name>
+    <span class="dsg-tool-name-inner">{tool.name}</span>
+  </span>
+</div>
+
+<script>
+  function initMarquee() {
+    const labels = document.querySelectorAll<HTMLElement>("[data-tool-name]");
+    labels.forEach((label) => {
+      if (label.dataset.marqueeInit) return;
+      label.dataset.marqueeInit = "1";
+      const inner = label.querySelector<HTMLElement>(".dsg-tool-name-inner");
+      if (!inner) return;
+      // Force inline-block + auto width to measure natural content width
+      const prevDisplay = inner.style.display;
+      const prevWidth = inner.style.width;
+      inner.style.display = "inline-block";
+      inner.style.width = "auto";
+      const naturalWidth = inner.scrollWidth;
+      inner.style.display = prevDisplay;
+      inner.style.width = prevWidth;
+      const overflow = naturalWidth - label.clientWidth;
+      if (overflow > 2) {
+        label.dataset.overflow = "1";
+        label.style.setProperty("--marquee-distance", `-${overflow + 4}px`);
+        const duration = Math.max(2.5, Math.min(6, overflow / 12));
+        label.style.setProperty("--marquee-duration", `${duration}s`);
+      }
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => requestAnimationFrame(initMarquee));
+  } else {
+    requestAnimationFrame(initMarquee);
+  }
+
+  // Re-measure on resize
+  let resizeTimer: ReturnType<typeof setTimeout> | null = null;
+  window.addEventListener("resize", () => {
+    if (resizeTimer) clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      document.querySelectorAll<HTMLElement>("[data-tool-name]").forEach((el) => {
+        delete el.dataset.marqueeInit;
+        delete el.dataset.overflow;
+        el.style.removeProperty("--marquee-distance");
+        el.style.removeProperty("--marquee-duration");
+      });
+      initMarquee();
+    }, 200);
+  });
+</script>

@@ -1,0 +1,91 @@
+---
+interface Heading {
+  id: string;
+  text: string;
+  level: number;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+const minLevel = headings.length > 0 ? Math.min(...headings.map((h) => h.level)) : 0;
+---
+
+{headings.length > 0 && (
+  <nav class="toc" aria-label="Table of contents" data-toc>
+    <p class="toc__title">ON THIS PAGE</p>
+    <ul class="toc__list">
+      {headings.map((heading) => {
+        const indent = heading.level - minLevel;
+        const lineWidth = Math.min(Math.max(heading.text.length * 2.5, 24), 100);
+        return (
+          <li class="toc__item">
+            <a
+              href={`#${heading.id}`}
+              class="toc__link"
+              data-toc-link={heading.id}
+              style={`padding-left:${indent * 12}px`}
+            >
+              <span class="toc__line" style={`width:${lineWidth}px`}></span>
+              <span class="toc__label">{heading.text}</span>
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  </nav>
+)}
+
+<script>
+  const toc = document.querySelector<HTMLElement>("[data-toc]");
+  if (toc) {
+    const links = toc.querySelectorAll<HTMLAnchorElement>("[data-toc-link]");
+    const ids = Array.from(links).map((a) => a.dataset.tocLink || "");
+
+    let activeId = "";
+    function setActive(id: string) {
+      if (id === activeId) return;
+      activeId = id;
+      links.forEach((a) => {
+        a.classList.toggle("toc__link--active", a.dataset.tocLink === id);
+      });
+    }
+
+    // Hover expand
+    toc.addEventListener("mouseenter", () => toc.classList.add("toc--expanded"));
+    toc.addEventListener("mouseleave", () => toc.classList.remove("toc--expanded"));
+
+    // Smooth scroll on click + replace hash
+    links.forEach((a) => {
+      a.addEventListener("click", (event) => {
+        event.preventDefault();
+        const id = a.dataset.tocLink || "";
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+        history.replaceState(null, "", `#${id}`);
+        setActive(id);
+      });
+    });
+
+    // Observe headings for active state
+    const elements = ids
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => Boolean(el));
+
+    if (elements.length > 0) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const visible = entries
+            .filter((e) => e.isIntersecting)
+            .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+          if (visible.length > 0) setActive(visible[0].target.id);
+        },
+        { rootMargin: "-35% 0px -55% 0px", threshold: 0 }
+      );
+      elements.forEach((el) => observer.observe(el));
+    }
+  }
+</script>

@@ -1,0 +1,244 @@
+{
+  "slug": "forktober",
+  "title": "Forktober Fest",
+  "tagline": "Every great open-source contributor starts with a single commit.",
+  "eyebrow": "ACM-VIT · Hacktoberfest · Open Source",
+  "themeKey": "tech",
+  "themeColor": "#EFEFEF",
+  "hideCtaBanner": true,
+  "cassetteSvg": "/events/events-forktober-cassette.svg",
+  "shortDescription": "Forktober is ACM-VIT's annual open-source initiative conducted as part of the global Hacktoberfest celebration. It equips students with the practical skills needed to contribute confidently to open-source projects.",
+  "longDescription": [
+    "Every great open-source contributor starts with a single commit, and Forktober is where that journey begins. Forktober is ACM-VIT's annual open-source initiative, conducted as part of the global Hacktoberfest celebration. Designed to introduce students to the world of collaborative software development, the event equips participants with the practical skills needed to contribute confidently to open-source projects while fostering a culture of learning, collaboration, and community-driven development.",
+    "Through a series of hands-on workshops, live coding sessions, and mentorship, participants learn the complete Git and GitHub workflow - from creating repositories and managing branches to resolving merge conflicts and submitting their first pull requests. Beyond technical skills, Forktober emphasises best practices in open-source contribution, project collaboration, version control, and community etiquette.",
+    "As participants progress through the event, they are encouraged to contribute to beginner-friendly open-source repositories as part of Hacktoberfest, allowing them to apply their newly acquired skills in real-world projects under the guidance of experienced mentors. This hands-on approach helps students build confidence, strengthen their portfolios, and become active contributors to the global open-source community.",
+    "Whether you're making your very first pull request or taking your first steps into collaborative development, Forktober serves as the perfect launchpad into open source. Over the years, it has empowered hundreds of students to begin their open-source journey, transforming beginners into confident contributors while fostering a thriving developer community within ACM-VIT."
+  ],
+  "format": "Hybrid · Workshops + contribution drive",
+  "duration": "October",
+  "mode": "Hybrid",
+  "audience": "All students, all skill levels",
+  "team": "Individual contributor",
+  "organizedBy": "ACM-VIT · Technical Domain",
+  "firstHeld": "2021",
+  "recurrence": "Annual · Every October",
+  "registrationUrl": "https://github.com/ACM-VIT",
+  "primaryCtaLabel": "Contribute on GitHub",
+  "stats": [
+    {
+      "value": "5",
+      "label": "Editions"
+    }
+  ],
+  "tracks": [],
+  "schedule": [],
+  "prizes": [],
+  "highlights": [],
+  "perks": [
+    "Hands-on Git and GitHub workshops",
+    "Mentorship from experienced contributors",
+    "Real open-source contribution experience"
+  ],
+  "faq": [
+    {
+      "q": "Do I need to know git?",
+      "a": "Not before kickoff - the workshops cover git, GitHub, and the contribution workflow from scratch."
+    },
+    {
+      "q": "What repositories can I contribute to?",
+      "a": "ACM-VIT maintains beginner-friendly repositories on GitHub specifically for Forktober participants."
+    }
+  ],
+  "socials": [
+    {
+      "label": "ACM-VIT GitHub",
+      "href": "https://github.com/ACM-VIT"
+    },
+    {
+      "label": "Instagram · @acmvit",
+      "href": "https://instagram.com/acmvit"
+    }
+  ],
+  "pastEditions": [
+    {
+      "year": "2025",
+      "edition": "Forktober 2025",
+      "description": "Fifth edition with new repositories for participants to contribute to.",
+      "links": [
+        {
+          "label": "open-with-browser",
+          "href": "https://github.com/ACM-VIT/open-with-browser"
+        },
+        {
+          "label": "scrag",
+          "href": "https://github.com/ACM-VIT/scrag"
+        },
+        {
+          "label": "Digital-Circuit-Simulator",
+          "href": "https://github.com/ACM-VIT/Digital-Circuit-Simulator"
+        }
+      ]
+    },
+    {
+      "year": "2024",
+      "edition": "Forktober 2024",
+      "description": "Fourth edition featuring blog posts and live sessions alongside contributions.",
+      "links": [
+        {
+          "label": "Session",
+          "href": "https://www.youtube.com/watch?v=Adc-iTzIbko&t=1476s"
+        },
+        {
+          "label": "Blog: Quantizing LLMs",
+          "href": "https://blog.acmvit.in/honey-i-shrunk-the-ai-quantizing-llms-for-edge-hardware"
+        },
+        {
+          "label": "Blog: AI Dream Manipulation",
+          "href": "https://blog.acmvit.in/beyond-the-totem-ai-driven-dream-manipulation-the-future-of-lucid-dreaming"
+        }
+      ]
+    },
+    {
+      "year": "2023",
+      "edition": "Forktober 2023",
+      "description": "Third edition with YouTube sessions, new repositories, and an offline session by Rishabh Keshan, Shubham Palriwala, and Abhitej Singh on open-source contribution and blockchain.",
+      "links": [
+        {
+          "label": "Session 1",
+          "href": "https://www.youtube.com/watch?v=E_dwtisWjdI"
+        },
+        {
+          "label": "Session 2",
+          "href": "https://www.youtube.com/watch?v=tSolfruU4Qw"
+        },
+        {
+          "label": "Session 3",
+          "href": "https://www.youtube.com/watch?v=mbKmVj9S8Cw"
+        },
+        {
+          "label": "EchoLink",
+          "href": "https://github.com/ACM-VIT/EchoLink"
+        },
+        {
+          "label": "Ride-Safe",
+          "href": "https://github.com/ACM-VIT/Ride-Safe"
+        },
+        {
+          "label": "PDFMaker",
+          "href": "https://github.com/ACM-VIT/PDFMaker"
+        }
+      ]
+    },
+    {
+      "year": "2022",
+      "edition": "Forktober 2022",
+      "description": "Second edition with an expanded roster of 15 repositories for contributors.",
+      "links": [
+        {
+          "label": "fludget",
+          "href": "https://github.com/ACM-VIT/fludget"
+        },
+        {
+          "label": "gitpositive",
+          "href": "https://github.com/ACM-VIT/gitpositive"
+        },
+        {
+          "label": "muscle_magic",
+          "href": "https://github.com/ACM-VIT/muscle_magic"
+        },
+        {
+          "label": "AlarmIT",
+          "href": "https://github.com/ACM-VIT/AlarmIT"
+        },
+        {
+          "label": "sticky-links",
+          "href": "https://github.com/ACM-VIT/sticky-links"
+        },
+        {
+          "label": "10-000-Hours",
+          "href": "https://github.com/ACM-VIT/10-000-Hours"
+        },
+        {
+          "label": "certify",
+          "href": "https://github.com/ACM-VIT/certify"
+        },
+        {
+          "label": "golly-bot",
+          "href": "https://github.com/ACM-VIT/golly-bot"
+        },
+        {
+          "label": "maildart-backend",
+          "href": "https://github.com/ACM-VIT/maildart-backend"
+        },
+        {
+          "label": "Paint-me",
+          "href": "https://github.com/ACM-VIT/Paint-me"
+        },
+        {
+          "label": "CryptoDash",
+          "href": "https://github.com/ACM-VIT/CryptoDash"
+        },
+        {
+          "label": "todo-app",
+          "href": "https://github.com/ACM-VIT/todo-app"
+        },
+        {
+          "label": "create-boilerplate-node",
+          "href": "https://github.com/ACM-VIT/create-boilerplate-node"
+        },
+        {
+          "label": "QChat",
+          "href": "https://github.com/ACM-VIT/QChat"
+        }
+      ]
+    },
+    {
+      "year": "2021",
+      "edition": "Forktober 2021",
+      "description": "Inaugural edition introducing VIT students to open-source contribution through Hacktoberfest.",
+      "links": [
+        {
+          "label": "Session",
+          "href": "https://www.youtube.com/watch?v=Bmt6MC1P5pw"
+        },
+        {
+          "label": "fludget",
+          "href": "https://github.com/ACM-VIT/fludget"
+        },
+        {
+          "label": "gitpositive",
+          "href": "https://github.com/ACM-VIT/gitpositive"
+        },
+        {
+          "label": "Algos-for-all-Amigos",
+          "href": "https://github.com/ACM-VIT/Algos-for-all-Amigos"
+        },
+        {
+          "label": "sticky-links",
+          "href": "https://github.com/ACM-VIT/sticky-links"
+        },
+        {
+          "label": "maildart-frontend",
+          "href": "https://github.com/ACM-VIT/maildart-frontend"
+        },
+        {
+          "label": "certify",
+          "href": "https://github.com/ACM-VIT/certify"
+        },
+        {
+          "label": "acm-github-bot",
+          "href": "https://github.com/ACM-VIT/acm-github-bot"
+        },
+        {
+          "label": "maildart-backend",
+          "href": "https://github.com/ACM-VIT/maildart-backend"
+        },
+        {
+          "label": "discord-hackpot",
+          "href": "https://github.com/ACM-VIT/discord-hackpot"
+        }
+      ]
+    }
+  ],
+  "order": 60
+}

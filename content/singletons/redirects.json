@@ -1,0 +1,9 @@
+{
+  "rules": [
+    {
+      "from": "/events/code-plusplus",
+      "to": "/events/code-plus-plus",
+      "status": "301"
+    }
+  ]
+}

@@ -1,0 +1,220 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import Footer from "../../../layouts/Footer.astro";
+import ReadingProgress from "../../../components/blog/ReadingProgress.astro";
+import TableOfContents from "../../../components/blog/TableOfContents.astro";
+import BlogDock from "../../../components/blog/BlogDock.astro";
+import TextHighlighter from "../../../components/blog/TextHighlighter.astro";
+import { getPost } from "../../../lib/blog";
+import type { BlogSource } from "../../../lib/blog/types";
+import { getAssetUrl } from "../../../utils/cdn";
+import FillButton from "../../../components/ui/FillButton.astro";
+import "../../../styles/globals.css";
+import "../../../styles/blog.css";
+
+const { source, slug } = Astro.params;
+
+if (!source || !slug || !['hashnode', 'medium'].includes(source)) {
+  return Astro.redirect('/blogs');
+}
+
+const post = await getPost(source as BlogSource, slug);
+
+if (!post) {
+  return Astro.redirect('/blogs');
+}
+
+const formattedDate = new Date(post.publishedAt).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+const hasContent = post.contentHtml.length > 100;
+---
+
+<Layout
+  pageTitle="Blog"
+  backHref="/blogs"
+  scrollCue={false}
+  crumbs={[
+    { label: "Home", href: "/" },
+    { label: "Blogs", href: "/blogs" },
+    { label: post.title },
+  ]}
+>
+  <ReadingProgress />
+
+  {/* blog-reader class used by blog.css diamond-grid opacity selector */}
+  <article class="blog-reader relative overflow-hidden pt-8 md:pt-12 pb-0">
+    <div class="max-w-[1400px] mx-auto px-6 md:px-10 relative z-10">
+
+      {/* Back link */}
+      <div class="mb-8">
+        <FillButton href="/blogs" label="Back to all posts">
+          <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </FillButton>
+      </div>
+
+      {/* Cover image */}
+      {post.coverImage && (
+        <div class="blog-cover relative rounded-2xl overflow-hidden mb-10 border border-white/[0.06]">
+          <img
+            src={post.coverImage}
+            alt={post.title}
+            class="w-full max-h-[400px] object-cover"
+            loading="eager"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-[#0d0e0d] via-transparent to-transparent" />
+        </div>
+      )}
+
+      {/* Post meta */}
+      <div class="max-w-3xl">
+        {/* Tags */}
+        {post.tags.length > 0 && (
+          <div class="flex flex-wrap gap-2 mb-4">
+            {post.tags.slice(0, 5).map((tag) => (
+              <span class="inline-flex items-center px-2.5 py-1 rounded-lg font-mono text-[10px] tracking-[0.12em] uppercase bg-[#F95F4A]/[0.14] text-[#FF9A86] border border-[#F95F4A]/[0.18]">
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Title */}
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-['PolySans_Trial'] font-bold text-[#FEFCD9] leading-tight">
+          {post.title}
+        </h1>
+
+        {/* Meta row */}
+        <div class="flex flex-wrap items-center gap-4 mt-6 mb-10 text-sm text-gray-400 font-mono">
+          {post.author && post.author !== 'ACM-VIT' && (
+            <div class="flex items-center gap-2">
+              <div class="w-6 h-6 rounded-full bg-[#F95F4A]/20 flex items-center justify-center text-[10px] text-[#F95F4A] font-bold">
+                {post.author.charAt(0).toUpperCase()}
+              </div>
+              <span>{post.author}</span>
+            </div>
+          )}
+          <time datetime={post.publishedAt}>{formattedDate}</time>
+          <span class="flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" />
+            </svg>
+            {post.readingTime} min read
+          </span>
+          <a
+            href={post.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-[#F95F4A] hover:underline flex items-center gap-1"
+          >
+            View on {post.source === 'hashnode' ? 'Hashnode' : 'Medium'}
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  {/* blog-body class used by blog.css diamond-grid opacity selector */}
+  <section class="blog-body relative z-10 pb-24">
+    <div class="max-w-[1400px] mx-auto px-6 md:px-10">
+
+      <div class="flex flex-col lg:flex-row lg:gap-12 lg:items-start">
+
+        {/* Main content */}
+        <div class="flex-1 min-w-0">
+          {hasContent ? (
+            <div class="blog-content" set:html={post.contentHtml} />
+          ) : (
+            <div class="text-center py-20">
+              <p class="text-gray-400 mb-6 font-mono text-sm">
+                Full article available on {post.source === 'hashnode' ? 'Hashnode' : 'Medium'}
+              </p>
+              <a
+                href={post.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-2 px-6 py-3 bg-[#F95F4A] text-white rounded-full font-mono text-sm hover:bg-[#e8513d] transition-colors"
+              >
+                Read on {post.source === 'hashnode' ? 'Hashnode' : 'Medium'}
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" />
+                </svg>
+              </a>
+            </div>
+          )}
+        </div>
+
+        {/* TOC sidebar - sticky, starts aligned with first line of content */}
+        {hasContent && post.headings.length > 0 && (
+          <aside class="hidden lg:block w-56 flex-shrink-0 sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto overflow-x-hidden">
+            <TableOfContents headings={post.headings} />
+          </aside>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <BlogDock slug={slug} title={post.title} />
+  <TextHighlighter slug={slug} />
+
+  <Footer />
+</Layout>
+
+<script>
+  import { gsap } from "gsap";
+
+  function isPreloaderActive() {
+    const preloader = document.getElementById('preloader');
+    if (!preloader) return false;
+    const styles = window.getComputedStyle(preloader);
+    return styles.display !== 'none' && styles.visibility !== 'hidden' && styles.opacity !== '0';
+  }
+
+  function runAfterPreloader(callback: () => void) {
+    if (!isPreloaderActive()) {
+      callback();
+      return;
+    }
+    window.addEventListener('preloader:done', callback, { once: true });
+  }
+
+  runAfterPreloader(() => {
+    gsap.from('.blog-content', {
+      y: 30,
+      opacity: 0,
+      duration: 0.8,
+      ease: 'power3.out',
+      delay: 0.2,
+    });
+
+    const toc = document.querySelector('.toc');
+    if (toc) {
+      gsap.from(toc, {
+        x: 20,
+        opacity: 0,
+        duration: 0.6,
+        ease: 'power3.out',
+        delay: 0.5,
+      });
+    }
+  });
+
+  // Handle broken cover images
+  const coverImg = document.querySelector('.blog-cover img') as HTMLImageElement;
+  if (coverImg) {
+    coverImg.addEventListener('error', () => {
+      const cover = coverImg.closest('.blog-cover') as HTMLElement;
+      if (cover) cover.style.display = 'none';
+    });
+    if (coverImg.complete && coverImg.naturalWidth === 0) {
+      const cover = coverImg.closest('.blog-cover') as HTMLElement;
+      if (cover) cover.style.display = 'none';
+    }
+  }
+</script>

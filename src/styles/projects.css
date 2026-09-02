@@ -1,0 +1,139 @@
+/* ═══════════════════════════════════════════════════════
+   Projects Gallery Page
+   ═══════════════════════════════════════════════════════ */
+
+.proj-page {
+  min-height: 100vh;
+  padding-bottom: 6rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Tubelight ── */
+.proj-tubelight-wrap {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 2rem;
+  margin-top: -1rem;
+  margin-bottom: -2rem;
+  max-height: 30vh;
+  overflow: hidden;
+}
+
+.proj-tubelight {
+  width: 80vw;
+  max-width: 1400px;
+  opacity: 0;
+  user-select: none;
+  pointer-events: none;
+  mask-image: radial-gradient(circle, black 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle, black 30%, transparent 100%);
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  will-change: opacity;
+}
+
+.proj-tubelight-wrap--bottom {
+  transform: scaleY(-1);
+}
+
+/* ── Tagline ── */
+.proj-tagline {
+  text-align: center;
+  color: rgba(255,255,255,0.7);
+  font-family: 'PolySans Trial', Inter, sans-serif;
+  font-size: clamp(0.9rem, 2vw, 1.15rem);
+  letter-spacing: 0.02em;
+  margin: 0 auto 2.5rem;
+  max-width: 600px;
+  padding: 0 1rem;
+}
+
+/* ── Grid ── */
+.proj-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem 3.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+
+/* ── Card ── */
+.proj-card {
+  position: relative;
+  display: block;
+  text-decoration: none;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.proj-card:hover {
+  transform: translateY(-6px);
+}
+
+.proj-card-inner {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 576 / 353;
+}
+
+/* ── Hover glow ── */
+.proj-card::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  /* Match the cassette frame corner (Cassette.astro / SVG rx 23.4655 on a
+     588x360 box = 3.99% / 6.52%). This box is offset 4px outward (inset -4px),
+     so a concentric corner needs radius + that offset - hence the +4px. */
+  border-radius: calc(3.99% + 4px) / calc(6.52% + 4px);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+.proj-card:hover::after {
+  opacity: 1;
+}
+
+/* ── Bottom glow section ── */
+.proj-bottom-glow {
+  position: relative;
+  width: 100%;
+  margin-top: 5rem;
+}
+
+/* ═══════════════════════════════════════════════════════
+   Responsive
+   ═══════════════════════════════════════════════════════ */
+@media (max-width: 700px) {
+  .proj-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    max-width: 400px;
+    padding: 0 1.25rem;
+  }
+  .proj-tagline {
+    margin: 0.5rem auto 2rem;
+  }
+  .proj-tubelight {
+    width: 95vw;
+    max-width: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   Light mode
+   ═══════════════════════════════════════════════════════ */
+html[data-theme="light"] .proj-tubelight-wrap {
+  display: none;
+}
+
+html[data-theme="light"] .proj-tagline {
+  color: rgba(0,0,0,0.6);
+}

@@ -1,0 +1,140 @@
+{
+  "builtAt": "2026-08-30T04:53:34.764Z",
+  "content": {
+    "pages": {
+      "hash": "a928fc56ef42",
+      "count": 1
+    },
+    "events": {
+      "hash": "5fd613ab3266",
+      "count": 18
+    },
+    "project-details": {
+      "hash": "da391ddf99cd",
+      "count": 36
+    },
+    "forktober-projects": {
+      "hash": "0de64ef6eed6",
+      "count": 24
+    },
+    "forktober-meta": {
+      "hash": "77101ff751f0",
+      "count": 24
+    },
+    "project-cassettes": {
+      "hash": "225acabb2315",
+      "count": 15
+    },
+    "team-years": {
+      "hash": "428d3f5cc19c",
+      "count": 9
+    },
+    "calendar-events": {
+      "hash": "39895d5e5221",
+      "count": 15
+    },
+    "achievements": {
+      "hash": "19fc99f4b808",
+      "count": 3
+    },
+    "design-products": {
+      "hash": "11c31a48fc0d",
+      "count": 6
+    },
+    "board-members": {
+      "hash": "c3c73c43bebc",
+      "count": 16
+    },
+    "partners": {
+      "hash": "df92cb7ddaac",
+      "count": 37
+    },
+    "home-domains": {
+      "hash": "9441fd461dfc",
+      "count": 5
+    },
+    "home-projects": {
+      "hash": "db954213da47",
+      "count": 9
+    },
+    "blog-refs": {
+      "hash": "932b84b3da1c",
+      "count": 17
+    },
+    "speakers": {
+      "hash": "1e88c0e21288",
+      "count": 2
+    },
+    "tools-tech": {
+      "hash": "6cd1316e564d",
+      "count": 97
+    },
+    "tools-design": {
+      "hash": "df21b4ca1c32",
+      "count": 27
+    },
+    "tools-research": {
+      "hash": "d0bfdc4ce7f0",
+      "count": 40
+    },
+    "tools-management": {
+      "hash": "eaa1d2b7ac1b",
+      "count": 24
+    },
+    "tools-cc": {
+      "hash": "39c6039c59ac",
+      "count": 17
+    },
+    "aois-tech": {
+      "hash": "800469e32787",
+      "count": 5
+    },
+    "aois-design": {
+      "hash": "e597793b2a44",
+      "count": 5
+    },
+    "aois-research": {
+      "hash": "b77d4746af94",
+      "count": 6
+    },
+    "domain-tech": {
+      "hash": "e9e98674f9b1"
+    },
+    "domain-design": {
+      "hash": "4da7d5dec7dd"
+    },
+    "domain-research": {
+      "hash": "3944ade3cc42"
+    },
+    "domain-management": {
+      "hash": "0452200e3d6e"
+    },
+    "domain-cc": {
+      "hash": "ed4758526db4"
+    },
+    "events-section": {
+      "hash": "3b0aaba684f4"
+    },
+    "redirects": {
+      "hash": "ba795feda7e1"
+    },
+    "site-config": {
+      "hash": "e5c8d9f6c0eb"
+    },
+    "achievements-page": {
+      "hash": "0155f0de518c"
+    },
+    "event-links": {
+      "hash": "2c720f72e8e6"
+    },
+    "z0d1ak": {
+      "hash": "e988d20b6f94"
+    },
+    "faqs-page": {
+      "hash": "7203e83ba8fd"
+    },
+    "access-control": {
+      "hash": "671559d21db6"
+    }
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "slug": "todo-app",
+  "title": "Todo App",
+  "tagline": " A React web-app to maintain and track our day-to-day tasks or any thing important lined up for a day!",
+  "eyebrow": "ACM-VIT · Forktober 2022 · Open Source",
+  "themeColor": "#EFEFEF",
+  "themeColorSecondary": "#1a1a1a",
+  "shortDescription": " A React web-app to maintain and track our day-to-day tasks or any thing important lined up for a day!",
+  "longDescription": [
+    " A React web-app to maintain and track our day-to-day tasks or any thing important lined up for a day!",
+    "Todo App was part of ACM-VIT's Forktober open-source drive in 2022, opening up to student contributors during Hacktoberfest.",
+    "The repository is archived. It remains on GitHub as a record of the Forktober edition that ran it, but is no longer accepting new contributions.",
+    "Across its lifetime, the project drew 10 contributors, 11 pull requests and 33 commits."
+  ],
+  "status": "archived",
+  "statusNote": "Forktober 2022 · Archived",
+  "cassetteSvg": "/events/events-forktober-cassette.svg",
+  "stats": [
+    {
+      "value": "10",
+      "label": "Contributors"
+    },
+    {
+      "value": "11",
+      "label": "Pull requests"
+    },
+    {
+      "value": "33",
+      "label": "Commits"
+    },
+    {
+      "value": "2",
+      "label": "Stars"
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Stack",
+      "slugs": [
+        "react",
+        "javascript"
+      ]
+    },
+    {
+      "category": "Tooling",
+      "slugs": [
+        "git",
+        "github"
+      ]
+    }
+  ],
+  "developers": [
+    {
+      "github": "nakshatraraghav"
+    },
+    {
+      "github": "harshalranjhani"
+    },
+    {
+      "github": "tab21"
+    },
+    {
+      "github": "ThPadelis"
+    },
+    {
+      "github": "AryanKhubchandani"
+    },
+    {
+      "github": "ersascape"
+    }
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/ACM-VIT/todo-app",
+      "kind": "github"
+    }
+  ],
+  "commitGraphSeed": 804,
+  "order": 290
+}

@@ -1,0 +1,8 @@
+{
+  "name": "NumPy",
+  "slug": "numpy",
+  "svgFile": "/domains/research/tools/research-tool-numpy.svg",
+  "colorHex": "#4DABCF",
+  "isDark": true,
+  "order": 70
+}

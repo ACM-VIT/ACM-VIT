@@ -1,0 +1,7 @@
+{
+  "name": "MongoDB",
+  "slug": "mongodb",
+  "svgFile": "/domains/tech/tools/tech-tool-mongodb.svg",
+  "colorHex": "#47A248",
+  "order": 190
+}

@@ -1,0 +1,352 @@
+---
+import { DOMAIN_COLORS } from '../../data/calendarEventsData';
+---
+
+<div class="agenda" id="agenda-root">
+  <!-- Sidebar -->
+  <aside class="agenda-side" id="agenda-side">
+    <div class="agenda-side-top">
+      <svg class="agenda-cal-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <h2 class="agenda-side-title">Calendar</h2>
+    </div>
+
+    <!-- Mini Calendar -->
+    <div class="agenda-mini">
+      <div class="agenda-mini-head">
+        <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+      </div>
+      <div class="agenda-mini-grid" id="agenda-mini-grid"></div>
+    </div>
+
+    <!-- Domain Filters -->
+    <div class="agenda-domains" id="agenda-domains"></div>
+
+    <!-- Upcoming Events -->
+    <div class="agenda-upcoming">
+      <div class="agenda-sec-head">
+        <span>Events</span>
+      </div>
+      <div id="agenda-up-list"></div>
+    </div>
+  </aside>
+
+  <!-- Sidebar Backdrop (mobile) -->
+  <div class="agenda-backdrop" id="agenda-backdrop"></div>
+
+  <!-- Main Timeline -->
+  <main class="agenda-body">
+    <header class="agenda-head">
+      <div class="agenda-head-left">
+        <button class="agenda-nav-btn" data-agenda-dir="-1" aria-label="Previous month">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <h2 class="agenda-month" id="agenda-month"></h2>
+        <button class="agenda-nav-btn" data-agenda-dir="1" aria-label="Next month">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+      <button class="agenda-today-btn" id="agenda-today-btn">Today</button>
+    </header>
+
+    <div class="agenda-timeline" id="agenda-timeline"></div>
+  </main>
+
+  <!-- Modal -->
+  <div id="agenda-modal"></div>
+</div>
+
+<!-- Mobile sidebar toggle -->
+<button class="agenda-mob-btn" id="agenda-mob-btn" aria-label="Toggle calendar sidebar">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+</button>
+
+<script>
+  import { SAMPLE_EVENTS, DOMAIN_COLORS, type CalendarEvent, type EventDomain } from '../../data/calendarEventsData';
+
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const DAYS_ABBR = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+
+  let curDate = new Date();
+  let activeFilters = new Set<EventDomain>();
+  let allEvents: CalendarEvent[] = [...SAMPLE_EVENTS];
+  const today = new Date();
+
+  const miniGrid = document.getElementById('agenda-mini-grid')!;
+  const domainsEl = document.getElementById('agenda-domains')!;
+  const upList = document.getElementById('agenda-up-list')!;
+  const monthEl = document.getElementById('agenda-month')!;
+  const timeline = document.getElementById('agenda-timeline')!;
+  const modalRoot = document.getElementById('agenda-modal')!;
+  const todayBtn = document.getElementById('agenda-today-btn')!;
+  const sidebar = document.getElementById('agenda-side')!;
+  const backdrop = document.getElementById('agenda-backdrop')!;
+  const mobBtn = document.getElementById('agenda-mob-btn')!;
+
+  function daysInMonth(y: number, m: number) { return new Date(y, m + 1, 0).getDate(); }
+  function firstDay(y: number, m: number) { return new Date(y, m, 1).getDay(); }
+  function fmt(d: Date) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+  function fmtTime(t: string) { const [h,m] = t.split(':').map(Number); return `${h % 12 || 12}:${String(m).padStart(2,'0')} ${h >= 12 ? 'PM' : 'AM'}`; }
+  function isSameDay(d: Date) { return d.getDate() === today.getDate() && d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear(); }
+  function esc(s: string) { return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!)); }
+
+  function eventsFor(date: string) {
+    let evs = allEvents.filter(e => e.date === date);
+    if (activeFilters.size > 0) evs = evs.filter(e => activeFilters.has(e.domain));
+    return evs.sort((a, b) => a.startTime.localeCompare(b.startTime));
+  }
+
+  // ── Mini Calendar ──
+  function renderMini() {
+    const y = curDate.getFullYear(), m = curDate.getMonth();
+    const total = daysInMonth(y, m);
+    const start = firstDay(y, m);
+    const prevTotal = daysInMonth(y, m - 1);
+
+    let html = '';
+    for (let i = start - 1; i >= 0; i--)
+      html += `<span class="ag-mini-d ag-mini-out">${prevTotal - i}</span>`;
+
+    for (let d = 1; d <= total; d++) {
+      const date = new Date(y, m, d);
+      const ds = fmt(date);
+      const evs = eventsFor(ds);
+      const todayCls = isSameDay(date) ? ' ag-mini-now' : '';
+      html += `<span class="ag-mini-d${todayCls}" data-md="${ds}">${d}${
+        evs.length ? `<span class="ag-mini-dots">${evs.slice(0,3).map(e => `<i style="background:${DOMAIN_COLORS[e.domain].border}"></i>`).join('')}</span>` : ''
+      }</span>`;
+    }
+
+    const rem = (7 - ((start + total) % 7)) % 7;
+    for (let i = 1; i <= rem; i++)
+      html += `<span class="ag-mini-d ag-mini-out">${i}</span>`;
+
+    miniGrid.innerHTML = html;
+    miniGrid.querySelectorAll<HTMLElement>('[data-md]').forEach(el => {
+      el.addEventListener('click', () => {
+        const target = timeline.querySelector(`[data-day="${el.dataset.md}"]`);
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  }
+
+  // ── Domain Filters ──
+  function renderDomains() {
+    domainsEl.innerHTML = '';
+    (Object.entries(DOMAIN_COLORS) as [EventDomain, typeof DOMAIN_COLORS[EventDomain]][]).forEach(([key, val]) => {
+      const on = activeFilters.size === 0 || activeFilters.has(key);
+      const btn = document.createElement('button');
+      btn.className = `ag-dom-btn${on ? '' : ' ag-dom-off'}`;
+      btn.innerHTML = `<span class="ag-dom-dot" style="background:${val.border};opacity:${on?1:0.3}"></span><span>${esc(val.label)}</span>`;
+      btn.addEventListener('click', () => {
+        if (activeFilters.has(key)) activeFilters.delete(key); else activeFilters.add(key);
+        renderAll();
+      });
+      domainsEl.appendChild(btn);
+    });
+  }
+
+  // ── Upcoming Events ──
+  function renderUpcoming() {
+    const todayStr = fmt(today);
+    const items = allEvents
+      .filter(e => e.date >= todayStr && (activeFilters.size === 0 || activeFilters.has(e.domain)))
+      .sort((a, b) => a.date.localeCompare(b.date) || a.startTime.localeCompare(b.startTime))
+      .slice(0, 8);
+
+    upList.innerHTML = items.map(ev => {
+      const c = DOMAIN_COLORS[ev.domain];
+      const d = new Date(ev.date + 'T00:00');
+      return `<div class="ag-up-item" data-eid="${ev.id}">
+        <span class="ag-up-dot" style="background:${c.border}"></span>
+        <div class="ag-up-info">
+          <span class="ag-up-name">${esc(ev.title)}</span>
+          <span class="ag-up-meta">${d.toLocaleDateString('en-US',{month:'short',day:'numeric'})} · ${fmtTime(ev.startTime)}</span>
+        </div>
+      </div>`;
+    }).join('');
+
+    upList.querySelectorAll<HTMLElement>('.ag-up-item').forEach(el => {
+      el.addEventListener('click', () => {
+        const ev = allEvents.find(e => e.id === el.dataset.eid);
+        if (ev) openModal(ev);
+      });
+    });
+  }
+
+  // ── Timeline ──
+  function renderTimeline() {
+    const y = curDate.getFullYear(), m = curDate.getMonth();
+    monthEl.textContent = `${MONTHS[m]} ${y}`;
+    const total = daysInMonth(y, m);
+    const todayStr = fmt(today);
+    let html = '';
+
+    for (let d = 1; d <= total; d++) {
+      const date = new Date(y, m, d);
+      const ds = fmt(date);
+      const evs = eventsFor(ds);
+      const isNow = isSameDay(date);
+      const isPast = ds < todayStr;
+
+      if (!evs.length && !isNow) continue;
+
+      const dow = date.getDay();
+      html += `<div class="ag-day${isNow ? ' ag-day-now' : ''}${isPast ? ' ag-day-past' : ''}" data-day="${ds}">
+        <div class="ag-day-label">
+          <span class="ag-day-num">${String(d).padStart(2, '0')}</span>
+          <span class="ag-day-abbr">${DAYS_ABBR[dow]}</span>
+        </div>
+        <div class="ag-day-content">`;
+
+      if (evs.length) {
+        evs.forEach(ev => {
+          const c = DOMAIN_COLORS[ev.domain];
+          html += `<div class="ag-event" data-eid="${ev.id}">
+            <div class="ag-ev-time">
+              <span class="ag-ev-start">${ev.startTime}</span>
+              <span class="ag-ev-end">-${ev.endTime}</span>
+            </div>
+            <div class="ag-ev-bar" style="background:${c.border}"></div>
+            <div class="ag-ev-detail">
+              <span class="ag-ev-domain" style="color:${c.border}">${esc(c.label)}</span>
+              <span class="ag-ev-title">${esc(ev.title)}</span>
+              <span class="ag-ev-loc">${esc(ev.location)}</span>
+            </div>
+            <span class="ag-ev-badge" style="background:${c.bg};border-color:${c.border}">
+              <img src="${c.cassette}" alt="" class="ag-ev-cass" />
+            </span>
+          </div>`;
+        });
+      } else {
+        html += `<div class="ag-empty">No events scheduled</div>`;
+      }
+
+      html += `</div></div>`;
+    }
+
+    if (!html) html = `<div class="ag-none">No events this month</div>`;
+    timeline.innerHTML = html;
+
+    timeline.querySelectorAll<HTMLElement>('.ag-event').forEach(el => {
+      el.addEventListener('click', () => {
+        const ev = allEvents.find(e => e.id === el.dataset.eid);
+        if (ev) openModal(ev);
+      });
+    });
+  }
+
+  // ── Modal (cassette) ──
+  const SCREW = "M9.595 0C14.894 0 19.189 4.296 19.189 9.595C19.188 14.893 14.893 19.188 9.595 19.189C4.296 19.189 0 14.893 0 9.595C0 4.296 4.296 0 9.595 0ZM10.378 3.853C10.205 2.999 8.984 2.999 8.811 3.853L8.078 7.454C8.014 7.769 7.769 8.014 7.454 8.078L3.853 8.811C2.999 8.984 2.999 10.204 3.853 10.378L7.454 11.11C7.769 11.174 8.014 11.42 8.078 11.734L8.811 15.336C8.984 16.19 10.205 16.19 10.378 15.336L11.111 11.734C11.175 11.42 11.42 11.174 11.735 11.11L15.336 10.378C16.19 10.204 16.19 8.984 15.336 8.811L11.735 8.078C11.42 8.014 11.175 7.769 11.111 7.454L10.378 3.853Z";
+  let modalEsc: ((e: KeyboardEvent) => void) | null = null;
+
+  function closeModal() {
+    modalRoot.innerHTML = '';
+    if (modalEsc) { window.removeEventListener('keydown', modalEsc); modalEsc = null; }
+  }
+
+  function openModal(event: CalendarEvent) {
+    const c = DOMAIN_COLORS[event.domain];
+    const overlay = document.createElement('div');
+    overlay.className = 'cal-detail-overlay';
+    overlay.innerHTML = `
+      <div class="cal-cassette-wrapper">
+        <button class="cal-detail-close" aria-label="Close">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+        <svg class="cal-cassette-frame" viewBox="0 0 576 353" fill="none">
+          <rect x="0.8" y="0.8" width="574.06" height="351.26" rx="24.25" fill="#FCE6D2" stroke="#202020" stroke-width="1.6"/>
+          <g transform="translate(14.5,14)"><path d="${SCREW}" fill="#202020"/></g>
+          <g transform="translate(14.5,319.9)"><path d="${SCREW}" fill="#202020"/></g>
+          <g transform="translate(542.2,14)"><path d="${SCREW}" fill="#202020"/></g>
+          <g transform="translate(542.2,319.9)"><path d="${SCREW}" fill="#202020"/></g>
+          <g transform="translate(32,14)">
+            <path d="M479 0.8H31C26.5 0.8 22.2 2.6 19 5.8L5.5 19.2C2.3 22.4 0.5 26.8 0.5 31.3V209C0.5 218.4 8.1 226 17.5 226H492.5C501.9 226 509.5 218.4 509.5 209V31.3C509.5 26.8 507.7 22.4 504.5 19.2L491 5.8C487.8 2.6 483.5 0.8 479 0.8Z" fill="#261D1E" stroke="#202020" stroke-width="1.6"/>
+          </g>
+          <path d="M67.4 145.5C61.9 189.6 40.2 294.7 45.8 328.6" stroke="#202020" stroke-width="0.53"/>
+          <path d="M62.4 342.5C99.4 343 509.3 342.5 513.3 342.5" stroke="#202020" stroke-width="0.53"/>
+          <path d="M436.3 138.1C455.1 166 515.9 277.8 529.5 321.4" stroke="#202020" stroke-width="0.53"/>
+          <path d="M129.7 273.2H450.2C457.6 273.2 464.1 278.2 465.9 285.4L483 352.1H93.3L114.2 284.6C116.3 277.8 122.6 273.2 129.7 273.2Z" stroke="#202020" stroke-width="1.6"/>
+          <circle cx="151.9" cy="327.8" r="14.1" stroke="#202020" stroke-width="1.6"/>
+          <circle cx="424.3" cy="327.8" r="14.1" stroke="#202020" stroke-width="1.6"/>
+          <rect x="197.5" y="313.7" width="18.7" height="18.7" rx="2.4" stroke="#202020" stroke-width="1.6"/>
+          <rect x="360.1" y="313.7" width="18.7" height="18.7" rx="2.4" stroke="#202020" stroke-width="1.6"/>
+          <path d="M277.7 333.1C277.7 331.4 279.1 329.9 280.9 329.9H294.8C296.5 329.9 298 331.4 298 333.1V342.7H277.7V333.1Z" fill="#202020"/>
+          <path d="M62.4 308.6C71.8 308.6 79.4 316.3 79.4 325.7C79.4 335.1 71.8 342.7 62.4 342.7C52.9 342.7 45.3 335.1 45.3 325.7C45.3 316.3 52.9 308.6 62.4 308.6ZM62.4 318.5C58.4 318.5 55.2 321.7 55.2 325.7C55.2 329.6 58.4 332.9 62.4 332.9C66.3 332.9 69.5 329.6 69.5 325.7C69.5 321.7 66.3 318.5 62.4 318.5Z" fill="#202020"/>
+          <path d="M513.3 308.6C522.7 308.6 530.4 316.3 530.4 325.7C530.4 335.1 522.7 342.7 513.3 342.7C503.9 342.7 496.2 335.1 496.2 325.7C496.2 316.3 503.9 308.6 513.3 308.6ZM513.3 318.5C509.3 318.5 506.1 321.7 506.1 325.7C506.1 329.6 509.3 332.9 513.3 332.9C517.3 332.9 520.5 329.6 520.5 325.7C520.5 321.7 517.3 318.5 513.3 318.5Z" fill="#202020"/>
+          <path d="M287.8 279.3C293.1 279.3 297.4 283.6 297.4 288.9C297.4 294.2 293.1 298.5 287.8 298.5C282.5 298.5 278.2 294.2 278.2 288.9C278.2 283.6 282.5 279.3 287.8 279.3ZM288.6 283.2C288.4 282.3 287.2 282.3 287 283.2L286.3 286.8C286.3 287.1 286 287.3 285.7 287.4L282.1 288.1C281.2 288.3 281.2 289.5 282.1 289.7L285.7 290.4C286 290.5 286.2 290.7 286.3 291L287 294.6C287.2 295.5 288.4 295.5 288.6 294.6L289.3 291C289.4 290.7 289.7 290.5 290 290.4L293.6 289.7C294.4 289.5 294.4 288.3 293.6 288.1L290 287.4C289.7 287.3 289.4 287.1 289.3 286.8L288.6 283.2Z" fill="#202020"/>
+        </svg>
+        <div class="cal-cassette-brand-row">
+          <span class="cal-cassette-brand">ACM-VIT</span>
+          <span class="cal-cassette-type" style="color:${c.border}">${esc(c.label.toUpperCase())}</span>
+        </div>
+        <div class="cal-label-content">
+          <div class="cal-label-glow" style="background:radial-gradient(ellipse 100% 50% at 50% 120%,${c.border}18 0%,transparent 70%)"></div>
+          <div class="cal-label-side" style="color:${c.border}">A SIDE</div>
+          <div class="cal-label-domain" style="color:${c.text}">
+            <span class="cal-domain-dot" style="background:${c.border}"></span>${esc(c.label)}
+          </div>
+          <h3 class="cal-label-title">${esc(event.title)}</h3>
+          <div class="cal-label-meta">
+            <span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${new Date(event.date+'T00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span>
+            <span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${fmtTime(event.startTime)} - ${fmtTime(event.endTime)}</span>
+            <span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${esc(event.location)}</span>
+          </div>
+          <p class="cal-label-desc">${esc(event.description)}</p>
+          ${event.href ? `<a href="${event.href}" class="cal-label-link" style="color:${c.text};border-color:${c.border}">Read Blog →</a>` : ''}
+        </div>
+      </div>`;
+
+    overlay.addEventListener('click', closeModal);
+    overlay.querySelector('.cal-cassette-wrapper')!.addEventListener('click', e => e.stopPropagation());
+    overlay.querySelector('.cal-detail-close')!.addEventListener('click', closeModal);
+    modalRoot.innerHTML = '';
+    modalRoot.appendChild(overlay);
+    modalEsc = (e: KeyboardEvent) => { if (e.key === 'Escape') closeModal(); };
+    window.addEventListener('keydown', modalEsc);
+  }
+
+  function renderAll() {
+    renderMini();
+    renderDomains();
+    renderUpcoming();
+    renderTimeline();
+  }
+
+  // ── Controls ──
+  document.querySelectorAll<HTMLElement>('[data-agenda-dir]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const dir = Number(btn.dataset.agendaDir);
+      curDate = new Date(curDate.getFullYear(), curDate.getMonth() + dir, 1);
+      renderAll();
+    });
+  });
+
+  todayBtn.addEventListener('click', () => { curDate = new Date(); renderAll(); });
+
+  function toggleSidebar() {
+    sidebar.classList.toggle('agenda-side-open');
+    backdrop.classList.toggle('agenda-backdrop-on');
+  }
+  mobBtn.addEventListener('click', toggleSidebar);
+  backdrop.addEventListener('click', toggleSidebar);
+
+  // ── Init ──
+  renderAll();
+
+  // Blog dates
+  fetch('/api/blog-dates')
+    .then(r => r.json())
+    .then((blogs: {title:string;date:string;url:string;source:string}[]) => {
+      allEvents = [...SAMPLE_EVENTS, ...blogs.map((b, i) => ({
+        id: `blog-${i}`, title: b.title, date: b.date,
+        startTime: '00:00', endTime: '23:59', domain: 'blog' as EventDomain,
+        description: `Published on ${b.source === 'hashnode' ? 'Hashnode' : 'Medium'}`,
+        location: b.source === 'hashnode' ? 'blog.acmvit.in' : 'medium.com/acmvit',
+        href: b.url,
+      }))];
+      renderAll();
+    })
+    .catch(() => {});
+</script>

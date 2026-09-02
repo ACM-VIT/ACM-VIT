@@ -1,0 +1,618 @@
+---
+interface Props {
+  slug: string;
+  title: string;
+}
+
+const { slug, title } = Astro.props;
+---
+
+<div
+  class="fixed bottom-6 left-1/2 -translate-x-1/2 z-9000 pointer-events-none"
+  data-blog-dock-root
+  data-dock-state="booting"
+  data-slug={slug}
+  data-title={title}
+>
+  <div class="flex flex-col items-center gap-2 pointer-events-auto" data-dock-inner>
+
+    {/* Scratchpad panel */}
+    <div
+      class="hidden w-80 max-h-85 backdrop-blur-2xl rounded-2xl border overflow-hidden flex-col bg-[rgba(30,30,30,0.95)] border-white/8 shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+      data-scratchpad
+    >
+      <div class="flex items-center justify-between px-3.5 py-2.5 border-b font-mono text-[11px] tracking-widest uppercase border-white/6 text-white/50 scratchpad-header">
+        <span>Scratchpad</span>
+        <button
+          type="button"
+          data-scratchpad-close
+          aria-label="Close scratchpad"
+          class="p-0.5 flex items-center justify-center rounded bg-transparent border-none cursor-pointer transition-all duration-200 text-white/40 hover:text-white/80 hover:bg-white/6 scratchpad-close"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="flex flex-col flex-1 overflow-hidden">
+        <textarea
+          data-scratchpad-input
+          placeholder="Write a quick note..."
+          class="w-full h-45 px-3.5 py-3 bg-transparent border-0 font-mono text-[12px] leading-relaxed resize-none outline-none box-border border-white/6 text-white/80 placeholder:text-white/20 scratchpad-input"
+        ></textarea>
+      </div>
+    </div>
+
+    {/* Dock pill */}
+    <div
+      class="dock-pill flex min-h-13 items-center gap-1 px-4 py-2 backdrop-blur-2xl rounded-full border bg-[rgba(30,30,30,0.9)] border-white/8 shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+    >
+      {/* Listen */}
+      <button
+        type="button"
+        data-listen-btn
+        class="dock-btn dock-control w-9 h-9 flex items-center justify-center rounded-full border-none bg-transparent cursor-pointer transition-all duration-200 active:scale-[0.92] text-white/60 hover:text-[#FEFCD9] hover:bg-white/8"
+        title="Listen to article"
+      >
+        <span data-listen-icon-play>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+            <path d="M15.54 8.46a5 5 0 010 7.07" />
+            <path d="M19.07 4.93a10 10 0 010 14.14" />
+          </svg>
+        </span>
+        <span data-listen-icon-stop class="hidden">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <rect x="6" y="4" width="4" height="16" rx="1" />
+            <rect x="14" y="4" width="4" height="16" rx="1" />
+          </svg>
+        </span>
+      </button>
+
+      {/* Speed slider group - hidden until listening starts */}
+      <div
+        class="hidden playback-speed-group items-center gap-1 overflow-hidden origin-left"
+        data-speed-group
+      >        <div
+          class="dock-control elastic-speed-slider"
+          data-speed-slider
+          role="slider"
+          aria-label="Listening speed"
+          aria-valuemin="0.25"
+          aria-valuemax="2"
+          aria-valuenow="1"
+          tabindex="0"
+        >
+          <span class="elastic-speed-value" data-speed-value>1x</span>
+          <div class="elastic-speed-track" data-speed-track>
+            <div class="elastic-speed-fill" data-speed-fill style="width:0%"></div>
+            <span class="elastic-speed-stop" data-speed-stop="0" style="left:0%"></span>
+            <span class="elastic-speed-stop" data-speed-stop="1" style="left:14.2857%"></span>
+            <span class="elastic-speed-stop" data-speed-stop="2" style="left:28.5714%"></span>
+            <span class="elastic-speed-stop is-active" data-speed-stop="3" style="left:42.8571%"></span>
+            <span class="elastic-speed-stop" data-speed-stop="4" style="left:57.1429%"></span>
+            <span class="elastic-speed-stop" data-speed-stop="5" style="left:71.4286%"></span>
+            <span class="elastic-speed-stop" data-speed-stop="6" style="left:85.7143%"></span>
+            <span class="elastic-speed-stop" data-speed-stop="7" style="left:100%"></span>
+            <span class="elastic-speed-thumb" data-speed-thumb style="left:42.8571%"></span>
+          </div>
+        </div>      </div>
+
+      {/* Notes */}
+      <button
+        type="button"
+        data-notes-btn
+        class="dock-btn dock-control w-9 h-9 flex items-center justify-center rounded-full border-none bg-transparent cursor-pointer transition-all duration-200 active:scale-[0.92] text-white/60 hover:text-[#FEFCD9] hover:bg-white/8"
+        title="Scratchpad"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+        </svg>
+      </button>
+      {/* Theme */}
+      <button
+        type="button"
+        data-theme-btn
+        class="dock-btn dock-control w-9 h-9 flex items-center justify-center rounded-full border-none bg-transparent cursor-pointer transition-all duration-200 active:scale-[0.92] text-white/60 hover:text-[#FEFCD9] hover:bg-white/8"
+        title="Toggle theme"
+      >
+        <span data-theme-icon-sun>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5" />
+            <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+            <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+          </svg>
+        </span>
+        <span data-theme-icon-moon class="hidden">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+          </svg>
+        </span>
+      </button>
+      {/* Share */}
+      <button
+        type="button"
+        data-share-btn
+        class="dock-btn dock-control w-9 h-9 flex items-center justify-center rounded-full border-none bg-transparent cursor-pointer transition-all duration-200 active:scale-[0.92] text-white/60 hover:text-[#FEFCD9] hover:bg-white/8"
+        title="Share"
+      >
+        <span data-share-icon-default>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" />
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+          </svg>
+        </span>
+        <span data-share-icon-copied class="hidden">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  /* Light-theme overrides for dock chrome that Tailwind utilities don't cover via data-theme */
+  html[data-theme="light"] [data-blog-dock-root] .dock-pill {
+    background: rgba(22, 22, 22, 0.96);
+    border-color: rgba(249, 95, 74, 0.35);
+    box-shadow: 0 12px 36px rgba(45, 20, 12, 0.28);
+  }
+  html[data-theme="light"] [data-blog-dock-root] .dock-btn {
+    color: rgba(247, 238, 193, 0.75);
+  }
+  html[data-theme="light"] [data-blog-dock-root] .dock-btn:hover {
+    color: #F95F4A;
+    background: rgba(249, 95, 74, 0.18);
+  }
+  html[data-theme="light"] [data-blog-dock-root] .dock-divider {
+    background: rgba(249, 95, 74, 0.25);
+  }
+  html[data-theme="light"] [data-blog-dock-root] [data-scratchpad] {
+    background: rgba(255, 250, 238, 0.98);
+    border-color: rgba(199, 68, 46, 0.25);
+    box-shadow: 0 12px 36px rgba(45, 20, 12, 0.2);
+  }
+  html[data-theme="light"] [data-blog-dock-root] .scratchpad-header {
+    border-color: rgba(199, 68, 46, 0.15);
+    color: #8A2F21;
+  }
+  html[data-theme="light"] [data-blog-dock-root] .scratchpad-close {
+    color: rgba(138, 47, 33, 0.6);
+  }
+  html[data-theme="light"] [data-blog-dock-root] .scratchpad-close:hover {
+    color: #C7442E;
+    background: rgba(249, 95, 74, 0.12);
+  }
+  html[data-theme="light"] [data-blog-dock-root] .scratchpad-input {
+    border-color: rgba(199, 68, 46, 0.15);
+    color: #1a1a1a;
+  }
+  html[data-theme="light"] [data-blog-dock-root] .scratchpad-input::placeholder {
+    color: rgba(122, 74, 61, 0.6);
+  }
+
+  /* Listening / active state */
+  [data-blog-dock-root] .dock-btn.is-active {
+    color: #F95F4A;
+  }
+  [data-blog-dock-root] .dock-btn.is-active:hover {
+    color: #F95F4A;
+    background: rgba(249, 95, 74, 0.15);
+  }
+
+  [data-blog-dock-root][data-dock-state="booting"] {
+    visibility: hidden;
+  }
+
+  /* ── Mobile: the dock pill is replaced by the bottom nav's blog panel
+     (MobileNavbar proxies Listen/Notes/Share to the hidden buttons here).
+     Keep the root + scratchpad functional, just hide the pill and lift the
+     scratchpad above the mobile navbar. ── */
+  @media (max-width: 1024px) {
+    [data-blog-dock-root] {
+      bottom: calc(84px + env(safe-area-inset-bottom, 0px)) !important;
+    }
+    [data-blog-dock-root] .dock-pill {
+      display: none !important;
+    }
+    [data-blog-dock-root] [data-scratchpad] {
+      width: min(340px, calc(100vw - 24px));
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { Flip } from "gsap/Flip";
+  gsap.registerPlugin(Flip);
+
+  const LISTENING_SPEED_OPTIONS = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
+
+  function formatSpeed(speed: number): string {
+    return `${speed.toFixed(speed === 1 ? 0 : 2).replace(/0+$/, "").replace(/\.$/, "")}x`;
+  }
+
+  function nearestSpeedIndex(speed: number): number {
+    const exact = LISTENING_SPEED_OPTIONS.indexOf(speed);
+    if (exact !== -1) return exact;
+    return LISTENING_SPEED_OPTIONS.reduce(
+      (nearest, option, index) =>
+        Math.abs(option - speed) < Math.abs(LISTENING_SPEED_OPTIONS[nearest] - speed) ? index : nearest,
+      0
+    );
+  }
+
+  const root = document.querySelector<HTMLElement>("[data-blog-dock-root]");
+  if (root) {
+    const slug = root.dataset.slug || "";
+    const title = root.dataset.title || "";
+    const storageKey = `acm-blog-${slug}`;
+
+    const inner = root.querySelector<HTMLElement>("[data-dock-inner]")!;
+    const pill = root.querySelector<HTMLElement>(".dock-pill")!;
+    const listenBtn = root.querySelector<HTMLButtonElement>("[data-listen-btn]")!;
+    const listenIconPlay = root.querySelector<HTMLElement>("[data-listen-icon-play]")!;
+    const listenIconStop = root.querySelector<HTMLElement>("[data-listen-icon-stop]")!;
+    const speedGroup = root.querySelector<HTMLElement>("[data-speed-group]")!;
+    const speedSlider = root.querySelector<HTMLElement>("[data-speed-slider]")!;
+    const speedTrack = root.querySelector<HTMLElement>("[data-speed-track]")!;
+    const speedFill = root.querySelector<HTMLElement>("[data-speed-fill]")!;
+    const speedThumb = root.querySelector<HTMLElement>("[data-speed-thumb]")!;
+    const speedValueEl = root.querySelector<HTMLElement>("[data-speed-value]")!;
+    const speedStops = root.querySelectorAll<HTMLElement>("[data-speed-stop]");
+    const notesBtn = root.querySelector<HTMLButtonElement>("[data-notes-btn]")!;
+    const scratchpad = root.querySelector<HTMLElement>("[data-scratchpad]")!;
+    const scratchpadClose = root.querySelector<HTMLButtonElement>("[data-scratchpad-close]")!;
+    const scratchpadInput = root.querySelector<HTMLTextAreaElement>("[data-scratchpad-input]")!;
+    const themeBtn = root.querySelector<HTMLButtonElement>("[data-theme-btn]")!;
+    const themeIconSun = root.querySelector<HTMLElement>("[data-theme-icon-sun]")!;
+    const themeIconMoon = root.querySelector<HTMLElement>("[data-theme-icon-moon]")!;
+    const shareBtn = root.querySelector<HTMLButtonElement>("[data-share-btn]")!;
+    const shareIconDefault = root.querySelector<HTMLElement>("[data-share-icon-default]")!;
+    const shareIconCopied = root.querySelector<HTMLElement>("[data-share-icon-copied]")!;
+
+    let isListening = false;
+    let speedVisible = false;
+    let listeningSpeed = 1;
+    let voices: SpeechSynthesisVoice[] = [];
+    let speaking = false;
+    let showNotes = false;
+
+    function isPreloaderActive(): boolean {
+      const preloader = document.getElementById("preloader");
+      if (!preloader) return false;
+      const styles = window.getComputedStyle(preloader);
+      return styles.display !== "none" && styles.visibility !== "hidden" && styles.opacity !== "0";
+    }
+
+    function runAfterPreloader(callback: () => void) {
+      if (!isPreloaderActive()) {
+        callback();
+        return;
+      }
+      window.addEventListener("preloader:done", callback, { once: true });
+    }
+
+    // ── Load saved state
+    try {
+      const saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
+      if (saved.notes) scratchpadInput.value = saved.notes;
+      if (typeof saved.listeningSpeed === "number") {
+        listeningSpeed = LISTENING_SPEED_OPTIONS[nearestSpeedIndex(saved.listeningSpeed)];
+      }
+    } catch {}
+    updateSpeedVisual();
+
+    // ── Theme icon initial sync
+    function syncThemeIcon() {
+      const dark = document.documentElement.getAttribute("data-theme") !== "light";
+      themeIconSun.classList.toggle("hidden", !dark);
+      themeIconMoon.classList.toggle("hidden", dark);
+    }
+    syncThemeIcon();
+    const themeObserver = new MutationObserver(syncThemeIcon);
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+    // ── Voices
+    function loadVoices() {
+      const v = speechSynthesis.getVoices();
+      if (v.length > 0) voices = v;
+    }
+    loadVoices();
+    speechSynthesis.addEventListener("voiceschanged", loadVoices);
+
+    // ── Entry animation (Flip)
+    const controls = pill.querySelectorAll<HTMLElement>(".dock-control");
+
+    const runEntryAnimation = () => {
+      // On mobile (≤1024px) the dock pill is display:none - its controls are
+      // surfaced through the MobileNavbar blog panel instead. There's nothing to
+      // reveal, so skip the Flip/width animation on the hidden, zero-size pill
+      // (it would just burn ticks and could flash). Mark the dock ready so any
+      // dependent state settles.
+      if (pill.offsetParent === null || pill.getClientRects().length === 0) {
+        root.dataset.dockState = "ready";
+        root.style.removeProperty("visibility");
+        return;
+      }
+
+      root.style.visibility = "visible";
+      root.dataset.dockState = "animating";
+
+      const naturalRect = pill.getBoundingClientRect();
+      const naturalWidth = naturalRect.width;
+      const naturalHeight = naturalRect.height;
+
+      gsap.set(inner, { opacity: 1 });
+      gsap.set(pill, {
+        opacity: 0,
+        y: 24,
+        scale: 0.7,
+        width: naturalHeight,
+        height: naturalHeight,
+        overflow: "hidden",
+      });
+      gsap.set(controls, { opacity: 0 });
+
+      const tl = gsap.timeline();
+      tl.to(pill, { opacity: 1, y: -6, scale: 1.05, duration: 0.35, ease: "power2.out" })
+        .to(pill, { y: 0, scale: 1, duration: 0.25, ease: "power3.out" })
+        .add(() => {
+          const state = Flip.getState(pill);
+          pill.style.width = `${naturalWidth}px`;
+          Flip.from(state, {
+            duration: 0.5,
+            ease: "power3.out",
+            onComplete: () => {
+              pill.style.width = "";
+              pill.style.height = "";
+              pill.style.overflow = "";
+              root.dataset.dockState = "ready";
+              root.style.removeProperty("visibility");
+              gsap.to(controls, { opacity: 1, duration: 0.3, stagger: 0.025, ease: "power2.out" });
+            },
+          });
+        }, "-=0.08");
+    };
+
+    const ctx = gsap.context(() => {
+      runAfterPreloader(() => {
+        window.requestAnimationFrame(() => {
+          window.requestAnimationFrame(runEntryAnimation);
+        });
+      });
+    }, root);
+
+    // ── Speed slider visuals
+    function updateSpeedVisual() {
+      const idx = nearestSpeedIndex(listeningSpeed);
+      const max = LISTENING_SPEED_OPTIONS.length - 1;
+      const percent = (idx / max) * 100;
+      speedFill.style.width = `${percent}%`;
+      speedThumb.style.left = `${percent}%`;
+      speedValueEl.textContent = formatSpeed(listeningSpeed);
+      speedSlider.setAttribute("aria-valuenow", String(listeningSpeed));
+      speedSlider.setAttribute("aria-valuetext", formatSpeed(listeningSpeed));
+      speedStops.forEach((stop, i) => {
+        stop.classList.toggle("is-active", i <= idx);
+      });
+    }
+
+    function saveListeningSpeed(next: number) {
+      listeningSpeed = next;
+      updateSpeedVisual();
+      try {
+        const saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
+        saved.listeningSpeed = next;
+        localStorage.setItem(storageKey, JSON.stringify(saved));
+      } catch {}
+    }
+
+    // ── Elastic slider drag
+    let dragging = false;
+    let dragPosition: number | null = null;
+    const maxIndex = LISTENING_SPEED_OPTIONS.length - 1;
+
+    function updateFromClientX(clientX: number) {
+      const rect = speedTrack.getBoundingClientRect();
+      const raw = ((clientX - rect.left) / rect.width) * maxIndex;
+      const bounded = Math.min(maxIndex, Math.max(0, raw));
+      const overflow = raw < 0 ? raw : raw > maxIndex ? raw - maxIndex : 0;
+      dragPosition = bounded + overflow * 0.22;
+      renderDragVisual();
+    }
+
+    function renderDragVisual() {
+      if (dragPosition === null) return;
+      const max = maxIndex;
+      const bounded = Math.min(max, Math.max(0, dragPosition));
+      const visualPercent = (dragPosition / max) * 100;
+      const boundedPercent = (bounded / max) * 100;
+      const elasticPull = Math.min(1, Math.abs(dragPosition - bounded));
+      speedFill.style.width = `${boundedPercent}%`;
+      speedThumb.style.left = `${visualPercent}%`;
+      speedTrack.style.setProperty("--elastic-pull", elasticPull.toFixed(3));
+      speedTrack.style.setProperty("--elastic-origin", dragPosition < 0 ? "right" : "left");
+      const activeIdx = Math.round(bounded);
+      speedStops.forEach((stop, i) => stop.classList.toggle("is-active", i <= activeIdx));
+    }
+
+    function commitDrag() {
+      if (!dragging) return;
+      const position = Math.min(maxIndex, Math.max(0, dragPosition ?? nearestSpeedIndex(listeningSpeed)));
+      const nextIndex = Math.round(position);
+      dragging = false;
+      dragPosition = null;
+      speedSlider.classList.remove("is-dragging");
+      speedTrack.style.removeProperty("--elastic-pull");
+      saveListeningSpeed(LISTENING_SPEED_OPTIONS[nextIndex]);
+    }
+
+    speedSlider.addEventListener("pointerdown", (e) => {
+      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+      dragging = true;
+      speedSlider.classList.add("is-dragging");
+      updateFromClientX(e.clientX);
+    });
+    speedSlider.addEventListener("pointermove", (e) => {
+      if (dragging) updateFromClientX(e.clientX);
+    });
+    speedSlider.addEventListener("pointerup", commitDrag);
+    speedSlider.addEventListener("pointercancel", commitDrag);
+    speedSlider.addEventListener("keydown", (e) => {
+      if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+      e.preventDefault();
+      const delta = e.key === "ArrowRight" ? 1 : -1;
+      const idx = nearestSpeedIndex(listeningSpeed);
+      const next = Math.min(maxIndex, Math.max(0, idx + delta));
+      saveListeningSpeed(LISTENING_SPEED_OPTIONS[next]);
+    });
+
+    // ── Show/hide speed group with elastic animation
+    function showSpeedGroup() {
+      if (speedVisible) return;
+      speedVisible = true;
+      speedGroup.classList.remove("hidden");
+      speedGroup.classList.add("flex");
+      gsap.killTweensOf(speedGroup);
+      gsap.fromTo(
+        speedGroup,
+        { width: 0, opacity: 0, x: -10, scaleX: 0.88 },
+        { width: "auto", opacity: 1, x: 0, scaleX: 1, duration: 0.42, ease: "power3.out", clearProps: "width,x,scaleX" }
+      );
+    }
+    function hideSpeedGroup() {
+      if (!speedVisible) return;
+      gsap.killTweensOf(speedGroup);
+      gsap.to(speedGroup, {
+        width: 0, opacity: 0, x: -8, scaleX: 0.92,
+        duration: 0.24, ease: "power2.inOut",
+        onComplete: () => {
+          speedVisible = false;
+          speedGroup.classList.add("hidden");
+          speedGroup.classList.remove("flex");
+          speedGroup.style.removeProperty("width");
+          speedGroup.style.removeProperty("opacity");
+          speedGroup.style.removeProperty("transform");
+        },
+      });
+    }
+
+    // ── Listen / TTS
+    function toggleListen() {
+      if (isListening) {
+        speechSynthesis.cancel();
+        speaking = false;
+        isListening = false;
+        listenIconPlay.classList.remove("hidden");
+        listenIconStop.classList.add("hidden");
+        listenBtn.classList.remove("is-active");
+        hideSpeedGroup();
+        return;
+      }
+      const content = document.querySelector(".blog-content");
+      if (!content) return;
+      const text = content.textContent || "";
+      if (!text.trim()) return;
+
+      const sentences = text.match(/[^.!?]+[.!?]+\s*/g) || [text];
+      const chunks: string[] = [];
+      let current = "";
+      for (const s of sentences) {
+        if ((current + s).length > 500) { if (current) chunks.push(current); current = s; }
+        else current += s;
+      }
+      if (current) chunks.push(current);
+
+      const preferredVoice =
+        voices.find((v) => ["Samantha", "Karen", "Daniel"].some((n) => v.name.includes(n)) || v.name.includes("Google UK English")) ||
+        voices.find((v) => v.lang.startsWith("en")) ||
+        voices[0];
+
+      let i = 0;
+      speaking = true;
+      function speakNext() {
+        if (i >= chunks.length || !speaking) {
+          speaking = false; isListening = false;
+          listenIconPlay.classList.remove("hidden");
+          listenIconStop.classList.add("hidden");
+          listenBtn.classList.remove("is-active");
+          hideSpeedGroup();
+          return;
+        }
+        const utt = new SpeechSynthesisUtterance(chunks[i]);
+        if (preferredVoice) utt.voice = preferredVoice;
+        utt.rate = listeningSpeed;
+        utt.pitch = 1;
+        utt.onend = () => { i++; speakNext(); };
+        utt.onerror = () => { speaking = false; isListening = false; listenBtn.classList.remove("is-active"); hideSpeedGroup(); };
+        speechSynthesis.speak(utt);
+      }
+      speakNext();
+      isListening = true;
+      listenIconPlay.classList.add("hidden");
+      listenIconStop.classList.remove("hidden");
+      listenBtn.classList.add("is-active");
+      showSpeedGroup();
+    }
+    listenBtn.addEventListener("click", toggleListen);
+
+    // ── Notes
+    function setNotesOpen(open: boolean) {
+      showNotes = open;
+      scratchpad.classList.toggle("hidden", !open);
+      scratchpad.classList.toggle("flex", open);
+      notesBtn.classList.toggle("is-active", open);
+    }
+    notesBtn.addEventListener("click", () => setNotesOpen(!showNotes));
+    scratchpadClose.addEventListener("click", () => setNotesOpen(false));
+    scratchpadInput.addEventListener("input", () => {
+      try {
+        const saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
+        saved.notes = scratchpadInput.value;
+        saved.listeningSpeed = listeningSpeed;
+        saved.lastRead = Date.now();
+        localStorage.setItem(storageKey, JSON.stringify(saved));
+      } catch {}
+    });
+
+    // ── Theme toggle
+    themeBtn.addEventListener("click", () => {
+      const html = document.documentElement;
+      const isLight = html.getAttribute("data-theme") === "light";
+      if (isLight) { html.removeAttribute("data-theme"); localStorage.setItem("acm-theme", "dark"); }
+      else { html.setAttribute("data-theme", "light"); localStorage.setItem("acm-theme", "light"); }
+    });
+
+    // ── Share
+    let copiedTimeout: number | null = null;
+    shareBtn.addEventListener("click", async () => {
+      const url = window.location.href;
+      if (navigator.share) {
+        try { await navigator.share({ title, url }); } catch {}
+      } else {
+        try { await navigator.clipboard.writeText(url); } catch {}
+        shareIconDefault.classList.add("hidden");
+        shareIconCopied.classList.remove("hidden");
+        shareBtn.title = "Copied!";
+        if (copiedTimeout) window.clearTimeout(copiedTimeout);
+        copiedTimeout = window.setTimeout(() => {
+          shareIconDefault.classList.remove("hidden");
+          shareIconCopied.classList.add("hidden");
+          shareBtn.title = "Share";
+        }, 2000);
+      }
+    });
+
+    // Cleanup TTS on unload
+    window.addEventListener("beforeunload", () => { if (speaking) speechSynthesis.cancel(); });
+  }
+</script>

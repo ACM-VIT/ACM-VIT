@@ -1,0 +1,1081 @@
+
+<div id="preloader" class="preloader" role="status" aria-label="Loading" aria-live="polite">
+  <div class="loader-content">
+    <!-- Inline SVG Cassette - renders instantly, zero network requests -->
+    <div class="cassette-wrapper" id="cassette-wrapper">
+      <svg class="cassette-svg" viewBox="0 0 280 175" xmlns="http://www.w3.org/2000/svg">
+        <!-- Body -->
+        <rect class="cassette-body" x="0.75" y="0.75" width="278.5" height="173.5" rx="11" />
+
+        <!-- Cover area (top ~65%) -->
+        <path class="cassette-cover" d="
+          M 18 10
+          L 22 10 L 28 16 L 252 16 L 258 10 L 262 10
+          Q 266 10 266 14
+          L 266 120
+          L 14 120
+          L 14 14
+          Q 14 10 18 10
+          Z
+        " />
+
+        <!-- Cover inner shadow lines -->
+        <line class="cover-line" x1="20" y1="22" x2="260" y2="22" />
+        <line class="cover-line" x1="20" y1="114" x2="260" y2="114" />
+
+        <!-- Left reel -->
+        <g class="reel reel-left" data-reel>
+          <circle cx="92" cy="62" r="24" class="reel-outer" />
+          <circle cx="92" cy="62" r="16" class="reel-mid" />
+          <circle cx="92" cy="62" r="5.5" class="reel-hub" />
+          <!-- Spokes (make rotation visible) -->
+          <g class="reel-spokes" style="transform-origin: 92px 62px">
+            <line x1="92" y1="43" x2="92" y2="38" class="reel-spoke" />
+            <line x1="92" y1="43" x2="92" y2="38" class="reel-spoke" transform="rotate(60, 92, 62)" />
+            <line x1="92" y1="43" x2="92" y2="38" class="reel-spoke" transform="rotate(120, 92, 62)" />
+            <line x1="92" y1="43" x2="92" y2="38" class="reel-spoke" transform="rotate(180, 92, 62)" />
+            <line x1="92" y1="43" x2="92" y2="38" class="reel-spoke" transform="rotate(240, 92, 62)" />
+            <line x1="92" y1="43" x2="92" y2="38" class="reel-spoke" transform="rotate(300, 92, 62)" />
+          </g>
+          <!-- Tape fill (visual mass around hub) -->
+          <circle cx="92" cy="62" r="19" class="reel-tape reel-tape-left" />
+        </g>
+
+        <!-- Right reel -->
+        <g class="reel reel-right" data-reel>
+          <circle cx="188" cy="62" r="24" class="reel-outer" />
+          <circle cx="188" cy="62" r="16" class="reel-mid" />
+          <circle cx="188" cy="62" r="5.5" class="reel-hub reel-hub-accent" />
+          <g class="reel-spokes" style="transform-origin: 188px 62px">
+            <line x1="188" y1="43" x2="188" y2="38" class="reel-spoke" />
+            <line x1="188" y1="43" x2="188" y2="38" class="reel-spoke" transform="rotate(60, 188, 62)" />
+            <line x1="188" y1="43" x2="188" y2="38" class="reel-spoke" transform="rotate(120, 188, 62)" />
+            <line x1="188" y1="43" x2="188" y2="38" class="reel-spoke" transform="rotate(180, 188, 62)" />
+            <line x1="188" y1="43" x2="188" y2="38" class="reel-spoke" transform="rotate(240, 188, 62)" />
+            <line x1="188" y1="43" x2="188" y2="38" class="reel-spoke" transform="rotate(300, 188, 62)" />
+          </g>
+          <circle cx="188" cy="62" r="10" class="reel-tape reel-tape-right" />
+        </g>
+
+        <!-- Tape path between reels -->
+        <path class="tape-path" d="M 68 62 A 24 24 0 0 0 92 86 L 188 86 A 24 24 0 0 0 212 62" />
+
+        <!-- Tape window (transparent opening) -->
+        <rect class="tape-window" x="118" y="73" width="44" height="16" rx="3" />
+
+        <!-- Center post -->
+        <circle class="center-post" cx="140" cy="62" r="2.5" />
+
+        <!-- Label strip -->
+        <rect class="cassette-label" x="82" y="95" width="116" height="18" rx="9" />
+        <text class="label-text" x="140" y="107" text-anchor="middle" dominant-baseline="middle">
+          NOW LOADING
+        </text>
+
+        <!-- Bottom area -->
+        <path class="cassette-bump" d="M 85 132 L 98 158 Q 100 162 104 162 L 176 162 Q 180 162 182 158 L 195 132" />
+
+        <!-- Pin holes row -->
+        <g class="pin-holes">
+          <circle cx="90" cy="143" r="1.8" />
+          <circle cx="102" cy="143" r="1.8" />
+          <circle cx="114" cy="143" r="1.8" />
+          <circle cx="126" cy="143" r="1.8" />
+          <circle cx="140" cy="143" r="2.2" />
+          <circle cx="154" cy="143" r="1.8" />
+          <circle cx="166" cy="143" r="1.8" />
+          <circle cx="178" cy="143" r="1.8" />
+          <circle cx="190" cy="143" r="1.8" />
+        </g>
+
+        <!-- Corner screws -->
+        <g class="screws">
+          <circle cx="8" cy="8" r="2.5" class="screw" />
+          <circle cx="272" cy="8" r="2.5" class="screw" />
+          <circle cx="8" cy="167" r="2.5" class="screw" />
+          <circle cx="272" cy="167" r="2.5" class="screw" />
+        </g>
+
+        <!-- Logo reveal (hidden, revealed when loaded). Default: acm text.
+             On the z0d1ak page the preloader swaps in the z0d1ak logo. -->
+        <text class="acm-reveal acm-reveal-text" x="140" y="72" text-anchor="middle" dominant-baseline="middle">
+          acm
+        </text>
+        <image
+          class="acm-reveal acm-reveal-logo"
+          href="/z0d1ak/z0d1ak-logo.svg"
+          x="108" y="38" width="64" height="66"
+          preserveAspectRatio="xMidYMid meet"
+        />
+        <image
+          class="acm-reveal acm-reveal-trophy"
+          href="/ui/ui-trophy.webp"
+          x="113" y="37" width="54" height="70"
+          preserveAspectRatio="xMidYMid meet"
+        />
+      </svg>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="progress-bar">
+      <div class="progress-fill"></div>
+    </div>
+
+    <!-- Status text -->
+    <div class="loader-status" id="loader-status">PREPARING YOUR EXPERIENCE</div>
+  </div>
+</div>
+
+<script>
+  const preloader = document.getElementById("preloader");
+  // z0d1ak page: swap the acm reveal for the z0d1ak logo
+  if (preloader && location.pathname.replace(/\/+$/, "") === "/z0d1ak") {
+    preloader.classList.add("preloader--z0d1ak");
+  }
+  // achievements page: swap the acm reveal for the gold trophy
+  if (preloader && location.pathname.replace(/\/+$/, "") === "/achievements") {
+    preloader.classList.add("preloader--achievements");
+  }
+  const progressFill = document.querySelector(".progress-fill") as HTMLElement;
+  const cassetteWrapper = document.getElementById("cassette-wrapper");
+  const loaderStatus = document.getElementById("loader-status");
+  import { getAssetUrl } from "../utils/cdn";
+
+  let progressTween: any = null;
+  let gsapInstance: any = null;
+  let progressValue = 0;
+  let hasStartedCompletion = false;
+  let hasFinished = false;
+  let fallbackTimeoutId = 0;
+  let fakeProgressTimer = 0;
+  let remainingWarmupStarted = false;
+
+  const CRITICAL_WARMUP_TIMEOUT = 7500;
+  const VARIANTS_WAIT_TIMEOUT = 1600;
+  const VIDEO_WARM_TIMEOUT = 10000;
+
+  // ── Page-specific accent color ──
+  const getPreloaderAccent = () => {
+    const p = window.location.pathname;
+    if (p.includes('/domains/tech')) return '#9B51E0';
+    if (p.includes('/domains/cc')) return '#42CD9D';
+    if (p.includes('/domains/design')) return '#FF0054';
+    if (p.includes('/domains/research')) return '#135DE2';
+    if (p.includes('/domains/management')) return '#008080';
+    if (p.includes('/events/')) return '#E86C50';
+    if (p.includes('/blogs')) return '#FF8A6B';
+    if (p.includes('/calendar')) return '#FFB347';
+    if (p.includes('/community')) return '#F95F4A';
+    if (p.includes('/cassette-builder')) return '#EDA35F';
+    if (p.includes('/achievements')) return '#D4AF37';
+    return '#F95F4A';
+  };
+
+  if (preloader) {
+    preloader.style.setProperty('--preloader-accent', getPreloaderAccent());
+  }
+
+  const getGsap = async () => {
+    if (gsapInstance) return gsapInstance;
+    const mod = await import("gsap");
+    gsapInstance = mod.gsap || mod.default || mod;
+    return gsapInstance;
+  };
+
+  const setProgress = (gsap: any, nextValue: number, duration = 0.2) => {
+    const clamped = Math.max(progressValue, Math.min(95, nextValue));
+    if (clamped === progressValue) return;
+    progressValue = clamped;
+    if (progressTween) progressTween.kill();
+    progressTween = gsap.to(progressFill, {
+      width: `${clamped}%`,
+      duration,
+      ease: "power1.out",
+      overwrite: "auto",
+    });
+  };
+
+  const startFakeProgress = (gsap: any) => {
+    if (fakeProgressTimer) window.clearInterval(fakeProgressTimer);
+    fakeProgressTimer = window.setInterval(() => {
+      if (hasFinished || hasStartedCompletion) return;
+      const increment = progressValue < 60 ? 6 : 3;
+      setProgress(gsap, progressValue + increment, 0.3);
+    }, 180);
+  };
+
+  const stopFakeProgress = () => {
+    if (!fakeProgressTimer) return;
+    window.clearInterval(fakeProgressTimer);
+    fakeProgressTimer = 0;
+  };
+
+  const waitForWindowLoad = () =>
+    new Promise<void>((resolve) => {
+      if (document.readyState === "complete") {
+        resolve();
+        return;
+      }
+      window.addEventListener("load", () => resolve(), { once: true });
+    });
+
+  const waitForFonts = () => {
+    if (document.fonts && document.fonts.ready) {
+      return document.fonts.ready.catch(() => {});
+    }
+    return Promise.resolve();
+  };
+
+  const withTimeout = async (promise: Promise<unknown>, timeoutMs: number) => {
+    let timeoutId = 0;
+    try {
+      return await Promise.race([
+        promise,
+        new Promise<null>((resolve) => {
+          timeoutId = window.setTimeout(() => resolve(null), timeoutMs);
+        }),
+      ]);
+    } finally {
+      if (timeoutId) window.clearTimeout(timeoutId);
+    }
+  };
+
+  const waitForVariantsMounted = () =>
+    new Promise<void>((resolve) => {
+      const hosts = Array.from(
+        document.querySelectorAll("[data-variant-host]")
+      ) as HTMLElement[];
+
+      if (!hosts.length) {
+        resolve();
+        return;
+      }
+
+      const allReady = hosts.every((host) => host.dataset.variantReady);
+      if (allReady) {
+        resolve();
+        return;
+      }
+
+      let resolved = false;
+      const done = () => {
+        if (resolved) return;
+        resolved = true;
+        window.removeEventListener("variants-mounted", done as EventListener);
+        resolve();
+      };
+
+      window.addEventListener("variants-mounted", done as EventListener, {
+        once: true,
+      });
+      window.setTimeout(done, VARIANTS_WAIT_TIMEOUT);
+    });
+
+  const isVideoBufferedEnough = (video: HTMLVideoElement) => {
+    if (video.readyState >= 4) return true;
+    const duration = video.duration;
+    if (!duration || !isFinite(duration)) return video.readyState >= 3;
+    const buffered = video.buffered;
+    if (!buffered.length) return false;
+    const end = buffered.end(buffered.length - 1);
+    return end / duration >= 0.995;
+  };
+
+  const warmScrollVideo = (timeoutMs = VIDEO_WARM_TIMEOUT) =>
+    new Promise<void>((resolve) => {
+      const video = document.querySelector(
+        "[data-scroll-video]"
+      ) as HTMLVideoElement | null;
+
+      if (!video) {
+        resolve();
+        return;
+      }
+
+      if (video.dataset.warmed === "true" && isVideoBufferedEnough(video)) {
+        resolve();
+        return;
+      }
+
+      if (video.getAttribute("preload") !== "auto") {
+        video.setAttribute("preload", "auto");
+      }
+
+      let settled = false;
+      let timeoutId = 0;
+
+      const done = () => {
+        if (settled) return;
+        settled = true;
+        if (timeoutId) window.clearTimeout(timeoutId);
+        video.removeEventListener("canplaythrough", onReady);
+        video.removeEventListener("loadeddata", onReady);
+        video.removeEventListener("canplay", onReady);
+        video.removeEventListener("progress", onProgress);
+        video.removeEventListener("error", onError);
+        if (isVideoBufferedEnough(video)) {
+          video.dataset.warmed = "true";
+        }
+        resolve();
+      };
+
+      const onReady = () => {
+        if (isVideoBufferedEnough(video) || video.readyState >= 3) {
+          video.dataset.warmed = "true";
+          done();
+        }
+      };
+
+      const onProgress = () => {
+        if (isVideoBufferedEnough(video)) {
+          video.dataset.warmed = "true";
+          done();
+        }
+      };
+
+      const onError = () => done();
+
+      if (isVideoBufferedEnough(video)) {
+        video.dataset.warmed = "true";
+        resolve();
+        return;
+      }
+
+      video.addEventListener("canplaythrough", onReady, { once: true });
+      video.addEventListener("loadeddata", onReady, { once: true });
+      video.addEventListener("canplay", onReady, { once: true });
+      video.addEventListener("progress", onProgress);
+      video.addEventListener("error", onError, { once: true });
+      timeoutId = window.setTimeout(done, timeoutMs);
+
+      try {
+        if (video.networkState === HTMLMediaElement.NETWORK_EMPTY || video.readyState < 3) {
+          video.load();
+        }
+      } catch {
+        done();
+      }
+    });
+
+  const parseBackgroundImageUrls = (value: string | null | undefined) => {
+    if (!value) return [];
+    const urls: string[] = [];
+    const regex = /url\((['"]?)(.*?)\1\)/g;
+    let match: RegExpExecArray | null = null;
+    while ((match = regex.exec(value))) {
+      const url = match[2]?.trim();
+      if (!url || url.startsWith("data:")) continue;
+      urls.push(url);
+    }
+    return urls;
+  };
+
+  const normalizeUrl = (raw: string) => {
+    try {
+      return new URL(raw, window.location.href).href;
+    } catch {
+      return raw;
+    }
+  };
+
+  const isLikelyImageUrl = (url: string) =>
+    /\.(avif|webp|png|jpe?g|gif|svg|bmp|ico)(\?.*)?$/i.test(url);
+
+  const collectCriticalImageCandidates = () => {
+    const vh = window.innerHeight || 900;
+    const map = new Map<string, number>();
+
+    const upsert = (rawUrl: string, priority: number) => {
+      if (!rawUrl || !isLikelyImageUrl(rawUrl)) return;
+      const url = normalizeUrl(rawUrl);
+      const prev = map.get(url) ?? -Infinity;
+      if (priority > prev) map.set(url, priority);
+    };
+
+    const criticalSelector =
+      ".cassette-img, .cassette-svg, .mobile-cassette-img, #partners-svg, .acm-logo";
+
+    const images = Array.from(document.querySelectorAll("img[src]")) as HTMLImageElement[];
+    images.forEach((img) => {
+      const rect = img.getBoundingClientRect();
+      const inNearRange = rect.top < vh * 8 && rect.bottom > -vh;
+      const inSoonRange = rect.top < vh * 4 && rect.bottom > -vh;
+      const inView = rect.top < vh && rect.bottom > 0;
+      const isCritical = img.matches(criticalSelector);
+
+      let priority = 0;
+      if (img.getAttribute("fetchpriority") === "high") priority += 8;
+      if (img.getAttribute("loading") === "eager") priority += 5;
+      if (isCritical) priority += 6;
+      if (inView) priority += 8;
+      else if (inSoonRange) priority += 5;
+      else if (inNearRange) priority += 3;
+
+      if (priority > 0) {
+        const src = img.currentSrc || img.src;
+        upsert(src, priority);
+      }
+
+      if (inSoonRange || isCritical) {
+        img.loading = "eager";
+        if (!img.getAttribute("fetchpriority")) {
+          img.setAttribute("fetchpriority", "high");
+        }
+      }
+    });
+
+    const bgElements = Array.from(
+      document.querySelectorAll("[style*='background-image']")
+    ) as HTMLElement[];
+    bgElements.forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      const inNearRange = rect.top < vh * 8 && rect.bottom > -vh;
+      if (!inNearRange) return;
+
+      const inlineStyle = el.getAttribute("style");
+      const computedStyle = getComputedStyle(el).backgroundImage;
+      const urls = [
+        ...parseBackgroundImageUrls(inlineStyle),
+        ...parseBackgroundImageUrls(computedStyle),
+      ];
+
+      urls.forEach((url) => upsert(url, 4));
+    });
+
+    upsert(getAssetUrl("/backgrounds/backgrounds-background-pattern.webp"), 7);
+    upsert(getAssetUrl("/backgrounds/backgrounds-glow-ball-red.webp"), 7);
+    upsert(getAssetUrl("/logos/logos-acm-topleft.webp"), 9);
+    upsert(getAssetUrl("/acmw/acmw-bento.webp"), 5);
+    upsert(getAssetUrl("/acmw/acmw-bento-phone.webp"), 5);
+    upsert(getAssetUrl("/about/about-acmvit-cassette.webp"), 6);
+    upsert(getAssetUrl("/about/about-acm-cassette.webp"), 6);
+    upsert(getAssetUrl("/about/about-vit-cassette.webp"), 6);
+    upsert(getAssetUrl("/cassettes/cassettes-cassette-tech.webp"), 6);
+    upsert(getAssetUrl("/cassettes/cassettes-cassette-cc.webp"), 6);
+    upsert(getAssetUrl("/cassettes/cassettes-cassette-design.webp"), 6);
+    upsert(getAssetUrl("/cassettes/cassettes-cassette-management.webp"), 6);
+    upsert(getAssetUrl("/cassettes/cassettes-cassette-research.webp"), 6);
+
+    return Array.from(map.entries())
+      .sort((a, b) => b[1] - a[1])
+      .map(([url]) => url);
+  };
+
+  const preloadImage = (url: string, timeoutMs = 3500) =>
+    new Promise<void>((resolve) => {
+      const image = new Image();
+      let settled = false;
+      let timeoutId = 0;
+
+      const done = () => {
+        if (settled) return;
+        settled = true;
+        if (timeoutId) window.clearTimeout(timeoutId);
+        resolve();
+      };
+
+      image.onload = done;
+      image.onerror = done;
+      timeoutId = window.setTimeout(done, timeoutMs);
+      image.decoding = "async";
+      image.src = url;
+
+      if (image.complete) {
+        done();
+      } else if (typeof image.decode === "function") {
+        image.decode().then(done).catch(() => {});
+      }
+    });
+
+  const preloadInBatches = async (
+    urls: string[],
+    concurrency: number,
+    onProgress?: (loaded: number, total: number) => void
+  ) => {
+    if (!urls.length) return;
+    const total = urls.length;
+    let nextIndex = 0;
+    let loaded = 0;
+
+    const worker = async () => {
+      while (nextIndex < total) {
+        const index = nextIndex++;
+        const url = urls[index];
+        await preloadImage(url);
+        loaded += 1;
+        onProgress?.(loaded, total);
+      }
+    };
+
+    const workerCount = Math.min(concurrency, total);
+    await Promise.all(Array.from({ length: workerCount }, () => worker()));
+  };
+
+  const warmCriticalAssets = async (gsap?: any) => {
+    const allCandidates = collectCriticalImageCandidates();
+    const isMobile =
+      window.matchMedia("(max-width: 768px)").matches;
+    const maxCritical = isMobile ? 70 : 110;
+    const urls = allCandidates.slice(0, maxCritical);
+
+    await preloadInBatches(urls, 8, (loaded, total) => {
+      const normalized = total ? loaded / total : 1;
+      if (gsap) {
+        setProgress(gsap, 10 + normalized * 78, 0.15);
+      }
+    });
+  };
+
+  const warmRemainingAssets = async () => {
+    if (remainingWarmupStarted) return;
+    remainingWarmupStarted = true;
+
+    const schedule = (fn: () => void) => {
+      if ("requestIdleCallback" in window) {
+        (window as any).requestIdleCallback(fn, { timeout: 1200 });
+      } else {
+        window.setTimeout(fn, 350);
+      }
+    };
+
+    schedule(async () => {
+      const urls = Array.from(document.querySelectorAll("img[src]"))
+        .map((img) => img.getAttribute("src") || "")
+        .filter((url) => !!url && isLikelyImageUrl(url))
+        .map((url) => normalizeUrl(url));
+
+      const unique = Array.from(new Set(urls));
+      await preloadInBatches(unique, 4);
+    });
+  };
+
+  // ── Completion: reveal ACM logo, then slide away ──
+  const proceedToCompletion = async (gsap: any) => {
+    if (hasStartedCompletion || hasFinished) return;
+    hasStartedCompletion = true;
+    stopFakeProgress();
+    if (fallbackTimeoutId) window.clearTimeout(fallbackTimeoutId);
+
+    // Fill progress to 100%
+    if (progressTween) progressTween.kill();
+    progressTween = gsap.to(progressFill, {
+      width: "100%",
+      duration: 0.4,
+      ease: "power1.out",
+      onComplete: () => {
+        // Trigger the loaded state CSS transition
+        if (cassetteWrapper) {
+          cassetteWrapper.classList.add("cassette-loaded");
+        }
+        if (loaderStatus) {
+          loaderStatus.textContent = "WELCOME TO ACM-VIT";
+        }
+
+        // Wait for the ACM reveal animation, then slide away
+        window.setTimeout(finishLoading, 1400);
+      },
+    });
+  };
+
+  const initPreloader = async () => {
+    if (!preloader || !progressFill) return;
+    const gsap = await getGsap();
+
+    gsap.set(preloader, { autoAlpha: 1 });
+    gsap.set(progressFill, { width: "0%" });
+    progressValue = 0;
+
+    const startTime = performance.now();
+
+    startFakeProgress(gsap);
+
+    // Soft timeout: don't let preloader stay forever
+    const softTimeoutId = window.setTimeout(() => {
+      void proceedToCompletion(gsap);
+    }, 5200);
+
+    fallbackTimeoutId = window.setTimeout(() => {
+      void proceedToCompletion(gsap);
+    }, 9000);
+
+    await waitForVariantsMounted();
+
+    const criticalAssetPromise = withTimeout(
+      warmCriticalAssets(gsap),
+      CRITICAL_WARMUP_TIMEOUT
+    );
+
+    await Promise.allSettled([
+      waitForWindowLoad(),
+      waitForFonts(),
+      withTimeout(warmScrollVideo(), VIDEO_WARM_TIMEOUT),
+      criticalAssetPromise,
+    ]);
+
+    const elapsed = performance.now() - startTime;
+    const minimumDisplay = 950;
+    const delay = Math.max(0, minimumDisplay - elapsed);
+
+    window.setTimeout(() => {
+      window.clearTimeout(softTimeoutId);
+      void proceedToCompletion(gsap);
+    }, delay);
+  };
+
+  function finishLoading() {
+    const preloader = document.getElementById("preloader");
+    if (!preloader || !gsapInstance || hasFinished) return;
+    hasFinished = true;
+    hasStartedCompletion = true;
+    if (fallbackTimeoutId) window.clearTimeout(fallbackTimeoutId);
+
+    const tl = gsapInstance.timeline({
+      onComplete: () => {
+        if (progressTween) progressTween.kill();
+        void warmScrollVideo();
+        void warmRemainingAssets();
+        window.dispatchEvent(new CustomEvent("preloader:done"));
+      },
+    });
+
+    tl.to(".progress-bar", {
+      opacity: 0,
+      duration: 0.25,
+    })
+      .to(".loader-status", {
+        opacity: 0,
+        duration: 0.2,
+      }, "<")
+      .to(preloader, {
+        yPercent: -100,
+        duration: 0.75,
+        ease: "power4.inOut",
+      })
+      .set(preloader, { display: "none" });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+      void initPreloader();
+    });
+  } else {
+    void initPreloader();
+  }
+
+  // ── Handle bfcache restoration (browser back/forward button) ──
+  // When we navigate forward, the preloader curtain is visible (yPercent: 0).
+  // If the browser caches that state and restores it on back-nav, the user
+  // sees a black screen. Dismiss the curtain immediately on bfcache restore.
+  window.addEventListener('pageshow', (e) => {
+    if (e.persisted) {
+      const pl = document.getElementById('preloader');
+      if (pl) {
+        pl.style.display = 'none';
+        pl.style.transform = 'translateY(-100%)';
+      }
+    }
+  });
+
+  // ── Internal navigation: show preloader curtain before navigating ──
+  document.addEventListener('click', (e) => {
+    // Respect new-tab / new-window intents: cmd/ctrl/shift/alt + click,
+    // middle-click, or an already-handled event. Let the browser do its thing.
+    if (e.defaultPrevented) return;
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+    const anchor = (e.target as HTMLElement).closest('a[href]') as HTMLAnchorElement | null;
+    if (!anchor) return;
+    const href = anchor.getAttribute('href');
+    if (!href) return;
+
+    // Skip external, anchor, mailto, tel, and new-tab links
+    if (/^(https?:|mailto:|tel:|#)/.test(href)) return;
+    if (anchor.target === '_blank') return;
+
+    // Skip same-page hash links (e.g. /#about when already on /)
+    try {
+      const dest = new URL(href, window.location.href);
+      if (dest.pathname === window.location.pathname && dest.hash) return;
+    } catch { /* invalid URL, let it proceed */ }
+
+    e.preventDefault();
+    const pl = document.getElementById('preloader');
+    if (!pl || !gsapInstance) {
+      window.location.href = href;
+      return;
+    }
+
+    // Hide cassette content, just use the background as a curtain
+    const content = pl.querySelector('.loader-content') as HTMLElement;
+    if (content) content.style.opacity = '0';
+
+    gsapInstance.set(pl, { display: 'flex', yPercent: -100, autoAlpha: 1 });
+    gsapInstance.to(pl, {
+      yPercent: 0,
+      duration: 0.45,
+      ease: 'power3.inOut',
+      onComplete: () => { window.location.href = href; },
+    });
+  });
+</script>
+
+<style>
+  .preloader {
+    --preloader-accent: #F95F4A;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #0d0e0d;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  :global(html[data-theme="light"]) .preloader {
+    background-color: #f5f0e6;
+  }
+
+  .loader-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  /* ── Cassette wrapper ── */
+  .cassette-wrapper {
+    width: 300px;
+    opacity: 0;
+    transform: scale(0.85);
+    animation: cassetteEntrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+  }
+
+  @keyframes cassetteEntrance {
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .cassette-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* ── Body ── */
+  .cassette-body {
+    fill: #222;
+    stroke: rgba(255, 255, 255, 0.15);
+    stroke-width: 1.5;
+  }
+
+  :global(html[data-theme="light"]) .cassette-body {
+    fill: #e8e0d0;
+    stroke: rgba(0, 0, 0, 0.12);
+  }
+
+  /* ── Cover ── */
+  .cassette-cover {
+    fill: #161616;
+    stroke: rgba(255, 255, 255, 0.12);
+    stroke-width: 0.75;
+  }
+
+  :global(html[data-theme="light"]) .cassette-cover {
+    fill: #2a2420;
+  }
+
+  .cover-line {
+    stroke: rgba(255, 255, 255, 0.12);
+    stroke-width: 0.5;
+  }
+
+  :global(html[data-theme="light"]) .cover-line {
+    stroke: rgba(255, 255, 255, 0.08);
+  }
+
+  /* ── Reels ── */
+  .reel-outer {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.35);
+    stroke-width: 1.2;
+  }
+
+  .reel-mid {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.2);
+    stroke-width: 0.8;
+  }
+
+  .reel-hub {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.5);
+    stroke-width: 1.5;
+  }
+
+  .reel-hub-accent {
+    stroke: var(--preloader-accent);
+  }
+
+  .reel-spoke {
+    stroke: rgba(255, 255, 255, 0.25);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+  }
+
+  /* Tape fill around hubs - asymmetric (supply vs take-up) */
+  .reel-tape {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.12);
+    stroke-width: 5;
+  }
+
+  .reel-tape-left {
+    stroke-width: 7;
+    stroke: rgba(255, 255, 255, 0.15);
+  }
+
+  .reel-tape-right {
+    stroke-width: 3;
+    stroke: rgba(255, 255, 255, 0.1);
+  }
+
+  /* Reel spinning animation */
+  .reel-left .reel-spokes {
+    animation: spinReel 2s linear infinite;
+  }
+
+  .reel-right .reel-spokes {
+    animation: spinReel 1.4s linear infinite;
+  }
+
+  @keyframes spinReel {
+    to { transform: rotate(-360deg); }
+  }
+
+  /* ── Tape path ── */
+  .tape-path {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.18);
+    stroke-width: 0.8;
+  }
+
+  /* ── Tape window ── */
+  .tape-window {
+    fill: rgba(0, 0, 0, 0.5);
+    stroke: rgba(255, 255, 255, 0.18);
+    stroke-width: 0.6;
+  }
+
+  :global(html[data-theme="light"]) .tape-window {
+    fill: rgba(0, 0, 0, 0.15);
+  }
+
+  /* ── Center post ── */
+  .center-post {
+    fill: rgba(255, 255, 255, 0.3);
+  }
+
+  /* ── Label ── */
+  .cassette-label {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.22);
+    stroke-width: 0.8;
+  }
+
+  :global(html[data-theme="light"]) .cassette-label {
+    stroke: rgba(0, 0, 0, 0.2);
+  }
+
+  .label-text {
+    font-family: 'PolySans Mono', 'Courier New', monospace;
+    font-size: 5.5px;
+    letter-spacing: 0.18em;
+    fill: rgba(255, 253, 208, 0.6);
+    font-weight: 500;
+  }
+
+  :global(html[data-theme="light"]) .label-text {
+    fill: rgba(255, 253, 208, 0.8);
+  }
+
+  /* ── Bottom bump ── */
+  .cassette-bump {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.18);
+    stroke-width: 0.8;
+  }
+
+  :global(html[data-theme="light"]) .cassette-bump {
+    stroke: rgba(0, 0, 0, 0.15);
+  }
+
+  /* ── Pin holes ── */
+  .pin-holes circle {
+    fill: rgba(255, 255, 255, 0.18);
+  }
+
+  :global(html[data-theme="light"]) .pin-holes circle {
+    fill: rgba(0, 0, 0, 0.15);
+  }
+
+  /* ── Corner screws ── */
+  .screw {
+    fill: var(--preloader-accent);
+    opacity: 0.6;
+  }
+
+  /* Screw pulse animation */
+  .screws {
+    animation: screwPulse 3s ease-in-out infinite;
+  }
+
+  @keyframes screwPulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  /* ── ACM reveal text (hidden initially) ── */
+  .acm-reveal {
+    font-family: 'PolySans Bulky Wide', 'PolySans Trial', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    fill: var(--preloader-accent);
+    opacity: 0;
+    transform: translateY(30px);
+    transform-origin: 140px 72px;
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s,
+                transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s;
+  }
+
+  /* default: show acm text, hide the swap-in glyphs */
+  .acm-reveal-logo,
+  .acm-reveal-trophy { display: none; }
+  /* on the z0d1ak page (class set by the preloader script): swap them */
+  .preloader--z0d1ak .acm-reveal-text { display: none; }
+  .preloader--z0d1ak .acm-reveal-logo { display: block; }
+  /* on the achievements page: bring up the gold trophy */
+  .preloader--achievements .acm-reveal-text { display: none; }
+  .preloader--achievements .acm-reveal-trophy { display: block; }
+
+  /* ── LOADED STATE ── */
+  .cassette-loaded .reel-left .reel-spokes,
+  .cassette-loaded .reel-right .reel-spokes {
+    animation: none;
+  }
+
+  .cassette-loaded .reel,
+  .cassette-loaded .tape-path,
+  .cassette-loaded .tape-window,
+  .cassette-loaded .center-post,
+  .cassette-loaded .cassette-label,
+  .cassette-loaded .label-text,
+  .cassette-loaded .cassette-bump,
+  .cassette-loaded .pin-holes,
+  .cassette-loaded .cover-line {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .cassette-loaded .acm-reveal {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .cassette-loaded .screws {
+    animation: none;
+    opacity: 1;
+  }
+
+  .cassette-loaded .screw {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+
+  /* ── Progress bar ── */
+  .progress-bar {
+    width: 260px;
+    height: 2.5px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  :global(html[data-theme="light"]) .progress-bar {
+    background-color: rgba(0, 0, 0, 0.12);
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--preloader-accent);
+    position: relative;
+    width: 0%;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+    animation: shimmer 1.8s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+  }
+
+  /* ── Status text ── */
+  .loader-status {
+    font-family: 'PolySans Mono', 'Courier New', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    color: rgba(255, 253, 208, 0.45);
+    text-transform: uppercase;
+    text-align: center;
+    transition: color 0.3s ease;
+  }
+
+  :global(html[data-theme="light"]) .loader-status {
+    color: rgba(26, 26, 26, 0.45);
+  }
+
+  .cassette-loaded ~ .loader-status {
+    color: var(--preloader-accent);
+    opacity: 0.6;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .cassette-wrapper {
+      width: 250px;
+    }
+    .progress-bar {
+      width: 220px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .cassette-wrapper {
+      width: 210px;
+    }
+    .progress-bar {
+      width: 190px;
+    }
+    .loader-status {
+      font-size: 0.48rem;
+      letter-spacing: 0.2em;
+    }
+  }
+</style>

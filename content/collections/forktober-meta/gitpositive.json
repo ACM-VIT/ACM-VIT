@@ -1,0 +1,11 @@
+{
+  "slug": "gitpositive",
+  "title": "gitpositive",
+  "repo": "gitpositive",
+  "years": [
+    2021,
+    2022
+  ],
+  "description": "An efficient GitHub profile app, written in Kotlin!",
+  "order": 70
+}

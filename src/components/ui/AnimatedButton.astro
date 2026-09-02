@@ -1,0 +1,188 @@
+---
+interface Props {
+  text: string;
+  href?: string;
+  onclick?: string;
+  target?: string;
+  class?: string;
+  iconBg?: string;
+}
+
+const { text, href, onclick, target, class: className = "", iconBg } = Astro.props;
+const isExternal = href?.startsWith("http");
+const Tag = href ? "a" : "div";
+---
+
+<div class="anim-btn-anchor" data-anim-btn>
+  <Tag
+    href={href}
+    onclick={onclick}
+    target={target || (isExternal ? "_blank" : undefined)}
+    rel={isExternal ? "noopener noreferrer" : undefined}
+    class:list={["anim-btn", className]}
+    role={!href ? "button" : undefined}
+    tabindex={!href ? "0" : undefined}
+  >
+    <span class="anim-btn-label">{text}</span>
+    <span class="anim-btn-icon" style={iconBg ? `background: ${iconBg}` : undefined}>
+      <svg width="24" height="24" viewBox="0 0 67 67" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="33.0467" cy="33.0472" r="30.6486" stroke="currentColor" stroke-width="1.59906"/>
+        <path d="M32.8643 9.59424C36.0902 9.59424 39.1646 10.245 41.9619 11.4233L39.1357 16.3198L44.2207 19.2554L47.043 14.3657C51.9422 18.0897 55.3319 23.6956 56.1338 30.1069H50.4795V35.979H56.1348C55.3343 42.3971 51.9405 48.0083 47.0352 51.7339L44.2119 46.8433L39.127 49.7788L41.9531 54.6724C39.1579 55.8485 36.0871 56.4995 32.8643 56.4995C29.6368 56.4995 26.5621 55.8469 23.7637 54.6675L26.5947 49.7661L21.5098 46.8306L18.6826 51.7261C13.7832 48.0005 10.3946 42.3922 9.59473 35.979H15.25V30.1069H9.5957C10.398 23.6922 13.79 18.0829 18.6934 14.3589L21.5186 19.2515L26.6035 16.3159L23.7764 11.4194C26.5712 10.2436 29.642 9.59429 32.8643 9.59424Z" fill="currentColor"/>
+      </svg>
+    </span>
+  </Tag>
+</div>
+
+<style>
+  .anim-btn-anchor {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .anim-btn {
+    height: 48px;
+    width: 48px;
+    border-radius: 100px;
+    background: #FEFCD9;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 4px;
+    opacity: 0;
+    will-change: transform, width, opacity;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    transition: box-shadow 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+
+  .anim-btn:hover {
+    box-shadow: 0 8px 30px rgba(249, 95, 74, 0.25);
+  }
+
+  .anim-btn.is-expanded {
+    width: auto;
+    padding: 4px 4px 4px 1.75rem;
+    justify-content: flex-end;
+  }
+
+  .anim-btn-label {
+    color: #1e1e1e;
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-size: 1.125rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    pointer-events: none;
+    opacity: 0;
+    margin-right: 0.75rem;
+  }
+
+  /* Smaller label on small devices */
+  @media (max-width: 768px) {
+    .anim-btn-label {
+      font-size: 1rem;
+      margin-right: 0.6rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .anim-btn-label {
+      font-size: 0.9rem;
+      margin-right: 0.5rem;
+    }
+  }
+
+  .anim-btn-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #f95f4a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 300;
+    line-height: 1;
+    flex-shrink: 0;
+    pointer-events: none;
+  }
+
+  .anim-btn-icon svg {
+    transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+
+  .anim-btn:hover .anim-btn-icon svg {
+    transform: rotate(180deg);
+  }
+</style>
+
+<script>
+  function initBtnHoverSound() {
+    const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+
+    function playGearClick() {
+      const now = ctx.currentTime;
+      const ticks = 3;
+      const spacing = 0.055;
+
+      for (let i = 0; i < ticks; i++) {
+        const t = now + i * spacing;
+        const vol = 0.07 * (1 - i * 0.25);
+
+        // Soft sine thud - the gear tooth seating
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(600 - i * 60, t);
+        osc.frequency.exponentialRampToValueAtTime(150, t + 0.04);
+        gain.gain.setValueAtTime(vol, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(t);
+        osc.stop(t + 0.05);
+
+        // Tiny filtered noise for mechanical texture
+        const bufSize = Math.floor(ctx.sampleRate * 0.008);
+        const buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+        const data = buf.getChannelData(0);
+        for (let j = 0; j < bufSize; j++) data[j] = (Math.random() * 2 - 1);
+        const noise = ctx.createBufferSource();
+        const nGain = ctx.createGain();
+        const filter = ctx.createBiquadFilter();
+        filter.type = "bandpass";
+        filter.frequency.value = 3000;
+        filter.Q.value = 2;
+        noise.buffer = buf;
+        nGain.gain.setValueAtTime(vol * 0.3, t);
+        nGain.gain.exponentialRampToValueAtTime(0.001, t + 0.012);
+        noise.connect(filter).connect(nGain).connect(ctx.destination);
+        noise.start(t);
+        noise.stop(t + 0.015);
+      }
+    }
+
+    document.querySelectorAll<HTMLElement>(".anim-btn").forEach((btn) => {
+      if (btn.dataset.hoverSoundInit) return;
+      btn.dataset.hoverSoundInit = "1";
+      btn.addEventListener("mouseenter", () => {
+        if (ctx.state === "suspended") ctx.resume();
+        playGearClick();
+      });
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initBtnHoverSound);
+  } else {
+    initBtnHoverSound();
+  }
+  window.addEventListener("variants-mounted", () => initBtnHoverSound());
+  window.addEventListener("app:variants-mounted", () => initBtnHoverSound());
+</script>

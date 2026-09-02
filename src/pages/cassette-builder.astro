@@ -1,0 +1,64 @@
+---
+export const prerender = true;
+import Layout from "../layouts/Layout.astro";
+import "../styles/globals.css";
+import Footer from "../layouts/Footer.astro";
+import CassetteBuilder from "../components/ui/CassetteBuilder.astro";
+---
+
+<Layout pageTitle="Cassette Builder" backHref="/">
+  <section class="builder-page">
+    <div class="builder-inner">
+      <h1 class="builder-heading">Build Your Cassette</h1>
+      <p class="builder-subtitle">Customize colors, add your art, drop a Spotify track</p>
+
+      <CassetteBuilder />
+    </div>
+  </section>
+  <Footer />
+</Layout>
+
+<style>
+  .builder-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 7rem 1.5rem 4rem;
+  }
+
+  .builder-inner {
+    max-width: 960px;
+    width: 100%;
+  }
+
+  .builder-heading {
+    font-family: "PolySans Trial", system-ui, sans-serif;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 800;
+    color: #FFFDD0;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+
+  :global([data-theme="light"]) .builder-heading {
+    color: #1a1a1a;
+  }
+
+  .builder-subtitle {
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #FF5F4A;
+    margin-bottom: 2.5rem;
+    text-align: center;
+  }
+
+  @media (max-width: 640px) {
+    .builder-page {
+      padding: 6rem 1rem 3rem;
+    }
+  }
+</style>

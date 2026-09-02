@@ -1,0 +1,1514 @@
+---
+export const prerender = true;
+import Layout from "../layouts/Layout.astro";
+import "../styles/globals.css";
+import Footer from "../layouts/Footer.astro";
+import FillButton from "../components/ui/FillButton.astro";
+
+// Scroll-driven particle homage to the compact cassette: a point cloud that
+// assembles, disperses and re-forms through the making, the anatomy and the
+// working of a tape, then locks into a full cassette with spinning reels.
+// Facts from en.wikipedia.org/wiki/Cassette_tape + legacybox's "inner working
+// of cassette tapes". Theme-aware (cream-on-dark by default, ink-on-paper in
+// light). Stage ids here MUST stay in order/sync with STAGE_IDS + FORM_X in the
+// client script; copy alternates side via `align`.
+
+// Elapsed years since the compact cassette (Philips, 1963). Computed fresh at
+// build, and a matching client script re-derives it at view time so a stale
+// build never shows a wrong number. Keep [data-years-from] in sync.
+const CASSETTE_BORN = 1963;
+const ONES = [
+  "zero", "one", "two", "three", "four", "five", "six", "seven", "eight",
+  "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen",
+  "sixteen", "seventeen", "eighteen", "nineteen",
+];
+const TENS = ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"];
+const numberToWords = (n: number): string => {
+  if (n < 20) return ONES[n];
+  if (n < 100) {
+    const o = n % 10;
+    return o ? `${TENS[Math.floor(n / 10)]}-${ONES[o]}` : TENS[Math.floor(n / 10)];
+  }
+  const h = Math.floor(n / 100);
+  const r = n % 100;
+  return r ? `${ONES[h]} hundred ${numberToWords(r)}` : `${ONES[h]} hundred`;
+};
+const elapsedYears = new Date().getFullYear() - CASSETTE_BORN;
+const elapsedWordLower = numberToWords(elapsedYears);
+const elapsedWord = elapsedWordLower.charAt(0).toUpperCase() + elapsedWordLower.slice(1);
+const yearsSpan = `<span class="cass-years" data-years-from="${CASSETTE_BORN}">${elapsedWord}</span>`;
+
+const chapters = [
+  {
+    id: "dust",
+    hero: true,
+    align: "center",
+    line: "A machine for remembering sound.",
+    body: "The compact cassette, born at Philips in 1963: a length of magnetic tape sealed in a shell small enough to pocket. Scroll to build one part by part, then watch it play.",
+  },
+  {
+    id: "hub",
+    align: "right",
+    line: "It begins with a hub.",
+    body: "Each cassette is built on two toothed spools called hubs. The tape starts fully wound on one, the supply hub. The other, the take-up hub, grips the tape's clear leader and reels it in as the cassette plays.",
+  },
+  {
+    id: "tape",
+    align: "left",
+    line: "A ribbon thinner than a thought.",
+    body: "The tape is polyester film 3.81 millimetres wide, dusted with fine magnetic ferric oxide. That oxide is the memory: each grain is a speck of iron you can magnetise, and the pattern holds. A C90 packs over 130 metres of it into the shell.",
+  },
+  {
+    id: "reels",
+    align: "right",
+    line: "Wound between two reels.",
+    body: "In play, tape unspools from the supply reel on the left, crosses the middle of the cassette, and gathers on the take-up reel at the right. It moves at a fixed 4.76 centimetres per second, the speed every deck is built to match.",
+  },
+  {
+    id: "shell",
+    align: "left",
+    line: "Sealed inside a shell.",
+    body: "It all seals inside a plastic shell, two halves about 10 by 6 centimetres. Windows show the reels turning, holes underneath let the deck's spindles and head reach the tape, and tabs on the spine snap out to protect a recording from being taped over.",
+  },
+  {
+    id: "inside",
+    align: "right",
+    line: "Everything in its place.",
+    body: "Inside, small parts keep the tape true. Guide rollers steer it around the corners, a felt pad on a light spring presses it flat against the head, and slippery liner sheets on each face let the reels turn without snagging.",
+  },
+  {
+    id: "head",
+    align: "left",
+    line: "Then it meets the head.",
+    body: "A spinning steel capstan, with a rubber pinch roller pressing the tape against it, pulls the tape past the head at that steady crawl. The head is a small electromagnet with a microscopic gap that reads the tape as it slides by.",
+  },
+  {
+    id: "signal",
+    align: "right",
+    line: "The oxide speaks.",
+    body: "As each magnetised grain passes the gap, it shifts the magnetic field inside the head. That changing field induces a faint, wavering voltage in the head's coil of wire, an electrical copy of the sound first recorded.",
+  },
+  {
+    id: "sound",
+    align: "left",
+    line: "And it becomes music again.",
+    body: "An amplifier boosts that tiny voltage until it can drive a speaker, and the sound returns. The ribbon actually carries four tracks, two per side, so flipping the cassette plays the other pair.",
+  },
+  {
+    id: "cassette",
+    finale: true,
+    align: "center",
+    line: "Press play. The reels turn.",
+    body: `Two hubs turning, one ribbon crossing the gap, oxide read back into sound. ${yearsSpan} years of engineering in something you hold in one hand - the compact cassette, alive.`,
+  },
+];
+
+// Side progress rail (same component as /sleeve-notes) - short label per stage.
+const railLabel: Record<string, string> = {
+  dust: "Start", hub: "Hub", tape: "Tape", reels: "Reels", shell: "Shell",
+  inside: "Inside", head: "Head", signal: "Signal", sound: "Sound", cassette: "Play",
+};
+const railSections = chapters.map((c) => ({ id: c.id, label: railLabel[c.id] || c.id }));
+---
+
+<Layout pageTitle="Cassette" backHref="/" scrollCue={false}>
+  <div class="cass-root">
+    <!-- Fixed particle field. Painted every frame; sits behind the copy. -->
+    <div class="cass-stage" aria-hidden="true">
+      <canvas id="cass-canvas"></canvas>
+      <div class="cass-grain"></div>
+    </div>
+
+    <!-- Side progress rail (shared with /sleeve-notes: ticks + glowing fill) -->
+    <nav class="dg-rail" id="dgRail" aria-label="Section progress">
+      <span class="dg-rail-line" aria-hidden="true">
+        <span class="dg-rail-prog" id="dgRailFill"></span>
+      </span>
+      <ul class="dg-rail-list">
+        {
+          railSections.map((s, i) => (
+            <li>
+              <a href={`#${s.id}`} class="dg-rail-item" data-rail={s.id} aria-label={s.label}>
+                <span class="dg-rail-tick"></span>
+                <span class="dg-rail-label">
+                  <span class="dg-rail-num">{String(i).padStart(2, "0")}</span>
+                  {s.label}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <!-- Scrollytelling chapters. One block per particle stage; copy is pinned
+         and cross-faded by the engine as its stage settles. -->
+    <section id="cass-chapters" class="cass-chapters" aria-label="How a cassette is made and how it works" data-scroll-nudge>
+      {
+        chapters.map((c, i) => (
+          <article
+            class:list={[
+              "cass-chapter",
+              "align-" + (c.align || "center"),
+              { "is-hero": c.hero, "is-finale": c.finale },
+            ]}
+            id={c.id}
+            data-stage={i}
+            data-cue-anchor={c.hero ? "" : undefined}
+          >
+            <div class="cass-copy">
+              <span class="cass-index" aria-hidden="true">
+                {c.hero || c.finale ? "" : String(i).padStart(2, "0")}
+              </span>
+              <h2 class="cass-line">{c.line}</h2>
+              <span class="cass-rule" aria-hidden="true" />
+              <p class="cass-body" set:html={c.body} />
+              {c.hero && (
+                <span class="cass-cue" aria-hidden="true">
+                  scroll<span class="cass-cue-arrow" />
+                </span>
+              )}
+            </div>
+          </article>
+        ))
+      }
+    </section>
+
+    <!-- Dark close: ACM tie-off + loop back to the builder -->
+    <section class="cass-close">
+      <div class="cass-close-inner">
+        <h2 class="cass-close-line">Because Technology Matters.</h2>
+        <p class="cass-close-body">
+          <span class="cass-years" data-years-from={CASSETTE_BORN}>{elapsedWord}</span> years on, we still build the machinery that remembers.
+        </p>
+        <FillButton href="/cassette-builder" label="Build your own cassette" />
+      </div>
+    </section>
+  </div>
+
+  <Footer />
+</Layout>
+
+<noscript>
+  <style>
+    .cass-copy { opacity: 1 !important; transform: none !important; }
+  </style>
+</noscript>
+
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap");
+</style>
+
+<style>
+  /* Dark by default (site theme); ink-on-paper when light is toggled. */
+  .cass-root {
+    --paper: #0d0e0d;
+    --ink: #fefcd9;
+    --ink-soft: rgba(254, 252, 217, 0.64);
+    --ink-faint: rgba(254, 252, 217, 0.24);
+    --line: rgba(254, 252, 217, 0.14);
+    --accent: #f95f4a;
+    --serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+    position: relative;
+    z-index: 1;
+  }
+  :global([data-theme="light"]) .cass-root {
+    --paper: #efece3;
+    --ink: #24201b;
+    --ink-soft: rgba(36, 32, 27, 0.62);
+    --ink-faint: rgba(36, 32, 27, 0.28);
+    --line: rgba(36, 32, 27, 0.12);
+  }
+
+  /* Keep the site's common diamond-grid backdrop; the canvas is transparent and
+     only paints particles over it. */
+  .cass-stage {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: transparent;
+  }
+  #cass-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Fine tooth over the stipple - overlay blends on both themes */
+  .cass-grain {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.35;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  }
+
+  /* ── Side progress rail (ported from /sleeve-notes .dg-rail) ── */
+  .dg-rail {
+    position: fixed;
+    left: 22px;
+    /* start below the fixed header + breadcrumbs so the top tick hits nothing */
+    top: 132px;
+    height: calc(100vh - 160px);
+    height: calc(100dvh - 160px);
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+  }
+  .dg-rail-line {
+    position: absolute;
+    left: 3px;
+    top: 10px;
+    bottom: 10px;
+    width: 1px;
+    background: rgba(254, 252, 217, 0.14);
+    overflow: hidden;
+  }
+  .dg-rail-prog {
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 0%;
+    width: 100%;
+    background: #f95f4a;
+    transition: height 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+  .dg-rail-list {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    gap: 2px;
+  }
+  .dg-rail-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 4px 12px 4px 10px;
+    text-decoration: none;
+    border-radius: 100px;
+  }
+  .dg-rail-label {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    white-space: nowrap;
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 0.74rem;
+    font-weight: 500;
+    color: rgba(254, 252, 217, 0.5);
+    max-width: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: max-width 0.28s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.25s ease, transform 0.25s ease, color 0.25s ease;
+  }
+  .dg-rail-num {
+    font-family: "PolySans Mono", monospace;
+    font-size: 0.58rem;
+    color: rgba(254, 252, 217, 0.35);
+  }
+  .dg-rail-tick {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    flex: none;
+    background: rgba(254, 252, 217, 0.28);
+    transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .dg-rail:hover .dg-rail-label {
+    max-width: 160px;
+    opacity: 1;
+    transform: none;
+  }
+  .dg-rail-item:hover .dg-rail-label {
+    color: rgba(254, 252, 217, 0.85);
+  }
+  .dg-rail-item:hover .dg-rail-tick {
+    background: rgba(254, 252, 217, 0.7);
+    transform: scale(1.2);
+  }
+  .dg-rail-item.is-done .dg-rail-tick {
+    background: rgba(249, 95, 74, 0.55);
+  }
+  .dg-rail-item.is-active {
+    background: rgba(13, 14, 13, 0.82);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  }
+  .dg-rail-item.is-active .dg-rail-label {
+    max-width: 160px;
+    opacity: 1;
+    transform: none;
+    color: #fefcd9;
+  }
+  .dg-rail-item.is-active .dg-rail-num {
+    color: #f95f4a;
+  }
+  .dg-rail-item.is-active .dg-rail-tick {
+    background: #f95f4a;
+    transform: scale(1.25);
+    box-shadow: 0 0 8px rgba(249, 95, 74, 0.8);
+  }
+  :global(html[data-theme="light"]) .dg-rail-line {
+    background: rgba(26, 26, 26, 0.14);
+  }
+  :global(html[data-theme="light"]) .dg-rail-label {
+    color: rgba(26, 26, 26, 0.5);
+  }
+  :global(html[data-theme="light"]) .dg-rail-item:hover .dg-rail-label,
+  :global(html[data-theme="light"]) .dg-rail-item.is-active .dg-rail-label {
+    color: #1a1a1a;
+  }
+  :global(html[data-theme="light"]) .dg-rail-tick {
+    background: rgba(26, 26, 26, 0.28);
+  }
+  :global(html[data-theme="light"]) .dg-rail-item.is-active {
+    background: rgba(245, 237, 228, 0.95);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  }
+  /* hide the rail when there isn't room beside the centered column */
+  @media (max-width: 1200px) {
+    .dg-rail {
+      display: none;
+    }
+  }
+
+  /* ── Chapters ── */
+  .cass-chapters {
+    position: relative;
+    z-index: 1;
+  }
+  .cass-chapter {
+    height: 116vh;
+  }
+  /* Copy is a fixed viewport overlay fully driven by the engine (opacity keyed
+     to the settled particle stage), so vertical centring never drifts from the
+     particle clock. The opaque .cass-close (higher z-index) scrolls up and
+     covers these at the end. */
+  .cass-copy {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 clamp(1.4rem, 6vw, 6rem);
+    box-sizing: border-box;
+    opacity: 0;
+    will-change: opacity, transform;
+  }
+  .cass-copy > * {
+    max-width: 33ch;
+  }
+
+  /* Side alignment - copy hugs the edge opposite the particle form */
+  .align-left .cass-copy {
+    align-items: flex-start;
+    text-align: left;
+  }
+  .align-right .cass-copy {
+    align-items: flex-end;
+    text-align: right;
+  }
+  .align-center .cass-copy {
+    align-items: center;
+    text-align: center;
+  }
+  .align-left .cass-rule {
+    margin-right: auto;
+  }
+  .align-right .cass-rule {
+    margin-left: auto;
+  }
+  .align-center .cass-rule {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cass-index {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(3.2rem, 8vw, 7rem);
+    line-height: 0.8;
+    color: var(--ink-faint);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.35rem;
+  }
+  .cass-line {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(2.1rem, 5.4vw, 4.4rem);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 0;
+  }
+  .cass-rule {
+    display: block;
+    width: 48px;
+    height: 2px;
+    background: var(--accent);
+    margin-top: 1.35rem;
+    margin-bottom: 1.2rem;
+    opacity: 0.9;
+  }
+  .cass-body {
+    font-family: "PolySans Trial", Inter, system-ui, sans-serif;
+    font-size: clamp(0.95rem, 1.4vw, 1.05rem);
+    line-height: 1.7;
+    color: var(--ink-soft);
+    margin: 0;
+    font-weight: 400;
+  }
+
+  /* Hero + finale - centred, larger, caption sits low so the form breathes */
+  .is-hero .cass-copy,
+  .is-finale .cass-copy {
+    align-items: center;
+    text-align: center;
+  }
+  .is-finale .cass-copy {
+    justify-content: flex-end;
+    padding-bottom: clamp(3rem, 12vh, 8rem);
+  }
+  .is-hero .cass-line {
+    font-size: clamp(2.6rem, 7vw, 6rem);
+    max-width: 18ch;
+  }
+  .is-hero .cass-body,
+  .is-finale .cass-body {
+    max-width: 42ch;
+    font-size: clamp(0.95rem, 1.4vw, 1.05rem);
+  }
+  .is-hero .cass-copy > *,
+  .is-finale .cass-copy > * {
+    max-width: 42ch;
+  }
+  .is-finale .cass-line {
+    font-size: clamp(2.3rem, 5.6vw, 4.6rem);
+  }
+
+  .cass-cue {
+    margin-top: 2.6rem;
+    font-family: "PolySans Mono", ui-monospace, monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .cass-cue-arrow {
+    width: 1px;
+    height: 34px;
+    background: linear-gradient(var(--accent), transparent);
+    animation: cassCue 1.8s ease-in-out infinite;
+    transform-origin: top;
+  }
+  @keyframes cassCue {
+    0%,
+    100% {
+      transform: scaleY(0.4);
+      opacity: 0.5;
+    }
+    50% {
+      transform: scaleY(1);
+      opacity: 1;
+    }
+  }
+
+  /* ── Dark close ── */
+  .cass-close {
+    position: relative;
+    z-index: 2;
+    background: #0d0e0d;
+    color: #fefcd9;
+    padding: clamp(5rem, 14vh, 9rem) clamp(1.4rem, 6vw, 6rem);
+    display: flex;
+    justify-content: center;
+  }
+  .cass-close-inner {
+    max-width: none;
+    text-align: center;
+  }
+  .cass-close-line {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(2.2rem, 5.5vw, 4.4rem);
+    line-height: 1.03;
+    letter-spacing: -0.01em;
+    margin: 0 0 1.1rem;
+    white-space: nowrap;
+  }
+  .cass-close-body {
+    font-family: "PolySans Trial", Inter, system-ui, sans-serif;
+    font-size: clamp(0.95rem, 1.4vw, 1.05rem);
+    line-height: 1.7;
+    color: rgba(254, 252, 217, 0.66);
+    margin: 0 auto 2.6rem;
+    max-width: 44ch;
+  }
+  /* Very small screens: let the headline wrap rather than overflow. */
+  @media (max-width: 600px) {
+    .cass-close-line {
+      white-space: normal;
+    }
+  }
+  /* ── Mobile: copy centred + low, form is centred by the engine ── */
+  @media (max-width: 820px) {
+    .cass-copy,
+    .align-left .cass-copy,
+    .align-right .cass-copy,
+    .align-center .cass-copy {
+      align-items: center;
+      text-align: center;
+      justify-content: flex-end;
+      padding-bottom: clamp(3rem, 12vh, 7rem);
+    }
+    .cass-copy > *,
+    .cass-body {
+      max-width: 30ch;
+    }
+    .cass-rule {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cass-cue-arrow {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Order + count MUST match the `chapters` array in the frontmatter.
+  const STAGE_IDS = [
+    "dust",
+    "hub",
+    "tape",
+    "reels",
+    "shell",
+    "inside",
+    "head",
+    "signal",
+    "sound",
+    "cassette",
+  ] as const;
+  // Where each stage's form sits horizontally (fraction of viewport width).
+  // Opposite the copy: copy-right -> form-left, and vice versa. Lerped between
+  // stages so the form slides across on every transition.
+  const FORM_X = [0.5, 0.34, 0.66, 0.34, 0.66, 0.34, 0.66, 0.34, 0.66, 0.5];
+
+  function initCassette() {
+    const canvas = document.getElementById("cass-canvas") as HTMLCanvasElement | null;
+    const chaptersEl = document.getElementById("cass-chapters");
+    const railFill = document.getElementById("dgRailFill");
+    const railItems = Array.from(
+      document.querySelectorAll<HTMLElement>(".dg-rail-item"),
+    );
+    const stageEl = document.querySelector<HTMLElement>(".cass-stage");
+    if (!canvas || !chaptersEl) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const copies = Array.from(
+      chaptersEl.querySelectorAll<HTMLElement>(".cass-copy"),
+    );
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const ACCENT = "rgba(249,95,74,";
+    const S = STAGE_IDS.length;
+    const CASS = S - 1; // finale index
+
+    // Theme-aware palette (canvas colours). CSS handles copy colours.
+    const isLight = () =>
+      document.documentElement.getAttribute("data-theme") === "light";
+    let bg = "#0d0e0d";
+    let ink: number[] = [254, 252, 217];
+    let inkColors: string[] = [];
+    const rebuildPalette = () => {
+      if (isLight()) {
+        bg = "#efece3";
+        ink = [36, 32, 27];
+      } else {
+        bg = "#0d0e0d";
+        ink = [254, 252, 217];
+      }
+      inkColors = [0.3, 0.5, 0.72, 0.92].map(
+        (a) => `rgba(${ink[0]},${ink[1]},${ink[2]},${a})`,
+      );
+    };
+    rebuildPalette();
+    new MutationObserver(rebuildPalette).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+
+    const pickCount = () => {
+      const w = window.innerWidth;
+      if (w < 700) return 3200;
+      if (w < 1200) return 5600;
+      return 8000;
+    };
+    let N = pickCount();
+
+    // ── Offscreen shape sampler ──────────────────────────────────────────
+    const SW = 440;
+    const SH = 300;
+    const off = document.createElement("canvas");
+    off.width = SW;
+    off.height = SH;
+    const octx = off.getContext("2d", { willReadFrequently: true })!;
+
+    type Draw = (c: CanvasRenderingContext2D) => void;
+    const circle = (c: CanvasRenderingContext2D, x: number, y: number, r: number) => {
+      c.beginPath();
+      c.arc(x, y, r, 0, Math.PI * 2);
+      c.fill();
+    };
+    const ring = (c: CanvasRenderingContext2D, x: number, y: number, ro: number, ri: number) => {
+      c.beginPath();
+      c.arc(x, y, ro, 0, Math.PI * 2);
+      c.arc(x, y, ri, 0, Math.PI * 2, true);
+      c.fill("evenodd");
+    };
+    const rrect = (c: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) => {
+      c.beginPath();
+      c.roundRect(x, y, w, h, r);
+      c.fill();
+    };
+    const seg = (c: CanvasRenderingContext2D, x1: number, y1: number, x2: number, y2: number, w: number) => {
+      c.lineWidth = w;
+      c.lineCap = "round";
+      c.beginPath();
+      c.moveTo(x1, y1);
+      c.lineTo(x2, y2);
+      c.stroke();
+    };
+    const teeth = (c: CanvasRenderingContext2D, x: number, y: number, r: number, n: number, len: number, w: number) => {
+      for (let k = 0; k < n; k++) {
+        const a = (k / n) * Math.PI * 2;
+        seg(c, x + Math.cos(a) * r, y + Math.sin(a) * r, x + Math.cos(a) * (r + len), y + Math.sin(a) * (r + len), w);
+      }
+    };
+    const spiral = (c: CanvasRenderingContext2D, x: number, y: number, r0: number, r1: number, turns: number, w: number) => {
+      c.lineWidth = w;
+      c.lineCap = "round";
+      c.beginPath();
+      const steps = 120;
+      for (let i = 0; i <= steps; i++) {
+        const t = i / steps;
+        const a = t * turns * Math.PI * 2;
+        const r = r0 + (r1 - r0) * t;
+        const px = x + Math.cos(a) * r;
+        const py = y + Math.sin(a) * r;
+        if (i === 0) c.moveTo(px, py);
+        else c.lineTo(px, py);
+      }
+      c.stroke();
+    };
+    const wave = (c: CanvasRenderingContext2D, x0: number, x1: number, y: number, amp: number, cycles: number, w: number, grow = false) => {
+      c.lineWidth = w;
+      c.lineCap = "round";
+      c.lineJoin = "round";
+      c.beginPath();
+      const steps = 160;
+      for (let i = 0; i <= steps; i++) {
+        const t = i / steps;
+        const px = x0 + (x1 - x0) * t;
+        const a = amp * (grow ? 0.15 + 0.85 * t : 1);
+        const py = y + Math.sin(t * cycles * Math.PI * 2) * a;
+        if (i === 0) c.moveTo(px, py);
+        else c.lineTo(px, py);
+      }
+      c.stroke();
+    };
+    const reel = (c: CanvasRenderingContext2D, x: number, y: number, ro: number) => {
+      ring(c, x, y, ro, ro * 0.42);
+      for (let k = 0; k < 6; k++) {
+        const a = (k / 6) * Math.PI * 2;
+        seg(c, x + Math.cos(a) * (ro * 0.42), y + Math.sin(a) * (ro * 0.42), x + Math.cos(a) * ro, y + Math.sin(a) * ro, 3);
+      }
+      circle(c, x, y, ro * 0.3);
+      c.save();
+      c.globalCompositeOperation = "destination-out";
+      circle(c, x, y, ro * 0.12);
+      c.restore();
+      c.globalCompositeOperation = "source-over";
+      teeth(c, x, y, ro * 0.16, 9, ro * 0.13, 4);
+    };
+
+    const cx = SW / 2;
+    const cy = SH / 2;
+    // Finale hub geometry (pixel space) - shared by art + rotation.
+    const HUB_A: [number, number] = [158, 183];
+    const HUB_B: [number, number] = [282, 183];
+    const HUB_RIN = 6;
+    const HUB_ROUT = 25;
+    const HUB_TEETH = 9;
+
+    const shapes: Record<string, Draw> = {
+      hub: (c) => reel(c, cx, cy, 96),
+      tape: (c) => {
+        reel(c, 138, cy, 74);
+        c.strokeStyle = "#000";
+        c.lineWidth = 13;
+        c.lineCap = "round";
+        c.beginPath();
+        c.moveTo(206, 120);
+        c.bezierCurveTo(300, 70, 360, 120, 400, 100);
+        c.bezierCurveTo(360, 150, 300, 150, 236, 176);
+        c.bezierCurveTo(320, 200, 380, 190, 410, 214);
+        c.stroke();
+      },
+      reels: (c) => {
+        reel(c, 126, 138, 62);
+        reel(c, 314, 138, 62);
+        c.strokeStyle = "#000";
+        seg(c, 126, 208, 314, 208, 7);
+        seg(c, 88, 138, 88, 208, 5);
+        seg(c, 352, 138, 352, 208, 5);
+      },
+      // Static "frames" for spinning stages: the stage minus its reels, which
+      // are rebuilt procedurally so they turn live in the render loop.
+      reelsFrame: (c) => {
+        c.strokeStyle = "#000";
+        seg(c, 126, 208, 314, 208, 7);
+        seg(c, 88, 138, 88, 208, 5);
+        seg(c, 352, 138, 352, 208, 5);
+      },
+      tapeFrame: (c) => {
+        c.strokeStyle = "#000";
+        c.lineWidth = 13;
+        c.lineCap = "round";
+        c.beginPath();
+        c.moveTo(206, 120);
+        c.bezierCurveTo(300, 70, 360, 120, 400, 100);
+        c.bezierCurveTo(360, 150, 300, 150, 236, 176);
+        c.bezierCurveTo(320, 200, 380, 190, 410, 214);
+        c.stroke();
+      },
+      shellFrame: (c) => {
+        rrect(c, 42, 66, 356, 168, 18);
+        c.save();
+        c.globalCompositeOperation = "destination-out";
+        rrect(c, 108, 150, 224, 66, 30);
+        rrect(c, 176, 214, 26, 22, 4);
+        rrect(c, 238, 214, 26, 22, 4);
+        rrect(c, 70, 78, 30, 12, 3);
+        rrect(c, 340, 78, 30, 12, 3);
+        c.restore();
+        c.globalCompositeOperation = "source-over";
+        rrect(c, 96, 92, 248, 8, 4);
+      },
+      soundFrame: (c) => {
+        wave(c, 250, 356, 150, 30, 3, 5, true);
+        c.beginPath();
+        c.moveTo(364, 132);
+        c.lineTo(388, 112);
+        c.lineTo(388, 188);
+        c.lineTo(364, 168);
+        c.closePath();
+        c.fill();
+        c.strokeStyle = "#000";
+        for (let r = 14; r <= 30; r += 8) {
+          c.lineWidth = 3;
+          c.beginPath();
+          c.arc(392, 150, r, -0.8, 0.8);
+          c.stroke();
+        }
+      },
+      shell: (c) => {
+        rrect(c, 42, 66, 356, 168, 18);
+        c.save();
+        c.globalCompositeOperation = "destination-out";
+        rrect(c, 108, 150, 224, 66, 30);
+        rrect(c, 176, 214, 26, 22, 4);
+        rrect(c, 238, 214, 26, 22, 4);
+        rrect(c, 70, 78, 30, 12, 3);
+        rrect(c, 340, 78, 30, 12, 3);
+        c.restore();
+        c.globalCompositeOperation = "source-over";
+        reel(c, 158, 183, 30);
+        reel(c, 282, 183, 30);
+        rrect(c, 96, 92, 248, 8, 4);
+      },
+      inside: (c) => {
+        c.strokeStyle = "#000";
+        c.lineWidth = 4;
+        c.beginPath();
+        c.roundRect(42, 66, 356, 168, 18);
+        c.stroke();
+        ring(c, 138, 132, 52, 18);
+        ring(c, 302, 132, 52, 18);
+        circle(c, 76, 206, 9);
+        circle(c, 364, 206, 9);
+        seg(c, 120, 212, 320, 212, 4);
+        seg(c, cx, 234, cx, 214, 3);
+        c.beginPath();
+        c.moveTo(cx - 12, 216);
+        c.lineTo(cx + 12, 216);
+        c.lineTo(cx, 206);
+        c.closePath();
+        c.fill();
+      },
+      head: (c) => {
+        c.strokeStyle = "#000";
+        seg(c, 26, 118, 414, 118, 12);
+        c.beginPath();
+        c.moveTo(182, 178);
+        c.lineTo(258, 178);
+        c.lineTo(246, 128);
+        c.lineTo(194, 128);
+        c.closePath();
+        c.fill();
+        c.save();
+        c.globalCompositeOperation = "destination-out";
+        seg(c, 220, 178, 220, 126, 2);
+        c.restore();
+        c.globalCompositeOperation = "source-over";
+        circle(c, 344, 150, 20);
+        circle(c, 344, 90, 15);
+      },
+      signal: (c) => {
+        c.strokeStyle = "#000";
+        seg(c, 18, 108, 214, 108, 9);
+        for (let x = 34; x <= 198; x += 15) seg(c, x, 92, x, 124, 3);
+        c.beginPath();
+        c.moveTo(212, 138);
+        c.lineTo(240, 138);
+        c.lineTo(232, 96);
+        c.lineTo(220, 96);
+        c.closePath();
+        c.fill();
+        spiral(c, 292, 150, 6, 30, 3.2, 5);
+        wave(c, 330, 424, 150, 22, 3, 5);
+      },
+      sound: (c) => {
+        reel(c, 96, 118, 42);
+        reel(c, 200, 118, 42);
+        for (let k = 0; k < 4; k++) {
+          const a = (k / 4) * Math.PI * 2 - 0.5;
+          seg(c, 96 + Math.cos(a) * 52, 118 + Math.sin(a) * 52, 96 + Math.cos(a) * 62, 118 + Math.sin(a) * 62, 3);
+        }
+        wave(c, 250, 356, 150, 30, 3, 5, true);
+        c.beginPath();
+        c.moveTo(364, 132);
+        c.lineTo(388, 112);
+        c.lineTo(388, 188);
+        c.lineTo(364, 168);
+        c.closePath();
+        c.fill();
+        c.strokeStyle = "#000";
+        for (let r = 14; r <= 30; r += 8) {
+          c.lineWidth = 3;
+          c.beginPath();
+          c.arc(392, 150, r, -0.8, 0.8);
+          c.stroke();
+        }
+      },
+      // Finale body only - shell + window + label + holes. The two reel hubs
+      // are the rotating particles, placed in the window by buildCassette().
+      cassetteBody: (c) => {
+        rrect(c, 42, 66, 356, 168, 18);
+        c.save();
+        c.globalCompositeOperation = "destination-out";
+        rrect(c, 106, 150, 228, 64, 26);
+        rrect(c, 176, 214, 26, 20, 4);
+        rrect(c, 238, 214, 26, 20, 4);
+        rrect(c, 70, 78, 26, 12, 3);
+        rrect(c, 344, 78, 26, 12, 3);
+        c.restore();
+        c.globalCompositeOperation = "source-over";
+        rrect(c, 96, 92, 248, 7, 4);
+      },
+    };
+
+    const sampleShape = (id: string): number[] => {
+      octx.clearRect(0, 0, SW, SH);
+      octx.fillStyle = "#000";
+      octx.strokeStyle = "#000";
+      shapes[id](octx);
+      const data = octx.getImageData(0, 0, SW, SH).data;
+      const pts: number[] = [];
+      for (let y = 0; y < SH; y++) {
+        for (let x = 0; x < SW; x++) {
+          if (data[(y * SW + x) * 4 + 3] > 90) pts.push(x / SW, y / SH);
+        }
+      }
+      return pts;
+    };
+
+    // Opening grain: an even scatter spread well past the form box so it fills
+    // the whole viewport (the range overshoots [0,1] to cover the edges).
+    const dustCloud = (): number[] => {
+      const pts: number[] = [];
+      for (let i = 0; i < 5200; i++) {
+        pts.push(-0.6 + Math.random() * 2.2, -0.5 + Math.random() * 2.0);
+      }
+      return pts;
+    };
+
+    const shuffle = (arr: number[]) => {
+      for (let i = arr.length / 2 - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const ax = arr[i * 2], ay = arr[i * 2 + 1];
+        arr[i * 2] = arr[j * 2];
+        arr[i * 2 + 1] = arr[j * 2 + 1];
+        arr[j * 2] = ax;
+        arr[j * 2 + 1] = ay;
+      }
+    };
+
+    const resample = (flat: number[]): Float32Array => {
+      const out = new Float32Array(N * 2);
+      const count = flat.length / 2;
+      if (count === 0) {
+        for (let i = 0; i < N; i++) {
+          out[i * 2] = Math.random();
+          out[i * 2 + 1] = Math.random();
+        }
+        return out;
+      }
+      shuffle(flat);
+      for (let i = 0; i < N; i++) {
+        if (i < count) {
+          out[i * 2] = flat[i * 2];
+          out[i * 2 + 1] = flat[i * 2 + 1];
+        } else {
+          const j = Math.floor(Math.random() * count);
+          out[i * 2] = flat[j * 2] + (Math.random() - 0.5) * 0.01;
+          out[i * 2 + 1] = flat[j * 2 + 1] + (Math.random() - 0.5) * 0.01;
+        }
+      }
+      return out;
+    };
+
+    // Finale: body particles are static; a tail block of particles forms the
+    // two toothed hubs and is rotated live in the render loop.
+    let hubIdx: number[] = [];
+    let hAng = new Float32Array(0);
+    let hR = new Float32Array(0);
+    let hCx = new Float32Array(0);
+    let hCy = new Float32Array(0);
+    const buildCassette = (): Float32Array => {
+      const arr = new Float32Array(N * 2);
+      hubIdx = [];
+      const body = sampleShape("cassetteBody");
+      shuffle(body);
+      const bc = body.length / 2;
+      const M = Math.max(50, Math.round(N * 0.09)); // particles per hub
+      const nHubDisc = Math.floor(M * 0.72); // disc fill; rest are rim teeth
+      const nBody = N - 2 * M;
+      for (let i = 0; i < nBody; i++) {
+        if (i < bc) {
+          arr[i * 2] = body[i * 2];
+          arr[i * 2 + 1] = body[i * 2 + 1];
+        } else {
+          const j = (Math.random() * bc) | 0;
+          arr[i * 2] = body[j * 2] + (Math.random() - 0.5) * 0.006;
+          arr[i * 2 + 1] = body[j * 2 + 1] + (Math.random() - 0.5) * 0.006;
+        }
+      }
+      const mkHub = (start: number, center: [number, number]) => {
+        for (let m = 0; m < M; m++) {
+          const i = start + m;
+          let ang: number, r: number;
+          if (m < nHubDisc) {
+            ang = Math.random() * Math.PI * 2;
+            r = HUB_RIN + (HUB_ROUT - HUB_RIN) * Math.sqrt(Math.random());
+          } else {
+            // Even, deterministic spokes (cycle the tooth index) so both hubs
+            // show identical, clearly-read rotation - random indices left
+            // lopsided spokes that aliased into an uneven/wrong-way spin.
+            const tk = (m - nHubDisc) % HUB_TEETH;
+            ang = (tk / HUB_TEETH) * Math.PI * 2 + (Math.random() - 0.5) * 0.1;
+            r = HUB_ROUT + Math.random() * 6;
+          }
+          hubIdx.push(i);
+          hAng[i] = ang;
+          hR[i] = r;
+          hCx[i] = center[0];
+          hCy[i] = center[1];
+          arr[i * 2] = (center[0] + Math.cos(ang) * r) / SW;
+          arr[i * 2 + 1] = (center[1] + Math.sin(ang) * r) / SH;
+        }
+      };
+      mkHub(nBody, HUB_A);
+      mkHub(nBody + M, HUB_B);
+      return arr;
+    };
+
+    // Any stage with reels/hubs builds them procedurally (even spokes + teeth +
+    // rim) with polar coords so they spin live, over a static "frame" of the
+    // stage's other parts. One registry entry per spinning stage index.
+    type Spin = {
+      idx: number[];
+      ang: Float32Array;
+      r: Float32Array;
+      cx: Float32Array;
+      cy: Float32Array;
+    };
+    const spinStages: Record<number, Spin> = {};
+
+    // Stages that spin: the frame shape for their non-reel parts ("" = the reel
+    // is the whole stage), the reel centres/radii, and the share of particles
+    // the reels take (the rest fill the frame).
+    const SPIN: {
+      id: string;
+      frame: string;
+      reelShare: number;
+      reels: [number, number, number][];
+    }[] = [
+      { id: "hub", frame: "", reelShare: 1, reels: [[cx, cy, 96]] },
+      { id: "tape", frame: "tapeFrame", reelShare: 0.5, reels: [[138, cy, 74]] },
+      { id: "reels", frame: "reelsFrame", reelShare: 0.88, reels: [[126, 138, 62], [314, 138, 62]] },
+      { id: "shell", frame: "shellFrame", reelShare: 0.26, reels: [[158, 183, 30], [282, 183, 30]] },
+      { id: "sound", frame: "soundFrame", reelShare: 0.34, reels: [[96, 118, 42], [200, 118, 42]] },
+    ];
+
+    const buildReelInto = (
+      spin: Spin,
+      arr: Float32Array,
+      start: number,
+      count: number,
+      cx0: number,
+      cy0: number,
+      R: number,
+    ) => {
+      const TAU = Math.PI * 2;
+      const SPOKES = 6;
+      const TEETH = 9;
+      const nSpoke = Math.round(count * 0.4);
+      const nDisc = Math.round(count * 0.24);
+      const nTeeth = Math.round(count * 0.14);
+      const nRim = count - nSpoke - nDisc - nTeeth;
+      let m = 0;
+      const put = (ang: number, r: number) => {
+        const i = start + m++;
+        spin.ang[i] = ang;
+        spin.r[i] = r;
+        spin.cx[i] = cx0;
+        spin.cy[i] = cy0;
+        spin.idx.push(i);
+        arr[i * 2] = (cx0 + Math.cos(ang) * r) / SW;
+        arr[i * 2 + 1] = (cy0 + Math.sin(ang) * r) / SH;
+      };
+      for (let k = 0; k < nSpoke; k++) {
+        put(((k % SPOKES) / SPOKES) * TAU + (Math.random() - 0.5) * 0.05, R * (0.2 + 0.76 * Math.random()));
+      }
+      for (let k = 0; k < nDisc; k++) {
+        put(Math.random() * TAU, R * 0.2 * Math.sqrt(Math.random()));
+      }
+      for (let k = 0; k < nTeeth; k++) {
+        put(((k % TEETH) / TEETH) * TAU + (Math.random() - 0.5) * 0.1, R * (0.28 + Math.random() * 0.06));
+      }
+      for (let k = 0; k < nRim; k++) {
+        put(Math.random() * TAU, R * (0.9 + 0.1 * Math.random()));
+      }
+    };
+
+    const buildSpinStage = (cfg: (typeof SPIN)[number]): { arr: Float32Array; spin: Spin } => {
+      const arr = new Float32Array(N * 2);
+      const spin: Spin = {
+        idx: [],
+        ang: new Float32Array(N),
+        r: new Float32Array(N),
+        cx: new Float32Array(N),
+        cy: new Float32Array(N),
+      };
+      const per = Math.floor((N * cfg.reelShare) / cfg.reels.length);
+      const nFrame = N - per * cfg.reels.length;
+      if (cfg.frame && nFrame > 0) {
+        const f = sampleShape(cfg.frame);
+        shuffle(f);
+        const fc = f.length / 2;
+        for (let i = 0; i < nFrame; i++) {
+          if (fc && i < fc) {
+            arr[i * 2] = f[i * 2];
+            arr[i * 2 + 1] = f[i * 2 + 1];
+          } else if (fc) {
+            const j = (Math.random() * fc) | 0;
+            arr[i * 2] = f[j * 2] + (Math.random() - 0.5) * 0.006;
+            arr[i * 2 + 1] = f[j * 2 + 1] + (Math.random() - 0.5) * 0.006;
+          }
+        }
+      }
+      let start = nFrame;
+      for (const [rx, ry, R] of cfg.reels) {
+        buildReelInto(spin, arr, start, per, rx, ry, R);
+        start += per;
+      }
+      return { arr, spin };
+    };
+
+    let stages: Float32Array[] = [];
+    const buildStages = () => {
+      for (const k in spinStages) delete spinStages[+k];
+      stages = STAGE_IDS.map((id, idx) => {
+        if (id === "dust") return resample(dustCloud());
+        if (id === "cassette") return buildCassette();
+        const cfg = SPIN.find((s) => s.id === id);
+        if (cfg) {
+          const { arr, spin } = buildSpinStage(cfg);
+          spinStages[idx] = spin;
+          return arr;
+        }
+        return resample(sampleShape(id));
+      });
+    };
+
+    // ── Particle state ───────────────────────────────────────────────────
+    let px = new Float32Array(N);
+    let py = new Float32Array(N);
+    let pr = new Float32Array(N);
+    let pa = new Float32Array(N);
+    const buckets: number[][] = [[], [], [], []];
+    let accentCand: number[] = [];
+    const initParticles = () => {
+      px = new Float32Array(N);
+      py = new Float32Array(N);
+      pr = new Float32Array(N);
+      pa = new Float32Array(N);
+      hAng = new Float32Array(N);
+      hR = new Float32Array(N);
+      hCx = new Float32Array(N);
+      hCy = new Float32Array(N);
+      buckets[0] = [];
+      buckets[1] = [];
+      buckets[2] = [];
+      buckets[3] = [];
+      accentCand = [];
+      for (let i = 0; i < N; i++) {
+        pr[i] = Math.random();
+        pa[i] = Math.random() * Math.PI * 2;
+        buckets[Math.min(3, (pr[i] * 4) | 0)].push(i);
+        if (pr[i] < 0.05) accentCand.push(i);
+      }
+    };
+
+    // ── Screen mapping ───────────────────────────────────────────────────
+    let dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let vw = 0, vh = 0;
+    let rectW = 0, rectH = 0, rectY = 0, dispAmp = 0;
+    let mobile = false;
+    const layout = () => {
+      vw = window.innerWidth;
+      vh = window.innerHeight;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.floor(vw * dpr);
+      canvas.height = Math.floor(vh * dpr);
+      const aspect = SW / SH;
+      mobile = vw < 820;
+      const h = mobile
+        ? Math.min(vh * 0.44, (vw * 0.92) / aspect)
+        : Math.min(vh * 0.66, (vw * 0.6) / aspect);
+      rectW = h * aspect * dpr;
+      rectH = h * dpr;
+      const centerY = mobile ? vh * 0.36 : vh * 0.52;
+      rectY = (centerY - h / 2) * dpr;
+      dispAmp = Math.min(rectW, rectH) * 0.55;
+    };
+
+    const smooth = (a: number, b: number, x: number) => {
+      const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
+      return t * t * (3 - 2 * t);
+    };
+
+    let scrollT = 0;
+    ScrollTrigger.create({
+      trigger: chaptersEl,
+      start: "top top",
+      end: "bottom bottom",
+      scrub: true,
+      onUpdate: (self) => {
+        scrollT = self.progress;
+        if (railFill) railFill.style.height = (self.progress * 100).toFixed(2) + "%";
+        // Mark the rail from the SAME stage the copy shows (sf = round of the
+        // fractional stage), so the active tick never leads the visible section.
+        if (railItems.length) {
+          const sf = Math.min(S - 1, Math.max(0, self.progress * S - 0.5));
+          const active = Math.round(sf);
+          for (let i = 0; i < railItems.length; i++) {
+            railItems[i].classList.toggle("is-active", i === active);
+            railItems[i].classList.toggle("is-done", i < active);
+          }
+        }
+      },
+    });
+
+    const seedPositions = () => {
+      const s0 = stages[0];
+      const cxp = 0.5 * vw * dpr;
+      const rx = cxp - rectW / 2;
+      for (let i = 0; i < N; i++) {
+        px[i] = rx + s0[i * 2] * rectW;
+        py[i] = rectY + s0[i * 2 + 1] * rectH;
+      }
+    };
+
+    const sizes = [0.55, 0.8, 1.05, 1.35];
+    let spin = 0;
+    let reelSpin = 0;
+    let last = performance.now();
+
+    // Pointer (device px); repulsion nudges nearby particles away.
+    let pointerX = -1e9;
+    let pointerY = -1e9;
+    let pointerOn = false;
+
+    // Music reactivity: a smoothed 0..1 "energy" derived from the shared
+    // player's public state (play/pause + volume) - no audio internals touched.
+    let musicEnergy = 0;
+
+    const frame = (now: number) => {
+      const dt = Math.min(50, now - last) / 1000;
+      last = now;
+
+      // Music-reactive energy: pumps while a track is playing anywhere (this
+      // tab or another, via the shared player). Built from a slow dynamic swell
+      // plus a soft beat pulse, scaled by volume. Subtle by design.
+      let musicTarget = 0;
+      if (!reduced) {
+        const cass = (window as any).acmCassette;
+        if (cass && typeof cass.state === "function") {
+          try {
+            const st = cass.state();
+            if (st && !st.paused) {
+              const vol = typeof st.volume === "number" ? st.volume : 0.6;
+              const swell = 0.5 + 0.5 * Math.sin(now * 0.0011 + Math.sin(now * 0.0004) * 1.6);
+              const beat = Math.pow(Math.max(0, Math.sin(now * 0.0052)), 3);
+              musicTarget = (0.4 + 0.3 * swell + 0.35 * beat) * (0.5 + 0.5 * vol);
+            }
+          } catch {}
+        }
+      }
+      musicEnergy += (musicTarget - musicEnergy) * Math.min(1, dt * 6);
+
+      const sf = Math.min(S - 1, Math.max(0, scrollT * S - 0.5));
+      const a = Math.floor(sf);
+      const b = Math.min(S - 1, a + 1);
+      let t = sf - a;
+      t = smooth(0.22, 0.78, t);
+
+      // Form slides between the two stages' horizontal anchors.
+      const cxFrac = mobile ? 0.5 : FORM_X[a] + (FORM_X[b] - FORM_X[a]) * t;
+      const rectX = cxFrac * vw * dpr - rectW / 2;
+
+      // Spin the finale hubs (writes live rotating targets into the cassette
+      // stage) once we are within reach of it.
+      if (sf > CASS - 2.2) {
+        if (!reduced) spin += dt * 1.5;
+        const cass = stages[CASS];
+        for (let k = 0; k < hubIdx.length; k++) {
+          const i = hubIdx[k];
+          const ang = hAng[i] - spin;
+          cass[i * 2] = (hCx[i] + Math.cos(ang) * hR[i]) / SW;
+          cass[i * 2 + 1] = (hCy[i] + Math.sin(ang) * hR[i]) / SH;
+        }
+      }
+
+      // Spin every reel/hub on whichever spinning stage is on/near screen, so
+      // the single hub, tape reel, both reels, and the shell + sound reels all
+      // visibly turn.
+      if (!reduced) reelSpin += dt * 1.6;
+      for (const key in spinStages) {
+        const si = +key;
+        if (Math.abs(sf - si) >= 1.35) continue;
+        const spin = spinStages[si];
+        const st = stages[si];
+        for (let k = 0; k < spin.idx.length; k++) {
+          const i = spin.idx[k];
+          const ang = spin.ang[i] - reelSpin;
+          st[i * 2] = (spin.cx[i] + Math.cos(ang) * spin.r[i]) / SW;
+          st[i * 2 + 1] = (spin.cy[i] + Math.sin(ang) * spin.r[i]) / SH;
+        }
+      }
+
+      const sa = stages[a];
+      const sb = stages[b];
+      const disperse = reduced ? 0 : Math.sin(Math.PI * t) * dispAmp;
+      const ease = reduced ? 1 : 1 - Math.pow(0.0016, dt);
+      const accentAmt = smooth(6.4, 8.2, sf);
+
+      // Cursor repulsion: particles near the pointer nudge gently away and ease
+      // back to their shape when it leaves.
+      const curOn = pointerOn && !reduced;
+      const curR = 150 * dpr;
+      const curR2 = curR * curR;
+      const curPush = 26 * dpr;
+
+      // Music dance: each particle grooves on its own phase (bob + sway) and
+      // the whole form sways side to side, so the grain looks like it's dancing
+      // rather than breathing. Amplitude rides the beat energy.
+      const danceClock = now * 0.005;
+      const danceAmp = musicEnergy * 6.5 * dpr;
+      const swayG = Math.sin(now * 0.0022) * musicEnergy * 6 * dpr;
+      const musicOn = musicEnergy > 0.001;
+
+      for (let i = 0; i < N; i++) {
+        const nx = sa[i * 2] + (sb[i * 2] - sa[i * 2]) * t;
+        const ny = sa[i * 2 + 1] + (sb[i * 2 + 1] - sa[i * 2 + 1]) * t;
+        let tx = rectX + nx * rectW;
+        let ty = rectY + ny * rectH;
+        if (disperse) {
+          const d = disperse * (0.35 + pr[i] * 0.9);
+          tx += Math.cos(pa[i]) * d;
+          ty += Math.sin(pa[i]) * d;
+        }
+        if (curOn) {
+          const dx = tx - pointerX;
+          const dy = ty - pointerY;
+          const d2 = dx * dx + dy * dy;
+          if (d2 < curR2) {
+            const dist = Math.sqrt(d2) || 1;
+            const f = 1 - dist / curR;
+            const push = f * f * curPush;
+            tx += (dx / dist) * push;
+            ty += (dy / dist) * push;
+          }
+        }
+        if (musicOn) {
+          const ph = pa[i];
+          tx += swayG + Math.sin(danceClock + ph) * danceAmp;
+          ty += Math.sin(danceClock * 1.35 + ph * 1.7) * danceAmp * 1.2;
+        }
+        px[i] += (tx - px[i]) * ease;
+        py[i] += (ty - py[i]) * ease;
+      }
+
+      // Transparent canvas: clear each frame so the site's common diamond-grid
+      // background shows through behind the particles.
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const tsh = reduced ? 0 : now * 0.001;
+      const jamp = (0.35 + musicEnergy * 1.9) * dpr; // shimmer grows with music
+      for (let bk = 0; bk < 4; bk++) {
+        ctx.fillStyle = inkColors[bk];
+        const s = sizes[bk] * dpr;
+        const half = s / 2;
+        const list = buckets[bk];
+        for (let k = 0; k < list.length; k++) {
+          const i = list[k];
+          const jx = reduced ? 0 : Math.sin(tsh + i) * jamp;
+          const jy = reduced ? 0 : Math.cos(tsh + i * 1.3) * jamp;
+          ctx.fillRect(px[i] - half + jx, py[i] - half + jy, s, s);
+        }
+      }
+      if (accentAmt > 0.02) {
+        ctx.fillStyle = ACCENT + (accentAmt * 0.9).toFixed(3) + ")";
+        const s = 1.5 * dpr;
+        for (let k = 0; k < accentCand.length; k++) {
+          const i = accentCand[k];
+          ctx.fillRect(px[i] - s / 2, py[i] - s / 2, s, s);
+        }
+      }
+
+      // Fade the whole particle layer out as the chapters scroll away, so it is
+      // fully gone before the close section rises into view - no overlap, and
+      // the page scrolls normally into the close + footer after the finale.
+      const crb = chaptersEl.getBoundingClientRect().bottom;
+      const gFade = smooth(vh * 0.62, vh * 1.02, crb);
+      if (stageEl) stageEl.style.opacity = gFade.toFixed(3);
+
+      for (let i = 0; i < copies.length; i++) {
+        const vis = (1 - smooth(0.16, 0.72, Math.abs(sf - i))) * gFade;
+        const el = copies[i];
+        el.style.opacity = vis.toFixed(3);
+        el.style.transform = `translateY(${((1 - vis) * 22).toFixed(1)}px)`;
+      }
+
+      requestAnimationFrame(frame);
+    };
+
+    const boot = () => {
+      layout();
+      initParticles();
+      buildStages();
+      seedPositions();
+      requestAnimationFrame(frame);
+    };
+
+    let resizeRaf = 0;
+    const onResize = () => {
+      if (resizeRaf) return;
+      resizeRaf = requestAnimationFrame(() => {
+        resizeRaf = 0;
+        const newN = pickCount();
+        layout();
+        if (newN !== N) {
+          N = newN;
+          initParticles();
+          buildStages();
+          seedPositions();
+        }
+        ScrollTrigger.refresh();
+      });
+    };
+    window.addEventListener("resize", onResize, { passive: true });
+    window.addEventListener("orientationchange", onResize, { passive: true });
+
+    window.addEventListener(
+      "pointermove",
+      (e) => {
+        if (e.pointerType === "touch") return; // touch scroll, not a cursor
+        pointerX = e.clientX * dpr;
+        pointerY = e.clientY * dpr;
+        pointerOn = true;
+      },
+      { passive: true },
+    );
+    window.addEventListener("pointerleave", () => (pointerOn = false), { passive: true });
+    window.addEventListener("blur", () => (pointerOn = false), { passive: true });
+
+    boot();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initCassette);
+  } else {
+    initCassette();
+  }
+
+  // Re-derive the "N years" copy at view time so a stale build never shows the
+  // wrong number. Mirrors numberToWords() in the frontmatter.
+  const YEAR_ONES = [
+    "zero", "one", "two", "three", "four", "five", "six", "seven", "eight",
+    "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen",
+    "sixteen", "seventeen", "eighteen", "nineteen",
+  ];
+  const YEAR_TENS = ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"];
+  const yearWords = (n: number): string => {
+    if (n < 20) return YEAR_ONES[n];
+    if (n < 100) {
+      const o = n % 10;
+      return o ? `${YEAR_TENS[Math.floor(n / 10)]}-${YEAR_ONES[o]}` : YEAR_TENS[Math.floor(n / 10)];
+    }
+    const h = Math.floor(n / 100);
+    const r = n % 100;
+    return r ? `${YEAR_ONES[h]} hundred ${yearWords(r)}` : `${YEAR_ONES[h]} hundred`;
+  };
+  const nowYear = new Date().getFullYear();
+  document.querySelectorAll<HTMLElement>("[data-years-from]").forEach((el) => {
+    const from = parseInt(el.dataset.yearsFrom || "", 10);
+    const n = nowYear - from;
+    if (n > 0) {
+      const w = yearWords(n);
+      el.textContent = w.charAt(0).toUpperCase() + w.slice(1);
+    }
+  });
+</script>

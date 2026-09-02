@@ -1,0 +1,130 @@
+---
+/**
+ * GearStep - a single stepper node for the ProjectsShowcase.
+ * Renders the cassette reel ("Pencil Thingy") gear so it stays on-theme.
+ * Spins while active. State is driven from JS via `data-state`.
+ */
+export interface Props {
+  index: number;
+  label: string;
+  accentColor?: string;
+}
+const { index, label, accentColor = "#F95F4A" } = Astro.props;
+const num = String(index + 1).padStart(2, "0");
+
+// Cassette reel gear path - natural center (33,33) in a 67x67 box.
+const REEL_GEAR =
+  "M32.865 9.595C36.091 9.595 39.165 10.246 41.963 11.424L39.137 16.32L44.222 19.256L47.044 14.366C51.943 18.09 55.333 23.696 56.135 30.107H50.48V35.98H56.136C55.335 42.398 51.941 48.009 47.036 51.734L44.213 46.844L39.128 49.779L41.954 54.673C39.159 55.849 36.088 56.5 32.865 56.5C29.638 56.5 26.563 55.847 23.765 54.668L26.596 49.767L21.511 46.831L18.684 51.727C13.784 48.001 10.396 42.393 9.596 35.98H15.251V30.107H9.597C10.399 23.693 13.791 18.083 18.694 14.359L21.519 19.252L26.604 16.316L23.777 11.42C26.572 10.244 29.643 9.595 32.865 9.595Z";
+---
+
+<button
+  type="button"
+  class="reel-step group flex items-center gap-3"
+  data-gear-step
+  data-index={index}
+  data-state="upcoming"
+  style={`--accent: ${accentColor};`}
+  aria-label={`Go to project ${label}`}
+>
+  <span class="reel-wrap relative grid h-11 w-11 shrink-0 place-items-center">
+    <svg
+      class="reel-svg h-11 w-11"
+      viewBox="0 0 67 67"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <path class="reel-path" d={REEL_GEAR} />
+    </svg>
+    <span
+      class="reel-num absolute font-['PolySans_Trial',sans-serif] text-[10px] font-bold"
+      >{num}</span
+    >
+  </span>
+  <span
+    class="reel-label hidden whitespace-nowrap font-['PolySans_Trial',sans-serif] text-sm font-medium uppercase tracking-wide md:inline"
+    >{label}</span
+  >
+</button>
+
+<style>
+  .reel-step {
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    padding: 0;
+  }
+
+  .reel-path {
+    fill: rgba(254, 252, 217, 0.3);
+    transition: fill 0.4s ease;
+  }
+  .reel-num {
+    color: rgba(254, 252, 217, 0.5);
+    transition: color 0.4s ease;
+  }
+  .reel-label {
+    color: rgba(254, 252, 217, 0.45);
+    transition: color 0.4s ease;
+  }
+
+  /* Done: filled accent, dimmed. */
+  .reel-step[data-state="done"] .reel-path {
+    fill: var(--accent);
+    opacity: 0.55;
+  }
+  .reel-step[data-state="done"] .reel-num {
+    color: var(--accent);
+    opacity: 0.75;
+  }
+
+  /* Active: bright accent, spinning reel, label shown. */
+  .reel-step[data-state="active"] .reel-svg {
+    animation: reel-spin 5s linear infinite;
+    transform-origin: 50% 50%;
+  }
+  .reel-step[data-state="active"] .reel-path {
+    fill: var(--accent);
+  }
+  .reel-step[data-state="active"] .reel-num {
+    color: #fefcd9;
+  }
+  .reel-step[data-state="active"] .reel-label {
+    color: #fefcd9;
+  }
+
+  .reel-step:hover .reel-label {
+    color: rgba(254, 252, 217, 0.85);
+  }
+
+  @keyframes reel-spin {
+    to {
+      transform: rotate(-360deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reel-step[data-state="active"] .reel-svg {
+      animation: none;
+    }
+  }
+
+  /* Light mode. */
+  :global(html[data-theme="light"]) .reel-path {
+    fill: rgba(38, 59, 51, 0.28);
+  }
+  :global(html[data-theme="light"]) .reel-num {
+    color: rgba(38, 59, 51, 0.5);
+  }
+  :global(html[data-theme="light"]) .reel-label {
+    color: rgba(38, 59, 51, 0.5);
+  }
+  :global(html[data-theme="light"]) .reel-step[data-state="active"] .reel-num,
+  :global(html[data-theme="light"]) .reel-step[data-state="active"] .reel-label {
+    color: #263b33;
+  }
+  /* Base hover paints the label cream, which disappears on the light page. */
+  :global(html[data-theme="light"]) .reel-step:hover .reel-label {
+    color: rgba(38, 59, 51, 0.85);
+  }
+</style>

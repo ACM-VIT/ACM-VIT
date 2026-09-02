@@ -1,0 +1,94 @@
+---
+// Your frontmatter here
+import { getAssetUrl } from "../utils/cdn";
+---
+
+<section
+  class="h-dvh w-full flex justify-center items-center relative overflow-hidden"
+>
+  <!-- Marquee Container -->
+  <div class="marquee-container">
+    <div class="marquee-content z-20">
+      <img
+        src={getAssetUrl("/acmw/acmw-acmwmotto.webp")}
+        alt="AcmW Motto"
+        loading="lazy"
+        decoding="async"
+      />
+      <img
+        src={getAssetUrl("/acmw/acmw-acmwmotto.webp")}
+        alt="AcmW Motto"
+        loading="lazy"
+        decoding="async"
+      />
+      <img
+        src={getAssetUrl("/acmw/acmw-acmwmotto.webp")}
+        alt="AcmW Motto"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  </div>
+
+  <div class="absolute bottom-0 right-0 max-w-[70vw] sm:max-w-[55vw] md:max-w-none">
+    <img
+      src={getAssetUrl("/acmw/acmw-acmwtable.webp")}
+      alt="AcmW Table"
+      class="w-full h-auto"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+</section>
+
+<style>
+  .marquee-container {
+    position: absolute;
+    top: 35%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .marquee-content {
+    display: inline-flex;
+    animation: marquee 15s linear infinite;
+    height: 100%;
+    align-items: center;
+    will-change: transform;
+  }
+
+  .marquee-content img {
+    height: auto;
+    width: 100%;
+    margin-right: 50px;
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(calc(-100% - 50px));
+    }
+  }
+
+  /* Pause on hover */
+  .marquee-container:hover .marquee-content {
+    animation-play-state: paused;
+  }
+
+  @media (max-width: 768px) {
+    .marquee-container {
+      top: 30%;
+    }
+    .marquee-content {
+      animation-duration: 10s;
+    }
+    .marquee-content img {
+      margin-right: 24px;
+    }
+  }
+</style>

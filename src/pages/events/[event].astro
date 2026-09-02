@@ -1,0 +1,434 @@
+---
+export const prerender = true;
+
+import { titleToArt } from "../../utils/titleArt";
+import Layout from "../../layouts/Layout.astro";
+import Footer from "../../layouts/Footer.astro";
+import "../../styles/globals.css";
+import "../../styles/event.css";
+import { getAssetUrl } from "../../utils/cdn";
+import FillButton from "../../components/ui/FillButton.astro";
+import {
+  eventDetails,
+  eventSlugs,
+  getEventThemeHex,
+} from "../../data/eventDetailsData";
+
+export function getStaticPaths() {
+  return eventSlugs.map((slug) => ({ params: { event: slug } }));
+}
+
+const { event } = Astro.params;
+const data = eventDetails[event!];
+if (!data) return Astro.redirect("/");
+
+const themeColor = data.themeColor ?? getEventThemeHex(data.themeKey);
+const themeColorSecondary = data.themeColorSecondary ?? themeColor;
+
+// FillButton needs a dark ink/bg companion color for contrast (dark-mode text
+// on the bright accent bg, light-mode bg under fixed white text). themeColorSecondary
+// is a bright accent (used for page highlights), NOT a dark ink - reusing it here gives
+// unreadable bright-on-bright text. So always derive the button ink by darkening the
+// accent. Precompute the hex (no color-mix) so old iPad WebKit still gets the color
+// (see color-mix iPad fallback note).
+const darkenHex = (hex: string, factor: number): string => {
+  const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
+  if (!m) return hex;
+  const n = parseInt(m[1], 16);
+  const ch = (shift: number) =>
+    Math.round(((n >> shift) & 0xff) * factor)
+      .toString(16)
+      .padStart(2, "0");
+  return `#${ch(16)}${ch(8)}${ch(0)}`;
+};
+const fillButtonStyle = `--proj-color: ${themeColor}; --proj-color-secondary: ${darkenHex(themeColor, 0.55)};`;
+
+const titleArt = titleToArt(data.title);
+
+const titleWords = data.title.split(" ");
+const titleMain = titleWords[0];
+const titleAccent = titleWords.length > 1 ? titleWords.slice(1).join(" ") : "";
+
+const otherEvents = Object.values(eventDetails)
+  .filter((e) => e.slug !== data.slug)
+  .slice(0, 6);
+
+// The old hero eyebrow ("ACM-VIT · ACM-W · Flagship Hackathon") becomes a row
+// of category chips; the chapter name is implicit on its own site.
+const typeTags = (data.eyebrow ?? "")
+  .split("·")
+  .map((s: string) => s.trim())
+  .filter((s: string) => s && s.toUpperCase() !== "ACM-VIT");
+---
+
+<Layout pageTitle={data.title} backHref="/events">
+  <script is:inline define:vars={{ themeColor, titleArt }}>
+    console.log("%c" + titleArt, "color:" + themeColor + ";font-family:monospace;line-height:1;");
+  </script>
+  <div style={`--event-color: ${themeColor}; --event-color-secondary: ${themeColorSecondary};`}>
+
+    <!-- Hero -->
+    <section class="event-hero">
+      <div class="event-hero-inner">
+        <div class="event-hero-text">
+          {typeTags.length > 0 && (
+            <div class="event-hero-tags" data-animate="fade-up">
+              {typeTags.map((tag: string) => (
+                <span class="event-type-chip">{tag}</span>
+              ))}
+            </div>
+          )}
+          <h1 class="event-hero-title" data-animate="fade-up">
+            {titleMain}
+            {titleAccent && <><br /><span>{titleAccent}</span></>}
+          </h1>
+          <p class="event-hero-tagline" data-animate="fade-up">{data.tagline}</p>
+          <p class="event-hero-desc" data-animate="fade-up">{data.shortDescription}</p>
+
+          <div class="event-hero-meta" data-animate="fade-up">
+            <span class="event-meta-chip"><strong>Mode</strong>{data.mode}</span>
+            <span class="event-meta-chip"><strong>Duration</strong>{data.duration}</span>
+            <span class="event-meta-chip"><strong>Team</strong>{data.team}</span>
+            <span class="event-meta-chip"><strong>Recurs</strong>{data.recurrence}</span>
+            {data.firstHeld && <span class="event-meta-chip"><strong>Since</strong>{data.firstHeld}</span>}
+          </div>
+
+          <div class="event-hero-actions" data-animate="fade-up">
+            {data.registrationUrl !== "https://acmvit.in" && (
+              <FillButton
+                href={data.registrationUrl}
+                label={data.primaryCtaLabel}
+                style={fillButtonStyle}
+                external
+              >
+                <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </FillButton>
+            )}
+            <FillButton
+              href="#event-about"
+              label="Learn More"
+              style={fillButtonStyle}
+            />
+          </div>
+        </div>
+
+        <div class="event-hero-cassette" data-animate="fade-in">
+          <img
+            src={getAssetUrl(data.cassetteSvg)}
+            alt={`${data.title} cassette`}
+            class="event-hero-cassette-img"
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    {data.stats.length > 0 && (
+      <section class="event-stats" data-animate-group="stagger">
+        {data.stats.map((stat) => (
+          <div class="event-stat" data-animate="fade-up">
+            <div class="event-stat-value">{stat.value}</div>
+            <div class="event-stat-label">{stat.label}</div>
+          </div>
+        ))}
+      </section>
+    )}
+
+    <!-- About -->
+    <section class="event-section-narrow" id="event-about">
+      <div class="event-section-header">
+        <span class="event-section-rule" data-animate="fade-up" aria-hidden="true"></span>
+        <h2 class="event-section-title" data-animate="fade-up">
+          What is <span>{data.title}</span>?
+        </h2>
+      </div>
+      <div class="event-about-body" data-animate="fade-up">
+        {data.longDescription.map((para) => <p>{para}</p>)}
+      </div>
+    </section>
+
+    <!-- Speaker Bio (if speaker session) -->
+    {data.speaker && (
+      <>
+        <hr class="event-divider" />
+        <section class="event-section-narrow" id="event-speaker">
+          <div class="event-section-header">
+            <span class="event-section-rule" data-animate="fade-up" aria-hidden="true"></span>
+            <h2 class="event-section-title" data-animate="fade-up">
+              Who is <span>{data.speaker.name}</span>?
+            </h2>
+          </div>
+          <div class="event-speaker-block" data-animate="fade-up">
+            <div class="event-speaker-photo-wrap">
+              <img
+                src={getAssetUrl(data.speaker.image)}
+                alt={data.speaker.name}
+                class="event-speaker-photo"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div class="event-speaker-info">
+              <h3 class="event-speaker-name">{data.speaker.name}</h3>
+              <p class="event-speaker-role">{data.speaker.role} · {data.speaker.institution}</p>
+              <div class="event-speaker-bio">
+                {data.speaker.bio.map((para) => <p>{para}</p>)}
+              </div>
+              {data.speaker.profileUrl && (
+                <a
+                  href={data.speaker.profileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="event-archive-link-chip"
+                  style="margin-top: 1rem; display: inline-flex;"
+                >
+                  View Profile
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7 17L17 7M9 7h8v8"/>
+                  </svg>
+                </a>
+              )}
+            </div>
+          </div>
+        </section>
+      </>
+    )}
+
+    <!-- Archives (tabbed by year) -->
+    {data.pastEditions && data.pastEditions.length > 0 && (
+      <>
+        <hr class="event-divider" />
+        <section class="event-section" id="event-archives">
+          <div class="event-section-header">
+            <span class="event-section-rule" data-animate="fade-up" aria-hidden="true"></span>
+            <h2 class="event-section-title" data-animate="fade-up">
+              Past <span>editions</span>
+            </h2>
+          </div>
+
+          <div class="event-archive-tabs" role="tablist" data-animate="fade-up">
+            {data.pastEditions.map((ed, i) => (
+              <button
+                type="button"
+                role="tab"
+                class={`event-archive-tab${i === 0 ? " is-active" : ""}`}
+                data-archive-tab={ed.year}
+                aria-selected={i === 0 ? "true" : "false"}
+              >
+                {ed.year}
+              </button>
+            ))}
+          </div>
+
+          <div class="event-archive-panels">
+            {data.pastEditions.map((ed, i) => (
+              <article
+                class={`event-archive-panel${i === 0 ? " is-active" : ""}`}
+                data-archive-panel={ed.year}
+                role="tabpanel"
+                aria-hidden={i === 0 ? "false" : "true"}
+              >
+                <div class="event-archive-head">
+                  <span class="event-archive-year">{ed.year}</span>
+                  <h3 class="event-archive-edition">{ed.edition}</h3>
+                </div>
+                <p class="event-archive-desc">{ed.description}</p>
+
+                {ed.links && ed.links.length > 0 && (
+                  <div class="event-archive-links">
+                    {ed.links.map((l) => (
+                      <a href={l.href} target="_blank" rel="noopener noreferrer" class="event-archive-link-chip">
+                        {l.label}
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M7 17L17 7M9 7h8v8"/>
+                        </svg>
+                      </a>
+                    ))}
+                  </div>
+                )}
+
+                {ed.collectibles && ed.collectibles.length > 0 && (
+                  <div class="event-archive-sub-block">
+                    <span class="event-archive-sub-label">Collectibles</span>
+                    <div class="event-collectible-grid">
+                      {ed.collectibles.map((item) => (
+                        <div class="event-collectible-card">
+                          {item.image && (
+                            <div class="event-collectible-img-wrap">
+                              <img src={getAssetUrl(item.image)} alt={item.name} loading="lazy" decoding="async" />
+                            </div>
+                          )}
+                          <div class="event-collectible-name">{item.name}</div>
+                          {item.desc && <div class="event-collectible-desc">{item.desc}</div>}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {ed.sponsors && ed.sponsors.length > 0 && (
+                  <div class="event-archive-sub-block">
+                    <span class="event-archive-sub-label">Sponsors & Partners</span>
+                    <div class="event-archive-sponsor-grid">
+                      {ed.sponsors.map((s) => (
+                        <div class="event-sponsor-card">
+                          {s.logo && (
+                            <div class="event-sponsor-logo-wrap">
+                              <img src={getAssetUrl(s.logo)} alt={s.name} loading="lazy" decoding="async" />
+                            </div>
+                          )}
+                          <div class="event-sponsor-meta">
+                            <div class="event-sponsor-name">{s.name}</div>
+                            {s.tier && <div class="event-sponsor-tier">{s.tier}</div>}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </article>
+            ))}
+          </div>
+        </section>
+      </>
+    )}
+
+    {!data.hideCtaBanner && (
+      <>
+        <hr class="event-divider" />
+
+        {/* Be Part of Next Edition CTA */}
+        <div class="event-cta-banner" data-animate="fade-up">
+          <h3>Be part of the next {data.title}</h3>
+          <p>Hosted by {data.organizedBy}{data.firstHeld ? ` · First held ${data.firstHeld}` : ""}</p>
+          <FillButton
+            href={data.registrationUrl}
+            label={data.primaryCtaLabel}
+            style={fillButtonStyle}
+            external
+          >
+            <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 17L17 7M9 7h8v8"/>
+            </svg>
+          </FillButton>
+          {data.socials && data.socials.length > 0 && (
+            <div class="event-cta-socials">
+              {data.socials.map((s) => (
+                <a href={s.href} target="_blank" rel="noopener noreferrer" class="event-cta-social">
+                  {s.label}
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      </>
+    )}
+
+    <hr class="event-divider" />
+
+    <!-- Other events -->
+    <section class="event-section">
+      <div class="event-section-header">
+        <span class="event-section-rule" data-animate="fade-up" aria-hidden="true"></span>
+        <h2 class="event-section-title" data-animate="fade-up">
+          Explore other <span>events</span>
+        </h2>
+      </div>
+      <div class="event-other-strip">
+        {otherEvents.map((e) => (
+          <a href={`/events/${e.slug}`} class="event-other-card" data-animate="fade-up">
+            <img src={getAssetUrl(e.cassetteSvg)} alt={e.title} loading="lazy" decoding="async" />
+            <span class="event-other-card-name">{e.title}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    {data.slug === "cryptic-hunt" && (
+      <section class="event-owls-section" data-animate="fade-up">
+        <img
+          src={getAssetUrl("/events/cryptic-hunt/events-cryptic-hunt-owls.webp")}
+          alt="Eight wise owls watching over the hunt"
+          class="event-owls-img"
+          loading="lazy"
+          decoding="async"
+        />
+        <p class="event-owls-caption">You've reached the end of the trail. Even our owls couldn't find another clue.</p>
+      </section>
+    )}
+
+    <!-- Back -->
+    <section class="event-back-section">
+      <FillButton href="/events" label="Back to All Events">
+        <svg slot="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </FillButton>
+    </section>
+  </div>
+
+  <Footer />
+</Layout>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const heroEls = document.querySelectorAll('.event-hero [data-animate="fade-up"]');
+    gsap.fromTo(heroEls,
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 0.7, ease: "power3.out", stagger: 0.1, delay: 0.25 }
+    );
+
+    const cassette = document.querySelector('.event-hero [data-animate="fade-in"]');
+    if (cassette) {
+      gsap.fromTo(cassette,
+        { opacity: 0, scale: 0.9, rotate: -4 },
+        { opacity: 1, scale: 1, rotate: 0, duration: 0.85, ease: "power3.out", delay: 0.4 }
+      );
+      const img = cassette.querySelector('.event-hero-cassette-img');
+      if (img) {
+        gsap.to(img, {
+          y: -14, duration: 2.8, ease: "sine.inOut", yoyo: true, repeat: -1,
+        });
+      }
+    }
+
+    const scrollEls = document.querySelectorAll(
+      '.event-stats [data-animate], .event-section [data-animate], .event-section-narrow [data-animate], .event-cta-banner[data-animate]'
+    );
+    scrollEls.forEach((el) => {
+      gsap.fromTo(el,
+        { opacity: 0, y: 24 },
+        {
+          opacity: 1, y: 0, duration: 0.6, ease: "power2.out",
+          scrollTrigger: { trigger: el, start: "top 88%", once: true },
+        }
+      );
+    });
+
+    // Archive tabs
+    const tabs = document.querySelectorAll<HTMLButtonElement>("[data-archive-tab]");
+    const panels = document.querySelectorAll<HTMLElement>("[data-archive-panel]");
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const year = tab.dataset.archiveTab;
+        tabs.forEach((t) => {
+          const active = t.dataset.archiveTab === year;
+          t.classList.toggle("is-active", active);
+          t.setAttribute("aria-selected", active ? "true" : "false");
+        });
+        panels.forEach((p) => {
+          const active = p.dataset.archivePanel === year;
+          p.classList.toggle("is-active", active);
+          p.setAttribute("aria-hidden", active ? "false" : "true");
+        });
+      });
+    });
+  });
+</script>

@@ -1,0 +1,10 @@
+{
+  "slug": "ocs-2026",
+  "order": 80,
+  "kind": "svg",
+  "name": "OCS 2026",
+  "color": "#EFE28B",
+  "cassetteSvg": "/projects/cassettes/projects-cassettes-ocs-26.webp",
+  "alt": "OCS '26",
+  "url": "/projects/ocs-26"
+}

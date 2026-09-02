@@ -1,0 +1,28 @@
+{
+  "slug": "cc",
+  "order": 10,
+  "key": "cc",
+  "title": "COMPETITIVE CODING",
+  "description": "We see competitive programming as a game of logic, strategy, and precision, far beyond just writing code. We host contests, craft cryptic challenges, and build problem sets that push us to think algorithmically. Whether we're solving our first problem or chasing the next rating jump, we do it together - discussing, debating, and decoding as a team. In this space, sharpening skills becomes second nature and way more fun. Every problem we solve makes us a little sharper and a lot more confident.",
+  "themeColor": "competitive",
+  "cassetteSvg": "/cassettes/cassettes-cassette-cc.webp",
+  "techIcons": [
+    {
+      "src": "/domains/cc/domains-cc-codeforces-icon.webp",
+      "alt": "Codeforces"
+    },
+    {
+      "src": "/domains/cc/domains-cc-cpp.webp",
+      "alt": "C++"
+    },
+    {
+      "src": "/domains/cc/domains-cc-icpc-foundation-logo.webp",
+      "alt": "ICPC"
+    },
+    {
+      "src": "/domains/cc/domains-cc-vim.webp",
+      "alt": "Vim"
+    }
+  ],
+  "aois": []
+}

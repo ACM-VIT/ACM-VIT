@@ -1,0 +1,8 @@
+{
+  "name": "SDL",
+  "slug": "sdl",
+  "svgFile": "/domains/tech/tools/tech-tool-sdl.svg",
+  "colorHex": "#1A1A1A",
+  "isDark": false,
+  "order": 950
+}

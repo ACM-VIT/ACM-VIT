@@ -1,0 +1,218 @@
+---
+import BoardMemberCardSingular from "../components/ui/BoardMemberCardSingular.astro";
+import AnimatedButton from "../components/ui/AnimatedButton.astro";
+
+import { getAssetUrl } from "../utils/cdn";
+import { items as boardMembers } from "../generated/board-members";
+
+const mainBoardMembers = boardMembers.filter(
+  (member) => !member.isW && member.position !== "Faculty Coordinator"
+);
+const acmwBoardMembers = boardMembers.filter((member) => member.isW);
+const facultyCoordinator = boardMembers.find(
+  (member) => member.position === "Faculty Coordinator"
+);
+---
+
+<section
+  id="team"
+  class="board-section w-full min-h-screen py-12 px-4 relative"
+>
+  <div class="fixed inset-0 z-0 pointer-events-none opacity-0 board-bg-layer">
+    <img
+      src={getAssetUrl("/backgrounds/backgrounds-glow-ball-red.svg")}
+      alt="Board Background"
+      class="w-full h-full object-cover scale-125"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+
+  <div class="max-w-7xl mx-auto flex flex-col relative z-10">
+    <div class="flex flex-col items-center mb-12">
+      <img
+        src={getAssetUrl("/team/team-the-team.webp")}
+        alt="The Team"
+        class="w-80 md:w-[30rem] lg:w-[50rem] h-auto"
+        loading="lazy"
+        decoding="async"
+        data-board-preload
+        data-preloader-ignore
+      />
+      <p class="board-sub mt-6 max-w-2xl text-center font-['PolySans_Trial',sans-serif] text-base font-light leading-relaxed text-[#FEFCD9]/75 sm:text-lg">
+        A chapter is only as strong as its people. Meet the ones behind the
+        magic - the board steering ACM-VIT, then every crew across the years.
+      </p>
+    </div>
+
+    <!-- Faculty Coordinator - Featured Card -->
+    {
+      facultyCoordinator && (
+        <div class="flex justify-center self-center w-[90%] max-w-none sm:w-[60vw] md:w-[40vw] lg:w-[23vw] mb-12">
+          <div class="transition-all duration-300 hover:scale-105 hover:shadow-2xl self-center">
+            <BoardMemberCardSingular
+              title={facultyCoordinator.title}
+              fullName={facultyCoordinator.fullName}
+              position={facultyCoordinator.position}
+              imageUrl={facultyCoordinator.imageUrl}
+              linkedinUrl={facultyCoordinator.linkedinUrl}
+              googleScholarUrl={facultyCoordinator.googleScholarUrl}
+              githubUrl={facultyCoordinator.githubUrl}
+              isW={facultyCoordinator.isW}
+            />
+          </div>
+        </div>
+      )
+    }
+
+    <!-- Main Board Members Grid -->
+    <div
+      class="w-full lg:w-[70vw] self-center flex flex-wrap justify-center gap-4 mb-12"
+    >
+      {
+        mainBoardMembers.map((member) => (
+          <div class="w-[90%] max-w-none sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)] transition-all duration-300 hover:scale-105 hover:shadow-2xl self-center justify-center items-center flex">
+            <BoardMemberCardSingular
+              title={member.title}
+              fullName={member.fullName}
+              position={member.position}
+              imageUrl={member.imageUrl}
+              linkedinUrl={member.linkedinUrl}
+              googleScholarUrl={member.googleScholarUrl}
+              githubUrl={member.githubUrl}
+              isW={member.isW}
+            />
+          </div>
+        ))
+      }
+    </div>
+
+    {
+      acmwBoardMembers.length > 0 && (
+        <div class="w-full lg:w-[70vw] self-center flex flex-wrap justify-center gap-4 mb-12">
+          {acmwBoardMembers.map((member) => (
+            <div class="w-[90%] max-w-none md:max-w-none md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)] transition-all duration-300 hover:scale-105 hover:shadow-2xl self-center justify-center items-center flex">
+              <BoardMemberCardSingular
+                title={member.title}
+                fullName={member.fullName}
+                position={member.position}
+                imageUrl={member.imageUrl}
+                linkedinUrl={member.linkedinUrl}
+                googleScholarUrl={member.googleScholarUrl}
+                githubUrl={member.githubUrl}
+                isW={member.isW}
+              />
+            </div>
+          ))}
+        </div>
+      )
+    }
+
+    <!-- Call to Action Button -->
+    <div class="text-center mt-16">
+      <AnimatedButton
+        text="See the entire crew making magic!"
+        href="/team"
+      />
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  if (typeof gsap !== "undefined") {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const initBoardAnimation = () => {
+      const bgLayer = document.querySelector(".board-bg-layer");
+      const section = document.querySelector(".board-section");
+
+      if (!bgLayer || !section) return;
+
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top 30%",
+        end: "bottom 60%",
+        onEnter: () => gsap.to(bgLayer, { opacity: 1, duration: 0.5 }),
+        onLeave: () => gsap.to(bgLayer, { opacity: 0, duration: 0.5 }),
+        onEnterBack: () => gsap.to(bgLayer, { opacity: 1, duration: 0.5 }),
+        onLeaveBack: () => gsap.to(bgLayer, { opacity: 0, duration: 0.5 }),
+      });
+    };
+
+    // Initialize on load
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initBoardAnimation);
+    } else {
+      initBoardAnimation();
+    }
+  }
+
+</script>
+
+<style>
+  /* Custom animations */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .grid > div {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+
+  .grid > div:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  .grid > div:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .grid > div:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  .grid > div:nth-child(4) {
+    animation-delay: 0.4s;
+  }
+  .grid > div:nth-child(5) {
+    animation-delay: 0.5s;
+  }
+  .grid > div:nth-child(6) {
+    animation-delay: 0.6s;
+  }
+  .grid > div:nth-child(7) {
+    animation-delay: 0.7s;
+  }
+  .grid > div:nth-child(8) {
+    animation-delay: 0.8s;
+  }
+  .grid > div:nth-child(9) {
+    animation-delay: 0.9s;
+  }
+
+  :global(html[data-theme="light"]) .board-sub {
+    color: rgba(26, 26, 26, 0.74);
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+  }
+</style>

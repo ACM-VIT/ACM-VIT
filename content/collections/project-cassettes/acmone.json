@@ -1,0 +1,13 @@
+{
+  "slug": "acmone",
+  "order": 0,
+  "kind": "overlay",
+  "name": "ACMOne",
+  "color": "#F95F4A",
+  "image": "/projects/items/0/cassetteSrc.webp",
+  "alt": "ACMOne",
+  "url": "/projects/acmone",
+  "sizePercent": 85,
+  "sizeAxis": "width",
+  "offsetY": -5
+}

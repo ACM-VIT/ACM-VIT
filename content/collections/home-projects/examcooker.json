@@ -1,0 +1,29 @@
+{
+  "slug": "examcooker",
+  "order": 10,
+  "cassetteSrc": "/projects/items/1/cassetteSrc.webp",
+  "cassetteAlt": "ExamCooker Image",
+  "description1": "ExamCooker simplifies exam preparation for VIT students by centralizing notes, past papers, and community discussions in one comprehensive platform. Built to perform when the pressure's on, it features an intuitive interface, fast search, and seamless resource sharing that helps students find what they need quickly.",
+  "description2": "The platform's active forum enables peer-to-peer learning, while its extensive repository grows through community contributions. With over 11,000 active users, ExamCooker has become an essential tool during exam seasons across the VIT community. Developed using Next.js, CockroachDB, and Prisma, the platform maintains reliable performance even during peak traffic periods when thousands of students access resources simultaneously.",
+  "primaryBgColor": "#2664e4",
+  "primaryTextColor": "white",
+  "primaryBorderColor": "#FEFCD9",
+  "visitWebsiteText": "VISIT WEBSITE",
+  "visitWebsiteUrl": "https://examcooker.acmvit.in",
+  "visitWebsiteBgColor": "#2664e4",
+  "visitWebsiteTextColor": "white",
+  "visitWebsiteBorderColor": "#FEFCD9",
+  "icons": [
+    {
+      "type": "github",
+      "backgroundColor": "#2664e4",
+      "textColor": "white",
+      "borderColor": "#FEFCD9",
+      "iconColor": "#FEFCD9",
+      "url": "https://github.com/ACM-VIT/ExamCooker-2024"
+    }
+  ],
+  "textColor": "white",
+  "contentBlockBackground": "rgba(0, 0, 0, 0.15)",
+  "hoverShadow": "rgba(38, 100, 228, 0.4)"
+}

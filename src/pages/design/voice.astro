@@ -1,0 +1,281 @@
+---
+export const prerender = true;
+import DesignLayout from "../../layouts/DesignLayout.astro";
+
+const traits = [
+  {
+    name: "Confident, not boastful",
+    desc: "We state what we built and let specifics carry the weight. Numbers beat adjectives.",
+  },
+  {
+    name: "Dry, self-aware wit",
+    desc: "We can laugh at ourselves. Humor is seasoning, never the dish.",
+  },
+  {
+    name: "Direct and concrete",
+    desc: "Short sentences. Active voice. A reader should never wonder what we mean.",
+  },
+  {
+    name: "Warm to newcomers",
+    desc: "No gatekeeping, no acronym walls. First-years are the audience that matters most.",
+  },
+];
+
+const rewrites = [
+  {
+    bad: "We are thrilled to announce our flagship annual mega-event is back, bigger and better than ever!!!",
+    good: "Cryptic Hunt returns on 14 March. 36 hours, 1,200 hunters last year. Bring a team.",
+  },
+  {
+    bad: "Leveraging cutting-edge technologies to synergize innovative solutions for tomorrow's problems.",
+    good: "We build tools students actually use - starting with the ones we needed ourselves.",
+  },
+  {
+    bad: "Registrations are now live!!! Hurry, limited slots available, don't miss out!!!",
+    good: "Registrations are open until Friday. 200 seats.",
+  },
+];
+---
+
+<DesignLayout
+  title="Voice & Tone"
+  description="How ACM-VIT writes: voice, interface copy, word choice, and the grammar and punctuation rules behind it all."
+  current="/design/voice"
+>
+  <section class="ds-hero">
+    <div class="ds-kicker"><span class="ds-kicker-pill">Brand · Voice</span></div>
+    <h1 class="ds-h1">Say it like a builder.</h1>
+    <p class="ds-body-lg">
+      The visual system says who we are; the words prove it. ACM-VIT copy is
+      written by people who ship - specific, unhurried, and allergic to hype.
+    </p>
+  </section>
+
+  <section class="ds-section" id="traits">
+    <div class="ds-sec-head"><span class="ds-sec-num">01</span><h2 class="ds-h2">Four traits</h2></div>
+    <div class="ds-bento">
+      {
+        traits.map((t) => (
+          <div class="ds-card ds-card-tonal ds-b6 ds-reveal">
+            <h3 class="ds-h4">{t.name}</h3>
+            <p class="ds-body" style="margin-top:6px">{t.desc}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="ds-section" id="rewrites">
+    <div class="ds-sec-head"><span class="ds-sec-num">02</span><h2 class="ds-h2">Before and after</h2></div>
+    <p class="ds-body">The fastest way to hear the voice is a rewrite:</p>
+    <div style="display:grid; gap:14px; margin-top:24px;">
+      {
+        rewrites.map((r) => (
+          <div class="ds-bento" style="margin-top:0">
+            <div class="ds-card ds-b6 ds-reveal" style="border-color:var(--ds-accent-tonal); background:var(--ds-accent-tonal);">
+              <span class="ds-chip ds-chip-dont" style="margin-bottom:10px">Before</span>
+              <p class="ds-body">{r.bad}</p>
+            </div>
+            <div class="ds-card ds-b6 ds-reveal" style="border-color:var(--ds-green-tonal); background:var(--ds-green-tonal);">
+              <span class="ds-chip ds-chip-do" style="margin-bottom:10px">After</span>
+              <p class="ds-body">{r.good}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="ds-section" id="mechanics">
+    <div class="ds-sec-head"><span class="ds-sec-num">03</span><h2 class="ds-h2">House mechanics</h2></div>
+    <div class="ds-bento">
+      <div class="ds-card ds-b6 ds-reveal">
+        <span class="ds-chip ds-chip-do" style="margin-bottom:12px">Always</span>
+        <ul class="ds-v-list">
+          <li>Specific numbers over vague scale ("1,200 hunters", not "massive turnout").</li>
+          <li>"ACM-VIT" with the hyphen, every single time; "acm" lowercase only inside the mark.</li>
+          <li>The sign-off is "crafted with love by ACM-VIT" - crafted, never made. See <a href="/design/footers" style="color:var(--ds-accent-ink); font-weight:600;">Footers & Sign-offs</a>.</li>
+          <li>One name per thing: an event is "Cryptic Hunt" in every post, never "the hunt" in one and "CH" in the next.</li>
+        </ul>
+      </div>
+      <div class="ds-card ds-b6 ds-reveal">
+        <span class="ds-chip ds-chip-dont" style="margin-bottom:12px">Never</span>
+        <ul class="ds-v-list">
+          <li>"Flagship" for every event - save the word for when it is true.</li>
+          <li>Corporate filler: "leverage", "synergy", "cutting-edge", "revolutionary".</li>
+          <li>Copy that could belong to any other club with a find-and-replace.</li>
+          <li>FOMO pressure: "hurry", "don't miss out", "last chance!!!".</li>
+          <li>Unexplained internal jargon in public posts.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 · Writing for interfaces -->
+  <section class="ds-section" id="interfaces">
+    <div class="ds-sec-head"><span class="ds-sec-num">04</span><h2 class="ds-h2">Writing for interfaces</h2></div>
+    <p class="ds-body">
+      Buttons, forms, empty states, error toasts - anywhere the words sit
+      inside a product. People scan interfaces; they do not read them. Every
+      rule here exists to make the scan land.
+    </p>
+    <div class="ds-bento">
+      <div class="ds-card ds-card-tonal ds-b4 ds-reveal">
+        <h3 class="ds-h4">Front-load the point</h3>
+        <p class="ds-body" style="margin-top:6px">
+          Lead with the goal, then the method. "To join a team, open the
+          portal" - not "Open the portal in order to join a team". The first
+          three words do most of the work.
+        </p>
+      </div>
+      <div class="ds-card ds-card-tonal ds-b4 ds-reveal">
+        <h3 class="ds-h4">You and we</h3>
+        <p class="ds-body" style="margin-top:6px">
+          The reader is "you"; ACM-VIT is "we". Never "the user", never
+          "I" or "my" in interface copy - "Your submissions", not
+          "My submissions".
+        </p>
+      </div>
+      <div class="ds-card ds-card-tonal ds-b4 ds-reveal">
+        <h3 class="ds-h4">Present tense, active voice</h3>
+        <p class="ds-body" style="margin-top:6px">
+          Things happen now, and someone does them. "GREP publishes on
+          Fridays" - not "Articles will be published". Passive voice hides
+          who acts; interfaces cannot afford that.
+        </p>
+      </div>
+      <div class="ds-card ds-b6 ds-reveal">
+        <span class="ds-chip ds-chip-do" style="margin-bottom:12px">Choose words that</span>
+        <ul class="ds-v-list">
+          <li>A first-year understands on first read - common words beat clever ones.</li>
+          <li>Stay consistent: pick "sign in" or "log in" once, use it everywhere.</li>
+          <li>Describe the action on the control itself: "Save draft", "Join waitlist".</li>
+          <li>Distinguish destructive from reversible: "delete" is forever, "remove" can come back.</li>
+        </ul>
+      </div>
+      <div class="ds-card ds-b6 ds-reveal">
+        <span class="ds-chip ds-chip-dont" style="margin-bottom:12px">Cut without mercy</span>
+        <ul class="ds-v-list">
+          <li>"Please", "sorry", and "oops" - be helpful instead of apologetic.</li>
+          <li>Blame: "Card declined. Try another." - not "You entered an invalid card".</li>
+          <li>Directional copy: "select Save", never "click the button below" - it breaks on screen readers and reflowed layouts.</li>
+          <li>Filler openers: "Note that", "In order to", "Simply".</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 · Grammar & punctuation -->
+  <section class="ds-section" id="grammar">
+    <div class="ds-sec-head"><span class="ds-sec-num">05</span><h2 class="ds-h2">Grammar & punctuation</h2></div>
+    <p class="ds-body">
+      The mechanical layer. None of this is negotiable, because consistency
+      here is invisible when right and loud when wrong. When in doubt, come
+      back to this table.
+    </p>
+
+    <table class="ds-table">
+      <thead>
+        <tr><th>Mark</th><th>Rule</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Period</td>
+          <td>Multi-sentence body copy, yes. Buttons, labels, headings, and single-line helper text, no.</td>
+          <td class="ds-mono">Save draft &nbsp;·&nbsp; not &nbsp;Save draft.</td>
+        </tr>
+        <tr>
+          <td>Comma</td>
+          <td>Serial comma, always - the last item gets one too.</td>
+          <td class="ds-mono">design, tech, and research</td>
+        </tr>
+        <tr>
+          <td>Dash</td>
+          <td>Plain dash with a space on each side for a break in thought. Em dashes never; hyphens only inside compound words.</td>
+          <td class="ds-mono">ship it - then polish</td>
+        </tr>
+        <tr>
+          <td>Exclamation</td>
+          <td>One per publication, if you must. Never in error messages, never doubled.</td>
+          <td class="ds-mono">Registrations are open.</td>
+        </tr>
+        <tr>
+          <td>Colon</td>
+          <td>Introduces a list or an example. Lowercase after it unless a proper noun follows.</td>
+          <td class="ds-mono">bring two things: a team, a laptop</td>
+        </tr>
+        <tr>
+          <td>Ellipsis</td>
+          <td>In-progress states only. Never for dramatic trailing off.</td>
+          <td class="ds-mono">Uploading your mixtape…</td>
+        </tr>
+        <tr>
+          <td>Quotes</td>
+          <td>Around exact strings the reader sees or types - UI labels, titles, literal input. Not for emphasis.</td>
+          <td class="ds-mono">select "Join waitlist"</td>
+        </tr>
+        <tr>
+          <td>Apostrophe</td>
+          <td>Possessives only. Plurals never take one - not for acronyms, not for years.</td>
+          <td class="ds-mono">GDGs, the 2020s, the team's repo</td>
+        </tr>
+        <tr>
+          <td>Ampersand</td>
+          <td>"and" in sentences. "&amp;" only in tight labels and lockups where space is real.</td>
+          <td class="ds-mono">Grid &amp; Layout (nav) · design and tech (prose)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="ds-bento">
+      <div class="ds-card ds-b6 ds-reveal">
+        <h3 class="ds-h4">Capitalization</h3>
+        <ul class="ds-v-list" style="margin-top:10px">
+          <li>Sentence case by default: body copy, buttons, subject lines, helper text.</li>
+          <li>Title Case and ALL CAPS are allowed as display choices - hero type, posters, kickers, labels - as long as one treatment is used consistently within a piece.</li>
+          <li>Proper nouns keep their caps: Cryptic Hunt, GREP, DM Sans.</li>
+          <li>"ACM-VIT" hyphenated and uppercase in text; lowercase "acm" exists only inside the mark.</li>
+        </ul>
+      </div>
+      <div class="ds-card ds-b6 ds-reveal">
+        <h3 class="ds-h4">Contractions</h3>
+        <ul class="ds-v-list" style="margin-top:10px">
+          <li>Use them: "it's", "you're", "can't". Written-out forms sound like a terms-of-service.</li>
+          <li>Exception: warnings that need weight - "This cannot be undone."</li>
+          <li>Skip ambiguous ones: "it'd", "there'll", "who're".</li>
+        </ul>
+      </div>
+      <div class="ds-card ds-b6 ds-reveal">
+        <h3 class="ds-h4">Numbers, dates, time</h3>
+        <ul class="ds-v-list" style="margin-top:10px">
+          <li>Numerals always, even under ten: "3 rounds", "36 hours".</li>
+          <li>Thousands take a comma: "1,200 hunters".</li>
+          <li>Dates run day-month: "14 March", no ordinal suffixes ("14th").</li>
+          <li>Time is 12-hour with a lowercase meridiem: "5:30 pm".</li>
+        </ul>
+      </div>
+      <div class="ds-card ds-b6 ds-reveal">
+        <h3 class="ds-h4">Sentences</h3>
+        <ul class="ds-v-list" style="margin-top:10px">
+          <li>Short. One idea per sentence; one topic per paragraph.</li>
+          <li>Present tense unless the past actually matters.</li>
+          <li>Active voice: name who acts. "The design team reviews every mark."</li>
+          <li>Fragments are fine when the rhythm asks for one. Like this.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</DesignLayout>
+
+<style>
+  .ds-v-list {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--ds-ink-2);
+    font-size: 14.5px;
+    line-height: 1.7;
+  }
+  .ds-v-list li + li {
+    margin-top: 6px;
+  }
+</style>

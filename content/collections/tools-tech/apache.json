@@ -1,0 +1,7 @@
+{
+  "name": "Apache",
+  "slug": "apache",
+  "svgFile": "/domains/tech/tools/tech-tool-apache.svg",
+  "colorHex": "#D22128",
+  "order": 770
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Rust",
+  "slug": "rust",
+  "svgFile": "/domains/tech/tools/tech-tool-rust.svg",
+  "colorHex": "#FFFDD0",
+  "monochrome": true,
+  "order": 960
+}

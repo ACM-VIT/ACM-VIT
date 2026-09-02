@@ -1,0 +1,379 @@
+---
+---
+
+<section class="grep-section relative min-h-screen overflow-hidden flex items-center justify-center">
+  <!-- Keyboard SVG background - injected via JS for hover interactivity -->
+  <div class="keyboard-bg absolute inset-0 flex items-center justify-center pointer-events-none" id="grep-keyboard-bg"></div>
+
+  <!-- Mailbox illustration -->
+  <div class="absolute left-6 bottom-6 sm:left-12 sm:bottom-12 opacity-70">
+    <img src="/grep/grep-mailbox.svg" alt="" class="w-40 sm:w-56 md:w-64" />
+  </div>
+
+  <!-- Content: wordmark locked to viewport centre (grid row 1fr / auto / 1fr) so it
+       always shares a centre with the keyboard background; everything else flows below. -->
+  <div class="grep-content relative z-10 grid w-full min-h-screen px-6">
+    <div aria-hidden="true"></div>
+    <h2 class="grep-title text-[#2023FE] leading-[0.85] text-center justify-self-center self-center">
+      <span class="block">gr</span>
+      <span class="block">ep</span>
+    </h2>
+    <div class="grep-below flex flex-col items-center text-center justify-self-center w-full">
+      <p class="grep-by mt-3 text-[#efefef] text-lg sm:text-xl">
+        by acm-vit
+      </p>
+      <p class="grep-desc mt-5 max-w-md text-[#efefef] text-sm sm:text-base leading-relaxed">
+        ACM-VIT's quarterly newsletter - your one-stop source for community updates, event recaps, tech deep-dives, and everything happening at ACM-VIT.
+      </p>
+
+      <!-- Email signup -->
+      <form class="grep-email-form mt-8 flex flex-col sm:flex-row items-center gap-3 w-full max-w-md" id="grep-subscribe-form" novalidate>
+        <label for="grep-email-input" class="sr-only">Email address</label>
+        <input
+          id="grep-email-input"
+          type="email"
+          name="email"
+          inputmode="email"
+          autocomplete="email"
+          aria-describedby="grep-subscribe-status"
+          placeholder="Enter your email to subscribe"
+          class="grep-email-input w-full flex-1 rounded-lg border border-[#2023FE]/30 bg-white/5 px-4 py-2.5 text-sm text-[#efefef] placeholder:text-[#efefef]/30 outline-none transition-colors focus:border-[#2023FE] focus:bg-white/[0.08]"
+        />
+        <button
+          type="submit"
+          class="grep-subscribe-btn rounded-lg bg-[#2023FE] px-6 py-2.5 text-sm font-semibold text-white transition-all hover:bg-[#1a1cf0] active:scale-[0.97] whitespace-nowrap"
+        >
+          Subscribe
+        </button>
+      </form>
+      <p class="grep-subscribe-status mt-2 text-xs text-[#efefef] hidden" id="grep-subscribe-status" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+
+<style>
+  @font-face {
+    font-family: "ChessType";
+    src: url("/fonts/fonts-chesstype.ttf") format("truetype");
+    font-display: swap;
+  }
+
+  .grep-section {
+    --selection-color: #2023FE;
+  }
+
+  /* Mobile: the page <main> adds pt-28 (112px) for the fixed header, which
+     offsets this 100vh section's centre downward. Cancel it so the wordmark +
+     copy centre in the true viewport instead of sitting low. */
+  @media (max-width: 767px) {
+    .grep-section {
+      margin-top: -7rem;
+      min-height: 100svh;
+    }
+  }
+
+  .grep-section ::selection {
+    background: var(--selection-color);
+    color: white;
+  }
+
+  /* Mobile: centre the whole group (wordmark + copy + form) in the viewport.
+     Overrides the Tailwind `grid` utility so the block isn't bottom-heavy. */
+  .grep-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    /* Let hovers fall through to the keyboard rects behind; the interactive
+       form controls below re-enable pointer events for themselves. */
+    pointer-events: none;
+  }
+
+  .grep-content :where(form, input, button, a, label) {
+    pointer-events: auto;
+  }
+
+  /* Desktop: lock the wordmark to viewport centre so it shares a centre with the
+     keyboard background; copy + form flow in the row below, nudged for balance. */
+  @media (min-width: 768px) {
+    .grep-content {
+      display: grid;
+      grid-template-rows: 0.7fr auto 1.3fr;
+    }
+
+    .grep-below {
+      align-self: start;
+    }
+  }
+
+  .grep-title {
+    font-family: "ChessType", monospace;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+  }
+
+  /* Custom validation error state: red border + shake nudge. */
+  .grep-email-input.grep-input-error {
+    border-color: #ef4444 !important;
+    animation: grep-input-shake 0.4s ease;
+  }
+
+  @keyframes grep-input-shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .grep-email-input.grep-input-error {
+      animation: none;
+    }
+  }
+
+  .grep-by {
+    font-family: "Borel", cursive;
+  }
+
+  /* Animated button - blue theme override */
+  .grep-section :global(.grep-btn) {
+    background: #2023FE;
+  }
+
+  .grep-section :global(.grep-btn:hover) {
+    box-shadow: 0 8px 30px rgba(32, 35, 254, 0.25);
+  }
+
+  .grep-section :global(.grep-btn .anim-btn-label) {
+    color: white;
+  }
+
+  /* Keyboard background - scaled up to bleed off screen, 10% opacity */
+  .keyboard-bg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* svg opacity kept at 1 so hover highlight isn't multiplied away;
+     the faint resting look is baked into the low-alpha fills below. */
+  .keyboard-bg :global(svg) {
+    width: 200%;
+    height: auto;
+    max-height: none;
+    opacity: 1;
+    flex-shrink: 0;
+  }
+
+  .keyboard-bg :global(rect) {
+    fill: rgba(255, 255, 255, 0.03) !important;
+    transition: fill 0.15s ease, filter 0.15s ease;
+    pointer-events: auto;
+    cursor: default;
+  }
+
+  .keyboard-bg :global(rect:hover) {
+    fill: rgba(32, 35, 254, 0.1) !important;
+    filter: drop-shadow(0 0 4px rgba(32, 35, 254, 0.1));
+  }
+
+  .keyboard-bg :global(path) {
+    fill: rgba(255, 255, 255, 0.03) !important;
+    transition: fill 0.15s ease;
+    pointer-events: none;
+  }
+
+  /* Keep the key label legible on the blue highlight.
+     Scope to the two paths immediately after the hovered rect (this key's
+     letter) — a `~` sibling would recolour every later key too. */
+  .keyboard-bg :global(rect:hover + path),
+  .keyboard-bg :global(rect:hover + path + path) {
+    fill: rgba(32, 35, 254, 0.5) !important;
+  }
+
+  /* ── Light mode ── */
+  :global(html[data-theme="light"]) .grep-title {
+    color: #2023FE;
+  }
+
+  :global(html[data-theme="light"]) .grep-by,
+  :global(html[data-theme="light"]) .grep-desc,
+  :global(html[data-theme="light"]) .grep-subscribe-status {
+    color: #3a3a3a;
+  }
+
+  :global(html[data-theme="light"]) .grep-email-form input {
+    color: #1c1917;
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(32, 35, 254, 0.25);
+  }
+
+  :global(html[data-theme="light"]) .grep-email-form input::placeholder {
+    color: rgba(0, 0, 0, 0.35);
+  }
+
+  /* Keep the subscribe button label white in light mode (a global light-mode
+     rule otherwise darkens button text). */
+  :global(html[data-theme="light"]) .grep-section .grep-subscribe-btn {
+    color: #fff !important;
+  }
+
+  :global(html[data-theme="light"]) .keyboard-bg :global(rect) {
+    fill: rgba(0, 0, 0, 0.03) !important;
+  }
+
+  :global(html[data-theme="light"]) .keyboard-bg :global(rect:hover) {
+    fill: rgba(32, 35, 254, 0.09) !important;
+    filter: drop-shadow(0 0 4px rgba(32, 35, 254, 0.1));
+  }
+
+  :global(html[data-theme="light"]) .keyboard-bg :global(path) {
+    fill: rgba(0, 0, 0, 0.03) !important;
+  }
+
+  :global(html[data-theme="light"]) .keyboard-bg :global(rect:hover + path),
+  :global(html[data-theme="light"]) .keyboard-bg :global(rect:hover + path + path) {
+    fill: rgba(32, 35, 254, 0.5) !important;
+  }
+
+  :global(html[data-theme="light"]) .grep-section :global(.grep-btn) {
+    background: #2023FE;
+  }
+
+  :global(html[data-theme="light"]) .grep-section :global(.grep-btn .anim-btn-label) {
+    color: white;
+  }
+</style>
+
+<script>
+  // Inject keyboard SVG inline for CSS hover interactivity
+  const container = document.getElementById("grep-keyboard-bg");
+  if (container) {
+    fetch("/grep/grep-keyboard.svg")
+      .then((r) => r.text())
+      .then((svg) => {
+        container.innerHTML = svg;
+      });
+  }
+
+  // Import Borel from Google Fonts
+  if (!document.querySelector('link[href*="Borel"]')) {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href =
+      "https://fonts.googleapis.com/css2?family=Borel&display=swap";
+    document.head.appendChild(link);
+  }
+
+  // ── Blue confetti rain from the top (no dependency) ──────────────────────
+  function blueConfetti() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const colors = ["#2023FE", "#135DE2", "#5b6bff", "#8f9bff", "#c3caff"];
+    const count = 110;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const layer = document.createElement("div");
+    layer.setAttribute("aria-hidden", "true");
+    layer.style.cssText =
+      "position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden;";
+    document.body.appendChild(layer);
+
+    for (let i = 0; i < count; i++) {
+      const p = document.createElement("div");
+      const size = 6 + Math.random() * 6;
+      const color = colors[(Math.random() * colors.length) | 0];
+      const round = Math.random() < 0.35;
+      const startX = Math.random() * vw;
+      const startY = -20 - Math.random() * vh * 0.4; // staggered above the top edge
+      p.style.cssText =
+        `position:absolute;left:${startX}px;top:${startY}px;width:${size}px;` +
+        `height:${round ? size : size * 0.5}px;background:${color};` +
+        `border-radius:${round ? "50%" : "1px"};will-change:transform,opacity;`;
+      layer.appendChild(p);
+
+      const drift = (Math.random() - 0.5) * 220; // gentle horizontal sway
+      const fall = vh + 80 - startY; // travel fully off the bottom
+      const rot = (Math.random() - 0.5) * 900;
+      const duration = 2200 + Math.random() * 1600;
+
+      p.animate(
+        [
+          { transform: "translate(0,0) rotate(0deg)", opacity: 1 },
+          { transform: `translate(${drift * 0.5}px, ${fall * 0.5}px) rotate(${rot * 0.5}deg)`, opacity: 1, offset: 0.5 },
+          { transform: `translate(${drift}px, ${fall}px) rotate(${rot}deg)`, opacity: 0.9 },
+        ],
+        { duration, easing: "cubic-bezier(0.4,0.1,0.7,1)", fill: "forwards" }
+      );
+    }
+
+    setTimeout(() => layer.remove(), 4200);
+  }
+
+  // ── Subscribe form (custom validation, no native bubble) ─────────────────
+  const subForm = document.getElementById("grep-subscribe-form") as HTMLFormElement | null;
+  if (subForm) {
+    const input = document.getElementById("grep-email-input") as HTMLInputElement | null;
+    const statusEl = document.getElementById("grep-subscribe-status") as HTMLElement | null;
+    let successTimer = 0;
+
+    // Pragmatic email check: something@something.tld, no spaces.
+    const isValidEmail = (v: string) =>
+      /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+
+    function setStatus(msg: string, color: string) {
+      if (!statusEl) return;
+      statusEl.textContent = msg;
+      statusEl.style.color = color;
+      statusEl.classList.remove("hidden");
+    }
+    function clearStatus() {
+      if (!statusEl) return;
+      statusEl.textContent = "";
+      statusEl.style.removeProperty("color");
+      statusEl.classList.add("hidden");
+    }
+    function showError(msg: string) {
+      setStatus(msg, "#ef4444"); // red
+      if (input) {
+        input.setAttribute("aria-invalid", "true");
+        input.classList.remove("grep-input-error"); // restart shake
+        void input.offsetWidth; // reflow
+        input.classList.add("grep-input-error");
+        input.focus();
+      }
+    }
+
+    // Clear the error the moment the user starts fixing it.
+    input?.addEventListener("input", () => {
+      if (input.getAttribute("aria-invalid") === "true") {
+        input.removeAttribute("aria-invalid");
+        input.classList.remove("grep-input-error");
+        clearStatus();
+      }
+    });
+
+    subForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const value = (input?.value ?? "").trim();
+
+      if (!value) {
+        showError("Enter your email to subscribe.");
+        return;
+      }
+      if (!isValidEmail(value)) {
+        showError("That doesn't look like a valid email.");
+        return;
+      }
+
+      input?.removeAttribute("aria-invalid");
+      input?.classList.remove("grep-input-error");
+      blueConfetti();
+      subForm.reset();
+      setStatus("You're in - welcome to grep.", "#16a34a"); // success green
+
+      window.clearTimeout(successTimer);
+      successTimer = window.setTimeout(clearStatus, 4000);
+    });
+  }
+</script>

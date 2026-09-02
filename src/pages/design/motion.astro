@@ -1,0 +1,254 @@
+---
+export const prerender = true;
+import DesignLayout from "../../layouts/DesignLayout.astro";
+
+const durations = [
+  { token: "fast", ms: 150, use: "Hovers, toggles, color changes" },
+  { token: "base", ms: 250, use: "Buttons, chips, small movement" },
+  { token: "gentle", ms: 450, use: "Cards, reveals, drawer slides" },
+  { token: "slow", ms: 700, use: "Page transitions, hero entrances" },
+];
+
+const easings = [
+  { name: "Standard out", value: "cubic-bezier(0.22, 1, 0.36, 1)", note: "The default. Fast start, soft landing - GSAP power3.out.", curve: "M0 100 C 22 0, 36 0, 100 0" },
+  { name: "Standard in-out", value: "cubic-bezier(0.65, 0, 0.35, 1)", note: "For elements that move from A to B on screen.", curve: "M0 100 C 65 100, 35 0, 100 0" },
+  { name: "Snap", value: "cubic-bezier(0.34, 1.56, 0.64, 1)", note: "Slight overshoot for playful UI - docks, pills, toggles.", curve: "M0 100 C 34 -56, 64 0, 100 0" },
+];
+---
+
+<DesignLayout
+  title="Motion"
+  description="How ACM-VIT interfaces move: easing, duration, and choreography principles."
+  current="/design/motion"
+>
+  <section class="ds-hero">
+    <div class="ds-kicker"><span class="ds-kicker-pill">Expression · Motion</span></div>
+    <h1 class="ds-h1">Quick to start, soft to land.</h1>
+    <p class="ds-body-lg">
+      Motion at ACM-VIT is decisive: elements accelerate immediately and
+      decelerate long. Nothing bounces without a reason, nothing takes longer
+      than it needs to, and everything respects reduced-motion preferences.
+    </p>
+  </section>
+
+  <!-- 01 · Easing -->
+  <section class="ds-section" id="easing">
+    <div class="ds-sec-head"><span class="ds-sec-num">01</span><h2 class="ds-h2">Easing</h2></div>
+    <p class="ds-body">
+      Three curves cover the system. Hover any card to replay its motion.
+    </p>
+    <div class="ds-bento">
+      {
+        easings.map((e) => (
+          <div class="ds-card ds-b4 ds-reveal ds-ease-card" data-ease={e.value}>
+            <svg viewBox="-8 -20 116 128" style="width:100%; max-width:190px; display:block; margin:0 auto;">
+              <path d={e.curve} fill="none" stroke="var(--ds-line-2)" stroke-width="2" />
+              <path d={e.curve} fill="none" stroke="var(--ds-accent)" stroke-width="2.5" class="ds-ease-path" pathLength="1" />
+              <circle r="4.5" fill="var(--ds-accent)" class="ds-ease-dot" />
+            </svg>
+            <h3 class="ds-h4" style="margin-top:14px">{e.name}</h3>
+            <code class="ds-mono ds-small" style="display:block; margin-top:4px;">{e.value}</code>
+            <p class="ds-body" style="margin-top:8px">{e.note}</p>
+            <div class="ds-ease-track"><span class="ds-ease-ball" /></div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 02 · Duration -->
+  <section class="ds-section" id="duration">
+    <div class="ds-sec-head"><span class="ds-sec-num">02</span><h2 class="ds-h2">Duration</h2></div>
+    <p class="ds-body">
+      Scale duration with distance and size: the bigger the move, the longer
+      the ride. Past 700ms, motion reads as waiting.
+    </p>
+    <div class="ds-card ds-reveal" style="margin-top:24px; padding:0; overflow-x:auto;">
+      <table class="ds-table" style="margin-top:0">
+        <thead><tr><th>Token</th><th>Duration</th><th>Use</th></tr></thead>
+        <tbody>
+          {
+            durations.map((d) => (
+              <tr>
+                <td class="ds-mono">{d.token}</td>
+                <td class="ds-mono">{d.ms}ms</td>
+                <td>{d.use}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 03 · Choreography -->
+  <section class="ds-section" id="choreography">
+    <div class="ds-sec-head"><span class="ds-sec-num">03</span><h2 class="ds-h2">Choreography</h2></div>
+    <div class="ds-bento">
+      <div class="ds-card ds-b6 ds-reveal">
+        <h3 class="ds-h4">Stagger, don't dump</h3>
+        <p class="ds-body" style="margin-top:6px">
+          Lists and grids enter with a 40 to 60ms stagger, top to bottom.
+          Replay:
+        </p>
+        <button class="ds-btn ds-btn-outline ds-btn-sm" id="stagger-play" style="margin-top:14px">Play stagger</button>
+        <div class="ds-stagger-demo" id="stagger-demo">
+          {Array.from({ length: 5 }).map(() => (<span />))}
+        </div>
+      </div>
+      <div class="ds-card ds-b6 ds-reveal">
+        <h3 class="ds-h4">Principles</h3>
+        <ul class="ds-m-list" style="margin-top:10px">
+          <li>Animate transform and opacity only - never layout properties.</li>
+          <li>Enter from 12 to 16px below, fade in. Exit is faster than enter.</li>
+          <li>One hero moment per view; everything else supports it.</li>
+          <li>Hover states settle within 150ms - interfaces should feel awake.</li>
+          <li>Honor <span class="ds-mono">prefers-reduced-motion</span>: fade only, no travel.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 · Site conventions -->
+  <section class="ds-section" id="stack">
+    <div class="ds-sec-head"><span class="ds-sec-num">04</span><h2 class="ds-h2">On the website</h2></div>
+    <div class="ds-bento">
+      <div class="ds-card ds-card-tonal ds-b4 ds-reveal">
+        <h3 class="ds-h4">GSAP</h3>
+        <p class="ds-body" style="margin-top:6px">
+          Scroll choreography and timelines. Default ease is
+          <span class="ds-mono">power3.out</span> - the same curve as Standard
+          out above.
+        </p>
+      </div>
+      <div class="ds-card ds-card-tonal ds-b4 ds-reveal">
+        <h3 class="ds-h4">Native scroll</h3>
+        <p class="ds-body" style="margin-top:6px">
+          The window scrolls natively - no smooth-scroll library. Motion tied
+          to scroll maps 1:1 to scroll position - no lag, no drift.
+        </p>
+      </div>
+      <div class="ds-card ds-card-tonal ds-b4 ds-reveal">
+        <h3 class="ds-h4">CSS first</h3>
+        <p class="ds-body" style="margin-top:6px">
+          Hover, focus, and toggle states stay in CSS transitions. JavaScript
+          animation is for sequencing, not for a button hover.
+        </p>
+      </div>
+    </div>
+  </section>
+</DesignLayout>
+
+<style>
+  .ds-ease-track {
+    margin-top: 16px;
+    height: 28px;
+    border-radius: var(--ds-r-full);
+    background: var(--ds-surface-tonal);
+    position: relative;
+    overflow: hidden;
+  }
+  .ds-ease-ball {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--ds-accent);
+  }
+  .ds-stagger-demo {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .ds-stagger-demo span {
+    flex: 1;
+    height: 44px;
+    border-radius: 8px;
+    background: var(--ds-blue-tonal);
+    border: 1px solid #c9d8f5;
+    opacity: 1;
+  }
+  :global(html[data-theme="dark"]) .ds-stagger-demo span {
+    border-color: var(--ds-line-2);
+  }
+  .ds-m-list {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--ds-ink-2);
+    font-size: 14.5px;
+    line-height: 1.7;
+  }
+  .ds-m-list li + li {
+    margin-top: 6px;
+  }
+</style>
+
+<script>
+  // easing demos: replay ball + dot along curve on hover/click
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  document.querySelectorAll<HTMLElement>(".ds-ease-card").forEach((card) => {
+    const ease = card.dataset.ease ?? "ease";
+    const ball = card.querySelector<HTMLElement>(".ds-ease-ball");
+    const dot = card.querySelector<SVGCircleElement>(".ds-ease-dot");
+    const path = card.querySelector<SVGPathElement>(".ds-ease-path");
+    const track = card.querySelector<HTMLElement>(".ds-ease-track");
+    if (!ball || !track) return;
+
+    const play = () => {
+      if (reduced) return;
+      const dist = track.clientWidth - 28;
+      ball.animate(
+        [{ transform: "translateX(0)" }, { transform: `translateX(${dist}px)` }],
+        { duration: 900, easing: ease, fill: "forwards" },
+      );
+      if (dot && path) {
+        const len = path.getTotalLength();
+        const start = performance.now();
+        const D = 900;
+        // sample the same cubic-bezier via the ball's computed position is
+        // overkill; approximate by animating along path length linearly in
+        // time while the stroke draws with the ease.
+        const step = (t: number) => {
+          const p = Math.min((t - start) / D, 1);
+          const pt = path.getPointAtLength(len * p);
+          dot.setAttribute("cx", String(pt.x));
+          dot.setAttribute("cy", String(pt.y));
+          if (p < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      }
+    };
+    card.addEventListener("mouseenter", play);
+    card.addEventListener("click", play);
+    // initial position
+    if (dot && path) {
+      const pt = path.getPointAtLength(0);
+      dot.setAttribute("cx", String(pt.x));
+      dot.setAttribute("cy", String(pt.y));
+    }
+  });
+
+  // stagger demo
+  const staggerBtn = document.getElementById("stagger-play");
+  const staggerDemo = document.getElementById("stagger-demo");
+  staggerBtn?.addEventListener("click", () => {
+    if (reduced || !staggerDemo) return;
+    staggerDemo.querySelectorAll("span").forEach((el, i) => {
+      el.animate(
+        [
+          { opacity: 0, transform: "translateY(14px)" },
+          { opacity: 1, transform: "translateY(0)" },
+        ],
+        {
+          duration: 450,
+          delay: i * 50,
+          easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+          fill: "backwards",
+        },
+      );
+    });
+  });
+</script>

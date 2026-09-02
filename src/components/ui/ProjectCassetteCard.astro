@@ -1,0 +1,106 @@
+---
+import Cassette from "./Cassette.astro";
+import { getAssetUrl } from "../../utils/cdn";
+import { getProjectCassetteByTitle } from "../../data/projectCassettes";
+
+/**
+ * ProjectCassetteCard - renders a project using the EXACT same cassette art as
+ * the /projects page (looked up by title), with title + desc. Reuses the
+ * .dsg-event-card shell so it inherits the AOI page's light/dark styling.
+ * Falls back to a provided image, then a plain coloured tape.
+ */
+export interface Props {
+  title: string;
+  desc: string;
+  domainColor?: string;
+  fallbackImage?: string;
+}
+
+const { title, desc, domainColor = "#F95F4A", fallbackImage } = Astro.props;
+const proj = getProjectCassetteByTitle(title);
+
+const href = proj && proj.url !== "#" ? proj.url : undefined;
+const color = proj?.color ?? domainColor;
+const Tag = href ? "a" : "div";
+---
+
+<Tag
+  class="dsg-event-card proj-cass-card"
+  data-dsg-animate="fade-up"
+  style={`--pc: ${color};`}
+  {...href ? { href } : {}}
+>
+  <div class="proj-cass-tape">
+    {
+      proj?.kind === "svg" ? (
+        <img
+          src={getAssetUrl(proj.cassetteSvg)}
+          alt={title}
+          class="proj-cass-svg proj-cass-shell"
+          loading="lazy"
+          decoding="async"
+        />
+      ) : proj?.kind === "overlay" ? (
+        <Cassette
+          color={proj.color}
+          overlaySrc={getAssetUrl(proj.image)}
+          overlaySizePercent={proj.sizePercent}
+          overlaySizeAxis={proj.sizeAxis}
+          offsetYPercent={proj.offsetY}
+          alt={title}
+        />
+      ) : fallbackImage ? (
+        <img
+          src={getAssetUrl(fallbackImage)}
+          alt={title}
+          class="proj-cass-svg"
+          loading="lazy"
+          decoding="async"
+        />
+      ) : (
+        <Cassette color={color} alt={title} />
+      )
+    }
+  </div>
+  <h4>{title}</h4>
+  <p>{desc}</p>
+</Tag>
+
+<style>
+  .proj-cass-tape {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  /* Cap to 220px to match the img cassettes on other AOIs (.dsg-event-card img).
+     Without this, a single-project row (grid auto-fit 1fr) stretches the card
+     full-width and the tape balloons - e.g. DevOps' one project. */
+  .proj-cass-tape :global(.cassette-container) {
+    width: 100%;
+    /* !important: Cassette.astro sets an inline max-width:640px that would
+       otherwise win over this cap and balloon the overlay tape (CLI-RPG). */
+    max-width: 220px !important;
+  }
+  .proj-cass-svg {
+    width: 100%;
+    max-width: 220px;
+    height: auto;
+    border-radius: 12px;
+  }
+  /* svg-kind cassettes are white-stroke art on a transparent canvas (e.g.
+     tagred) - give them the same dark shell as the <Cassette> component so
+     they read on the light AOI page and match the others' size. */
+  .proj-cass-shell {
+    border-radius: 3.99% / 6.52%;
+  }
+  /* dark page bg already reads behind the white-stroke art - only paint the
+     shell in light mode. */
+  :global(html[data-theme="light"]) .proj-cass-shell {
+    background: #1a1a1a;
+  }
+  .proj-cass-card:hover .proj-cass-tape :global(.cassette-container),
+  .proj-cass-card:hover .proj-cass-svg {
+    transform: scale(1.02);
+    transition: transform 0.3s ease;
+  }
+</style>

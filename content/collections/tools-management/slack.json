@@ -1,0 +1,7 @@
+{
+  "name": "Slack",
+  "slug": "slack",
+  "svgFile": "/domains/management/tools/management-tool-slack.svg",
+  "colorHex": "#4A154B",
+  "order": 10
+}
