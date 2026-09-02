@@ -112,7 +112,7 @@
           </li>
           <li>
             <a
-              href="#community"
+              href="/community"
               class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[11px]"
               >Community</a
             >
@@ -188,7 +188,7 @@
               ].map((item) => (
                 <li>
                   <a
-                    href={`#${item}`}
+                    href={item === "community" ? "/community" : `#${item}`}
                     class="mobile-nav-link text-3xl font-light font-['PolySans_Trial'] uppercase text-[#FEFCD9] hover:text-[#F95F4A] transition-colors"
                   >
                     {item.replace("-", " ")}
@@ -496,6 +496,7 @@
       "community-sdg": "community",
       "community-conduct": "community",
       "community-speaker": "community",
+      "community-award": "community",
     };
     let currentSectionId = null;
     let rafPending = false;
@@ -558,6 +559,7 @@
             else if (sub === "sdg") displaySub = "SDG";
             else if (sub === "conduct") displaySub = "Code of Conduct";
             else if (sub === "speaker") displaySub = "Speakers";
+            else if (sub === "award") displaySub = "Award";
 
             text = `Community: ${displaySub}`;
             isLongText = true;
@@ -808,6 +810,35 @@
       if (!withinToggle && !withinMenu) closeAll();
     });
 
+    const communityFragments = [
+      "community",
+      "community-outreach",
+      "community-sdg",
+      "community-conduct",
+      "community-speaker",
+      "community-award",
+    ];
+
+    const onCommunityPage = () =>
+      window.location.pathname.replace(/\/$/, "") === "/community";
+
+    const resolveMissingSection = (id) =>
+      communityFragments.includes(id)
+        ? id === "community"
+          ? "/community"
+          : `/community#${id}`
+        : `/#${id}`;
+
+    const redirectLegacyFragment = () => {
+      const id = window.location.hash.slice(1);
+      if (!id || onCommunityPage()) return;
+      if (!communityFragments.includes(id)) return;
+      window.location.replace(resolveMissingSection(id));
+    };
+
+    redirectLegacyFragment();
+    window.addEventListener("hashchange", redirectLegacyFragment);
+
     // Smooth-scroll
     document.addEventListener("click", (e) => {
       const el =
@@ -817,7 +848,12 @@
       if (!href || href.length < 2) return;
       const id = href.slice(1);
       const target = document.getElementById(id);
-      if (!target) return;
+      if (!target) {
+        e.preventDefault();
+        closeAll();
+        window.location.href = resolveMissingSection(id);
+        return;
+      }
       e.preventDefault();
       closeAll();
       target.scrollIntoView({ behavior: "smooth", block: "start" });
