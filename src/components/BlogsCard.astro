@@ -1,76 +1,164 @@
 ---
 interface Props {
-  bgurl: string;
+  title: string;
   link: string;
+  bgUrl: string;
+  author?: string;
+  readingTime?: number;
+  tag?: string;
+  clone?: boolean;
 }
 
 import { getAssetUrl } from "../utils/cdn";
-const { bgurl, link } = Astro.props;
+const {
+  title,
+  link,
+  bgUrl,
+  author,
+  readingTime,
+  tag,
+  clone = false,
+} = Astro.props;
 
-const imageUrl = bgurl.startsWith("http") ? bgurl : getAssetUrl(bgurl);
+const imageUrl = bgUrl.startsWith("http") ? bgUrl : getAssetUrl(bgUrl);
 ---
 
 <a
   href={link}
   target="_blank"
   rel="noopener noreferrer"
-  class="relative w-full sm:w-[40vw] lg:w-[14vw] aspect-[1.6] rounded-lg bg-white overflow-hidden flex items-end justify-center cursor-pointer transition-transform duration-300 hover:scale-105"
+  aria-hidden={clone ? "true" : undefined}
+  tabindex={clone ? -1 : undefined}
+  class:list={[
+    "blog-mcard group relative block w-[74vw] sm:w-[340px] aspect-[1.55] shrink-0 mr-5 overflow-hidden rounded-2xl border border-[#fefcd9]/12 bg-[#141312] transition-[transform,border-color,box-shadow] duration-500 ease-out hover:-translate-y-2 hover:border-[#F95F4A]/70 hover:shadow-[0_20px_60px_-15px_rgba(249,95,74,0.45)]",
+    { "is-clone": clone },
+  ]}
 >
-  <!-- Background Pattern -->
   <img
     src={imageUrl}
     alt=""
-    class="absolute inset-0 w-full h-full object-cover"
+    class="absolute inset-0 h-full w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-110"
     loading="lazy"
     decoding="async"
   />
+
   <div
-    class="w-[97%] h-[96.5%] flex justify-center items-center absolute z-20 pointer-events-none"
+    class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"
   >
-    <img
-      src={getAssetUrl("/bloglayout.webp")}
-      alt="Background Pattern"
-      class="absolute w-full h-full object-contain"
-      loading="lazy"
-      decoding="async"
-    />
+  </div>
+  <div
+    class="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+    style="background: linear-gradient(160deg, rgba(249,95,74,0.28), transparent 55%);"
+  >
   </div>
 
-  <style>
-    @font-face {
-      font-family: "PolySans Slim";
-      src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-SlimMono.otf")
-        format("opentype");
-      font-weight: 300;
-      font-style: normal;
-      font-display: swap;
-    }
+  <span class="blog-mcard-screw" style="top: 10px; left: 10px;"></span>
+  <span class="blog-mcard-screw" style="top: 10px; right: 10px;"></span>
+  <span class="blog-mcard-screw" style="bottom: 10px; left: 10px;"></span>
+  <span class="blog-mcard-screw" style="bottom: 10px; right: 10px;"></span>
+  <div class="blog-mcard-reels" aria-hidden="true">
+    <span class="blog-mcard-reel"></span>
+    <span class="blog-mcard-reel"></span>
+  </div>
 
-    @font-face {
-      font-family: "PolySans Trial";
-      src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-NeutralMono.otf")
-        format("opentype");
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
-    }
+  {
+    tag && (
+      <span class="absolute left-4 top-4 z-10 rounded-full border border-[#fefcd9]/25 bg-black/40 px-3 py-1 font-['PolySans_Trial'] text-[10px] font-medium uppercase tracking-[0.18em] text-[#FEFCD9] backdrop-blur-sm">
+        {tag}
+      </span>
+    )
+  }
 
-    @font-face {
-      font-family: "PolySans Medium";
-      src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-MedianMono.otf")
-        format("opentype");
-      font-weight: 500;
-      font-style: normal;
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: "PolySans Bold";
-      src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-BulkyMono.otf")
-        format("opentype");
-      font-weight: 700;
-      font-style: normal;
-      font-display: swap;
-    }
-  </style>
+  <div class="absolute inset-x-0 bottom-0 z-10 flex flex-col gap-2 p-5">
+    <h3
+      class="blog-mcard-title font-['PolySans_Trial'] text-lg font-bold leading-[1.15] text-[#FEFCD9]"
+    >
+      {title}
+    </h3>
+    <div
+      class="flex items-center gap-2 font-['PolySans_Trial'] text-xs font-light text-[#FEFCD9]/70"
+    >
+      {author && <span class="truncate">{author}</span>}
+      {author && readingTime ? <span class="text-[#F95F4A]">·</span> : null}
+      {readingTime ? <span class="whitespace-nowrap">{readingTime} min read</span> : null}
+      <span
+        class="ml-auto inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#F95F4A]/60 text-[#F95F4A] transition-all duration-300 group-hover:bg-[#F95F4A] group-hover:text-black"
+      >
+        <svg
+          width="13"
+          height="13"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M7 17L17 7M17 7H8M17 7v9"></path>
+        </svg>
+      </span>
+    </div>
+  </div>
 </a>
+
+<style>
+  .blog-mcard-screw {
+    position: absolute;
+    z-index: 10;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(254, 252, 217, 0.35);
+    background: rgba(0, 0, 0, 0.35);
+  }
+
+  .blog-mcard-reels {
+    position: absolute;
+    z-index: 5;
+    top: 18%;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 22%;
+    pointer-events: none;
+  }
+  .blog-mcard-reel {
+    position: relative;
+    width: 15%;
+    aspect-ratio: 1;
+    max-width: 42px;
+    border-radius: 50%;
+    border: 2px solid rgba(254, 252, 217, 0.28);
+    background: radial-gradient(
+      circle,
+      rgba(0, 0, 0, 0.25) 35%,
+      transparent 60%
+    );
+    transition:
+      transform 0.6s ease,
+      border-color 0.4s ease;
+  }
+  .blog-mcard-reel::before {
+    content: "";
+    position: absolute;
+    inset: 32%;
+    border-radius: 50%;
+    background: rgba(254, 252, 217, 0.28);
+  }
+  .group:hover .blog-mcard-reel {
+    border-color: rgba(249, 95, 74, 0.6);
+    transform: rotate(140deg);
+  }
+  .group:hover .blog-mcard-reel:last-child {
+    transform: rotate(-140deg);
+  }
+
+  .blog-mcard-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

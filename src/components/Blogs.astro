@@ -7,70 +7,106 @@ const blogsData = await reader.singletons.blogs.read();
 const blogData = blogsData?.items ?? [];
 
 const fallbackCover = "/blogs/placeholder.webp";
-const HASHNODE_HOST = "blog.acmvit.in";
-const HASHNODE_ENDPOINT = "https://gql.hashnode.com";
 
-async function fetchHashnodeCover(url: string): Promise<string | null> {
+type PostMeta = {
+  cover: string | null;
+  title: string | null;
+  author: string | null;
+  readingTime: number | null;
+  tag: string | null;
+};
+
+const emptyMeta: PostMeta = {
+  cover: null,
+  title: null,
+  author: null,
+  readingTime: null,
+  tag: null,
+};
+
+function slugOf(url: string): string | null {
   try {
-    const parsed = new URL(url);
-    const slug = parsed.pathname.replace(/^\/|\/$/g, "");
-    if (!slug) return null;
-
-    const query = `
-      query PostBySlug($host: String!, $slug: String!) {
-        publication(host: $host) {
-          post(slug: $slug) {
-            coverImage {
-              url
-            }
-          }
-        }
-      }
-    `;
-
-    const response = await fetch(HASHNODE_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        "User-Agent": "Mozilla/5.0 (compatible; AstroBot/1.0)",
-      },
-      body: JSON.stringify({
-        query,
-        variables: { host: HASHNODE_HOST, slug },
-      }),
-    });
-
-    if (!response.ok) return null;
-
-    const contentType = response.headers.get("content-type") ?? "";
-    if (!contentType.includes("application/json")) return null;
-
-    const payload = await response.json().catch(() => null);
-    const post = payload?.data?.publication?.post;
-    if (!post) return null;
-
-    if (typeof post.coverImage === "string") return post.coverImage;
-    if (post.coverImage && typeof post.coverImage.url === "string") {
-      return post.coverImage.url;
-    }
+    const slug = new URL(url).pathname.replace(/^\/|\/$/g, "");
+    return slug || null;
   } catch {
-    // Network errors and unexpected failures fall back to placeholder silently.
+    return null;
   }
-
-  return null;
 }
 
-const blogsWithImages = await Promise.all(
-  blogData.map(async (blog) => {
-    if (blog.cover) {
-      return { link: blog.link, bgurl: blog.cover };
+function titleFromSlug(slug: string | null): string {
+  if (!slug) return "Untitled";
+  return slug
+    .split("-")
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
+async function fetchPostMeta(url: string): Promise<PostMeta> {
+  try {
+    const response = await fetch(url, {
+      headers: {
+        Accept: "text/html",
+        "User-Agent": "Mozilla/5.0 (compatible; AstroBot/1.0)",
+      },
+      signal: AbortSignal.timeout(20000),
+    });
+
+    if (!response.ok) return emptyMeta;
+
+    const html = await response.text();
+
+    const ldMatch = html.match(
+      /<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/
+    );
+
+    let cover: string | null = null;
+    let title: string | null = null;
+    let author: string | null = null;
+    let tag: string | null = null;
+
+    if (ldMatch) {
+      try {
+        const ld = JSON.parse(ldMatch[1]);
+        if (typeof ld.headline === "string") title = ld.headline;
+        if (typeof ld.author?.name === "string") author = ld.author.name;
+        if (typeof ld.image === "string") cover = ld.image;
+        else if (typeof ld.image?.url === "string") cover = ld.image.url;
+        if (typeof ld.keywords === "string") {
+          const first = ld.keywords.split(",")[0]?.trim().replace(/^#/, "");
+          tag = first || null;
+        }
+      } catch {
+        return emptyMeta;
+      }
     }
 
-    const hashnodeCover = await fetchHashnodeCover(blog.link);
-    return { link: blog.link, bgurl: hashnodeCover || fallbackCover };
+    const readMatch = html.match(/readTimeInMinutes\\?":(\d+)/);
+    const readingTime = readMatch ? Number(readMatch[1]) : null;
+
+    return { cover, title, author, readingTime, tag };
+  } catch {
+    return emptyMeta;
+  }
+}
+
+const blogs = await Promise.all(
+  blogData.map(async (blog) => {
+    const meta = await fetchPostMeta(blog.link);
+    return {
+      link: blog.link,
+      bgUrl: blog.cover || meta.cover || fallbackCover,
+      title: meta.title || titleFromSlug(slugOf(blog.link)),
+      author: meta.author ?? undefined,
+      readingTime: meta.readingTime ?? undefined,
+      tag: meta.tag ?? "Hashnode",
+    };
   })
 );
+
+const mid = Math.ceil(blogs.length / 2);
+const rowTop = blogs.slice(0, mid);
+const rowBottom = blogs.slice(mid);
 ---
 
 <div
@@ -87,6 +123,8 @@ const blogsWithImages = await Promise.all(
       <img
         src={getAssetUrl("/rotate.webp")}
         class="rotate-svg w-full h-full block"
+        alt=""
+        aria-hidden="true"
         loading="lazy"
         decoding="async"
       />
@@ -107,6 +145,8 @@ const blogsWithImages = await Promise.all(
       <img
         src={getAssetUrl("/rotate.webp")}
         class="rotate-svg w-full h-full block"
+        alt=""
+        aria-hidden="true"
         loading="lazy"
         decoding="async"
       />
@@ -128,70 +168,33 @@ const blogsWithImages = await Promise.all(
     </span>
   </div>
 
-  <!-- Carousel Container -->
-  <div class="w-full flex flex-col items-center space-y-8 relative">
-    <!-- Slider Wrapper -->
-    <div
-      class="relative w-full max-w-[88vw] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[80%] flex items-center justify-center"
-    >
-      <!-- Left Arrow -->
-      <button
-        id="prev-btn"
-        class="absolute left-[-2rem] md:left-[-4rem] z-10 text-[#F95F4A] hover:text-white transition-colors duration-300"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="w-8 h-8 md:w-12 md:h-12"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M15.75 19.5L8.25 12l7.5-7.5"></path>
-        </svg>
-      </button>
-
-      <!-- Slider Window -->
-      <div class="slider-window overflow-hidden w-full">
-        <div id="blogs-track" class="flex flex-row items-center">
-          {
-            blogsWithImages.map((blog) => (
-              <div class="blog-card-wrapper flex-shrink-0 w-full sm:w-auto px-3 sm:px-4">
-                <BlogsCard {...blog} />
-              </div>
-            ))
-          }
-        </div>
+  <div class="blogs-marquee w-full flex flex-col gap-5 md:gap-6" data-blogs-marquee>
+    <div class="marquee-viewport" data-marquee-viewport data-speed="65.1">
+      <div class="marquee-row">
+        {rowTop.map((blog) => <BlogsCard {...blog} />)}
+        {rowTop.map((blog) => <BlogsCard {...blog} clone />)}
       </div>
+    </div>
 
-      <!-- Right Arrow -->
-      <button
-        id="next-btn"
-        class="absolute right-[-2rem] md:right-[-4rem] z-10 text-[#F95F4A] hover:text-white transition-colors duration-300"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="w-8 h-8 md:w-12 md:h-12"
+    {
+      rowBottom.length > 0 && (
+        <div
+          class="marquee-viewport"
+          data-marquee-viewport
+          data-speed="50.4"
+          data-direction="reverse"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M8.25 4.5l7.5 7.5-7.5 7.5"></path>
-        </svg>
-      </button>
-    </div>
-
-    <!-- Dots -->
-    <div id="dots-container" class="flex space-x-2 mt-4">
-      <!-- Dots will be injected here -->
-    </div>
+          <div class="marquee-row">
+            {rowBottom.map((blog) => (
+              <BlogsCard {...blog} />
+            ))}
+            {rowBottom.map((blog) => (
+              <BlogsCard {...blog} clone />
+            ))}
+          </div>
+        </div>
+      )
+    }
   </div>
 
   <div class="flex justify-center w-full mt-8">
@@ -245,6 +248,48 @@ const blogsWithImages = await Promise.all(
   }
 </style>
 
+<style>
+  .marquee-viewport {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 8%,
+      #000 92%,
+      transparent
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 8%,
+      #000 92%,
+      transparent
+    );
+  }
+  .marquee-viewport::-webkit-scrollbar {
+    display: none;
+  }
+
+  .marquee-row {
+    display: flex;
+    width: max-content;
+    padding: 0.75rem 0;
+  }
+
+  .marquee-viewport.is-dragging {
+    cursor: grabbing;
+    user-select: none;
+  }
+  .marquee-viewport.is-dragging :global(a) {
+    pointer-events: none;
+  }
+</style>
+
 <script>
   import { gsap } from "gsap";
   gsap.to(".rotate-svg", {
@@ -254,223 +299,309 @@ const blogsWithImages = await Promise.all(
     ease: "linear",
   });
 
-  const track = document.getElementById("blogs-track");
-  const cards = document.querySelectorAll(".blog-card-wrapper");
-  const prevBtn = document.getElementById("prev-btn");
-  const nextBtn = document.getElementById("next-btn");
-  const dotsContainer = document.getElementById("dots-container");
-  const sliderWindow = document.querySelector(
-    ".slider-window"
-  ) as HTMLElement | null;
+  function initBlogsMarquee() {
+    const marquee = document.querySelector<HTMLElement>("[data-blogs-marquee]");
+    if (!marquee || marquee.dataset.bmInit === "1") return;
+    marquee.dataset.bmInit = "1";
 
-  let currentIndex = 0;
-  let itemsPerPage = 3;
-  let cardWidth = 0;
-  let totalPages = 0;
-  let isDragging = false;
-  let startX = 0;
-  let startY = 0;
-  let dragDelta = 0;
-  let activePointerId: number | null = null;
+    const viewports = Array.from(
+      marquee.querySelectorAll<HTMLElement>("[data-marquee-viewport]")
+    );
+    if (viewports.length === 0) return;
 
-  function updateDimensions() {
-    const width = window.innerWidth;
-    if (width < 640) itemsPerPage = 1;
-    else if (width < 1024) itemsPerPage = 2;
-    else itemsPerPage = 3;
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
 
-    // Calculate card width based on the first card's width + padding
-    // We assume all cards are same size.
-    // The wrapper has padding, so offsetWidth includes it.
-    if (cards.length > 0) {
-      cardWidth = (cards[0] as HTMLElement).offsetWidth;
-    }
+    const RESUME_DELAY = 2200;
 
-    totalPages = Math.ceil(cards.length / itemsPerPage);
-    // Ensure index is within bounds after resize
-    if (currentIndex >= totalPages) currentIndex = totalPages - 1;
-    if (currentIndex < 0) currentIndex = 0;
+    type Lane = {
+      viewport: HTMLElement;
+      row: HTMLElement;
+      template: HTMLElement[];
+      copies: number;
+      cycleWidth: number;
+      speed: number;
+      direction: number;
+      position: number;
+      auto: boolean;
+      hovering: boolean;
+      resumeTimer: number;
+      idleTimer: number;
+    };
 
-    updateSliderPosition(false); // No animation on resize
-    updateDots();
-  }
+    const lanes: Lane[] = viewports
+      .map((viewport) => {
+        const row = viewport.querySelector<HTMLElement>(".marquee-row");
+        if (!row) return null;
+        const template = Array.from(row.children).filter(
+          (card): card is HTMLElement =>
+            card instanceof HTMLElement && !card.classList.contains("is-clone")
+        );
+        if (template.length === 0) return null;
+        return {
+          viewport,
+          row,
+          template: template.map((card) => card.cloneNode(true) as HTMLElement),
+          copies: 1,
+          cycleWidth: 0,
+          speed: Number(viewport.dataset.speed ?? 55),
+          direction: viewport.dataset.direction === "reverse" ? -1 : 1,
+          position: 0,
+          auto: !reduceMotion,
+          hovering: false,
+          resumeTimer: 0,
+          idleTimer: 0,
+        };
+      })
+      .filter((lane): lane is Lane => lane !== null);
 
-  function updateSliderPosition(animate = true) {
-    if (!track) return;
+    if (lanes.length === 0) return;
 
-    // Calculate the translation value
-    // We slide by 'itemsPerPage' number of cards, or whatever is left
-    // Actually, a simpler way for a smooth slider is to slide by 'itemsPerPage * cardWidth'
-    // But since we want pages, we slide to the start of the current page.
+    const halfWidth = (viewport: HTMLElement) => viewport.scrollWidth / 2;
 
-    const xValue = -(currentIndex * itemsPerPage * cardWidth);
-
-    // Check if we are at the end and don't have enough items to fill the page
-    // In that case, we might want to clamp, but for now let's just slide.
-
-    if (animate) {
-      gsap.to(track, {
-        x: xValue,
-        duration: 0.5,
-        ease: "power2.out",
-      });
-    } else {
-      gsap.set(track, { x: xValue });
-    }
-  }
-
-  function isMobileView() {
-    return window.matchMedia("(max-width: 768px)").matches;
-  }
-
-  function handlePointerDown(event: Event) {
-    const pointerEvent = event as PointerEvent;
-    if (!sliderWindow || !track || !isMobileView()) return;
-    if (pointerEvent.pointerType === "mouse" && pointerEvent.button !== 0)
-      return;
-
-    isDragging = true;
-    dragDelta = 0;
-    startX = pointerEvent.clientX;
-    startY = pointerEvent.clientY;
-    activePointerId = pointerEvent.pointerId;
-    sliderWindow.setPointerCapture(pointerEvent.pointerId);
-    sliderWindow.classList.add("is-dragging");
-  }
-
-  function handlePointerMove(event: Event) {
-    const pointerEvent = event as PointerEvent;
-    if (!sliderWindow || !track || !isDragging) return;
-    if (activePointerId !== null && pointerEvent.pointerId !== activePointerId)
-      return;
-
-    const deltaX = pointerEvent.clientX - startX;
-    const deltaY = pointerEvent.clientY - startY;
-
-    if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 12) {
-      return;
-    }
-
-    dragDelta = deltaX;
-    const baseX = -(currentIndex * itemsPerPage * cardWidth);
-    gsap.set(track, { x: baseX + dragDelta });
-  }
-
-  function handlePointerUp(event: Event) {
-    const pointerEvent = event as PointerEvent;
-    if (!sliderWindow || !track || !isDragging) return;
-    if (activePointerId !== null && pointerEvent.pointerId !== activePointerId)
-      return;
-
-    isDragging = false;
-    sliderWindow.classList.remove("is-dragging");
-    sliderWindow.releasePointerCapture(pointerEvent.pointerId);
-    activePointerId = null;
-
-    const threshold = Math.min(90, cardWidth * 0.2);
-
-    if (Math.abs(dragDelta) > threshold) {
-      if (dragDelta < 0) {
-        currentIndex = Math.min(currentIndex + 1, totalPages - 1);
-      } else {
-        currentIndex = Math.max(currentIndex - 1, 0);
+    const render = (lane: Lane, copies: number) => {
+      const fragment = document.createDocumentFragment();
+      for (let set = 0; set < copies * 2; set += 1) {
+        lane.template.forEach((card) => {
+          const node = card.cloneNode(true) as HTMLElement;
+          if (set > 0) {
+            node.classList.add("is-clone");
+            node.setAttribute("aria-hidden", "true");
+            node.setAttribute("tabindex", "-1");
+          }
+          fragment.appendChild(node);
+        });
       }
-    }
+      lane.row.replaceChildren(fragment);
+      lane.copies = copies;
+    };
 
-    updateSliderPosition();
-    updateDots();
-  }
+    const fitToViewport = (lane: Lane) => {
+      const viewportWidth = lane.viewport.clientWidth;
+      if (viewportWidth <= 0) return;
 
-  if (sliderWindow) {
-    sliderWindow.addEventListener(
-      "pointerdown",
-      handlePointerDown as EventListener
-    );
-    sliderWindow.addEventListener(
-      "pointermove",
-      handlePointerMove as EventListener
-    );
-    sliderWindow.addEventListener(
-      "pointerup",
-      handlePointerUp as EventListener
-    );
-    sliderWindow.addEventListener(
-      "pointercancel",
-      handlePointerUp as EventListener
-    );
-    sliderWindow.addEventListener(
-      "pointerleave",
-      handlePointerUp as EventListener
-    );
-  }
+      let copies = lane.copies;
+      while (halfWidth(lane.viewport) <= viewportWidth && copies < 64) {
+        copies += 1;
+        render(lane, copies);
+      }
+      lane.cycleWidth = halfWidth(lane.viewport);
+    };
 
-  function updateDots() {
-    if (!dotsContainer) return;
-    dotsContainer.innerHTML = "";
-    for (let i = 0; i < totalPages; i++) {
-      const dot = document.createElement("div");
-      dot.classList.add(
-        "w-3",
-        "h-3",
-        "rounded-full",
-        "cursor-pointer",
-        "transition-colors",
-        "duration-300"
+    const prime = () => {
+      lanes.forEach((lane) => {
+        fitToViewport(lane);
+        if (!lane.auto) return;
+        if (lane.cycleWidth <= lane.viewport.clientWidth) return;
+        lane.position = lane.direction < 0 ? lane.cycleWidth : 0;
+        lane.viewport.scrollLeft = lane.position;
+      });
+    };
+
+    prime();
+
+    let onScreen = true;
+    let frameId = 0;
+    let lastFrame = 0;
+
+    const step = (time: number) => {
+      const delta = lastFrame ? Math.min(time - lastFrame, 64) : 16;
+      lastFrame = time;
+
+      if (onScreen && !document.hidden) {
+        for (const lane of lanes) {
+          if (!lane.auto || lane.hovering) continue;
+          const cycleWidth = lane.cycleWidth;
+          if (cycleWidth <= lane.viewport.clientWidth) continue;
+          lane.position += (lane.speed * lane.direction * delta) / 1000;
+          if (lane.position >= cycleWidth) lane.position -= cycleWidth;
+          if (lane.position < 0) lane.position += cycleWidth;
+          lane.viewport.scrollLeft = lane.position;
+        }
+      }
+
+      frameId = requestAnimationFrame(step);
+    };
+
+    const scheduleResume = (lane: Lane) => {
+      if (reduceMotion) return;
+      window.clearTimeout(lane.resumeTimer);
+      lane.resumeTimer = window.setTimeout(() => {
+        if (lane.hovering) {
+          scheduleResume(lane);
+          return;
+        }
+        lane.position = lane.viewport.scrollLeft;
+        lane.auto = true;
+      }, RESUME_DELAY);
+    };
+
+    const takeOver = (lane: Lane) => {
+      lane.auto = false;
+      scheduleResume(lane);
+    };
+
+    const wrapWhenIdle = (lane: Lane) => {
+      const cycleWidth = lane.cycleWidth;
+      if (cycleWidth <= 0) return;
+      if (lane.viewport.scrollLeft >= cycleWidth)
+        lane.viewport.scrollLeft -= cycleWidth;
+      else if (lane.viewport.scrollLeft <= 0)
+        lane.viewport.scrollLeft += cycleWidth;
+      lane.position = lane.viewport.scrollLeft;
+    };
+
+    let dragLane: Lane | null = null;
+    let dragStartX = 0;
+    let dragStartScroll = 0;
+    let dragged = false;
+    let suppressClick = false;
+
+    lanes.forEach((lane) => {
+      const viewport = lane.viewport;
+
+      viewport.addEventListener(
+        "scroll",
+        () => {
+          if (lane.auto) return;
+          window.clearTimeout(lane.idleTimer);
+          lane.idleTimer = window.setTimeout(() => wrapWhenIdle(lane), 180);
+          scheduleResume(lane);
+        },
+        { passive: true }
       );
-      if (i === currentIndex) {
-        dot.classList.add("bg-[#F95F4A]");
-      } else {
-        dot.classList.add("bg-gray-500", "hover:bg-[#F95F4A]");
-      }
-      dot.addEventListener("click", () => {
-        currentIndex = i;
-        updateSliderPosition();
-        updateDots();
+
+      viewport.addEventListener(
+        "wheel",
+        (event) => {
+          if (Math.abs(event.deltaX) > Math.abs(event.deltaY) || event.shiftKey)
+            takeOver(lane);
+        },
+        { passive: true }
+      );
+
+      let touchStartX = 0;
+      let touchStartY = 0;
+
+      viewport.addEventListener(
+        "touchstart",
+        (event) => {
+          const touch = event.touches[0];
+          if (!touch) return;
+          touchStartX = touch.clientX;
+          touchStartY = touch.clientY;
+        },
+        { passive: true }
+      );
+
+      viewport.addEventListener(
+        "touchmove",
+        (event) => {
+          const touch = event.touches[0];
+          if (!touch) return;
+          const deltaX = Math.abs(touch.clientX - touchStartX);
+          const deltaY = Math.abs(touch.clientY - touchStartY);
+          if (deltaX > deltaY && deltaX > 6) takeOver(lane);
+        },
+        { passive: true }
+      );
+
+      viewport.addEventListener("pointerdown", (event) => {
+        if (event.pointerType !== "mouse" || event.button !== 0) return;
+        dragLane = lane;
+        dragStartX = event.clientX;
+        dragStartScroll = viewport.scrollLeft;
+        dragged = false;
       });
-      dotsContainer.appendChild(dot);
+
+      viewport.addEventListener(
+        "click",
+        (event) => {
+          if (!suppressClick) return;
+          event.preventDefault();
+          event.stopPropagation();
+        },
+        true
+      );
+
+      viewport.addEventListener("mouseenter", () => {
+        lane.hovering = true;
+      });
+
+      viewport.addEventListener("mouseleave", () => {
+        lane.hovering = false;
+      });
+    });
+
+    window.addEventListener("pointermove", (event) => {
+      if (!dragLane) return;
+      const offset = event.clientX - dragStartX;
+      if (!dragged) {
+        if (Math.abs(offset) < 8) return;
+        dragged = true;
+        takeOver(dragLane);
+        dragLane.viewport.classList.add("is-dragging");
+      }
+      dragLane.viewport.scrollLeft = dragStartScroll - offset;
+    });
+
+    const endDrag = () => {
+      if (!dragLane) return;
+      dragLane.viewport.classList.remove("is-dragging");
+      if (dragged) {
+        suppressClick = true;
+        window.setTimeout(() => {
+          suppressClick = false;
+        }, 60);
+        scheduleResume(dragLane);
+      }
+      dragLane = null;
+      dragged = false;
+    };
+
+    window.addEventListener("pointerup", endDrag);
+    window.addEventListener("pointercancel", endDrag);
+
+    window.addEventListener("load", prime);
+
+    window.addEventListener("resize", () => {
+      lanes.forEach((lane) => {
+        const before = lane.copies;
+        fitToViewport(lane);
+        lane.position =
+          lane.copies === before
+            ? lane.viewport.scrollLeft
+            : lane.direction < 0
+              ? lane.cycleWidth
+              : 0;
+        lane.viewport.scrollLeft = lane.position;
+      });
+    });
+
+    if ("IntersectionObserver" in window) {
+      let primedOnScreen = false;
+      const observer = new IntersectionObserver(
+        (entries) => {
+          onScreen = entries.some((entry) => entry.isIntersecting);
+          if (onScreen && !primedOnScreen) {
+            primedOnScreen = true;
+            prime();
+          }
+        },
+        { rootMargin: "200px 0px" }
+      );
+      observer.observe(marquee);
+    }
+
+    if (!reduceMotion) {
+      frameId = requestAnimationFrame(step);
     }
   }
 
-  if (prevBtn) {
-    prevBtn.addEventListener("click", () => {
-      if (currentIndex > 0) {
-        currentIndex--;
-      } else {
-        currentIndex = totalPages - 1; // Loop to end
-      }
-      updateSliderPosition();
-      updateDots();
-    });
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initBlogsMarquee);
+  } else {
+    initBlogsMarquee();
   }
-
-  if (nextBtn) {
-    nextBtn.addEventListener("click", () => {
-      if (currentIndex < totalPages - 1) {
-        currentIndex++;
-      } else {
-        currentIndex = 0; // Loop to start
-      }
-      updateSliderPosition();
-      updateDots();
-    });
-  }
-
-  // Initialize and handle resize
-  window.addEventListener("resize", updateDimensions);
-
-  // Wait for layout to be stable
-  // Using requestAnimationFrame or setTimeout to ensure DOM is rendered
-  setTimeout(() => {
-    updateDimensions();
-  }, 100);
 </script>
-
-<style>
-  .slider-window {
-    touch-action: pan-y;
-  }
-
-  .slider-window.is-dragging a {
-    pointer-events: none;
-  }
-</style>
