@@ -1,0 +1,691 @@
+---
+import SectionHeading from "./SectionHeading.astro";
+import TeamDivision from "./TeamDivision.astro";
+import BoardMemberCardSingular from "./BoardMemberCardSingular.astro";
+import { reader } from "../utils/reader";
+import { getAssetUrl } from "../utils/cdn";
+import {
+    CURRENT_BOARD_YEAR,
+    historicalBoards,
+    teamYears,
+    yearLabel,
+    type TeamMember,
+} from "../data/teamData";
+
+const boardData = await reader.singletons.board.read();
+const boardMembers = boardData?.items ?? [];
+
+const toMember = (member: (typeof boardMembers)[number]): TeamMember => ({
+    title: member.title ?? "",
+    fullName: member.fullName ?? "",
+    position: member.position ?? "",
+    imageUrl: member.imageUrl ?? "",
+    linkedinUrl: member.linkedinUrl ?? undefined,
+    githubUrl: member.githubUrl ?? undefined,
+    googleScholarUrl: member.googleScholarUrl ?? undefined,
+    isW: member.isW ?? false,
+});
+
+const facultyCoordinator = boardMembers.find(
+    (member) => member.position === "Faculty Coordinator",
+);
+const faculty = facultyCoordinator ? toMember(facultyCoordinator) : null;
+const currentBoard = boardMembers
+    .filter((member) => member.position !== "Faculty Coordinator")
+    .map(toMember);
+
+const membersForYear = (year: number): TeamMember[] =>
+    year === CURRENT_BOARD_YEAR && currentBoard.length > 0
+        ? currentBoard
+        : (historicalBoards[year] ?? []);
+---
+
+<div class="team-page relative w-full overflow-hidden">
+    <div class="team-glow" aria-hidden="true"></div>
+    <img
+        src={getAssetUrl("/orange_tubelight.webp")}
+        alt=""
+        class="team-tubelight"
+        aria-hidden="true"
+        loading="eager"
+        decoding="async"
+        data-preloader-ignore
+    />
+
+    <header
+        class="team-hero relative z-10 flex min-h-[calc(100svh-7rem)] flex-col items-center justify-start px-6 pt-[15svh] pb-16 text-center"
+    >
+        <div
+            class="hero-logo w-[80vw] max-w-3xl"
+            role="img"
+            aria-label="The Team"
+            style={`--wordmark: url('${getAssetUrl("/the_team.webp")}'); --grain: url('${getAssetUrl("/wordmark_grain.webp")}')`}
+        >
+        </div>
+        <p
+            class="hero-sub mt-6 max-w-2xl font-['PolySans_Trial',sans-serif] text-sm font-light leading-relaxed text-white sm:text-lg"
+        >
+            Every cassette, a person. Every year, a new tape. Meet the crew
+            making the magic — the boards steering ACM-VIT, year after year.
+        </p>
+        <nav
+            class="year-nav mt-[calc(3rem+7svh)] flex w-fit max-w-[92vw] items-center gap-1 overflow-x-auto rounded-full border border-[#FEFCD9]/15 bg-black/40 p-1.5 backdrop-blur-md"
+        >
+            {
+                teamYears.map((year) => (
+                    <a
+                        href={`#year-${year}`}
+                        class="year-tab whitespace-nowrap rounded-full px-4 py-2 font-['PolySans_Trial',sans-serif] text-xs font-medium uppercase tracking-wider text-[#FEFCD9]/65 transition-colors duration-300 sm:text-sm"
+                        data-year-tab={year}
+                    >
+                        {year}
+                    </a>
+                ))
+            }
+        </nav>
+
+        <div class="year-dial" data-year-dial>
+            <button
+                type="button"
+                class="year-dial-trigger"
+                aria-expanded="false"
+                aria-controls="year-wheel"
+                data-dial-trigger
+            >
+                <span class="year-dial-value" data-dial-label>
+                    {teamYears[0]}
+                </span>
+                <svg
+                    class="year-dial-close"
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden="true"
+                >
+                    <path
+                        d="M6 6l12 12M18 6L6 18"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"></path>
+                </svg>
+            </button>
+
+            <div
+                class="year-wheel"
+                id="year-wheel"
+                aria-hidden="true"
+                data-wheel
+            >
+                {
+                    teamYears.map((year) => (
+                        <a
+                            href={`#year-${year}`}
+                            class="year-wheel-item"
+                            data-wheel-year={year}
+                        >
+                            {year}
+                        </a>
+                    ))
+                }
+            </div>
+        </div>
+
+        <a
+            href="/#team"
+            class="hero-back-link mt-[calc(1.5rem+5svh)] inline-block rounded-full border-2 border-primary-orange px-5 py-2 font-['PolySans_Trial',sans-serif] text-xs uppercase tracking-wider text-white transition-transform duration-300 hover:scale-105 sm:text-sm"
+        >
+            Back to home
+        </a>
+    </header>
+
+    {
+        faculty && (
+            <section class="relative z-10 mx-auto max-w-7xl px-4 pb-8 sm:px-6">
+                <SectionHeading
+                    title="The"
+                    accent="Leader"
+                    subtitle="Guiding ACM-VIT from the faculty side, year after year."
+                    align="left"
+                    accentColor="#F2C94C"
+                    class="mb-14"
+                />
+                <div class="faculty-feature">
+                    <div class="faculty-card" data-reveal>
+                        <BoardMemberCardSingular
+                            title={faculty.title ?? ""}
+                            fullName={faculty.fullName}
+                            position={faculty.position}
+                            imageUrl={getAssetUrl(faculty.imageUrl)}
+                            linkedinUrl={faculty.linkedinUrl}
+                            githubUrl={faculty.githubUrl}
+                            googleScholarUrl={faculty.googleScholarUrl}
+                            isW={faculty.isW}
+                        />
+                    </div>
+                    <div class="faculty-bio" data-reveal>
+                        <p class="font-['PolySans_Trial',sans-serif] text-lg font-light leading-relaxed text-[#FEFCD9] sm:text-xl">
+                            The{" "}
+                            <span class="text-[#F2C94C]">
+                                Faculty Coordinator
+                            </span>{" "}
+                            of ACM-VIT.
+                        </p>
+                        <p class="mt-4 font-['PolySans_Trial',sans-serif] text-sm font-light leading-[1.65] text-[#FEFCD9]/75 sm:text-base">
+                            Dr. Aswani Kumar Cherukuri is a Professor at the
+                            School of Information Technology and Engineering,
+                            Vellore Institute of Technology, with research
+                            spanning machine learning, formal concept analysis,
+                            information security, and quantum computing, and
+                            150+ refereed publications. As ACM-VIT's faculty
+                            coordinator, he guides the students of the chapter,
+                            mentoring them to push boundaries and take ACM-VIT
+                            forward in new directions.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        )
+    }
+
+    <div class="relative z-10 mx-auto max-w-7xl px-4 pb-24 sm:px-6">
+        {
+            teamYears.map((year) => (
+                <section
+                    id={`year-${year}`}
+                    class="year-block scroll-mt-32"
+                    data-year-block={year}
+                >
+                    <SectionHeading
+                        title="Board of"
+                        accent={yearLabel(year)}
+                        align="left"
+                        class="mb-14"
+                    />
+                    <TeamDivision
+                        label="Board"
+                        members={membersForYear(year)}
+                    />
+                </section>
+            ))
+        }
+    </div>
+</div>
+
+<style>
+    .team-glow {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        background:
+            radial-gradient(
+                55% 45% at 50% 48%,
+                rgba(249, 95, 74, 0.22),
+                transparent 70%
+            ),
+            radial-gradient(
+                40% 40% at 85% 80%,
+                rgba(255, 0, 122, 0.1),
+                transparent 70%
+            );
+    }
+
+    .team-tubelight {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, -45.4%);
+        width: 140vw;
+        max-width: none;
+        height: auto;
+        z-index: 0;
+        pointer-events: none;
+        user-select: none;
+        mix-blend-mode: screen;
+        opacity: 0.8;
+        -webkit-mask-image: radial-gradient(
+            ellipse 25% 50% at 50% 50%,
+            black 0%,
+            black 20%,
+            transparent 100%
+        );
+        mask-image: radial-gradient(
+            ellipse 25% 50% at 50% 50%,
+            black 0%,
+            black 20%,
+            transparent 100%
+        );
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        -webkit-mask-size: 100% 100%;
+        mask-size: 100% 100%;
+    }
+
+    /* A 20% wash of the wordmark's orange-to-cream gradient. Guarded so the
+       text stays plain white where background-clip: text is unsupported,
+       rather than going transparent. */
+    @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+        .hero-sub {
+            background-image: linear-gradient(to right, #f8e4e1, #f8f6f1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+    }
+
+    /* Same orange-to-cream ramp the asset carries, but running top-to-bottom
+       so the warm end sits under the tubelight. The asset's own gradient is
+       baked left-to-right, so the wordmark masks a CSS gradient instead.
+       Aspect ratio matches the source (1688x220). */
+    .hero-logo {
+        aspect-ratio: 1688 / 220;
+        /* Grain tile over the ramp, overlay-blended: the source art had noise
+           baked into its pixels (sd ~12%), which the mask discards because it
+           only reads alpha. The tile is mid-grey at a matching sd, so overlay
+           modulates the ramp without shifting its average colour. */
+        background-image:
+            var(--grain), linear-gradient(to bottom, #e89174 0%, #e8cfbe 100%);
+        background-size:
+            256px 256px,
+            100% 100%;
+        background-repeat: repeat, no-repeat;
+        background-blend-mode: overlay;
+        -webkit-mask-image: var(--wordmark);
+        mask-image: var(--wordmark);
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        filter: saturate(1.5) drop-shadow(0 20px 60px rgba(0, 0, 0, 0.5));
+        animation: heroFloat 6s ease-in-out infinite;
+    }
+
+    @keyframes heroFloat {
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    .year-nav {
+        scrollbar-width: none;
+    }
+
+    .year-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Phone year picker: a circular chip that blooms into a clock face in
+       place. The chip itself is the hub - it swaps its year for a close
+       glyph, so the shape never changes. Desktop keeps the horizontal rail. */
+    .year-dial {
+        display: none;
+    }
+
+    @media (max-width: 640px) {
+        .year-nav {
+            display: none;
+        }
+        .year-dial {
+            display: block;
+            position: relative;
+            z-index: 40;
+            margin-top: calc(3rem + 12svh);
+        }
+        /* Sits 5svh under the current-year chip. The wheel's lower years
+           reach past it, but the link fades out while the wheel is open. */
+        .team-hero .hero-back-link {
+            margin-top: 5svh;
+        }
+    }
+
+    .year-dial-trigger {
+        position: relative;
+        z-index: 2;
+        display: grid;
+        place-items: center;
+        padding: 0.45rem 1.35rem;
+        border-radius: 9999px;
+        border: 1px solid rgba(254, 252, 217, 0.15);
+        background: rgba(0, 0, 0, 0.4);
+        color: #fefcd9;
+        font-family: "PolySans Trial", sans-serif;
+        cursor: pointer;
+        transition:
+            border-color 0.3s ease,
+            background-color 0.3s ease;
+    }
+    /* Both faces share the one grid cell so the swap happens in place. */
+    .year-dial-value,
+    .year-dial-close {
+        grid-area: 1 / 1;
+        transition:
+            opacity 0.22s ease,
+            transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .year-dial-value {
+        font-size: 1.55rem;
+        font-weight: 600;
+        line-height: 1;
+        letter-spacing: 0.01em;
+    }
+    .year-dial-close {
+        color: #ff5f4a;
+        opacity: 0;
+        transform: scale(0.6);
+    }
+    .year-dial-trigger[aria-expanded="true"] {
+        border-color: transparent;
+        background: transparent;
+    }
+    .year-dial-trigger[aria-expanded="true"] .year-dial-value {
+        opacity: 0;
+        transform: scale(0.6);
+    }
+    .year-dial-trigger[aria-expanded="true"] .year-dial-close {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    /* The wheel is anchored on the chip, not the viewport, so it opens in
+       place. No backdrop - items carry their own plate for legibility. */
+    .year-wheel {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 0;
+        height: 0;
+        z-index: 1;
+        pointer-events: none;
+    }
+    .year-wheel.is-open {
+        pointer-events: auto;
+    }
+
+    .year-wheel-item {
+        position: absolute;
+        left: 0;
+        top: 0;
+        padding: 0.4rem 0.7rem;
+        border-radius: 9999px;
+        background: rgba(8, 8, 8, 0.82);
+        font-family: "PolySans Trial", sans-serif;
+        font-size: 0.9rem;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        color: #fefcd9;
+        text-decoration: none;
+        white-space: nowrap;
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.4);
+        transition:
+            transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+            opacity 0.3s ease,
+            color 0.3s ease,
+            background-color 0.3s ease;
+        transition-delay: 0s;
+    }
+    .year-wheel.is-open .year-wheel-item {
+        opacity: 1;
+        transform: translate(
+                calc(-50% + var(--x, 0px)),
+                calc(-50% + var(--y, 0px))
+            )
+            scale(1);
+        transition-delay: var(--delay, 0s);
+    }
+    .year-wheel-item.is-active {
+        color: #0d0e0d;
+        background: #ff5f4a;
+    }
+
+    /* The 6 o'clock year lands on the back link, so retire it while the
+       wheel is open rather than letting the two overlap. */
+    .hero-back-link {
+        transition:
+            opacity 0.25s ease,
+            transform 0.3s ease;
+    }
+    .team-hero.is-wheel-open .hero-back-link {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .year-wheel-item,
+        .year-dial-value,
+        .year-dial-close {
+            transition-duration: 0.01ms;
+        }
+        .year-wheel.is-open .year-wheel-item {
+            transition-delay: 0s;
+        }
+    }
+
+    .year-tab.is-active {
+        color: #0d0e0d;
+        background: #ff5f4a;
+    }
+
+    .faculty-feature {
+        display: grid;
+        grid-template-columns: minmax(0, 460px) minmax(0, 1fr);
+        align-items: center;
+        gap: clamp(2rem, 4vw, 4rem);
+    }
+    .faculty-card {
+        width: 100%;
+        max-width: 460px;
+        transition: transform 0.3s ease;
+    }
+    .faculty-card:hover {
+        transform: translateY(-6px) scale(1.02);
+    }
+    .faculty-bio {
+        max-width: 56ch;
+    }
+    @media (max-width: 860px) {
+        .faculty-feature {
+            grid-template-columns: 1fr;
+            gap: 1.75rem;
+        }
+    }
+
+    .year-block {
+        padding-block: clamp(2.5rem, 6vw, 4.5rem);
+        border-top: 1px dashed rgba(254, 252, 217, 0.12);
+    }
+    .year-block:first-child {
+        border-top: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .hero-logo {
+            animation: none;
+        }
+    }
+</style>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    function initTeamPage() {
+        const page = document.querySelector<HTMLElement>(".team-page");
+        if (!page || page.dataset.teamInit) return;
+        page.dataset.teamInit = "1";
+
+        const hero = document.querySelector<HTMLElement>(".team-hero");
+        if (hero) {
+            const heroObserver = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        document.body.classList.toggle(
+                            "hero-in-view",
+                            entry.isIntersecting,
+                        );
+                    });
+                },
+                { root: null, threshold: 0.05 },
+            );
+            heroObserver.observe(hero);
+        }
+
+        const cards = gsap.utils.toArray<HTMLElement>("[data-reveal]");
+        gsap.set(cards, { opacity: 0, y: 30 });
+        ScrollTrigger.batch(cards, {
+            start: "top 92%",
+            onEnter: (batch) =>
+                gsap.to(batch, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.5,
+                    ease: "power2.out",
+                    stagger: 0.06,
+                    overwrite: true,
+                }),
+        });
+
+        const tabs = Array.from(
+            document.querySelectorAll<HTMLElement>("[data-year-tab]"),
+        );
+        const blocks = Array.from(
+            document.querySelectorAll<HTMLElement>("[data-year-block]"),
+        );
+        let activeYear = "";
+
+        const dial = document.querySelector<HTMLElement>("[data-year-dial]");
+        const trigger = dial?.querySelector<HTMLButtonElement>(
+            "[data-dial-trigger]",
+        );
+        const wheel = dial?.querySelector<HTMLElement>("[data-wheel]");
+        const dialLabel = dial?.querySelector<HTMLElement>("[data-dial-label]");
+        const wheelItems = dial
+            ? Array.from(
+                  dial.querySelectorAll<HTMLElement>("[data-wheel-year]"),
+              )
+            : [];
+        const wheelYears = wheelItems.map((el) => el.dataset.wheelYear || "");
+        const reduceMotion = window.matchMedia(
+            "(prefers-reduced-motion: reduce)",
+        ).matches;
+
+        const wheelRadius = () =>
+            Math.min(
+                150,
+                Math.max(
+                    96,
+                    Math.min(window.innerWidth, window.innerHeight) * 0.32,
+                ),
+            );
+
+        // Places each year on a clock face around the chip: the active year
+        // sits at 12 o'clock and the rest run clockwise in descending order.
+        const layoutWheel = () => {
+            const count = wheelItems.length;
+            if (!count) return;
+            const step = 360 / count;
+            const activeIndex = Math.max(0, wheelYears.indexOf(activeYear));
+            const radius = wheelRadius();
+            wheelItems.forEach((el, index) => {
+                const offset = (index - activeIndex + count) % count;
+                const angle = (offset * step * Math.PI) / 180;
+                el.style.setProperty("--x", `${Math.sin(angle) * radius}px`);
+                el.style.setProperty("--y", `${-Math.cos(angle) * radius}px`);
+                // Items nearest 12 o'clock bloom first.
+                const ring = Math.min(offset, count - offset);
+                el.style.setProperty("--delay", `${ring * 0.028}s`);
+            });
+        };
+
+        const isWheelOpen = () => !!wheel?.classList.contains("is-open");
+
+        const setWheelOpen = (open: boolean) => {
+            if (!wheel || !trigger) return;
+            if (open) layoutWheel();
+            wheel.classList.toggle("is-open", open);
+            wheel.setAttribute("aria-hidden", open ? "false" : "true");
+            trigger.setAttribute("aria-expanded", open ? "true" : "false");
+            dial?.closest(".team-hero")?.classList.toggle(
+                "is-wheel-open",
+                open,
+            );
+        };
+
+        const setActive = (year: string) => {
+            activeYear = year;
+            tabs.forEach((tab) =>
+                tab.classList.toggle("is-active", tab.dataset.yearTab === year),
+            );
+            wheelItems.forEach((el) =>
+                el.classList.toggle("is-active", el.dataset.wheelYear === year),
+            );
+            if (dialLabel) dialLabel.textContent = year;
+            if (isWheelOpen()) layoutWheel();
+        };
+
+        if (trigger && wheel) {
+            trigger.addEventListener("click", (event) => {
+                event.stopPropagation();
+                setWheelOpen(!isWheelOpen());
+            });
+            // No backdrop element, so close on any click outside the dial.
+            document.addEventListener("click", (event) => {
+                if (isWheelOpen() && !dial?.contains(event.target as Node)) {
+                    setWheelOpen(false);
+                }
+            });
+            document.addEventListener("keydown", (event) => {
+                if (event.key === "Escape" && isWheelOpen()) {
+                    setWheelOpen(false);
+                }
+            });
+            window.addEventListener("resize", () => {
+                if (isWheelOpen()) layoutWheel();
+            });
+            wheelItems.forEach((el) => {
+                el.addEventListener("click", (event) => {
+                    event.preventDefault();
+                    setWheelOpen(false);
+                    const target = document.getElementById(
+                        `year-${el.dataset.wheelYear}`,
+                    );
+                    target?.scrollIntoView({
+                        behavior: reduceMotion ? "auto" : "smooth",
+                        block: "start",
+                    });
+                });
+            });
+        }
+
+        blocks.forEach((block) => {
+            ScrollTrigger.create({
+                trigger: block,
+                start: "top 40%",
+                end: "bottom 40%",
+                onToggle: (self) => {
+                    if (self.isActive) setActive(block.dataset.yearBlock || "");
+                },
+            });
+        });
+        if (blocks[0]) setActive(blocks[0].dataset.yearBlock || "");
+
+        requestAnimationFrame(() => ScrollTrigger.refresh());
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initTeamPage);
+    } else {
+        initTeamPage();
+    }
+</script>

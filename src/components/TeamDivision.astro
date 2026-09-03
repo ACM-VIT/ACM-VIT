@@ -1,0 +1,79 @@
+---
+import BoardMemberCardSingular from "./BoardMemberCardSingular.astro";
+import { getAssetUrl } from "../utils/cdn";
+import type { TeamMember } from "../data/teamData";
+
+export interface Props {
+  label: string;
+  accent?: string;
+  members: TeamMember[];
+}
+
+const { label, accent = "#F95F4A", members } = Astro.props;
+---
+
+<div class="team-division" style={`--div-accent: ${accent};`}>
+  <div class="division-head flex items-center gap-3">
+    <span class="division-dot"></span>
+    <h4
+      class="division-title font-['PolySans_Trial',sans-serif] text-base font-semibold uppercase tracking-wide text-[#FEFCD9] sm:text-xl"
+    >
+      {label}
+    </h4>
+    <span class="division-line"></span>
+    <span
+      class="division-count font-['PolySans_Trial',sans-serif] text-xs font-light tracking-widest text-[#FEFCD9]/55"
+    >
+      {String(members.length).padStart(2, "0")}
+    </span>
+  </div>
+
+  <div
+    class="division-grid mt-6 flex flex-wrap justify-center gap-3 sm:gap-4"
+  >
+    {
+      members.map((member) => (
+        <div
+          class="card-wrap w-[calc(50%-0.375rem)] sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)]"
+          data-reveal
+        >
+          <BoardMemberCardSingular
+            title={member.title ?? ""}
+            fullName={member.fullName}
+            position={member.position}
+            imageUrl={getAssetUrl(member.imageUrl)}
+            linkedinUrl={member.linkedinUrl}
+            githubUrl={member.githubUrl}
+            googleScholarUrl={member.googleScholarUrl}
+            isW={member.isW}
+          />
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .team-division {
+    margin-bottom: clamp(3rem, 6vw, 5rem);
+  }
+  .division-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 9999px;
+    background: var(--div-accent);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--div-accent) 70%, transparent);
+    flex-shrink: 0;
+  }
+  .division-line {
+    flex: 1;
+    height: 0;
+    border-top: 1px dashed rgba(254, 252, 217, 0.18);
+  }
+  .card-wrap {
+    transition: transform 0.3s ease;
+  }
+  .card-wrap:hover {
+    transform: translateY(-6px) scale(1.02);
+  }
+</style>
