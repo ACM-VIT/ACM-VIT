@@ -309,9 +309,13 @@ const isExternal = (href: string) => /^https?:\/\//.test(href);
     color: #ff007a;
   }
 
-  .nav-list .more-link { color: #f95f4a; }
+  .nav-list .more-link {
+    color: #f95f4a;
+    transition: color 0.28s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.22s ease;
+  }
   .nav-list .more-link:hover,
   .nav-list .more-link:focus-visible { color: #ff8878; outline: none; }
+  .nav-list .more-link.blob-active { color: #fefcd9; }
   .nav-list li { white-space: nowrap; }
 
   .nav-desktop {
@@ -912,6 +916,7 @@ const isExternal = (href: string) => /^https?:\/\//.test(href);
 
     function updateBlob(targetLink) {
       if (!targetLink || !blob || !pill) return;
+      moreToggle?.classList.toggle("blob-active", targetLink === moreToggle);
       const pillRect = pill.getBoundingClientRect();
       const linkRect = targetLink.getBoundingClientRect();
       const scaleX = pill.offsetWidth > 0 ? pillRect.width / pill.offsetWidth : 1;
@@ -922,7 +927,10 @@ const isExternal = (href: string) => /^https?:\/\//.test(href);
       blob.style.opacity = "1";
     }
 
-    function hideBlob() { if (blob) blob.style.opacity = "0"; }
+    function hideBlob() {
+      moreToggle?.classList.remove("blob-active");
+      if (blob) blob.style.opacity = "0";
+    }
 
     function applyNavState(sectionId) {
       if (!sectionId || sectionId === "home" || sectionId === "footer") {
