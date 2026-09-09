@@ -315,6 +315,7 @@ const isExternal = (href: string) => /^https?:\/\//.test(href);
   .nav-list li { white-space: nowrap; }
 
   .nav-desktop {
+    --more-menu-shift: clamp(0px, calc(50vw - 315px), 268px);
     display: block;
     position: relative;
     transform: scale(var(--nav-bar-scale, 1));
@@ -348,7 +349,7 @@ const isExternal = (href: string) => /^https?:\/\//.test(href);
 
   .nav-megamenu.from-more {
     left: auto;
-    right: 294px;
+    right: calc(294px - var(--more-menu-shift));
     width: min(860px, calc(100vw - 360px));
     transform: translateY(10px) scale(0.97);
     transform-origin: top right;
@@ -562,7 +563,7 @@ const isExternal = (href: string) => /^https?:\/\//.test(href);
   .more-menu {
     position: absolute;
     top: calc(100% + 14px);
-    right: 0;
+    right: calc(-1 * var(--more-menu-shift));
     width: 280px;
     z-index: 80;
     padding: 16px 18px;
