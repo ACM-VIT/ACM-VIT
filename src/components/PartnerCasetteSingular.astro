@@ -3,11 +3,12 @@ interface Props {
   title: string;
   imageUrl: string;
   link: string;
+  interactive?: boolean;
 }
 
 import { getAssetUrl } from "../utils/cdn";
-const { title, imageUrl, link } = Astro.props;
-const hasLink = /^https?:\/\//.test(link);
+const { title, imageUrl, link, interactive = true } = Astro.props;
+const hasLink = interactive && /^https?:\/\//.test(link);
 const Card = hasLink ? "a" : "div";
 const usesLargerLogo = ["Dataflow Security", "CodeCrafters"].includes(title);
 ---
