@@ -7,10 +7,20 @@ interface Props {
 
 import { getAssetUrl } from "../utils/cdn";
 const { title, imageUrl, link } = Astro.props;
+const hasLink = /^https?:\/\//.test(link);
+const Card = hasLink ? "a" : "div";
+const usesLargerLogo = ["Dataflow Security", "CodeCrafters"].includes(title);
 ---
 
-<div
-  class="w-[80vw] h-[50vw] sm:w-[30vw] sm:h-[18.75vw] lg:w-[20vw] lg:h-[12.5vw] rounded-lg shadow-lg flex flex-col items-center justify-center relative"
+<Card
+  href={hasLink ? link : undefined}
+  target={hasLink ? "_blank" : undefined}
+  rel={hasLink ? "noopener noreferrer" : undefined}
+  aria-label={hasLink ? `Visit ${title}` : undefined}
+  class:list={[
+    "w-[80vw] h-[50vw] sm:w-[30vw] sm:h-[18.75vw] lg:w-[20vw] lg:h-[12.5vw] rounded-lg shadow-lg flex flex-col items-center justify-center relative",
+    { "group cursor-pointer": hasLink },
+  ]}
 >
   <div class="w-full h-[80%] z-0 absolute">
     <img
@@ -22,12 +32,20 @@ const { title, imageUrl, link } = Astro.props;
     />
   </div>
   <div class="z-10 h-full w-full flex justify-center items-center">
-    <img
-      src={imageUrl}
-      alt={title}
-      class="object-contain h-[60%] w-[60%]"
-      loading="lazy"
-      decoding="async"
-    />
+    <div
+      class:list={[
+        "flex items-center justify-center transition-transform duration-300",
+        usesLargerLogo ? "h-[70%] w-[80%]" : "h-[60%] w-[60%]",
+        { "group-hover:scale-105": hasLink },
+      ]}
+    >
+      <img
+        src={imageUrl}
+        alt={title}
+        class="object-contain max-h-full max-w-full"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
   </div>
-</div>
+</Card>
