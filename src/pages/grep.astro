@@ -19,23 +19,30 @@ const versions = [
   <body>
     <main class="grep-reader" data-grep-viewer data-mode="spread" aria-busy="true">
       <header class="reader-toolbar">
-        <a class="reader-brand" href="/" aria-label="Read GREP — Back to Main Site">Read <strong>GREP</strong></a>
+        <a class="reader-brand" href="/" aria-label="Read GREP — Back to Main Site">
+          <img src={getAssetUrl("/rotate.webp")} width="20" height="20" alt="" aria-hidden="true" />
+          Read <strong>GREP</strong>
+        </a>
         <div class="reader-options">
-          <label class="deck-field"><span class="sr-only">Version</span>
+          <label class="deck-field"><span>Edition</span>
+            <span class="select-shell">
             <select data-grep-version-select>
               {versions.map((version, index) => (
                 <option value={version.id} selected={index === 0} data-pdf-url={getAssetUrl(version.path)} data-pdf-fallback={version.path} data-version-title={version.title}>{version.label}</option>
               ))}
             </select>
+            </span>
           </label>
           <details class="reading-options">
             <summary>Reading Options</summary>
           <label class="deck-field">View
+            <span class="select-shell">
             <select data-grep-mode>
               <option value="spread">Two Pages</option>
               <option value="single">One Page</option>
               <option value="pdf">PDF Mode</option>
             </select>
+            </span>
           </label>
           <a class="deck-button open-pdf" data-grep-pdf-link href="/grep/v1.pdf" target="_blank" rel="noopener">Open PDF ↗</a>
           </details>
@@ -51,10 +58,18 @@ const versions = [
         <iframe data-grep-pdf-frame title="GREP PDF viewer" hidden></iframe>
 
         <div class="reader-overlay" data-grep-start hidden>
-          <div class="reader-card">
-            <h1>Welcome to GREP</h1>
-            <p data-grep-edition>August 2026 Edition</p>
-            <button class="deck-button primary" data-grep-start-btn type="button">Start Reading</button>
+          <div class="reader-card welcome-card">
+            <div class="welcome-label">
+              <span>ACM-VIT Newsletter</span>
+              <img src={getAssetUrl("/rotate.webp")} width="28" height="28" alt="" aria-hidden="true" />
+            </div>
+            <h1>Read <span>GREP</span></h1>
+            <p class="welcome-copy">Your search query for ACM-VIT updates.</p>
+            <p class="welcome-edition" data-grep-edition>August 2026 Edition</p>
+            <button class="deck-button primary start-reading" data-grep-start-btn type="button">
+              Start Reading
+              <img src={getAssetUrl("/top-arrow.webp")} width="24" height="24" alt="" aria-hidden="true" />
+            </button>
           </div>
         </div>
 
@@ -95,23 +110,44 @@ const versions = [
 </html>
 
 <style>
+  @font-face {
+    font-family: "PolySans Trial";
+    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Standard/PolySansTrial-Slim.otf") format("opentype");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "PolySans Trial";
+    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Standard/PolySansTrial-Neutral.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
   :global(html), :global(body) { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #0d0e0d; color: #fefcd9; font-family: "PolySans Trial", sans-serif; }
   :global(*) { box-sizing: border-box; }
   :global([hidden]) { display: none !important; }
   .grep-reader { position: relative; height: 100vh; height: 100dvh; background: radial-gradient(circle at center, #111 0%, #0a0a0a 55%, #050505 100%); }
-  .reader-toolbar { position: absolute; top: 18px; left: 18px; z-index: 10; width: min(280px, calc(100vw - 36px)); padding: 14px; border: 1px solid rgba(249, 95, 74, .35); border-radius: 16px; background: rgba(10, 10, 10, .78); backdrop-filter: blur(14px); }
-  .reader-brand { display: inline-flex; gap: 4px; align-items: center; text-decoration: none; color: #f95f4a; font-size: 12px; letter-spacing: .08em; margin-bottom: 10px; }
+  .reader-toolbar { position: absolute; top: 18px; left: 18px; z-index: 10; width: min(280px, calc(100vw - 36px)); padding: 18px; border: 1px solid rgba(254, 252, 217, .65); border-radius: 24px; background: rgba(13, 14, 13, .92); backdrop-filter: blur(4px); }
+  .reader-brand { display: inline-flex; gap: 5px; align-items: center; text-decoration: none; color: #fefcd9; font-size: 16px; font-weight: 300; margin-bottom: 16px; }
+  .reader-brand img { margin-right: 5px; }
   .reader-brand strong { font-weight: inherit; }
   .reader-options { display: grid; gap: 9px; }
-  .reading-options summary { color: rgba(254, 252, 217, .6); font-size: 10px; cursor: pointer; }
+  .reading-options summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #fefcd9; font-size: 12px; font-weight: 300; cursor: pointer; padding: 6px 2px; list-style: none; }
+  .reading-options summary::-webkit-details-marker { display: none; }
+  .reading-options summary::after { content: "+"; color: #f95f4a; font-size: 20px; line-height: 1; }
+  .reading-options[open] summary::after { content: "−"; }
+  .reading-options summary:focus-visible { outline: 2px solid #f95f4a; outline-offset: 3px; border-radius: 4px; }
   .reading-options .deck-field { margin-top: 10px; }
   .reading-options .open-pdf { margin-top: 10px; }
-  .deck-field { display: grid; gap: 5px; color: rgba(254, 252, 217, .52); font-size: 10px; letter-spacing: .08em; }
+  .deck-field { display: grid; gap: 8px; color: rgba(254, 252, 217, .65); font-size: 11px; font-weight: 300; }
   select, .deck-button { border: 1px solid rgba(254, 252, 217, .14); border-radius: 10px; background: #171716; color: #fefcd9; font: inherit; font-size: 12px; }
-  select { color-scheme: dark; width: 100%; padding: 9px 12px; cursor: pointer; }
-  select option { background: #171716; color: #fefcd9; }
+  .select-shell { display: block; position: relative; }
+  .select-shell::after { content: ""; position: absolute; top: 50%; right: 18px; width: 7px; height: 7px; border-right: 1.5px solid #f95f4a; border-bottom: 1.5px solid #f95f4a; transform: translateY(-70%) rotate(45deg); pointer-events: none; }
+  select { appearance: none; color-scheme: dark; width: 100%; min-height: 44px; padding: 11px 40px 11px 17px; cursor: pointer; border: 1px solid #fefcd9; border-radius: 41px; background: rgba(0, 0, 0, .35); font-size: 13px; font-weight: 300; transition: border-color .2s ease, background .2s ease; }
+  select option { background: #0d0e0d; color: #fefcd9; }
   .deck-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 20px; text-decoration: none; cursor: pointer; border-radius: 999px; border-color: #f95f4a; background: transparent; transition: background .2s ease, color .2s ease; }
-  select:hover:not(:disabled) { border-color: rgba(249, 95, 74, .7); }
+  select:hover:not(:disabled) { border-color: #f95f4a; background: rgba(249, 95, 74, .08); }
   .deck-button:hover:not(:disabled) { background: #f95f4a; color: #1a1a1a; }
   .deck-button:disabled, select:disabled { opacity: .4; cursor: default; }
   :is(a, button, select):focus-visible { outline: 2px solid #f95f4a; outline-offset: 3px; }
@@ -126,6 +162,16 @@ const versions = [
   .reader-card h1 { font-size: .95rem; margin: 0 0 8px; font-weight: 400; letter-spacing: .12em; }
   .reader-card p { color: rgba(254, 252, 217, .6); font-size: .8rem; line-height: 1.6; margin: 0 0 16px; letter-spacing: .06em; }
   .reader-card h2 { font-size: 1rem; font-weight: 400; }
+  .welcome-card { width: min(440px, 100%); max-width: 440px; padding: 28px; text-align: left; border: 1px solid #fefcd9; border-radius: 28px; background: #0d0e0d; }
+  .welcome-label { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 20px; margin-bottom: 24px; border-bottom: 1px solid rgba(254, 252, 217, .22); color: #fefcd9; font-size: 12px; font-weight: 300; }
+  .welcome-card h1 { font-size: clamp(38px, 5vw, 52px); font-weight: 300; line-height: 1.1; letter-spacing: -.04em; margin: 0 0 16px; }
+  .welcome-card h1 span { color: #f95f4a; }
+  .welcome-card .welcome-copy { color: #fefcd9; font-size: 15px; font-weight: 300; letter-spacing: 0; line-height: 1.5; margin-bottom: 22px; max-width: 28ch; }
+  .welcome-card .welcome-edition { display: inline-block; margin-bottom: 26px; padding: 7px 12px; border: 1px solid rgba(254, 252, 217, .35); border-radius: 41px; font-size: 11px; letter-spacing: .02em; }
+  .start-reading { width: 100%; min-height: 50px; justify-content: space-between; padding: 12px 24px; border-radius: 41px; background: #f95f4a; color: #fefcd9; font-size: 16px; font-weight: 300; }
+  .start-reading:hover:not(:disabled) { background: #ff7663; color: #fefcd9; }
+  .start-reading img { transition: transform .2s ease; }
+  .start-reading:hover:not(:disabled) img { transform: translate(2px, -2px); }
   .loading-overlay { z-index: 4; background: #0d0e0d; }
   .loading-overlay .reader-card { background: none; border: 0; }
   .loading-cassette { width: 300px; height: 300px; display: flex; align-items: center; justify-content: center; margin: 0 auto 26px; }
@@ -148,9 +194,10 @@ const versions = [
   .noscript { position: fixed; inset: 25% 10%; background: #191a17; padding: 30px; z-index: 20; }
   .noscript a { color: #f95f4a; }
   @media (max-width: 768px) {
-    .reader-toolbar { top: 10px; left: 10px; width: min(240px, calc(100vw - 20px)); padding: 10px; border-radius: 12px; }
+    .reader-toolbar { top: 10px; left: 10px; width: min(240px, calc(100vw - 20px)); padding: 12px; border-radius: 22px; }
+    .reader-brand { margin-bottom: 10px; font-size: 14px; }
     .reader-options { gap: 7px; }
-    select { padding: 7px 9px; font-size: 11px; }
+    select { padding: 9px 36px 9px 14px; font-size: 12px; }
     .grep-stage { padding: 8px; }
     .transport-key { top: auto; bottom: 20px; width: 52px; height: 52px; transform: none; }
     [data-grep-prev] { left: 16px; }
@@ -160,6 +207,9 @@ const versions = [
     [data-mode="pdf"] .reader-options { flex-wrap: wrap; width: 100%; }
     [data-mode="pdf"] .deck-field { flex: 1; }
   }
+  @media (max-width: 480px) { .welcome-card { padding: 22px; border-radius: 24px; } }
+  @media (max-height: 650px) { [data-grep-start] { align-items: start; overflow-y: auto; padding-top: 200px; padding-bottom: 24px; } }
+  @media (prefers-reduced-motion: reduce) { .start-reading img { transition: none; } }
   @media (max-width: 768px) { .loading-cassette { width: 250px; height: 250px; } }
   @media (max-width: 480px) { .loading-cassette { width: 200px; height: 200px; } }
 </style>
