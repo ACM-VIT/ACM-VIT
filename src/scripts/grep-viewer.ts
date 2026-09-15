@@ -1,446 +1,322 @@
 import { getDocument, GlobalWorkerOptions } from "pdfjs-dist";
 import workerSrc from "pdfjs-dist/build/pdf.worker.min.mjs?url";
+import type { AnimationItem } from "lottie-web";
 
 GlobalWorkerOptions.workerSrc = workerSrc;
 
+type Mode = "spread" | "single" | "pdf";
+type RenderedPage = { canvas: HTMLCanvasElement; width: number; height: number; page: number };
+
 const init = () => {
   const viewer = document.querySelector<HTMLElement>("[data-grep-viewer]");
-  const pdfUrl = viewer?.getAttribute("data-pdf-url");
-  const fallbackUrl = viewer?.getAttribute("data-pdf-fallback");
-  const stage = document.querySelector<HTMLElement>("[data-grep-stage]");
-  const leftCanvas = document.querySelector<HTMLCanvasElement>(
-    "[data-grep-left]"
-  );
-  const rightCanvas = document.querySelector<HTMLCanvasElement>(
-    "[data-grep-right]"
-  );
-  const singleCanvas = document.querySelector<HTMLCanvasElement>(
-    "[data-grep-single]"
-  );
-  const flipLayer = document.querySelector<HTMLElement>("[data-grep-flip]");
-  const flipFront = document.querySelector<HTMLCanvasElement>(
-    "[data-grep-flip-front]"
-  );
-  const flipBack = document.querySelector<HTMLCanvasElement>(
-    "[data-grep-flip-back]"
-  );
-  const prevBtn = document.querySelector<HTMLButtonElement>("[data-grep-prev]");
-  const nextBtn = document.querySelector<HTMLButtonElement>("[data-grep-next]");
-  const pageLabel = document.querySelector<HTMLElement>("[data-grep-page]");
-  const totalLabel = document.querySelector<HTMLElement>("[data-grep-total]");
-  const endOverlay = document.querySelector<HTMLElement>("[data-grep-end]");
-  const startOverlay = document.querySelector<HTMLElement>("[data-grep-start]");
-  const startButton = document.querySelector<HTMLButtonElement>(
-    "[data-grep-start-btn]"
-  );
+  if (!viewer) return;
+  const find = <T extends Element>(selector: string) => viewer.querySelector<T>(selector)!;
+  const stage = find<HTMLElement>("[data-grep-stage]");
+  const left = find<HTMLCanvasElement>("[data-grep-left]");
+  const right = find<HTMLCanvasElement>("[data-grep-right]");
+  const turn = find<HTMLCanvasElement>("[data-grep-flip]");
+  const versionSelect = find<HTMLSelectElement>("[data-grep-version-select]");
+  const modeSelect = find<HTMLSelectElement>("[data-grep-mode]");
+  const prev = find<HTMLButtonElement>("[data-grep-prev]");
+  const next = find<HTMLButtonElement>("[data-grep-next]");
+  const start = find<HTMLElement>("[data-grep-start]");
+  const startButton = find<HTMLButtonElement>("[data-grep-start-btn]");
+  const loader = find<HTMLElement>("[data-grep-loading]");
+  const loadingAnimationContainer = find<HTMLElement>("[data-grep-loading-animation]");
+  const errorPanel = find<HTMLElement>("[data-grep-error]");
+  const frame = find<HTMLIFrameElement>("[data-grep-pdf-frame]");
+  const pdfLink = find<HTMLAnchorElement>("[data-grep-pdf-link]");
+  const errorLink = find<HTMLAnchorElement>("[data-grep-error-link]");
+  const options = Array.from(versionSelect.options);
+  const params = new URL(location.href).searchParams;
+  let edition = options.find((option) => option.value === params.get("version")) ?? options[0];
+  const requestedMode = params.get("mode");
+  let mode: Mode = requestedMode === "pdf" || requestedMode === "single" || requestedMode === "spread"
+    ? requestedMode : matchMedia("(max-width: 768px)").matches ? "single" : "spread";
+  let doc: Awaited<ReturnType<typeof getDocument>["promise"]> | null = null;
+  let page = 1;
+  let busy = false;
+  let started = false;
+  let needsResize = false;
+  let resizeTimer = 0;
+  let generation = 0;
+  const cache = new Map<string, Promise<RenderedPage>>();
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+  const perSpread = () => mode === "spread" ? 2 : 1;
+  let loadingAnimation: AnimationItem | null = null;
+  let loadingAnimationToken = 0;
 
-  if (
-    !pdfUrl ||
-    !stage ||
-    !leftCanvas ||
-    !rightCanvas ||
-    !singleCanvas ||
-    !flipLayer
-  ) {
-    console.warn("GREP viewer missing required elements.");
-    return;
-  }
-
-  let pdfDoc: Awaited<ReturnType<typeof getDocument>>["promise"] | null = null;
-  let currentPage = 1;
-  let totalPages = 0;
-  let isFlipping = false;
-  let renderToken = 0;
-  let resizeRaf = 0;
-  const flipDuration = 880;
-  let introDismissed = false;
-  const maxCacheEntries = 6;
-  const pageCache = new Map<
-    number,
-    { canvas: HTMLCanvasElement; cssWidth: number; cssHeight: number; ratio: number }
-  >();
-  let cacheSignature = "";
-
-  const getPagesPerSpread = () =>
-    window.matchMedia("(max-width: 768px)").matches ? 1 : 2;
-
-  const getCanvasContext = (canvas: HTMLCanvasElement) =>
-    canvas.getContext("2d");
-
-  const getSpreadMetrics = () => {
-    const rect = stage.getBoundingClientRect();
-    const styles = window.getComputedStyle(stage);
-    const paddingX =
-      parseFloat(styles.paddingLeft || "0") +
-      parseFloat(styles.paddingRight || "0");
-    const paddingY =
-      parseFloat(styles.paddingTop || "0") +
-      parseFloat(styles.paddingBottom || "0");
-    const pagesPerSpread = getPagesPerSpread();
-    const availableWidth = rect.width - paddingX;
-    const availableHeight = rect.height - paddingY;
-    const width = pagesPerSpread === 2 ? availableWidth / 2 : availableWidth;
-    return { width, height: availableHeight, pagesPerSpread };
+  const stopLoadingAnimation = () => {
+    loadingAnimationToken += 1;
+    loadingAnimation?.destroy();
+    loadingAnimation = null;
   };
 
-  const computeLayout = (boxWidth: number, boxHeight: number, ratio: number) => {
-    let width = boxWidth;
-    let height = width / ratio;
-    if (height > boxHeight) {
-      height = boxHeight;
-      width = height * ratio;
-    }
-    return { width, height };
-  };
-
-  const storeInCache = (
-    pageNumber: number,
-    canvas: HTMLCanvasElement,
-    cssWidth: number,
-    cssHeight: number,
-    ratio: number
-  ) => {
-    const cacheCanvas = document.createElement("canvas");
-    cacheCanvas.width = canvas.width;
-    cacheCanvas.height = canvas.height;
-    const ctx = cacheCanvas.getContext("2d");
-    if (ctx) {
-      ctx.drawImage(canvas, 0, 0);
-    }
-
-    if (pageCache.has(pageNumber)) {
-      pageCache.delete(pageNumber);
-    }
-    pageCache.set(pageNumber, { canvas: cacheCanvas, cssWidth, cssHeight, ratio });
-
-    if (pageCache.size > maxCacheEntries) {
-      const oldestKey = pageCache.keys().next().value;
-      if (oldestKey !== undefined) {
-        pageCache.delete(oldestKey);
-      }
+  const startLoadingAnimation = async () => {
+    stopLoadingAnimation();
+    const token = loadingAnimationToken;
+    try {
+      const { default: lottie } = await import("lottie-web/build/player/lottie_light");
+      if (token !== loadingAnimationToken || loader.hidden) return;
+      // Use the main website's exact cassette animation, on the same origin.
+      loadingAnimation = lottie.loadAnimation({
+        container: loadingAnimationContainer,
+        renderer: "svg",
+        loop: !reducedMotion.matches,
+        autoplay: !reducedMotion.matches,
+        path: "/loader/loading_state.json",
+      });
+      loadingAnimation.addEventListener("data_failed", () => {
+        if (token === loadingAnimationToken) stopLoadingAnimation();
+      });
+    } catch (error) {
+      // The loading status and PDF reader still work if the animation fails.
+      console.warn("GREP cassette animation failed to load:", error);
     }
   };
 
-  const renderPage = async (
-    pageNumber: number,
-    canvas: HTMLCanvasElement,
-    boxWidth: number,
-    boxHeight: number
-  ) => {
-    if (!pdfDoc || pageNumber < 1 || pageNumber > totalPages) {
-      const ctx = getCanvasContext(canvas);
-      if (ctx) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      }
-      return;
-    }
-
-    const cached = pageCache.get(pageNumber);
-    let ratio = cached?.ratio ?? null;
-
-    if (!ratio) {
-      const page = await (await pdfDoc).getPage(pageNumber);
-      const viewport = page.getViewport({ scale: 1 });
-      ratio = viewport.width / viewport.height;
-    }
-
-    const { width, height } = computeLayout(boxWidth, boxHeight, ratio);
-
-    if (
-      cached &&
-      Math.abs(cached.cssWidth - width) < 1 &&
-      Math.abs(cached.cssHeight - height) < 1
-    ) {
-      canvas.style.width = `${cached.cssWidth}px`;
-      canvas.style.height = `${cached.cssHeight}px`;
-      canvas.width = cached.canvas.width;
-      canvas.height = cached.canvas.height;
-
-      const ctx = getCanvasContext(canvas);
-      if (ctx) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(cached.canvas, 0, 0);
-      }
-
-      const wrapper = canvas.parentElement as HTMLElement | null;
-      if (wrapper) {
-        wrapper.style.width = `${cached.cssWidth}px`;
-        wrapper.style.height = `${cached.cssHeight}px`;
-      }
-      return;
-    }
-
-    const page = await (await pdfDoc).getPage(pageNumber);
-    const viewport = page.getViewport({ scale: 1 });
-    const deviceScale = window.devicePixelRatio || 1;
-    const scale = (width / viewport.width) * deviceScale;
-    const scaledViewport = page.getViewport({ scale });
-
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
-    canvas.width = Math.floor(scaledViewport.width);
-    canvas.height = Math.floor(scaledViewport.height);
-    const wrapper = canvas.parentElement as HTMLElement | null;
-    if (wrapper) {
-      wrapper.style.width = `${width}px`;
-      wrapper.style.height = `${height}px`;
-    }
-
-    const ctx = getCanvasContext(canvas);
-    if (!ctx) return;
-
-    await page.render({
-      canvasContext: ctx,
-      viewport: scaledViewport,
-      canvas,
-    }).promise;
-    storeInCache(pageNumber, canvas, width, height, ratio);
+  const syncControls = () => {
+    viewer.setAttribute("aria-busy", String(busy));
+    versionSelect.disabled = busy;
+    modeSelect.disabled = busy;
+    startButton.disabled = busy;
+    prev.disabled = busy || !doc || !started || page <= 1;
+    next.disabled = busy || !doc || !started || page + perSpread() > doc.numPages;
+    prev.setAttribute("aria-label", mode === "single" ? "Previous page" : "Previous pages");
+    next.setAttribute("aria-label", mode === "single" ? "Next page" : "Next pages");
+    find<HTMLElement>("[data-grep-page]").textContent = doc && mode === "spread" && page < doc.numPages ? `${page}–${page + 1}` : String(page);
+    find<HTMLElement>("[data-grep-total]").textContent = doc ? String(doc.numPages) : "—";
+    find<HTMLElement>("[data-grep-end]").hidden = !doc || page + perSpread() <= doc.numPages;
   };
 
-  const updateHud = () => {
-    if (pageLabel) pageLabel.textContent = String(currentPage);
-    if (totalLabel) totalLabel.textContent = String(totalPages);
-    const pagesPerSpread = getPagesPerSpread();
-    const isEnd = currentPage + pagesPerSpread - 1 >= totalPages;
-    if (endOverlay) {
-      endOverlay.classList.toggle("is-visible", isEnd);
-    }
-    if (startOverlay) {
-      startOverlay.classList.toggle(
-        "is-visible",
-        currentPage === 1 && !introDismissed
-      );
-    }
+  const syncUrl = () => {
+    const url = new URL(location.href);
+    if (edition.value === "v1") url.searchParams.delete("version");
+    else url.searchParams.set("version", edition.value);
+    url.searchParams.set("mode", mode);
+    history.replaceState({}, "", url);
   };
 
-  const renderSpread = async () => {
-    const token = ++renderToken;
-    const { width, height, pagesPerSpread } = getSpreadMetrics();
-    const signature = `${Math.round(width)}x${Math.round(height)}:${pagesPerSpread}`;
-    if (signature !== cacheSignature) {
-      pageCache.clear();
-      cacheSignature = signature;
-    }
-
-    if (pagesPerSpread === 1) {
-      await renderPage(currentPage, singleCanvas, width, height);
-    } else {
-      await renderPage(currentPage, leftCanvas, width, height);
-      await renderPage(currentPage + 1, rightCanvas, width, height);
-    }
-
-    if (token === renderToken) {
-      updateHud();
-      prefetchSurrounding(width, height, pagesPerSpread);
-    }
+  const applyMode = () => {
+    viewer.dataset.mode = mode;
+    modeSelect.value = mode;
+    stage.hidden = mode === "pdf";
+    frame.hidden = mode !== "pdf";
+    right.hidden = mode !== "spread";
+    start.hidden = started || mode === "pdf";
+    if (mode === "pdf") frame.src = `${pdfLink.href}#page=${page}&view=FitH`;
+    else frame.removeAttribute("src");
   };
 
-  const copyCanvas = (
-    source: HTMLCanvasElement,
-    target: HTMLCanvasElement
-  ) => {
-    target.width = source.width;
-    target.height = source.height;
-    const ctx = getCanvasContext(target);
-    if (!ctx) return;
-    ctx.clearRect(0, 0, target.width, target.height);
-    ctx.drawImage(source, 0, 0);
-  };
-
-  const positionFlipLayer = (targetCanvas: HTMLCanvasElement) => {
-    const canvasRect = targetCanvas.getBoundingClientRect();
-    const stageRect = stage.getBoundingClientRect();
-
-    flipLayer.style.width = `${canvasRect.width}px`;
-    flipLayer.style.height = `${canvasRect.height}px`;
-    flipLayer.style.left = `${canvasRect.left - stageRect.left}px`;
-    flipLayer.style.top = `${canvasRect.top - stageRect.top}px`;
-  };
-
-  const runFlip = async (direction: "next" | "prev") => {
-    if (isFlipping) return;
-    const pagesPerSpread = getPagesPerSpread();
-    const nextPage =
-      direction === "next"
-        ? currentPage + pagesPerSpread
-        : currentPage - pagesPerSpread;
-
-    if (nextPage < 1 || nextPage > totalPages) return;
-
-    let activeCanvas = singleCanvas;
-    let backPage = nextPage;
-
-    if (pagesPerSpread === 2) {
-      if (direction === "next") {
-        activeCanvas = rightCanvas;
-        backPage = currentPage + 2;
-      } else {
-        activeCanvas = leftCanvas;
-        backPage = currentPage - 1;
-      }
-    }
-
-    if (!activeCanvas || !flipFront || !flipBack) return;
-
-    positionFlipLayer(activeCanvas);
-    copyCanvas(activeCanvas, flipFront);
-    await renderPage(
-      backPage,
-      flipBack,
-      activeCanvas.clientWidth,
-      activeCanvas.clientHeight
-    );
-
-    isFlipping = true;
-    flipLayer.classList.remove("next", "prev");
-    flipLayer.classList.add("is-flipping", direction);
-    flipLayer.style.transformOrigin =
-      direction === "next" ? "left center" : "right center";
-    flipLayer.style.transform = "rotateY(0deg)";
-
-    const rotation = direction === "next" ? "-180deg" : "180deg";
-    const animation = flipLayer.animate(
-      [
-        { transform: "rotateY(0deg)" },
-        { transform: `rotateY(${rotation})` },
-      ],
-      {
-        duration: flipDuration,
-        easing: "cubic-bezier(0.25, 0.8, 0.25, 1)",
-        fill: "forwards",
-      }
-    );
-
-    animation.onfinish = async () => {
-      flipLayer.classList.remove("is-flipping", direction);
-      flipLayer.style.transform = "";
-      isFlipping = false;
-      currentPage = nextPage;
-      await renderSpread();
+  const metrics = () => {
+    const style = getComputedStyle(stage);
+    return {
+      width: Math.max(1, (stage.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight)) / perSpread()),
+      height: Math.max(1, stage.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom)),
+      dpr: Math.min(devicePixelRatio || 1, 2),
     };
   };
 
-  const onPrev = () => runFlip("prev");
-  const onNext = () => runFlip("next");
-
-  prevBtn?.addEventListener("click", onPrev);
-  nextBtn?.addEventListener("click", onNext);
-
-  const dismissIntro = () => {
-    introDismissed = true;
-    if (startOverlay) startOverlay.classList.remove("is-visible");
+  // Render into detached canvases only. In-flight prefetches share a promise
+  // with navigation, and can never overwrite a displayed canvas or new edition.
+  const prepare = (number: number, size = metrics()): Promise<RenderedPage> => {
+    const source = doc!;
+    const key = `${generation}:${number}:${size.width}:${size.height}:${size.dpr}`;
+    const hit = cache.get(key);
+    if (hit) return hit;
+    const promise = (async () => {
+      const valid = number >= 1 && number <= source.numPages;
+      const pdfPage = await source.getPage(valid ? number : source.numPages);
+      const natural = pdfPage.getViewport({ scale: 1 });
+      const scale = Math.min(size.width / natural.width, size.height / natural.height);
+      const viewport = pdfPage.getViewport({ scale: scale * size.dpr });
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.ceil(viewport.width);
+      canvas.height = Math.ceil(viewport.height);
+      if (valid) await pdfPage.render({ canvas, canvasContext: canvas.getContext("2d")!, viewport }).promise;
+      return { canvas, width: natural.width * scale, height: natural.height * scale, page: valid ? number : 0 };
+    })();
+    cache.set(key, promise);
+    while (cache.size > 10) cache.delete(cache.keys().next().value!);
+    void promise.catch(() => { if (cache.get(key) === promise) cache.delete(key); });
+    return promise;
   };
 
-  startButton?.addEventListener("click", dismissIntro);
+  const paint = (target: HTMLCanvasElement, source: RenderedPage) => {
+    target.width = source.canvas.width;
+    target.height = source.canvas.height;
+    target.style.width = `${source.width}px`;
+    target.style.height = `${source.height}px`;
+    target.getContext("2d")!.drawImage(source.canvas, 0, 0);
+    target.dataset.page = String(source.page);
+  };
 
-  window.addEventListener("resize", () => {
-    cancelAnimationFrame(resizeRaf);
-    resizeRaf = requestAnimationFrame(() => {
-      renderSpread();
-    });
-  });
+  const spread = (number: number) => {
+    const size = metrics();
+    return Promise.all(Array.from({ length: perSpread() }, (_, offset) => prepare(number + offset, size)));
+  };
 
-  window.addEventListener("keydown", (event) => {
-    if (event.key === "ArrowRight") onNext();
-    if (event.key === "ArrowLeft") onPrev();
-  });
+  const commit = (pages: RenderedPage[]) => {
+    // Both stationary pages are committed in the same task / browser frame.
+    paint(left, pages[0]);
+    if (pages[1]) paint(right, pages[1]);
+    else { right.width = 0; right.dataset.page = "0"; }
+  };
 
-  const prefetchPage = async (
-    pageNumber: number,
-    boxWidth: number,
-    boxHeight: number
-  ) => {
-    if (!pdfDoc || pageNumber < 1 || pageNumber > totalPages) return;
-    if (pageCache.has(pageNumber)) return;
-
-    const page = await (await pdfDoc).getPage(pageNumber);
-    const viewport = page.getViewport({ scale: 1 });
-    const ratio = viewport.width / viewport.height;
-    const { width, height } = computeLayout(boxWidth, boxHeight, ratio);
-    const deviceScale = window.devicePixelRatio || 1;
-    const scale = (width / viewport.width) * deviceScale;
-    const scaledViewport = page.getViewport({ scale });
-
-    const cacheCanvas = document.createElement("canvas");
-    cacheCanvas.width = Math.floor(scaledViewport.width);
-    cacheCanvas.height = Math.floor(scaledViewport.height);
-    const ctx = cacheCanvas.getContext("2d");
-    if (!ctx) return;
-
-    await page.render({
-      canvasContext: ctx,
-      viewport: scaledViewport,
-      canvas: cacheCanvas,
-    }).promise;
-    pageCache.set(pageNumber, {
-      canvas: cacheCanvas,
-      cssWidth: width,
-      cssHeight: height,
-      ratio,
-    });
-
-    if (pageCache.size > maxCacheEntries) {
-      const oldestKey = pageCache.keys().next().value;
-      if (oldestKey !== undefined) {
-        pageCache.delete(oldestKey);
-      }
+  const prefetch = () => {
+    if (!doc || mode === "pdf") return;
+    const size = metrics();
+    for (const number of [page - 2, page - 1, page + perSpread(), page + perSpread() + 1]) {
+      if (number > 0 && number <= doc.numPages) void prepare(number, size).catch(() => {});
     }
   };
 
-  const prefetchSurrounding = (
-    boxWidth: number,
-    boxHeight: number,
-    pagesPerSpread: number
-  ) => {
-    const nextStart = currentPage + pagesPerSpread;
-    const prevStart = currentPage - pagesPerSpread;
-    const targets: number[] = [];
+  const showError = (error: unknown) => {
+    console.error("GREP reader failed:", error);
+    loader.hidden = true;
+    start.hidden = true;
+    errorPanel.hidden = false;
+  };
 
-    if (pagesPerSpread === 2) {
-      targets.push(nextStart, nextStart + 1, prevStart, prevStart + 1);
-    } else {
-      targets.push(nextStart, prevStart);
+  const finish = () => {
+    busy = false;
+    syncControls();
+    if (needsResize && mode !== "pdf" && doc && errorPanel.hidden) {
+      needsResize = false;
+      void redraw();
     }
-
-    targets.forEach((pageNumber) => {
-      if (pageNumber >= 1 && pageNumber <= totalPages) {
-        prefetchPage(pageNumber, boxWidth, boxHeight);
-      }
-    });
   };
 
-  const loadPdf = (url: string) => getDocument(url).promise;
-  const usePdf = async (url: string) => {
-    pdfDoc = loadPdf(url);
-    return await pdfDoc;
+  const redraw = async () => {
+    if (!doc || mode === "pdf") return;
+    if (busy) { needsResize = true; return; }
+    busy = true;
+    syncControls();
+    try { commit(await spread(page)); prefetch(); }
+    catch (error) { showError(error); }
+    finally { finish(); }
   };
 
-  (async () => {
+  const animate = async (from: number, to: number) => {
+    const animation = turn.animate(
+      [{ transform: `scaleX(${from})` }, { transform: `scaleX(${to})` }],
+      { duration: 230, easing: "cubic-bezier(.4,0,.2,1)", fill: "forwards" },
+    );
+    try { await animation.finished; }
+    finally { turn.style.transform = `scaleX(${to})`; animation.cancel(); }
+  };
+
+  const positionTurn = (target: HTMLCanvasElement, origin: "left" | "right") => {
+    const rect = target.getBoundingClientRect();
+    const parent = stage.getBoundingClientRect();
+    turn.style.left = `${rect.left - parent.left}px`;
+    turn.style.top = `${rect.top - parent.top}px`;
+    turn.style.transformOrigin = `${origin} center`;
+  };
+
+  const flip = async (direction: 1 | -1) => {
+    if (busy || !doc || !started || mode === "pdf" || !errorPanel.hidden) return;
+    const destination = page + direction * perSpread();
+    if (destination < 1 || destination > doc.numPages) return;
+    busy = true;
+    syncControls();
     try {
-      const resolved = await usePdf(pdfUrl);
-      totalPages = resolved.numPages;
-    } catch (error) {
-      if (fallbackUrl && fallbackUrl !== pdfUrl) {
-        try {
-          const resolved = await usePdf(fallbackUrl);
-          totalPages = resolved.numPages;
-        } catch (fallbackError) {
-          console.error("GREP PDF failed to load:", fallbackError);
-          return;
-        }
-      } else {
-        console.error("GREP PDF failed to load:", error);
-        return;
+      const prepared = await spread(destination);
+      if (!reducedMotion.matches) {
+        const outgoing = mode === "spread" && direction === 1 ? right : left;
+        paint(turn, { canvas: outgoing, width: outgoing.clientWidth, height: outgoing.clientHeight, page });
+        positionTurn(outgoing, direction === 1 ? "left" : "right");
+        turn.style.transform = "scaleX(1)";
+        turn.hidden = false;
+        // Replace the sheet below the outgoing copy before opening the fold.
+        paint(outgoing, prepared[mode === "spread" && direction === 1 ? 1 : 0]);
+        await animate(1, 0);
+        commit(prepared);
+        const landing = mode === "spread" && direction === -1 ? right : left;
+        paint(turn, prepared[mode === "spread" && direction === -1 ? 1 : 0]);
+        positionTurn(landing, direction === 1 ? "right" : "left");
+        // Positive scale only: neither sheet can ever be mirrored.
+        await animate(0, 1);
       }
+      commit(prepared);
+      page = destination;
+      prefetch();
+    } catch (error) { showError(error); }
+    finally {
+      turn.hidden = true;
+      turn.getAnimations().forEach((animation) => animation.cancel());
+      turn.style.transform = "";
+      finish();
     }
+  };
 
-    updateHud();
-    await renderSpread();
-  })();
+  const loadVersion = async (option: HTMLOptionElement) => {
+    if (busy) return;
+    busy = true;
+    generation += 1;
+    cache.clear();
+    page = 1;
+    loader.hidden = false;
+    void startLoadingAnimation();
+    errorPanel.hidden = true;
+    start.hidden = true;
+    versionSelect.value = option.value;
+    // Direct links use same-origin assets so browser PDF mode also works if
+    // a CDN asset hasn't been uploaded yet or disallows cross-origin requests.
+    pdfLink.href = option.dataset.pdfFallback!;
+    errorLink.href = option.dataset.pdfFallback!;
+    const oldDoc = doc;
+    doc = null;
+    syncControls();
+    try {
+      if (oldDoc) await oldDoc.destroy();
+      const urls = [...new Set([option.dataset.pdfUrl!, option.dataset.pdfFallback!])];
+      for (const url of urls) {
+        const task = getDocument(url);
+        task.onProgress = ({ loaded, total }) => {
+          find<HTMLElement>("[data-grep-loading-text]").textContent = total > 0 && loaded < total
+            ? `Loading GREP… ${Math.min(100, Math.round(loaded / total * 100))}%` : "Preparing Pages…";
+        };
+        try { doc = await task.promise; break; }
+        catch (error) { await task.destroy(); if (url === urls.at(-1)) throw error; }
+      }
+      edition = option;
+      find<HTMLElement>("[data-grep-edition]").textContent = option.dataset.versionTitle!;
+      applyMode();
+      if (mode !== "pdf") { commit(await spread(page)); prefetch(); }
+      syncUrl();
+    } catch (error) { showError(error); }
+    finally { loader.hidden = true; stopLoadingAnimation(); finish(); }
+  };
+
+  versionSelect.addEventListener("change", () => { void loadVersion(versionSelect.selectedOptions[0]); });
+  modeSelect.addEventListener("change", () => {
+    if (busy) { modeSelect.value = mode; return; }
+    mode = modeSelect.value as Mode;
+    if (mode === "spread") page = Math.floor((page - 1) / 2) * 2 + 1;
+    cache.clear();
+    applyMode();
+    syncUrl();
+    syncControls();
+    void redraw();
+  });
+  startButton.addEventListener("click", () => { started = true; start.hidden = true; syncControls(); next.focus(); });
+  prev.addEventListener("click", () => { void flip(-1); });
+  next.addEventListener("click", () => { void flip(1); });
+  find<HTMLButtonElement>("[data-grep-retry]").addEventListener("click", () => { void loadVersion(versionSelect.selectedOptions[0]); });
+  window.addEventListener("keydown", (event) => {
+    if (event.target instanceof Element && event.target.closest("select, input, textarea, button, a, [contenteditable]")) return;
+    if (mode !== "pdf" && (event.key === "ArrowRight" || event.key === "ArrowLeft")) {
+      event.preventDefault();
+      void flip(event.key === "ArrowRight" ? 1 : -1);
+    }
+  });
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(() => { void redraw(); }, 120);
+  });
+  applyMode();
+  void loadVersion(edition);
 };
 
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", init);
-} else {
-  init();
-}
+init();
