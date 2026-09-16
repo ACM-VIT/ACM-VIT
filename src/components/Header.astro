@@ -1,5 +1,11 @@
 ---
-// Header.astro
+import { getAssetUrl } from "../utils/cdn";
+import {
+  moreNavigationItems,
+  navigationPanels,
+} from "../data/navigationData";
+
+const isExternal = (href: string) => /^https?:\/\//.test(href);
 ---
 
 <header
@@ -8,30 +14,19 @@
   <div
     class="header-inner relative max-w-4xl mx-auto flex justify-center pointer-events-auto"
   >
-    <nav>
-      <!-- Desktop nav -->
-      <div class="nav-desktop">
+    <nav aria-label="Primary navigation">
+      <div class="nav-desktop" id="desktopNav">
         <div
           class="header-pill relative flex items-center justify-center w-fit px-8 overflow-hidden"
+          id="headerPill"
           style="height:50px;border-radius:41px;border:1px solid #FEFCD9;background:rgba(0,0,0,0.35);backdrop-filter:blur(4px);"
         >
-          <!-- The Blob -->
           <div
             id="nav-blob"
             class="absolute top-0 bottom-0 bg-[#F95F4A] rounded-[41px] transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] opacity-0 -z-10"
-            style="left: 0; width: 0;"
+            style="left:0;width:0;"
+            aria-hidden="true"
           >
-          </div>
-
-          <!-- Dynamic Title for MORE sections -->
-          <div
-            id="dynamic-title"
-            class="absolute inset-0 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300"
-          >
-            <div
-              class="justify-start text-white text-base font-light font-['PolySans_Trial'] uppercase"
-            >
-            </div>
           </div>
 
           <ul
@@ -41,98 +36,162 @@
             <li>
               <a
                 href="#about"
-                class="nav-link inline-block px-3 py-1 hover:text-white transition-colors"
-                >ABOUT</a
+                class="nav-link inline-block px-3 py-1"
+                data-mega-section="about"
+                aria-haspopup="true"
+                aria-controls="nav-panel-about"
+                aria-expanded="false">ABOUT</a
               >
             </li>
             <li>
               <a
                 href="#domains"
-                class="nav-link inline-block px-3 py-1 hover:text-white transition-colors"
-                >DOMAINS</a
+                class="nav-link inline-block px-3 py-1"
+                data-mega-section="domains"
+                aria-haspopup="true"
+                aria-controls="nav-panel-domains"
+                aria-expanded="false">DOMAINS</a
               >
             </li>
             <li>
               <a
                 href="#events"
-                class="nav-link inline-block px-3 py-1 hover:text-white transition-colors"
-                >EVENTS</a
+                class="nav-link inline-block px-3 py-1"
+                data-mega-section="events"
+                aria-haspopup="true"
+                aria-controls="nav-panel-events"
+                aria-expanded="false">EVENTS</a
               >
             </li>
             <li>
               <a
                 href="#projects"
-                class="nav-link inline-block px-3 py-1 hover:text-white transition-colors"
-                >PROJECTS</a
+                class="nav-link inline-block px-3 py-1"
+                data-mega-section="projects"
+                aria-haspopup="true"
+                aria-controls="nav-panel-projects"
+                aria-expanded="false">PROJECTS</a
               >
             </li>
             <li>
               <a
                 href="#acm-w"
-                class="nav-link inline-block px-3 py-1 hover:text-white transition-colors"
-                >ACM-W</a
+                class="nav-link inline-block px-3 py-1"
+                data-mega-section="acm-w"
+                aria-haspopup="true"
+                aria-controls="nav-panel-acm-w"
+                aria-expanded="false">ACM-W</a
               >
             </li>
             <li>
-              <a
-                href="#"
-                role="button"
-                class="more-toggle inline-block px-3 py-1 more-link hover:opacity-80 transition-opacity"
+              <button
+                type="button"
+                class="nav-link more-toggle inline-block px-3 py-1 more-link"
+                aria-haspopup="true"
                 aria-controls="desktopMoreMenu"
-                aria-expanded="false">MORE</a
+                aria-expanded="false">MORE</button
               >
             </li>
           </ul>
         </div>
+
+        <div class="nav-megamenu" id="navMegamenu" aria-hidden="true" inert>
+          {
+            Object.entries(navigationPanels).map(([key, items]) => (
+              <div
+                class="megamenu-panel"
+                id={`nav-panel-${key}`}
+                data-panel={key}
+                role="region"
+                aria-label={`${key === "acm-w" ? "ACM-W" : key} links`}
+              >
+                <div class="megamenu-grid">
+                  {items.map((item, index) =>
+                    item.all ? (
+                      <a
+                        href={item.href}
+                        class="megamenu-tile all-tile"
+                        style={`--tile-i:${index}`}
+                        target={isExternal(item.href) ? "_blank" : undefined}
+                        rel={isExternal(item.href) ? "noopener noreferrer" : undefined}
+                      >
+                        <span class="all-tile-label">{item.title}</span>
+                        <svg
+                          class="all-tile-arrow"
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M5 12h14M13 6l6 6-6 6"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"></path>
+                        </svg>
+                      </a>
+                    ) : (
+                      <a
+                        href={item.href}
+                        class="megamenu-tile"
+                        data-tilt
+                        style={`--tile-i:${index};${item.accent ? `--tile-color:${item.accent}` : ""}`}
+                        target={isExternal(item.href) ? "_blank" : undefined}
+                        rel={isExternal(item.href) ? "noopener noreferrer" : undefined}
+                      >
+                        {item.accent && <span class="tile-color-bar" aria-hidden="true" />}
+                        <span class="tile-text">
+                          <span class="tile-title">{item.title}</span>
+                          <span class="tile-desc">{item.description}</span>
+                        </span>
+                        {item.image && (
+                          <img
+                            class="tile-img"
+                            src={getAssetUrl(item.image)}
+                            alt=""
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        )}
+                      </a>
+                    ),
+                  )}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+
+        <div id="desktopMoreMenu" class="more-menu" aria-hidden="true" inert>
+          <ul class="more-list">
+            {
+              moreNavigationItems.map((item, index) => (
+                <li style={`--menu-i:${index}`}>
+                  <a
+                    href={item.href}
+                    data-more-section={item.panel}
+                    aria-haspopup="true"
+                    aria-controls={`nav-panel-${item.panel}`}
+                    aria-expanded="false"
+                  >
+                    <span>{item.label}</span>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
       </div>
 
-      <!-- Desktop More dropdown -->
-      <div id="desktopMoreMenu" class="more-menu w-[220px]">
-        <ul class="mobile-more-list">
-          <li>
-            <a
-              href="#blogs"
-              class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[11px]"
-              >Blogs</a
-            >
-          </li>
-          <li>
-            <a
-              href="#partners"
-              class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[11px]"
-              >Partners</a
-            >
-          </li>
-          <li>
-            <a
-              href="#contact"
-              class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[11px]"
-              >Contact Us</a
-            >
-          </li>
-          <li>
-            <a
-              href="#community"
-              class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[11px]"
-              >Community</a
-            >
-          </li>
-          <li>
-            <a
-              href="#team"
-              class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[11px]"
-              >Team</a
-            >
-          </li>
-        </ul>
-      </div>
-
-      <!-- Mobile nav -->
       <div class="nav-mobile">
         <button
           id="mobile-menu-btn"
           class="pointer-events-auto w-12 h-12 flex items-center justify-center rounded-full bg-[rgba(0,0,0,0.35)] border border-[#FEFCD9] backdrop-blur transition-transform active:scale-95"
-          aria-label="Toggle menu"
+          aria-label="Open navigation menu"
+          aria-controls="mobile-menu-overlay"
+          aria-expanded="false"
         >
           <svg
             width="24"
@@ -143,6 +202,7 @@
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
+            aria-hidden="true"
           >
             <line x1="3" y1="12" x2="21" y2="12"></line>
             <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -153,10 +213,13 @@
         <div
           id="mobile-menu-overlay"
           class="fixed inset-0 bg-black/95 z-[100] translate-x-full transition-transform duration-300 flex flex-col items-center justify-center"
+          aria-hidden="true"
+          inert
         >
           <button
             id="mobile-menu-close"
             class="absolute top-6 right-6 w-12 h-12 flex items-center justify-center text-[#FEFCD9]"
+            aria-label="Close navigation menu"
           >
             <svg
               width="32"
@@ -167,6 +230,7 @@
               stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
+              aria-hidden="true"
             >
               <line x1="18" y1="6" x2="6" y2="18"></line>
               <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -208,424 +272,679 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition:
-      width 0.3s cubic-bezier(0.25, 0.1, 0.25, 1),
-      background-color 0.3s ease,
-      border-color 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.3s ease;
   }
 
-  /* Dynamic Mode Styles */
-  .header-pill.dynamic-mode {
-    width: 112px; /* w-28 */
-    background-color: #f95f4a !important;
-    border-color: #fefcd9;
+  .header-pill.menu-active {
+    border-color: #f95f4a !important;
+    background: rgba(0, 0, 0, 0.52) !important;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.42), 0 0 18px rgba(249, 95, 74, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.06);
   }
 
-  .header-pill.dynamic-mode.pink-mode {
-    background-color: #ff007a !important;
-  }
-
-  .header-pill.dynamic-mode .nav-list {
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .header-pill.dynamic-mode #dynamic-title {
-    opacity: 1;
-  }
-
-  /* Hover state for dynamic mode - revert to full menu */
-  .header-pill.dynamic-mode:hover {
-    width: var(--full-width, auto) !important;
-    background-color: rgba(0, 0, 0, 0.35) !important;
-    border-color: #fefcd9;
-  }
-
-  .header-pill.dynamic-mode:hover .nav-list {
-    opacity: 1;
-    pointer-events: auto;
-    transition-delay: 0.1s;
-  }
-
-  .header-pill.dynamic-mode:hover #dynamic-title {
-    opacity: 0;
-    transition-delay: 0s;
-  }
-  .nav-list a {
+  .nav-list a,
+  .nav-list button {
     position: relative;
     z-index: 10;
     color: #fefcd9;
-    transition: color 0.3s ease;
+    font: inherit;
+    letter-spacing: inherit;
+    line-height: inherit;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    transition: color 0.22s ease, opacity 0.22s ease;
   }
-  .nav-list a.more-link {
-    color: #f95f4a !important;
+
+  .nav-list a:hover,
+  .nav-list a:focus-visible,
+  .nav-list a[aria-expanded="true"] {
+    color: #f95f4a;
+    outline: none;
   }
-  .nav-list li {
-    white-space: nowrap;
+
+  .nav-list a[href="#acm-w"]:hover,
+  .nav-list a[href="#acm-w"]:focus-visible,
+  .nav-list a[href="#acm-w"][aria-expanded="true"] {
+    color: #ff007a;
   }
+
+  .nav-list .more-link {
+    color: #f95f4a;
+    transition: color 0.28s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.22s ease;
+  }
+  .nav-list .more-link:hover,
+  .nav-list .more-link:focus-visible { color: #ff8878; outline: none; }
+  .nav-list .more-link.blob-active { color: #fefcd9; }
+  .nav-list li { white-space: nowrap; }
+
   .nav-desktop {
+    --more-menu-shift: clamp(0px, calc(50vw - 315px), 268px);
     display: block;
     position: relative;
     transform: scale(var(--nav-bar-scale, 1));
     transform-origin: top center;
     transition: transform 160ms ease;
   }
-  .nav-mobile {
-    display: none;
-    position: relative;
-    pointer-events: auto; /* Ensure button is clickable */
+
+  .nav-mobile { display: none; position: relative; pointer-events: auto; }
+
+  .nav-megamenu {
+    position: absolute;
+    top: calc(100% + 14px);
+    left: 50%;
+    width: min(980px, calc(100vw - 40px));
+    z-index: 70;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%) translateY(10px) scale(0.97);
+    transform-origin: top center;
+    transition: opacity 0.22s ease, transform 0.28s cubic-bezier(0.22, 0.61, 0.36, 1);
   }
 
-  /* 'More' dropdown */
-  .more-menu {
+  .nav-megamenu::before {
+    content: "";
     position: absolute;
-    top: calc(100% + 8px);
-    right: 0; /* stick to right */
+    top: -16px;
+    left: 0;
+    right: 0;
+    height: 16px;
+  }
+
+  .nav-megamenu.from-more {
     left: auto;
-    border: 1px solid #fefcd9;
-    border-radius: 16px;
-    background: rgba(0, 0, 0, 0.35);
-    backdrop-filter: blur(4px);
-    padding: 10px 12px;
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
-    z-index: 60;
-    /* animation base state */
-    opacity: 0;
-    transform: translateY(8px) scale(0.96);
+    right: calc(294px - var(--more-menu-shift));
+    width: min(860px, calc(100vw - 360px));
+    transform: translateY(10px) scale(0.97);
     transform-origin: top right;
-    transition:
-      opacity 0.18s ease,
-      transform 0.24s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  .nav-megamenu.from-more::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -16px;
+    width: 16px;
+    height: 100%;
+  }
+
+  .nav-megamenu.open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+
+  .nav-megamenu.open.from-more { transform: translateY(0) scale(1); }
+
+  .megamenu-panel {
+    display: none;
+    position: relative;
+    overflow: hidden;
+    padding: 18px;
+    border: 1px solid rgba(249, 95, 74, 0.55);
+    border-radius: 22px;
+    background: rgba(6, 2, 2, 0.76);
+    backdrop-filter: blur(34px) saturate(180%);
+    -webkit-backdrop-filter: blur(34px) saturate(180%);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.58), 0 0 20px rgba(249, 95, 74, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  .megamenu-panel::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 45%;
+    border-radius: inherit;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent);
     pointer-events: none;
   }
-  .more-menu.open {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    pointer-events: auto;
+
+  .megamenu-panel.active { display: block; }
+
+  .megamenu-panel[data-panel="acm-w"] {
+    border-color: rgba(255, 0, 122, 0.55);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.58), 0 0 22px rgba(255, 0, 122, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   }
-  .mobile-more-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+
+  .megamenu-grid {
+    position: relative;
+    z-index: 1;
     display: grid;
-    gap: 6px;
-    text-align: left;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
   }
-  .mobile-more-list a {
+
+  .nav-megamenu.open .megamenu-tile {
+    animation: tile-slide-in 0.3s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--tile-i, 0) * 45ms);
+  }
+
+  @keyframes tile-slide-in {
+    from { opacity: 0; transform: translateY(10px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .megamenu-tile {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: stretch;
+    min-height: 118px;
+    overflow: hidden;
+    border: 1px solid rgba(254, 252, 217, 0.09);
+    border-radius: 16px;
+    background: rgba(13, 14, 13, 0.55);
+    color: #fefcd9;
     text-decoration: none;
-    letter-spacing: 0.04em;
+    will-change: transform;
+    transition: border-color 0.24s ease, background 0.24s ease, box-shadow 0.24s ease, transform 0.16s ease-out;
   }
-  .more-menu .mobile-more-list li {
+
+  .megamenu-tile:hover,
+  .megamenu-tile:focus-visible {
+    border-color: rgba(249, 95, 74, 0.35);
+    background: rgba(249, 95, 74, 0.08);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.28), 0 0 14px rgba(249, 95, 74, 0.08);
+    outline: none;
+  }
+
+  .megamenu-panel[data-panel="acm-w"] .megamenu-tile:hover,
+  .megamenu-panel[data-panel="acm-w"] .megamenu-tile:focus-visible {
+    border-color: rgba(255, 0, 122, 0.4);
+    background: rgba(255, 0, 122, 0.09);
+  }
+
+  .tile-color-bar {
+    position: absolute;
+    top: 0;
+    left: 16px;
+    right: 16px;
+    height: 3px;
+    border-radius: 0 0 3px 3px;
+    background: var(--tile-color, #f95f4a);
+    opacity: 0.65;
+    transition: opacity 0.2s ease;
+  }
+
+  .megamenu-tile:hover .tile-color-bar,
+  .megamenu-tile:focus-visible .tile-color-bar { opacity: 1; }
+
+  .tile-text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    min-width: 0;
+    padding: 16px 0 16px 18px;
+  }
+
+  .tile-title,
+  .all-tile-label {
+    color: #fefcd9;
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: 0.045em;
+    text-transform: uppercase;
+    transition: color 0.2s ease;
+  }
+
+  .tile-desc {
+    color: rgba(254, 252, 217, 0.48);
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 12px;
+    line-height: 1.38;
+    transition: color 0.2s ease;
+  }
+
+  .megamenu-tile:hover .tile-title,
+  .megamenu-tile:focus-visible .tile-title { color: #f95f4a; }
+
+  .megamenu-panel[data-panel="acm-w"] .megamenu-tile:hover .tile-title,
+  .megamenu-panel[data-panel="acm-w"] .megamenu-tile:focus-visible .tile-title { color: #ff2b90; }
+
+  .megamenu-tile:hover .tile-desc,
+  .megamenu-tile:focus-visible .tile-desc { color: rgba(254, 252, 217, 0.72); }
+
+  .tile-img {
+    width: 125px;
+    height: auto;
+    flex-shrink: 0;
+    object-fit: contain;
+    object-position: center;
+    padding: 12px 14px 12px 4px;
+    opacity: 0.58;
+    filter: saturate(0.7);
+    transform: rotate(-3deg) scale(1.01);
+    transition: opacity 0.32s ease, filter 0.32s ease, transform 0.32s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  .megamenu-tile:hover .tile-img,
+  .megamenu-tile:focus-visible .tile-img {
+    opacity: 1;
+    filter: saturate(1.05);
+    transform: rotate(0) scale(1.06);
+  }
+
+  .megamenu-panel[data-panel="about"] .tile-img,
+  .megamenu-panel[data-panel="team"] .tile-img {
+    width: 104px;
+    padding: 0;
+    object-fit: cover;
+    transform: scale(1.02);
+  }
+
+  .megamenu-panel[data-panel="contact"] .tile-img,
+  .megamenu-panel[data-panel="partners"] .tile-img {
+    width: 108px;
+    padding: 18px;
+    transform: none;
+  }
+
+  .megamenu-panel[data-panel="community"] .tile-img[src*="acm-logo-black"] { filter: invert(1); }
+
+  .all-tile {
+    grid-column: 1 / -1;
+    min-height: 0;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px;
+  }
+
+  .all-tile-label { font-size: 13px; letter-spacing: 0.08em; }
+  .all-tile-arrow { transition: color 0.2s ease, transform 0.24s ease; }
+
+  .all-tile:hover .all-tile-label,
+  .all-tile:focus-visible .all-tile-label,
+  .all-tile:hover .all-tile-arrow,
+  .all-tile:focus-visible .all-tile-arrow { color: #f95f4a; }
+
+  .all-tile:hover .all-tile-arrow,
+  .all-tile:focus-visible .all-tile-arrow { transform: translateX(4px); }
+
+  .more-menu {
+    position: absolute;
+    top: calc(100% + 14px);
+    right: calc(-1 * var(--more-menu-shift));
+    width: 280px;
+    z-index: 80;
+    padding: 16px 18px;
+    border: 1px solid #fefcd9;
+    border-radius: 20px;
+    background: rgba(6, 2, 2, 0.78);
+    backdrop-filter: blur(28px) saturate(170%);
+    -webkit-backdrop-filter: blur(28px) saturate(170%);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(9px) scale(0.96);
+    transform-origin: top right;
+    transition: opacity 0.2s ease, transform 0.26s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  .more-menu::before {
+    content: "";
+    position: absolute;
+    top: -16px;
+    left: 0;
+    right: 0;
+    height: 16px;
+  }
+
+  .more-menu::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -16px;
+    width: 16px;
+  }
+
+  .more-menu.open { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
+  .more-list { display: grid; gap: 5px; margin: 0; padding: 0; list-style: none; }
+
+  .more-list li {
     opacity: 0;
     transform: translateY(6px);
-    transition:
-      opacity 0.2s ease,
-      transform 0.25s ease;
+    transition: opacity 0.2s ease, transform 0.24s ease;
   }
-  .more-menu.open .mobile-more-list li {
+
+  .more-menu.open .more-list li {
     opacity: 1;
     transform: translateY(0);
+    transition-delay: calc(var(--menu-i, 0) * 35ms);
   }
-  .more-menu.open .mobile-more-list li:nth-child(1) {
-    transition-delay: 0.02s;
+
+  .more-list a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 9px 10px;
+    border-radius: 11px;
+    color: #fefcd9;
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
   }
-  .more-menu.open .mobile-more-list li:nth-child(2) {
-    transition-delay: 0.06s;
-  }
-  .more-menu.open .mobile-more-list li:nth-child(3) {
-    transition-delay: 0.1s;
+
+  .more-list a:hover,
+  .more-list a:focus-visible,
+  .more-list a.is-current {
+    color: #f95f4a;
+    background: rgba(249, 95, 74, 0.09);
+    outline: none;
+    transform: translateX(2px);
   }
 
   @media (max-width: 952px) {
-    body.partners-active .site-header {
-      z-index: 200;
-    }
-    body.mobile-menu-open #mobile-menu-btn {
-      opacity: 0;
-      pointer-events: none;
-    }
-    .site-header {
-      top: 15px;
-      bottom: auto;
-      padding: 0 15px;
-    }
-    .header-inner {
-      justify-content: flex-end;
-    }
-    body.hero-in-view .site-header {
-      top: auto;
-      bottom: calc(18px + env(safe-area-inset-bottom, 0px));
-    }
-    body.hero-in-view .header-inner {
-      justify-content: center;
-    }
+    body.partners-active .site-header { z-index: 200; }
+    :global(body.mobile-menu-open) { overflow: hidden; }
+    body.mobile-menu-open #mobile-menu-btn { opacity: 0; pointer-events: none; }
+    .site-header { top: 15px; bottom: auto; padding: 0 15px; }
+    .header-inner { justify-content: flex-end; }
+    body.hero-in-view .site-header { top: auto; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); }
+    body.hero-in-view .header-inner { justify-content: center; }
     #mobile-menu-btn,
-    #mobile-menu-close {
-      width: 45px;
-      height: 45px;
-    }
-    #mobile-menu-close {
-      top: 15px;
-      right: 15px;
-      bottom: auto;
-      left: auto;
-      transform: none;
-    }
-    body.hero-in-view #mobile-menu-close {
-      top: auto;
-      right: auto;
-      bottom: calc(18px + env(safe-area-inset-bottom, 0px));
-      left: 50%;
-      transform: translateX(-50%);
-    }
-    .nav-desktop {
-      display: none;
-      transform: none;
-    }
-    .nav-mobile {
-      display: block;
-    }
+    #mobile-menu-close { width: 45px; height: 45px; }
+    #mobile-menu-close { top: 15px; right: 15px; bottom: auto; left: auto; transform: none; }
+    body.hero-in-view #mobile-menu-close { top: auto; right: auto; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%); }
+    .nav-desktop { display: none; transform: none; }
+    .nav-mobile { display: block; }
   }
 
   @media screen and (max-width: 480px) {
-    .site-header {
-      top: 10px;
-      padding: 0 10px;
-    }
-    body.hero-in-view .site-header {
-      top: auto;
-      bottom: calc(10px + env(safe-area-inset-bottom, 0px));
-    }
+    .site-header { top: 10px; padding: 0 10px; }
+    body.hero-in-view .site-header { top: auto; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); }
     #mobile-menu-btn,
-    #mobile-menu-close {
-      width: 35px;
-      height: 35px;
-    }
+    #mobile-menu-close { width: 35px; height: 35px; }
     #mobile-menu-btn svg,
-    #mobile-menu-close svg {
-      width: 20px;
-      height: 20px;
-    }
-    #mobile-menu-close {
-      top: 10px;
-      right: 10px;
-    }
-    body.hero-in-view #mobile-menu-close {
-      top: auto;
-      right: auto;
-      bottom: calc(10px + env(safe-area-inset-bottom, 0px));
-      left: 50%;
-      transform: translateX(-50%);
-    }
+    #mobile-menu-close svg { width: 20px; height: 20px; }
+    #mobile-menu-close { top: 10px; right: 10px; }
+    body.hero-in-view #mobile-menu-close { top: auto; right: auto; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-megamenu,
+    .more-menu,
+    .megamenu-tile,
+    .more-list li,
+    .tile-img { animation: none !important; transition-duration: 0.01ms !important; }
   }
 </style>
 
 <script>
   // @ts-nocheck
   document.addEventListener("DOMContentLoaded", () => {
-    // BLOB NAVIGATION LOGIC
+    const desktopNav = document.getElementById("desktopNav");
+    const pill = document.getElementById("headerPill");
     const blob = document.getElementById("nav-blob");
-    const navLinks = document.querySelectorAll(".nav-desktop .nav-link");
-    const sections = document.querySelectorAll("section[id], footer[id]"); // Include footer
+    const topLinks = Array.from(document.querySelectorAll(".nav-desktop [data-mega-section]"));
     const moreToggle = document.querySelector(".nav-desktop .more-toggle");
-    const pill = document.querySelector(".header-pill");
-    const dynamicTitle = document.querySelector("#dynamic-title div"); // Changed to div
+    const moreMenu = document.getElementById("desktopMoreMenu");
+    const moreLinks = Array.from(document.querySelectorAll("#desktopMoreMenu [data-more-section]"));
+    const megamenu = document.getElementById("navMegamenu");
+    const megamenuPanels = Array.from(document.querySelectorAll("#navMegamenu .megamenu-panel"));
+    const sections = document.querySelectorAll("section[id], footer[id]");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // Mobile Menu Logic
     const mobileMenuBtn = document.getElementById("mobile-menu-btn");
     const mobileMenuOverlay = document.getElementById("mobile-menu-overlay");
     const mobileMenuClose = document.getElementById("mobile-menu-close");
     const mobileNavLinks = document.querySelectorAll(".mobile-nav-link");
 
-    function toggleMobileMenu(show) {
-      if (show) {
-        mobileMenuOverlay.classList.remove("translate-x-full");
-        document.body.classList.add("mobile-menu-open");
-      } else {
-        mobileMenuOverlay.classList.add("translate-x-full");
-        document.body.classList.remove("mobile-menu-open");
-      }
-    }
+    let megaTimer = null;
+    let moreTimer = null;
+    let currentPanel = null;
+    let panelOpenedFromMore = false;
 
-    if (mobileMenuBtn) {
-      mobileMenuBtn.addEventListener("click", () => toggleMobileMenu(true));
-    }
-    if (mobileMenuClose) {
-      mobileMenuClose.addEventListener("click", () => toggleMobileMenu(false));
-    }
-    mobileNavLinks.forEach((link) => {
-      link.addEventListener("click", () => toggleMobileMenu(false));
-    });
+    const clearTimer = (timer) => {
+      if (timer) window.clearTimeout(timer);
+      return null;
+    };
 
-    // Capture initial full width for restoration
-    let fullWidth = pill ? pill.offsetWidth : 0;
-    if (pill) {
-      pill.style.setProperty("--full-width", `${fullWidth}px`);
-      // Update full width on resize
-      window.addEventListener("resize", () => {
-        // Temporarily remove dynamic class to measure
-        const wasDynamic = pill.classList.contains("dynamic-mode");
-        if (wasDynamic) pill.classList.remove("dynamic-mode");
-
-        const navList = document.querySelector(".nav-list");
-        if (navList) {
-          // 32px padding-left + 32px padding-right (px-8 = 2rem = 32px)
-          const w = navList.offsetWidth + 64;
-          pill.style.setProperty("--full-width", `${w}px`);
-        }
-
-        if (wasDynamic) pill.classList.add("dynamic-mode");
-        currentSectionId = null;
-        scheduleNavUpdate();
+    function setTopExpanded(section) {
+      topLinks.forEach((link) => {
+        link.setAttribute("aria-expanded", link.dataset.megaSection === section ? "true" : "false");
       });
     }
 
-    // IDs that live under the "MORE" dropdown
-    const moreSectionIds = [
-      "blogs",
-      "partners",
-      "contact",
-      "community",
-      "team",
-    ];
+    function setMoreExpanded(section) {
+      moreLinks.forEach((link) => {
+        const active = link.dataset.moreSection === section;
+        link.setAttribute("aria-expanded", active ? "true" : "false");
+        link.classList.toggle("is-current", active);
+      });
+    }
+
+    function openMoreMenu() {
+      moreTimer = clearTimer(moreTimer);
+      moreMenu?.classList.add("open");
+      moreMenu?.setAttribute("aria-hidden", "false");
+      moreMenu?.removeAttribute("inert");
+      moreToggle?.setAttribute("aria-expanded", "true");
+      pill?.classList.add("menu-active");
+    }
+
+    function hideMegamenu() {
+      megaTimer = clearTimer(megaTimer);
+      currentPanel = null;
+      panelOpenedFromMore = false;
+      megamenu?.classList.remove("open", "from-more");
+      megamenu?.setAttribute("aria-hidden", "true");
+      megamenu?.setAttribute("inert", "");
+      setTopExpanded(null);
+      setMoreExpanded(null);
+      window.setTimeout(() => {
+        if (!currentPanel) megamenuPanels.forEach((panel) => panel.classList.remove("active"));
+      }, 280);
+      if (!moreMenu?.classList.contains("open")) pill?.classList.remove("menu-active");
+    }
+
+    function closeMoreMenu(closePanel = true) {
+      moreTimer = clearTimer(moreTimer);
+      moreMenu?.classList.remove("open");
+      moreMenu?.setAttribute("aria-hidden", "true");
+      moreMenu?.setAttribute("inert", "");
+      moreToggle?.setAttribute("aria-expanded", "false");
+      setMoreExpanded(null);
+      if (closePanel && panelOpenedFromMore) hideMegamenu();
+      if (!currentPanel) pill?.classList.remove("menu-active");
+    }
+
+    function closeAllMenus() {
+      closeMoreMenu(false);
+      hideMegamenu();
+      pill?.classList.remove("menu-active");
+    }
+
+    function showMegamenu(section, fromMore = false) {
+      megaTimer = clearTimer(megaTimer);
+      moreTimer = clearTimer(moreTimer);
+      const panel = megamenu?.querySelector(`[data-panel="${section}"]`);
+      if (!panel) return;
+      megamenuPanels.forEach((candidate) => candidate.classList.remove("active"));
+      panel.classList.add("active");
+      currentPanel = section;
+      panelOpenedFromMore = fromMore;
+      megamenu?.classList.toggle("from-more", fromMore);
+      megamenu?.classList.add("open");
+      megamenu?.setAttribute("aria-hidden", "false");
+      megamenu?.removeAttribute("inert");
+      pill?.classList.add("menu-active");
+
+      if (fromMore) {
+        openMoreMenu();
+        setTopExpanded(null);
+        setMoreExpanded(section);
+      } else {
+        closeMoreMenu(false);
+        setMoreExpanded(null);
+        setTopExpanded(section);
+      }
+    }
+
+    function scheduleMegaClose() {
+      megaTimer = clearTimer(megaTimer);
+      megaTimer = window.setTimeout(hideMegamenu, 190);
+    }
+
+    function scheduleMoreClose() {
+      moreTimer = clearTimer(moreTimer);
+      moreTimer = window.setTimeout(() => closeMoreMenu(true), 220);
+    }
+
+    topLinks.forEach((link) => {
+      const section = link.dataset.megaSection;
+      link.addEventListener("mouseenter", () => showMegamenu(section, false));
+      link.addEventListener("focus", () => showMegamenu(section, false));
+      link.addEventListener("mouseleave", scheduleMegaClose);
+    });
+
+    moreToggle?.addEventListener("mouseenter", () => {
+      hideMegamenu();
+      openMoreMenu();
+    });
+    moreToggle?.addEventListener("focus", () => {
+      hideMegamenu();
+      openMoreMenu();
+    });
+    moreToggle?.addEventListener("mouseleave", scheduleMoreClose);
+    moreToggle?.addEventListener("click", () => {
+      hideMegamenu();
+      openMoreMenu();
+    });
+
+    moreLinks.forEach((link) => {
+      const section = link.dataset.moreSection;
+      link.addEventListener("mouseenter", () => showMegamenu(section, true));
+      link.addEventListener("focus", () => showMegamenu(section, true));
+    });
+
+    moreMenu?.addEventListener("mouseenter", () => {
+      moreTimer = clearTimer(moreTimer);
+      megaTimer = clearTimer(megaTimer);
+    });
+    moreMenu?.addEventListener("mouseleave", scheduleMoreClose);
+    megamenu?.addEventListener("mouseenter", () => {
+      megaTimer = clearTimer(megaTimer);
+      moreTimer = clearTimer(moreTimer);
+    });
+    megamenu?.addEventListener("mouseleave", () => {
+      if (panelOpenedFromMore) scheduleMoreClose();
+      else scheduleMegaClose();
+    });
+
+    desktopNav?.addEventListener("focusout", () => {
+      window.setTimeout(() => {
+        if (!desktopNav.contains(document.activeElement)) closeAllMenus();
+      }, 0);
+    });
+
+    document.addEventListener("click", (event) => {
+      const target = event.target;
+      if (target instanceof Node && !desktopNav?.contains(target)) closeAllMenus();
+    });
+
+    megamenu?.querySelectorAll(".megamenu-tile").forEach((tile) => {
+      tile.addEventListener("click", closeAllMenus);
+    });
+
+    function toggleMobileMenu(show) {
+      mobileMenuOverlay?.classList.toggle("translate-x-full", !show);
+      mobileMenuOverlay?.setAttribute("aria-hidden", show ? "false" : "true");
+      if (show) mobileMenuOverlay?.removeAttribute("inert");
+      else mobileMenuOverlay?.setAttribute("inert", "");
+      mobileMenuBtn?.setAttribute("aria-expanded", show ? "true" : "false");
+      document.body.classList.toggle("mobile-menu-open", show);
+      if (show) mobileMenuClose?.focus();
+    }
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape") return;
+      const returnFocus = panelOpenedFromMore
+        ? moreToggle
+        : topLinks.find((link) => link.getAttribute("aria-expanded") === "true");
+      closeAllMenus();
+      if (document.body.classList.contains("mobile-menu-open")) {
+        toggleMobileMenu(false);
+        mobileMenuBtn?.focus();
+      } else {
+        returnFocus?.focus();
+      }
+    });
+
+    if (!reduceMotion) {
+      document.querySelectorAll("[data-tilt]").forEach((tile) => {
+        tile.addEventListener("mousemove", (event) => {
+          const rect = tile.getBoundingClientRect();
+          const x = (event.clientX - rect.left) / rect.width;
+          const y = (event.clientY - rect.top) / rect.height;
+          tile.style.transform = `perspective(650px) rotateX(${(0.5 - y) * 6}deg) rotateY(${(x - 0.5) * 6}deg) scale(1.015)`;
+        });
+        tile.addEventListener("mouseleave", () => { tile.style.transform = ""; });
+      });
+    }
+
+    mobileMenuBtn?.addEventListener("click", () => toggleMobileMenu(true));
+    mobileMenuClose?.addEventListener("click", () => toggleMobileMenu(false));
+    mobileNavLinks.forEach((link) => link.addEventListener("click", () => toggleMobileMenu(false)));
+
+    const moreSectionIds = ["blogs", "partners", "contact", "community", "team", "gallery"];
     const idMapping = {
       work: "events",
-      "igniting-minds-section": "about",
+      "about-acmvit": "about",
+      "about-vit": "about",
+      "about-acm": "about",
       "projects-intro": "projects",
+      "acm-w-content": "acm-w",
+      "acm-w-bento": "acm-w",
+      "igniting-minds-section": "community",
       "community-outreach": "community",
       "community-sdg": "community",
+      "community-award": "community",
       "community-conduct": "community",
       "community-speaker": "community",
     };
     let currentSectionId = null;
     let rafPending = false;
-    let lastScrollY = window.scrollY || window.pageYOffset;
-    let scrollDirection = "down";
 
-    // Function to update blob position
     function updateBlob(targetLink) {
-      if (!targetLink || !blob) return;
-
-      const pill = document.querySelector(".header-pill");
-      if (!pill) return;
-
+      if (!targetLink || !blob || !pill) return;
+      moreToggle?.classList.toggle("blob-active", targetLink === moreToggle);
       const pillRect = pill.getBoundingClientRect();
       const linkRect = targetLink.getBoundingClientRect();
       const scaleX = pill.offsetWidth > 0 ? pillRect.width / pill.offsetWidth : 1;
       const safeScaleX = Number.isFinite(scaleX) && scaleX > 0 ? scaleX : 1;
-
-      const relativeLeft = (linkRect.left - pillRect.left) / safeScaleX;
-      const width = linkRect.width / safeScaleX;
-
-      blob.style.left = `${relativeLeft}px`;
-      blob.style.width = `${width}px`;
+      blob.style.left = `${(linkRect.left - pillRect.left) / safeScaleX}px`;
+      blob.style.width = `${linkRect.width / safeScaleX}px`;
+      blob.style.backgroundColor = targetLink.getAttribute("href") === "#acm-w" ? "#FF007A" : "#F95F4A";
       blob.style.opacity = "1";
-
-      // Color logic
-      const href = targetLink.getAttribute("href");
-      if (href === "#acm-w") {
-        blob.style.backgroundColor = "#FF007A";
-      } else {
-        blob.style.backgroundColor = "#F95F4A";
-      }
     }
 
-    // Function to hide blob
     function hideBlob() {
+      moreToggle?.classList.remove("blob-active");
       if (blob) blob.style.opacity = "0";
     }
 
-    function setDynamicMode(isDynamic, sectionId) {
-      if (!pill) return;
-
-      if (isDynamic) {
-        pill.classList.add("dynamic-mode");
-        if (sectionId === "acm-w") {
-          pill.classList.add("pink-mode");
-        } else {
-          pill.classList.remove("pink-mode");
-        }
-
-        if (dynamicTitle) {
-          let text = sectionId;
-          let isLongText = false;
-
-          if (sectionId.startsWith("community-")) {
-            // Format: Community: Outreach
-            const sub = sectionId.replace("community-", "");
-            let displaySub = sub;
-            if (sub === "outreach") displaySub = "Outreach";
-            else if (sub === "sdg") displaySub = "SDG";
-            else if (sub === "conduct") displaySub = "Code of Conduct";
-            else if (sub === "speaker") displaySub = "Speakers";
-
-            text = `Community: ${displaySub}`;
-            isLongText = true;
-          }
-
-          dynamicTitle.textContent = text;
-          dynamicTitle.style.whiteSpace = "nowrap";
-
-          if (isLongText) {
-            // Measure text width
-            const font = "16px PolySans_Trial";
-            const tempSpan = document.createElement("span");
-            tempSpan.style.fontFamily = "'PolySans_Trial', sans-serif";
-            tempSpan.style.fontSize = "16px";
-            tempSpan.style.fontWeight = "300";
-            tempSpan.style.textTransform = "uppercase";
-            tempSpan.style.visibility = "hidden";
-            tempSpan.style.position = "absolute";
-            tempSpan.style.whiteSpace = "nowrap";
-            tempSpan.textContent = text;
-            document.body.appendChild(tempSpan);
-            const width = tempSpan.offsetWidth;
-            document.body.removeChild(tempSpan);
-
-            const totalWidth = width + 55;
-
-            pill.style.setProperty("width", `${totalWidth}px`);
-            pill.style.setProperty("padding-left", "0px"); // Reset to avoid double padding if width includes it? Actually my logic sets width including padding.
-            // Wait, transition: width 0.3s. If I set width explicit, it should animate.
-          } else {
-            pill.style.setProperty("width", "112px");
-          }
-        }
-        hideBlob();
-      } else {
-        pill.classList.remove("dynamic-mode");
-        pill.classList.remove("pink-mode");
-        // Clear inline styles so it returns to original CSS/auto width
-        pill.style.removeProperty("width");
-        pill.style.removeProperty("padding-left");
-      }
-    }
-
     function applyNavState(sectionId) {
-      if (!sectionId) return;
-
-      if (sectionId === "footer") {
-        setDynamicMode(false);
+      if (!sectionId || sectionId === "home" || sectionId === "footer") {
         hideBlob();
         return;
       }
-
-      if (moreSectionIds.includes(sectionId) || sectionId.startsWith("community-")) {
-        setDynamicMode(true, sectionId);
-        return;
-      }
-
       const mappedId = idMapping[sectionId] || sectionId;
-      setDynamicMode(false);
-
-      const activeLink = document.querySelector(
-        `.nav-desktop .nav-link[href="#${mappedId}"]`
-      );
-      if (activeLink) {
-        updateBlob(activeLink);
-      } else {
-        hideBlob();
+      if (moreSectionIds.includes(mappedId)) {
+        updateBlob(moreToggle);
+        return;
       }
+      const activeLink = document.querySelector(`.nav-desktop .nav-link[href="#${mappedId}"]`);
+      if (activeLink) updateBlob(activeLink);
+      else hideBlob();
     }
 
     function getActiveSection() {
@@ -633,56 +952,20 @@
       let activeSection = null;
       let closestSection = null;
       let closestDistance = Infinity;
-      let closestPosition = null;
-
       sections.forEach((section) => {
         const rect = section.getBoundingClientRect();
-        if (rect.top <= focusLine && rect.bottom >= focusLine) {
-          activeSection = section;
-        }
-        let distance = 0;
-        let position = null;
-        if (rect.top > focusLine) {
-          distance = rect.top - focusLine;
-          position = "below";
-        } else if (rect.bottom < focusLine) {
-          distance = focusLine - rect.bottom;
-          position = "above";
-        }
-
+        if (rect.top <= focusLine && rect.bottom >= focusLine) activeSection = section;
+        const distance = rect.top > focusLine ? rect.top - focusLine : rect.bottom < focusLine ? focusLine - rect.bottom : 0;
         if (distance < closestDistance) {
           closestDistance = distance;
           closestSection = section;
-          closestPosition = position;
-        } else if (distance === closestDistance && closestSection) {
-          if (
-            scrollDirection === "down" &&
-            position === "below" &&
-            closestPosition !== "below"
-          ) {
-            closestSection = section;
-            closestPosition = position;
-          } else if (
-            scrollDirection === "up" &&
-            position === "above" &&
-            closestPosition !== "above"
-          ) {
-            closestSection = section;
-            closestPosition = position;
-          }
         }
       });
-
       return activeSection || closestSection;
     }
 
     function updateActiveSection() {
       rafPending = false;
-      const scrollY = window.scrollY || window.pageYOffset;
-      if (scrollY !== lastScrollY) {
-        scrollDirection = scrollY > lastScrollY ? "down" : "up";
-        lastScrollY = scrollY;
-      }
       const activeSection = getActiveSection();
       if (!activeSection) return;
       const id = activeSection.getAttribute("id");
@@ -697,136 +980,34 @@
       requestAnimationFrame(updateActiveSection);
     }
 
-    // Intersection Observer to track sections
-    const observerOptions = {
+    const observer = new IntersectionObserver(scheduleNavUpdate, {
       root: null,
-      rootMargin: "-20% 0px -60% 0px", // Trigger when section is near top/center
+      rootMargin: "-20% 0px -60% 0px",
       threshold: 0,
-    };
-
-    const observer = new IntersectionObserver(() => {
-      scheduleNavUpdate();
-    }, observerOptions);
-
+    });
     sections.forEach((section) => observer.observe(section));
-    window.addEventListener("scroll", scheduleNavUpdate, { passive: true });
+    window.addEventListener("scroll", () => {
+      closeAllMenus();
+      scheduleNavUpdate();
+    }, { passive: true });
+    window.addEventListener("resize", scheduleNavUpdate, { passive: true });
 
-    // Removed manual hover listener as requested
-
-    // EXISTING DROPDOWN LOGIC
-    const toggles = Array.from(document.querySelectorAll(".more-toggle"));
-    const moreMenuLinks = document.querySelectorAll("#desktopMoreMenu a");
-
-    const getMenuFor = (tg) => {
-      const id = tg.getAttribute("aria-controls");
-      return id ? document.getElementById(id) : null;
-    };
-
-    const openMenu = (tg, menu) => {
-      tg.setAttribute("aria-expanded", "true");
-      menu.classList.add("open");
-    };
-
-    const closeMenu = (tg, menu) => {
-      tg.setAttribute("aria-expanded", "false");
-      menu.classList.remove("open");
-    };
-
-    const allMenus = () => toggles.map(getMenuFor).filter(Boolean);
-
-    const closeAll = () =>
-      toggles.forEach((tg) => {
-        const m = getMenuFor(tg);
-        if (m) closeMenu(tg, m);
-      });
-
-    let suppressNextDocClick = false;
-
-    toggles.forEach((tg) => {
-      const menu = getMenuFor(tg);
-      if (!menu) return;
-      tg.addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        suppressNextDocClick = true;
-        setTimeout(() => {
-          suppressNextDocClick = false;
-        }, 0);
-        const expanded = tg.getAttribute("aria-expanded") === "true";
-        toggles.forEach((ot) => {
-          if (ot !== tg) {
-            const otherMenu = getMenuFor(ot);
-            if (otherMenu) closeMenu(ot, otherMenu);
-          }
-        });
-        if (expanded) {
-          closeMenu(tg, menu);
-        } else {
-          openMenu(tg, menu);
-        }
-      });
-
-      let hoverTimer = null;
-      const startCloseTimer = () => {
-        hoverTimer = setTimeout(() => {
-          closeMenu(tg, menu);
-        }, 220);
-      };
-      const clearCloseTimer = () => {
-        if (hoverTimer) {
-          clearTimeout(hoverTimer);
-          hoverTimer = null;
-        }
-      };
-
-      tg.addEventListener("mouseenter", () => {
-        openMenu(tg, menu);
-      });
-      tg.addEventListener("mouseleave", () => {
-        startCloseTimer();
-      });
-      menu.addEventListener("mouseenter", () => {
-        clearCloseTimer();
-      });
-      menu.addEventListener("mouseleave", () => {
-        startCloseTimer();
-      });
-    });
-
-    moreMenuLinks.forEach((link) => {
-      link.addEventListener("click", () => {
-        closeAll();
-      });
-    });
-
-    document.addEventListener("click", (e) => {
-      if (suppressNextDocClick) return;
-      const t = e.target;
-      if (!(t instanceof Node)) return;
-      const withinToggle = toggles.some((tg) => tg.contains(t));
-      const withinMenu = allMenus().some((m) => m.contains(t));
-      if (!withinToggle && !withinMenu) closeAll();
-    });
-
-    // Smooth-scroll
-    document.addEventListener("click", (e) => {
-      const el =
-        e.target instanceof Element ? e.target.closest('a[href^="#"]') : null;
-      if (!el) return;
-      const href = el.getAttribute("href");
+    document.addEventListener("click", (event) => {
+      const link = event.target instanceof Element ? event.target.closest('a[href^="#"]') : null;
+      if (!link) return;
+      const href = link.getAttribute("href");
       if (!href || href.length < 2) return;
       const id = href.slice(1);
       const target = document.getElementById(id);
       if (!target) return;
-      e.preventDefault();
-      closeAll();
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      event.preventDefault();
+      closeAllMenus();
+      target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
       history.replaceState(null, "", `#${id}`);
-
-      // Manually update blob on click
       applyNavState(id);
       currentSectionId = id;
     });
+
     scheduleNavUpdate();
   });
 </script>
