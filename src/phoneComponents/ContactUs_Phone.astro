@@ -88,51 +88,17 @@ const formAction = rawEndpoint ? undefined : `mailto:${fallbackEmail}`;
       >
         Submit
       </button>
+      <p
+        data-contact-status
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        class="text-center text-sm font-mono normal-case tracking-normal break-words select-text empty:hidden"
+      ></p>
     </form>
   </div>
 </section>
 
 <script>
-  const form = document.getElementById(
-    "contact-form-mobile"
-  ) as HTMLFormElement;
-  if (form) {
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const submitBtn = form.querySelector('button[type="submit"]');
-      const originalBtnText = submitBtn ? submitBtn.innerHTML : "Submit";
-      const setSubmitting = (submitting: boolean) => {
-        if (!submitBtn) return;
-        submitBtn.innerHTML = submitting ? "Sending..." : originalBtnText;
-        (submitBtn as HTMLButtonElement).disabled = submitting;
-      };
-
-      setSubmitting(true);
-
-      const formData = new FormData(form);
-      // Handle radio buttons specifically if needed, but Object.fromEntries handles it if checked
-      const data = Object.fromEntries(formData.entries());
-
-      try {
-        const response = await fetch("/api/contact", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
-
-        if (response.ok) {
-          form.reset();
-        } else {
-          const resData = await response.json();
-          console.warn(`Failed to send message: ${resData.message || "Error"}`);
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      } finally {
-        setSubmitting(false);
-      }
-    });
-  }
+  import "../scripts/contact-form";
 </script>
