@@ -311,10 +311,11 @@ const init = () => {
       void flip(event.key === "ArrowRight" ? 1 : -1);
     }
   });
-  window.addEventListener("resize", () => {
+  // Toolbar expansion and mode changes resize the stage without a window resize.
+  new ResizeObserver(() => {
     clearTimeout(resizeTimer);
     resizeTimer = window.setTimeout(() => { void redraw(); }, 120);
-  });
+  }).observe(stage);
   applyMode();
   void loadVersion(edition);
 };
