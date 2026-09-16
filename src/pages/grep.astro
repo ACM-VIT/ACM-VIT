@@ -202,6 +202,22 @@ const versions = [
     .page-display { bottom: 84px; }
   }
   @media (max-width: 480px) { .welcome-card { padding: 22px; border-radius: 24px; } }
+  /* Short landscape screens need their height for pages, not stacked controls. */
+  @media (max-height: 500px) and (orientation: landscape) {
+    .reader-toolbar { flex-wrap: nowrap; align-items: flex-start; gap: 10px; margin: 6px 8px 0; padding: 8px; max-height: 76px; border-radius: 18px; }
+    .reader-brand { font-size: 14px; min-height: 44px; }
+    .reader-options { flex: 1; width: auto; flex-wrap: nowrap; align-items: flex-start; gap: 10px; min-width: 0; }
+    .reader-options > .deck-field { display: flex; align-items: center; gap: 6px; }
+    .reader-options > .deck-field .select-shell { flex: 1; min-width: 0; }
+    .reading-options { flex-shrink: 0; }
+    .reading-options summary { min-height: 44px; }
+    .grep-stage { padding: 8px 64px 28px; }
+    .transport-key { top: calc(50% + 34px); bottom: auto; width: 44px; height: 44px; transform: translateY(-50%); }
+    [data-grep-prev] { left: 8px; }
+    [data-grep-next] { right: 8px; }
+    .page-display { bottom: 8px; }
+    .page-display small { display: inline; margin: 0 0 0 8px; }
+  }
   @media (max-height: 650px) { .reader-overlay { align-items: start; overflow-y: auto; } }
   @media (prefers-reduced-motion: reduce) { .start-reading img { transition: none; } }
   @media (max-width: 768px) { .loading-cassette { width: 250px; height: 250px; } }
