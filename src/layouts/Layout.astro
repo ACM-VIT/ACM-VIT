@@ -86,6 +86,7 @@ const description =
     />
   </head>
   <body>
+    <div class="scroll-sentinel" aria-hidden="true"></div>
     <Preloader />
     <CelebrationPopup />
     <div
@@ -117,6 +118,40 @@ const description =
         <slot />
       </main>
     </div>
+    <script>
+      (() => {
+        const SHOW_UNTIL = 64;
+        const setScrolled = (scrolled) =>
+          document.body.classList.toggle("page-scrolled", scrolled);
+
+        // The sentinel is a 64px-tall marker pinned to the top of the
+        // document. Watching it beats a scroll listener: it fires no matter
+        // which element actually scrolls, and needs no rAF or scroll events.
+        const sentinel = document.querySelector(".scroll-sentinel");
+        if (sentinel && "IntersectionObserver" in window) {
+          new IntersectionObserver(
+            (entries) => setScrolled(!entries[0].isIntersecting),
+            { threshold: 0 }
+          ).observe(sentinel);
+        }
+
+        // Capture phase so scrolling inside any nested container still counts.
+        const fromScroll = () =>
+          setScrolled(
+            (window.scrollY ||
+              document.documentElement.scrollTop ||
+              document.body.scrollTop ||
+              0) > SHOW_UNTIL
+          );
+        document.addEventListener("scroll", fromScroll, {
+          capture: true,
+          passive: true,
+        });
+        window.addEventListener("resize", fromScroll, { passive: true });
+        fromScroll();
+      })();
+    </script>
+
     <script>
       import { gsap } from "gsap";
       import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -440,6 +475,16 @@ const description =
     pointer-events: none;
   }
 
+  .scroll-sentinel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 64px;
+    pointer-events: none;
+    opacity: 0;
+  }
+
   .brand-logos {
     position: fixed;
     top: 20px;
@@ -557,7 +602,8 @@ const description =
     }
   }
 
-  body.mobile-menu-open .brand-logos {
+  body.mobile-menu-open .brand-logos,
+  body.page-scrolled .brand-logos {
     opacity: 0;
     pointer-events: none;
   }
